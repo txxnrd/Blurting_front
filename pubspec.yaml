@@ -62,6 +62,8 @@ flutter:
     - assets/images/profile_image.png
     - assets/images/icon_group.png
     - assets/images/setting.png
+    - assets/images/profile_swipe.png
+    - assets/images/icon_warning.png
 
   fonts:
     - family: Pretendard
@@ -84,6 +86,18 @@ flutter:
           weight: 800
         - asset: assets/fonts/Pretendard-Black.ttf
           weight: 900
+
+    - family: Heedo
+      fonts:
+        - asset: assets/fonts/Heebo-Thin.ttf
+        - asset: assets/fonts/Heebo-ExtraLight.ttf
+        - asset: assets/fonts/Heebo-Light.ttf
+        - asset: assets/fonts/Heebo-Regular.ttf
+        - asset: assets/fonts/Heebo-Medium.ttf
+        - asset: assets/fonts/Heebo-SemiBold.ttf
+        - asset: assets/fonts/Heebo-Bold.ttf
+        - asset: assets/fonts/Heebo-ExtraBold.ttf
+        - asset: assets/fonts/Heebo-Black.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

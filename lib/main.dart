@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -70,6 +72,203 @@ class RightTailClipper extends CustomClipper<Path> {
 }
 
 class _Group extends State<Group> {
+  void _ClickWarningButton(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromRGBO(217, 217, 217, 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(7)),
+          ),
+          title: Row(
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: Image.asset('assets/images/icon_warning.png'),
+                width: 40,
+                height: 40,
+              ),
+              Text(
+                '이 사용자를 신고하시겠습니까?',
+                style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            Container(
+              margin: EdgeInsets.only(top: 0, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    child: Container(
+                      width: 75,
+                      height: 31,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color.fromRGBO(134, 134, 134, 1), // 테두리 색상 설정
+                          width: 2, // 테두리 두께 설정
+                        ),
+                        borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '예',
+                          style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontSize: 15,
+                            color: Color.fromRGBO(48, 48, 48, 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 모달 닫기
+                      print('신고 접수');
+                    },
+                  ),
+                  TextButton(
+                    child: Container(
+                      width: 75,
+                      height: 31,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color.fromRGBO(134, 134, 134, 1), // 테두리 색상 설정
+                          width: 2, // 테두리 두께 설정
+                        ),
+                        borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '아니오',
+                          style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontSize: 15,
+                            color: Color.fromRGBO(48, 48, 48, 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 모달 닫기
+                      print('신고 취소');
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showProfileModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromRGBO(217, 217, 217, 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+            side: BorderSide(color: Color.fromRGBO(48, 48, 48, 1), width: 3.0),
+          ),
+          title: Row(
+            children: [
+              IconButton(
+                icon: Image.asset('assets/images/icon_warning.png'),
+                color: Color.fromRGBO(48, 48, 48, 1),
+                onPressed: () {
+                  _ClickWarningButton(context);
+                  print('신고 버튼 눌림');
+                },
+              ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Profile',
+                    style: TextStyle(
+                      color: Color.fromRGBO(138, 138, 138, 1),
+                      fontFamily: "Heedo",
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: 5),
+                  width: 127.99,
+                  child: Image.asset(
+                    'assets/images/profile_image.png',
+                    fit: BoxFit.cover,
+                  )),
+              Container(
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '개굴',
+                      style: TextStyle(
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 24),
+                    ),
+                    Text(
+                      'INFJ',
+                      style: TextStyle(
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 5),
+                        child: Text(
+                            '아이씨 겁나 귀찮네 이거' +
+                                '\n' +
+                                '아래 점은... 일단 그냥 해놧어요' +
+                                '\n' +
+                                '무슨 정보가 들어가는 건지 모르겟음',
+                            textAlign: TextAlign.center, // 텍스트를 가운데 정렬
+                            style: TextStyle(
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w400,
+                                fontSize: 15))),
+                  ],
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 15,
+                      margin: EdgeInsets.all(0),
+                      child: Image.asset('assets/images/profile_swipe.png'),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var _controller = TextEditingController();
@@ -140,34 +339,38 @@ class _Group extends State<Group> {
             ],
           ),
           Expanded(
-            // 세로로 늘려늘려... 가로로는 늘리지 마 ㅡㅡㅠㅠ
             child: SingleChildScrollView(
               child: Container(
-                //color: Colors.amber,
                 margin: EdgeInsets.symmetric(vertical: 30),
                 child: Column(
                   children: <Widget>[
                     ListTile(
                       // 동적으로 받아와야 합니다...
-                      leading: Container(
-                        // 프로필
-                        width: 55,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Color.fromRGBO(217, 217, 217, 1),
-                        ),
+                      leading: GestureDetector(
+                        onTap: () {
+                          _showProfileModal(context);
+                          // 클릭 이벤트 처리 코드 작성
+                          print('profile 클릭됨');
+                        },
                         child: Container(
-                          width: 42.74,
-                          height: 48.56,
-                          child: Image.asset(
-                            'assets/images/profile_image.png',
+                          // 프로필
+                          width: 55,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Color.fromRGBO(217, 217, 217, 1),
+                          ),
+                          child: Container(
+                            width: 42.74,
+                            height: 48.56,
+                            child: Image.asset(
+                              'assets/images/profile_image.png',
+                            ),
                           ),
                         ),
                       ),
                       title: Container(
-                        //color: Colors.amber,
-                        // 닉네임, 답변 내용
+                        // 닉네임
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           '정원',
@@ -178,36 +381,47 @@ class _Group extends State<Group> {
                           ),
                         ),
                       ),
-                      subtitle: ClipPath(
-                        clipper: LeftTailClipper(),
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color.fromRGBO(217, 217, 217, 1),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(top: 12),
-                                child: Text(
-                                  '저는 휴학했어요 하하 부러우시죠' +
-                                      '\n' +
-                                      '하하하하하하하하하하하하하' +
-                                      '\n' +
-                                      '푸하하하하하학' +
-                                      '\n' +
-                                      '휴학 ㄱㄱ',
-                                  style: TextStyle(
-                                    fontFamily: "Pretendard",
-                                    fontSize: 10,
-                                    color: Color.fromRGBO(48, 48, 48, 1),
-                                  ),
+
+                      subtitle: // 답변 내용
+                          Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipPath(
+                              clipper: LeftTailClipper(),
+                              child: Container(
+                                width: 350,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Color.fromRGBO(217, 217, 217, 1),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      // 이거는 width 설정이 되는디...
+                                      margin: EdgeInsets.only(top: 12),
+                                      child: Text(
+                                        '저는 휴학했어요 하하 부러우시죠' +
+                                            '\n' +
+                                            '하하하하하하하하하하하하하' +
+                                            '\n' +
+                                            '푸하하하하하학' +
+                                            '\n' +
+                                            '휴학 ㄱㄱ',
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 10,
+                                          color: Color.fromRGBO(48, 48, 48, 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -239,32 +453,38 @@ class _Group extends State<Group> {
                           ),
                         ),
                       ),
-                      subtitle: ClipPath(
-                        clipper: LeftTailClipper(),
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color.fromRGBO(217, 217, 217, 1),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                margin:
-                                    EdgeInsets.only(top: 12), // 상단에 10만큼의 마진 적용
-                                child: Text(
-                                  '그냥 자퇴할까 봐요 ^^',
-                                  style: TextStyle(
-                                    fontFamily: "Pretendard",
-                                    fontSize: 10,
-                                    color: Color.fromRGBO(48, 48, 48, 1),
-                                  ),
-                                ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipPath(
+                            clipper: LeftTailClipper(),
+                            child: Container(
+                              width: 350,
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Color.fromRGBO(217, 217, 217, 1),
                               ),
-                            ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: 12), // 상단에 10만큼의 마진 적용
+                                    child: Text(
+                                      '그냥 자퇴할까 봐요 ^^',
+                                      style: TextStyle(
+                                        fontFamily: "Pretendard",
+                                        fontSize: 10,
+                                        color: Color.fromRGBO(48, 48, 48, 1),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ],
