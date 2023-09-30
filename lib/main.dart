@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -390,7 +388,7 @@ class _Group extends State<Group> {
                             ClipPath(
                               clipper: LeftTailClipper(),
                               child: Container(
-                                width: 350,
+                                width: 250,
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
@@ -412,7 +410,7 @@ class _Group extends State<Group> {
                                             '휴학 ㄱㄱ',
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
-                                          fontSize: 10,
+                                          fontSize: 12,
                                           color: Color.fromRGBO(48, 48, 48, 1),
                                         ),
                                       ),
@@ -459,7 +457,7 @@ class _Group extends State<Group> {
                           ClipPath(
                             clipper: LeftTailClipper(),
                             child: Container(
-                              width: 350,
+                              width: 250,
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -475,7 +473,7 @@ class _Group extends State<Group> {
                                       '그냥 자퇴할까 봐요 ^^',
                                       style: TextStyle(
                                         fontFamily: "Pretendard",
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         color: Color.fromRGBO(48, 48, 48, 1),
                                       ),
                                     ),
