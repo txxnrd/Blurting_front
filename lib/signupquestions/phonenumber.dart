@@ -6,7 +6,39 @@ class PhoneNumberPage extends StatefulWidget {
   _PhoneNumberPageState createState() => _PhoneNumberPageState();
 }
 
-class _PhoneNumberPageState extends State<PhoneNumberPage> {
+class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProviderStateMixin {
+  AnimationController? _animationController;
+  Animation<double>? _progressAnimation;
+  Future<void> _increaseProgressAndNavigate() async {
+    await _animationController!.forward();
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => SexPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
+
+  }
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
+      vsync: this,
+    );
+
+    _progressAnimation = Tween<double>(
+      begin: 0,  // 시작 게이지 값
+      end: 0.1,    // 종료 게이지 값
+    ).animate(_animationController!);
+
+    _animationController?.addListener(() {
+      setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,14 +81,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * 0, // 10% 완료로 가정
+                  width: MediaQuery.of(context).size.width * _progressAnimation!.value,
                   decoration: BoxDecoration(
                     color: Color(0xFF303030), // 파란색
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * 0 - 15,
+                  left: MediaQuery.of(context).size.width * _progressAnimation!.value - 15,
                   bottom: -10,
                   child: Image.asset('assets/signupface.png', width: 30, height: 30),
                 )
@@ -99,10 +131,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SexPage()),
-                  );
+                  print("다음 버튼 클릭됨");
+                  _increaseProgressAndNavigate();
                 },
 
                 child: Text(

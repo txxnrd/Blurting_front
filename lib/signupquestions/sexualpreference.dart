@@ -8,8 +8,28 @@ class SexualPreferencePage extends StatefulWidget {
 }
 enum SexualPreference { different,same,both,etc}
 
-class _SexualPreferencePageState extends State<SexualPreferencePage> {
+class _SexualPreferencePageState extends State<SexualPreferencePage> with SingleTickerProviderStateMixin {
   SexualPreference? _selectedSexualPreference;
+  AnimationController? _animationController;
+  Animation<double>? _progressAnimation;
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: Duration(seconds: 2),  // 애니메이션의 지속 시간 설정
+      vsync: this,
+    );
+
+    _progressAnimation = Tween<double>(
+      begin: 0.4,  // 시작 너비 (30%)
+      end: 0.5,    // 종료 너비 (40%)
+    ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,14 +73,14 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> {
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * 0.4, // 10% 완료로 가정
+                  width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
-                    color: Color(0xFF303030), // 파란색
+                    color: Color(0xFF303030),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * 0.4 - 15,
+                  left: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 15,
                   bottom: -10,
                   child: Image.asset('assets/signupface.png', width: 30, height: 30),
                 )
