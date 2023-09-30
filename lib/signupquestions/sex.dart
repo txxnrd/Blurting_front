@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/activeplace.dart';  // sex.dart를 임포트
 
 class SexPage extends StatefulWidget {
   @override
@@ -74,9 +75,8 @@ class _SexPageState extends State<SexPage> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
-
               SizedBox(width: 20), // 두 버튼 사이의 간격 조정
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -158,7 +158,7 @@ class _SexPageState extends State<SexPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PhoneNumberPage()),
+                    MaterialPageRoute(builder: (context) => ActivePlacePage()),
                   );
                 },
 
@@ -199,3 +199,4 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
+

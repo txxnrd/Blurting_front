@@ -141,4 +141,5 @@ class FaceIconPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
+
 }
