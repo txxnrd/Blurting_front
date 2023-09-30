@@ -1,6 +1,6 @@
+import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/activeplace.dart';  // sex.dart를 임포트
 
 class SexPage extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => ActivePlacePage(),
+        pageBuilder: (context, animation, secondaryAnimation) => ActivePlacePage(selectedGender: _selectedGender.toString()),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -45,6 +45,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

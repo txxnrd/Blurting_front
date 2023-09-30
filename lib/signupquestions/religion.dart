@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/sexualpreference.dart';  // sex.dart를 임포트
 
 class ReligionPage extends StatefulWidget {
+  final String selectedGender;
+
+  ReligionPage({required this.selectedGender});
   @override
   _ReligionPageState createState() => _ReligionPageState();
 }
@@ -16,7 +19,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => SexualPreferencePage(),
+        pageBuilder: (context, animation, secondaryAnimation) => SexualPreferencePage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -46,6 +49,12 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    Gender? gender;
+    if (widget.selectedGender == "Gender.male") {
+      gender = Gender.male;
+    } else if (widget.selectedGender == "Gender.female") {
+      gender = Gender.female;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -96,7 +105,13 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 Positioned(
                   left: MediaQuery.of(context).size.width * _progressAnimation!.value - 15,
                   bottom: -10,
-                  child: Image.asset('assets/signupface.png', width: 30, height: 30),
+                  child: Image.asset(
+                    gender == Gender.male ? 'assets/man.png'
+                        : gender == Gender.female ? 'assets/woman.png'
+                        : 'assets/signupface.png', // 기본 이미지
+                    width: 30,
+                    height: 30,
+                  ),
                 )
               ],
             ),

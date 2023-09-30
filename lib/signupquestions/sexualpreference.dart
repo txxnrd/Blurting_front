@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/activeplace.dart';
+import 'package:blurting/signupquestions/religion.dart';
+import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 
 class SexualPreferencePage extends StatefulWidget {
+  final String selectedGender;
+
+  SexualPreferencePage({required this.selectedGender});
   @override
   _SexualPreferencePageState createState() => _SexualPreferencePageState();
 }
@@ -17,7 +21,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 2),  // 애니메이션의 지속 시간 설정
+      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
@@ -32,6 +36,12 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
 
   @override
   Widget build(BuildContext context) {
+    Gender? gender;
+    if (widget.selectedGender == "Gender.male") {
+      gender = Gender.male;
+    } else if (widget.selectedGender == "Gender.female") {
+      gender = Gender.female;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -82,7 +92,13 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 Positioned(
                   left: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 15,
                   bottom: -10,
-                  child: Image.asset('assets/signupface.png', width: 30, height: 30),
+                  child: Image.asset(
+                    gender == Gender.male ? 'assets/man.png'
+                        : gender == Gender.female ? 'assets/woman.png'
+                        : 'assets/signupface.png', // 기본 이미지
+                    width: 30,
+                    height: 30,
+                  ),
                 )
               ],
             ),
@@ -247,7 +263,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ActivePlacePage()),
+                    MaterialPageRoute(builder: (context) => ActivePlacePage(selectedGender:'')),
                   );
                 },
 

@@ -3,6 +3,9 @@ import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포트
 
 class ActivePlacePage extends StatefulWidget {
+  final String selectedGender;
+
+  ActivePlacePage({required this.selectedGender});
   @override
   _ActivePlacePageState createState() => _ActivePlacePageState();
 }
@@ -14,7 +17,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => ReligionPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => ReligionPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -42,6 +45,12 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
   }
   @override
   Widget build(BuildContext context) {
+    Gender? gender;
+    if (widget.selectedGender == "Gender.male") {
+      gender = Gender.male;
+    } else if (widget.selectedGender == "Gender.female") {
+      gender = Gender.female;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -92,7 +101,13 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
                 Positioned(
                   left: MediaQuery.of(context).size.width * _progressAnimation!.value - 15,
                   bottom: -10,
-                  child: Image.asset('assets/signupface.png', width: 30, height: 30),
+                  child: Image.asset(
+                    gender == Gender.male ? 'assets/man.png'
+                        : gender == Gender.female ? 'assets/woman.png'
+                        : 'assets/signupface.png', // 기본 이미지
+                    width: 30,
+                    height: 30,
+                  ),
                 )
               ],
             ),
