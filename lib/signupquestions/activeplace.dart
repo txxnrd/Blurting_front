@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포트
 
 class ActivePlacePage extends StatefulWidget {
   @override
@@ -171,12 +172,12 @@ class _ActivePlacePageState extends State<ActivePlacePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SexPage()),
+                    MaterialPageRoute(builder: (context) => ReligionPage()),
                   );
                 },
 
                 child: Text(
-                  '인증번호 요청',
+                  '다음',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 20.0,
