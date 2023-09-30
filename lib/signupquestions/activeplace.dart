@@ -158,7 +158,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> {
             // ),
 
 
-            SizedBox(height: 309),
+            SizedBox(height: 318),
             Container(
               width: 350,
               height: 48,

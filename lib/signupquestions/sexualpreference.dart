@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/sexualpreference.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포트
 
-class ReligionPage extends StatefulWidget {
+class SexualPreferencePage extends StatefulWidget {
   @override
-  _ReligionPageState createState() => _ReligionPageState();
+  _SexualPreferencePageState createState() => _SexualPreferencePageState();
 }
-enum Religion { none,buddhism,christian,catholicism, etc}
+enum SexualPreference { different,same,both,etc}
 
-class _ReligionPageState extends State<ReligionPage> {
-  Religion? _selectedReligion;
+class _SexualPreferencePageState extends State<SexualPreferencePage> {
+  SexualPreference? _selectedSexualPreference;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,14 +53,14 @@ class _ReligionPageState extends State<ReligionPage> {
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * 0.3, // 10% 완료로 가정
+                  width: MediaQuery.of(context).size.width * 0.4, // 10% 완료로 가정
                   decoration: BoxDecoration(
                     color: Color(0xFF303030), // 파란색
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * 0.3 - 15,
+                  left: MediaQuery.of(context).size.width * 0.4 - 15,
                   bottom: -10,
                   child: Image.asset('assets/signupface.png', width: 30, height: 30),
                 )
@@ -71,7 +71,7 @@ class _ReligionPageState extends State<ReligionPage> {
               height: 50,
             ),
             Text(
-              '종교가 있으신가요?',
+              '성적지향성은 어떻게 되시나요?',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
@@ -87,7 +87,7 @@ class _ReligionPageState extends State<ReligionPage> {
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.none ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedSexualPreference == SexualPreference.different ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -95,11 +95,11 @@ class _ReligionPageState extends State<ReligionPage> {
 
                     onPressed: () {
                       setState(() {
-                        _selectedReligion = Religion.none;
+                        _selectedSexualPreference = SexualPreference.different;
                       });
                     },
                     child: Text(
-                      '무교',
+                      '이성애자',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -120,7 +120,7 @@ class _ReligionPageState extends State<ReligionPage> {
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.buddhism ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedSexualPreference == SexualPreference.same ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -128,11 +128,11 @@ class _ReligionPageState extends State<ReligionPage> {
 
                     onPressed: () {
                       setState(() {
-                        _selectedReligion = Religion.buddhism;
+                        _selectedSexualPreference == SexualPreference.same;
                       });
                     },
                     child: Text(
-                      '불교',
+                      '동성애자',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -155,7 +155,7 @@ class _ReligionPageState extends State<ReligionPage> {
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.christian ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedSexualPreference == SexualPreference.both ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -163,11 +163,11 @@ class _ReligionPageState extends State<ReligionPage> {
 
                     onPressed: () {
                       setState(() {
-                        _selectedReligion = Religion.christian;
+                        _selectedSexualPreference = SexualPreference.both;
                       });
                     },
                     child: Text(
-                      '기독교',
+                      '양성애자',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -188,7 +188,7 @@ class _ReligionPageState extends State<ReligionPage> {
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.catholicism ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedSexualPreference == SexualPreference.etc ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -196,11 +196,11 @@ class _ReligionPageState extends State<ReligionPage> {
 
                     onPressed: () {
                       setState(() {
-                        _selectedReligion = Religion.catholicism;
+                        _selectedSexualPreference = SexualPreference.etc;
                       });
                     },
                     child: Text(
-                      '천주교',
+                      '기타',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -212,52 +212,8 @@ class _ReligionPageState extends State<ReligionPage> {
                 ),
               ],
             ),
-            SizedBox(height: 17,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 159, // 원하는 너비 값
-                  height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.etc ? Color(0xFF868686) : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-
-                    onPressed: () {
-                      setState(() {
-                        _selectedReligion = Religion.etc;
-                      });
-                    },
-                    child: Text(
-                      '이외종교',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                Container(
-                  width: 159, // 원하는 너비 값
-                  height: 48, // 원하는 높이 값
-
-                ),
-              ],
-            ),
-
-            SizedBox(height: 178),
+            // 두 버튼 사이의 간격 조정
+            SizedBox(height: 242),
             Container(
               width: 350,
               height: 48,
@@ -271,7 +227,7 @@ class _ReligionPageState extends State<ReligionPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SexualPreferencePage()),
+                    MaterialPageRoute(builder: (context) => ActivePlacePage()),
                   );
                 },
 
