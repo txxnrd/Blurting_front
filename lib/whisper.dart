@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class Whisper extends StatefulWidget {
   const Whisper({Key? key}) : super(key: key);
 
@@ -13,20 +11,23 @@ class LeftTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.moveTo(15, 15);
-    path.lineTo(30, 15);
-    path.lineTo(30, 5);
-    path.quadraticBezierTo(30, 2, 32, 2);
-    path.lineTo(48, 15);
-    path.lineTo(size.width - 15, 15);
-    path.quadraticBezierTo(size.width, 15, size.width, 30);
-    path.lineTo(size.width, size.height - 15);
+    path.moveTo(25, 5);
+    path.lineTo(size.width - 15, 5); // 상측 선
+    path.quadraticBezierTo(size.width, 5, size.width, 15); // 우측 상단 둥글게
+    path.lineTo(size.width, size.height - 15); // 우측 선
     path.quadraticBezierTo(
-        size.width, size.height, size.width - 15, size.height);
-    path.lineTo(15, size.height);
-    path.quadraticBezierTo(0, size.height, 0, size.height - 15);
-    path.lineTo(0, 30);
-    path.quadraticBezierTo(0, 15, 15, 15);
+        // 우측 하단 둥글게
+        size.width,
+        size.height,
+        size.width - 15,
+        size.height);
+    path.lineTo(20, size.height); // 하측 선 어디까지?!
+    path.quadraticBezierTo(10, size.height, 10, size.height - 15); // 좌측 하단 둥글게
+    path.lineTo(10, 25); // 좌측 선 어디까지?! 여기서 꼬리 그려야 함
+    path.lineTo(0, 15);
+    path.lineTo(10, 15);
+    path.quadraticBezierTo(10, 5, 25, 5);
+
     return path;
   }
 
@@ -40,20 +41,18 @@ class RightTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.moveTo(size.width - 15, 15);
-    path.lineTo(size.width - 30, 15);
-    path.lineTo(size.width - 30, 5);
-    path.quadraticBezierTo(size.width - 30, 2, size.width - 32, 2);
-    path.lineTo(size.width - 48, 15);
-    path.lineTo(15, 15);
-    path.quadraticBezierTo(0, 15, 0, 30);
+    path.moveTo(size.width - 25, 5);
+    path.lineTo(15, 5);
+    path.quadraticBezierTo(0, 5, 0, 20);
     path.lineTo(0, size.height - 15);
     path.quadraticBezierTo(0, size.height, 15, size.height);
-    path.lineTo(size.width - 15, size.height);
+    path.lineTo(size.width - 23, size.height);
     path.quadraticBezierTo(
-        size.width, size.height, size.width, size.height - 15);
-    path.lineTo(size.width, 30);
-    path.quadraticBezierTo(size.width, 15, size.width - 15, 15);
+        size.width - 10, size.height, size.width - 10, size.height - 15);
+    path.lineTo(size.width - 10, 25);
+    path.lineTo(size.width, 15);
+    path.lineTo(size.width - 10, 15);
+    path.quadraticBezierTo(size.width - 10, 5, size.width - 25, 5);
 
     return path;
   }
@@ -173,25 +172,30 @@ class _Whisper extends State<Whisper> {
                 topLeft: Radius.circular(30), topRight: Radius.circular(30)),
             side: BorderSide(color: Color.fromRGBO(48, 48, 48, 1), width: 3.0),
           ),
-          title: Row(
+          title: Stack(
             children: [
-              IconButton(
-                icon: Image.asset('assets/images/icon_warning.png'),
-                color: Color.fromRGBO(48, 48, 48, 1),
-                onPressed: () {
-                  _ClickWarningButton(context);
-                  print('신고 버튼 눌림');
-                },
+              Positioned(
+                child: IconButton(
+                  icon: Image.asset('assets/images/icon_warning.png'),
+                  color: Color.fromRGBO(48, 48, 48, 1),
+                  onPressed: () {
+                    _ClickWarningButton(context);
+                    print('신고 버튼 눌림');
+                  },
+                ),
               ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Profile',
-                    style: TextStyle(
-                      color: Color.fromRGBO(138, 138, 138, 1),
-                      fontFamily: "Heedo",
-                      fontSize: 20,
+              Align(
+                alignment: Alignment.center,
+                child: Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(
+                        color: Color.fromRGBO(138, 138, 138, 1),
+                        fontFamily: "Heedo",
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),
@@ -199,6 +203,7 @@ class _Whisper extends State<Whisper> {
             ],
           ),
           content: Column(
+            // 동적으로 눌린 유저의 정보 받아오기
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
@@ -280,7 +285,9 @@ class _Whisper extends State<Whisper> {
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(bottom: 5),
-                        child: Icon(Icons.favorite_border, size: 35,
+                        child: Icon(
+                          Icons.favorite_border,
+                          size: 35,
                         ),
                       ), // 질문 번호 동적으로 받아오기
                       Text(
@@ -349,7 +356,6 @@ class _Whisper extends State<Whisper> {
                               clipper: LeftTailClipper(),
                               child: Container(
                                 width: 250,
-                                margin: EdgeInsets.only(bottom: 5),
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
@@ -359,7 +365,7 @@ class _Whisper extends State<Whisper> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.only(top: 12),
+                                      margin: EdgeInsets.only(left: 12, top: 3),
                                       child: Text(
                                         '개굴개굴 개구리 노래를 한다',
                                         style: TextStyle(
@@ -377,7 +383,6 @@ class _Whisper extends State<Whisper> {
                               clipper: LeftTailClipper(),
                               child: Container(
                                 width: 250,
-                                margin: EdgeInsets.only(bottom: 5),
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
@@ -387,7 +392,7 @@ class _Whisper extends State<Whisper> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.only(top: 12),
+                                      margin: EdgeInsets.only(left: 12, top: 3),
                                       child: Text(
                                         '어쩌라고 콱씨',
                                         style: TextStyle(
@@ -405,7 +410,6 @@ class _Whisper extends State<Whisper> {
                               clipper: LeftTailClipper(),
                               child: Container(
                                 width: 250,
-                                margin: EdgeInsets.only(bottom: 5),
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
@@ -415,9 +419,9 @@ class _Whisper extends State<Whisper> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.only(top: 12),
+                                      margin: EdgeInsets.only(left: 12, top: 3),
                                       child: Text(
-                                        '말풍선 고칠 거임',
+                                        '말풍선 고쳤다앙',
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
                                           fontSize: 12,
@@ -433,7 +437,6 @@ class _Whisper extends State<Whisper> {
                         ),
                       ),
                     ),
-
                     ListTile(
                       subtitle: // 답변 내용
                           Container(
@@ -444,7 +447,6 @@ class _Whisper extends State<Whisper> {
                               clipper: RightTailClipper(),
                               child: Container(
                                 width: 250,
-                                margin: EdgeInsets.only(bottom: 5),
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
@@ -453,8 +455,8 @@ class _Whisper extends State<Whisper> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(top: 12, right: 5),
+                                    Container(                                      
+                                      margin: EdgeInsets.only(left: 7, top: 3),
                                       child: Text(
                                         '흠냐링',
                                         style: TextStyle(
@@ -505,6 +507,7 @@ class _Whisper extends State<Whisper> {
                         onPressed: () {
                           SendAnswer(_controller.text);
                           _controller.clear();
+                          print('귓속말 보내기');
                         },
                         icon: Icon(Icons.arrow_forward_ios),
                         color: Color.fromRGBO(48, 48, 48, 1),
