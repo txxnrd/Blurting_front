@@ -153,7 +153,7 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
 
 
 
-            SizedBox(height: 242),
+            SizedBox(height: 292),
             Container(
               width: 350,
               height: 48,

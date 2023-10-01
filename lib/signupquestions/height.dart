@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/major.dart';  // sex.dart를 임포트
+
 final labels = ['안 핌', '가끔', '자주', '매일'];
 
 class HeightPage extends StatefulWidget {
@@ -22,7 +24,7 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => HeightPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) => MajorPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -145,7 +147,7 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                   : "${_currentHeightValue.toStringAsFixed(0)} cm",
             ),
 
-            SizedBox(height: 242),
+            SizedBox(height: 309),
             Container(
               width: 350,
               height: 48,

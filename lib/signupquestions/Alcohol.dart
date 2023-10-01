@@ -153,7 +153,7 @@ class _AlcoholPageState extends State<AlcoholPage> with SingleTickerProviderStat
 
 
 
-            SizedBox(height: 242),
+            SizedBox(height: 292),
             Container(
               width: 350,
               height: 48,
