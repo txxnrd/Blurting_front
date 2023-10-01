@@ -2,23 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/height.dart';  // sex.dart를 임포트
-
 final labels = ['안 핌', '가끔', '자주', '매일'];
 
-class SmokePage extends StatefulWidget {
+class HeightPage extends StatefulWidget {
   final String selectedGender;
 
-  SmokePage({required this.selectedGender});
+  HeightPage({required this.selectedGender});
   @override
-  _SmokePageState createState() => _SmokePageState();
+  _HeightPageState createState() => _HeightPageState();
 }
-enum SmokePreference { none,rarely,enjoy,everyday}
+enum AlcoholPreference { none,rarely,enjoy,everyday}
 
-class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMixin {
-  SmokePreference? _selectedSmokePreference;
-  double _smokeSliderValue = 0; // 슬라이더의 초기값 설정
-
+class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateMixin {
+  AlcoholPreference? _selectedAlcoholPreference;
+  double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -124,34 +121,29 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
               height: 50,
             ),
             Text(
-              '당신의 흡연습관은 어떻게 되시나요?',
+              '당신의 키는 어떻게 되시나요?',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
 
-            Column(
-              children: [
-                Slider(
-                  value: _smokeSliderValue,
-                  onChanged: (double newValue) {
-                    setState(() {
-                      _smokeSliderValue = newValue;
-                      _selectedSmokePreference = SmokePreference.values[newValue.toInt()];
-                    });
-                  },
-                  divisions: 3,
-                  min: 0,
-                  max: 3,
-                  activeColor: Color(0xFFF66464),
-                  inactiveColor: Color(0xFFD9D9D9),
-                ),
-                Row(
-                  children: labels.map((label) => Expanded(child: Center(child: Text(label)))).toList(),
-                ),
-              ],
+            Slider(
+              value: _currentHeightValue,
+              onChanged: (double newValue) {
+                setState(() {
+                  _currentHeightValue = newValue;
+                });
+              },
+              min: 150,
+              max: 205,
+              divisions: 45, // 205 - 160 = 45
+              activeColor: Color(0xFFF66464),
+              inactiveColor: Color(0xFFD9D9D9),
+              label: _currentHeightValue == 150
+                  ? "${_currentHeightValue.toStringAsFixed(0)} cm 이하"
+                  : _currentHeightValue == 205
+                  ? "${_currentHeightValue.toStringAsFixed(0)} cm 이상"
+                  : "${_currentHeightValue.toStringAsFixed(0)} cm",
             ),
-
-
 
             SizedBox(height: 242),
             Container(
