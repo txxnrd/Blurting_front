@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart';
+import 'image.dart';  // sex.dart를 임포트
 
 class HobbyPage extends StatefulWidget {
   final String selectedGender;
@@ -38,7 +39,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => HobbyPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) => ImagePage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
