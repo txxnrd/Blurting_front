@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/hobby.dart';  // sex.dart를 임포트
 
-class PersonalityPage extends StatefulWidget {
+class HobbyPage extends StatefulWidget {
   final String selectedGender;
 
-  PersonalityPage({required this.selectedGender});
+  HobbyPage({required this.selectedGender});
   @override
-  _PersonalityPageState createState() => _PersonalityPageState();
+  HobbyPageState createState() => HobbyPageState();
 }
 
 
@@ -17,24 +16,24 @@ class PersonalityPage extends StatefulWidget {
 
 
 
-class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProviderStateMixin {
+class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  bool isPersonality1Selected = false;
-  bool isPersonality2Selected = false;
-  bool isPersonality3Selected = false;
-  bool isPersonality4Selected = false;
-  bool isPersonality5Selected = false;
-  bool isPersonality6Selected = false;
-  bool isPersonality7Selected = false;
-  bool isPersonality8Selected = false;
-  bool isPersonality9Selected = false;
-  bool isPersonality10Selected = false;
-  bool isPersonality11Selected = false;
-  bool isPersonality12Selected = false;
-  bool isPersonality13Selected = false;
-  bool isPersonality14Selected = false;
-  bool isPersonality15Selected = false;
+  bool isHobby1Selected = false;
+  bool isHobby2Selected = false;
+  bool isHobby3Selected = false;
+  bool isHobby4Selected = false;
+  bool isHobby5Selected = false;
+  bool isHobby6Selected = false;
+  bool isHobby7Selected = false;
+  bool isHobby8Selected = false;
+  bool isHobby9Selected = false;
+  bool isHobby10Selected = false;
+  bool isHobby11Selected = false;
+  bool isHobby12Selected = false;
+  bool isHobby13Selected = false;
+  bool isHobby14Selected = false;
+  bool isHobby15Selected = false;
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
@@ -138,7 +137,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
               height: 50,
             ),
             Text(
-              '당신의 성격은 어떠신가요?',
+              '당신의 취미는 어떠신가요?',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
@@ -153,7 +152,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality1Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby1Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -161,7 +160,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality1Selected =!isPersonality1Selected;
+                        isHobby1Selected =!isHobby1Selected;
                       });
                     },
                     child: Text(
@@ -184,7 +183,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality2Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby2Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -192,7 +191,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality2Selected =!isPersonality2Selected;
+                        isHobby2Selected =!isHobby2Selected;
                       });
                     },
                     child: Text(
@@ -214,7 +213,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality3Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby3Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -222,7 +221,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality3Selected =!isPersonality3Selected;
+                        isHobby3Selected =!isHobby3Selected;
                       });
                     },
                     child: Text(
@@ -249,7 +248,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality4Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby4Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -257,7 +256,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality4Selected =!isPersonality4Selected;
+                        isHobby4Selected =!isHobby4Selected;
                       });
                     },
                     child: Text(
@@ -280,7 +279,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality5Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby5Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -288,7 +287,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality5Selected =!isPersonality5Selected;
+                        isHobby5Selected =!isHobby5Selected;
                       });
                     },
                     child: Text(
@@ -310,7 +309,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality6Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby6Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -318,7 +317,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality6Selected =!isPersonality6Selected;
+                        isHobby6Selected =!isHobby6Selected;
                       });
                     },
                     child: Text(
@@ -345,7 +344,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality7Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby7Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -353,7 +352,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality7Selected =!isPersonality7Selected;
+                        isHobby7Selected =!isHobby7Selected;
                       });
                     },
                     child: Text(
@@ -376,7 +375,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality8Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby8Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -384,7 +383,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality8Selected =!isPersonality8Selected;
+                        isHobby8Selected =!isHobby8Selected;
                       });
                     },
                     child: Text(
@@ -406,7 +405,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality9Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby9Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -414,7 +413,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality9Selected =!isPersonality9Selected;
+                        isHobby9Selected =!isHobby9Selected;
                       });
                     },
                     child: Text(
@@ -441,7 +440,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality10Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby10Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -449,7 +448,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality10Selected =!isPersonality10Selected;
+                        isHobby10Selected =!isHobby10Selected;
                       });
                     },
                     child: Text(
@@ -472,7 +471,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality11Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby11Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -480,7 +479,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality11Selected =true;
+                        isHobby11Selected =true;
                       });
                     },
                     child: Text(
@@ -502,7 +501,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality12Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby12Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -510,7 +509,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality12Selected =!isPersonality12Selected;
+                        isHobby12Selected =!isHobby12Selected;
                       });
                     },
                     child: Text(
@@ -537,7 +536,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality13Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby13Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -545,7 +544,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality13Selected =!isPersonality13Selected;
+                        isHobby13Selected =!isHobby13Selected;
                       });
                     },
                     child: Text(
@@ -568,7 +567,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality14Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby14Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -576,7 +575,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality14Selected =!isPersonality14Selected;
+                        isHobby14Selected =!isHobby14Selected;
                       });
                     },
                     child: Text(
@@ -598,7 +597,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                     style: TextButton.styleFrom(
                       side: BorderSide(color: Color(0xFF868686), width: 2,),
                       primary: Color(0xFF303030),
-                      backgroundColor: isPersonality15Selected ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby15Selected ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
                       ),
@@ -606,7 +605,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality15Selected =!isPersonality15Selected;
+                        isHobby15Selected =!isHobby15Selected;
                       });
                     },
                     child: Text(
