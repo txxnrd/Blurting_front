@@ -61,9 +61,14 @@ path.quadraticBezierTo(size.width - 10, 5, size.width - 25, 5);
 
 class _Group extends State<Group> {
   void _ClickWarningButton(BuildContext context) {
+
+    String IsTab='';
+  
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState){
         return AlertDialog(
           backgroundColor: Color.fromRGBO(217, 217, 217, 1),
           shape: RoundedRectangleBorder(
@@ -93,10 +98,20 @@ class _Group extends State<Group> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
+                    onPressed: () {
+                      //Navigator.of(context).pop(); // 모달 닫기
+                      print('신고 접수');
+                      setState(() {
+                        IsTab = 'confirm';
+                        print(IsTab);
+                      });
+                    },
                     child: Container(
                       width: 75,
                       height: 31,
                       decoration: BoxDecoration(
+                        color: IsTab=='confirm'
+                            ? Color.fromRGBO(134, 134, 134, 1) : Color.fromRGBO(217, 217, 217, 1),
                         border: Border.all(
                           color: Color.fromRGBO(134, 134, 134, 1), // 테두리 색상 설정
                           width: 2, // 테두리 두께 설정
@@ -110,21 +125,19 @@ class _Group extends State<Group> {
                           style: TextStyle(
                             fontFamily: "Pretendard",
                             fontSize: 15,
-                            color: Color.fromRGBO(48, 48, 48, 1),
+                            color: IsTab=='confirm' ? Colors.white : Color.fromRGBO(48, 48, 48, 1),
                           ),
                         ),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pop(); // 모달 닫기
-                      print('신고 접수');
-                    },
                   ),
                   TextButton(
                     child: Container(
                       width: 75,
                       height: 31,
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration(                       
+                        color: IsTab=='cancel'
+                            ? Color.fromRGBO(134, 134, 134, 1) : Color.fromRGBO(217, 217, 217, 1),
                         border: Border.all(
                           color: Color.fromRGBO(134, 134, 134, 1), // 테두리 색상 설정
                           width: 2, // 테두리 두께 설정
@@ -138,21 +151,26 @@ class _Group extends State<Group> {
                           style: TextStyle(
                             fontFamily: "Pretendard",
                             fontSize: 15,
-                            color: Color.fromRGBO(48, 48, 48, 1),
+                            color: IsTab=='cancel' ? Colors.white : Color.fromRGBO(48, 48, 48, 1),
                           ),
                         ),
+                        ),
                       ),
+                      onPressed: () {
+                        //Navigator.of(context).pop(); // 모달 닫기
+                        print('신고 취소');
+                        setState(() {
+                          IsTab = 'cancel';
+                          print(IsTab);
+                        });
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pop(); // 모달 닫기
-                      print('신고 취소');
-                    },
-                  ),
-                ],
+                  ],
               ),
             ),
           ],
         );
+      });
       },
     );
   }
