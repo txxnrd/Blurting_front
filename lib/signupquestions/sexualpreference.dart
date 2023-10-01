@@ -1,3 +1,4 @@
+import 'package:blurting/signupquestions/Alcohol.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
@@ -16,22 +17,35 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
   SexualPreference? _selectedSexualPreference;
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  Future<void> _increaseProgressAndNavigate() async {
+    await _animationController!.forward();
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => AlcoholPage(selectedGender: widget.selectedGender),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
+
+  }
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간 설정
+      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.4,  // 시작 너비 (30%)
-      end: 0.5,    // 종료 너비 (40%)
-    ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
-      ..addListener(() {
-        setState(() {});
-      });
+      begin: 0.4,  // 시작 게이지 값
+      end: 0.5,    // 종료 게이지 값
+    ).animate(_animationController!);
+
+    _animationController?.addListener(() {
+      setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
+    });
   }
 
   @override
@@ -261,10 +275,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ActivePlacePage(selectedGender:'')),
-                  );
+                  print("다음 버튼 클릭됨");
+                  _increaseProgressAndNavigate();
                 },
 
                 child: Text(
