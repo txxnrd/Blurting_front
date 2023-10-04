@@ -30,7 +30,7 @@ class MainApp extends StatelessWidget {
                 color: Color.fromRGBO(48, 48, 48, 1),
               ),
               onPressed: () {
-                // 돌아가기 버튼을 눌렀을 때의 동작
+                // 뒤로가기 버튼을 눌렀을 때의 동작
               },
             ),
             actions: <Widget>[
