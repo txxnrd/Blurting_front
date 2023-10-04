@@ -8,7 +8,10 @@ class PhoneNumberPage extends StatefulWidget {
 
 class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
+  String? _previousText;
   Animation<double>? _progressAnimation;
+  final _controller = TextEditingController();
+
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
@@ -30,6 +33,30 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
       vsync: this,
     );
 
+    _controller.addListener(() {
+      String text = _controller.text;
+
+      // Checking if the text has been added or removed.
+      if (_previousText == null || (text.length > (_previousText?.length ?? 0))) {
+        if (text.length == 3 || text.length == 8) {
+          text += '-';
+          _controller.text = text;
+          _controller.selection = TextSelection.fromPosition(TextPosition(offset: text.length));
+        }
+      } else if (text.length < (_previousText?.length ?? 0)) {
+        if (text.length == 4 || text.length == 9) {
+          text = text.substring(0, text.length - 1);
+          _controller.text = text;
+          _controller.selection = TextSelection.fromPosition(TextPosition(offset: text.length));
+        }
+      }
+
+      _previousText = _controller.text;
+    });
+
+
+
+
     _progressAnimation = Tween<double>(
       begin: 0,  // 시작 게이지 값
       end: 0.1,    // 종료 게이지 값
@@ -37,7 +64,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
 
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
-    });
+    }
+
+    );
   }
   @override
   Widget build(BuildContext context) {
@@ -104,6 +133,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
             ),
             SizedBox(height: 20),
             TextField(
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              maxLength: 13,
               decoration: InputDecoration(
                 hintText: '010-1234-5678',
                 border: OutlineInputBorder(
@@ -150,6 +182,11 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
       ),
     );
   }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
 
 class FaceIconPainter extends CustomPainter {
@@ -171,5 +208,6 @@ class FaceIconPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
+
 
 }

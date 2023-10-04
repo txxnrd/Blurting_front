@@ -178,6 +178,7 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
+                  elevation: 0,
                 ),
                 onPressed: () {
                   print("다음 버튼 클릭됨");
