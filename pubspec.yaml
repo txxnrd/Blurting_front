@@ -66,6 +66,9 @@ flutter:
     - assets/images/profile_swipe.png
     - assets/images/icon_warning.png
     - assets/images/Union.png
+    - assets/signupface.png
+    - assets/man.png
+    - assets/woman.png
 
   fonts:
     - family: Pretendard
@@ -101,10 +104,7 @@ flutter:
         - asset: assets/fonts/Heebo-ExtraBold.ttf
         - asset: assets/fonts/Heebo-Black.ttf
   # To add assets to your application, add an assets section, like this:
-  assets:
-     - assets/signupface.png
-     - assets/man.png
-     - assets/woman.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -117,10 +117,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-fonts:
-  - family: Pretendard
-    fonts:
-      - asset: fonts/PretendardVariable.ttf
+#fonts:
+#  - family: Pretendard
+#    fonts:
+#      - asset: fonts/PretendardVariable.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
