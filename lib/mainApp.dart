@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/group.dart';
 import 'package:blurting/whisper.dart';
 import 'package:blurting/tab3.dart';
+import 'package:blurting/MyPage.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -47,7 +48,7 @@ class MainApp extends StatelessWidget {
             children: [
               Group(), // 첫 번째 탭을 Group으로 대체
               Whisper(),
-              Tab3(),
+              MyPage(),
             ],
           ),
           bottomNavigationBar: TabBar( // 여기에 추가

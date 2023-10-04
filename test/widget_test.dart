@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:blurting/main.dart';
+import 'package:blurting/MyPage.dart';
 
 void main() {
 
