@@ -169,7 +169,9 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
 
 
             SizedBox(height: 309),
-            Container(
+            Center(
+              child:
+              Container(
               width: 350,
               height: 48,
               child: ElevatedButton(
@@ -179,6 +181,8 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   elevation: 0,
+                  padding: EdgeInsets.all(0), // 이 부분을 추가하여 내부 패딩을 제거
+
                 ),
                 onPressed: () {
                   print("다음 버튼 클릭됨");
@@ -194,6 +198,7 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                   ),
                 ),
               ),
+            ),
             ),
           ],
         ),
