@@ -48,7 +48,7 @@ class MainApp extends StatelessWidget {
             children: [
               Group(), // 첫 번째 탭을 Group으로 대체
               Whisper(),
-              Tab3(),
+              MyPage(),
             ],
           ),
           bottomNavigationBar: TabBar( // 여기에 추가
