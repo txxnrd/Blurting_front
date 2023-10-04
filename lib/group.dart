@@ -200,7 +200,6 @@ class _Group extends State<Group> {
               ),
               Align(
                 alignment: Alignment.center,
-                child: Expanded(
                   child: Container(
                     alignment: Alignment.center,
                     child: Text(
@@ -212,7 +211,6 @@ class _Group extends State<Group> {
                       ),
                     ),
                   ),
-                ),
               ),
             ],
           ),
