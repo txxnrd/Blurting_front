@@ -1,6 +1,6 @@
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/phonenumber.dart';  // sex.dart를 임포트
+// sex.dart를 임포트
 
 class SexPage extends StatefulWidget {
   @override

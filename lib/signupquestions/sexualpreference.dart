@@ -1,7 +1,5 @@
 import 'package:blurting/signupquestions/Alcohol.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 
 class SexualPreferencePage extends StatefulWidget {

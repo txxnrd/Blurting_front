@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 final labels = ['안 마심', '가끔', '자주', '매일'];
 
