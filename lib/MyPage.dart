@@ -25,6 +25,7 @@ class _MyPage extends State<MyPage> {
           useMaterial3: true,
         ),
         home: Scaffold(
+          /*
             appBar: AppBar(
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -34,6 +35,7 @@ class _MyPage extends State<MyPage> {
                       icon: Icon(Icons.settings, color: Colors.black),
                       onPressed: null)
                 ]),
+                */
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(

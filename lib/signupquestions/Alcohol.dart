@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/smoke.dart';  // sex.dart를 임포트
+
 final labels = ['안 마심', '가끔', '자주', '매일'];
 
 class AlcoholPage extends StatefulWidget {
@@ -21,7 +23,7 @@ class _AlcoholPageState extends State<AlcoholPage> with SingleTickerProviderStat
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => AlcoholPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) => SmokePage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -149,7 +151,7 @@ class _AlcoholPageState extends State<AlcoholPage> with SingleTickerProviderStat
 
 
 
-            SizedBox(height: 242),
+            SizedBox(height: 292),
             Container(
               width: 350,
               height: 48,

@@ -17,12 +17,20 @@ public final class GeneratedPluginRegistrant {
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin());
+<<<<<<< HEAD
     } catch (Exception e) {
+=======
+    } catch(Exception e) {
+>>>>>>> d19b1347493de81e1650206d364f2f005edfbe96
       Log.e(TAG, "Error registering plugin flutter_plugin_android_lifecycle, io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin", e);
     }
     try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.imagepicker.ImagePickerPlugin());
+<<<<<<< HEAD
     } catch (Exception e) {
+=======
+    } catch(Exception e) {
+>>>>>>> d19b1347493de81e1650206d364f2f005edfbe96
       Log.e(TAG, "Error registering plugin image_picker_android, io.flutter.plugins.imagepicker.ImagePickerPlugin", e);
     }
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -17,4 +18,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
