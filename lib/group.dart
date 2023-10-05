@@ -78,9 +78,9 @@ class _Group extends State<Group> {
             children: [
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: Image.asset('assets/images/icon_warning.png'),
                 width: 40,
                 height: 40,
+                child: Image.asset('assets/images/icon_warning.png'),
               ),
               Text(
                 '이 사용자를 신고하시겠습니까?',
@@ -246,11 +246,7 @@ class _Group extends State<Group> {
                     Container(
                         margin: EdgeInsets.only(top: 10, bottom: 5),
                         child: Text(
-                            '아이씨 겁나 귀찮네 이거' +
-                                '\n' +
-                                '아래 점은... 일단 그냥 해놧어요' +
-                                '\n' +
-                                '무슨 정보가 들어가는 건지 모르겟음',
+                            '아이씨 겁나 귀찮네 이거\n아래 점은... 일단 그냥 해놧어요\n무슨 정보가 들어가는 건지 모르겟음',
                             textAlign: TextAlign.center, // 텍스트를 가운데 정렬
                             style: TextStyle(
                                 fontFamily: "Pretendard",
@@ -280,7 +276,7 @@ class _Group extends State<Group> {
 
   @override
   Widget build(BuildContext context) {
-    var _controller = TextEditingController();
+    var controller = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -294,7 +290,7 @@ class _Group extends State<Group> {
                 Positioned(
                   left: 15,
                   bottom: 0,
-                  child: Container(
+                  child: SizedBox(
                     // 그룹 아이콘
                     width: 50,
                     height: 50,
@@ -310,7 +306,7 @@ class _Group extends State<Group> {
                         Container(
                           margin: EdgeInsets.only(bottom: 5),
                           child: Text(
-                            'Q' + '1',
+                            'Q' '1',
                             style: TextStyle(
                                 fontSize: 24,
                                 fontFamily: "Pretendard",
@@ -353,7 +349,7 @@ class _Group extends State<Group> {
                             borderRadius: BorderRadius.circular(5),
                             color: Color.fromRGBO(217, 217, 217, 1),
                           ),
-                          child: Container(
+                          child: SizedBox(
                             width: 42.74,
                             height: 48.56,
                             child: Image.asset(
@@ -396,13 +392,7 @@ class _Group extends State<Group> {
                                       // 이거는 width 설정이 되는디...
                                       margin: EdgeInsets.only(left: 12, top: 3),
                                       child: Text(
-                                        '저는 휴학했어요 하하 부러우시죠' +
-                                            '\n' +
-                                            '하하하하하하하하하하하하하' +
-                                            '\n' +
-                                            '푸하하하하하학' +
-                                            '\n' +
-                                            '휴학 ㄱㄱ',
+                                        '저는 휴학했어요 하하 부러우시죠\n하하하하하하하하하하하하하\n푸하하하하하학\n휴학 ㄱㄱ',
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
                                           fontSize: 12,
@@ -427,7 +417,7 @@ class _Group extends State<Group> {
                           borderRadius: BorderRadius.circular(5),
                           color: Color.fromRGBO(217, 217, 217, 1),
                         ),
-                        child: Container(
+                        child: SizedBox(
                           width: 42.74,
                           height: 48.56,
                           child: Image.asset(
@@ -484,7 +474,7 @@ class _Group extends State<Group> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             height: 50, // 높이를 50으로 설정
             child: Row(
               children: <Widget>[
@@ -510,8 +500,8 @@ class _Group extends State<Group> {
                       hintStyle: TextStyle(fontSize: 12),
                       suffixIcon: IconButton(
                         onPressed: () {
-                          SendAnswer(_controller.text);
-                          _controller.clear();
+                          SendAnswer(controller.text);
+                          controller.clear();
                           print('답변하기');
                         },
                         icon: Icon(Icons.arrow_forward_ios),

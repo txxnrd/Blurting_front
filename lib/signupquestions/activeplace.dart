@@ -5,7 +5,7 @@ import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포�
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
 
-  ActivePlacePage({required this.selectedGender});
+  ActivePlacePage({super.key, required this.selectedGender});
   @override
   _ActivePlacePageState createState() => _ActivePlacePageState();
 }
@@ -123,7 +123,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextField(
@@ -157,7 +157,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextField(
@@ -206,12 +206,12 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
 
 
             SizedBox(height: 318),
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

@@ -5,6 +5,8 @@ void main() {
 }
 
 class MyPage extends StatefulWidget {
+  const MyPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _MyPage();
@@ -101,9 +103,7 @@ class _MyPage extends State<MyPage> {
                             Container(
                                 margin: EdgeInsets.only(top: 10, bottom: 5),
                                 child: Text(
-                                    '아래 점은...고정하고 싶은 답변?' +
-                                        '\n' +
-                                        'or 상태메시지? or 추가정보',
+                                    '아래 점은...고정하고 싶은 답변?\nor 상태메시지? or 추가정보',
                                     textAlign: TextAlign.center, // 텍스트를 가운데 정렬
                                     style: TextStyle(
                                         fontFamily: "Pretendard",
@@ -149,7 +149,7 @@ class _MyPage extends State<MyPage> {
                   ),
                   Padding(
                       padding: const EdgeInsets.only(top: 70),
-                      child: Container(
+                      child: SizedBox(
                         width: 350,
                         height: 48,
                         child: ElevatedButton(

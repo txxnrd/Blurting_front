@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/group.dart';
 import 'package:blurting/whisper.dart';
-import 'package:blurting/tab3.dart';
 import 'package:blurting/MyPage.dart';
 
 void main() {
@@ -45,7 +44,7 @@ class MainApp extends StatelessWidget {
             ],
           ),
           body: TabBarView(
-            children: [
+            children: const [
               Group(), // 첫 번째 탭을 Group으로 대체
               Whisper(),
               MyPage(),
@@ -53,7 +52,7 @@ class MainApp extends StatelessWidget {
           ),
           bottomNavigationBar: TabBar( // 여기에 추가
             indicatorColor: Colors.black,
-            tabs: [
+            tabs: const [
               Tab(icon: Icon(Icons.chat_bubble_outline, color: Colors.black,)),
               Tab(icon: Icon(Icons.favorite_border, color: Colors.black,)),
               Tab(icon: Icon(Icons.perm_identity, color: Colors.black,)),

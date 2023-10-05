@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/mbti.dart';
 
 import 'done.dart';  // sex.dart를 임포트
 
@@ -10,7 +7,7 @@ import 'done.dart';  // sex.dart를 임포트
 class UniversityPage extends StatefulWidget {
   final String selectedGender;
 
-  UniversityPage({required this.selectedGender});
+  UniversityPage({super.key, required this.selectedGender});
   @override
   _UniversityPageState createState() => _UniversityPageState();
 }
@@ -144,12 +141,12 @@ class _UniversityPageState extends State<UniversityPage> with SingleTickerProvid
 
             SizedBox(height: 299),
 
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

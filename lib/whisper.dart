@@ -77,9 +77,9 @@ class _Whisper extends State<Whisper> {
             children: [
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: Image.asset('assets/images/icon_warning.png'),
                 width: 40,
                 height: 40,
+                child: Image.asset('assets/images/icon_warning.png'),
               ),
               Text(
                 '이 사용자를 신고하시겠습니까?',
@@ -235,11 +235,7 @@ class _Whisper extends State<Whisper> {
                     Container(
                         margin: EdgeInsets.only(top: 10, bottom: 5),
                         child: Text(
-                            '아이씨 겁나 귀찮네 이거' +
-                                '\n' +
-                                '아래 점은... 일단 그냥 해놧어요' +
-                                '\n' +
-                                '무슨 정보가 들어가는 건지 모르겟음',
+                            '아이씨 겁나 귀찮네 이거\n아래 점은... 일단 그냥 해놧어요\n무슨 정보가 들어가는 건지 모르겟음',
                             textAlign: TextAlign.center, // 텍스트를 가운데 정렬
                             style: TextStyle(
                                 fontFamily: "Pretendard",
@@ -269,7 +265,7 @@ class _Whisper extends State<Whisper> {
 
   @override
   Widget build(BuildContext context) {
-    var _controller = TextEditingController();
+    var controller = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -325,7 +321,7 @@ class _Whisper extends State<Whisper> {
                             borderRadius: BorderRadius.circular(5),
                             color: Color.fromRGBO(217, 217, 217, 1),
                           ),
-                          child: Container(
+                          child: SizedBox(
                             width: 42.74,
                             height: 48.56,
                             child: Image.asset(
@@ -479,7 +475,7 @@ class _Whisper extends State<Whisper> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             height: 50, // 높이를 50으로 설정
             child: Row(
               children: <Widget>[
@@ -505,8 +501,8 @@ class _Whisper extends State<Whisper> {
                       hintStyle: TextStyle(fontSize: 12),
                       suffixIcon: IconButton(
                         onPressed: () {
-                          SendAnswer(_controller.text);
-                          _controller.clear();
+                          SendAnswer(controller.text);
+                          controller.clear();
                           print('귓속말 보내기');
                         },
                         icon: Icon(Icons.arrow_forward_ios),

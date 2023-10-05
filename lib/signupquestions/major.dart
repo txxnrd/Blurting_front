@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/mbti.dart';  // sex.dart를 임포트
 
@@ -8,7 +6,7 @@ import 'package:blurting/signupquestions/mbti.dart';  // sex.dart를 임포트
 class MajorPage extends StatefulWidget {
   final String selectedGender;
 
-  MajorPage({required this.selectedGender});
+  MajorPage({super.key, required this.selectedGender});
   @override
   _MajorPageState createState() => _MajorPageState();
 }
@@ -16,7 +14,7 @@ enum AlcoholPreference { none,rarely,enjoy,everyday}
 
 class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMixin {
   AlcoholPreference? _selectedAlcoholPreference;
-  double _currentHeightValue = 160.0; // 초기 키 값
+  final double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -144,12 +142,12 @@ class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMix
 
             SizedBox(height: 299),
 
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

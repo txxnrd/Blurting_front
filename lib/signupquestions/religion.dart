@@ -5,7 +5,7 @@ import 'package:blurting/signupquestions/sexualpreference.dart';  // sex.dart를
 class ReligionPage extends StatefulWidget {
   final String selectedGender;
 
-  ReligionPage({required this.selectedGender});
+  ReligionPage({super.key, required this.selectedGender});
   @override
   _ReligionPageState createState() => _ReligionPageState();
 }
@@ -129,13 +129,12 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedReligion == Religion.none ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -162,13 +161,12 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedReligion == Religion.buddhism ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -197,13 +195,12 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedReligion == Religion.christian ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -230,13 +227,12 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedReligion == Religion.catholicism ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -265,13 +261,12 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedReligion == Religion.etc ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -298,7 +293,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
 
@@ -307,12 +302,12 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
             ),
 
             SizedBox(height: 178),
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

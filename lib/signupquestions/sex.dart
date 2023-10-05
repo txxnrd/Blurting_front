@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // sex.dart를 임포트
 
 class SexPage extends StatefulWidget {
+  const SexPage({super.key});
+
   @override
   _SexPageState createState() => _SexPageState();
 }
@@ -120,13 +122,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedGender == Gender.male ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -153,13 +154,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2),
                       backgroundColor: _selectedGender == Gender.female ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -185,12 +185,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
             ),
 
             SizedBox(height: 309),
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

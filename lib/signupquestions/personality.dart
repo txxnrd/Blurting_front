@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/hobby.dart';  // sex.dart를 임포트
 
 class PersonalityPage extends StatefulWidget {
   final String selectedGender;
 
-  PersonalityPage({required this.selectedGender});
+  PersonalityPage({super.key, required this.selectedGender});
   @override
   _PersonalityPageState createState() => _PersonalityPageState();
 }
@@ -146,13 +144,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality1Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -177,13 +174,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality2Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -207,13 +203,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                   ),
                 ),
                 SizedBox(width:17),
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality3Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -242,13 +237,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality4Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -273,13 +267,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality5Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -303,13 +296,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                   ),
                 ),
                 SizedBox(width:17),
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality6Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -338,13 +330,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality7Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -369,13 +360,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality8Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -399,13 +389,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                   ),
                 ),
                 SizedBox(width:17),
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality9Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -434,13 +423,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality10Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -465,13 +453,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality11Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -495,13 +482,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                   ),
                 ),
                 SizedBox(width:17),
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality12Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -530,13 +516,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality13Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -561,13 +546,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality14Selected == true ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -591,13 +575,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                   ),
                 ),
                 SizedBox(width:17),
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: isPersonality15Selected ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
@@ -624,12 +607,12 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
             ),
             SizedBox(height: 95),
 
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

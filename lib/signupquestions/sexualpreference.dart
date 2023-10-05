@@ -5,7 +5,7 @@ import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 class SexualPreferencePage extends StatefulWidget {
   final String selectedGender;
 
-  SexualPreferencePage({required this.selectedGender});
+  SexualPreferencePage({super.key, required this.selectedGender});
   @override
   _SexualPreferencePageState createState() => _SexualPreferencePageState();
 }
@@ -128,13 +128,12 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedSexualPreference == SexualPreference.different ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -161,13 +160,12 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedSexualPreference == SexualPreference.same ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -196,13 +194,12 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedSexualPreference == SexualPreference.both ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -229,13 +226,12 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedSexualPreference == SexualPreference.etc ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -262,12 +258,12 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
             ),
             // 두 버튼 사이의 간격 조정
             SizedBox(height: 242),
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/personality.dart';  // sex.dart를 임포트
 
@@ -8,7 +6,7 @@ import 'package:blurting/signupquestions/personality.dart';  // sex.dart를 임�
 class MBTIPage extends StatefulWidget {
   final String selectedGender;
 
-  MBTIPage({required this.selectedGender});
+  MBTIPage({super.key, required this.selectedGender});
   @override
   _MBTIPageState createState() => _MBTIPageState();
 }
@@ -27,7 +25,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
 
 
-  double _currentHeightValue = 160.0; // 초기 키 값
+  final double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -141,13 +139,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedEorI == EorI.e ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -174,13 +171,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedEorI == EorI.i ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -209,13 +205,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedSorN == SorN.s ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -242,13 +237,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedSorN == SorN.n ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -277,13 +271,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedTorF == TorF.t ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -310,13 +303,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedTorF == TorF.f ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -345,13 +337,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedJorP == JorP.j ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -378,13 +369,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
+                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
                       backgroundColor: _selectedJorP == JorP.p ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
@@ -412,12 +402,12 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
             SizedBox(height: 115),
 
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

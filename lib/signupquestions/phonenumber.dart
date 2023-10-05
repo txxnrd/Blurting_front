@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 
 class PhoneNumberPage extends StatefulWidget {
+  const PhoneNumberPage({super.key});
+
   @override
   _PhoneNumberPageState createState() => _PhoneNumberPageState();
 }
@@ -120,12 +122,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
 
 
             SizedBox(height: 309),
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

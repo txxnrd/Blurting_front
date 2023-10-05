@@ -7,7 +7,7 @@ final labels = ['안 마심', '가끔', '자주', '매일'];
 class AlcoholPage extends StatefulWidget {
   final String selectedGender;
 
-  AlcoholPage({required this.selectedGender});
+  AlcoholPage({super.key, required this.selectedGender});
   @override
   _AlcoholPageState createState() => _AlcoholPageState();
 }
@@ -152,12 +152,12 @@ class _AlcoholPageState extends State<AlcoholPage> with SingleTickerProviderStat
 
 
             SizedBox(height: 292),
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

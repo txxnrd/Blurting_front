@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/major.dart';  // sex.dart를 임포트
 
@@ -9,7 +7,7 @@ final labels = ['안 핌', '가끔', '자주', '매일'];
 class HeightPage extends StatefulWidget {
   final String selectedGender;
 
-  HeightPage({required this.selectedGender});
+  HeightPage({super.key, required this.selectedGender});
   @override
   _HeightPageState createState() => _HeightPageState();
 }
@@ -148,12 +146,12 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
             ),
 
             SizedBox(height: 309),
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

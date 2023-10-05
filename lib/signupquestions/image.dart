@@ -1,9 +1,7 @@
 import 'package:blurting/signupquestions/university.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/mbti.dart';  // sex.dart를 임포트
+// sex.dart를 임포트
 
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';  // 추가
@@ -12,7 +10,7 @@ import 'package:image_picker/image_picker.dart';  // 추가
 class ImagePage extends StatefulWidget {
   final String selectedGender;
 
-  ImagePage({required this.selectedGender});
+  ImagePage({super.key, required this.selectedGender});
 
   @override
   ImagePageState createState() => ImagePageState();
@@ -26,8 +24,8 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
   File? _image3;
 
   Future<void> _pickImage1() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image1 = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image1 = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (image1 != null) {
@@ -36,8 +34,8 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
     });
   }
   Future<void> _pickImage2() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image2 = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image2 = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (image2 != null) {
@@ -46,8 +44,8 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
     });
   }
   Future<void> _pickImage3() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image3 = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image3 = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (image3 != null) {
@@ -216,12 +214,12 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
 
             SizedBox(height: 235),
 
-            Container(
+            SizedBox(
               width: 350,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
+                  backgroundColor: Color(0xFFF66464),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
