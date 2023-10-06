@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Phone Number App',
       theme: ThemeData(
-        primaryColor: Colors.white, colorScheme: ColorScheme(background: Colors.white),
+        primaryColor: Colors.white,
+        backgroundColor: Colors.white,
       ),
       home: PhoneNumberPage(), // PhoneNumberPage를 홈으로 설정
     );

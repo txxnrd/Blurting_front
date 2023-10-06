@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/religion.dart'; // sex.dart를 임포트
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
@@ -10,39 +10,42 @@ class ActivePlacePage extends StatefulWidget {
   _ActivePlacePageState createState() => _ActivePlacePageState();
 }
 
-class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProviderStateMixin{
+class _ActivePlacePageState extends State<ActivePlacePage>
+    with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => ReligionPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            ReligionPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
+
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.2,  // 시작 게이지 값
-      end: 0.3,    // 종료 게이지 값
+      begin: 0.2, // 시작 게이지 값
+      end: 0.3, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
     });
   }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -92,19 +95,24 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * _progressAnimation!.value,
+                  width: MediaQuery.of(context).size.width *
+                      _progressAnimation!.value,
                   decoration: BoxDecoration(
                     color: Color(0xFF303030), // 파란색
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * _progressAnimation!.value - 15,
+                  left: MediaQuery.of(context).size.width *
+                          _progressAnimation!.value -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
@@ -117,7 +125,11 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
             ),
             Text(
               '주로 활동하는 지역이 어디인가요?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
             Row(
@@ -144,16 +156,17 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Color(0xFF868686), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xFF868686), width: 2),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Color(0xFF868686), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xFF868686), width: 2),
                       ),
                     ),
                   ),
                 ),
-
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
@@ -178,11 +191,13 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Color(0xFF868686), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xFF868686), width: 2),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Color(0xFF868686), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xFF868686), width: 2),
                       ),
                     ),
                   ),
@@ -204,7 +219,6 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
             //   ),
             // ),
 
-
             SizedBox(height: 318),
             SizedBox(
               width: 350,
@@ -220,14 +234,13 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
                   print("다음 버튼 클릭됨");
                   _increaseProgressAndNavigate();
                 },
-
                 child: Text(
                   '다음',
                   style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontFamily: 'Pretendard',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
               ),
             ),
@@ -257,5 +270,4 @@ class FaceIconPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
-
 }
