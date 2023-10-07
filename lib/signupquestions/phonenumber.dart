@@ -75,6 +75,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       backgroundColor: Colors.white,
       appBar: AppBar(
         toolbarHeight: 80,
