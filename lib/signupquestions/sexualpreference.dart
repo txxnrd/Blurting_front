@@ -262,8 +262,36 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 ),
               ],
             ),
+            SizedBox(height: 222,),
             // 두 버튼 사이의 간격 조정
-            SizedBox(height: 242),
+            // SizedBox(height: 255),
+            Container(
+              width: 180,
+              height: 12,
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                    color: Color(0xFF303030),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '*동성애자 선택시 ',
+                    ),
+                    TextSpan(
+                      text: '동성끼리만',
+                      style: TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                    ),
+                    TextSpan(
+                      text: ' 매칭해드립니다.',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 21,),
             Container(
               width: 350,
               height: 48,

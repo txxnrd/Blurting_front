@@ -10,19 +10,115 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		hHE+eaNTU7OhZm6GhedRzMj7KCY=
+		DjDt0GaAhuZZwSEZBw96RBmHjLw=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		3UegCTJRwh4wNUBNAIjGoY84Tvc=
+		jgyUNqDVEGZHdcpYU3kB2feuiWM=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
-		vKJkVIcw+LGHFnKJGwrQwCREv68=
+		hh0As7VbEC2WlcWc3CSeiaKzQdc=
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
 		bGZP0/MCAl5LHC4CJZbRd2ZuMwQ=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-Black.ttf</key>
+		<data>
+		PqvVFLBeFGi9swBFbWr6aM0Hk9E=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-Bold.ttf</key>
+		<data>
+		I9EY3u7fgYs70DyYmc0piAHv360=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-ExtraBold.ttf</key>
+		<data>
+		m+Ol+4iryZgcjUGScxo9LqFYL7I=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-ExtraLight.ttf</key>
+		<data>
+		NiAwSLFvtdBP49qsPIZ8EubiqDo=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-Light.ttf</key>
+		<data>
+		W9sRlmjaMIYy0p2u0eYnO2H8pqk=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-Medium.ttf</key>
+		<data>
+		H9fDpJ97CLPT2g7svUljak59l7Q=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-Regular.ttf</key>
+		<data>
+		D/oexOG8gxlBYLUhl0mjYN7DCQ4=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-SemiBold.ttf</key>
+		<data>
+		FXow+h9pJJZMO0an5sIQMSFufCI=
+		</data>
+		<key>flutter_assets/assets/fonts/Heebo-Thin.ttf</key>
+		<data>
+		VJlP4gamUoyiWTfXVIN3TPZKNl4=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-Black.ttf</key>
+		<data>
+		bhqNz7gSZdfFHuqIm8c38KSzM2g=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-Bold.ttf</key>
+		<data>
+		ixiXn29A64pdaES2uULZ1vOMhFI=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-ExtraBold.ttf</key>
+		<data>
+		jSWYx2Mfe33mPgpfw5APa8Q/sp4=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-ExtraLight.ttf</key>
+		<data>
+		ZlM0vaL6L+Vver7YpvyH2SbbwGM=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-Light.ttf</key>
+		<data>
+		ghr+JGLU6lytPWNccFpSPNHXmO8=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-Medium.ttf</key>
+		<data>
+		vThBcF84WXOE8im3NB1XaX5bv2g=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-Regular.ttf</key>
+		<data>
+		f/tj7mhmobNMNIrOdtZSlBbx4TE=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-SemiBold.ttf</key>
+		<data>
+		dTRhVOOtDRPtpCXWa2JfAH7wDxs=
+		</data>
+		<key>flutter_assets/assets/fonts/Pretendard-Thin.ttf</key>
+		<data>
+		HPHhBxTQjFg/bnqdXX0D7XPRVuc=
+		</data>
+		<key>flutter_assets/assets/images/Union.png</key>
+		<data>
+		8/UJn2/DYg/QBDTsUgmstfoBxBw=
+		</data>
+		<key>flutter_assets/assets/images/icon_group.png</key>
+		<data>
+		TjxKTwPaqG3UBJ9rPQIjtE8Z6zo=
+		</data>
+		<key>flutter_assets/assets/images/icon_warning.png</key>
+		<data>
+		ejoWuYmEvXmxcHP4/OYstEhXbQU=
+		</data>
+		<key>flutter_assets/assets/images/profile_image.png</key>
+		<data>
+		tegx6PIv40JQKnNJgVNEZMc2ANA=
+		</data>
+		<key>flutter_assets/assets/images/profile_swipe.png</key>
+		<data>
+		72aEHJQCxF8eS741RHm+DNdGO+o=
+		</data>
+		<key>flutter_assets/assets/images/setting.png</key>
+		<data>
+		D8z5ZjBQQpb+5RDRZKe/Y/0SNrQ=
 		</data>
 		<key>flutter_assets/assets/man.png</key>
 		<data>
@@ -40,13 +136,25 @@
 		<data>
 		/CUoTuPQqqdexfyOT9lpJhV+2MQ=
 		</data>
+		<key>flutter_assets/image/girl.png</key>
+		<data>
+		Eu/GmmmWpXxaI3BUJdgAvqr4tSc=
+		</data>
+		<key>flutter_assets/image/profile_swipe_next.png</key>
+		<data>
+		72aEHJQCxF8eS741RHm+DNdGO+o=
+		</data>
+		<key>flutter_assets/image/profile_swipe_now.png</key>
+		<data>
+		p4QWSlX+X9Q9UX2ylMF3QeL9Vwk=
+		</data>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<data>
 		dRka9t86+Ik10kMCLsudB3ofChY=
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		maQh9LZbpIvTRl7igyZ4wOqvwpE=
+		/bl5zy0ek8xwLvfd9vjqOd1748k=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -67,21 +175,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			b1BQU8WeRcQGG1Iw26gpw3XYa6Q4CbYc4kmNHk1XlBc=
+			bkRCKEdhm8SLfeqiq+5MG3V8eSun+9fb82XhRHjsKrU=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			DxuGnaF6BECEWMhYv4zvL0L0LBvSMx83lS9FmWaeiC0=
+			Kplv6N5QUyEBZOJYF/539UR4c1MaGitVe5rMRm9Brok=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			zX4DZFvESy3Ue3y2JvUcTsv1Whl6t3JBYotHrBZfviE=
+			JWf8GuNm+KdTxmZkS+ASQtaMe+6cxWdYlu7iKcNZxJg=
 			</data>
 		</dict>
 		<key>flutter_assets/NOTICES.Z</key>
@@ -89,6 +197,174 @@
 			<key>hash2</key>
 			<data>
 			J4t4HVnLNfq3FKkczTZNkZop9+rzgnu0w37aYXpm984=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-Black.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			HE5suf8m+1rgw6W0k6AJOEPVC09IxDnmMIJTm8gw6MI=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-Bold.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mxSyWZY3C4cwcK7QMyDzwHb/pRywn1QzISLIL5FY3yo=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-ExtraBold.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			FOBtf95pNX8pBBvc9Ept1cl5EDzygDe51+8lhKyrtNs=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-ExtraLight.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Pueu4cMy9Qwniy2pJhPac0/Spcj5Kn3OVkPAZXR6t+k=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-Light.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			95A8A2+oeF4KTjk6KVA7Mn/NEE2enEeOTkaJ7Mu/i44=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-Medium.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			UMIkCjMDLbxZhD2LJa0NaweXPqKNFbnW+Bf+ogDQz1I=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-Regular.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2wMT/JmV67sitvpzY+T98Nybef5YRUf2huuI9ubmR7Q=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-SemiBold.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			6WEnODrMYHZ6n8Ii0hfOz32NVMLADtbtjBNXWpwskfg=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Heebo-Thin.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bMgcqEUZ2LmUiITJb4k+SPb16H6MIThH1CFxRfdYrRw=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-Black.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2YjmhCkoeBjpjeeng8EEE5DuOXbi9hlYGqOt7NWwMrc=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-Bold.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			7g+3tDJe21AxW4G/s22/EqANtZbLQ/G5sdkNggx4i74=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-ExtraBold.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			MqHXG+yc6s4sbEuE1vTVzmAcRZAjeW/pWj0LnGTVIkY=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-ExtraLight.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			tpYRa3YClXp7zA8cX2Q/9Q/F3vgzYPCFD17EvvRY39s=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-Light.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Ar6X4qg3u7Ks/ENuoHAoASw9mj9W1yLZg6gCbS1WCb0=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-Medium.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			m4poADtY6+KCiZczYOD7shmQGDA7tS1ookBQkw3xh4w=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-Regular.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			8ylSiTwzSOzOsbWXXpU8qhNvuhB+1AAxf+hlmo+0xQY=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-SemiBold.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Bddx6iDPDoLC3e637HoQ7nSusQuqJgOstAfVsqWlW7c=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/fonts/Pretendard-Thin.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			RxpBZ9ejBrJJlSAqSwPTFsco8Cy23injwmkCqoUxrn4=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/Union.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			biNxXJlmoqyxKXX5wkkLLGlQ4V0ii90YL9fCqGT8wj0=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/icon_group.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			RnBE/J4Yf1OA8v3On5hGGNx5YnJF9UaW7a4xu9wXpaM=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/icon_warning.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			jy0iy7W+ABXOkW5dpJvaWU17GFqV3yQubMEGY0EmENg=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/profile_image.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bqxjjLgcXt7O8BYlYXG4YW3zRA1S0KlHWKJxUrJC0RU=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/profile_swipe.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			GPLkPzYSnKaJyFjWPJBM23vxSsM99Vb723UFVi0nw8c=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/setting.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+hIycyv7+qL+0G6NEUQrzXoXQxZVuzR0NXiVhOZNqz4=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/man.png</key>
@@ -119,6 +395,27 @@
 			2YZbZxoJ1oPROoYwidiCXg9ho3aWzl19RIvIAjqmJFM=
 			</data>
 		</dict>
+		<key>flutter_assets/image/girl.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			8K8KN8wvR6Zpg/gSrYCe5sTS7D287uW7MQpH999WkvM=
+			</data>
+		</dict>
+		<key>flutter_assets/image/profile_swipe_next.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			GPLkPzYSnKaJyFjWPJBM23vxSsM99Vb723UFVi0nw8c=
+			</data>
+		</dict>
+		<key>flutter_assets/image/profile_swipe_now.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			xFWR/J7Jhat+vyQbFfhj16Xt3jCOTqoXyHBrhgbX19o=
+			</data>
+		</dict>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<dict>
 			<key>hash2</key>
@@ -130,7 +427,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			iHvirs9QGQnrLRiVMQqR+aAkrJR5hIgHPNlwcYdxXsk=
+			UvGE5OdwVqrX3Lve54wIyuKkEYfAifZlLcDp6Jjgyv0=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

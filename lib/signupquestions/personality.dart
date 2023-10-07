@@ -622,7 +622,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                 ),
               ],
             ),
-            SizedBox(height: 95),
+            SizedBox(height: 107),
 
             Container(
               width: 350,

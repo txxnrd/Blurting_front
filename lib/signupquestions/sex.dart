@@ -184,12 +184,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
               ],
             ),
 
-            SizedBox(height: 309),
+            SizedBox(height: 320),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: 350,
+                  width: 343,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

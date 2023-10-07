@@ -306,7 +306,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
               ],
             ),
 
-            SizedBox(height: 178),
+            SizedBox(height: 190),
             Container(
               width: 350,
               height: 48,

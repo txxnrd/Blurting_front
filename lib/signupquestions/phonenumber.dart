@@ -1,3 +1,4 @@
+import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 
@@ -16,7 +17,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => SexPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => PhoneCertificationPage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -151,7 +152,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
             ),
 
 
-            SizedBox(height: 309),
+            SizedBox(height: 299),
             Container(
               width: 350,
               height: 48,

@@ -214,8 +214,34 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
 
 
 
-            SizedBox(height: 235),
-
+            SizedBox(height: 206),
+            Container(
+              width: 180,
+              height: 12,
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                    color: Color(0xFF303030),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '*얼굴이 ',
+                    ),
+                    TextSpan(
+                      text: '잘 보이는',
+                      style: TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                    ),
+                    TextSpan(
+                      text: ' 사진 3장을 등록해주세요.',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height:27),
             Container(
               width: 350,
               height: 48,

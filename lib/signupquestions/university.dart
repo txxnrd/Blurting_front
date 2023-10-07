@@ -142,7 +142,7 @@ class _UniversityPageState extends State<UniversityPage> with SingleTickerProvid
               ),
             ),
 
-            SizedBox(height: 299),
+            SizedBox(height: 312),
 
             Container(
               width: 350,

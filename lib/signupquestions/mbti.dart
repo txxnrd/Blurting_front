@@ -133,14 +133,27 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
               height: 50,
             ),
             Text(
-              '당신의 전공은 무엇인가요?',
+              '당신의 MBTI는 무엇인가요?',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                  '에너지방향',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+
                 Container(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -205,10 +218,58 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
-            SizedBox(height: 17,),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+
+                Container(
+                  child: Text(
+                    '외향형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+
+
+                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
+
+                Container(
+                  child: Text(
+                    '내항형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 3,),
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                '인식',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+
                 Container(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -273,10 +334,57 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
-            SizedBox(height: 17,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+
+                Container(
+                  child: Text(
+                    '감각형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+
+
+                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
+
+                Container(
+                  child: Text(
+                    '직관형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 3,),
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                '판단',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+
                 Container(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -325,7 +433,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
-                        _selectedTorF = TorF.f;
+                        _selectedTorF = TorF.f ;
                       });
                     },
                     child: Text(
@@ -341,10 +449,57 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
-            SizedBox(height: 17,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+
+                Container(
+                  child: Text(
+                    '사고형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+
+
+                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
+
+                Container(
+                  child: Text(
+                    '감각형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 3,),
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                '계획성',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+
                 Container(
                   width: 159, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -393,7 +548,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
-                        _selectedJorP = JorP.p;
+                        _selectedJorP = JorP.p ;
                       });
                     },
                     child: Text(
@@ -409,8 +564,40 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
 
-            SizedBox(height: 115),
+                Container(
+                  child: Text(
+                    '판단형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+
+
+                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
+
+                Container(
+                  child: Text(
+                    '인식형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 58),
 
             Container(
               width: 350,

@@ -205,7 +205,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
             // ),
 
 
-            SizedBox(height: 318),
+            SizedBox(height: 331),
             Container(
               width: 350,
               height: 48,

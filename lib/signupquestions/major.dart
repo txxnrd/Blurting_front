@@ -142,7 +142,7 @@ class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMix
               ),
             ),
 
-            SizedBox(height: 299),
+            SizedBox(height: 312),
 
             Container(
               width: 350,

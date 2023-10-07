@@ -3,6 +3,7 @@ import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/mbti.dart';  // sex.dart를 임포트
+import 'package:blurting/mainApp.dart';
 
 
 class DonePage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _DonePageState extends State<DonePage> with SingleTickerProviderStateMixin
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => DonePage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) => MainApp(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -145,7 +146,7 @@ class _DonePageState extends State<DonePage> with SingleTickerProviderStateMixin
                 },
 
                 child: Text(
-                  '이메일로 인증하기',
+                  '탭 있는 페이지로 ㄱㄱ',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 20.0,
