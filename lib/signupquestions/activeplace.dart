@@ -54,6 +54,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,

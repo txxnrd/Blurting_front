@@ -57,7 +57,11 @@ class _UniversityPageState extends State<UniversityPage> with SingleTickerProvid
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -148,7 +152,7 @@ class _UniversityPageState extends State<UniversityPage> with SingleTickerProvid
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: 343,
+                  width: width*0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
