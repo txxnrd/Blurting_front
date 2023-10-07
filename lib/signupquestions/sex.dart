@@ -45,6 +45,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -121,7 +122,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -154,7 +155,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42,
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -190,7 +191,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: 343,
+                  width: width*0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

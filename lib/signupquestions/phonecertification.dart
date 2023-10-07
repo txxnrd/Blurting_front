@@ -70,6 +70,8 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
   }
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -169,7 +171,7 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: 343,
+                  width: width*0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
