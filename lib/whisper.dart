@@ -504,39 +504,41 @@ class _Whisper extends State<Whisper> {
                   Expanded(
                     child: ClipPath(
                       clipper: InputfieldClipper(),
-                      child: TextField(
-                        cursorColor: Color.fromRGBO(246, 100, 100, 1),
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 0,
-                            ), // 파란색 테두리 없앰
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 0,
-                            ), // 파란색 테두리를 없앰
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "내 생각 쓰기...",
-                          hintStyle: TextStyle(fontSize: 12),
-                          suffixIcon: Container(
-                            child: IconButton(
-                              onPressed: () {
-                                SendAnswer(_controller.text);
-
-                                _controller.clear();
-
-                                print('귓속말 보내기');
-                              },
-                              icon: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 14,
+                      child: Container(
+                        child: TextField(
+                          cursorColor: Color.fromRGBO(246, 100, 100, 1),
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 0,
+                              ), // 파란색 테두리 없앰
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 0,
+                              ), // 파란색 테두리를 없앰
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: "내 생각 쓰기...",
+                            hintStyle: TextStyle(fontSize: 12),
+                            suffixIcon: Container(
+                              child: IconButton(
+                                onPressed: () {
+                                  SendAnswer(_controller.text);
+                      
+                                  _controller.clear();
+                      
+                                  print('귓속말 보내기');
+                                },
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 14,
+                                ),
+                                color: Color.fromRGBO(48, 48, 48, 1),
                               ),
-                              color: Color.fromRGBO(48, 48, 48, 1),
                             ),
                           ),
                         ),
