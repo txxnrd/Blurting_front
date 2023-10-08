@@ -264,7 +264,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 ),
               ],
             ),
-            SizedBox(height: 222,),
+            SizedBox(height: 223,),
             // 두 버튼 사이의 간격 조정
             // SizedBox(height: 255),
             Container(

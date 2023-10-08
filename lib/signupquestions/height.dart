@@ -138,6 +138,7 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                     width: 125,
                     height: 48,
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: '',
                         border: OutlineInputBorder(
@@ -171,7 +172,7 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
             ),
 
 
-            SizedBox(height: 320),
+            SizedBox(height: 321),
             Center(
               child:
               Row(

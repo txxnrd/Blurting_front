@@ -155,7 +155,7 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
 
 
 
-            SizedBox(height: 305),
+            SizedBox(height: 306),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [

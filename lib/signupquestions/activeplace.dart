@@ -208,7 +208,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
             // ),
 
 
-            SizedBox(height: 330),
+            SizedBox(height: 331),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [
