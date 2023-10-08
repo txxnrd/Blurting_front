@@ -308,7 +308,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
               ],
             ),
 
-            SizedBox(height: 190),
+            SizedBox(height: 191),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [

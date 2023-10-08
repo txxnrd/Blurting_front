@@ -167,7 +167,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
             ),
 
 
-            SizedBox(height: 246),
+            SizedBox(height: 274),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [

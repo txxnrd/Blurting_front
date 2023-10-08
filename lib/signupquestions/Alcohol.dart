@@ -154,7 +154,7 @@ class _AlcoholPageState extends State<AlcoholPage> with SingleTickerProviderStat
 
 
 
-            SizedBox(height: 304),
+            SizedBox(height: 306),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [

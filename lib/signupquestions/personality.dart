@@ -482,7 +482,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        isPersonality11Selected =true;
+                        isPersonality11Selected =!isPersonality11Selected;
                       });
                     },
                     child: Text(

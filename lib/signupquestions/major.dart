@@ -145,7 +145,7 @@ class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMix
               ),
             ),
 
-            SizedBox(height: 312),
+            SizedBox(height: 313),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬

@@ -175,40 +175,53 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      color: Colors.grey[200],
+                      border: Border.all(color: Color(0xFF868686)),
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
                     ),
-                    child: _image1 == null
-                        ? Center(child: Icon(Icons.add, size: 40.0))
-                        : Image.file(_image1!, fit: BoxFit.cover),
+                    child: ClipRRect(  // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: _image1 == null
+                          ? Center(child: Icon(Icons.add, color: Color(0xFF868686),size: 40.0))
+                          : Image.file(_image1!, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
+
                 GestureDetector(
-                  onTap: _pickImage2,
+                  onTap: _pickImage1,
                   child: Container(
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      color: Colors.grey[200],
+                      border: Border.all(color: Color(0xFF868686)),
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
                     ),
-                    child: _image2 == null
-                        ? Center(child: Icon(Icons.add, size: 40.0))
-                        : Image.file(_image2!, fit: BoxFit.cover),
+                    child: ClipRRect(  // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: _image2 == null
+                          ? Center(child: Icon(Icons.add, color: Color(0xFF868686),size: 40.0))
+                          : Image.file(_image2!, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
                 GestureDetector(
-                  onTap: _pickImage3,
+                  onTap: _pickImage1,
                   child: Container(
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      color: Colors.grey[200],
+                      border: Border.all(color: Color(0xFF868686)),
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
                     ),
-                    child: _image3 == null
-                        ? Center(child: Icon(Icons.add, size: 40.0))
-                        : Image.file(_image3!, fit: BoxFit.cover),
+                    child: ClipRRect(  // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: _image3 == null
+                          ? Center(child: Icon(Icons.add, color: Color(0xFF868686),size: 40.0))
+                          : Image.file(_image3!, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ],
@@ -243,7 +256,7 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
                 ),
               ),
             ),
-            SizedBox(height:27),
+            SizedBox(height:28),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [

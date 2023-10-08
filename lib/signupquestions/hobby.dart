@@ -482,7 +482,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        isHobby11Selected =true;
+                        isHobby11Selected =!isHobby11Selected;
                       });
                     },
                     child: Text(
