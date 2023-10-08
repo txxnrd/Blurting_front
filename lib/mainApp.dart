@@ -18,6 +18,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: DefaultTabController(
         length: 4,
@@ -30,18 +31,19 @@ class MainApp extends StatelessWidget {
               MyPage(),
             ],
           ),
-          bottomNavigationBar: Container(
-            height: 69,
-            
+          bottomNavigationBar: 
+          
+          Container(
+            height: 100,
             child: TabBar(
-              // 여기에 추가
-              indicatorColor: Colors.black,
+              indicatorColor: Colors.transparent,
+              
               tabs: [
                 Container(
                     child: Column(
                   children: [
                     Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 5),
+                        margin: EdgeInsets.only(top: 30, bottom: 5),
                         height: 25,
                         child: Tab(
                           icon: Image.asset('assets/images/home.png'),
@@ -59,7 +61,7 @@ class MainApp extends StatelessWidget {
                     child: Column(
                   children: [
                     Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 5),
+                        margin: EdgeInsets.only(top: 30, bottom: 5),
                         height: 25,
                         child: Tab(
                           icon: Image.asset('assets/images/QnA.png'),
@@ -77,7 +79,7 @@ class MainApp extends StatelessWidget {
                     child: Column(
                   children: [
                     Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 5),
+                        margin: EdgeInsets.only(top: 30, bottom: 5),
                         height: 25,
                         child: Tab(
                           icon: Image.asset('assets/images/whisper.png'),
@@ -95,7 +97,7 @@ class MainApp extends StatelessWidget {
                     child: Column(
                   children: [
                     Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 5),
+                        margin: EdgeInsets.only(top: 30, bottom: 5),
                         height: 25,
                         child: Tab(
                           icon: Image.asset('assets/images/mypage.png'),
