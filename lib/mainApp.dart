@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             toolbarHeight: 80,
@@ -49,15 +49,40 @@ class MainApp extends StatelessWidget {
               Group(), // 첫 번째 탭을 Group으로 대체
               Whisper(),
               MyPage(),
+              Tab3(),
             ],
           ),
-          bottomNavigationBar: TabBar( // 여기에 추가
-            indicatorColor: Colors.black,
-            tabs: [
-              Tab(icon: Icon(Icons.chat_bubble_outline, color: Colors.black,)),
-              Tab(icon: Icon(Icons.favorite_border, color: Colors.black,)),
-              Tab(icon: Icon(Icons.perm_identity, color: Colors.black,)),
-            ],
+          bottomNavigationBar: Container(
+            height: 69,
+            child: TabBar( // 여기에 추가
+              indicatorColor: Colors.black,
+              tabs: [
+                Container(child: Column(
+                  children: [
+                    Container(margin: EdgeInsets.only(top: 15, bottom: 5), height: 25, child: Tab(icon: Image.asset('assets/images/QnA.png'),)),
+                    Text('Q&A', style: TextStyle(color: Color.fromRGBO(48, 48, 48, 0.8), fontSize: 10, fontFamily: 'Pretendard'),),
+                  ],
+                )),
+                Container(child: Column(
+                  children: [
+                    Container(margin: EdgeInsets.only(top: 15, bottom: 5), height: 25, child: Tab(icon: Image.asset('assets/images/whisper.png'),)),
+                    Text('귓속말', style: TextStyle(color: Color.fromRGBO(48, 48, 48, 0.8), fontSize: 10, fontFamily: 'Pretendard'),),
+                  ],
+                )),
+                Container(child: Column(
+                  children: [
+                    Container(margin: EdgeInsets.only(top: 15, bottom: 5), height: 25, child: Tab(icon: Image.asset('assets/images/home.png'),)),
+                    Text('홈', style: TextStyle(color: Color.fromRGBO(48, 48, 48, 0.8), fontSize: 10, fontFamily: 'Pretendard'),),
+                  ],
+                )),
+                Container(child: Column(
+                  children: [
+                    Container(margin: EdgeInsets.only(top: 15, bottom: 5), height: 25, child: Tab(icon: Image.asset('assets/images/mypage.png'),)),
+                    Text('마이페이지', style: TextStyle(color: Color.fromRGBO(48, 48, 48, 0.8), fontSize: 10, fontFamily: 'Pretendard'),),
+                  ],
+                )),
+              ],
+            ),
           ),
         ),
       ),
