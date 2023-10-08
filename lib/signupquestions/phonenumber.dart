@@ -11,6 +11,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
   AnimationController? _animationController;
   String? _previousText;
   Animation<double>? _progressAnimation;
+
   final _controller = TextEditingController();
 
   Future<void> _increaseProgressAndNavigate() async {
@@ -71,22 +72,32 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
   }
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 80,
         backgroundColor: Colors.white,
-        title: Text(''),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 48, 48, 1),
+          ),
           onPressed: () {
-            Navigator.pop(context);
+            // 뒤로가기 버튼을 눌렀을 때의 동작
           },
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
+            icon: Image.asset('assets/images/setting.png'),
+            color: Color.fromRGBO(48, 48, 48, 1),
+            onPressed: () {
+              // 설정 버튼을 눌렀을 때의 동작
+            },
           ),
         ],
       ),
@@ -133,6 +144,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
+            Container(
+              width:350,
+              child:
             TextField(
               controller: _controller,
               keyboardType: TextInputType.number,
@@ -150,33 +164,40 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
                 ),
               ),
             ),
+            ),
 
 
-            SizedBox(height: 299),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            SizedBox(height: 246),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: () {
+                      print("다음 버튼 클릭됨");
+                      _increaseProgressAndNavigate();
+                    },
+                    child: Text(
+                      '인증번호 요청',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-                child: Text(
-                  '인증번호 요청',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
         ),

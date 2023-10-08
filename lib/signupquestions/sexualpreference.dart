@@ -56,6 +56,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -131,7 +133,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -164,7 +166,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -199,7 +201,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -232,7 +234,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -292,30 +294,36 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
               ),
             ),
             SizedBox(height: 21,),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: () {
+                      print("다음 버튼 클릭됨");
+                      _increaseProgressAndNavigate();
+                    },
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
         ),

@@ -94,6 +94,8 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -242,30 +244,36 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
               ),
             ),
             SizedBox(height:27),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: () {
+                      print("다음 버튼 클릭됨");
+                      _increaseProgressAndNavigate();
+                    },
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
         ),
