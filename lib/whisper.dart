@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:blurting/chattingList.dart';
 
 class Whisper extends StatefulWidget {
   const Whisper({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class LeftTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
+    /*
     path.moveTo(25, 5);
     path.lineTo(size.width - 15, 5); // 상측 선
     path.quadraticBezierTo(size.width, 5, size.width, 15); // 우측 상단 둥글게
@@ -27,6 +29,20 @@ class LeftTailClipper extends CustomClipper<Path> {
     path.lineTo(0, 15);
     path.lineTo(10, 15);
     path.quadraticBezierTo(10, 5, 25, 5);
+*/
+
+    path.moveTo(0, 5);
+    path.lineTo(size.width - 30, 5);
+    path.quadraticBezierTo(size.width, 5, size.width, 30); // 우측 상단 둥글게
+    path.lineTo(size.width, size.height - 30); // 우측 선
+    path.quadraticBezierTo(
+        // 우측 하단 둥글게
+        size.width,
+        size.height,
+        size.width - 30,
+        size.height);
+    path.lineTo(30, size.height); // 하측 선 어디까지?!
+    path.quadraticBezierTo(0, size.height, 0, size.height - 30); // 좌측 하단 둥글게
 
     return path;
   }
@@ -41,18 +57,36 @@ class RightTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.moveTo(size.width - 25, 5);
-    path.lineTo(15, 5);
-    path.quadraticBezierTo(0, 5, 0, 20);
-    path.lineTo(0, size.height - 15);
-    path.quadraticBezierTo(0, size.height, 15, size.height);
-    path.lineTo(size.width - 23, size.height);
+    path.moveTo(size.width, 5);
+    path.lineTo(30, 5);
+    path.quadraticBezierTo(0, 5, 0, 30);
+    path.lineTo(0, size.height - 30);
+    path.quadraticBezierTo(0, size.height, 30, size.height);
+    path.lineTo(size.width - 30, size.height);
     path.quadraticBezierTo(
-        size.width - 10, size.height, size.width - 10, size.height - 15);
-    path.lineTo(size.width - 10, 25);
-    path.lineTo(size.width, 15);
-    path.lineTo(size.width - 10, 15);
-    path.quadraticBezierTo(size.width - 10, 5, size.width - 25, 5);
+        size.width, size.height, size.width, size.height - 20);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+class InputfieldClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    path.moveTo(size.width - 30, 0);
+    path.lineTo(30, 0);
+    path.quadraticBezierTo(0, 0, 0, 30); //
+    path.lineTo(0, size.height); //
+    path.lineTo(size.width, size.height); //
+    path.lineTo(size.width, 30);
+    path.quadraticBezierTo(size.width, 0, size.width - 30, 0); //
 
     return path;
   }
@@ -272,253 +306,248 @@ class _Whisper extends State<Whisper> {
     var _controller = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
+      appBar: AppBar(
+  toolbarHeight: 80,
+  backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
+  elevation: 0, // 그림자 효과를 제거합니다.
+  leading: IconButton(
+    icon: Icon(
+      Icons.arrow_back_ios,
+      color: Color.fromRGBO(48, 48, 48, 1),
+    ),
+    onPressed: () {
+      // 뒤로가기 버튼을 눌렀을 때의 동작
+      Navigator.pop(context);
+    },
+  ),
+  actions: <Widget>[
+    IconButton(
+      icon: Image.asset('assets/images/setting.png'),
+      color: Color.fromRGBO(48, 48, 48, 1),
+      onPressed: () {
+        // 설정 버튼을 눌렀을 때의 동작
+      },
+    ),
+  ],
+  flexibleSpace: Container(
+    decoration: BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/whisper_appbar_background.png'), // 배경 이미지 경로를 설정합니다.
+        fit: BoxFit.cover, // 이미지를 화면에 맞게 설정합니다.
+      ),
+    ),
+  ),
+),
+
+      resizeToAvoidBottomInset: false, // 키보드가 올라와도 배경 이미지가 밀려 올라가지 않도록
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(
+                'assets/images/whisper_body_background.png'), // 배경 이미지
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
                 child: Container(
-                  // 질문 번호, 질문 내용
+                  margin: EdgeInsets.symmetric(vertical: 30),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 5),
-                        child: Icon(
-                          Icons.favorite_border,
-                          size: 35,
+                      ListTile(
+                        subtitle: // 답변 내용
+
+                            Container(
+                          margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipPath(
+                                clipper: LeftTailClipper(),
+                                child: Container(
+                                  width: 250,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color.fromRGBO(255, 238, 238, 1),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Text(
+                                          '개굴개굴 개구리 노래를 한다',
+                                          style: TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 10,
+                                            color:
+                                                Color.fromRGBO(48, 48, 48, 1),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ), // 질문 번호 동적으로 받아오기
-                      Text(
-                        '귓속말',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w700),
-                      ), // 질문 내용 동적으로 받아오기
+                      ),
+                      ListTile(
+                        subtitle: // 답변 내용
+
+                            Container(
+                          margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipPath(
+                                clipper: LeftTailClipper(),
+                                child: Container(
+                                  width: 250,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color.fromRGBO(255, 238, 238, 1),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Text(
+                                          '흠냐링',
+                                          style: TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 10,
+                                            color:
+                                                Color.fromRGBO(48, 48, 48, 1),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        subtitle: // 답변 내용
+
+                            Container(
+                          margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              ClipPath(
+                                clipper: RightTailClipper(),
+                                child: Container(
+                                  width: 250,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color.fromRGBO(255, 210, 210, 1),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Text(
+                                          '흠냐링',
+                                          style: TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 10,
+                                            color:
+                                                Color.fromRGBO(48, 48, 48, 1),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      // 동적으로 받아와야 합니다...
-                      leading: GestureDetector(
-                        onTap: () {
-                          _showProfileModal(context);
-                          // 클릭 이벤트 처리 코드 작성
-                          print('profile 클릭됨');
-                        },
-                        child: Container(
-                          // 프로필
-                          width: 55,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Color.fromRGBO(217, 217, 217, 1),
-                          ),
-                          child: Container(
-                            width: 42.74,
-                            height: 48.56,
-                            child: Image.asset(
-                              'assets/images/profile_image.png',
-                            ),
-                          ),
-                        ),
-                      ),
-                      title: Container(
-                        // 닉네임
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          '개굴',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color.fromRGBO(48, 48, 48, 1),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-
-                      subtitle: // 답변 내용
-                          Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipPath(
-                              clipper: LeftTailClipper(),
-                              child: Container(
-                                width: 250,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(248, 186, 186, 1),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(left: 12, top: 3),
-                                      child: Text(
-                                        '개굴개굴 개구리 노래를 한다',
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 12,
-                                          color: Color.fromRGBO(48, 48, 48, 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            ClipPath(
-                              clipper: LeftTailClipper(),
-                              child: Container(
-                                width: 250,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(248, 186, 186, 1),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(left: 12, top: 3),
-                                      child: Text(
-                                        '어쩌라고 콱씨',
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 12,
-                                          color: Color.fromRGBO(48, 48, 48, 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            ClipPath(
-                              clipper: LeftTailClipper(),
-                              child: Container(
-                                width: 250,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(248, 186, 186, 1),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(left: 12, top: 3),
-                                      child: Text(
-                                        '말풍선 고쳤다앙',
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 12,
-                                          color: Color.fromRGBO(48, 48, 48, 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    ListTile(
-                      subtitle: // 답변 내용
-                          Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ClipPath(
-                              clipper: RightTailClipper(),
-                              child: Container(
-                                width: 250,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(183, 183, 183, 1),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(                                      
-                                      margin: EdgeInsets.only(left: 7, top: 3),
-                                      child: Text(
-                                        '흠냐링',
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 12,
-                                          color: Color.fromRGBO(48, 48, 48, 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
             ),
-          ),
-          Container(
-            height: 50, // 높이를 50으로 설정
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    cursorColor: Color.fromRGBO(246, 100, 100, 1),
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                        ), // 파란색 테두리 없앰
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                        ), // 파란색 테두리를 없앰
-                      ),
-                      filled: true,
-                      fillColor: Color.fromRGBO(183, 183, 183, 1),
-                      hintText: "내 생각 쓰기...",
-                      hintStyle: TextStyle(fontSize: 12),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          SendAnswer(_controller.text);
-                          _controller.clear();
-                          print('귓속말 보내기');
-                        },
-                        icon: Icon(Icons.arrow_forward_ios),
-                        color: Color.fromRGBO(48, 48, 48, 1),
+            Container(
+              height: 50, // 높이를 50으로 설정
+
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ClipPath(
+                      clipper: InputfieldClipper(),
+                      child: TextField(
+                        cursorColor: Color.fromRGBO(246, 100, 100, 1),
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 0,
+                            ), // 파란색 테두리 없앰
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 0,
+                            ), // 파란색 테두리를 없앰
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "내 생각 쓰기...",
+                          hintStyle: TextStyle(fontSize: 12),
+                          suffixIcon: Container(
+                            child: IconButton(
+                              onPressed: () {
+                                SendAnswer(_controller.text);
+
+                                _controller.clear();
+
+                                print('귓속말 보내기');
+                              },
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                size: 14,
+                              ),
+                              color: Color.fromRGBO(48, 48, 48, 1),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
