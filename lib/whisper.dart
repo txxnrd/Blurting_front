@@ -11,6 +11,7 @@ class LeftTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
+    /*
     path.moveTo(25, 5);
     path.lineTo(size.width - 15, 5); // 상측 선
     path.quadraticBezierTo(size.width, 5, size.width, 15); // 우측 상단 둥글게
@@ -27,6 +28,20 @@ class LeftTailClipper extends CustomClipper<Path> {
     path.lineTo(0, 15);
     path.lineTo(10, 15);
     path.quadraticBezierTo(10, 5, 25, 5);
+*/
+
+    path.moveTo(0, 5);
+    path.lineTo(size.width - 30, 5);
+    path.quadraticBezierTo(size.width, 5, size.width, 30); // 우측 상단 둥글게
+    path.lineTo(size.width, size.height - 30); // 우측 선
+    path.quadraticBezierTo(
+        // 우측 하단 둥글게
+        size.width,
+        size.height,
+        size.width - 30,
+        size.height);
+    path.lineTo(30, size.height); // 하측 선 어디까지?!
+    path.quadraticBezierTo(0, size.height, 0, size.height - 30); // 좌측 하단 둥글게
 
     return path;
   }
@@ -41,18 +56,14 @@ class RightTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.moveTo(size.width - 25, 5);
-    path.lineTo(15, 5);
-    path.quadraticBezierTo(0, 5, 0, 20);
-    path.lineTo(0, size.height - 15);
-    path.quadraticBezierTo(0, size.height, 15, size.height);
-    path.lineTo(size.width - 23, size.height);
+    path.moveTo(size.width, 5);
+    path.lineTo(30, 5);
+    path.quadraticBezierTo(0, 5, 0, 30);
+    path.lineTo(0, size.height - 30);
+    path.quadraticBezierTo(0, size.height, 30, size.height);
+    path.lineTo(size.width - 30, size.height);
     path.quadraticBezierTo(
-        size.width - 10, size.height, size.width - 10, size.height - 15);
-    path.lineTo(size.width - 10, 25);
-    path.lineTo(size.width, 15);
-    path.lineTo(size.width - 10, 15);
-    path.quadraticBezierTo(size.width - 10, 5, size.width - 25, 5);
+        size.width, size.height, size.width, size.height - 30);
 
     return path;
   }
@@ -310,45 +321,9 @@ class _Whisper extends State<Whisper> {
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      // 동적으로 받아와야 합니다...
-                      leading: GestureDetector(
-                        onTap: () {
-                          _showProfileModal(context);
-                          // 클릭 이벤트 처리 코드 작성
-                          print('profile 클릭됨');
-                        },
-                        child: Container(
-                          // 프로필
-                          width: 55,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Color.fromRGBO(217, 217, 217, 1),
-                          ),
-                          child: Container(
-                            width: 42.74,
-                            height: 48.56,
-                            child: Image.asset(
-                              'assets/images/profile_image.png',
-                            ),
-                          ),
-                        ),
-                      ),
-                      title: Container(
-                        // 닉네임
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          '개굴',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color.fromRGBO(48, 48, 48, 1),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-
                       subtitle: // 답변 내용
                           Container(
+                            margin: EdgeInsets.only(left:20, bottom: 20, top: 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -359,69 +334,19 @@ class _Whisper extends State<Whisper> {
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(248, 186, 186, 1),
+                                  color: Color.fromRGBO(255, 238, 238, 1),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.only(left: 12, top: 3),
+                                      margin: EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                          top: 10,
+                                          bottom: 10),
                                       child: Text(
                                         '개굴개굴 개구리 노래를 한다',
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 12,
-                                          color: Color.fromRGBO(48, 48, 48, 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            ClipPath(
-                              clipper: LeftTailClipper(),
-                              child: Container(
-                                width: 250,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(248, 186, 186, 1),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(left: 12, top: 3),
-                                      child: Text(
-                                        '어쩌라고 콱씨',
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 12,
-                                          color: Color.fromRGBO(48, 48, 48, 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            ClipPath(
-                              clipper: LeftTailClipper(),
-                              child: Container(
-                                width: 250,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(248, 186, 186, 1),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(left: 12, top: 3),
-                                      child: Text(
-                                        '말풍선 고쳤다앙',
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
                                           fontSize: 12,
@@ -440,6 +365,50 @@ class _Whisper extends State<Whisper> {
                     ListTile(
                       subtitle: // 답변 내용
                           Container(
+                            margin: EdgeInsets.only(left:20, bottom: 20, top: 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipPath(
+                              clipper: LeftTailClipper(),
+                              child: Container(
+                                width: 250,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Color.fromRGBO(255, 238, 238, 1),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                          top: 10,
+                                          bottom: 10),
+                                      child: Text(
+                                        '흠냐링',
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(48, 48, 48, 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      subtitle: // 답변 내용
+                          Container(
+                                                        margin: EdgeInsets.only(left:20, bottom: 20, top: 0),
+
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -450,13 +419,17 @@ class _Whisper extends State<Whisper> {
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(183, 183, 183, 1),
+                                  color: Color.fromRGBO(255, 210, 210, 1),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Container(                                      
-                                      margin: EdgeInsets.only(left: 7, top: 3),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                          top: 10,
+                                          bottom: 10),
                                       child: Text(
                                         '흠냐링',
                                         style: TextStyle(

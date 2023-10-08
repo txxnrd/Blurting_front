@@ -11,6 +11,7 @@ class LeftTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
+    /*
     path.moveTo(25, 5);
     path.lineTo(size.width - 15, 5); // 상측 선
     path.quadraticBezierTo(size.width, 5, size.width, 15); // 우측 상단 둥글게
@@ -27,7 +28,21 @@ class LeftTailClipper extends CustomClipper<Path> {
     path.lineTo(0, 15);
     path.lineTo(10, 15);
     path.quadraticBezierTo(10, 5, 25, 5);
+*/
 
+  path.moveTo(0, 5);
+  path.lineTo(size.width-30, 5);
+  path.quadraticBezierTo(size.width, 5, size.width, 30); // 우측 상단 둥글게
+      path.lineTo(size.width, size.height - 30); // 우측 선
+    path.quadraticBezierTo(
+        // 우측 하단 둥글게
+        size.width,
+        size.height,
+        size.width - 30,
+        size.height);
+            path.lineTo(30, size.height); // 하측 선 어디까지?!
+    path.quadraticBezierTo(0, size.height, 0, size.height - 30); // 좌측 하단 둥글게
+    
     return path;
   }
 
@@ -337,30 +352,24 @@ class _Group extends State<Group> {
                   children: <Widget>[
                     ListTile(
                       // 동적으로 받아와야 합니다...
-                      leading: GestureDetector(
+                     leading: GestureDetector(
                         onTap: () {
                           _showProfileModal(context);
                           // 클릭 이벤트 처리 코드 작성
                           print('profile 클릭됨');
                         },
-                        child: Container(
-                          // 프로필
-                          width: 55,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.white,
-                          ),
+
                           child: Container(
+                            //color: Colors.amber,
                             width: 42.74,
                             height: 48.56,
                             child: Image.asset(
                               'assets/images/profile_image.png',
                             ),
                           ),
-                        ),
                       ),
                       title: Container(
+                        //color: Colors.amber,
                         // 닉네임
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
@@ -368,13 +377,14 @@ class _Group extends State<Group> {
                           style: TextStyle(
                             fontSize: 12,
                             color: Color.fromRGBO(48, 48, 48, 1),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
-
                       subtitle: // 답변 내용
                           Container(
+                             margin: EdgeInsets.only(bottom: 20, top: 0, left: 10),
+
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -392,7 +402,7 @@ class _Group extends State<Group> {
                                   children: <Widget>[
                                     Container(
                                       // 이거는 width 설정이 되는디...
-                                      margin: EdgeInsets.only(left: 12, top: 3),
+                                      margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
                                       child: Text(
                                         '저는 휴학했어요 하하 부러우시죠' +
                                             '\n' +
@@ -404,7 +414,7 @@ class _Group extends State<Group> {
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
                                           fontSize: 12,
-                                          color: Color.fromRGBO(48, 48, 48, 1),
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
@@ -417,21 +427,21 @@ class _Group extends State<Group> {
                       ),
                     ),
                     ListTile(
-                      // 동적으로 받아와야 합니다...
-                      leading: Container(
-                        width: 55,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.white,
-                        ),
-                        child: Container(
-                          width: 42.74,
-                          height: 48.56,
-                          child: Image.asset(
-                            'assets/images/profile_image.png',
+                     leading: GestureDetector(
+                        onTap: () {
+                          _showProfileModal(context);
+                          // 클릭 이벤트 처리 코드 작성
+                          print('profile 클릭됨');
+                        },
+
+                          child: Container(
+                            //color: Colors.amber,
+                            width: 42.74,
+                            height: 48.56,
+                            child: Image.asset(
+                              'assets/images/profile_image.png',
+                            ),
                           ),
-                        ),
                       ),
                       title: Container(
                         padding: EdgeInsets.symmetric(vertical: 10),
@@ -440,41 +450,46 @@ class _Group extends State<Group> {
                           style: TextStyle(
                             fontSize: 12,
                             color: Color.fromRGBO(48, 48, 48, 1),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipPath(
-                            clipper: LeftTailClipper(),
-                            child: Container(
-                              width: 250,
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(255, 238, 238, 1),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(left: 12, top: 3),
-                                    child: Text(
-                                      '그냥 자퇴할까 봐요 ^^',
-                                      style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontSize: 12,
-                                        color: Color.fromRGBO(48, 48, 48, 1),
+                     
+                      subtitle: Container(
+                             margin: EdgeInsets.only(bottom: 20, top: 0, left: 10),
+
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipPath(
+                              clipper: LeftTailClipper(),
+                              child: Container(
+                                width: 250,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                    color: Color.fromRGBO(255, 238, 238, 1),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                        margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                                      child: Text(
+                                        '그냥 자퇴할까 봐요 ^^',
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 12,
+                                            color: Colors.black,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
