@@ -309,6 +309,29 @@ class _Group extends State<Group> {
     var _controller = TextEditingController();
 
     return Scaffold(
+                appBar: AppBar(
+            toolbarHeight: 80,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Color.fromRGBO(48, 48, 48, 1),
+              ),
+              onPressed: () {
+                // 뒤로가기 버튼을 눌렀을 때의 동작
+              },
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Image.asset('assets/images/setting.png'),
+                color: Color.fromRGBO(48, 48, 48, 1),
+                onPressed: () {
+                  // 설정 버튼을 눌렀을 때의 동작
+                },
+              ),
+            ],
+          ),
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -413,7 +436,7 @@ class _Group extends State<Group> {
                                             '휴학 ㄱㄱ',
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
-                                          fontSize: 12,
+                                          fontSize: 10,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -479,7 +502,7 @@ class _Group extends State<Group> {
                                         '그냥 자퇴할까 봐요 ^^',
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
-                                          fontSize: 12,
+                                          fontSize: 10,
                                             color: Colors.black,
                                         ),
                                       ),
