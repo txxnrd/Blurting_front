@@ -25,15 +25,29 @@ class _MyPage extends State<MyPage> {
           useMaterial3: true,
         ),
         home: Scaffold(
-            appBar: AppBar(
-                leading: IconButton(
-                    icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-                    onPressed: null),
-                actions: [
-                  IconButton(
-                      icon: Icon(Icons.settings, color: Colors.black),
-                      onPressed: null)
-                ]),
+      appBar: AppBar(
+  toolbarHeight: 80,
+  backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
+  elevation: 0, // 그림자 효과를 제거합니다.
+  leading: IconButton(
+    icon: Icon(
+      Icons.arrow_back_ios,
+      color: Color.fromRGBO(48, 48, 48, 1),
+    ),
+    onPressed: () {
+      // 뒤로가기 버튼을 눌렀을 때의 동작
+    },
+  ),
+  actions: <Widget>[
+    IconButton(
+      icon: Image.asset('assets/images/setting.png'),
+      color: Color.fromRGBO(48, 48, 48, 1),
+      onPressed: () {
+        // 설정 버튼을 눌렀을 때의 동작
+      },
+    ),
+  ],
+),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
