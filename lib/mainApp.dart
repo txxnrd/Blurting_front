@@ -32,8 +32,9 @@ class MainApp extends StatelessWidget {
           ),
           bottomNavigationBar: Container(
             height: 69,
-            
             child: TabBar(
+              unselectedLabelColor: Colors.black,
+              labelColor: Colors.red,
               // 여기에 추가
               indicatorColor: Colors.black,
               tabs: [

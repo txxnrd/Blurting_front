@@ -132,20 +132,32 @@ class _chattingList extends State<ChattingList> {
                     children: <Widget>[
                       ListTile(
                         title: // 채팅 리스트 하나
-                              GestureDetector(
-                            onTap: () {
-    
-                              print('profile 클릭됨');
-    
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Whisper()),
-                              );                              // 클릭한 상대방의 정보를 넘겨줌
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 30),
+                            GestureDetector(
+                          onTap: () {
+                            print('profile 클릭됨');
+
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        Whisper(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.easeInOut;
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  var offsetAnimation = animation.drive(tween);
+                                  return SlideTransition(
+                                      position: offsetAnimation, child: child);
+                                },
+                              ),
+                            ); // 클릭한 상대방의 정보를 넘겨줌
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 30),
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
@@ -229,7 +241,10 @@ class _chattingList extends State<ChattingList> {
                                                   right: 20,
                                                 ),
                                                 child: Text(
-                                                  '개굴개굴 개구리 노래를 한다',
+                                                  '개굴개굴 개구리 노래를 한다 한 줄이 넘어가면 ...으로 처리되게 해놓았다 넘어가라',
+                                                    overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      
                                                   style: TextStyle(
                                                     fontFamily: "Pretendard",
                                                     fontSize: 15,
