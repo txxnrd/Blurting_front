@@ -15,7 +15,7 @@ class _chattingList extends State<ChattingList> {
     return 
         Scaffold(
         appBar: 
-        AppBar(  
+        AppBar( automaticallyImplyLeading: false, 
           toolbarHeight: 244,
           flexibleSpace: Stack(
             children: [ClipRRect(
