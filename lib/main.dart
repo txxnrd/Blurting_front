@@ -4,7 +4,7 @@ import 'package:blurting/mainApp.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: const MainApp(),
+    home: MainApp(),
   ));
 }
 /*

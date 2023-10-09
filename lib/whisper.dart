@@ -351,16 +351,17 @@ class _Whisper extends State<Whisper> {
               // 설정 버튼을 눌렀을 때의 동작
             },
           ),
-  ],
-  flexibleSpace: Container(
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/whisper_appbar_background.png'), // 배경 이미지 경로를 설정합니다.
-        fit: BoxFit.cover, // 이미지를 화면에 맞게 설정합니다.
+        ],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'assets/images/whisper_appbar_background.png'), // 배경 이미지 경로를 설정합니다.
+              fit: BoxFit.cover, // 이미지를 화면에 맞게 설정합니다.
+            ),
+          ),
+        ),
       ),
-    ),
-  ),
-),
 
       resizeToAvoidBottomInset: false, // 키보드가 올라와도 배경 이미지가 밀려 올라가지 않도록
       body: Container(
@@ -422,8 +423,7 @@ class _Whisper extends State<Whisper> {
                                           style: TextStyle(
                                             fontFamily: "Pretendard",
                                             fontSize: 10,
-                                            color:
-                                                Colors.black,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
@@ -467,8 +467,7 @@ class _Whisper extends State<Whisper> {
                                           style: TextStyle(
                                             fontFamily: "Pretendard",
                                             fontSize: 10,
-                                            color:
-                                                Colors.black,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
@@ -512,8 +511,7 @@ class _Whisper extends State<Whisper> {
                                           style: TextStyle(
                                             fontFamily: "Pretendard",
                                             fontSize: 10,
-                                            color:
-                                                Colors.black,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
@@ -524,62 +522,89 @@ class _Whisper extends State<Whisper> {
                             ],
                           ),
                         ),
-                      )
+                      ),
+                      for (var answer in answerList) answer,
                     ],
                   ),
                 ),
               ),
             ),
             Container(
-              height: 50, // 높이를 50으로 설정
+              height: 55, // 높이를 50으로 설정
 
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ClipPath(
-                      clipper: InputfieldClipper(),
-                      child: Container(
-                        child: TextField(
-                          cursorColor: Color.fromRGBO(246, 100, 100, 1),
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 0,
-                              ), // 파란색 테두리 없앰
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 0,
-                              ), // 파란색 테두리를 없앰
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: "내 생각 쓰기...",
-                            hintStyle: TextStyle(fontSize: 12),
-                            suffixIcon: Container(
-                              child: IconButton(
-                                onPressed: () {
-                                  SendAnswer(_controller.text);
-                      
-                                  _controller.clear();
-                      
-                                  print('귓속말 보내기');
-                                },
-                                icon: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 14,
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey, // 그림자 색상
+                      blurRadius: 10, // 그림자의 흐림 정도
+                      spreadRadius: 2, // 그림자의 확산 정도
+                      offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(10), // 선택적: 필요에 따라 둥글게 처리
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ClipPath(
+                        clipper: InputfieldClipper(),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey, // 그림자 색상
+                                blurRadius: 10, // 그림자의 흐림 정도
+                                spreadRadius: 2, // 그림자의 확산 정도
+                                offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
+                              ),
+                            ],
+                            borderRadius:
+                                BorderRadius.circular(10), // 선택적: 필요에 따라 둥글게 처리
+                          ),
+                          child: TextField(
+                            controller: _controller, // 컨트롤러 할당
+                            cursorColor: Color.fromRGBO(246, 100, 100, 1),
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 0,
+                                ), // 파란색 테두리 없앰
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 0,
+                                ), // 파란색 테두리를 없앰
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: "내 생각 쓰기...",
+                              hintStyle: TextStyle(fontSize: 12),
+                              suffixIcon: Container(
+                                child: IconButton(
+                                  onPressed: () {
+                                    SendAnswer(_controller.text);
+
+                                    _controller.clear();
+
+                                    print('귓속말 보내기');
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 14,
+                                  ),
+                                  color: Color.fromRGBO(48, 48, 48, 1),
                                 ),
-                                color: Color.fromRGBO(48, 48, 48, 1),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],
@@ -587,8 +612,56 @@ class _Whisper extends State<Whisper> {
       ),
     );
   }
-}
 
-void SendAnswer(String answer) {
-  // 입력한 내용을 리스트에 추가하고 화면을 리로드하는 로직을 구현해야 함. 해당 답변의 user_id 조사 시, 로컬의 답변일 경우, 닉네임, 프로필 없이 RightTailClipper로 ListTile에 추가
+  List<Widget> answerList = []; // 답변을 저장할 리스트
+
+  void SendAnswer(String answer) {
+    // 입력한 내용을 ListTile에 추가
+    Widget newAnswer = ListTile(
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            ClipPath(
+              clipper: RightTailClipper(),
+              child: Container(
+                width: 250,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Color.fromRGBO(255, 210, 210, 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 20, right: 20, top: 10, bottom: 10),
+                      child: Text(
+                        answer,
+                        style: TextStyle(
+                          fontFamily: "Pretendard",
+                          fontSize: 10,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      // 기타 설정 및 스타일을 필요에 따라 추가
+    );
+
+    // 리스트에 추가
+    answerList.add(newAnswer);
+
+    // 화면을 리로드하는 로직이 필요할 경우 setState()를 호출합니다.
+    setState(() {});
+  }
 }
