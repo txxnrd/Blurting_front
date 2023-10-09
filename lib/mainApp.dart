@@ -145,8 +145,8 @@ class _MainApp extends State<MainApp> {
                       margin: EdgeInsets.only(top: 0, bottom: 5),
                       height: 25,
                       child: _currentIndex == 3
-                      ? Image.asset('assets/images/MyPage.png')
-                      : Image.asset('assets/images/MyPage.png', color: Color.fromRGBO(217, 217, 217, 1),),
+                      ? Image.asset('assets/images/mypage.png')
+                      : Image.asset('assets/images/mypage.png', color: Color.fromRGBO(217, 217, 217, 1),),
                                         ),
                     Text(
                       '마이페이지',
