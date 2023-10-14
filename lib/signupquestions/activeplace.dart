@@ -47,6 +47,23 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     });
   }
 
+  String content = '';
+
+  Future<void> goToSearchPage(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SearchPage()),
+    );
+
+    if (result != null) {
+      setState(() {
+        content = result;
+      });
+    }
+
+    print(content);
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -136,62 +153,34 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
-
-            Stack(
-              children: [
-                Container(
+            GestureDetector(
+              onTap: () {
+                goToSearchPage(context);
+                print(content);
+                setState(() {});
+              },
+              child: Container(
                   width: width * 1, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextField(
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 14, 10, 10),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
+                  child: Container(
+                    padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xFF868686), // 초기 테두리 색상
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
-                      hintText: '동명(읍,면)으로 검색 (ex. 안암동)',
-                      hintStyle: TextStyle(
+                    child: Text(
+                      (content == '') ? '동명(읍,면)으로 검색 (ex. 안암동)' : content,
+                      style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
                       ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFF868686),
-                        ), // 초기 테두리 색상
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color(0xFF868686), width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color(0xFFF66464), width: 2),
-                      ),
                     ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return SearchPage();
-                      }),
-                    );
-                  },
-                  child: Container(
-                    width: width * 1, // 동일한 너비
-                    height: 48, // 동일한 높이
-                    color:
-                        Colors.transparent, // GestureDetector 위젯의 배경을 투명하게 설정
-                  ),
-                ),
-              ],
+                  )),
             ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,

@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/activeplacedone.dart';
+// import 'package:blurting/signupquestions/activeplace.dart';
+// import 'package:blurting/signupquestions/activeplacedone.dart';
 
 String searchText = '';
 
 // 리스트뷰에 표시할 내용
 List<String> items = ['안암동1가', '안암동2가', '안암동3가', '안암동4가'];
 List<String> itemContents = [
-  '안암동 1가 받아오기',
-  '안암동 2가 받아오기',
-  '안암동 3가 받아오기',
-  '안암동 4가 받아오기'
+  '안암동 1가',
+  '안암동 2가',
+  '안암동 3가',
+  '안암동 4가'
 ];
 
 class SearchPage extends StatefulWidget {
-  final String selectedGender;
-  SearchPage({required this.selectedGender});
 
   @override
   State<StatefulWidget> createState() {
@@ -25,16 +23,11 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPage extends State<SearchPage> {
   void cardClickEvent(BuildContext context, int index) {
-    final String selectedGender;
     String content = itemContents[index];
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        // 정의한 ContentPage의 폼 호출
-        builder: (context) => ActivePlaceDonePage(
-            selectedGender: selectedGender, content: content),
-      ),
-    );
+    // print(content);
+    Navigator.pop(context, content);
+
+    // Navigator.pop(context); // 뒤로가기 버튼을 눌렀을 때의 동작
   }
 
   @override
@@ -85,7 +78,7 @@ class _SearchPage extends State<SearchPage> {
               child: ListView.builder(
                 // items 변수에 저장되어 있는 모든 값 출력
                 itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (BuildContext currentcontext, int index) {
                   // 검색 기능, 검색어가 있을 경우
                   if (searchText.isNotEmpty &&
                       !items[index]
@@ -101,9 +94,10 @@ class _SearchPage extends State<SearchPage> {
                           borderRadius:
                               BorderRadius.all(Radius.elliptical(20, 20))),
                       child: ListTile(
-                        title: Text(items[index]),
-                        onTap: () => cardClickEvent(context, index),
-                      ),
+                          title: Text(items[index]),
+                          onTap: () => {
+                                cardClickEvent(context, index),
+                              }),
                     );
                   }
                 },
