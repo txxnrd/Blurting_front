@@ -22,8 +22,15 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
         },
       ),
     );
-
   }
+
+    bool IsValid = false;
+
+    @override
+    void IsSelected() {
+        IsValid = true;
+    }
+
   @override
   void initState() {
     super.initState();
@@ -133,12 +140,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedGender = Gender.male;
                       });
                     },
+
                     child: Text(
                       '남성',
                       style: TextStyle(
@@ -163,14 +171,17 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedGender == Gender.female ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedGender = Gender.female;
                       });
                     },
+
                     child: Text(
                       '여성',
                       style: TextStyle(
@@ -202,10 +213,11 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(

@@ -138,7 +138,8 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
                   onChanged: (double newValue) {
                     setState(() {
                       _smokeSliderValue = newValue;
-                      _selectedSmokePreference = SmokePreference.values[newValue.toInt()];
+                      _selectedSmokePreference =
+                          SmokePreference.values[newValue.toInt()];
                     });
                   },
                   divisions: 3,
@@ -148,7 +149,13 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
                   inactiveColor: Color(0xFFD9D9D9),
                 ),
                 Row(
-                  children: labels.map((label) => Expanded(child: Center(child: Text(label)))).toList(),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: labels
+                      .map((label) => Container(
+                            margin: EdgeInsets.all(10),
+                            child: Text(label),
+                          ))
+                      .toList(),
                 ),
               ],
             ),

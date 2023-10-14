@@ -12,12 +12,11 @@ class MBTIPage extends StatefulWidget {
   @override
   _MBTIPageState createState() => _MBTIPageState();
 }
+
 enum EorI {e,i}
 enum SorN {s,n}
 enum TorF {t,f}
 enum JorP {j,p}
-
-
 
 class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin {
   EorI? _selectedEorI;
@@ -42,6 +41,19 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
     );
 
   }
+
+List<bool> isValidList = [false, false, false, false];
+bool IsValid = false;
+
+    @override
+    void IsSelected(int index) {
+        isValidList[index] = true;
+     if (isValidList.every((isValid) => isValid))
+      {
+        IsValid = true;
+      }
+    }
+
   @override
   void initState() {
     super.initState();
@@ -170,6 +182,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.e;
                       });
@@ -203,6 +216,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.i;
                       });
@@ -286,6 +300,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.s;
                       });
@@ -319,6 +334,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.n;
                       });
@@ -402,6 +418,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(2);
                         _selectedTorF = TorF.t;
                       });
                     },
@@ -435,6 +452,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(2);
                         _selectedTorF = TorF.f ;
                       });
                     },
@@ -517,6 +535,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(3);
                         _selectedJorP = JorP.j;
                       });
                     },
@@ -550,6 +569,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(3);
                         _selectedJorP = JorP.p ;
                       });
                     },
@@ -616,10 +636,11 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(
