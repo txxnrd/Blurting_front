@@ -73,6 +73,8 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,

@@ -45,22 +45,43 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
         },
       ),
     );
-
   }
 
-      bool IsValid = false;
+  bool IsValid = false;
 
-    @override
-    void IsSelected() {
-        IsValid = true;
-    }
+  List<bool> isValidList = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+
+  @override
+  void IsSelected(int index) {
+    isValidList[index] = !isValidList[index];
+    if (isValidList.any((isValid) => isValid)) {
+      IsValid = true;
+    } else
+      IsValid = false;
+  }
 
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간 설정
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
@@ -171,7 +192,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(0);
                         isHobby1Selected =!isHobby1Selected;
                       });
                     },
@@ -203,7 +224,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(1);
                         isHobby2Selected =!isHobby2Selected;
                       });
                     },
@@ -234,7 +255,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(2);
                         isHobby3Selected =!isHobby3Selected;
                       });
                     },
@@ -270,7 +291,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(3);
                         isHobby4Selected =!isHobby4Selected;
                       });
                     },
@@ -302,7 +323,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(4);
                         isHobby5Selected =!isHobby5Selected;
                       });
                     },
@@ -333,7 +354,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(5);
                         isHobby6Selected =!isHobby6Selected;
                       });
                     },
@@ -369,7 +390,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(6);
                         isHobby7Selected =!isHobby7Selected;
                       });
                     },
@@ -401,7 +422,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(7);
                         isHobby8Selected =!isHobby8Selected;
                       });
                     },
@@ -432,7 +453,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(8);
                         isHobby9Selected =!isHobby9Selected;
                       });
                     },
@@ -468,7 +489,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(9);
                         isHobby10Selected =!isHobby10Selected;
                       });
                     },
@@ -500,7 +521,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(10);
                         isHobby11Selected =!isHobby11Selected;
                       });
                     },
@@ -531,7 +552,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(11);
                         isHobby12Selected =!isHobby12Selected;
                       });
                     },
@@ -567,7 +588,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(12);
                         isHobby13Selected =!isHobby13Selected;
                       });
                     },
@@ -599,7 +620,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(13);
                         isHobby14Selected =!isHobby14Selected;
                       });
                     },
@@ -630,7 +651,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(14);
                         isHobby15Selected =!isHobby15Selected;
                       });
                     },

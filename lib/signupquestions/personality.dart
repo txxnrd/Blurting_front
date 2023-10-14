@@ -65,12 +65,34 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
       });
   }
 
-      bool IsValid = false;
+  bool IsValid = false;
 
-    @override
-    void IsSelected() {
-        IsValid = true;
-    }
+  List<bool> isValidList = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+
+  @override
+  void IsSelected(int index) {
+    isValidList[index] = !isValidList[index];
+    if (isValidList.any((isValid) => isValid)) {
+      IsValid = true;
+    } else
+      IsValid = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +192,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(0);
                         isPersonality1Selected =!isPersonality1Selected;
                       });
                     },
@@ -202,7 +224,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(1);
                         isPersonality2Selected =!isPersonality2Selected;
                       });
                     },
@@ -233,7 +255,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(2);
                         isPersonality3Selected =!isPersonality3Selected;
                       });
                     },
@@ -269,7 +291,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(3);
                         isPersonality4Selected =!isPersonality4Selected;
                       });
                     },
@@ -301,7 +323,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(4);
                         isPersonality5Selected =!isPersonality5Selected;
                       });
                     },
@@ -332,7 +354,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(5);
                         isPersonality6Selected =!isPersonality6Selected;
                       });
                     },
@@ -368,7 +390,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(6);
                         isPersonality7Selected =!isPersonality7Selected;
                       });
                     },
@@ -400,7 +422,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(7);
                         isPersonality8Selected =!isPersonality8Selected;
                       });
                     },
@@ -431,7 +453,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(8);
                         isPersonality9Selected =!isPersonality9Selected;
                       });
                     },
@@ -467,7 +489,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(9);
                         isPersonality10Selected =!isPersonality10Selected;
                       });
                     },
@@ -499,7 +521,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(10);
                         isPersonality11Selected =!isPersonality11Selected;
                       });
                     },
@@ -530,7 +552,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(11);
                         isPersonality12Selected =!isPersonality12Selected;
                       });
                     },
@@ -566,7 +588,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(12);
                         isPersonality13Selected =!isPersonality13Selected;
                       });
                     },
@@ -598,7 +620,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(13);
                         isPersonality14Selected =!isPersonality14Selected;
                       });
                     },
@@ -629,7 +651,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
-                        IsSelected();
+                        IsSelected(14);
                         isPersonality15Selected =!isPersonality15Selected;
                       });
                     },
