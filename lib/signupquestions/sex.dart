@@ -22,8 +22,15 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
         },
       ),
     );
-
   }
+
+    bool IsValid = false;
+
+    @override
+    void IsSelected() {
+        IsValid = true;
+    }
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +52,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -121,7 +129,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -132,12 +140,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
                         borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedGender = Gender.male;
                       });
                     },
+
                     child: Text(
                       '남성',
                       style: TextStyle(
@@ -154,7 +163,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42,
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -162,14 +171,17 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedGender == Gender.female ? Color(0xFF868686) : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedGender = Gender.female;
                       });
                     },
+
                     child: Text(
                       '여성',
                       style: TextStyle(
@@ -184,31 +196,39 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
               ],
             ),
 
-            SizedBox(height: 309),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
+            SizedBox(height: 321),
 
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

@@ -94,6 +94,8 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -173,40 +175,53 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      color: Colors.grey[200],
+                      border: Border.all(color: Color(0xFF868686)),
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
                     ),
-                    child: _image1 == null
-                        ? Center(child: Icon(Icons.add, size: 40.0))
-                        : Image.file(_image1!, fit: BoxFit.cover),
+                    child: ClipRRect(  // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: _image1 == null
+                          ? Center(child: Icon(Icons.add, color: Color(0xFF868686),size: 40.0))
+                          : Image.file(_image1!, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
+
                 GestureDetector(
-                  onTap: _pickImage2,
+                  onTap: _pickImage1,
                   child: Container(
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      color: Colors.grey[200],
+                      border: Border.all(color: Color(0xFF868686)),
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
                     ),
-                    child: _image2 == null
-                        ? Center(child: Icon(Icons.add, size: 40.0))
-                        : Image.file(_image2!, fit: BoxFit.cover),
+                    child: ClipRRect(  // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: _image2 == null
+                          ? Center(child: Icon(Icons.add, color: Color(0xFF868686),size: 40.0))
+                          : Image.file(_image2!, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
                 GestureDetector(
-                  onTap: _pickImage3,
+                  onTap: _pickImage1,
                   child: Container(
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      color: Colors.grey[200],
+                      border: Border.all(color: Color(0xFF868686)),
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
                     ),
-                    child: _image3 == null
-                        ? Center(child: Icon(Icons.add, size: 40.0))
-                        : Image.file(_image3!, fit: BoxFit.cover),
+                    child: ClipRRect(  // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: _image3 == null
+                          ? Center(child: Icon(Icons.add, color: Color(0xFF868686),size: 40.0))
+                          : Image.file(_image3!, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ],
@@ -214,32 +229,64 @@ class ImagePageState extends State<ImagePage> with SingleTickerProviderStateMixi
 
 
 
-            SizedBox(height: 235),
-
+            SizedBox(height: 206),
             Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-                child: Text(
-                  '다음',
+              width: 180,
+              height: 12,
+              child: RichText(
+                text: TextSpan(
                   style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
+                    fontSize: 10,
                     fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                    color: Color(0xFF303030),
                   ),
+                  children: [
+                    TextSpan(
+                      text: '*얼굴이 ',
+                    ),
+                    TextSpan(
+                      text: '잘 보이는',
+                      style: TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                    ),
+                    TextSpan(
+                      text: ' 사진 3장을 등록해주세요.',
+                    ),
+                  ],
                 ),
               ),
+            ),
+            SizedBox(height:28),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: () {
+                      print("다음 버튼 클릭됨");
+                      _increaseProgressAndNavigate();
+                    },
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

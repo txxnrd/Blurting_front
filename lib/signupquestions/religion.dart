@@ -27,6 +27,14 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
     );
 
   }
+
+    bool IsValid = false;
+
+    @override
+    void IsSelected() {
+        IsValid = true;
+    }
+
   @override
   void initState() {
     super.initState();
@@ -55,6 +63,8 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -130,7 +140,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -144,6 +154,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.none;
                       });
                     },
@@ -163,7 +174,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -177,6 +188,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                     onPressed: () {
                       setState(() {
+                                                IsSelected();
                         _selectedReligion = Religion.buddhism;
                       });
                     },
@@ -198,7 +210,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -212,6 +224,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.christian;
                       });
                     },
@@ -231,7 +244,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -245,6 +258,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.catholicism;
                       });
                     },
@@ -266,7 +280,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -280,6 +294,7 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.etc;
                       });
                     },
@@ -299,39 +314,45 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
 
                 ),
               ],
             ),
 
-            SizedBox(height: 178),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            SizedBox(height: 191),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
         ),

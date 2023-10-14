@@ -12,12 +12,11 @@ class MBTIPage extends StatefulWidget {
   @override
   _MBTIPageState createState() => _MBTIPageState();
 }
+
 enum EorI {e,i}
 enum SorN {s,n}
 enum TorF {t,f}
 enum JorP {j,p}
-
-
 
 class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin {
   EorI? _selectedEorI;
@@ -42,6 +41,19 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
     );
 
   }
+
+List<bool> isValidList = [false, false, false, false];
+bool IsValid = false;
+
+    @override
+    void IsSelected(int index) {
+        isValidList[index] = true;
+     if (isValidList.every((isValid) => isValid))
+      {
+        IsValid = true;
+      }
+    }
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +80,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -133,16 +147,29 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
               height: 50,
             ),
             Text(
-              '당신의 전공은 무엇인가요?',
+              '당신의 MBTI는 무엇인가요?',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                  '에너지방향',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
+
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -155,6 +182,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.e;
                       });
@@ -170,12 +198,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -188,6 +212,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.i;
                       });
@@ -205,12 +230,57 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
-            SizedBox(height: 17,),
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  margin: EdgeInsets.all(0),
+                  child: Text(
+                    '외향형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(0),
+                  child: Text(
+                    '내항형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 3,),
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                '인식',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+
+                Container(
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -223,6 +293,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.s;
                       });
@@ -239,11 +310,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                   ),
                 ),
 
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -256,6 +324,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                     ),
 
                     onPressed: () {
+                        IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.n;
                       });
@@ -273,12 +342,56 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
-            SizedBox(height: 17,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
+
                 Container(
-                  width: 159, // 원하는 너비 값
+                  child: Text(
+                    '감각형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+
+                Container(
+                  child: Text(
+                    '직관형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 3,),
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                '판단',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+
+                Container(
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -292,6 +405,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(2);
                         _selectedTorF = TorF.t;
                       });
                     },
@@ -307,11 +421,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                   ),
                 ),
 
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -325,7 +436,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
-                        _selectedTorF = TorF.f;
+                        IsSelected(2);
+                        _selectedTorF = TorF.f ;
                       });
                     },
                     child: Text(
@@ -341,12 +453,56 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
-            SizedBox(height: 17,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
+
                 Container(
-                  width: 159, // 원하는 너비 값
+                  child: Text(
+                    '사고형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+
+                Container(
+                  child: Text(
+                    '감각형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 3,),
+            Container(
+              width: 44,
+              height: 12,
+              child: Text(
+                '계획성',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard'
+                ),
+              ),
+            ),
+            SizedBox(height: 4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+
+                Container(
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -360,6 +516,7 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(3);
                         _selectedJorP = JorP.j;
                       });
                     },
@@ -375,11 +532,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                   ),
                 ),
 
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
@@ -393,7 +547,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 
                     onPressed: () {
                       setState(() {
-                        _selectedJorP = JorP.p;
+                        IsSelected(3);
+                        _selectedJorP = JorP.p ;
                       });
                     },
                     child: Text(
@@ -409,33 +564,69 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
 
-            SizedBox(height: 115),
-
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  child: Text(
+                    '판단형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
 
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
+                Container(
+                  child: Text(
+                    '인식형',
+                    style: TextStyle(
+                      color: Color(0xFF868686),
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+
+                    ),
                   ),
                 ),
-              ),
+              ],
+            ),
+            SizedBox(height: 58),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

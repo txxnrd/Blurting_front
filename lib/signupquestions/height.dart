@@ -32,6 +32,14 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
     );
 
   }
+
+      bool IsValid = false;
+
+    @override
+    void IsSelected() {
+        IsValid = true;
+    }
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +66,10 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -124,53 +135,91 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
             ),
             Text(
               '당신의 키는 어떻게 되시나요?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
-            Slider(
-              value: _currentHeightValue,
-              onChanged: (double newValue) {
-                setState(() {
-                  _currentHeightValue = newValue;
-                });
-              },
-              min: 150,
-              max: 205,
-              divisions: 45, // 205 - 160 = 45
-              activeColor: Color(0xFFF66464),
-              inactiveColor: Color(0xFFD9D9D9),
-              label: _currentHeightValue == 150
-                  ? "${_currentHeightValue.toStringAsFixed(0)} cm 이하"
-                  : _currentHeightValue == 205
-                  ? "${_currentHeightValue.toStringAsFixed(0)} cm 이상"
-                  : "${_currentHeightValue.toStringAsFixed(0)} cm",
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
+                children: [
+                  Container(
+                    width: 125,
+                    height: 48,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: '',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFF66464),
+                          ), // 초기 테두리 색상
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFF66464),
+                          ), // 입력할 때 테두리 색상
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFF66464),
+                          ), // 선택/포커스 됐을 때 테두리 색상
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value != '') IsSelected();
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 6), // Container와 Text 위젯 사이의 간격
+                  Text(
+                    'cm',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF303030),
+                      fontFamily: 'Pretendard'
+                  ),)
+                ],
+              ),
             ),
 
-            SizedBox(height: 309),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
 
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
+            SizedBox(height: 321),
+            Center(
+              child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+                children: [
+                  Container(
+                    width: width*0.9,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFFF66464),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 0,
+                        padding: EdgeInsets.all(0),
+                      ),
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
+                      child: Text(
+                        '다음',
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

@@ -59,6 +59,8 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -136,7 +138,8 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
                   onChanged: (double newValue) {
                     setState(() {
                       _smokeSliderValue = newValue;
-                      _selectedSmokePreference = SmokePreference.values[newValue.toInt()];
+                      _selectedSmokePreference =
+                          SmokePreference.values[newValue.toInt()];
                     });
                   },
                   divisions: 3,
@@ -146,38 +149,50 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
                   inactiveColor: Color(0xFFD9D9D9),
                 ),
                 Row(
-                  children: labels.map((label) => Expanded(child: Center(child: Text(label)))).toList(),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: labels
+                      .map((label) => Container(
+                            margin: EdgeInsets.all(10),
+                            child: Text(label),
+                          ))
+                      .toList(),
                 ),
               ],
             ),
 
 
 
-            SizedBox(height: 292),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            SizedBox(height: 306),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: () {
+                      print("다음 버튼 클릭됨");
+                      _increaseProgressAndNavigate();
+                    },
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
         ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
-
+/*
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: MainApp(),
   ));
 }
-/*
+
+*/
 import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
 
 void main() => runApp(MyApp());
@@ -26,5 +27,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-*/
