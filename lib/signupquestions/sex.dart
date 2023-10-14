@@ -23,6 +23,15 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin{
       ),
     );
 
+    bool IsValid = false;
+
+    @override
+    void IsSelected() {
+      setState(() {
+        IsValid = false;
+      });
+    }
+
   }
   @override
   void initState() {
