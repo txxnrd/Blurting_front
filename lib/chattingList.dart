@@ -122,7 +122,7 @@ class _chattingList extends State<ChattingList> {
             color: Colors.white.withOpacity(0.5),
           ),
           SingleChildScrollView(
-            padding: EdgeInsets.only(top: 250), // 시작 위치에 여백 추가
+            padding: EdgeInsets.only(top: 260, bottom: 100), // 시작 위치에 여백 추가
 
             child: Column(
               children: [
