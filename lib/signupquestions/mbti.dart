@@ -165,7 +165,7 @@ bool IsValid = false;
             ),
             SizedBox(height: 4,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
 
                 Container(
@@ -198,10 +198,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
                 Container(
                   width: width*0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -236,10 +232,10 @@ bool IsValid = false;
             ),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
+                  margin: EdgeInsets.all(0),
                   child: Text(
                     '외향형',
                     style: TextStyle(
@@ -250,11 +246,8 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
-
                 Container(
+                  margin: EdgeInsets.all(0),
                   child: Text(
                     '내항형',
                     style: TextStyle(
@@ -283,7 +276,7 @@ bool IsValid = false;
             ),
             SizedBox(height: 4,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
 
                 Container(
@@ -316,9 +309,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
                   width: width*0.42, // 원하는 너비 값
@@ -353,7 +343,7 @@ bool IsValid = false;
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
 
                 Container(
@@ -367,9 +357,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
 
                 Container(
                   child: Text(
@@ -400,7 +387,7 @@ bool IsValid = false;
             ),
             SizedBox(height: 4,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
 
                 Container(
@@ -433,9 +420,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
                   width: width*0.42, // 원하는 너비 값
@@ -470,7 +454,7 @@ bool IsValid = false;
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
 
                 Container(
@@ -484,9 +468,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
 
                 Container(
                   child: Text(
@@ -517,7 +498,7 @@ bool IsValid = false;
             ),
             SizedBox(height: 4,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
 
                 Container(
@@ -550,9 +531,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
                   width: width*0.42, // 원하는 너비 값
@@ -587,7 +565,7 @@ bool IsValid = false;
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
 
                 Container(
@@ -601,9 +579,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
-
-                SizedBox(width: 156), // 두 버튼 사이의 간격 조정
 
                 Container(
                   child: Text(
