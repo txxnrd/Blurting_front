@@ -47,6 +47,14 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
     );
 
   }
+
+      bool IsValid = false;
+
+    @override
+    void IsSelected() {
+        IsValid = true;
+    }
+
   @override
   void initState() {
     super.initState();
@@ -140,7 +148,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
               height: 50,
             ),
             Text(
-              '당신의 취미는 어떠신가요?',
+              '당신의 취미는 무엇인가요?',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
@@ -163,6 +171,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby1Selected =!isHobby1Selected;
                       });
                     },
@@ -194,6 +203,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby2Selected =!isHobby2Selected;
                       });
                     },
@@ -224,6 +234,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby3Selected =!isHobby3Selected;
                       });
                     },
@@ -259,6 +270,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby4Selected =!isHobby4Selected;
                       });
                     },
@@ -290,6 +302,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby5Selected =!isHobby5Selected;
                       });
                     },
@@ -320,6 +333,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby6Selected =!isHobby6Selected;
                       });
                     },
@@ -355,6 +369,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby7Selected =!isHobby7Selected;
                       });
                     },
@@ -386,6 +401,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby8Selected =!isHobby8Selected;
                       });
                     },
@@ -416,6 +432,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby9Selected =!isHobby9Selected;
                       });
                     },
@@ -451,6 +468,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby10Selected =!isHobby10Selected;
                       });
                     },
@@ -482,6 +500,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby11Selected =!isHobby11Selected;
                       });
                     },
@@ -512,6 +531,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby12Selected =!isHobby12Selected;
                       });
                     },
@@ -547,6 +567,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby13Selected =!isHobby13Selected;
                       });
                     },
@@ -578,6 +599,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby14Selected =!isHobby14Selected;
                       });
                     },
@@ -608,6 +630,7 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
 
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         isHobby15Selected =!isHobby15Selected;
                       });
                     },
@@ -641,10 +664,11 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(

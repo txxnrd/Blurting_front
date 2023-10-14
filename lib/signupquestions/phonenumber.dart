@@ -94,15 +94,15 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
 
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
-    }
-
-    );
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         toolbarHeight: 80,
@@ -170,6 +170,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
+            
             Container(
               width: 350,
               child: TextField(

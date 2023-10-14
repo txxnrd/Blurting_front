@@ -32,6 +32,14 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
     );
 
   }
+
+      bool IsValid = false;
+
+    @override
+    void IsSelected() {
+        IsValid = true;
+    }
+
   @override
   void initState() {
     super.initState();
@@ -157,14 +165,20 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                           ), // 선택/포커스 됐을 때 테두리 색상
                         ),
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value != '') IsSelected();
+                        });
+                      },
                     ),
                   ),
                   SizedBox(width: 6), // Container와 Text 위젯 사이의 간격
-                  Text('cm',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                      color: Color(0xFF303030),
+                  Text(
+                    'cm',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF303030),
                       fontFamily: 'Pretendard'
                   ),)
                 ],
@@ -190,10 +204,11 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                         elevation: 0,
                         padding: EdgeInsets.all(0),
                       ),
-                      onPressed: () {
-                        print("다음 버튼 클릭됨");
-                        _increaseProgressAndNavigate();
-                      },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                       child: Text(
                         '다음',
                         style: TextStyle(
