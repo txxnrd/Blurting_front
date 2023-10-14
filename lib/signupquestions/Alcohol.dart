@@ -150,8 +150,8 @@ class _AlcoholPageState extends State<AlcoholPage> with SingleTickerProviderStat
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: labels
                       .map((label) => Container(
-                            margin: EdgeInsets.all(10),
-                            child: Text(label),
+                            margin: EdgeInsets.only(left: 10, right: 20),
+                            child: Text(label, style: TextStyle(fontSize: 12, fontFamily: 'Pretendard', color: Color.fromRGBO(48, 48, 48, 1)),),
                           ))
                       .toList(),
                 ),

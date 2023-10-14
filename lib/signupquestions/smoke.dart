@@ -130,30 +130,31 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
             Column(
               children: [
-                Slider(
-                  value: _smokeSliderValue,
-                  onChanged: (double newValue) {
-                    setState(() {
-                      _smokeSliderValue = newValue;
-                      _selectedSmokePreference =
-                          SmokePreference.values[newValue.toInt()];
-                    });
-                  },
-                  divisions: 3,
-                  min: 0,
-                  max: 3,
-                  activeColor: Color(0xFFF66464),
-                  inactiveColor: Color(0xFFD9D9D9),
+                Container(
+                  child: Slider(
+                    value: _smokeSliderValue,
+                    onChanged: (double newValue) {
+                      setState(() {
+                        _smokeSliderValue = newValue;
+                        _selectedSmokePreference =
+                            SmokePreference.values[newValue.toInt()];
+                      });
+                    },
+                    divisions: 3,
+                    min: 0,
+                    max: 3,
+                    activeColor: Color(0xFFF66464),
+                    inactiveColor: Color(0xFFD9D9D9),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: labels
                       .map((label) => Container(
-                            margin: EdgeInsets.all(10),
-                            child: Text(label),
+                            margin: EdgeInsets.only(left: 10, right: 20),
+                            child: Text(label, style: TextStyle(fontSize: 12, fontFamily: 'Pretendard', color: Color.fromRGBO(48, 48, 48, 1)),),
                           ))
                       .toList(),
                 ),
