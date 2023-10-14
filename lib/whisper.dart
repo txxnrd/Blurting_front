@@ -570,6 +570,7 @@ TextEditingController _controller = TextEditingController();
                             ),
 
                             child: TextField(
+                              style: TextStyle(fontSize: 12),
                               controller: _controller, // 컨트롤러 할당
                               cursorColor: Color.fromRGBO(246, 100, 100, 1),
                               decoration: InputDecoration(
