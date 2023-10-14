@@ -25,29 +25,29 @@ class _MyPage extends State<MyPage> {
           useMaterial3: true,
         ),
         home: Scaffold(
-      appBar: AppBar(
-  toolbarHeight: 80,
-  backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
-  elevation: 0, // 그림자 효과를 제거합니다.
-  leading: IconButton(
-    icon: Icon(
-      Icons.arrow_back_ios,
-      color: Color.fromRGBO(48, 48, 48, 1),
-    ),
-    onPressed: () {
-      // 뒤로가기 버튼을 눌렀을 때의 동작
-    },
-  ),
-  actions: <Widget>[
-    IconButton(
-      icon: Image.asset('assets/images/setting.png'),
-      color: Color.fromRGBO(48, 48, 48, 1),
-      onPressed: () {
-        // 설정 버튼을 눌렀을 때의 동작
-      },
-    ),
-  ],
-),
+            appBar: AppBar(
+              toolbarHeight: 80,
+              backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
+              elevation: 0, // 그림자 효과를 제거합니다.
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Color.fromRGBO(48, 48, 48, 1),
+                ),
+                onPressed: () {
+                  // 뒤로가기 버튼을 눌렀을 때의 동작
+                },
+              ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Image.asset('assets/images/setting.png'),
+                  color: Color.fromRGBO(48, 48, 48, 1),
+                  onPressed: () {
+                    // 설정 버튼을 눌렀을 때의 동작
+                  },
+                ),
+              ],
+            ),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -56,11 +56,12 @@ class _MyPage extends State<MyPage> {
                   Container(
                     padding: EdgeInsets.only(bottom: 30),
                     child: Text('My Profile',
-                        textAlign: TextAlign.left,
+                        // textAlign: TextAlign.left,
                         style: TextStyle(
                             color: Color.fromARGB(163, 0, 0, 0),
+                            fontFamily: 'Pretendard',
                             fontSize: 40,
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.w800)),
                   ),
                   Center(
                     child: Container(
@@ -94,6 +95,7 @@ class _MyPage extends State<MyPage> {
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromRGBO(138, 138, 138, 1)),
                             ),
+                            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                             Image.asset(
                               'image/girl.png',
                               width: 128,
@@ -112,36 +114,12 @@ class _MyPage extends State<MyPage> {
                                     fontSize: 15)),
                             Container(
                                 margin: EdgeInsets.only(top: 10, bottom: 5),
-                                child: Text(
-                                    '아래 점은...고정하고 싶은 답변?' +
-                                        '\n' +
-                                        'or 상태메시지? or 추가정보',
+                                child: Text('고려대학교' + '\n' + '컴퓨터학과',
                                     textAlign: TextAlign.center, // 텍스트를 가운데 정렬
                                     style: TextStyle(
                                         fontFamily: "Pretendard",
                                         fontWeight: FontWeight.w400,
                                         fontSize: 15))),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                      //여기도 일단은 row로 했지만.. 나중에 개발할땐 tab? scrollview?
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                            'image/profile_swipe_now.png'),
-                                        Image.asset(
-                                            'image/profile_swipe_next.png'),
-                                        Image.asset(
-                                            'image/profile_swipe_next.png')
-                                      ]),
-                                ),
-                              ],
-                            )
                           ],
                         )
                         //동적으로 user data를 받아올땐 아래 코드를 써야할 것임
@@ -159,29 +137,32 @@ class _MyPage extends State<MyPage> {
                                 ),*/
                         ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 70),
-                      child: Container(
-                        width: 350,
-                        height: 48,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 239, 183, 183),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                  Center(
+                    child: Padding(
+                        padding: const EdgeInsets.only(top: 60),
+                        child: Container(
+                          width: 350,
+                          height: 48,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Color.fromARGB(255, 239, 183, 183),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
                             ),
+                            child: const Text(
+                              'Edit',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontFamily: 'pretendard',
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            onPressed: () {},
                           ),
-                          child: const Text(
-                            'Edit',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                fontFamily: 'pretendard',
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          onPressed: () {},
-                        ),
-                      ))
+                        )),
+                  )
                 ],
               ),
             )));

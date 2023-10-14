@@ -307,27 +307,50 @@ class _Whisper extends State<Whisper> {
 
     return Scaffold(
       appBar: AppBar(
-  toolbarHeight: 80,
-  backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
-  elevation: 0, // 그림자 효과를 제거합니다.
-  leading: IconButton(
-    icon: Icon(
-      Icons.arrow_back_ios,
-      color: Color.fromRGBO(48, 48, 48, 1),
-    ),
-    onPressed: () {
-      // 뒤로가기 버튼을 눌렀을 때의 동작
-      Navigator.pop(context);
-    },
-  ),
-  actions: <Widget>[
-    IconButton(
-      icon: Image.asset('assets/images/setting.png'),
-      color: Color.fromRGBO(48, 48, 48, 1),
-      onPressed: () {
-        // 설정 버튼을 눌렀을 때의 동작
-      },
-    ),
+        toolbarHeight: 120,
+        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
+        elevation: 0, // 그림자 효과를 제거합니다.
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 48, 48, 1),
+          ),
+          onPressed: () {
+            // 뒤로가기 버튼을 눌렀을 때의 동작
+            Navigator.pop(context);
+          },
+        ),
+        title: Row(
+          children: [
+            Container(
+              width: 70,
+              height: 70,
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: Text(
+                '개굴',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15),
+              ),
+            )
+          ],
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/images/setting.png'),
+            color: Color.fromRGBO(48, 48, 48, 1),
+            onPressed: () {
+              // 설정 버튼을 눌렀을 때의 동작
+            },
+          ),
   ],
   flexibleSpace: Container(
     decoration: BoxDecoration(
@@ -356,6 +379,17 @@ class _Whisper extends State<Whisper> {
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: Column(
                     children: <Widget>[
+                      ListTile(
+                        title: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '2023년 11월 6일',
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: Color.fromRGBO(134, 134, 134, 1)),
+                          ),
+                        ),
+                      ),
                       ListTile(
                         subtitle: // 답변 내용
 
@@ -389,7 +423,7 @@ class _Whisper extends State<Whisper> {
                                             fontFamily: "Pretendard",
                                             fontSize: 10,
                                             color:
-                                                Color.fromRGBO(48, 48, 48, 1),
+                                                Colors.black,
                                           ),
                                         ),
                                       ),
@@ -434,7 +468,7 @@ class _Whisper extends State<Whisper> {
                                             fontFamily: "Pretendard",
                                             fontSize: 10,
                                             color:
-                                                Color.fromRGBO(48, 48, 48, 1),
+                                                Colors.black,
                                           ),
                                         ),
                                       ),
@@ -479,7 +513,7 @@ class _Whisper extends State<Whisper> {
                                             fontFamily: "Pretendard",
                                             fontSize: 10,
                                             color:
-                                                Color.fromRGBO(48, 48, 48, 1),
+                                                Colors.black,
                                           ),
                                         ),
                                       ),
@@ -504,39 +538,41 @@ class _Whisper extends State<Whisper> {
                   Expanded(
                     child: ClipPath(
                       clipper: InputfieldClipper(),
-                      child: TextField(
-                        cursorColor: Color.fromRGBO(246, 100, 100, 1),
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 0,
-                            ), // 파란색 테두리 없앰
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 0,
-                            ), // 파란색 테두리를 없앰
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "내 생각 쓰기...",
-                          hintStyle: TextStyle(fontSize: 12),
-                          suffixIcon: Container(
-                            child: IconButton(
-                              onPressed: () {
-                                SendAnswer(_controller.text);
-
-                                _controller.clear();
-
-                                print('귓속말 보내기');
-                              },
-                              icon: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 14,
+                      child: Container(
+                        child: TextField(
+                          cursorColor: Color.fromRGBO(246, 100, 100, 1),
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 0,
+                              ), // 파란색 테두리 없앰
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 0,
+                              ), // 파란색 테두리를 없앰
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: "내 생각 쓰기...",
+                            hintStyle: TextStyle(fontSize: 12),
+                            suffixIcon: Container(
+                              child: IconButton(
+                                onPressed: () {
+                                  SendAnswer(_controller.text);
+                      
+                                  _controller.clear();
+                      
+                                  print('귓속말 보내기');
+                                },
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 14,
+                                ),
+                                color: Color.fromRGBO(48, 48, 48, 1),
                               ),
-                              color: Color.fromRGBO(48, 48, 48, 1),
                             ),
                           ),
                         ),

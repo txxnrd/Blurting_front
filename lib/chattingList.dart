@@ -80,7 +80,6 @@ class _chattingList extends State<ChattingList> {
               children: [
                 Container(
                   height: 65,
-                  width: 390,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius:
@@ -133,20 +132,32 @@ class _chattingList extends State<ChattingList> {
                     children: <Widget>[
                       ListTile(
                         title: // 채팅 리스트 하나
-                              GestureDetector(
-                            onTap: () {
-    
-                              print('profile 클릭됨');
-    
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Whisper()),
-                              );                              // 클릭한 상대방의 정보를 넘겨줌
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 30),
+                            GestureDetector(
+                          onTap: () {
+                            print('profile 클릭됨');
+
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        Whisper(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.easeInOut;
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  var offsetAnimation = animation.drive(tween);
+                                  return SlideTransition(
+                                      position: offsetAnimation, child: child);
+                                },
+                              ),
+                            ); // 클릭한 상대방의 정보를 넘겨줌
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 30),
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
@@ -163,7 +174,6 @@ class _chattingList extends State<ChattingList> {
                               children: [
                                 ClipPath(
                                   child: Container(
-                                    width: 350,
                                     height: 85,
                                     padding: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
@@ -186,737 +196,764 @@ class _chattingList extends State<ChattingList> {
                                           child: Image.asset('assets/images/profile_image.png'),
                                           ),
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 20,
-                                                      top: 6,
-                                                      bottom: 6),
-                                                  child: Text(
-                                                    '개굴',
-                                                    style: TextStyle(
-                                                      fontFamily: "Pretendard",
-                                                      fontSize: 15,
-                                                      color: Color.fromRGBO(
-                                                          48, 48, 48, 1),
-                                                      fontWeight: FontWeight.w700,
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 20,
+                                                          top: 6,
+                                                          bottom: 6),
+                                                      child: Text(
+                                                        '개굴',
+                                                        style: TextStyle(
+                                                          fontFamily: "Pretendard",
+                                                          fontSize: 15,
+                                                          color: Color.fromRGBO(
+                                                              48, 48, 48, 1),
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
                                                     ),
+                                                    Container(
+                                                      //margin:EdgeInsets.only(left: 190),
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromRGBO(
+                                                              246, 100, 100, 1),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  50)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                ),
+                                                child: Text(
+                                                  '개굴개굴 개구리 노래를 한다 한 줄이 넘어가면 ...으로 처리되게 해놓았다 넘어가라',
+                                                    overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 15,
+                                                    color: Color.fromRGBO(
+                                                        48, 48, 48, 1),
                                                   ),
                                                 ),
-                                                Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 190),
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          246, 100, 100, 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
                                               ),
-                                              child: Text(
-                                                '개굴개굴 개구리 노래를 한다',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 15,
-                                                  color: Color.fromRGBO(
-                                                      48, 48, 48, 1),
+                                              Container(
+                                                //width: 300,
+                                                alignment: Alignment.centerRight,
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Text(
+                                                  '10:30',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 10,
+                                                    color: Color.fromRGBO(
+                                                        134, 134, 134, 1),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(left: 220),
-                                              child: Text(
-                                                '10:30',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 10,
-                                                  color: Color.fromRGBO(
-                                                      134, 134, 134, 1),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),                      ),
-    
-                        ),                      ListTile(
-                          title: // 채팅 리스트 하나
-                              GestureDetector(
-                            onTap: () {
-    
-                              print('profile 클릭됨');
-    
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Whisper()),
-                              );                              // 클릭한 상대방의 정보를 넘겨줌
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 30),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 15,
-                                  offset: Offset(
-                                      0, 0.1), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipPath(
-                                  child: Container(
-                                    width: 350,
-                                    height: 85,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            margin: EdgeInsets.only(left: 20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color:
-                                                  Color.fromRGBO(255, 210, 210, 1),
-                                            ),
-                                            width: 55,
-                                            height: 55,
-                                          child: Image.asset('assets/images/profile_image.png'),
+                                            ],
                                           ),
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 20,
-                                                      top: 6,
-                                                      bottom: 6),
-                                                  child: Text(
-                                                    '개굴',
-                                                    style: TextStyle(
-                                                      fontFamily: "Pretendard",
-                                                      fontSize: 15,
-                                                      color: Color.fromRGBO(
-                                                          48, 48, 48, 1),
-                                                      fontWeight: FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 190),
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          246, 100, 100, 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                              ),
-                                              child: Text(
-                                                '개굴개굴 개구리 노래를 한다',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 15,
-                                                  color: Color.fromRGBO(
-                                                      48, 48, 48, 1),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(left: 220),
-                                              child: Text(
-                                                '10:30',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 10,
-                                                  color: Color.fromRGBO(
-                                                      134, 134, 134, 1),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                          ),                      ),
-    
-                        ),                      ListTile(
-                          title: // 채팅 리스트 하나
-                              GestureDetector(
-                            onTap: () {
-    
-                              print('profile 클릭됨');
-    
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Whisper()),
-                              );                              // 클릭한 상대방의 정보를 넘겨줌
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 30),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 15,
-                                  offset: Offset(
-                                      0, 0.1), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipPath(
-                                  child: Container(
-                                    width: 350,
-                                    height: 85,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            margin: EdgeInsets.only(left: 20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color:
-                                                  Color.fromRGBO(255, 210, 210, 1),
-                                            ),
-                                            width: 55,
-                                            height: 55,
-                                          child: Image.asset('assets/images/profile_image.png'),
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 20,
-                                                      top: 6,
-                                                      bottom: 6),
-                                                  child: Text(
-                                                    '개굴',
-                                                    style: TextStyle(
-                                                      fontFamily: "Pretendard",
-                                                      fontSize: 15,
-                                                      color: Color.fromRGBO(
-                                                          48, 48, 48, 1),
-                                                      fontWeight: FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 190),
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          246, 100, 100, 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                              ),
-                                              child: Text(
-                                                '개굴개굴 개구리 노래를 한다',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 15,
-                                                  color: Color.fromRGBO(
-                                                      48, 48, 48, 1),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(left: 220),
-                                              child: Text(
-                                                '10:30',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 10,
-                                                  color: Color.fromRGBO(
-                                                      134, 134, 134, 1),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),                      ),
-    
-                        ),                      ListTile(
-                          title: // 채팅 리스트 하나
-                              GestureDetector(
-                            onTap: () {
-    
-                              print('profile 클릭됨');
-    
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Whisper()),
-                              );                              // 클릭한 상대방의 정보를 넘겨줌
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 30),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 15,
-                                  offset: Offset(
-                                      0, 0.1), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipPath(
-                                  child: Container(
-                                    width: 350,
-                                    height: 85,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            margin: EdgeInsets.only(left: 20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color:
-                                                  Color.fromRGBO(255, 210, 210, 1),
-                                            ),
-                                            width: 55,
-                                            height: 55,
-                                          child: Image.asset('assets/images/profile_image.png'),
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 20,
-                                                      top: 6,
-                                                      bottom: 6),
-                                                  child: Text(
-                                                    '개굴',
-                                                    style: TextStyle(
-                                                      fontFamily: "Pretendard",
-                                                      fontSize: 15,
-                                                      color: Color.fromRGBO(
-                                                          48, 48, 48, 1),
-                                                      fontWeight: FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 190),
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          246, 100, 100, 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                              ),
-                                              child: Text(
-                                                '개굴개굴 개구리 노래를 한다',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 15,
-                                                  color: Color.fromRGBO(
-                                                      48, 48, 48, 1),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(left: 220),
-                                              child: Text(
-                                                '10:30',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 10,
-                                                  color: Color.fromRGBO(
-                                                      134, 134, 134, 1),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),                      ),
-    
-                        ),                      ListTile(
-                          title: // 채팅 리스트 하나
-                              GestureDetector(
-                            onTap: () {
-    
-                              print('profile 클릭됨');
-    
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Whisper()),
-                              );                              // 클릭한 상대방의 정보를 넘겨줌
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 30),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 15,
-                                  offset: Offset(
-                                      0, 0.1), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipPath(
-                                  child: Container(
-                                    width: 350,
-                                    height: 85,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            margin: EdgeInsets.only(left: 20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color:
-                                                  Color.fromRGBO(255, 210, 210, 1),
-                                            ),
-                                            width: 55,
-                                            height: 55,
-                                          child: Image.asset('assets/images/profile_image.png'),
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 20,
-                                                      top: 6,
-                                                      bottom: 6),
-                                                  child: Text(
-                                                    '개굴',
-                                                    style: TextStyle(
-                                                      fontFamily: "Pretendard",
-                                                      fontSize: 15,
-                                                      color: Color.fromRGBO(
-                                                          48, 48, 48, 1),
-                                                      fontWeight: FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 190),
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          246, 100, 100, 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                              ),
-                                              child: Text(
-                                                '개굴개굴 개구리 노래를 한다',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 15,
-                                                  color: Color.fromRGBO(
-                                                      48, 48, 48, 1),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(left: 220),
-                                              child: Text(
-                                                '10:30',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 10,
-                                                  color: Color.fromRGBO(
-                                                      134, 134, 134, 1),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),                      ),
-    
-                        ),                      ListTile(
-                          title: // 채팅 리스트 하나
-                              GestureDetector(
-                            onTap: () {
-    
-                              print('profile 클릭됨');
-    
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Whisper()),
-                              );                              // 클릭한 상대방의 정보를 넘겨줌
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 30),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 15,
-                                  offset: Offset(
-                                      0, 0.1), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipPath(
-                                  child: Container(
-                                    width: 350,
-                                    height: 85,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            margin: EdgeInsets.only(left: 20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color:
-                                                  Color.fromRGBO(255, 210, 210, 1),
-                                            ),
-                                            width: 55,
-                                            height: 55,
-                                          child: Image.asset('assets/images/profile_image.png'),
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 20,
-                                                      top: 6,
-                                                      bottom: 6),
-                                                  child: Text(
-                                                    '개굴',
-                                                    style: TextStyle(
-                                                      fontFamily: "Pretendard",
-                                                      fontSize: 15,
-                                                      color: Color.fromRGBO(
-                                                          48, 48, 48, 1),
-                                                      fontWeight: FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 190),
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          246, 100, 100, 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                              ),
-                                              child: Text(
-                                                '개굴개굴 개구리 노래를 한다',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 15,
-                                                  color: Color.fromRGBO(
-                                                      48, 48, 48, 1),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(left: 220),
-                                              child: Text(
-                                                '10:30',
-                                                style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 10,
-                                                  color: Color.fromRGBO(
-                                                      134, 134, 134, 1),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),                      ),
-    
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      ListTile(
+                        title: // 채팅 리스트 하나
+                              GestureDetector(
+                            onTap: () {
+    
+                              print('profile 클릭됨');
+    
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Whisper()),
+                              );                              // 클릭한 상대방의 정보를 넘겨줌
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 30),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 15,
+                                  offset: Offset(
+                                      0, 0.1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipPath(
+                                  child: Container(
+                                    height: 85,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 20),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color:
+                                                  Color.fromRGBO(255, 210, 210, 1),
+                                            ),
+                                            width: 55,
+                                            height: 55,
+                                          child: Image.asset('assets/images/profile_image.png'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 20,
+                                                          top: 6,
+                                                          bottom: 6),
+                                                      child: Text(
+                                                        '개굴',
+                                                        style: TextStyle(
+                                                          fontFamily: "Pretendard",
+                                                          fontSize: 15,
+                                                          color: Color.fromRGBO(
+                                                              48, 48, 48, 1),
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      //margin:EdgeInsets.only(left: 190),
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromRGBO(
+                                                              246, 100, 100, 1),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  50)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                ),
+                                                child: Text(
+                                                  '개굴개굴 개구리 노래를 한다',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 15,
+                                                    color: Color.fromRGBO(
+                                                        48, 48, 48, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                //width: 300,
+                                                alignment: Alignment.centerRight,
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Text(
+                                                  '10:30',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 10,
+                                                    color: Color.fromRGBO(
+                                                        134, 134, 134, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: // 채팅 리스트 하나
+                              GestureDetector(
+                            onTap: () {
+    
+                              print('profile 클릭됨');
+    
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Whisper()),
+                              );                              // 클릭한 상대방의 정보를 넘겨줌
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 30),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 15,
+                                  offset: Offset(
+                                      0, 0.1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipPath(
+                                  child: Container(
+                                    height: 85,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 20),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color:
+                                                  Color.fromRGBO(255, 210, 210, 1),
+                                            ),
+                                            width: 55,
+                                            height: 55,
+                                          child: Image.asset('assets/images/profile_image.png'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 20,
+                                                          top: 6,
+                                                          bottom: 6),
+                                                      child: Text(
+                                                        '개굴',
+                                                        style: TextStyle(
+                                                          fontFamily: "Pretendard",
+                                                          fontSize: 15,
+                                                          color: Color.fromRGBO(
+                                                              48, 48, 48, 1),
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      //margin:EdgeInsets.only(left: 190),
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromRGBO(
+                                                              246, 100, 100, 1),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  50)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                ),
+                                                child: Text(
+                                                  '개굴개굴 개구리 노래를 한다',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 15,
+                                                    color: Color.fromRGBO(
+                                                        48, 48, 48, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                //width: 300,
+                                                alignment: Alignment.centerRight,
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Text(
+                                                  '10:30',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 10,
+                                                    color: Color.fromRGBO(
+                                                        134, 134, 134, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: // 채팅 리스트 하나
+                              GestureDetector(
+                            onTap: () {
+    
+                              print('profile 클릭됨');
+    
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Whisper()),
+                              );                              // 클릭한 상대방의 정보를 넘겨줌
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 30),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 15,
+                                  offset: Offset(
+                                      0, 0.1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipPath(
+                                  child: Container(
+                                    height: 85,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 20),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color:
+                                                  Color.fromRGBO(255, 210, 210, 1),
+                                            ),
+                                            width: 55,
+                                            height: 55,
+                                          child: Image.asset('assets/images/profile_image.png'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 20,
+                                                          top: 6,
+                                                          bottom: 6),
+                                                      child: Text(
+                                                        '개굴',
+                                                        style: TextStyle(
+                                                          fontFamily: "Pretendard",
+                                                          fontSize: 15,
+                                                          color: Color.fromRGBO(
+                                                              48, 48, 48, 1),
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      //margin:EdgeInsets.only(left: 190),
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromRGBO(
+                                                              246, 100, 100, 1),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  50)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                ),
+                                                child: Text(
+                                                  '개굴개굴 개구리 노래를 한다',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 15,
+                                                    color: Color.fromRGBO(
+                                                        48, 48, 48, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                //width: 300,
+                                                alignment: Alignment.centerRight,
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Text(
+                                                  '10:30',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 10,
+                                                    color: Color.fromRGBO(
+                                                        134, 134, 134, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: // 채팅 리스트 하나
+                              GestureDetector(
+                            onTap: () {
+    
+                              print('profile 클릭됨');
+    
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Whisper()),
+                              );                              // 클릭한 상대방의 정보를 넘겨줌
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 30),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 15,
+                                  offset: Offset(
+                                      0, 0.1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipPath(
+                                  child: Container(
+                                    height: 85,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 20),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color:
+                                                  Color.fromRGBO(255, 210, 210, 1),
+                                            ),
+                                            width: 55,
+                                            height: 55,
+                                          child: Image.asset('assets/images/profile_image.png'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 20,
+                                                          top: 6,
+                                                          bottom: 6),
+                                                      child: Text(
+                                                        '개굴',
+                                                        style: TextStyle(
+                                                          fontFamily: "Pretendard",
+                                                          fontSize: 15,
+                                                          color: Color.fromRGBO(
+                                                              48, 48, 48, 1),
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      //margin:EdgeInsets.only(left: 190),
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromRGBO(
+                                                              246, 100, 100, 1),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  50)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                ),
+                                                child: Text(
+                                                  '개굴개굴 개구리 노래를 한다',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 15,
+                                                    color: Color.fromRGBO(
+                                                        48, 48, 48, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                //width: 300,
+                                                alignment: Alignment.centerRight,
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Text(
+                                                  '10:30',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 10,
+                                                    color: Color.fromRGBO(
+                                                        134, 134, 134, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: // 채팅 리스트 하나
+                              GestureDetector(
+                            onTap: () {
+    
+                              print('profile 클릭됨');
+    
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Whisper()),
+                              );                              // 클릭한 상대방의 정보를 넘겨줌
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 30),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 15,
+                                  offset: Offset(
+                                      0, 0.1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipPath(
+                                  child: Container(
+                                    height: 85,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 20),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color:
+                                                  Color.fromRGBO(255, 210, 210, 1),
+                                            ),
+                                            width: 55,
+                                            height: 55,
+                                          child: Image.asset('assets/images/profile_image.png'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 20,
+                                                          top: 6,
+                                                          bottom: 6),
+                                                      child: Text(
+                                                        '개굴',
+                                                        style: TextStyle(
+                                                          fontFamily: "Pretendard",
+                                                          fontSize: 15,
+                                                          color: Color.fromRGBO(
+                                                              48, 48, 48, 1),
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      //margin:EdgeInsets.only(left: 190),
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromRGBO(
+                                                              246, 100, 100, 1),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  50)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                ),
+                                                child: Text(
+                                                  '개굴개굴 개구리 노래를 한다',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 15,
+                                                    color: Color.fromRGBO(
+                                                        48, 48, 48, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                //width: 300,
+                                                alignment: Alignment.centerRight,
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Text(
+                                                  '10:30',
+                                                  style: TextStyle(
+                                                    fontFamily: "Pretendard",
+                                                    fontSize: 10,
+                                                    color: Color.fromRGBO(
+                                                        134, 134, 134, 1),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
             ),
           ],
         ),
