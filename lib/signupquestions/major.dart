@@ -172,6 +172,7 @@ class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMix
             //   },
             // ),
 
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
@@ -200,9 +201,44 @@ class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMix
                 ),
               ],
             ),
-
-
-
+          //   Row(
+          //     mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+          //     children: [
+          //       Container(
+          //         alignment: Alignment.center,
+          //         width: 200,
+          //         height: 420,
+          //         child: Center(
+          //           child: ListView.separated(
+          //             itemCount: majors.length,
+          //             itemBuilder: (context, index) {
+          //               return ListTile(
+          //                 shape: RoundedRectangleBorder( //<-- SEE HERE
+          //                   side: BorderSide(width: 2,color: Color(0xFF868686)),
+          //                   borderRadius: BorderRadius.circular(20),
+          //                 ),
+          //                 title: Text(majors[index]),
+          //                 trailing: selectedMajor == majors[index]
+          //                     ? Icon(Icons.check, color: Color(0xFFF66464))
+          //                     : null,
+          //                 onTap: () {
+          //                   setState(() {
+          //                     selectedMajor = majors[index];
+          //                   });
+          //                 },
+          //               );
+          //             },
+          //             separatorBuilder: (context, index) {
+          //               return SizedBox(height: 4);  // 여기에서 간격을 조절하실 수 있습니다.
+          //             },
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          //
+          //
+          // SizedBox(height: 35,),
             //다음 버튼
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
