@@ -13,19 +13,47 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
   Animation<double>? _progressAnimation;
 
   final _controller = TextEditingController();
+  final _controller_certification = TextEditingController();
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => PhoneCertificationPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => SexPage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
+    String phonenumber='';
+    bool certification = false;
+    bool IsValid = false;
+
+  @override
+  void InputPhoneNumber(String value) {
+    setState(() {
+      phonenumber = value;
+      if (phonenumber.length == 13) IsValid = true;
+    });
+  }
+
+  @override
+  void NowCertification() {
+    setState(() {
+      certification = true;
+      IsValid = false;
+    });
+  }
+
+  @override
+  void InputCertification(String value) {
+    setState(() {
+      if (value.length == 6) IsValid = true;
+      // 사실 글자수가 아니고 찐 인증번호랑 같은지 안 같은지로 해야 함
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -66,15 +94,15 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
 
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
-    }
-
-    );
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         toolbarHeight: 80,
@@ -142,51 +170,120 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> with SingleTickerProv
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
+            
             Container(
-              width:350,
-              child:
-            TextField(
-              controller: _controller,
-              keyboardType: TextInputType.number,
-              maxLength: 13,
-              decoration: InputDecoration(
-                hintText: '010-1234-5678',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFF66464),), // 초기 테두리 색상
+              width: 350,
+              child: TextField(
+                style: TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFF66464),), // 입력할 때 테두리 색상
+                controller: _controller,
+                keyboardType: TextInputType.number,
+                maxLength: 13,
+                decoration: InputDecoration(
+                  hintText: '010-1234-5678',
+                  counterText: '',  // 이 부분을 추가
+                  hintStyle: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: Color.fromRGBO(217, 217, 217, 1)),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFF66464),
+                    ), // 초기 테두리 색상
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFF66464),
+                    ), // 입력할 때 테두리 색상
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFF66464),
+                    ), // 선택/포커스 됐을 때 테두리 색상
+                  ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color:Color(0xFFF66464),), // 선택/포커스 됐을 때 테두리 색상
+                onChanged: (value) {
+                  InputPhoneNumber(value);
+                },
+              ),
+            ),
+            Visibility(
+              visible: certification, // showButton이 true이면 보이고, false이면 숨김
+              child: Container(
+                margin: EdgeInsets.only(top: 15),
+                width: 350,
+                child: TextField(
+                  maxLength: 6,
+                  style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        ),
+                  controller: _controller_certification,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    counterText: "",
+                    hintText: '인증번호를 입력해 주세요',
+                    hintStyle: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        color: Color.fromRGBO(217, 217, 217, 1)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFF66464),
+                      ), // 초기 테두리 색상
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFF66464),
+                      ), // 입력할 때 테두리 색상
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFF66464),
+                      ), // 선택/포커스 됐을 때 테두리 색상
+                    ),
+                  ),
+                  onChanged: (value) {
+                    InputCertification(value);
+                  },
                 ),
               ),
             ),
-            ),
-
-
             SizedBox(height: 274),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
                   width: width*0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
+                      primary: 
+                       Color(0xFFF66464),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
-                    child: Text(
-                      '인증번호 요청',
+                    onPressed: (IsValid)
+                        ? () {
+                            //_increaseProgressAndNavigate();
+                            if(!certification)
+                              NowCertification();
+                            else
+                             _increaseProgressAndNavigate();
+                          }
+                        : null,
+                    child: Text(!certification
+                      ? '인증번호 요청'
+                      : '다음',
                       style: TextStyle(
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,

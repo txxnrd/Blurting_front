@@ -1,8 +1,11 @@
+import 'package:blurting/signupquestions/universitylist.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/mbti.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/mbti.dart';
+
+import 'majorlist.dart';  // sex.dart를 임포트
 
 
 class MajorPage extends StatefulWidget {
@@ -19,6 +22,8 @@ class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMix
   double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  String? selectedMajor=majors[0];
+
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
@@ -129,24 +134,76 @@ class _MajorPageState extends State<MajorPage> with SingleTickerProviderStateMix
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
+            //검색 구현
+            // Autocomplete<String>(
+            //   optionsBuilder: (TextEditingValue textEditingValue) {
+            //     if (textEditingValue.text == '') {
+            //       return const Iterable.empty();
+            //     }
+            //     //majors는 majorlist.dart에서 import 해옴
+            //     return majors.where((String major) {
+            //       return major.contains(textEditingValue.text.toLowerCase());
+            //     });
+            //   },
+            //   onSelected: (String selection) {
+            //     print('You just selected $selection');
+            //   },
+            //
+            //   fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+            //
+            //     //전공 입력창 ex)인문계열
+            //     return TextField(
+            //       controller: textEditingController,
+            //       focusNode: focusNode,
+            //       decoration: InputDecoration(
+            //         hintText: majors[0],
+            //         border: OutlineInputBorder(
+            //           borderSide: BorderSide(color: Color(0xFFF66464),), // 초기 테두리 색상
+            //         ),
+            //         enabledBorder: OutlineInputBorder(
+            //           borderSide: BorderSide(color: Color(0xFFF66464),), // 입력할 때 테두리 색상
+            //         ),
+            //         focusedBorder: OutlineInputBorder(
+            //           borderSide: BorderSide(color:Color(0xFFF66464),), // 선택/포커스 됐을 때 테두리 색상
+            //         ),
+            //       ),
+            //       style: DefaultTextStyle.of(context).style,
+            //     );
+            //   },
+            // ),
 
-            TextField(
-              decoration: InputDecoration(
-                hintText: '컴퓨터공학과',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFF66464),), // 초기 테두리 색상
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: 200,
+                  height: 420,
+                  child: Center(
+                    child: ListView.builder(
+                      itemCount: majors.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(majors[index]),
+                          trailing: selectedMajor == majors[index]
+                              ? Icon(Icons.check, color: Color(0xFFF66464))
+                              : null,
+                          onTap: () {
+                            setState(() {
+                              selectedMajor = majors[index];
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFF66464),), // 입력할 때 테두리 색상
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color:Color(0xFFF66464),), // 선택/포커스 됐을 때 테두리 색상
-                ),
-              ),
+              ],
             ),
 
-            SizedBox(height: 313),
 
+
+            //다음 버튼
             Row(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [

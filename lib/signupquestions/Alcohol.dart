@@ -147,7 +147,13 @@ class _AlcoholPageState extends State<AlcoholPage> with SingleTickerProviderStat
                   inactiveColor: Color(0xFFD9D9D9),
                 ),
                 Row(
-                  children: labels.map((label) => Expanded(child: Center(child: Text(label)))).toList(),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: labels
+                      .map((label) => Container(
+                            margin: EdgeInsets.only(left: 10, right: 20),
+                            child: Text(label, style: TextStyle(fontSize: 12, fontFamily: 'Pretendard', color: Color.fromRGBO(48, 48, 48, 1)),),
+                          ))
+                      .toList(),
                 ),
               ],
             ),

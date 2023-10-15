@@ -65,6 +65,35 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
       });
   }
 
+  bool IsValid = false;
+
+  List<bool> isValidList = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+
+  @override
+  void IsSelected(int index) {
+    isValidList[index] = !isValidList[index];
+    if (isValidList.any((isValid) => isValid)) {
+      IsValid = true;
+    } else
+      IsValid = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -163,6 +192,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(0);
                         isPersonality1Selected =!isPersonality1Selected;
                       });
                     },
@@ -194,6 +224,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(1);
                         isPersonality2Selected =!isPersonality2Selected;
                       });
                     },
@@ -224,6 +255,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(2);
                         isPersonality3Selected =!isPersonality3Selected;
                       });
                     },
@@ -259,6 +291,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(3);
                         isPersonality4Selected =!isPersonality4Selected;
                       });
                     },
@@ -290,6 +323,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(4);
                         isPersonality5Selected =!isPersonality5Selected;
                       });
                     },
@@ -320,6 +354,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(5);
                         isPersonality6Selected =!isPersonality6Selected;
                       });
                     },
@@ -355,6 +390,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(6);
                         isPersonality7Selected =!isPersonality7Selected;
                       });
                     },
@@ -386,6 +422,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(7);
                         isPersonality8Selected =!isPersonality8Selected;
                       });
                     },
@@ -416,6 +453,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(8);
                         isPersonality9Selected =!isPersonality9Selected;
                       });
                     },
@@ -451,6 +489,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(9);
                         isPersonality10Selected =!isPersonality10Selected;
                       });
                     },
@@ -482,6 +521,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(10);
                         isPersonality11Selected =!isPersonality11Selected;
                       });
                     },
@@ -512,6 +552,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(11);
                         isPersonality12Selected =!isPersonality12Selected;
                       });
                     },
@@ -547,6 +588,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(12);
                         isPersonality13Selected =!isPersonality13Selected;
                       });
                     },
@@ -578,6 +620,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(13);
                         isPersonality14Selected =!isPersonality14Selected;
                       });
                     },
@@ -608,6 +651,7 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
 
                     onPressed: () {
                       setState(() {
+                        IsSelected(14);
                         isPersonality15Selected =!isPersonality15Selected;
                       });
                     },
@@ -641,10 +685,11 @@ class _PersonalityPageState extends State<PersonalityPage> with SingleTickerProv
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(
