@@ -146,7 +146,7 @@ class _MyPage extends State<MyPage> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                  Color.fromARGB(255, 239, 183, 183),
+                                  Color(0xFFF66464),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
