@@ -369,6 +369,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     child: Text(
                       '다음',
                       style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,

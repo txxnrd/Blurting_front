@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 
 class PhoneCertificationPage extends StatefulWidget {
   @override
   _PhoneCertificationPageState createState() => _PhoneCertificationPageState();
 }
 
-class _PhoneCertificationPageState extends State<PhoneCertificationPage> with SingleTickerProviderStateMixin {
+class _PhoneCertificationPageState extends State<PhoneCertificationPage>
+    with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   String? _previousText;
   Animation<double>? _progressAnimation;
@@ -22,14 +23,14 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
         },
       ),
     );
-
   }
+
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
     );
 
@@ -37,44 +38,42 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
       String text = _controller.text;
 
       // Checking if the text has been added or removed.
-      if (_previousText == null || (text.length > (_previousText?.length ?? 0))) {
+      if (_previousText == null ||
+          (text.length > (_previousText?.length ?? 0))) {
         if (text.length == 3 || text.length == 8) {
           text += '-';
           _controller.text = text;
-          _controller.selection = TextSelection.fromPosition(TextPosition(offset: text.length));
+          _controller.selection =
+              TextSelection.fromPosition(TextPosition(offset: text.length));
         }
       } else if (text.length < (_previousText?.length ?? 0)) {
         if (text.length == 4 || text.length == 9) {
           text = text.substring(0, text.length - 1);
           _controller.text = text;
-          _controller.selection = TextSelection.fromPosition(TextPosition(offset: text.length));
+          _controller.selection =
+              TextSelection.fromPosition(TextPosition(offset: text.length));
         }
       }
 
       _previousText = _controller.text;
     });
 
-
-
-
     _progressAnimation = Tween<double>(
-      begin: 0,  // 시작 게이지 값
-      end: 0.1,    // 종료 게이지 값
+      begin: 0, // 시작 게이지 값
+      end: 0.1, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
-    }
-
-    );
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -114,20 +113,23 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * _progressAnimation!.value,
+                  width: MediaQuery.of(context).size.width *
+                      _progressAnimation!.value,
                   decoration: BoxDecoration(
                     color: Color(0xFF303030), // 파란색
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * _progressAnimation!.value - 15,
+                  left: MediaQuery.of(context).size.width *
+                          _progressAnimation!.value -
+                      15,
                   bottom: -10,
-                  child: Image.asset('assets/signupface.png', width: 30, height: 30),
+                  child: Image.asset('assets/signupface.png',
+                      width: 30, height: 30),
                 )
               ],
             ),
-
             SizedBox(
               height: 50,
             ),
@@ -139,41 +141,42 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF303030),
-                    fontFamily: 'Pretendard'
-                ),
+                    fontFamily: 'Pretendard'),
               ),
             ),
-
             SizedBox(height: 20),
             Container(
               width: 125,
               height: 48,
-              child:
-            TextField(
-              keyboardType: TextInputType.number,
-              maxLength: 6,
-              decoration: InputDecoration(
-                counterText: "",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFF66464),), // 초기 테두리 색상
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFF66464),), // 입력할 때 테두리 색상
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color:Color(0xFFF66464),), // 선택/포커스 됐을 때 테두리 색상
+              child: TextField(
+                keyboardType: TextInputType.number,
+                maxLength: 6,
+                decoration: InputDecoration(
+                  counterText: "",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFF66464),
+                    ), // 초기 테두리 색상
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFF66464),
+                    ), // 입력할 때 테두리 색상
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFF66464),
+                    ), // 선택/포커스 됐을 때 테두리 색상
+                  ),
                 ),
               ),
             ),
-            ),
-
-
             SizedBox(height: 331),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: width*0.9,
+                  width: width * 0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -191,6 +194,7 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
                     child: Text(
                       '다음',
                       style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
@@ -205,6 +209,7 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage> with Si
       ),
     );
   }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -231,6 +236,4 @@ class FaceIconPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
-
-
 }
