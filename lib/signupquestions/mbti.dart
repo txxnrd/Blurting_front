@@ -20,14 +20,6 @@ enum TorF { t, f }
 
 enum JorP { j, p }
 
-enum EorI { e, i }
-
-enum SorN { s, n }
-
-enum TorF { t, f }
-
-enum JorP { j, p }
-
 class _MBTIPageState extends State<MBTIPage>
     with SingleTickerProviderStateMixin {
   EorI? _selectedEorI;
