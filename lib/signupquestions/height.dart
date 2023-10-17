@@ -35,6 +35,13 @@ class _HeightPageState extends State<HeightPage>
     );
   }
 
+  bool IsValid = false;
+
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -170,6 +177,11 @@ class _HeightPageState extends State<HeightPage>
                           ), // 선택/포커스 됐을 때 테두리 색상
                         ),
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value != '') IsSelected();
+                        });
+                      },
                     ),
                   ),
                   SizedBox(width: 6), // Container와 Text 위젯 사이의 간격
@@ -201,10 +213,11 @@ class _HeightPageState extends State<HeightPage>
                         elevation: 0,
                         padding: EdgeInsets.all(0),
                       ),
-                      onPressed: () {
-                        print("다음 버튼 클릭됨");
-                        _increaseProgressAndNavigate();
-                      },
+                      onPressed: (IsValid)
+                          ? () {
+                              _increaseProgressAndNavigate();
+                            }
+                          : null,
                       child: Text(
                         '다음',
                         style: TextStyle(

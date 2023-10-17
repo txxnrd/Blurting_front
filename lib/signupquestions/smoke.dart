@@ -160,9 +160,12 @@ class _SmokePageState extends State<SmokePage>
                   inactiveColor: Color(0xFFD9D9D9),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: labels
-                      .map((label) =>
-                          Expanded(child: Center(child: Text(label))))
+                      .map((label) => Container(
+                            margin: EdgeInsets.all(10),
+                            child: Text(label),
+                          ))
                       .toList(),
                 ),
               ],

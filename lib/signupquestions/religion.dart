@@ -30,6 +30,13 @@ class _ReligionPageState extends State<ReligionPage>
     );
   }
 
+  bool IsValid = false;
+
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -162,6 +169,7 @@ class _ReligionPageState extends State<ReligionPage>
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.none;
                       });
                     },
@@ -199,6 +207,7 @@ class _ReligionPageState extends State<ReligionPage>
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.buddhism;
                       });
                     },
@@ -241,6 +250,7 @@ class _ReligionPageState extends State<ReligionPage>
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.christian;
                       });
                     },
@@ -278,6 +288,7 @@ class _ReligionPageState extends State<ReligionPage>
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.catholicism;
                       });
                     },
@@ -320,6 +331,7 @@ class _ReligionPageState extends State<ReligionPage>
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.etc;
                       });
                     },
@@ -360,10 +372,11 @@ class _ReligionPageState extends State<ReligionPage>
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(

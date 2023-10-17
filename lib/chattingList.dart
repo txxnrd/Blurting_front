@@ -15,7 +15,7 @@ class _chattingList extends State<ChattingList> {
     return 
         Scaffold(
         appBar: 
-        AppBar(  
+        AppBar( automaticallyImplyLeading: false, 
           toolbarHeight: 244,
           flexibleSpace: Stack(
             children: [ClipRRect(
@@ -81,7 +81,7 @@ class _chattingList extends State<ChattingList> {
                 Container(
                   height: 65,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withOpacity(0.35),
                     borderRadius:
                         BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
                   ),

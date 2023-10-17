@@ -26,6 +26,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
     );
   }
 
+  bool IsValid = false;
+
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -151,6 +158,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedGender = Gender.male;
                       });
                     },
@@ -185,6 +193,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     ),
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedGender = Gender.female;
                       });
                     },
@@ -219,10 +228,11 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(

@@ -32,6 +32,13 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     );
   }
 
+  bool IsValid = false;
+
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -166,6 +173,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference = SexualPreference.different;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -204,6 +212,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference == SexualPreference.same;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -247,6 +256,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference = SexualPreference.both;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -285,6 +295,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference = SexualPreference.etc;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -350,10 +361,11 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(

@@ -14,18 +14,46 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   Animation<double>? _progressAnimation;
 
   final _controller = TextEditingController();
+  final _controller_certification = TextEditingController();
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            PhoneCertificationPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => SexPage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
+  }
+
+  String phonenumber = '';
+  bool certification = false;
+  bool IsValid = false;
+
+  @override
+  void InputPhoneNumber(String value) {
+    setState(() {
+      phonenumber = value;
+      if (phonenumber.length == 13) IsValid = true;
+    });
+  }
+
+  @override
+  void NowCertification() {
+    setState(() {
+      certification = true;
+      IsValid = false;
+    });
+  }
+
+  @override
+  void InputCertification(String value) {
+    setState(() {
+      if (value.length == 6) IsValid = true;
+      // 사실 글자수가 아니고 찐 인증번호랑 같은지 안 같은지로 해야 함
+    });
   }
 
   @override
@@ -154,11 +182,21 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
             Container(
               width: 350,
               child: TextField(
+                style: TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
                 controller: _controller,
                 keyboardType: TextInputType.number,
                 maxLength: 13,
                 decoration: InputDecoration(
                   hintText: '010-1234-5678',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: Color.fromRGBO(217, 217, 217, 1)),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Color(0xFFF66464),
@@ -174,6 +212,51 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       color: Color(0xFFF66464),
                     ), // 선택/포커스 됐을 때 테두리 색상
                   ),
+                ),
+                onChanged: (value) {
+                  InputPhoneNumber(value);
+                },
+              ),
+            ),
+            Visibility(
+              visible: certification, // showButton이 true이면 보이고, false이면 숨김
+              child: Container(
+                margin: EdgeInsets.only(top: 15),
+                width: 350,
+                child: TextField(
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
+                  controller: _controller_certification,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: '인증번호를 입력해 주세요',
+                    hintStyle: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        color: Color.fromRGBO(217, 217, 217, 1)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFF66464),
+                      ), // 초기 테두리 색상
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFF66464),
+                      ), // 입력할 때 테두리 색상
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFF66464),
+                      ), // 선택/포커스 됐을 때 테두리 색상
+                    ),
+                  ),
+                  onChanged: (value) {
+                    InputCertification(value);
+                  },
                 ),
               ),
             ),
@@ -193,12 +276,17 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            //_increaseProgressAndNavigate();
+                            if (!certification)
+                              NowCertification();
+                            else
+                              _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
-                      '인증번호 요청',
+                      !certification ? '인증번호 요청' : '다음',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Pretendard',
