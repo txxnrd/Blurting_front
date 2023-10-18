@@ -210,136 +210,129 @@ class _Whisper extends State<Whisper> {
         ),
       ),
 
-      resizeToAvoidBottomInset: false, // 키보드가 올라와도 배경 이미지가 밀려 올라가지 않도록
-
-      body: GestureDetector(
-        onTap: () {
-          SystemChannels.textInput.invokeMethod('TextInput.hide');
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(
-                  'assets/images/whisper_body_background.png'), // 배경 이미지
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(
+                'assets/images/whisper_body_background.png'), // 배경 이미지
           ),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 30),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: DateItem(year: 2023, month: 10, date: 19,)
-                        ),
-                        ListTile(
-                            subtitle: TargetMessageItem(
-                          message: '개굴개굴개구리 노래를 애옹',
-                        )),
-                        ListTile(
-                            subtitle: TargetMessageItem(
-                          message: '흠냐',
-                        )),
-                        ListTile(
-                            title: DateItem(
-                          year: 2023,
-                          month: 10,
-                          date: 20,
-                        )),
-                        for (var answer in answerList) answer,
-                      ],
-                    ),
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 30),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: DateItem(year: 2023, month: 10, date: 19,)
+                      ),
+                      ListTile(
+                          subtitle: TargetMessageItem(
+                        message: '개굴개굴개구리 노래를 애옹',
+                      )),
+                      ListTile(
+                          subtitle: TargetMessageItem(
+                        message: '흠냐',
+                      )),
+                      ListTile(
+                          title: DateItem(
+                        year: 2023,
+                        month: 10,
+                        date: 20,
+                      )),
+                      for (var answer in answerList) answer,
+                    ],
                   ),
                 ),
               ),
-              Container(
-                height: 55,
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey, // 그림자 색상
-                        blurRadius: 10, // 그림자의 흐림 정도
-                        spreadRadius: 2, // 그림자의 확산 정도
-                        offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
-                      ),
-                    ],
-                    borderRadius:
-                        BorderRadius.circular(10), // 선택적: 필요에 따라 둥글게 처리
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: ClipPath(
-                          clipper: InputfieldClipper(),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey, // 그림자 색상
-                                  blurRadius: 10, // 그림자의 흐림 정도
-                                  spreadRadius: 2, // 그림자의 확산 정도
-                                  offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(
-                                  10), // 선택적: 필요에 따라 둥글게 처리
-                            ),
-                            child: TextField(
-                              style: TextStyle(fontSize: 12),
-                              controller: _controller, // 컨트롤러 할당
-                              // onChanged: (value) => setState(() {
-                              //   isValid = value.isNotEmpty;
-                              // }),
-                              cursorColor: Color.fromRGBO(246, 100, 100, 1),
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 0,
-                                  ), // 파란색 테두리 없앰
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 0,
-                                  ), // 파란색 테두리를 없앰
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: "내 생각 쓰기...",
-                                hintStyle: TextStyle(fontSize: 12),
-                                suffixIcon: Container(
-                                  child: IconButton(
-                                    onPressed: () //(isValid)
-                                        //? () 
-                                        {
-                                            SendAnswer(_controller.text);
-                                            print(
-                                                '귓속말 보내기: ' + _controller.text);
-                                          },
-                                        //: null,
-                                    icon: Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 14,
-                                    ),
-                                    color: Color.fromRGBO(48, 48, 48, 1),
+            ),
+            Container(
+              height: 55,
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey, // 그림자 색상
+                      blurRadius: 10, // 그림자의 흐림 정도
+                      spreadRadius: 2, // 그림자의 확산 정도
+                      offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
+                    ),
+                  ],
+                  borderRadius:
+                      BorderRadius.circular(10), // 선택적: 필요에 따라 둥글게 처리
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ClipPath(
+                        clipper: InputfieldClipper(),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey, // 그림자 색상
+                                blurRadius: 10, // 그림자의 흐림 정도
+                                spreadRadius: 2, // 그림자의 확산 정도
+                                offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(
+                                10), // 선택적: 필요에 따라 둥글게 처리
+                          ),
+                          child: TextField(
+                            style: TextStyle(fontSize: 12),
+                            controller: _controller, // 컨트롤러 할당
+                            // onChanged: (value) => setState(() {
+                            //   isValid = value.isNotEmpty;
+                            // }),
+                            cursorColor: Color.fromRGBO(246, 100, 100, 1),
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 0,
+                                ), // 파란색 테두리 없앰
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 0,
+                                ), // 파란색 테두리를 없앰
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: "내 생각 쓰기...",
+                              hintStyle: TextStyle(fontSize: 12),
+                              suffixIcon: Container(
+                                child: IconButton(
+                                  onPressed: () //(isValid)
+                                      //? () 
+                                      {
+                                          SendAnswer(_controller.text);
+                                          print(
+                                              '귓속말 보내기: ' + _controller.text);
+                                        },
+                                      //: null,
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 14,
                                   ),
+                                  color: Color.fromRGBO(48, 48, 48, 1),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
