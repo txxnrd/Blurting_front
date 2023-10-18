@@ -7,6 +7,28 @@ class GroupChat extends StatefulWidget {
   _GroupChat createState() => _GroupChat();
 }
 
+class InputfieldClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    path.moveTo(size.width - 30, 0);
+    path.lineTo(30, 0);
+    path.quadraticBezierTo(0, 0, 0, 30); //
+    path.lineTo(0, size.height); //
+    path.lineTo(size.width, size.height); //
+    path.lineTo(size.width, 30);
+    path.quadraticBezierTo(size.width, 0, size.width - 30, 0); //
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
 class LeftTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -38,18 +60,14 @@ class RightTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.moveTo(size.width - 25, 5);
-    path.lineTo(15, 5);
-    path.quadraticBezierTo(0, 5, 0, 15);
-    path.lineTo(0, size.height - 15);
-    path.quadraticBezierTo(0, size.height, 15, size.height);
-    path.lineTo(size.width - 20, size.height);
+    path.moveTo(size.width, 5);
+    path.lineTo(30, 5);
+    path.quadraticBezierTo(0, 5, 0, 30);
+    path.lineTo(0, size.height - 30);
+    path.quadraticBezierTo(0, size.height, 30, size.height);
+    path.lineTo(size.width - 30, size.height);
     path.quadraticBezierTo(
-        size.width - 10, size.height, size.width - 10, size.height - 15);
-    path.lineTo(size.width - 10, 25);
-    path.lineTo(size.width, 15);
-    path.lineTo(size.width - 10, 15);
-    path.quadraticBezierTo(size.width - 10, 5, size.width - 25, 5);
+        size.width, size.height, size.width, size.height - 20);
 
     return path;
   }
@@ -258,8 +276,7 @@ class AnswerItem extends StatelessWidget {
                     ),
                     Container(
                         margin: EdgeInsets.only(top: 10, bottom: 5),
-                        child: Text(
-                            '아이씨 겁나 귀찮네 이거',
+                        child: Text('아이씨 겁나 귀찮네 이거',
                             textAlign: TextAlign.center, // 텍스트를 가운데 정렬
                             style: TextStyle(
                                 fontFamily: "Pretendard",
@@ -400,6 +417,8 @@ class QuestionNumber extends StatelessWidget {
 class _GroupChat extends State<GroupChat> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController _controller = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -440,16 +459,16 @@ class _GroupChat extends State<GroupChat> {
         title: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 25),
+                margin: EdgeInsets.only(top: 25),
                 child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: Text(
-                    'Day1',
-                    style: TextStyle(
-                        fontFamily: "Heedo",
-                        fontSize: 40,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Text(
+                        'Day1',
+                        style: TextStyle(
+                            fontFamily: "Heedo",
+                            fontSize: 40,
                             fontWeight: FontWeight.w700,
                             color: Color.fromRGBO(246, 100, 100, 1)),
                       ),
@@ -510,26 +529,166 @@ class _GroupChat extends State<GroupChat> {
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
             color: Colors.white.withOpacity(0.5),
           ),
-          SingleChildScrollView(
-            padding: EdgeInsets.only(top: 260, bottom: 100), // 시작 위치에 여백 추가
+          Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(top: 260), // 시작 위치에 여백 추가
 
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 20, top: 10),
                   child: Column(
-                    children: <Widget>[
-                    AnswerItem(nickname: '정원', message: '하하\n그냥 잘까'),
-                    AnswerItem(nickname: '개굴', message: '아 목 아파 감기 걸렷나'),
-                    AnswerItem(nickname: '감기', message: '양치하고 자야겟다..'),
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 20, top: 10),
+                        child: Column(
+                          children: <Widget>[
+                            AnswerItem(nickname: '정원', message: '하하\n그냥 잘까'),
+                            AnswerItem(
+                                nickname: '개굴', message: '아 목 아파 감기 걸렷나'),
+                            AnswerItem(nickname: '감기', message: '양치하고 자야겟다..'),
+                            for (var answer in answerList) answer,
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),            Container(
+              height: 55,
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey, // 그림자 색상
+                      blurRadius: 10, // 그림자의 흐림 정도
+                      spreadRadius: 2, // 그림자의 확산 정도
+                      offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
+                    ),
+                  ],
+                  borderRadius:
+                      BorderRadius.circular(10), // 선택적: 필요에 따라 둥글게 처리
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ClipPath(
+                        clipper: InputfieldClipper(),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey, // 그림자 색상
+                                blurRadius: 10, // 그림자의 흐림 정도
+                                spreadRadius: 2, // 그림자의 확산 정도
+                                offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(
+                                10), // 선택적: 필요에 따라 둥글게 처리
+                          ),
+                          child: TextField(
+                            style: TextStyle(fontSize: 12),
+                            controller: _controller, // 컨트롤러 할당
+                            // onChanged: (value) => setState(() {
+                            //   isValid = value.isNotEmpty;
+                            // }),
+                            cursorColor: Color.fromRGBO(246, 100, 100, 1),
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 0,
+                                ), // 파란색 테두리 없앰
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 0,
+                                ), // 파란색 테두리를 없앰
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: "내 생각 쓰기...",
+                              hintStyle: TextStyle(fontSize: 12),
+                              suffixIcon: Container(
+                                child: IconButton(
+                                  onPressed: () //(isValid)
+                                      //? () 
+                                      {
+                                          SendAnswer(_controller.text);
+                                          print(
+                                              '귓속말 보내기: ' + _controller.text);
+                                        },
+                                      //: null,
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 14,
+                                  ),
+                                  color: Color.fromRGBO(48, 48, 48, 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ),
+            ],
           ),
+          
         ],
       ),
     );
+  }
+
+  List<Widget> answerList = []; // 답변을 저장할 리스트
+
+  void SendAnswer(String answer) {
+    // 입력한 내용을 ListTile에 추가
+    Widget newAnswer = ListTile(
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            ClipPath(
+              clipper: RightTailClipper(),
+              child: Container(
+                width: 250,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Color.fromRGBO(255, 210, 210, 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 20, right: 20, top: 10, bottom: 10),
+                      child: Text(
+                        answer,
+                        style: TextStyle(
+                          fontFamily: "Pretendard",
+                          fontSize: 10,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // 리스트에 추가
+    answerList.add(newAnswer);
+    setState(() {});
   }
 }

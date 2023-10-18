@@ -16,13 +16,18 @@ class _Blurting extends State<Blurting> {
         backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 24,),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+            size: 24,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
               padding: EdgeInsets.only(top: 20, bottom: 30, left: 20),
@@ -71,13 +76,13 @@ class _Blurting extends State<Blurting> {
                 borderRadius: BorderRadius.circular(10),
                 color: Color.fromRGBO(255, 210, 210, 1),
               ),
-              margin: EdgeInsets.only(top: 30),
+              margin: EdgeInsets.only(bottom: 140),
               width: 344,
               height: 48,
             ),
             onTap: () {
-              Navigator.push(context, 
-              MaterialPageRoute(builder: (context)=>GroupChat()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => GroupChat()));
             },
           )
         ],
