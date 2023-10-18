@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/major.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/major.dart'; // sex.dart를 임포트
 
 final labels = ['안 핌', '가끔', '자주', '매일'];
 
@@ -13,9 +13,11 @@ class HeightPage extends StatefulWidget {
   @override
   _HeightPageState createState() => _HeightPageState();
 }
-enum AlcoholPreference { none,rarely,enjoy,everyday}
 
-class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateMixin {
+enum AlcoholPreference { none, rarely, enjoy, everyday }
+
+class _HeightPageState extends State<HeightPage>
+    with SingleTickerProviderStateMixin {
   AlcoholPreference? _selectedAlcoholPreference;
   double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
@@ -24,35 +26,36 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => MajorPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            MajorPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
 
       bool IsValid = false;
 
-    @override
-    void IsSelected() {
-        IsValid = true;
-    }
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
 
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간 설정
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.6,  // 시작 너비 (30%)
-      end: 0.7,    // 종료 너비 (40%)
-    ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
+      begin: 0.6, // 시작 너비 (30%)
+      end: 0.7, // 종료 너비 (40%)
+    ).animate(
+        CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
@@ -110,37 +113,46 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3),
+                  width: MediaQuery.of(context).size.width *
+                      (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
                     color: Color(0xFF303030),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 15,
+                  left: MediaQuery.of(context).size.width *
+                          (_progressAnimation?.value ?? 0.3) -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
                 )
               ],
             ),
-
             SizedBox(
               height: 50,
             ),
             Text(
               '당신의 키는 어떻게 되시나요?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
             Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
                 children: [
                   Container(
                     width: 125,
@@ -184,16 +196,13 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                 ],
               ),
             ),
-
-
             SizedBox(height: 321),
             Center(
-              child:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
                 children: [
                   Container(
-                    width: width*0.9,
+                    width: width * 0.9,
                     height: 48,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -204,14 +213,15 @@ class _HeightPageState extends State<HeightPage> with SingleTickerProviderStateM
                         elevation: 0,
                         padding: EdgeInsets.all(0),
                       ),
-                    onPressed: (IsValid)
-                        ? () {
-                            _increaseProgressAndNavigate();
-                          }
-                        : null,
+                      onPressed: (IsValid)
+                          ? () {
+                              _increaseProgressAndNavigate();
+                            }
+                          : null,
                       child: Text(
                         '다음',
                         style: TextStyle(
+                          color: Colors.white,
                           fontFamily: 'Pretendard',
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500,
@@ -249,8 +259,3 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
-
-
-
-
-

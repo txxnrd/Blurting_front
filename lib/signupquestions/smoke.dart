@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/height.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/height.dart'; // sex.dart를 임포트
 
-final labels = ['안 핌', '가끔', '자주', '매일'];
+final labels = ['안 피움', '가끔', '자주', '매일'];
 
 class SmokePage extends StatefulWidget {
   final String selectedGender;
@@ -13,9 +13,11 @@ class SmokePage extends StatefulWidget {
   @override
   _SmokePageState createState() => _SmokePageState();
 }
-enum SmokePreference { none,rarely,enjoy,everyday}
 
-class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMixin {
+enum SmokePreference { none, rarely, enjoy, everyday }
+
+class _SmokePageState extends State<SmokePage>
+    with SingleTickerProviderStateMixin {
   SmokePreference? _selectedSmokePreference;
   double _smokeSliderValue = 0; // 슬라이더의 초기값 설정
 
@@ -25,27 +27,29 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => HeightPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            HeightPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
+
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간 설정
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.6,  // 시작 너비 (30%)
-      end: 0.7,    // 종료 너비 (40%)
-    ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
+      begin: 0.6, // 시작 너비 (30%)
+      end: 0.7, // 종료 너비 (40%)
+    ).animate(
+        CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
@@ -102,72 +106,78 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3),
+                  width: MediaQuery.of(context).size.width *
+                      (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
                     color: Color(0xFF303030),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 15,
+                  left: MediaQuery.of(context).size.width *
+                          (_progressAnimation?.value ?? 0.3) -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
                 )
               ],
             ),
-
             SizedBox(
               height: 50,
             ),
             Text(
               '당신의 흡연습관은 어떻게 되시나요?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
             Column(
               children: [
-                Slider(
-                  value: _smokeSliderValue,
-                  onChanged: (double newValue) {
-                    setState(() {
-                      _smokeSliderValue = newValue;
-                      _selectedSmokePreference =
-                          SmokePreference.values[newValue.toInt()];
-                    });
-                  },
-                  divisions: 3,
-                  min: 0,
-                  max: 3,
-                  activeColor: Color(0xFFF66464),
-                  inactiveColor: Color(0xFFD9D9D9),
+                Container(
+                  child: Slider(
+                    value: _smokeSliderValue,
+                    onChanged: (double newValue) {
+                      setState(() {
+                        _smokeSliderValue = newValue;
+                        _selectedSmokePreference =
+                            SmokePreference.values[newValue.toInt()];
+                      });
+                    },
+                    divisions: 3,
+                    min: 0,
+                    max: 3,
+                    activeColor: Color(0xFFF66464),
+                    inactiveColor: Color(0xFFD9D9D9),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: labels
                       .map((label) => Container(
-                            margin: EdgeInsets.all(10),
-                            child: Text(label),
+                            margin: EdgeInsets.only(left: 10, right: 20),
+                            child: Text(label, style: TextStyle(fontSize: 12, fontFamily: 'Pretendard', color: Color.fromRGBO(48, 48, 48, 1)),),
                           ))
                       .toList(),
                 ),
               ],
             ),
-
-
-
             SizedBox(height: 306),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: width*0.9,
+                  width: width * 0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -185,6 +195,7 @@ class _SmokePageState extends State<SmokePage> with SingleTickerProviderStateMix
                     child: Text(
                       '다음',
                       style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
@@ -221,8 +232,3 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
-
-
-
-
-

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/personality.dart';  // sex.dart를 임포트
-
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/personality.dart'; // sex.dart를 임포트
 
 class MBTIPage extends StatefulWidget {
   final String selectedGender;
@@ -24,8 +23,6 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
   TorF? _selectedTorF;
   JorP? _selectedJorP;
 
-
-
   double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
@@ -33,40 +30,40 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => PersonalityPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            PersonalityPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
 
 List<bool> isValidList = [false, false, false, false];
 bool IsValid = false;
 
-    @override
-    void IsSelected(int index) {
-        isValidList[index] = true;
-     if (isValidList.every((isValid) => isValid))
-      {
-        IsValid = true;
-      }
+  @override
+  void IsSelected(int index) {
+    isValidList[index] = true;
+    if (isValidList.every((isValid) => isValid)) {
+      IsValid = true;
     }
+  }
 
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간 설정
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.8,  // 시작 너비 (30%)
-      end: 0.9,    // 종료 너비 (40%)
-    ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
+      begin: 0.8, // 시작 너비 (30%)
+      end: 0.9, // 종료 너비 (40%)
+    ).animate(
+        CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
@@ -123,66 +120,79 @@ bool IsValid = false;
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3),
+                  width: MediaQuery.of(context).size.width *
+                      (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
                     color: Color(0xFF303030),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 15,
+                  left: MediaQuery.of(context).size.width *
+                          (_progressAnimation?.value ?? 0.3) -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
                 )
               ],
             ),
-
             SizedBox(
               height: 50,
             ),
             Text(
               '당신의 MBTI는 무엇인가요?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
             Container(
               width: 44,
               height: 12,
               child: Text(
-                  '에너지방향',
+                '에너지방향',
                 style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Pretendard'
-                ),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard'),
               ),
             ),
-            SizedBox(height: 4,),
+            SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedEorI == EorI.e ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedEorI == EorI.e
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
-                        IsSelected(0);
+                      IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.e;
                       });
@@ -199,20 +209,25 @@ bool IsValid = false;
                   ),
                 ),
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedEorI == EorI.i ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedEorI == EorI.i
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
-                        IsSelected(0);
+                      IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.i;
                       });
@@ -230,7 +245,6 @@ bool IsValid = false;
                 ),
               ],
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
@@ -255,13 +269,14 @@ bool IsValid = false;
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                       fontSize: 10,
-
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 3,),
+            SizedBox(
+              height: 3,
+            ),
             Container(
               width: 44,
               height: 12,
@@ -270,30 +285,35 @@ bool IsValid = false;
                 style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard'
-                ),
+                    fontFamily: 'Pretendard'),
               ),
             ),
-            SizedBox(height: 4,),
+            SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedSorN == SorN.s ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedSorN == SorN.s
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
-                        IsSelected(1);
+                      IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.s;
                       });
@@ -309,22 +329,26 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedSorN == SorN.n ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedSorN == SorN.n
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
-                        IsSelected(1);
+                      IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.n;
                       });
@@ -345,7 +369,6 @@ bool IsValid = false;
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
                   child: Text(
                     '감각형',
@@ -357,7 +380,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   child: Text(
                     '직관형',
@@ -366,13 +388,14 @@ bool IsValid = false;
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                       fontSize: 10,
-
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 3,),
+            SizedBox(
+              height: 3,
+            ),
             Container(
               width: 44,
               height: 12,
@@ -381,28 +404,33 @@ bool IsValid = false;
                 style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard'
-                ),
+                    fontFamily: 'Pretendard'),
               ),
             ),
-            SizedBox(height: 4,),
+            SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedTorF == TorF.t ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedTorF == TorF.t
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         IsSelected(2);
@@ -420,20 +448,24 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedTorF == TorF.f ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedTorF == TorF.f
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         IsSelected(2);
@@ -456,7 +488,6 @@ bool IsValid = false;
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
                   child: Text(
                     '사고형',
@@ -468,7 +499,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   child: Text(
                     '감각형',
@@ -477,13 +507,14 @@ bool IsValid = false;
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                       fontSize: 10,
-
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 3,),
+            SizedBox(
+              height: 3,
+            ),
             Container(
               width: 44,
               height: 12,
@@ -492,28 +523,33 @@ bool IsValid = false;
                 style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard'
-                ),
+                    fontFamily: 'Pretendard'),
               ),
             ),
-            SizedBox(height: 4,),
+            SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedJorP == JorP.j ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedJorP == JorP.j
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         IsSelected(3);
@@ -531,20 +567,24 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
-                  width: width*0.42, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: _selectedJorP == JorP.p ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: _selectedJorP == JorP.p
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         IsSelected(3);
@@ -567,7 +607,6 @@ bool IsValid = false;
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Container(
                   child: Text(
                     '판단형',
@@ -579,7 +618,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   child: Text(
                     '인식형',
@@ -588,19 +626,17 @@ bool IsValid = false;
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                       fontSize: 10,
-
                     ),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 58),
-
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: width*0.9,
+                  width: width * 0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -619,6 +655,7 @@ bool IsValid = false;
                     child: Text(
                       '다음',
                       style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
@@ -655,8 +692,3 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
-
-
-
-
-
