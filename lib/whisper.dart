@@ -366,6 +366,7 @@ TextEditingController _controller = TextEditingController();
       ),
 
       resizeToAvoidBottomInset: false, // 키보드가 올라와도 배경 이미지가 밀려 올라가지 않도록
+      
       body: GestureDetector(
         onTap: () {
           SystemChannels.textInput.invokeMethod('TextInput.hide');

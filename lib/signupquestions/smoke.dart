@@ -4,7 +4,7 @@ import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/height.dart'; // sex.dart를 임포트
 
-final labels = ['안 핌', '가끔', '자주', '매일'];
+final labels = ['안 피움', '가끔', '자주', '매일'];
 
 class SmokePage extends StatefulWidget {
   final String selectedGender;
