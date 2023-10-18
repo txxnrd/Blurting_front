@@ -14,6 +14,9 @@ class MyPage extends StatefulWidget {
 class _MyPage extends State<MyPage> {
   var switchValue = false;
   String modify = 'Edit';
+  final PageController pageController = PageController(
+    initialPage: 0,
+  );
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,76 +57,118 @@ class _MyPage extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(bottom: 30),
-                    child: Text('My Profile',
-                        // textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: Color.fromARGB(163, 0, 0, 0),
-                            fontFamily: 'Pretendard',
-                            fontSize: 40,
-                            fontWeight: FontWeight.w800)),
-                  ),
+                      padding: EdgeInsets.only(bottom: 30),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(5),
+                            child: Text('My Profile',
+                                // textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Color.fromARGB(163, 0, 0, 0),
+                                    fontFamily: 'Pretendard',
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w800)),
+                          ),
+                          Container(
+                              padding: EdgeInsets.only(top: 20, left: 5),
+                              alignment: Alignment.bottomRight,
+                              child: Image.asset('assets/images/Ellipse.png')),
+                        ],
+                      )),
                   Center(
                     child: Container(
-                        alignment: Alignment.center,
-                        width: 260,
-                        height: 345, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(217, 217, 217, 1),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)),
-                          border: Border.all(
-                              color: Color.fromARGB(144, 0, 0, 0), width: 3),
-                          boxShadow: [
-                            BoxShadow(
-                              offset: Offset(5, 5),
-                              blurRadius: 10,
-                              color:
-                                  Color.fromARGB(255, 0, 0, 0).withOpacity(.25),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                            Text(
-                              'Profile',
-                              style: TextStyle(
-                                  fontFamily: 'Heedo',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(138, 138, 138, 1)),
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                            Image.asset(
-                              'image/girl.png',
-                              width: 128,
-                              fit: BoxFit.cover,
-                            ),
-                            Text('개굴',
+                      alignment: Alignment.center,
+                      width: 260,
+                      height: 345, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(217, 217, 217, 1),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        border: Border.all(
+                            color: Color.fromARGB(144, 0, 0, 0), width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                            color:
+                                Color.fromARGB(255, 0, 0, 0).withOpacity(.25),
+                          ),
+                        ],
+                      ),
+                      child: PageView(
+                        controller: pageController,
+                        children: [
+                          //첫번째 페이지
+                          Column(
+                            children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                              Text(
+                                '서울 성북구',
                                 style: TextStyle(
-                                    fontFamily: "Pretendard",
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 24)),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                            Text('INFJ',
+                                    fontFamily: 'Heedo',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(138, 138, 138, 1)),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                              Image.asset(
+                                'image/girl.png',
+                                width: 128,
+                                fit: BoxFit.cover,
+                              ),
+                              Text('개굴',
+                                  style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24)),
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                              Text('INFJ',
+                                  style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15)),
+                              Container(
+                                  margin: EdgeInsets.only(top: 10, bottom: 5),
+                                  child: Text('고려대학교' + '\n' + '컴퓨터학과',
+                                      textAlign:
+                                          TextAlign.center, // 텍스트를 가운데 정렬
+                                      style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15))),
+                            ],
+                          ),
+                          //두번째페이지
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                '서울',
                                 style: TextStyle(
-                                    fontFamily: "Pretendard",
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15)),
-                            Container(
-                                margin: EdgeInsets.only(top: 10, bottom: 5),
-                                child: Text('고려대학교' + '\n' + '컴퓨터학과',
-                                    textAlign: TextAlign.center, // 텍스트를 가운데 정렬
-                                    style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15))),
-                          ],
-                        )
-                        //동적으로 user data를 받아올땐 아래 코드를 써야할 것임
-                        /*child: Center(child: data!.length == 0
+                                    fontFamily: 'Heedo',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(138, 138, 138, 1)),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                              Text('개굴',
+                                  style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24)),
+                            ],
+                          ),
+                          //세번째페이지
+                        ],
+                      ),
+
+                      //동적으로 user data를 받아올땐 아래 코드를 써야할 것임
+                      /*child: Center(child: data!.length == 0
                                       ? Text('유저 정보가 없습니다. 로그인하세요.', style: TextStyle(fontSize: 20),textAlign: TextAlign.center,)
                                       :Container(
                       child: Column(children: <Widget>[
@@ -135,7 +180,7 @@ class _MyPage extends State<MyPage> {
                       ]),
                                       ),
                                 ),*/
-                        ),
+                    ),
                   ),
                   Center(
                     child: Padding(
@@ -145,8 +190,7 @@ class _MyPage extends State<MyPage> {
                           height: 48,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Color(0xFFF66464),
+                              backgroundColor: Color(0xFFF66464),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),

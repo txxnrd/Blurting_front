@@ -28,10 +28,10 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
 
     bool IsValid = false;
 
-    @override
-    void IsSelected() {
-        IsValid = true;
-    }
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
 
   @override
   void initState() {
@@ -162,7 +162,6 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                         _selectedGender = Gender.male;
                       });
                     },
-
                     child: Text(
                       '남성',
                       style: TextStyle(
@@ -198,7 +197,6 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                         _selectedGender = Gender.female;
                       });
                     },
-
                     child: Text(
                       '여성',
                       style: TextStyle(

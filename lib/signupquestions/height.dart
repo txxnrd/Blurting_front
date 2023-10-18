@@ -37,10 +37,10 @@ class _HeightPageState extends State<HeightPage>
 
       bool IsValid = false;
 
-    @override
-    void IsSelected() {
-        IsValid = true;
-    }
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
 
   @override
   void initState() {
@@ -213,11 +213,11 @@ class _HeightPageState extends State<HeightPage>
                         elevation: 0,
                         padding: EdgeInsets.all(0),
                       ),
-                    onPressed: (IsValid)
-                        ? () {
-                            _increaseProgressAndNavigate();
-                          }
-                        : null,
+                      onPressed: (IsValid)
+                          ? () {
+                              _increaseProgressAndNavigate();
+                            }
+                          : null,
                       child: Text(
                         '다음',
                         style: TextStyle(

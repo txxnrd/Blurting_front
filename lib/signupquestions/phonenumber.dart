@@ -178,7 +178,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
-            
             Container(
               width: 350,
               child: TextField(
@@ -225,10 +224,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 width: 350,
                 child: TextField(
                   style: TextStyle(
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                        ),
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
                   controller: _controller_certification,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -269,8 +268,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: 
-                       Color(0xFFF66464),
+                      primary: Color(0xFFF66464),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -280,15 +278,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     onPressed: (IsValid)
                         ? () {
                             //_increaseProgressAndNavigate();
-                            if(!certification)
+                            if (!certification)
                               NowCertification();
                             else
-                             _increaseProgressAndNavigate();
+                              _increaseProgressAndNavigate();
                           }
                         : null,
-                    child: Text(!certification
-                      ? '인증번호 요청'
-                      : '다음',
+                    child: Text(
+                      !certification ? '인증번호 요청' : '다음',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Pretendard',

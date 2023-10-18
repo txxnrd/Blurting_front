@@ -32,10 +32,10 @@ class _ReligionPageState extends State<ReligionPage>
 
     bool IsValid = false;
 
-    @override
-    void IsSelected() {
-        IsValid = true;
-    }
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
 
   @override
   void initState() {
@@ -207,7 +207,7 @@ class _ReligionPageState extends State<ReligionPage>
                     ),
                     onPressed: () {
                       setState(() {
-                                                IsSelected();
+                        IsSelected();
                         _selectedReligion = Religion.buddhism;
                       });
                     },

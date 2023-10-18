@@ -28,6 +28,15 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     );
   }
 
+  bool IsValid = false;
+
+  @override
+  void IsSelected(String content) {
+    setState(() {
+      if (content.isNotEmpty) IsValid = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -60,7 +69,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
         content = result;
       });
     }
-
+    IsSelected(content);
     print(content);
   }
 
@@ -285,10 +294,11 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(

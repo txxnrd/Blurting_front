@@ -42,14 +42,13 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
 List<bool> isValidList = [false, false, false, false];
 bool IsValid = false;
 
-    @override
-    void IsSelected(int index) {
-        isValidList[index] = true;
-     if (isValidList.every((isValid) => isValid))
-      {
-        IsValid = true;
-      }
+  @override
+  void IsSelected(int index) {
+    isValidList[index] = true;
+    if (isValidList.every((isValid) => isValid)) {
+      IsValid = true;
     }
+  }
 
   @override
   void initState() {
@@ -193,7 +192,7 @@ bool IsValid = false;
                       ),
                     ),
                     onPressed: () {
-                        IsSelected(0);
+                      IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.e;
                       });
@@ -228,7 +227,7 @@ bool IsValid = false;
                       ),
                     ),
                     onPressed: () {
-                        IsSelected(0);
+                      IsSelected(0);
                       setState(() {
                         _selectedEorI = EorI.i;
                       });
@@ -314,7 +313,7 @@ bool IsValid = false;
                       ),
                     ),
                     onPressed: () {
-                        IsSelected(1);
+                      IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.s;
                       });
@@ -330,7 +329,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -350,7 +348,7 @@ bool IsValid = false;
                       ),
                     ),
                     onPressed: () {
-                        IsSelected(1);
+                      IsSelected(1);
                       setState(() {
                         _selectedSorN = SorN.n;
                       });
@@ -382,7 +380,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   child: Text(
                     '직관형',
@@ -451,7 +448,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -503,7 +499,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   child: Text(
                     '감각형',
@@ -572,7 +567,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -624,7 +618,6 @@ bool IsValid = false;
                     ),
                   ),
                 ),
-
                 Container(
                   child: Text(
                     '인식형',
