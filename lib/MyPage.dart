@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:blurting/MyPageEdit.dart';
 
 void main() {
   runApp(MyPage());
@@ -18,6 +19,19 @@ class _MyPage extends State<MyPage> {
   final PageController pageController = PageController(
     initialPage: 0,
   );
+  Future<void> goToMyPageEdit(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyPageEdit()),
+    );
+
+    // 이후에 필요한 작업을 수행할 수 있습니다.
+    if (result != null) {
+      print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
+    }
+    print(result);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -281,7 +295,10 @@ class _MyPage extends State<MyPage> {
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w500),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              print("edit 버튼 클릭됨");
+                              goToMyPageEdit(context);
+                            },
                           ),
                         )),
                   )

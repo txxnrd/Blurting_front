@@ -69,7 +69,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
         content = result;
       });
     }
-    IsSelected(content);
+    IsSelected(content); //비었는지 확인하는
     print(content);
   }
 
