@@ -218,6 +218,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "smooth_page_indicator",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/smooth_page_indicator-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "source_span",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.10.0",
       "packageUri": "lib/",
@@ -278,7 +284,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-10-17T05:44:51.114125Z",
+  "generated": "2023-10-19T07:38:15.727079Z",
   "generator": "pub",
   "generatorVersion": "3.2.0-210.0.dev"
 }
