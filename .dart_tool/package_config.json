@@ -38,6 +38,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "crypto",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.6",
       "packageUri": "lib/",
@@ -266,13 +272,19 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "web_socket_channel",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "blurting",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-10-18T15:49:32.834578Z",
+  "generated": "2023-10-24T15:12:01.919269Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }

@@ -29,7 +29,7 @@ class _chatListItemState extends State<ChatListItem> {
         Navigator.push(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => Whisper(),
+            pageBuilder: (context, animation, secondaryAnimation) => Whisper(userName: widget.userName),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               const begin = Offset(0.0, 1.0);

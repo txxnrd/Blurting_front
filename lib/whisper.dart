@@ -1,152 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/chattingList.dart';
-import 'package:flutter/services.dart';
+import 'package:blurting/messageClass.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Whisper extends StatefulWidget {
-  const Whisper({Key? key}) : super(key: key);
+  // 소켓 서버와 연결 (소켓 연결 시 주석 해제)
+  // final WebSocketChannel channel = IOWebSocketChannel.connect('url');
+  // 에뮬레이터에서는 IP를 적어 줘야 한답니다
+
+  final String userName;
+
+  Whisper({Key? key, required this.userName}) : super(key: key);
 
   @override
   _Whisper createState() => _Whisper();
 }
 
-class LeftTailClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-
-    path.moveTo(0, 5);
-    path.lineTo(size.width - 30, 5);
-    path.quadraticBezierTo(size.width, 5, size.width, 30); // 우측 상단 둥글게
-    path.lineTo(size.width, size.height - 30); // 우측 선
-    path.quadraticBezierTo(
-        // 우측 하단 둥글게
-        size.width,
-        size.height,
-        size.width - 30,
-        size.height);
-    path.lineTo(30, size.height); // 하측 선 어디까지?!
-    path.quadraticBezierTo(0, size.height, 0, size.height - 30); // 좌측 하단 둥글게
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-class RightTailClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.moveTo(size.width, 5);
-    path.lineTo(30, 5);
-    path.quadraticBezierTo(0, 5, 0, 30);
-    path.lineTo(0, size.height - 30);
-    path.quadraticBezierTo(0, size.height, 30, size.height);
-    path.lineTo(size.width - 30, size.height);
-    path.quadraticBezierTo(
-        size.width, size.height, size.width, size.height - 20);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-class InputfieldClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-
-    path.moveTo(size.width - 30, 0);
-    path.lineTo(30, 0);
-    path.quadraticBezierTo(0, 0, 0, 30); //
-    path.lineTo(0, size.height); //
-    path.lineTo(size.width, size.height); //
-    path.lineTo(size.width, 30);
-    path.quadraticBezierTo(size.width, 0, size.width - 30, 0); //
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-class DateItem extends StatelessWidget{
-  final int year;
-  final int month;
-  final int date;
-
-  DateItem({required this.year, required this.month, required this.date});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Text(
-        '$year년 $month월 $date일',
-        style: TextStyle(fontSize: 10, color: Color.fromRGBO(134, 134, 134, 1)),
-      ),
-    );
-  }
-}
-
-class TargetMessageItem extends StatelessWidget {
-  final String message;
-
-  TargetMessageItem({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipPath(
-            clipper: LeftTailClipper(),
-            child: Container(
-              width: 250,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Color.fromRGBO(255, 238, 238, 1),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
-                    child: Text(
-                      message,
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontSize: 10,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _Whisper extends State<Whisper> {
-    bool isValid = false;
+  bool isValid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +52,7 @@ class _Whisper extends State<Whisper> {
             Container(
               margin: EdgeInsets.all(10),
               child: Text(
-                '개굴',
+                widget.userName,
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w700,
@@ -209,7 +80,6 @@ class _Whisper extends State<Whisper> {
           ),
         ),
       ),
-
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -222,19 +92,53 @@ class _Whisper extends State<Whisper> {
           children: <Widget>[
             Expanded(
               child: SingleChildScrollView(
+                // 스크롤뷰
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: Column(
                     children: <Widget>[
+                      // 소켓에 데이터가 존재할 시 반환 (소켓 연결 시 주석 해제)
+                      // StreamBuilder(
+                      //   stream: widget.channel.stream,
+                      //   builder: (context, snapshot) {
+                      //     // snapshot은 비동기적으로 서버에서 가져 온 데이터들의 집합
+                      //     // 알아야 할 정보: 시간, 메시지, 유저 아이디
+                      //     dynamic data = snapshot.data;
+
+                      //     String userId = data['user_id'];
+                      //     String messageText = data['message_text'];
+                      //     DateTime date = DateTime.parse(data['date']);
+
+                      //     Widget messageWidget;
+                      //     if (userId == '1')
+                      //       messageWidget = MyChat(
+                      //         message: messageText,
+                      //       );
+                      //     else
+                      //       messageWidget = OtherChat(
+                      //         message: messageText,
+                      //       );
+
+                      //     return ListTile(
+                      //         subtitle: messageWidget);
+                      //   },
+                      // ),
+
+                      // 전송 중일 시 프론트에서 바로바로 띄워 줘야 함
                       ListTile(
-                        title: DateItem(year: 2023, month: 10, date: 19,)
-                      ),
+                          // 날짜
+                          title: DateItem(
+                        year: 2023,
+                        month: 10,
+                        date: 19,
+                      )),
                       ListTile(
-                          subtitle: TargetMessageItem(
+                          // 상대방 채팅
+                          subtitle: OtherChat(
                         message: '개굴개굴개구리 노래를 애옹',
                       )),
                       ListTile(
-                          subtitle: TargetMessageItem(
+                          subtitle: OtherChat(
                         message: '흠냐',
                       )),
                       ListTile(
@@ -243,147 +147,40 @@ class _Whisper extends State<Whisper> {
                         month: 10,
                         date: 20,
                       )),
-                      for (var answer in answerList) answer,
+                      for (var answer in answerList) answer, // 내 채팅
                     ],
                   ),
                 ),
               ),
             ),
-            Container(
-              height: 55,
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey, // 그림자 색상
-                      blurRadius: 10, // 그림자의 흐림 정도
-                      spreadRadius: 2, // 그림자의 확산 정도
-                      offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
-                    ),
-                  ],
-                  borderRadius:
-                      BorderRadius.circular(10), // 선택적: 필요에 따라 둥글게 처리
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: ClipPath(
-                        clipper: InputfieldClipper(),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey, // 그림자 색상
-                                blurRadius: 10, // 그림자의 흐림 정도
-                                spreadRadius: 2, // 그림자의 확산 정도
-                                offset: Offset(0, 4), // 그림자의 위치 (가로, 세로)
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(
-                                10), // 선택적: 필요에 따라 둥글게 처리
-                          ),
-                          child: TextField(
-                            style: TextStyle(fontSize: 12),
-                            controller: _controller, // 컨트롤러 할당
-                            // onChanged: (value) => setState(() {
-                            //   isValid = value.isNotEmpty;
-                            // }),
-                            cursorColor: Color.fromRGBO(246, 100, 100, 1),
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 0,
-                                ), // 파란색 테두리 없앰
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 0,
-                                ), // 파란색 테두리를 없앰
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: "내 생각 쓰기...",
-                              hintStyle: TextStyle(fontSize: 12),
-                              suffixIcon: Container(
-                                child: IconButton(
-                                  onPressed: () //(isValid)
-                                      //? () 
-                                      {
-                                          SendAnswer(_controller.text);
-                                          print(
-                                              '귓속말 보내기: ' + _controller.text);
-                                        },
-                                      //: null,
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 14,
-                                  ),
-                                  color: Color.fromRGBO(48, 48, 48, 1),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+            CustomInputField(controller: _controller, sendFunction: SendAnswer,)
           ],
         ),
       ),
     );
   }
 
-  List<Widget> answerList = []; // 답변을 저장할 리스트
+  List<Widget> answerList = []; // 답변을 저장할 리스트 (소켓 연결 시 해제)
 
   void SendAnswer(String answer) {
     // 입력한 내용을 ListTile에 추가
-    Widget newAnswer = ListTile(
-      subtitle: // 답변 내용
-          Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            ClipPath(
-              clipper: RightTailClipper(),
-              child: Container(
-                width: 250,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Color.fromRGBO(255, 210, 210, 1),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(
-                          left: 20, right: 20, top: 10, bottom: 10),
-                      child: Text(
-                        answer,
-                        style: TextStyle(
-                          fontFamily: "Pretendard",
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    Widget newAnswer = MyChat(message: answer);
 
-    // 리스트에 추가
+    // 소켓 서버에 데이터 전송 (소켓 연결 시 주석 해제)
+    // if (answer.isNotEmpty) {
+    //   widget.channel.sink.add(answer);
+    // }
+
+    // 리스트에 추가 (소켓 연결 시 삭제)
     answerList.add(newAnswer);
     setState(() {});
+    print("귓속말");
+  
   }
+
+  // 상태 클래스가 종료될 때 호출 (소켓 연결 시 주석 해제)
+  // void dispose() {
+  //   widget.channel.sink.close();
+  //   super.dispose();
+  // }
 }
