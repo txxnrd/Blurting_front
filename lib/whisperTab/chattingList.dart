@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/whisper.dart';
+import 'package:blurting/whisperTab/whisper.dart';
 import 'dart:ui'; // Import the dart:ui library
 
 class ChattingList extends StatefulWidget {

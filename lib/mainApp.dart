@@ -1,10 +1,10 @@
 // main_page.dart
 import 'package:flutter/material.dart';
-import 'package:blurting/blurting.dart';
-import 'package:blurting/whisper.dart';
+import 'package:blurting/blurtingTab/blurting.dart';
+import 'package:blurting/whisperTab/whisper.dart';
 import 'package:blurting/tab3.dart';
 import 'package:blurting/MyPage.dart';
-import 'package:blurting/chattingList.dart';
+import 'package:blurting/whisperTab/chattingList.dart';
 
 void main() {
   runApp(MaterialApp(

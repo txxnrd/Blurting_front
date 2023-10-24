@@ -1,4 +1,4 @@
-import 'package:blurting/groupChat.dart';
+import 'package:blurting/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 
 class Blurting extends StatefulWidget {

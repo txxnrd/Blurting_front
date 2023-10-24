@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/messageClass.dart';
+import 'package:blurting/class/messageClass.dart';
 
 class GroupChat extends StatefulWidget {
   const GroupChat({Key? key}) : super(key: key);
