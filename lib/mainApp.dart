@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/blurtingTab/blurting.dart';
 import 'package:blurting/whisperTab/whisper.dart';
-import 'package:blurting/tab3.dart';
+import 'package:blurting/Home.dart';
 import 'package:blurting/MyPage.dart';
 import 'package:blurting/whisperTab/chattingList.dart';
 
@@ -29,7 +29,7 @@ class _MainApp extends State<MainApp> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          Tab3(),
+          Home(),
           Blurting(), // 첫 번째 탭을 Group으로 대체
           ChattingList(),
           MyPage(),
