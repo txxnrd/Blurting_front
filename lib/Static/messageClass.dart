@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:blurting/Static/messageClass.dart';
+import 'package:blurting/Static/provider.dart';
+
+  SocketProvider socketProvider = SocketProvider();
 
 // 상대방 말풍선 클리퍼
 class LeftTailClipper extends CustomClipper<Path> {
@@ -189,7 +192,7 @@ class DateItem extends StatelessWidget {
   }
 }
 
-// 귓속말 탭 상대방 말풍선 위젯
+// 귓속말탭 상대방 말풍선 위젯
 class OtherChat extends StatelessWidget {
   final String message;
 
@@ -236,7 +239,7 @@ class OtherChat extends StatelessWidget {
   }
 }
 
-// 귓속말 탭 본인 말풍선 위젯
+// 귓속말탭 + 블러팅탭 본인 말풍선 위젯
 class MyChat extends StatelessWidget{
   final String message;
 
@@ -286,12 +289,16 @@ class MyChat extends StatelessWidget{
   }
 }
 
-// 블러팅탭 상대방 답변 위젯
+// 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatelessWidget {
+
+  final Map<String, dynamic> jsonData; // JSON 데이터를 저장할 변수
+
+
   final String nickname;
   final String message;
 
-  AnswerItem({required this.nickname, required this.message});
+  AnswerItem({required this.nickname, required this.message, required this.jsonData});
 
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
@@ -415,6 +422,134 @@ class AnswerItem extends StatelessWidget {
     );
   }
 
+  void _ClickWhisperButton(BuildContext context) {
+    String IsTab = '';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: Color.fromRGBO(217, 217, 217, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(7)),
+            ),
+            title: Column(
+              children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: Icon(Icons.heart_broken),
+                      width: 40,
+                      height: 40,
+                    ),
+                    Text(
+                      '귓속말을 거시겠습니까?',
+                      style: TextStyle(
+                          fontFamily: "Pretendard",
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                Text(
+                  '10 포인트가 차감됩니다!',
+                  style: TextStyle(
+                      fontFamily: "Pretendard",
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 0, bottom: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        socketProvider.channel.sink.add(jsonData);      // 내 아이디, 상대방 아이디 전달
+                        print('귓속말 걺');
+                        setState(() {
+                          IsTab = 'confirm';
+                          print(IsTab);
+                        });
+                      },
+                      child: Container(
+                        width: 75,
+                        height: 31,
+                        decoration: BoxDecoration(
+                          color: IsTab == 'confirm'
+                              ? Color.fromRGBO(134, 134, 134, 1)
+                              : Color.fromRGBO(217, 217, 217, 1),
+                          border: Border.all(
+                            color:
+                                Color.fromRGBO(134, 134, 134, 1), // 테두리 색상 설정
+                            width: 2, // 테두리 두께 설정
+                          ),
+                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '예',
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontSize: 15,
+                              color: IsTab == 'confirm'
+                                  ? Colors.white
+                                  : Color.fromRGBO(48, 48, 48, 1),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      child: Container(
+                        width: 75,
+                        height: 31,
+                        decoration: BoxDecoration(
+                          color: IsTab == 'cancel'
+                              ? Color.fromRGBO(134, 134, 134, 1)
+                              : Color.fromRGBO(217, 217, 217, 1),
+                          border: Border.all(
+                            color:
+                                Color.fromRGBO(134, 134, 134, 1), // 테두리 색상 설정
+                            width: 2, // 테두리 두께 설정
+                          ),
+                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '아니오',
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontSize: 15,
+                              color: IsTab == 'cancel'
+                                  ? Colors.white
+                                  : Color.fromRGBO(48, 48, 48, 1),
+                            ),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        //Navigator.of(context).pop(); // 모달 닫기
+                        print('신고 취소');
+                        setState(() {
+                          IsTab = 'cancel';
+                          print(IsTab);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
+
 // 프로필 클릭 시 모달 띄우는 함수
   void _showProfileModal(BuildContext context) {
     showDialog(
@@ -434,7 +569,7 @@ class AnswerItem extends StatelessWidget {
                   icon: Image.asset('assets/images/icon_warning.png'),
                   color: Color.fromRGBO(48, 48, 48, 1),
                   onPressed: () {
-                    _ClickWarningButton(context);
+                    _ClickWarningButton(context);         // jsonData 줘야 함
                     print('신고 버튼 눌림');
                   },
                 ),
@@ -442,6 +577,7 @@ class AnswerItem extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Container(
+                  padding: EdgeInsets.all(5),
                   alignment: Alignment.center,
                   child: Text(
                     'Profile',
@@ -451,6 +587,17 @@ class AnswerItem extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(Icons.heart_broken),
+                  color: Color.fromRGBO(48, 48, 48, 1),
+                  onPressed: () {
+                    _ClickWhisperButton(context);
+                    print('귓속말 버튼 눌림');
+                  },
                 ),
               ),
             ],
@@ -521,7 +668,7 @@ class AnswerItem extends StatelessWidget {
     return ListTile(
       leading: GestureDetector(
         onTap: () {
-          _showProfileModal(context);
+          _showProfileModal(context);         // jsonData 매개변수
         },
         child: Container(
           width: 42.74,

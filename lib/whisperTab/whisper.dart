@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/class/messageClass.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:blurting/Static/messageClass.dart';
+import 'package:blurting/Static/provider.dart';
 
 class Whisper extends StatefulWidget {
-  // 소켓 서버와 연결 (소켓 연결 시 주석 해제)
-  // final WebSocketChannel channel = IOWebSocketChannel.connect('url');
-  // 에뮬레이터에서는 IP를 적어 줘야 한답니다
 
   final String userName;
 
@@ -17,7 +13,12 @@ class Whisper extends StatefulWidget {
 }
 
 class _Whisper extends State<Whisper> {
+  SocketProvider socketProvider = SocketProvider(); // SocketProvider 인스턴스 생성
   bool isValid = false;
+
+  Map<String, dynamic> data = {
+    'users': [3, 5], 
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -167,9 +168,9 @@ class _Whisper extends State<Whisper> {
     Widget newAnswer = MyChat(message: answer);
 
     // 소켓 서버에 데이터 전송 (소켓 연결 시 주석 해제)
-    // if (answer.isNotEmpty) {
-    //   widget.channel.sink.add(answer);
-    // }
+    if (answer.isNotEmpty) {
+      socketProvider.sendData(data);
+    }
 
     // 리스트에 추가 (소켓 연결 시 삭제)
     answerList.add(newAnswer);
@@ -177,10 +178,4 @@ class _Whisper extends State<Whisper> {
     print("귓속말");
   
   }
-
-  // 상태 클래스가 종료될 때 호출 (소켓 연결 시 주석 해제)
-  // void dispose() {
-  //   widget.channel.sink.close();
-  //   super.dispose();
-  // }
 }

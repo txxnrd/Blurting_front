@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/blurtingTab/blurting.dart';
 import 'package:blurting/whisperTab/whisper.dart';
-import 'package:blurting/Home.dart';
+import 'package:blurting/homeTab/Home.dart';
 import 'package:blurting/MyPage.dart';
 import 'package:blurting/whisperTab/chattingList.dart';
 
@@ -55,12 +55,6 @@ class _MainApp extends State<MainApp> {
             type: BottomNavigationBarType.fixed,
             currentIndex: _currentIndex,
             backgroundColor: Colors.white,
-            /*
-            selectedItemColor: Colors.black, 
-            unselectedItemColor: Colors.grey, 
-            showSelectedLabels: false, 
-            showUnselectedLabels: false, 
-            */
         
             onTap: (int index) {
               print(index);

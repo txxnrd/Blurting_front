@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
+import 'package:provider/provider.dart';
+import 'package:blurting/Static/provider.dart';
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: MainApp(),
+  runApp(ChangeNotifierProvider(
+    create: (context) => SocketProvider(),
+    child: MainApp(),
   ));
 }
-
 
 // import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
 
