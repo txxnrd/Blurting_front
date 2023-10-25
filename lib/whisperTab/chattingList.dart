@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/whisperTab/whisper.dart';
-import 'dart:ui'; // Import the dart:ui library
+import 'dart:ui';
+
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChattingList extends StatefulWidget {
-  const ChattingList({Key? key}) : super(key: key);
+  final IO.Socket socket;
+  
+  ChattingList({required this.socket, Key? key}) : super(key: key);
 
   @override
   _chattingList createState() => _chattingList();
@@ -14,9 +20,10 @@ class ChatListItem extends StatefulWidget {
   final String message;
   final String time;
   final String image;
+  final IO.Socket socket;
 
   ChatListItem(
-      {required this.userName, required this.message, required this.time, required this.image});
+      {required this.userName, required this.message, required this.time, required this.image, required this.socket});
 
   @override
   _chatListItemState createState() => _chatListItemState();
@@ -29,7 +36,7 @@ class _chatListItemState extends State<ChatListItem> {
         Navigator.push(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => Whisper(userName: widget.userName),
+            pageBuilder: (context, animation, secondaryAnimation) => Whisper(userName: widget.userName, socket: widget.socket),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               const begin = Offset(0.0, 1.0);
@@ -270,7 +277,7 @@ class _chattingList extends State<ChattingList> {
 
             child: Column(
               children: [
-                Container(
+                Container(                      // streamBuilder로 소켓에 room 데이터가 존재할 때마다 실시간으로 띄워줌
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: Column(
                     children: <Widget>[
@@ -280,35 +287,40 @@ class _chattingList extends State<ChattingList> {
                         message:
                             '개굴개굴 개구리 노래를 한다 한 줄이 넘어가면 ...으로 처리되게 해놓았다 넘어가라',
                         time: '10:30',
-                        image: 'assets/woman.png'
+                        image: 'assets/woman.png',
+                        socket: widget.socket,
                       )),
                       ListTile(
                           title: ChatListItem(
                         userName: '이얏',
                         message: '위에서 만들어 두고 아래에선 호출만 하기',
                         time: '10:30',
-                        image: 'assets/woman.png'
+                        image: 'assets/woman.png',
+                        socket: widget.socket,
                       )),
                       ListTile(
                           title: ChatListItem(
                         userName: '오호',
                         message: '훨씬 코드가 간결해집니다',
                         time: '10:30',
-                        image: 'assets/images/profile_image.png'
+                        image: 'assets/images/profile_image.png',
+                        socket: widget.socket,
                       )),
                       ListTile(
                           title: ChatListItem(
                         userName: '굿',
                         message: '다른 것들도 바꿔 보세요',
                         time: '10:30',
-                        image: 'assets/images/profile_image.png'
+                        image: 'assets/images/profile_image.png',
+                        socket: widget.socket,
                       )),
                       ListTile(
                           title: ChatListItem(
                         userName: '매개변수',
                         message: '이름, 메시지, 시간, 성별에 따른 프로필 이미지',
                         time: '10:30',
-                        image: 'assets/woman.png'
+                        image: 'assets/woman.png',
+                        socket: widget.socket,
                       )),
                     ],
                   ),

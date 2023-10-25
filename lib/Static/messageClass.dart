@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/Static/messageClass.dart';
 import 'package:blurting/Static/provider.dart';
-
-  SocketProvider socketProvider = SocketProvider();
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 // 상대방 말풍선 클리퍼
 class LeftTailClipper extends CustomClipper<Path> {
@@ -80,11 +78,10 @@ class InputfieldClipper extends CustomClipper<Path> {
 
 // 인풋필드 위젯
 class CustomInputField extends StatelessWidget {
-  
-final TextEditingController controller;
-final Function(String)? sendFunction;
+  final TextEditingController controller;
+  final Function(String)? sendFunction;
 
-CustomInputField({required this.controller, this.sendFunction});
+  CustomInputField({required this.controller, this.sendFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +147,8 @@ CustomInputField({required this.controller, this.sendFunction});
                           onPressed: () //(isValid)
                               //? ()
                               {
-                            sendFunction!(controller.text);         // null 일 수도 있으니까 !을 붙여 주었다, 각 함수의 작동은 groupChat(http), whisper(소켓) 파일에서 수정...
+                            sendFunction!(controller
+                                .text); // null 일 수도 있으니까 !을 붙여 주었다, 각 함수의 작동은 groupChat(http), whisper(소켓) 파일에서 수정...
                           },
                           //: null,
                           icon: Icon(
@@ -240,13 +238,13 @@ class OtherChat extends StatelessWidget {
 }
 
 // 귓속말탭 + 블러팅탭 본인 말풍선 위젯
-class MyChat extends StatelessWidget{
+class MyChat extends StatelessWidget {
   final String message;
 
   MyChat({required this.message});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return ListTile(
       subtitle: // 답변 내용
           Container(
@@ -291,14 +289,17 @@ class MyChat extends StatelessWidget{
 
 // 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatelessWidget {
-
+  final IO.Socket socket;
   final Map<String, dynamic> jsonData; // JSON 데이터를 저장할 변수
-
 
   final String nickname;
   final String message;
 
-  AnswerItem({required this.nickname, required this.message, required this.jsonData});
+  AnswerItem(
+      {required this.nickname,
+      required this.message,
+      required this.jsonData,
+      required this.socket});
 
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
@@ -423,6 +424,7 @@ class AnswerItem extends StatelessWidget {
   }
 
   void _ClickWhisperButton(BuildContext context) {
+    SocketProvider socketProvider = SocketProvider(socket);
     String IsTab = '';
 
     showDialog(
@@ -436,25 +438,25 @@ class AnswerItem extends StatelessWidget {
             ),
             title: Column(
               children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 10),
-                      child: Icon(Icons.heart_broken),
-                      width: 40,
-                      height: 40,
-                    ),
-                    Text(
-                      '귓속말을 거시겠습니까?',
-                      style: TextStyle(
-                          fontFamily: "Pretendard",
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: Icon(Icons.heart_broken),
+                  width: 40,
+                  height: 40,
+                ),
+                Text(
+                  '귓속말을 거시겠습니까?',
+                  style: TextStyle(
+                      fontFamily: "Pretendard",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700),
+                ),
                 Text(
                   '10 포인트가 차감됩니다!',
                   style: TextStyle(
                       fontFamily: "Pretendard",
                       fontSize: 10,
-                      fontWeight: FontWeight.w700),
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -466,7 +468,7 @@ class AnswerItem extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        socketProvider.channel.sink.add(jsonData);      // 내 아이디, 상대방 아이디 전달
+                        socketProvider.joinChat(jsonData);
                         print('귓속말 걺');
                         setState(() {
                           IsTab = 'confirm';
@@ -533,7 +535,7 @@ class AnswerItem extends StatelessWidget {
                       ),
                       onPressed: () {
                         //Navigator.of(context).pop(); // 모달 닫기
-                        print('신고 취소');
+                        print('귓속말 취소');
                         setState(() {
                           IsTab = 'cancel';
                           print(IsTab);
@@ -569,7 +571,7 @@ class AnswerItem extends StatelessWidget {
                   icon: Image.asset('assets/images/icon_warning.png'),
                   color: Color.fromRGBO(48, 48, 48, 1),
                   onPressed: () {
-                    _ClickWarningButton(context);         // jsonData 줘야 함
+                    _ClickWarningButton(context); // jsonData 줘야 함
                     print('신고 버튼 눌림');
                   },
                 ),
@@ -668,7 +670,7 @@ class AnswerItem extends StatelessWidget {
     return ListTile(
       leading: GestureDetector(
         onTap: () {
-          _showProfileModal(context);         // jsonData 매개변수
+          _showProfileModal(context); // jsonData 매개변수
         },
         child: Container(
           width: 42.74,

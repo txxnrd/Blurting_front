@@ -1,26 +1,41 @@
 // main_page.dart
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/blurtingTab/blurting.dart';
-import 'package:blurting/whisperTab/whisper.dart';
 import 'package:blurting/homeTab/Home.dart';
 import 'package:blurting/MyPage.dart';
 import 'package:blurting/whisperTab/chattingList.dart';
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: MainApp(), // MainApp을 호출하도록 수정
-  ));
-}
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:blurting/Static/provider.dart';
 
 class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
+
+  MainApp({Key? key}) : super(key: key);
 
   @override
   _MainApp createState() => _MainApp();
 }
 
 class _MainApp extends State<MainApp> {
+
+  IO.Socket socket = IO.io('ws://localhost:3000/', <String, dynamic>{
+    'transports': ['websocket']
+  });
+
+  late SocketProvider socketProvider; // SocketProvider 변수 추가
+
+  @override
+  void initState() {
+    super.initState();
+
+    // initState에서 SocketProvider 초기화 -> MainApp init과 동시에 소켓 연결
+    socketProvider =
+        SocketProvider(IO.io('ws://localhost:3000/', <String, dynamic>{
+      'transports': ['websocket']
+    }));
+  }
+
   int _currentIndex = 0;
 
   @override
@@ -30,8 +45,8 @@ class _MainApp extends State<MainApp> {
         index: _currentIndex,
         children: [
           Home(),
-          Blurting(), // 첫 번째 탭을 Group으로 대체
-          ChattingList(),
+          Blurting(socket: socket,), // 첫 번째 탭을 Group으로 대체
+          ChattingList(socket: socket),
           MyPage(),
         ],
       ),

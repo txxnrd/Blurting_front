@@ -182,6 +182,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "logging",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "matcher",
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.15",
       "packageUri": "lib/",
@@ -234,6 +240,18 @@
       "rootUri": "file:///C:/Users/4_da_/Downloads/flutter_windows_3.10.5-stable/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "socket_io_client",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_client-2.0.3+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "socket_io_common",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_common-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "source_span",
@@ -296,7 +314,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-10-25T09:46:45.669623Z",
+  "generated": "2023-10-25T12:42:09.218893Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }

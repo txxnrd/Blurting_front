@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
-import 'package:blurting/Static/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class GroupChat extends StatefulWidget {
-  const GroupChat({Key? key}) : super(key: key);
+  final IO.Socket socket;
+
+  GroupChat({required this.socket, Key? key}) : super(key: key);
 
   @override
   _GroupChat createState() => _GroupChat();
@@ -54,8 +56,6 @@ class QuestionNumber extends StatelessWidget {
 }
 
 class _GroupChat extends State<GroupChat> {
-  SocketProvider socketProvider = SocketProvider(); // SocketProvider 인스턴스 생성
-
 
   @override
   Widget build(BuildContext context) {
@@ -187,10 +187,10 @@ class _GroupChat extends State<GroupChat> {
                         padding: EdgeInsets.only(left: 20, top: 10),
                         child: Column(
                           children: <Widget>[
-                            AnswerItem(nickname: '정원', message: '하하\n그냥 잘까', jsonData: data),
+                            AnswerItem(nickname: '정원', message: '하하\n그냥 잘까', jsonData: data, socket: widget.socket),
                             AnswerItem(
-                                nickname: '개굴', message: '아 목 아파 감기 걸렷나', jsonData: data),
-                            AnswerItem(nickname: '감기', message: '양치하고 자야겟다..', jsonData: data),
+                                nickname: '개굴', message: '아 목 아파 감기 걸렷나', jsonData: data, socket: widget.socket),
+                            AnswerItem(nickname: '감기', message: '양치하고 자야겟다..', jsonData: data, socket: widget.socket),
                             for (var answer in answerList) answer,
                           ],
                         ),

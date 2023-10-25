@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:provider/provider.dart';
 import 'package:blurting/Static/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => SocketProvider(),
-    child: MainApp(),
-  ));
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MainApp()),
+  );
 }
 
 // import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트

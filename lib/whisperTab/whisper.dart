@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:blurting/Static/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Whisper extends StatefulWidget {
 
+  final IO.Socket socket;
   final String userName;
 
-  Whisper({Key? key, required this.userName}) : super(key: key);
+  Whisper({Key? key, required this.userName, required this.socket}) : super(key: key);
 
   @override
   _Whisper createState() => _Whisper();
 }
 
 class _Whisper extends State<Whisper> {
-  SocketProvider socketProvider = SocketProvider(); // SocketProvider 인스턴스 생성
   bool isValid = false;
 
   Map<String, dynamic> data = {
@@ -164,18 +165,19 @@ class _Whisper extends State<Whisper> {
   List<Widget> answerList = []; // 답변을 저장할 리스트 (소켓 연결 시 해제)
 
   void SendAnswer(String answer) {
+    SocketProvider socketProvider = SocketProvider(widget.socket);
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(message: answer);
 
     // 소켓 서버에 데이터 전송 (소켓 연결 시 주석 해제)
     if (answer.isNotEmpty) {
       socketProvider.sendData(data);
+      print("socket");
     }
 
     // 리스트에 추가 (소켓 연결 시 삭제)
     answerList.add(newAnswer);
     setState(() {});
     print("귓속말");
-  
   }
 }
