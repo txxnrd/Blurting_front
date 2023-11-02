@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 // import 'package:blurting/signupquestions/activeplace.dart';
 // import 'package:blurting/signupquestions/activeplacedone.dart';
 
@@ -18,12 +19,14 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPage extends State<SearchPage> {
   void cardClickEvent(BuildContext context, int index) {
-    String content = itemContents[index];
+    String content = filteredItems[index];
     // print(content);
     Navigator.pop(context, content);
 
     // Navigator.pop(context); // 뒤로가기 버튼을 눌렀을 때의 동작
   }
+
+  List<String> filteredItems = items; // 검색 결과에 따라 필터링된 리스트
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +86,7 @@ class _SearchPage extends State<SearchPage> {
                   setState(() {
                     searchText = value;
                   });
+                  filterItems();
                 },
               ),
             ),
@@ -100,20 +104,7 @@ class _SearchPage extends State<SearchPage> {
                 ),
                 onPressed: () async {
                   print("현위치 검색 버튼 클릭됨");
-                  final String apiUrl =
-                      'http://54.180.85.164:3080/geocoding/search/district/by-geo?geo=POINT(127.0164 37.4984)';
-
-                  final response = await http.get(Uri.parse(apiUrl));
-
-                  if (response.statusCode == 200) {
-                    // 서버 응답이 성공한 경우
-                    print('서버 응답: ${response.body}');
-                    // 여기서 response.body를 JSON 파싱하거나 원하는 대로 처리합니다.
-                  } else {
-                    // 서버 응답이 에러인 경우
-                    print('에러: ${response.statusCode}');
-                    print('에러 메시지: ${response.body}');
-                  }
+                  searchCurrentLocation();
                 },
                 child: Text(
                   '현재 위치로 검색하기',
@@ -128,18 +119,18 @@ class _SearchPage extends State<SearchPage> {
             ),
             Expanded(
               child: ListView.builder(
-                // items 변수에 저장되어 있는 모든 값 출력
-                itemCount: items.length,
-                itemBuilder: (BuildContext currentcontext, int index) {
-                  // 검색 기능, 검색어가 있을 경우
-                  if (searchText.isNotEmpty &&
-                      !items[index]
-                          .toLowerCase()
-                          .contains(searchText.toLowerCase())) {
-                    return SizedBox.shrink();
-                  }
-                  // 검색어가 없을 경우, 모든 항목 표시
-                  else {
+                  // items 변수에 저장되어 있는 모든 값 출력
+                  itemCount: filteredItems.length,
+                  itemBuilder: (BuildContext currentcontext, int index) {
+                    // // 검색 기능, 검색어가 있을 경우
+                    // if (searchText.isNotEmpty &&
+                    //     !items[index]
+                    //         .toLowerCase()
+                    //         .contains(searchText.toLowerCase())) {
+                    //   return SizedBox.shrink();
+                    // }
+                    // // 검색어가 없을 경우, 모든 항목 표시
+                    // else {
                     return Card(
                       elevation: 0,
                       // shadowColor: null,
@@ -150,7 +141,7 @@ class _SearchPage extends State<SearchPage> {
                               BorderRadius.all(Radius.elliptical(10, 10))),
                       child: ListTile(
                           title: Text(
-                            items[index],
+                            filteredItems[index],
                             style: TextStyle(
                               color: Color(0xFF303030),
                               fontFamily: 'Pretendard',
@@ -162,13 +153,45 @@ class _SearchPage extends State<SearchPage> {
                                 cardClickEvent(context, index),
                               }),
                     );
-                  }
-                },
-              ),
+                  }),
             ),
           ],
         ),
       ),
     );
+  }
+
+  // 검색어에 따라 리스트 필터링하는 함수
+  void filterItems() {
+    if (searchText.isNotEmpty) {
+      filteredItems = items
+          .where(
+              (item) => item.toLowerCase().contains(searchText.toLowerCase()))
+          .toList();
+    } else {
+      filteredItems = items; // 검색어가 없을 경우 전체 리스트 사용
+    }
+  }
+
+  // 검색 버튼 클릭 시 서버 요청 후 검색 결과 업데이트
+  Future<void> searchCurrentLocation() async {
+    final String apiUrl =
+        'http://54.180.85.164:3080/geocoding/search/district/by-geo?geo=POINT(127.0164 37.4984)';
+
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      // 서버 응답이 성공한 경우
+      print('서버 응답: ${response.body}');
+
+      // 서버 응답을 사용하여 검색 결과 업데이트
+      setState(() {
+        filteredItems = json.decode(response.body).cast<String>();
+      });
+    } else {
+      // 서버 응답이 에러인 경우
+      print('에러: ${response.statusCode}');
+      print('에러 메시지: ${response.body}');
+    }
   }
 }
