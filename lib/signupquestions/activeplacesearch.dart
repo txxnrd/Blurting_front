@@ -5,10 +5,11 @@ import 'dart:convert';
 // import 'package:blurting/signupquestions/activeplacedone.dart';
 
 String searchText = '';
+TextEditingController _searchController = TextEditingController();
 
 // 리스트뷰에 표시할 내용
-List<String> items = ['안암동1가', '안암동2가', '안암동3가', '안암동4가'];
-List<String> itemContents = ['안암동 1가', '안암동 2가', '안암동 3가', '안암동 4가'];
+List<String> itemsByLocation = []; // 현재 위치로 검색한 결과
+List<String> itemsByName = []; // 이름으로 검색한 결과
 
 class SearchPage extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _SearchPage extends State<SearchPage> {
     // Navigator.pop(context); // 뒤로가기 버튼을 눌렀을 때의 동작
   }
 
-  List<String> filteredItems = items; // 검색 결과에 따라 필터링된 리스트
+  List<String> filteredItems = itemsByLocation; // 기본적으로 위치로 검색한 결과를 표시
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,7 @@ class _SearchPage extends State<SearchPage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: TextField(
+                controller: _searchController,
                 decoration: InputDecoration(
                   hintText: '동명(읍,면)으로 검색 (ex. 안암동)',
                   contentPadding: EdgeInsets.all(10.0),
@@ -88,6 +90,9 @@ class _SearchPage extends State<SearchPage> {
                   });
                   filterItems();
                 },
+                onSubmitted: (value) {
+                  searchByLocationName();
+                },
               ),
             ),
             Container(
@@ -104,7 +109,7 @@ class _SearchPage extends State<SearchPage> {
                 ),
                 onPressed: () async {
                   print("현위치 검색 버튼 클릭됨");
-                  searchCurrentLocation();
+                  await searchCurrentLocation();
                 },
                 child: Text(
                   '현재 위치로 검색하기',
@@ -164,12 +169,12 @@ class _SearchPage extends State<SearchPage> {
   // 검색어에 따라 리스트 필터링하는 함수
   void filterItems() {
     if (searchText.isNotEmpty) {
-      filteredItems = items
+      filteredItems = itemsByLocation
           .where(
               (item) => item.toLowerCase().contains(searchText.toLowerCase()))
           .toList();
     } else {
-      filteredItems = items; // 검색어가 없을 경우 전체 리스트 사용
+      filteredItems = itemsByLocation; // 검색어가 없을 경우 전체 리스트 사용
     }
   }
 
@@ -185,11 +190,36 @@ class _SearchPage extends State<SearchPage> {
       print('서버 응답: ${response.body}');
 
       // 서버 응답을 사용하여 검색 결과 업데이트
+      List<String> serverResponse =
+          (json.decode(response.body) as List<dynamic>).cast<String>();
       setState(() {
-        filteredItems = json.decode(response.body).cast<String>();
+        itemsByLocation = serverResponse;
+        filterItems();
       });
     } else {
       // 서버 응답이 에러인 경우
+      print('에러: ${response.statusCode}');
+      print('에러 메시지: ${response.body}');
+    }
+  }
+
+  Future<void> searchByLocationName() async {
+    String searchText = _searchController.text;
+
+    final String apiUrl =
+        'http://54.180.85.164:3080/geocoding/search/district/by-name?name=${Uri.encodeComponent(searchText)}';
+
+    final response = await http.get(Uri.parse(apiUrl));
+    print('검색어: $searchText');
+    if (response.statusCode == 200) {
+      print('서버 응답: ${response.body}');
+      List<String> serverResponse =
+          (json.decode(response.body) as List<dynamic>).cast<String>();
+      setState(() {
+        itemsByName = serverResponse;
+        filterItems();
+      });
+    } else {
       print('에러: ${response.statusCode}');
       print('에러 메시지: ${response.body}');
     }
