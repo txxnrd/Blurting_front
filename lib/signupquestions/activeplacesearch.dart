@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 // import 'package:blurting/signupquestions/activeplace.dart';
 // import 'package:blurting/signupquestions/activeplacedone.dart';
 
@@ -26,6 +27,7 @@ class _SearchPage extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return MaterialApp(
       title: 'MemoApp', // 앱의 아이콘 이름
       home: Scaffold(
@@ -82,6 +84,46 @@ class _SearchPage extends State<SearchPage> {
                     searchText = value;
                   });
                 },
+              ),
+            ),
+            Container(
+              width: width * 0.9,
+              height: 48,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFF66464),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 0,
+                  padding: EdgeInsets.all(0),
+                ),
+                onPressed: () async {
+                  print("현위치 검색 버튼 클릭됨");
+                  final String apiUrl =
+                      'http://54.180.85.164:3080/geocoding/search/district/by-geo?geo=POINT(127.0164 37.4984)';
+
+                  final response = await http.get(Uri.parse(apiUrl));
+
+                  if (response.statusCode == 200) {
+                    // 서버 응답이 성공한 경우
+                    print('서버 응답: ${response.body}');
+                    // 여기서 response.body를 JSON 파싱하거나 원하는 대로 처리합니다.
+                  } else {
+                    // 서버 응답이 에러인 경우
+                    print('에러: ${response.statusCode}');
+                    print('에러 메시지: ${response.body}');
+                  }
+                },
+                child: Text(
+                  '현재 위치로 검색하기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Pretendard',
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
             Expanded(
