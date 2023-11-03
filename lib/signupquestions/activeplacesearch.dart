@@ -100,6 +100,7 @@ class _SearchPage extends State<SearchPage> {
                     filterItems();
                   },
                   onSubmitted: (value) {
+                    searchByLocation = false;
                     searchByLocationName();
                   }),
             ),
