@@ -19,6 +19,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPage extends State<SearchPage> {
+  bool searchByLocation = true; // 추가: 검색 유형을 추적하기 위한 변수
+
   void cardClickEvent(BuildContext context, int index) {
     String content = filteredItems[index];
     // print(content);
@@ -64,36 +66,42 @@ class _SearchPage extends State<SearchPage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: '동명(읍,면)으로 검색 (ex. 안암동)',
-                  contentPadding: EdgeInsets.all(10.0),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFF868686),
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFF66464),
-                    ), // 입력할 때 테두리 색상
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFF66464),
-                    ),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    searchText = value;
-                  });
-                  filterItems();
-                },
-                onSubmitted: (value) {
-                  searchByLocationName();
-                },
-              ),
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                      hintText: '동명(읍,면)으로 검색 (ex. 안암동)',
+                      contentPadding: EdgeInsets.all(10.0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF868686),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ), // 입력할 때 테두리 색상
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          searchByLocation =
+                              false; //위치로 검색 모드가 아니라 이름검색 모드임을 알려주는 것
+                          searchByLocationName();
+                        },
+                      )),
+                  onChanged: (value) {
+                    setState(() {
+                      searchText = value;
+                    });
+                    filterItems();
+                  },
+                  onSubmitted: (value) {
+                    searchByLocationName();
+                  }),
             ),
             Container(
               width: width * 0.9,
@@ -109,6 +117,7 @@ class _SearchPage extends State<SearchPage> {
                 ),
                 onPressed: () async {
                   print("현위치 검색 버튼 클릭됨");
+                  searchByLocation = true;
                   await searchCurrentLocation();
                 },
                 child: Text(
@@ -166,18 +175,6 @@ class _SearchPage extends State<SearchPage> {
     );
   }
 
-  // 검색어에 따라 리스트 필터링하는 함수
-  void filterItems() {
-    if (searchText.isNotEmpty) {
-      filteredItems = itemsByLocation
-          .where(
-              (item) => item.toLowerCase().contains(searchText.toLowerCase()))
-          .toList();
-    } else {
-      filteredItems = itemsByLocation; // 검색어가 없을 경우 전체 리스트 사용
-    }
-  }
-
   // 검색 버튼 클릭 시 서버 요청 후 검색 결과 업데이트
   Future<void> searchCurrentLocation() async {
     final String apiUrl =
@@ -222,6 +219,31 @@ class _SearchPage extends State<SearchPage> {
     } else {
       print('에러: ${response.statusCode}');
       print('에러 메시지: ${response.body}');
+    }
+  }
+
+  // 검색어에 따라 리스트 필터링하는 함수
+  void filterItems() {
+    if (searchText.isNotEmpty) {
+      if (searchByLocation) {
+        filteredItems = itemsByLocation
+            .where(
+                (item) => item.toLowerCase().contains(searchText.toLowerCase()))
+            .toSet()
+            .toList();
+      } else {
+        filteredItems = itemsByName
+            .where(
+                (item) => item.toLowerCase().contains(searchText.toLowerCase()))
+            .toSet()
+            .toList();
+      }
+    } else {
+      if (searchByLocation) {
+        filteredItems = itemsByLocation;
+      } else {
+        filteredItems = itemsByName;
+      }
     }
   }
 }
