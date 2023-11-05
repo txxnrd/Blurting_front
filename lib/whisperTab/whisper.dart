@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:blurting/Static/provider.dart';
@@ -8,8 +7,9 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class Whisper extends StatefulWidget {
   final IO.Socket socket;
   final String userName;
+  final String roomId;
 
-  Whisper({Key? key, required this.userName, required this.socket})
+  Whisper({Key? key, required this.userName, required this.socket, required this.roomId})
       : super(key: key);
 
   @override
@@ -29,24 +29,24 @@ class _Whisper extends State<Whisper> {
     super.initState();
 
     // 기존의 채팅 내역을 받아 오는 로직 추가 (http get 함수 사용)
+    // 기존의 채팅 내역, 상대의 정보 받아 오기
 
     widget.socket.on('new_chat', (data) {
       // 새로운 메시지가 도착하면 위젯을 추가해야 함. date, userId, message를 저장해서 전달해 줘야 함!
 
       int userId = data['userId']; // 맵핑되어 있는 제이슨 데이터를 하나씩 변수에 저장
       DateTime date =
-          DateTime.parse(data['date']); // date 처리하는 거 또 따로 만들어 줘야 함... (groupedList?)
-      String message = data['message'];
+          DateTime.parse(data['createdAt']); // date 처리하는 거 또 따로 만들어 줘야 함... (groupedList?)
+      String message = data['chat'];
 
-      Widget
-          newAnswer; // 위젯임. userId가 내 아이디와 같다면 MyChat, 다르다면 OtherChat을 저장해야 함!
+      Widget newAnswer; // 위젯임. userId가 내 아이디와 같다면 MyChat, 다르다면 OtherChat을 저장해야 함!
 
       if (userId == 3) {
         // 일단은 내 유저 아이디를 3이라고 지정, 원래는 userProvider로 받아와야 한다
         newAnswer = MyChat(message: message);
         print('내 메시지 전송 완료: $message');
       } else {
-        newAnswer = OtherChat(message: message);
+        newAnswer = ListTile(subtitle: OtherChat(message: message));
         print('상대방 메시지 도착: $message');
       }
 
@@ -140,13 +140,6 @@ class _Whisper extends State<Whisper> {
                         child: Column(
                           children: <Widget>[
                             ListTile(
-                              title: DateItem(
-                                year: 2023,
-                                month: 10,
-                                date: 19,
-                              ),
-                            ),
-                            ListTile(
                               subtitle: OtherChat(
                                 message: '개굴개굴개구리 노래를 애옹',
                               ),
@@ -172,7 +165,7 @@ class _Whisper extends State<Whisper> {
             CustomInputField(
               controller: controller,
               sendFunction: sendChat,
-              now: DateTime.now(),
+              now: DateTime.now().toString(),
             ),
           ],
         ),
@@ -182,13 +175,13 @@ class _Whisper extends State<Whisper> {
 
   List<Widget> messageList = []; // 전송 중인 답변을 저장할 리스트
 
-  void sendChat(String message, DateTime now) {
+  void sendChat(String message, String now) {
     Map<String, dynamic> data = {
       // 소켓 서버에 보낼 roomId, 보내는 사람 id, 채팅 내용, 날짜 시간
-      'users': [3, 5],
-      'roomId': "3765undefinedundefined",
+      // 'users': [3, 5],
+      'roomId': widget.roomId,
       'chat': message,
-      'date': now,
+      'createdAt': now,
     };
 
     SocketProvider socketProvider = SocketProvider(widget.socket);
@@ -196,7 +189,7 @@ class _Whisper extends State<Whisper> {
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(message: message);
     
-    // 소켓 서버에 데이터 전송 (두 명의 유저 아이디, 메시지, date)
+    // 소켓 서버에 데이터 전송
     if (message.isNotEmpty) {
       socketProvider.requestSendChat(data);
     }

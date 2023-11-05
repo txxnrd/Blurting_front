@@ -7,8 +7,9 @@ import 'package:http/browser_client.dart' as http;
 
 class ChattingList extends StatefulWidget {
   final IO.Socket socket;
+  final String token;
   
-  ChattingList({required this.socket, Key? key}) : super(key: key);
+  ChattingList({required this.socket, Key? key, required this.token}) : super(key: key);
 
   @override
   _chattingList createState() => _chattingList();
@@ -19,23 +20,26 @@ class ChatListItem extends StatefulWidget {
   final String message;
   final String time;
   final String image;
+  final String roomId;
   final IO.Socket socket;
 
   ChatListItem(
-      {required this.userName, required this.message, required this.time, required this.image, required this.socket});
+      {required this.userName, required this.message, required this.time, required this.image, required this.socket, required this.roomId});
 
   @override
   _chatListItemState createState() => _chatListItemState();
 }
 
 class _chatListItemState extends State<ChatListItem> {
+
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => Whisper(userName: widget.userName, socket: widget.socket),
+            pageBuilder: (context, animation, secondaryAnimation) => Whisper(userName: widget.userName, socket: widget.socket, roomId: widget.roomId),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               const begin = Offset(0.0, 1.0);
@@ -160,7 +164,47 @@ class _chatListItemState extends State<ChatListItem> {
 }
 
 class _chattingList extends State<ChattingList> {
-  final http.BrowserClient client = http.BrowserClient();       // http로 
+  List<Widget> chatLists = [];
+
+  final http.BrowserClient client = http.BrowserClient();
+
+  @override
+  void initState() {
+    // http로 새로운 채팅방 불러 오기,, 지금은 소켓인데 http로 불러올 거양
+
+    widget.socket.on('create_room', (data) {
+      Widget newChat = ChatListItem(
+        roomId: data,
+        userName: '새로운 채팅방',
+        message: '내가 누군가에게 새로운 채팅을 걸었어요',
+        time: '10:30',
+        image: 'assets/images/profile_image.png',
+        socket: widget.socket,
+      );
+
+      print('리스트 생성');
+
+      setState(() {
+        chatLists.insert(0, newChat);
+      });
+    });
+
+    widget.socket.on('invite_chat', (data) {
+      Widget newChat = ChatListItem(
+        roomId: data,
+        userName: '새로운 채팅방',
+        message: '누군가가 나에게 새로운 채팅을 걸었어요',
+        time: '10:30',
+        image: 'assets/images/profile_image.png',
+        socket: widget.socket,
+      );
+
+      widget.socket.emit('join_chat', data);
+      setState(() {
+        chatLists.insert(0, newChat);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -282,8 +326,10 @@ class _chattingList extends State<ChattingList> {
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: Column(
                     children: <Widget>[
+                      for (var chatItem in chatLists) ListTile(title: chatItem),
                       ListTile(
                           title: ChatListItem(
+                        roomId: '',
                         userName: '개굴',
                         message:
                             '개굴개굴 개구리 노래를 한다 한 줄이 넘어가면 ...으로 처리되게 해놓았다 넘어가라',
@@ -293,6 +339,7 @@ class _chattingList extends State<ChattingList> {
                       )),
                       ListTile(
                           title: ChatListItem(
+                        roomId: '',
                         userName: '이얏',
                         message: '위에서 만들어 두고 아래에선 호출만 하기',
                         time: '10:30',
@@ -301,6 +348,7 @@ class _chattingList extends State<ChattingList> {
                       )),
                       ListTile(
                           title: ChatListItem(
+                        roomId: '',
                         userName: '오호',
                         message: '훨씬 코드가 간결해집니다',
                         time: '10:30',
@@ -309,6 +357,7 @@ class _chattingList extends State<ChattingList> {
                       )),
                       ListTile(
                           title: ChatListItem(
+                        roomId: '',
                         userName: '굿',
                         message: '다른 것들도 바꿔 보세요',
                         time: '10:30',
@@ -317,6 +366,7 @@ class _chattingList extends State<ChattingList> {
                       )),
                       ListTile(
                           title: ChatListItem(
+                        roomId: '',
                         userName: '매개변수',
                         message: '이름, 메시지, 시간, 성별에 따른 프로필 이미지',
                         time: '10:30',

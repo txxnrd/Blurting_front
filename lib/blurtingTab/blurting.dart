@@ -7,8 +7,9 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Blurting extends StatefulWidget {
   final IO.Socket socket;
+  final String token;
   
-  Blurting({required this.socket, Key? key}) : super(key: key);
+  Blurting({required this.socket, Key? key, required this.token}) : super(key: key);
 
   @override
   _Blurting createState() => _Blurting();
@@ -89,7 +90,7 @@ class _Blurting extends State<Blurting> {
             ),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GroupChat(socket: widget.socket,)));
+                  MaterialPageRoute(builder: (context) => GroupChat(socket: widget.socket, token: widget.token)));
             },
           )
         ],

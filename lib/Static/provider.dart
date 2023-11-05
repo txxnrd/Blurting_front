@@ -2,6 +2,7 @@
 // 소켓 연결을 수행... 소켓 프로바이더를 쓸 필요가 있을까?
 // 변화를 서로 다른 위젯끼리 공유한다
 
+// 소켓 프로바이더는 필요가 없었습니다~!
 // .on: 서버가 실행해 달라고 요청해서 내가 실행하는 것 (내가 구현)
 // .emit: 실행해 달라고 요청하는 것 (서버가 구현)
 
@@ -28,15 +29,6 @@ class SocketProvider extends ChangeNotifier {
       requestJoinChat(data);
       notifyListeners();
     });
-  }
-
-  // 귓속말 걸기 버튼 -> createRoom으로 유저 아이디를 보내고, create_room 함수를 실행해 달라고 함 -> 서버에서 roomId를 전달해 주면서 invite_chat을 실행시키라고 함 
-  //-> invite_chat에서 roomId를 받아 와서 join_chat 실행해 달라고 함
-
-  void requestCreateRoom(dynamic data) {
-    // 귓속말 걸었을 때 userId 두 개 배열로 보내고, 서버에게 create_room 메소드를 실행해 달라고 함 -> 서버는 create_room를 통해 invite_chat을 실행해 달라고 클라이언트에게 요청해 옴
-    socket.emit('create_room', data);
-    print("귓속말 걸기");
   }
 
   void requestJoinChat(dynamic data) {

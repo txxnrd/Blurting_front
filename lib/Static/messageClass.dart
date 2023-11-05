@@ -79,8 +79,8 @@ class InputfieldClipper extends CustomClipper<Path> {
 // 인풋필드 위젯 (컨트롤러, 시간, 보내는 함수)
 class CustomInputField extends StatelessWidget {
   final TextEditingController controller;
-  final Function(String, DateTime)? sendFunction;
-  final DateTime now;
+  final Function(String, String)? sendFunction;
+  final String now;
 
   CustomInputField(
       {required this.controller, this.sendFunction, required this.now});
@@ -294,14 +294,16 @@ class AnswerItem extends StatelessWidget {
   final IO.Socket socket;
   final Map<String, dynamic> jsonData; // JSON 데이터를 저장할 변수
 
-  final String nickname;
+  final String userName;
   final String message;
+  final int userId;
 
   AnswerItem(
-      {required this.nickname,
+      {required this.userName,
       required this.message,
       required this.jsonData,
-      required this.socket});
+      required this.socket,
+      required this.userId});
 
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
@@ -425,8 +427,7 @@ class AnswerItem extends StatelessWidget {
     );
   }
 
-  void _ClickWhisperButton(BuildContext context) {
-    SocketProvider socketProvider = SocketProvider(socket);
+  void _ClickWhisperButton(BuildContext context, int userId) {
     String IsTab = '';
 
     showDialog(
@@ -470,8 +471,11 @@ class AnswerItem extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        socketProvider.requestCreateRoom(jsonData);
-                        print('귓속말 걺');
+                        socket.emit('create_room', userId);
+                        print("귓속말 거는 중...");
+
+                        Navigator.of(context).pop(); // 모달 닫기
+
                         setState(() {
                           IsTab = 'confirm';
                           print(IsTab);
@@ -536,7 +540,7 @@ class AnswerItem extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        //Navigator.of(context).pop(); // 모달 닫기
+                        Navigator.of(context).pop(); // 모달 닫기
                         print('귓속말 취소');
                         setState(() {
                           IsTab = 'cancel';
@@ -555,7 +559,7 @@ class AnswerItem extends StatelessWidget {
   }
 
 // 프로필 클릭 시 모달 띄우는 함수
-  void _showProfileModal(BuildContext context) {
+  void _showProfileModal(BuildContext context, int userId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -599,7 +603,7 @@ class AnswerItem extends StatelessWidget {
                   icon: Icon(Icons.heart_broken),
                   color: Color.fromRGBO(48, 48, 48, 1),
                   onPressed: () {
-                    _ClickWhisperButton(context);
+                    _ClickWhisperButton(context, userId);
                     print('귓속말 버튼 눌림');
                   },
                 ),
@@ -623,7 +627,7 @@ class AnswerItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      nickname,
+                      userName,
                       style: TextStyle(
                           fontFamily: "Pretendard",
                           fontWeight: FontWeight.w700,
@@ -669,10 +673,11 @@ class AnswerItem extends StatelessWidget {
   // 답변 위젯
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
       leading: GestureDetector(
         onTap: () {
-          _showProfileModal(context); // jsonData 매개변수
+          _showProfileModal(context, userId); // jsonData 매개변수
         },
         child: Container(
           width: 42.74,
@@ -685,7 +690,7 @@ class AnswerItem extends StatelessWidget {
       title: Container(
         padding: EdgeInsets.symmetric(vertical: 5),
         child: Text(
-          nickname,
+          userName,
           style: TextStyle(
             fontSize: 12,
             color: Color.fromRGBO(48, 48, 48, 1),

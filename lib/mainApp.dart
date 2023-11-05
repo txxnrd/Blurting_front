@@ -16,13 +16,27 @@ class MainApp extends StatefulWidget {
 
 class _MainApp extends State<MainApp> {
 
+  static String token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywic2lnbmVkQXQiOiIyMDIzLTExLTA1VDE3OjQ0OjU1Ljc1NFoiLCJpYXQiOjE2OTkyMDYyOTUsImV4cCI6MTY5OTIwOTg5NX0.neqQon0ndporngphxUZy17A23Yyg_eaEj-CXZYfH3ZM';
+
   IO.Socket socket = IO.io('ws://localhost:3000/whisper', <String, dynamic>{
-    'transports': ['websocket']
+    'transports': ['websocket'],
+    'auth': {'authorization': 'Bearer $token'},
   });
 
   late SocketProvider socketProvider; // SocketProvider 변수 추가
 
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 서버에 연결되었을 때 동작
+    socket.on('connect', (_) {
+      print('연결됨');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +45,8 @@ class _MainApp extends State<MainApp> {
         index: _currentIndex,
         children: [
           Home(),
-          Blurting(socket: socket,), // 첫 번째 탭을 Group으로 대체
-          ChattingList(socket: socket),
+          Blurting(socket: socket, token: token), // 첫 번째 탭을 Group으로 대체
+          ChattingList(socket: socket, token: token),
           MyPage(),
         ],
       ),
@@ -58,11 +72,9 @@ class _MainApp extends State<MainApp> {
             backgroundColor: Colors.white,
         
             onTap: (int index) {
-              print(index);
               setState(() {
                 _currentIndex = index;
               });
-              print(_currentIndex);
             },
               
             items: [

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blurting/whisperTab/whisper.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -7,8 +8,9 @@ import 'package:http/browser_client.dart' as http;
 
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
+  final String token;
 
-  GroupChat({required this.socket, Key? key}) : super(key: key);
+  GroupChat({required this.socket, Key? key, required this.token}) : super(key: key);
 
   @override
   _GroupChat createState() => _GroupChat();
@@ -60,17 +62,33 @@ class QuestionNumber extends StatelessWidget {
 class _GroupChat extends State<GroupChat> {
   final http.BrowserClient client = http.BrowserClient();
 
+
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      fetchComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드, 뭘 전달해 주지?
+      fetchComments(widget.token); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
     });
   }
 
   @override
   Widget build(BuildContext context) {
     TextEditingController _controller = TextEditingController();
+
+    widget.socket.on('create_room', (data) {
+      print(data);
+
+      // 서버로부터 roomId를 전달받아서 해당 room으로 화면 전환,
+      String roomId = data;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                Whisper(socket: widget.socket, userName: '새로운 채팅방', roomId: roomId)),
+      );
+    });
 
     Map<String, dynamic> data = {
       'users': [3, 5]
@@ -197,22 +215,25 @@ class _GroupChat extends State<GroupChat> {
                       Container(
                         padding: EdgeInsets.only(left: 20, top: 10),
                         child: Column(
-                          children: <Widget>[
+                          children: <Widget>[                       // 왜  AnswerItem의 개수만큼 socket.on이 실행될까...?
                             AnswerItem(
-                                nickname: '정원',
+                                userName: '정원',
                                 message: '하하\n그냥 잘까',
                                 jsonData: data,
-                                socket: widget.socket),
+                                socket: widget.socket,
+                                userId: 5,),
                             AnswerItem(
-                                nickname: '개굴',
+                                userName: '개굴',
                                 message: '아 목 아파 감기 걸렷나',
                                 jsonData: data,
-                                socket: widget.socket),
+                                socket: widget.socket,
+                                userId: 6,),
                             AnswerItem(
-                                nickname: '감기',
+                                userName: '감기',
                                 message: '양치하고 자야겟다..',
                                 jsonData: data,
-                                socket: widget.socket),
+                                socket: widget.socket,
+                                userId: 7,),
                             for (var answer in answerList)
                               answer, // answerList에 있는 내용 순회하며 추가
                           ],
@@ -225,7 +246,7 @@ class _GroupChat extends State<GroupChat> {
               CustomInputField(
                   controller: _controller,
                   sendFunction: SendAnswer,
-                  now: DateTime.now()),
+                  now: DateTime.now().toString()),
             ],
           ),
         ],
@@ -235,13 +256,12 @@ class _GroupChat extends State<GroupChat> {
 
   List<Widget> answerList = []; // 답변을 저장할 리스트
 
-  Future<void> fetchComments() async {
+  Future<void> fetchComments(String token) async {
     // 채팅 받아오기
 
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     final url = Uri.parse('uri');
-    final token = 'TOKEN';
 
     final response = await client.post(
       url,
@@ -287,12 +307,13 @@ class _GroupChat extends State<GroupChat> {
     }
   }
 
-  void SendAnswer(String answer, DateTime now) async {
+  void SendAnswer(String answer, String now) async {
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(message: answer);
 
     final url = Uri.parse('uri');
-    const token = 'TOKEN';
+    String token = widget.token;
+
     final response = await client.put(
       // 서버에 답변 전송하기
       url,
