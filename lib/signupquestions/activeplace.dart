@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/religion.dart';
-import 'package:blurting/signupquestions/activeplacesearch.dart'; // sex.dart를 임포트
-=======
+
+
 import 'package:location/location.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포트
->>>>>>> taeyun
+import 'package:blurting/signupquestions/religion.dart';
+
+import 'activeplacesearch.dart';  // sex.dart를 임포트
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
@@ -65,7 +63,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
     });
   }
-<<<<<<< HEAD
+
 
   String content = '';
 
@@ -84,7 +82,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     print(content);
   }
 
-=======
+
   Future<void> _getLocation() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled!) {
@@ -105,7 +103,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     _locationData = await location.getLocation();
     setState(() {});
   }
->>>>>>> taeyun
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -312,13 +310,10 @@ class _ActivePlacePageState extends State<ActivePlacePage>
             // ),
 
             SizedBox(height: 331),
-<<<<<<< HEAD
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-=======
+
             Column(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
->>>>>>> taeyun
+
               children: [
                 Container(
                   width: width * 0.9,
