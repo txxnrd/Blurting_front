@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:blurting/whisperTab/whisper.dart';
 import 'dart:ui';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:http/browser_client.dart' as http;
 
 class ChattingList extends StatefulWidget {
   final IO.Socket socket;
@@ -161,6 +160,8 @@ class _chatListItemState extends State<ChatListItem> {
 }
 
 class _chattingList extends State<ChattingList> {
+  final http.BrowserClient client = http.BrowserClient();       // http로 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

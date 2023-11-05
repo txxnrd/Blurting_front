@@ -1,6 +1,3 @@
-// main_page.dart
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:blurting/blurtingTab/blurting.dart';
 import 'package:blurting/homeTab/Home.dart';
@@ -19,22 +16,11 @@ class MainApp extends StatefulWidget {
 
 class _MainApp extends State<MainApp> {
 
-  IO.Socket socket = IO.io('ws://localhost:3000/', <String, dynamic>{
+  IO.Socket socket = IO.io('ws://localhost:3000/whisper', <String, dynamic>{
     'transports': ['websocket']
   });
 
   late SocketProvider socketProvider; // SocketProvider 변수 추가
-
-  @override
-  void initState() {
-    super.initState();
-
-    // initState에서 SocketProvider 초기화 -> MainApp init과 동시에 소켓 연결
-    socketProvider =
-        SocketProvider(IO.io('ws://localhost:3000/', <String, dynamic>{
-      'transports': ['websocket']
-    }));
-  }
 
   int _currentIndex = 0;
 

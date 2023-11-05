@@ -110,6 +110,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "grouped_list",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/grouped_list-5.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "http",
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.0",
       "packageUri": "lib/",
@@ -314,7 +320,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-10-25T12:42:09.218893Z",
+  "generated": "2023-11-05T05:53:43.547330Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }

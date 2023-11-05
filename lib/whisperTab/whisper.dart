@@ -1,29 +1,65 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:blurting/Static/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Whisper extends StatefulWidget {
-
   final IO.Socket socket;
   final String userName;
 
-  Whisper({Key? key, required this.userName, required this.socket}) : super(key: key);
+  Whisper({Key? key, required this.userName, required this.socket})
+      : super(key: key);
 
   @override
   _Whisper createState() => _Whisper();
 }
 
 class _Whisper extends State<Whisper> {
+  List<Widget> chatMessages = [];
   bool isValid = false;
 
-  Map<String, dynamic> data = {
-    'users': [3, 5], 
-  };
+  final StreamController<List<Widget>> _messageStreamController =
+      StreamController<List<Widget>>();
+  Stream<List<Widget>> get messageStream => _messageStreamController.stream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 기존의 채팅 내역을 받아 오는 로직 추가 (http get 함수 사용)
+
+    widget.socket.on('new_chat', (data) {
+      // 새로운 메시지가 도착하면 위젯을 추가해야 함. date, userId, message를 저장해서 전달해 줘야 함!
+
+      int userId = data['userId']; // 맵핑되어 있는 제이슨 데이터를 하나씩 변수에 저장
+      DateTime date =
+          DateTime.parse(data['date']); // date 처리하는 거 또 따로 만들어 줘야 함... (groupedList?)
+      String message = data['message'];
+
+      Widget
+          newAnswer; // 위젯임. userId가 내 아이디와 같다면 MyChat, 다르다면 OtherChat을 저장해야 함!
+
+      if (userId == 3) {
+        // 일단은 내 유저 아이디를 3이라고 지정, 원래는 userProvider로 받아와야 한다
+        newAnswer = MyChat(message: message);
+        print('내 메시지 전송 완료: $message');
+      } else {
+        newAnswer = OtherChat(message: message);
+        print('상대방 메시지 도착: $message');
+      }
+
+      // 새로운 메시지가 도착하면 위젯을 추가하고 스트림을 통해 새로운 위젯 리스트를 전달
+      chatMessages.add(newAnswer); // 새로운 메시지 추가
+
+      _messageStreamController.sink.add(chatMessages); // 스트림을 통해 업데이트된 리스트 전달
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _controller = TextEditingController();
+    TextEditingController controller = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -86,98 +122,91 @@ class _Whisper extends State<Whisper> {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage(
-                'assets/images/whisper_body_background.png'), // 배경 이미지
+            image: AssetImage('assets/images/whisper_body_background.png'),
           ),
         ),
         child: Column(
           children: <Widget>[
             Expanded(
-              child: SingleChildScrollView(
-                // 스크롤뷰
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 30),
-                  child: Column(
-                    children: <Widget>[
-                      // 소켓에 데이터가 존재할 시 반환 (소켓 연결 시 주석 해제)
-                      // StreamBuilder(
-                      //   stream: widget.channel.stream,
-                      //   builder: (context, snapshot) {
-                      //     // snapshot은 비동기적으로 서버에서 가져 온 데이터들의 집합
-                      //     // 알아야 할 정보: 시간, 메시지, 유저 아이디
-                      //     dynamic data = snapshot.data;
-
-                      //     String userId = data['user_id'];
-                      //     String messageText = data['message_text'];
-                      //     DateTime date = DateTime.parse(data['date']);
-
-                      //     Widget messageWidget;
-                      //     if (userId == '1')
-                      //       messageWidget = MyChat(
-                      //         message: messageText,
-                      //       );
-                      //     else
-                      //       messageWidget = OtherChat(
-                      //         message: messageText,
-                      //       );
-
-                      //     return ListTile(
-                      //         subtitle: messageWidget);
-                      //   },
-                      // ),
-
-                      // 전송 중일 시 프론트에서 바로바로 띄워 줘야 함
-                      ListTile(
-                          // 날짜
-                          title: DateItem(
-                        year: 2023,
-                        month: 10,
-                        date: 19,
-                      )),
-                      ListTile(
-                          // 상대방 채팅
-                          subtitle: OtherChat(
-                        message: '개굴개굴개구리 노래를 애옹',
-                      )),
-                      ListTile(
-                          subtitle: OtherChat(
-                        message: '흠냐',
-                      )),
-                      ListTile(
-                          title: DateItem(
-                        year: 2023,
-                        month: 10,
-                        date: 20,
-                      )),
-                      for (var answer in answerList) answer, // 내 채팅
-                    ],
-                  ),
-                ),
+              child: StreamBuilder<List<Widget>>(
+                stream:
+                    messageStream, // 위에서 선언한 StreamController로부터 상태 변화를 받아 옴
+                initialData: [],
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    return SingleChildScrollView(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 30),
+                        child: Column(
+                          children: <Widget>[
+                            ListTile(
+                              title: DateItem(
+                                year: 2023,
+                                month: 10,
+                                date: 19,
+                              ),
+                            ),
+                            ListTile(
+                              subtitle: OtherChat(
+                                message: '개굴개굴개구리 노래를 애옹',
+                              ),
+                            ),
+                            ListTile(
+                              subtitle: OtherChat(
+                                message: '흠냐',
+                              ),
+                            ),
+                            if (snapshot.data != null)
+                              for (var chat in snapshot.data!)
+                                if (chat != null) chat,
+                          ],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               ),
             ),
-            CustomInputField(controller: _controller, sendFunction: SendAnswer,)
+            CustomInputField(
+              controller: controller,
+              sendFunction: sendChat,
+              now: DateTime.now(),
+            ),
           ],
         ),
       ),
     );
   }
 
-  List<Widget> answerList = []; // 답변을 저장할 리스트 (소켓 연결 시 해제)
+  List<Widget> messageList = []; // 전송 중인 답변을 저장할 리스트
 
-  void SendAnswer(String answer) {
+  void sendChat(String message, DateTime now) {
+    Map<String, dynamic> data = {
+      // 소켓 서버에 보낼 roomId, 보내는 사람 id, 채팅 내용, 날짜 시간
+      'users': [3, 5],
+      'roomId': "3765undefinedundefined",
+      'chat': message,
+      'date': now,
+    };
+
     SocketProvider socketProvider = SocketProvider(widget.socket);
+
     // 입력한 내용을 ListTile에 추가
-    Widget newAnswer = MyChat(message: answer);
-
-    // 소켓 서버에 데이터 전송 (소켓 연결 시 주석 해제)
-    if (answer.isNotEmpty) {
-      socketProvider.sendData(data);
-      print("socket");
+    Widget newAnswer = MyChat(message: message);
+    
+    // 소켓 서버에 데이터 전송 (두 명의 유저 아이디, 메시지, date)
+    if (message.isNotEmpty) {
+      socketProvider.requestSendChat(data);
     }
+    
+    // 리스트에 추가 (클라이언트에서 바로바로 화면에 띄움, 전송 중...)
+    // 리스트에 위젯을 추가한다
+    messageList.add(newAnswer);
+    // _messageStreamController.sink.add(messageList); // 스트림을 통해 업데이트된 리스트 전달
 
-    // 리스트에 추가 (소켓 연결 시 삭제)
-    answerList.add(newAnswer);
+    print("귓속말 전송 중...");
     setState(() {});
-    print("귓속말");
   }
 }

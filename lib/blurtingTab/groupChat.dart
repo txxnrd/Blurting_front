@@ -1,7 +1,9 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:http/browser_client.dart' as http;
 
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
@@ -56,6 +58,15 @@ class QuestionNumber extends StatelessWidget {
 }
 
 class _GroupChat extends State<GroupChat> {
+  final http.BrowserClient client = http.BrowserClient();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      fetchComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드, 뭘 전달해 주지?
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,22 +198,36 @@ class _GroupChat extends State<GroupChat> {
                         padding: EdgeInsets.only(left: 20, top: 10),
                         child: Column(
                           children: <Widget>[
-                            AnswerItem(nickname: '정원', message: '하하\n그냥 잘까', jsonData: data, socket: widget.socket),
                             AnswerItem(
-                                nickname: '개굴', message: '아 목 아파 감기 걸렷나', jsonData: data, socket: widget.socket),
-                            AnswerItem(nickname: '감기', message: '양치하고 자야겟다..', jsonData: data, socket: widget.socket),
-                            for (var answer in answerList) answer,
+                                nickname: '정원',
+                                message: '하하\n그냥 잘까',
+                                jsonData: data,
+                                socket: widget.socket),
+                            AnswerItem(
+                                nickname: '개굴',
+                                message: '아 목 아파 감기 걸렷나',
+                                jsonData: data,
+                                socket: widget.socket),
+                            AnswerItem(
+                                nickname: '감기',
+                                message: '양치하고 자야겟다..',
+                                jsonData: data,
+                                socket: widget.socket),
+                            for (var answer in answerList)
+                              answer, // answerList에 있는 내용 순회하며 추가
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),            
-              CustomInputField(controller: _controller, sendFunction: SendAnswer),
+              ),
+              CustomInputField(
+                  controller: _controller,
+                  sendFunction: SendAnswer,
+                  now: DateTime.now()),
             ],
           ),
-          
         ],
       ),
     );
@@ -210,14 +235,82 @@ class _GroupChat extends State<GroupChat> {
 
   List<Widget> answerList = []; // 답변을 저장할 리스트
 
-  void SendAnswer(String answer) {
+  Future<void> fetchComments() async {
+    // 채팅 받아오기
+
+    // final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    final url = Uri.parse('uri');
+    final token = 'TOKEN';
+
+    final response = await client.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, dynamic>{
+        // 보내 줄 데이터
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 요청 성공, 답변들을 받아 오기
+
+      dynamic responseData = jsonDecode(response.body)['data'];
+
+      if (responseData is Map<String, dynamic>) {
+        final replyList = responseData['chatList'] as List<dynamic>;
+        for (final replyData in replyList) {
+          // final Chat newComment = Chat(
+          //   uid: replyData['uid'] as String? ?? '', // 댓글의 텍스트 받아오기
+          //   tid: replyData['tid'] as String? ?? '', // 댓글의 uid 받아오기
+          //   chatRoomId: replyData['chatRoomId'] as String,
+          //   chatId: replyData['chatId'] as String? ?? '',
+          //   time: replyData['time'] as String, // liked 값 설정
+          //   cText: replyData['cText'] as String? ?? '',       // uid의 프로필 사진 가져오기
+          //   like: replyData['like'] as bool,       // uid의 프로필 사진 가져오기
+          // );
+
+          // 데이터 받아 오기
+
+          setState(() {
+            // answerList.add(newComment); // 받아 온 답변 추가하기
+          });
+        }
+      } else {
+        print('Invalid response data');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('답변을 로드하는 데 실패했습니다');
+    }
+  }
+
+  void SendAnswer(String answer, DateTime now) async {
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(message: answer);
+
+    final url = Uri.parse('uri');
+    const token = 'TOKEN';
+    final response = await client.put(
+      // 서버에 답변 전송하기
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'answer': answer}),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 응답
+    } else {
+      // 요청 실패 시 처리
+    }
 
     // 리스트에 추가
     answerList.add(newAnswer);
     setState(() {});
-
-    print("그룹챗");
   }
 }

@@ -76,12 +76,14 @@ class InputfieldClipper extends CustomClipper<Path> {
   }
 }
 
-// 인풋필드 위젯
+// 인풋필드 위젯 (컨트롤러, 시간, 보내는 함수)
 class CustomInputField extends StatelessWidget {
   final TextEditingController controller;
-  final Function(String)? sendFunction;
+  final Function(String, DateTime)? sendFunction;
+  final DateTime now;
 
-  CustomInputField({required this.controller, this.sendFunction});
+  CustomInputField(
+      {required this.controller, this.sendFunction, required this.now});
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +149,8 @@ class CustomInputField extends StatelessWidget {
                           onPressed: () //(isValid)
                               //? ()
                               {
-                            sendFunction!(controller
-                                .text); // null 일 수도 있으니까 !을 붙여 주었다, 각 함수의 작동은 groupChat(http), whisper(소켓) 파일에서 수정...
+                            sendFunction!(controller.text,
+                                now); // null 일 수도 있으니까 !을 붙여 주었다, 각 함수의 작동은 groupChat(http), whisper(소켓) 파일에서 수정...
                           },
                           //: null,
                           icon: Icon(
@@ -468,7 +470,7 @@ class AnswerItem extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        socketProvider.joinChat(jsonData);
+                        socketProvider.requestCreateRoom(jsonData);
                         print('귓속말 걺');
                         setState(() {
                           IsTab = 'confirm';
