@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/religion.dart';  // sex.dart를 임포트
 
@@ -13,6 +14,10 @@ class ActivePlacePage extends StatefulWidget {
 class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProviderStateMixin{
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  Location location = new Location();
+  bool? _serviceEnabled;
+  PermissionStatus? _permissionGranted;
+  LocationData? _locationData;
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
@@ -28,7 +33,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-
+    _getLocation();
     _animationController = AnimationController(
       duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
       vsync: this,
@@ -42,6 +47,26 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
     });
+  }
+  Future<void> _getLocation() async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled!) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled!) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+    setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -209,7 +234,7 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
 
 
             SizedBox(height: 331),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
               children: [
                 Container(
@@ -230,6 +255,34 @@ class _ActivePlacePageState extends State<ActivePlacePage> with SingleTickerProv
                     },
                     child: Text(
                       '다음',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: width*0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: () async {
+                      print("다음 버튼 클릭됨");
+                      await _getLocation();
+                      print('Latitude: ${_locationData?.latitude}');
+                      print('Longitude: ${_locationData?.longitude}');
+                    },
+                    child: Text(
+                      '위치 요청하기',
                       style: TextStyle(
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,

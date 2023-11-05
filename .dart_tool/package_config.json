@@ -176,6 +176,24 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "location",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/location-5.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "location_platform_interface",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/location_platform_interface-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "location_web",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/location_web-4.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "matcher",
       "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/matcher-0.12.15",
       "packageUri": "lib/",
@@ -272,7 +290,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-10-15T02:56:55.354747Z",
+  "generated": "2023-10-30T08:37:27.435078Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }

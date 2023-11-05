@@ -24,6 +24,10 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>이 앱에서 위치 서비스를 사용하려면 권한을 부여해주세요.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>이 앱에서 위치 서비스를 사용하려면 권한을 부여해주세요.</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
