@@ -22,7 +22,7 @@
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		bGZP0/MCAl5LHC4CJZbRd2ZuMwQ=
+		wJIvROKSEjAVAPiOvKgjEfo+ovU=
 		</data>
 		<key>flutter_assets/assets/fonts/Heebo-Black.ttf</key>
 		<data>
@@ -103,6 +103,10 @@
 		<key>flutter_assets/assets/images/QnA.png</key>
 		<data>
 		YxHHKK/fds9wFHsRfSyG0cIDrdo=
+		</data>
+		<key>flutter_assets/assets/images/Union.png</key>
+		<data>
+		8/UJn2/DYg/QBDTsUgmstfoBxBw=
 		</data>
 		<key>flutter_assets/assets/images/appbar_bottom.png</key>
 		<data>
@@ -190,7 +194,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		fQImJK0lyc7RToKKTT9/bVk8n/s=
+		fBoawvXjlgT8Uyjq5xlmhE0ukE0=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -232,7 +236,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			J4t4HVnLNfq3FKkczTZNkZop9+rzgnu0w37aYXpm984=
+			gPBpWu0Prkm0SSSoKh0dwLvnX9vkwDIQNusMsdcEdZQ=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/fonts/Heebo-Black.ttf</key>
@@ -373,6 +377,13 @@
 			<key>hash2</key>
 			<data>
 			rtrt7lY5K5hmRGKETu4hDx4MTq9ti31Amf+QaVQU/KU=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/Union.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			biNxXJlmoqyxKXX5wkkLLGlQ4V0ii90YL9fCqGT8wj0=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/appbar_bottom.png</key>
@@ -526,7 +537,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			FI6DOXjo0Kp5EO2Arwm41VErnl+0X+I5krgLpCyNYZw=
+			JpenALjwW2J6UQl9qRIKasVdaYC7nPO4H+LuUdEUkTY=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

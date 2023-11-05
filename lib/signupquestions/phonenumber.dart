@@ -1,6 +1,7 @@
 import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/config/app_config.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   @override
