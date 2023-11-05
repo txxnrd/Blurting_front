@@ -8,5 +8,4 @@ class API {
   static const String checkemail = "${ServerEndpoints.serverEndpoint}/auth/check/email";
   static const String signup = "${ServerEndpoints.serverEndpoint}/auth/signup";
   static const String refresh = "${ServerEndpoints.serverEndpoint}/auth/refresh";
-
 }
