@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';
-import 'image.dart';  // sex.dart를 임포트
+import 'image.dart'; // sex.dart를 임포트
 
 class HobbyPage extends StatefulWidget {
   final String selectedGender;
@@ -12,12 +12,8 @@ class HobbyPage extends StatefulWidget {
   HobbyPageState createState() => HobbyPageState();
 }
 
-
-
-
-
-
-class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixin {
+class HobbyPageState extends State<HobbyPage>
+    with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   bool isHobby1Selected = false;
@@ -39,27 +35,58 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => ImagePage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            ImagePage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
+
+  bool IsValid = false;
+
+  List<bool> isValidList = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+
+  @override
+  void IsSelected(int index) {
+    isValidList[index] = !isValidList[index];
+    if (isValidList.any((isValid) => isValid)) {
+      IsValid = true;
+    } else
+      IsValid = false;
+  }
+
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간 설정
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.8,  // 시작 너비 (30%)
-      end: 0.9,    // 종료 너비 (40%)
-    ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
+      begin: 0.8, // 시작 너비 (30%)
+      end: 0.9, // 종료 너비 (40%)
+    ).animate(
+        CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
@@ -116,35 +143,38 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3),
+                  width: MediaQuery.of(context).size.width *
+                      (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
                     color: Color(0xFF303030),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 15,
+                  left: MediaQuery.of(context).size.width *
+                          (_progressAnimation?.value ?? 0.3) -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
                 )
               ],
             ),
-
             SizedBox(
               height: 50,
             ),
             Text(
-              '당신의 취미는 어떠신가요?',
+              '당신의 취미는 무엇인가요?',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -153,16 +183,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby1Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby1Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(0);
                         isHobby1Selected =!isHobby1Selected;
                       });
                     },
@@ -184,16 +220,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby2Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby2Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(1);
                         isHobby2Selected =!isHobby2Selected;
                       });
                     },
@@ -208,22 +250,28 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                     ),
                   ),
                 ),
-                SizedBox(width:17),
+                SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby3Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby3Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(2);
                         isHobby3Selected =!isHobby3Selected;
                       });
                     },
@@ -240,7 +288,9 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                 ),
               ],
             ),
-            SizedBox(height: 21,),
+            SizedBox(
+              height: 21,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -249,16 +299,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby4Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby4Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(3);
                         isHobby4Selected =!isHobby4Selected;
                       });
                     },
@@ -280,16 +336,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby5Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby5Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(4);
                         isHobby5Selected =!isHobby5Selected;
                       });
                     },
@@ -304,22 +366,28 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                     ),
                   ),
                 ),
-                SizedBox(width:17),
+                SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby6Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby6Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(5);
                         isHobby6Selected =!isHobby6Selected;
                       });
                     },
@@ -336,7 +404,9 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                 ),
               ],
             ),
-            SizedBox(height: 21,),
+            SizedBox(
+              height: 21,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -345,16 +415,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby7Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby7Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(6);
                         isHobby7Selected =!isHobby7Selected;
                       });
                     },
@@ -376,16 +452,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby8Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby8Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(7);
                         isHobby8Selected =!isHobby8Selected;
                       });
                     },
@@ -400,22 +482,28 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                     ),
                   ),
                 ),
-                SizedBox(width:17),
+                SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby9Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby9Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(8);
                         isHobby9Selected =!isHobby9Selected;
                       });
                     },
@@ -432,7 +520,9 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                 ),
               ],
             ),
-            SizedBox(height: 21,),
+            SizedBox(
+              height: 21,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -441,16 +531,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby10Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby10Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(9);
                         isHobby10Selected =!isHobby10Selected;
                       });
                     },
@@ -472,16 +568,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby11Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby11Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(10);
                         isHobby11Selected =!isHobby11Selected;
                       });
                     },
@@ -496,22 +598,28 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                     ),
                   ),
                 ),
-                SizedBox(width:17),
+                SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby12Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby12Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(11);
                         isHobby12Selected =!isHobby12Selected;
                       });
                     },
@@ -528,7 +636,9 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                 ),
               ],
             ),
-            SizedBox(height: 21,),
+            SizedBox(
+              height: 21,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -537,16 +647,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby13Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby13Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(12);
                         isHobby13Selected =!isHobby13Selected;
                       });
                     },
@@ -568,16 +684,22 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby14Selected == true ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby14Selected == true
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(13);
                         isHobby14Selected =!isHobby14Selected;
                       });
                     },
@@ -592,22 +714,28 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                     ),
                   ),
                 ),
-                SizedBox(width:17),
+                SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
                       primary: Color(0xFF303030),
-                      backgroundColor: isHobby15Selected ? Color(0xFF868686) : Colors.transparent,
+                      backgroundColor: isHobby15Selected
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected(14);
                         isHobby15Selected =!isHobby15Selected;
                       });
                     },
@@ -625,12 +753,11 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
               ],
             ),
             SizedBox(height: 107),
-
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: width*0.9,
+                  width: width * 0.9,
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -641,13 +768,15 @@ class HobbyPageState extends State<HobbyPage> with SingleTickerProviderStateMixi
                       elevation: 0,
                       padding: EdgeInsets.all(0),
                     ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
-                    },
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
                     child: Text(
                       '다음',
                       style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
@@ -684,8 +813,3 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
-
-
-
-
-
