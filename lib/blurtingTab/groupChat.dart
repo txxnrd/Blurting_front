@@ -4,7 +4,7 @@ import 'package:blurting/whisperTab/whisper.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:http/browser_client.dart' as http;
+import 'package:http/http.dart' as http;
 
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
@@ -60,9 +60,6 @@ class QuestionNumber extends StatelessWidget {
 }
 
 class _GroupChat extends State<GroupChat> {
-  final http.BrowserClient client = http.BrowserClient();
-
-
 
   @override
   void initState() {
@@ -263,7 +260,7 @@ class _GroupChat extends State<GroupChat> {
 
     final url = Uri.parse('uri');
 
-    final response = await client.post(
+    final response = await http.post(
       url,
       headers: {
         'Authorization': 'Bearer $token',
@@ -314,7 +311,7 @@ class _GroupChat extends State<GroupChat> {
     final url = Uri.parse('uri');
     String token = widget.token;
 
-    final response = await client.put(
+    final response = await http.put(
       // 서버에 답변 전송하기
       url,
       headers: {

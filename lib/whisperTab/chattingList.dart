@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/whisperTab/whisper.dart';
 import 'dart:ui';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:http/browser_client.dart' as http;
+import 'package:http/http.dart' as http;
 
 class ChattingList extends StatefulWidget {
   final IO.Socket socket;
@@ -31,7 +33,6 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _chatListItemState extends State<ChatListItem> {
-
   Widget build(BuildContext context) {
 
     return GestureDetector(
@@ -166,28 +167,65 @@ class _chatListItemState extends State<ChatListItem> {
 class _chattingList extends State<ChattingList> {
   List<Widget> chatLists = [];
 
-  final http.BrowserClient client = http.BrowserClient();
+  Future<void> fetchList(String token) async {
+    // 채팅 받아오기
+
+    // final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    final url = Uri.parse('http://localhost:3000/chat/rooms');
+
+    final response = await http.get(
+      url,
+      headers: {
+        'authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      }
+    );
+
+    if (response.statusCode == 200) {
+      // 요청 성공, 답변들을 받아 오기
+      print('요청 성공');
+      dynamic responseData = jsonDecode(response.body)['data'];
+
+      if (responseData is Map<String, dynamic>) {
+        // final replyList = responseData['chatList'] as List<dynamic>;
+
+        // for (final replyData in replyList) {
+        //   setState(() {
+        //     // chatLists.insert(0, newChat);
+        //   });
+        // }
+      } else {
+        print('Invalid response data');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('답변을 로드하는 데 실패했습니다');
+    }
+  }
+
 
   @override
   void initState() {
     // http로 새로운 채팅방 불러 오기,, 지금은 소켓인데 http로 불러올 거양
+    fetchList(widget.token);
 
-    widget.socket.on('create_room', (data) {
-      Widget newChat = ChatListItem(
-        roomId: data,
-        userName: '새로운 채팅방',
-        message: '내가 누군가에게 새로운 채팅을 걸었어요',
-        time: '10:30',
-        image: 'assets/images/profile_image.png',
-        socket: widget.socket,
-      );
+    // widget.socket.on('create_room', (data) {
+    //   Widget newChat = ChatListItem(
+    //     roomId: data,
+    //     userName: '새로운 채팅방',
+    //     message: '내가 누군가에게 새로운 채팅을 걸었어요',
+    //     time: '10:30',
+    //     image: 'assets/images/profile_image.png',
+    //     socket: widget.socket,
+    //   );
 
-      print('리스트 생성');
+    //   print('리스트 생성');
 
-      setState(() {
-        chatLists.insert(0, newChat);
-      });
-    });
+    //   setState(() {
+    //     chatLists.insert(0, newChat);
+    //   });
+    // });
 
     widget.socket.on('invite_chat', (data) {
       Widget newChat = ChatListItem(

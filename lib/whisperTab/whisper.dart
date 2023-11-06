@@ -26,7 +26,7 @@ class _Whisper extends State<Whisper> {
 
   @override
   void initState() {
-    super.initState();
+    // super.initState();
 
     // 기존의 채팅 내역을 받아 오는 로직 추가 (http get 함수 사용)
     // 기존의 채팅 내역, 상대의 정보 받아 오기
