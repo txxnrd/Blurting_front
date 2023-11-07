@@ -1,27 +1,42 @@
-// main_page.dart
 import 'package:flutter/material.dart';
-import 'package:blurting/blurting.dart';
-import 'package:blurting/whisper.dart';
+import 'package:blurting/blurtingTab/blurting.dart';
+import 'package:blurting/homeTab/Home.dart';
 import 'package:blurting/MyPage.dart';
-import 'package:blurting/chattingList.dart';
-import 'package:blurting/tab3.dart';
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: MainApp(), // MainApp을 호출하도록 수정
-  ));
-}
+import 'package:blurting/whisperTab/chattingList.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:blurting/Static/provider.dart';
 
 class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
+
+  MainApp({Key? key}) : super(key: key);
 
   @override
   _MainApp createState() => _MainApp();
 }
 
 class _MainApp extends State<MainApp> {
+
+  static String token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywic2lnbmVkQXQiOiIyMDIzLTExLTA2VDEwOjM1OjUzLjMwMloiLCJpYXQiOjE2OTkyNjY5NTMsImV4cCI6MTY5OTI3MDU1M30.9Y0D8hf-W5Hr-ToJxJmChOw7d28fUiVA0h1_jNS6M_k';
+
+  IO.Socket socket = IO.io('ws://localhost:3000/whisper', <String, dynamic>{
+    'transports': ['websocket'],
+    'auth': {'authorization': 'Bearer $token'},
+  });
+
+  late SocketProvider socketProvider; // SocketProvider 변수 추가
+
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 서버에 연결되었을 때 동작
+    socket.on('connect', (_) {
+      print('연결됨');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +44,9 @@ class _MainApp extends State<MainApp> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          Tab3(),
-          Blurting(), // 첫 번째 탭을 Group으로 대체
-          ChattingList(),
+          Home(),
+          Blurting(socket: socket, token: token), // 첫 번째 탭을 Group으로 대체
+          ChattingList(socket: socket, token: token),
           MyPage(),
         ],
       ),
@@ -55,19 +70,11 @@ class _MainApp extends State<MainApp> {
             type: BottomNavigationBarType.fixed,
             currentIndex: _currentIndex,
             backgroundColor: Colors.white,
-            /*
-            selectedItemColor: Colors.black, 
-            unselectedItemColor: Colors.grey, 
-            showSelectedLabels: false, 
-            showUnselectedLabels: false, 
-            */
-
+        
             onTap: (int index) {
-              print(index);
               setState(() {
                 _currentIndex = index;
               });
-              print(_currentIndex);
             },
             items: [
               BottomNavigationBarItem(

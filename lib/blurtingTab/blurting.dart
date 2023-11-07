@@ -1,14 +1,22 @@
-import 'package:blurting/groupChat.dart';
+import 'dart:io';
+
+import 'package:blurting/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Blurting extends StatefulWidget {
-  const Blurting({Key? key}) : super(key: key);
+  final IO.Socket socket;
+  final String token;
+  
+  Blurting({required this.socket, Key? key, required this.token}) : super(key: key);
 
   @override
   _Blurting createState() => _Blurting();
 }
 
 class _Blurting extends State<Blurting> {
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -82,7 +90,7 @@ class _Blurting extends State<Blurting> {
             ),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GroupChat()));
+                  MaterialPageRoute(builder: (context) => GroupChat(socket: widget.socket, token: widget.token)));
             },
           )
         ],
