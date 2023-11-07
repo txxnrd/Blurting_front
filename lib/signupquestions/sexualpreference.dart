@@ -1,6 +1,8 @@
 import 'package:blurting/signupquestions/Alcohol.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/activeplace.dart';
+import 'package:blurting/signupquestions/religion.dart';
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 
 class SexualPreferencePage extends StatefulWidget {
   final String selectedGender;
@@ -9,9 +11,11 @@ class SexualPreferencePage extends StatefulWidget {
   @override
   _SexualPreferencePageState createState() => _SexualPreferencePageState();
 }
-enum SexualPreference { different,same,both,etc}
 
-class _SexualPreferencePageState extends State<SexualPreferencePage> with SingleTickerProviderStateMixin {
+enum SexualPreference { different, same, both, etc }
+
+class _SexualPreferencePageState extends State<SexualPreferencePage>
+    with SingleTickerProviderStateMixin {
   SexualPreference? _selectedSexualPreference;
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
@@ -19,26 +23,34 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => AlcoholPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            AlcoholPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
+
+  bool IsValid = false;
+
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
+
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.4,  // 시작 게이지 값
-      end: 0.5,    // 종료 게이지 값
+      begin: 0.4, // 시작 게이지 값
+      end: 0.5, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -54,6 +66,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -95,19 +109,24 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3),
+                  width: MediaQuery.of(context).size.width *
+                      (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
                     color: Color(0xFF303030),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 15,
+                  left: MediaQuery.of(context).size.width *
+                          (_progressAnimation?.value ?? 0.3) -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
@@ -120,7 +139,11 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
             ),
             Text(
               '성적지향성은 어떻게 되시나요?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
             SizedBox(width: 20), // 두 버튼 사이의 간격 조정
@@ -128,21 +151,29 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedSexualPreference == SexualPreference.different ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor: _selectedSexualPreference ==
+                              SexualPreference.different
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference = SexualPreference.different;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -157,24 +188,31 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                   ),
                 ),
 
-
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedSexualPreference == SexualPreference.same ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor:
+                          _selectedSexualPreference == SexualPreference.same
+                              ? Color(0xFF868686)
+                              : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference == SexualPreference.same;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -190,25 +228,35 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 ),
               ],
             ),
-            SizedBox(height: 17,),
+            SizedBox(
+              height: 17,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedSexualPreference == SexualPreference.both ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor:
+                          _selectedSexualPreference == SexualPreference.both
+                              ? Color(0xFF868686)
+                              : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference = SexualPreference.both;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -223,24 +271,31 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                   ),
                 ),
 
-
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedSexualPreference == SexualPreference.etc ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor:
+                          _selectedSexualPreference == SexualPreference.etc
+                              ? Color(0xFF868686)
+                              : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
                         _selectedSexualPreference = SexualPreference.etc;
+                        IsSelected();
                       });
                     },
                     child: Text(
@@ -256,32 +311,73 @@ class _SexualPreferencePageState extends State<SexualPreferencePage> with Single
                 ),
               ],
             ),
-            // 두 버튼 사이의 간격 조정
-            SizedBox(height: 242),
             SizedBox(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-                child: Text(
-                  '다음',
+              height: 223,
+            ),
+            // 두 버튼 사이의 간격 조정
+            // SizedBox(height: 255),
+            Container(
+              width: 180,
+              height: 12,
+              child: RichText(
+                text: TextSpan(
                   style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
+                    fontSize: 10,
                     fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                    color: Color(0xFF303030),
                   ),
+                  children: [
+                    TextSpan(
+                      text: '*동성애자 선택시 ',
+                    ),
+                    TextSpan(
+                      text: '동성끼리만',
+                      style:
+                          TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                    ),
+                    TextSpan(
+                      text: ' 매칭해드립니다.',
+                    ),
+                  ],
                 ),
               ),
+            ),
+            SizedBox(
+              height: 21,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -310,4 +406,3 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
-

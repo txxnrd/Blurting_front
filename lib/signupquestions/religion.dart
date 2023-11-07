@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/sexualpreference.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/sexualpreference.dart'; // sex.dart를 임포트
 
 class ReligionPage extends StatefulWidget {
   final String selectedGender;
@@ -9,9 +9,11 @@ class ReligionPage extends StatefulWidget {
   @override
   _ReligionPageState createState() => _ReligionPageState();
 }
-enum Religion { none,buddhism,christian,catholicism, etc}
 
-class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderStateMixin{
+enum Religion { none, buddhism, christian, catholicism, etc }
+
+class _ReligionPageState extends State<ReligionPage>
+    with SingleTickerProviderStateMixin {
   Religion? _selectedReligion;
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
@@ -19,33 +21,40 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => SexualPreferencePage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            SexualPreferencePage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-
   }
+
+  bool IsValid = false;
+
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
+
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.3,  // 시작 게이지 값
-      end: 0.4,    // 종료 게이지 값
+      begin: 0.3, // 시작 게이지 값
+      end: 0.4, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +64,8 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -96,19 +107,24 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * _progressAnimation!.value,
+                  width: MediaQuery.of(context).size.width *
+                      _progressAnimation!.value,
                   decoration: BoxDecoration(
                     color: Color(0xFF303030), // 파란색
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * _progressAnimation!.value - 15,
+                  left: MediaQuery.of(context).size.width *
+                          _progressAnimation!.value -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
@@ -121,7 +137,11 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
             ),
             Text(
               '종교가 있으신가요?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
             SizedBox(width: 20), // 두 버튼 사이의 간격 조정
@@ -129,20 +149,27 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedReligion == Religion.none ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor: _selectedReligion == Religion.none
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.none;
                       });
                     },
@@ -158,23 +185,29 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                   ),
                 ),
 
-
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedReligion == Religion.buddhism ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor: _selectedReligion == Religion.buddhism
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.buddhism;
                       });
                     },
@@ -191,24 +224,33 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 ),
               ],
             ),
-            SizedBox(height: 17,),
+            SizedBox(
+              height: 17,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedReligion == Religion.christian ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor: _selectedReligion == Religion.christian
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.christian;
                       });
                     },
@@ -224,23 +266,29 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                   ),
                 ),
 
-
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedReligion == Religion.catholicism ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor: _selectedReligion == Religion.catholicism
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.catholicism;
                       });
                     },
@@ -257,24 +305,33 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 ),
               ],
             ),
-            SizedBox(height: 17,),
+            SizedBox(
+              height: 17,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Color(0xFF303030), side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      backgroundColor: _selectedReligion == Religion.etc ? Color(0xFF868686) : Colors.transparent,
+                      side: BorderSide(
+                        color: Color(0xFF868686),
+                        width: 2,
+                      ),
+                      primary: Color(0xFF303030),
+                      backgroundColor: _selectedReligion == Religion.etc
+                          ? Color(0xFF868686)
+                          : Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                        borderRadius:
+                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                       ),
                     ),
-
                     onPressed: () {
                       setState(() {
+                        IsSelected();
                         _selectedReligion = Religion.etc;
                       });
                     },
@@ -290,43 +347,48 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                   ),
                 ),
 
-
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-
                 ),
               ],
             ),
 
-            SizedBox(height: 178),
-            SizedBox(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            SizedBox(height: 191),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-
-
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
         ),
@@ -355,8 +417,3 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
-
-
-
-
-

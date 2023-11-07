@@ -2,7 +2,7 @@ name: blurting
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.5 <4.0.0'
+  sdk: ">=3.0.5 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,8 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: ^1.0.4
-
-
+  smooth_page_indicator: ^1.0.0+2
+  http: ^0.13.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -54,24 +54,32 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
   assets:
-  - image/girl.png
-  - image/profile_swipe_now.png
-  - image/profile_swipe_next.png
-  - assets/images/profile_image.png
-  - assets/images/icon_group.png
-  - assets/images/setting.png
-  - assets/images/profile_swipe.png
-  - assets/images/icon_warning.png
-  - assets/images/Union.png
-  - assets/signupface.png
-  - assets/man.png
-  - assets/woman.png
+    - image/girl.png
+    - image/profile_swipe_now.png
+    - image/profile_swipe_next.png
+    - assets/images/profile_image.png
+    - assets/images/icon_group.png
+    - assets/images/setting.png
+    - assets/images/profile_swipe.png
+    - assets/images/icon_warning.png
+    - assets/images/whisper_body_background.png
+    - assets/images/whisper_appbar_background.png
+    - assets/images/chatList_appbar_background.png
+    - assets/images/appbar_bottom.png
+    - assets/images/Ellipse.png
+    - assets/images/chatList_body_background.png
+    - assets/images/QnA.png
+    - assets/images/mypage.png
+    - assets/images/whisper.png
+    - assets/images/home.png
+    - assets/signupface.png
+    - assets/man.png
+    - assets/woman.png
 
   fonts:
     - family: Pretendard
@@ -108,7 +116,6 @@ flutter:
         - asset: assets/fonts/Heebo-Black.ttf
   # To add assets to your application, add an assets section, like this:
 
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -125,222 +132,5 @@ flutter:
 #    fonts:
 #      - asset: fonts/PretendardVariable.ttf
 
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# For details regarding fonts from package dependencies,
+# see https://flutter.dev/custom-fonts/#from-packages

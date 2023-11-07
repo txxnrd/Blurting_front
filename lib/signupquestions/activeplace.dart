@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/religion.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/religion.dart';
+import 'package:blurting/signupquestions/activeplacesearch.dart'; // sex.dart를 임포트
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
@@ -27,6 +28,15 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     );
   }
 
+  bool IsValid = false;
+
+  @override
+  void IsSelected(String content) {
+    setState(() {
+      if (content.isNotEmpty) IsValid = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +56,23 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     });
   }
 
+  String content = '';
+
+  Future<void> goToSearchPage(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SearchPage()),
+    );
+
+    if (result != null) {
+      setState(() {
+        content = result;
+      });
+    }
+    IsSelected(content); //비었는지 확인하는
+    print(content);
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -54,7 +81,10 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -132,78 +162,107 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width: 159, // 원하는 너비 값
+            GestureDetector(
+              onTap: () {
+                goToSearchPage(context);
+                print(content);
+                setState(() {});
+              },
+              child: Container(
+                  width: width * 1, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextField(
-                    style: TextStyle(
-                      color: Color(0xFF303030),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
+                  child: Container(
+                    padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xFF868686), // 초기 테두리 색상
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
-                      hintText: '시 입력',
-                      hintStyle: TextStyle(
+                    child: Text(
+                      (content == '') ? '동명(읍,면)으로 검색 (ex. 안암동)' : content,
+                      style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color(0xFF868686), width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color(0xFF868686), width: 2),
-                      ),
                     ),
-                  ),
-                ),
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                SizedBox(
-                  width: 159, // 원하는 너비 값
-                  height: 48, // 원하는 높이 값
-                  child: TextField(
-                    style: TextStyle(
-                      color: Color(0xFF303030),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
-                    ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
-                      hintText: '구 입력',
-                      hintStyle: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color(0xFF868686), width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color(0xFF868686), width: 2),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                  )),
             ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: <Widget>[
+            //     Container(
+            //       width: width * 0.42, // 원하는 너비 값
+            //       height: 48, // 원하는 높이 값
+            //       child: TextField(
+            //         style: TextStyle(
+            //           color: Color(0xFF303030),
+            //           fontFamily: 'Pretendard',
+            //           fontWeight: FontWeight.w500,
+            //           fontSize: 20,
+            //         ),
+            //         decoration: InputDecoration(
+            //           contentPadding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
+            //           hintText: '시 입력',
+            //           hintStyle: TextStyle(
+            //             color: Color(0xFF303030),
+            //             fontFamily: 'Pretendard',
+            //             fontWeight: FontWeight.w500,
+            //             fontSize: 20,
+            //           ),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(10.0),
+            //             borderSide:
+            //                 BorderSide(color: Color(0xFF868686), width: 2),
+            //           ),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(10.0),
+            //             borderSide:
+            //                 BorderSide(color: Color(0xFF868686), width: 2),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+
+            //     SizedBox(width: 23), // 두 버튼 사이의 간격 조정
+
+            //     Container(
+            //       width: width * 0.42, // 원하는 너비 값
+            //       height: 48, // 원하는 높이 값
+            //       child: TextField(
+            //         style: TextStyle(
+            //           color: Color(0xFF303030),
+            //           fontFamily: 'Pretendard',
+            //           fontWeight: FontWeight.w500,
+            //           fontSize: 20,
+            //         ),
+            //         decoration: InputDecoration(
+            //           contentPadding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
+            //           hintText: '구 입력',
+            //           hintStyle: TextStyle(
+            //             color: Color(0xFF303030),
+            //             fontFamily: 'Pretendard',
+            //             fontWeight: FontWeight.w500,
+            //             fontSize: 20,
+            //           ),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(10.0),
+            //             borderSide:
+            //                 BorderSide(color: Color(0xFF868686), width: 2),
+            //           ),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(10.0),
+            //             borderSide:
+            //                 BorderSide(color: Color(0xFF868686), width: 2),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             // TextField(
             //   decoration: InputDecoration(
             //     hintText: '010-1234-5678',
@@ -219,30 +278,39 @@ class _ActivePlacePageState extends State<ActivePlacePage>
             //   ),
             // ),
 
-            SizedBox(height: 318),
-            SizedBox(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            SizedBox(height: 331),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.9,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFF66464),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                    ),
+                    onPressed: (IsValid)
+                        ? () {
+                            _increaseProgressAndNavigate();
+                          }
+                        : null,
+                    child: Text(
+                      '다음',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Pretendard',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
-                ),
-              ),
+              ],
             ),
           ],
         ),
