@@ -203,7 +203,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(0);
-                        isPersonality1Selected = !isPersonality1Selected;
+                        isPersonality1Selected =!isPersonality1Selected;
                       });
                     },
                     child: Text(
@@ -240,7 +240,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(1);
-                        isPersonality2Selected = !isPersonality2Selected;
+                        isPersonality2Selected =!isPersonality2Selected;
                       });
                     },
                     child: Text(
@@ -276,7 +276,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(2);
-                        isPersonality3Selected = !isPersonality3Selected;
+                        isPersonality3Selected =!isPersonality3Selected;
                       });
                     },
                     child: Text(
@@ -319,7 +319,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(3);
-                        isPersonality4Selected = !isPersonality4Selected;
+                        isPersonality4Selected =!isPersonality4Selected;
                       });
                     },
                     child: Text(
@@ -356,7 +356,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(4);
-                        isPersonality5Selected = !isPersonality5Selected;
+                        isPersonality5Selected =!isPersonality5Selected;
                       });
                     },
                     child: Text(
@@ -392,7 +392,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(5);
-                        isPersonality6Selected = !isPersonality6Selected;
+                        isPersonality6Selected =!isPersonality6Selected;
                       });
                     },
                     child: Text(
@@ -435,7 +435,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(6);
-                        isPersonality7Selected = !isPersonality7Selected;
+                        isPersonality7Selected =!isPersonality7Selected;
                       });
                     },
                     child: Text(
@@ -472,7 +472,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(7);
-                        isPersonality8Selected = !isPersonality8Selected;
+                        isPersonality8Selected =!isPersonality8Selected;
                       });
                     },
                     child: Text(
@@ -508,7 +508,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(8);
-                        isPersonality9Selected = !isPersonality9Selected;
+                        isPersonality9Selected =!isPersonality9Selected;
                       });
                     },
                     child: Text(
@@ -551,7 +551,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(9);
-                        isPersonality10Selected = !isPersonality10Selected;
+                        isPersonality10Selected =!isPersonality10Selected;
                       });
                     },
                     child: Text(
@@ -588,7 +588,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(10);
-                        isPersonality11Selected = !isPersonality11Selected;
+                        isPersonality11Selected =!isPersonality11Selected;
                       });
                     },
                     child: Text(
@@ -624,7 +624,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(11);
-                        isPersonality12Selected = !isPersonality12Selected;
+                        isPersonality12Selected =!isPersonality12Selected;
                       });
                     },
                     child: Text(
@@ -667,7 +667,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(12);
-                        isPersonality13Selected = !isPersonality13Selected;
+                        isPersonality13Selected =!isPersonality13Selected;
                       });
                     },
                     child: Text(
@@ -704,7 +704,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(13);
-                        isPersonality14Selected = !isPersonality14Selected;
+                        isPersonality14Selected =!isPersonality14Selected;
                       });
                     },
                     child: Text(
@@ -740,7 +740,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(14);
-                        isPersonality15Selected = !isPersonality15Selected;
+                        isPersonality15Selected =!isPersonality15Selected;
                       });
                     },
                     child: Text(

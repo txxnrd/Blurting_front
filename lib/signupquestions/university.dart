@@ -6,7 +6,9 @@ import 'package:blurting/signupquestions/mbti.dart';
 import 'package:blurting/signupquestions/universitylist.dart';
 
 import 'done.dart';
-import 'email.dart'; // sex.dart를 임포트
+
+
+import 'email.dart';  // email.dart를 임포트
 
 class UniversityPage extends StatefulWidget {
   final String selectedGender;

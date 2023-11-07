@@ -170,11 +170,7 @@ class HobbyPageState extends State<HobbyPage>
             ),
             Text(
               '당신의 취미는 무엇인가요?',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF303030),
-                  fontFamily: 'Pretendard'),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
             Row(
@@ -201,7 +197,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(0);
-                        isHobby1Selected = !isHobby1Selected;
+                        isHobby1Selected =!isHobby1Selected;
                       });
                     },
                     child: Text(
@@ -238,7 +234,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(1);
-                        isHobby2Selected = !isHobby2Selected;
+                        isHobby2Selected =!isHobby2Selected;
                       });
                     },
                     child: Text(
@@ -274,7 +270,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(2);
-                        isHobby3Selected = !isHobby3Selected;
+                        isHobby3Selected =!isHobby3Selected;
                       });
                     },
                     child: Text(
@@ -317,7 +313,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(3);
-                        isHobby4Selected = !isHobby4Selected;
+                        isHobby4Selected =!isHobby4Selected;
                       });
                     },
                     child: Text(
@@ -354,7 +350,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(4);
-                        isHobby5Selected = !isHobby5Selected;
+                        isHobby5Selected =!isHobby5Selected;
                       });
                     },
                     child: Text(
@@ -390,7 +386,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(5);
-                        isHobby6Selected = !isHobby6Selected;
+                        isHobby6Selected =!isHobby6Selected;
                       });
                     },
                     child: Text(
@@ -433,7 +429,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(6);
-                        isHobby7Selected = !isHobby7Selected;
+                        isHobby7Selected =!isHobby7Selected;
                       });
                     },
                     child: Text(
@@ -470,7 +466,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(7);
-                        isHobby8Selected = !isHobby8Selected;
+                        isHobby8Selected =!isHobby8Selected;
                       });
                     },
                     child: Text(
@@ -506,7 +502,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(8);
-                        isHobby9Selected = !isHobby9Selected;
+                        isHobby9Selected =!isHobby9Selected;
                       });
                     },
                     child: Text(
@@ -549,7 +545,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(9);
-                        isHobby10Selected = !isHobby10Selected;
+                        isHobby10Selected =!isHobby10Selected;
                       });
                     },
                     child: Text(
@@ -586,7 +582,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(10);
-                        isHobby11Selected = !isHobby11Selected;
+                        isHobby11Selected =!isHobby11Selected;
                       });
                     },
                     child: Text(
@@ -622,7 +618,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(11);
-                        isHobby12Selected = !isHobby12Selected;
+                        isHobby12Selected =!isHobby12Selected;
                       });
                     },
                     child: Text(
@@ -665,7 +661,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(12);
-                        isHobby13Selected = !isHobby13Selected;
+                        isHobby13Selected =!isHobby13Selected;
                       });
                     },
                     child: Text(
@@ -702,7 +698,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(13);
-                        isHobby14Selected = !isHobby14Selected;
+                        isHobby14Selected =!isHobby14Selected;
                       });
                     },
                     child: Text(
@@ -738,7 +734,7 @@ class HobbyPageState extends State<HobbyPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(14);
-                        isHobby15Selected = !isHobby15Selected;
+                        isHobby15Selected =!isHobby15Selected;
                       });
                     },
                     child: Text(

@@ -12,16 +12,12 @@ class MBTIPage extends StatefulWidget {
   _MBTIPageState createState() => _MBTIPageState();
 }
 
-enum EorI { e, i }
+enum EorI {e,i}
+enum SorN {s,n}
+enum TorF {t,f}
+enum JorP {j,p}
 
-enum SorN { s, n }
-
-enum TorF { t, f }
-
-enum JorP { j, p }
-
-class _MBTIPageState extends State<MBTIPage>
-    with SingleTickerProviderStateMixin {
+class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin {
   EorI? _selectedEorI;
   SorN? _selectedSorN;
   TorF? _selectedTorF;
@@ -43,8 +39,8 @@ class _MBTIPageState extends State<MBTIPage>
     );
   }
 
-  List<bool> isValidList = [false, false, false, false];
-  bool IsValid = false;
+List<bool> isValidList = [false, false, false, false];
+bool IsValid = false;
 
   @override
   void IsSelected(int index) {
@@ -473,7 +469,7 @@ class _MBTIPageState extends State<MBTIPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(2);
-                        _selectedTorF = TorF.f;
+                        _selectedTorF = TorF.f ;
                       });
                     },
                     child: Text(
@@ -592,7 +588,7 @@ class _MBTIPageState extends State<MBTIPage>
                     onPressed: () {
                       setState(() {
                         IsSelected(3);
-                        _selectedJorP = JorP.p;
+                        _selectedJorP = JorP.p ;
                       });
                     },
                     child: Text(

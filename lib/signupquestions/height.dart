@@ -35,7 +35,7 @@ class _HeightPageState extends State<HeightPage>
     );
   }
 
-  bool IsValid = false;
+      bool IsValid = false;
 
   @override
   void IsSelected() {
@@ -191,8 +191,8 @@ class _HeightPageState extends State<HeightPage>
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: Color(0xFF303030),
-                        fontFamily: 'Pretendard'),
-                  )
+                      fontFamily: 'Pretendard'
+                  ),)
                 ],
               ),
             ),

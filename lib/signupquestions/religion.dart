@@ -30,7 +30,7 @@ class _ReligionPageState extends State<ReligionPage>
     );
   }
 
-  bool IsValid = false;
+    bool IsValid = false;
 
   @override
   void IsSelected() {

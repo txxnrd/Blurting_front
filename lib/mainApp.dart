@@ -1,9 +1,10 @@
 // main_page.dart
 import 'package:flutter/material.dart';
-import 'package:blurting/group.dart';
+import 'package:blurting/blurting.dart';
 import 'package:blurting/whisper.dart';
 import 'package:blurting/MyPage.dart';
 import 'package:blurting/chattingList.dart';
+import 'package:blurting/tab3.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -29,7 +30,7 @@ class _MainApp extends State<MainApp> {
         index: _currentIndex,
         children: [
           Tab3(),
-          Group(), // 첫 번째 탭을 Group으로 대체
+          Blurting(), // 첫 번째 탭을 Group으로 대체
           ChattingList(),
           MyPage(),
         ],
