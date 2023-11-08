@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
+import 'package:blurting/config/app_config.dart';
+
 
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
@@ -258,8 +260,8 @@ class _GroupChat extends State<GroupChat> {
 
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    final url = Uri.parse('uri');
 
+    final url = Uri.parse('${ServerEndpoints.serverEndpoint}chat/rooms');
     final response = await http.post(
       url,
       headers: {

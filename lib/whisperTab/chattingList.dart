@@ -6,6 +6,8 @@ import 'dart:ui';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
+import 'package:blurting/config/app_config.dart';
+
 
 class ChattingList extends StatefulWidget {
   final IO.Socket socket;
@@ -172,7 +174,7 @@ class _chattingList extends State<ChattingList> {
 
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    final url = Uri.parse('http://localhost:3000/chat/rooms');
+    final url = Uri.parse('${ServerEndpoints.serverEndpoint}chat/rooms');
 
     final response = await http.get(
       url,

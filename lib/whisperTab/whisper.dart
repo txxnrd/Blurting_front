@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/Static/messageClass.dart';
 import 'package:blurting/Static/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:blurting/config/app_config.dart';
 
 class Whisper extends StatefulWidget {
   final IO.Socket socket;

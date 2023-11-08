@@ -5,6 +5,7 @@ import 'package:blurting/MyPage.dart';
 import 'package:blurting/whisperTab/chattingList.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Static/provider.dart';
+import 'package:blurting/config/app_config.dart';
 
 class MainApp extends StatefulWidget {
 
@@ -19,7 +20,7 @@ class _MainApp extends State<MainApp> {
   static String token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywic2lnbmVkQXQiOiIyMDIzLTExLTA2VDEwOjM1OjUzLjMwMloiLCJpYXQiOjE2OTkyNjY5NTMsImV4cCI6MTY5OTI3MDU1M30.9Y0D8hf-W5Hr-ToJxJmChOw7d28fUiVA0h1_jNS6M_k';
 
-  IO.Socket socket = IO.io('ws://localhost:3000/whisper', <String, dynamic>{
+  IO.Socket socket = IO.io('${ServerEndpoints.socketServerEndpoint}whisper', <String, dynamic>{
     'transports': ['websocket'],
     'auth': {'authorization': 'Bearer $token'},
   });
