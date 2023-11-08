@@ -302,7 +302,7 @@ class _GroupChat extends State<GroupChat> {
       }
     } else {
       print(response.statusCode);
-      throw Exception('답변을 로드하는 데 실패했습니다');
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
   }
 

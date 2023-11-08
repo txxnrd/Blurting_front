@@ -202,7 +202,7 @@ class _chattingList extends State<ChattingList> {
       }
     } else {
       print(response.statusCode);
-      throw Exception('답변을 로드하는 데 실패했습니다');
+      throw Exception('chattingList : 답변을 로드하는 데 실패했습니다');
     }
   }
 
