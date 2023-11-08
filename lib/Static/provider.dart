@@ -9,7 +9,12 @@
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+class staticVars {
+  static String uri = '54.180.85.164:3080';
+}
+
 class SocketProvider extends ChangeNotifier {
+
   late IO.Socket socket;
 
   SocketProvider(this.socket) {

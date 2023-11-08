@@ -17,6 +17,7 @@ class Whisper extends StatefulWidget {
 }
 
 class _Whisper extends State<Whisper> {
+  String uri = staticVars.uri;
   List<Widget> chatMessages = [];
   bool isValid = false;
 
