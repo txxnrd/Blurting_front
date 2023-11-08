@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:blurting/Static/messageClass.dart';
+import 'package:blurting/Static/staticWidget.dart';
 import 'package:blurting/Static/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
@@ -27,7 +27,7 @@ class _Whisper extends State<Whisper> {
 
   @override
   void initState() {
-    // super.initState();
+    super.initState();
 
     // 기존의 채팅 내역을 받아 오는 로직 추가 (http get 함수 사용)
     // 기존의 채팅 내역, 상대의 정보 받아 오기
@@ -64,7 +64,7 @@ class _Whisper extends State<Whisper> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 120,
+        toolbarHeight: 170,
         backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
         elevation: 0, // 그림자 효과를 제거합니다.
         leading: IconButton(
@@ -82,7 +82,7 @@ class _Whisper extends State<Whisper> {
             Container(
               width: 70,
               height: 70,
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 color: Colors.white,
@@ -110,20 +110,23 @@ class _Whisper extends State<Whisper> {
           ),
         ],
         flexibleSpace: Container(
+        margin: EdgeInsets.only(top: 0),
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
-                  'assets/images/whisper_appbar_background.png'), // 배경 이미지 경로를 설정합니다.
+                  'assets/images/appbar_background.png'), // 배경 이미지 경로를 설정합니다.
               fit: BoxFit.cover, // 이미지를 화면에 맞게 설정합니다.
             ),
           ),
         ),
       ),
+      extendBodyBehindAppBar: false,
       body: Container(
+        margin: EdgeInsets.only(top: 0),
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage('assets/images/whisper_body_background.png'),
+            image: AssetImage('assets/images/body_background.png'),
           ),
         ),
         child: Column(
@@ -185,14 +188,14 @@ class _Whisper extends State<Whisper> {
       'createdAt': now,
     };
 
-    SocketProvider socketProvider = SocketProvider(widget.socket);
 
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(message: message);
     
     // 소켓 서버에 데이터 전송
     if (message.isNotEmpty) {
-      socketProvider.requestSendChat(data);
+      widget.socket.emit('send_chat', data);
+      print("소켓 서버에 귓속말 전송 ($data)");
     }
     
     // 리스트에 추가 (클라이언트에서 바로바로 화면에 띄움, 전송 중...)

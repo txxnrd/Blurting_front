@@ -126,7 +126,7 @@ class CustomInputField extends StatelessWidget {
                     // onChanged: (value) => setState(() {
                     //   isValid = value.isNotEmpty;
                     // }),
-                    cursorColor: Color.fromRGBO(246, 100, 100, 1),
+                    cursorColor: mainColor.MainColor,
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -292,7 +292,7 @@ class MyChat extends StatelessWidget {
 // 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatelessWidget {
   final IO.Socket socket;
-  final Map<String, dynamic> jsonData; // JSON 데이터를 저장할 변수
+  // final Map<String, dynamic> jsonData; // JSON 데이터를 저장할 변수
 
   final String userName;
   final String message;
@@ -301,7 +301,7 @@ class AnswerItem extends StatelessWidget {
   AnswerItem(
       {required this.userName,
       required this.message,
-      required this.jsonData,
+      // required this.jsonData,
       required this.socket,
       required this.userId});
 
@@ -472,7 +472,7 @@ class AnswerItem extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         socket.emit('create_room', userId);
-                        print("귓속말 거는 중...");
+                        print("$userId에게 귓속말 거는 중...");
 
                         Navigator.of(context).pop(); // 모달 닫기
 
@@ -735,6 +735,67 @@ class AnswerItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class staticButton extends StatelessWidget {
+  final String text;
+
+  staticButton({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Color.fromRGBO(255, 210, 210, 1),
+      ),
+      margin: EdgeInsets.only(bottom: 140),
+      width: 344,
+      height: 48,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+            color: mainColor.MainColor, fontSize: 20, fontFamily: 'Heedo'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ellipseText extends StatelessWidget {
+  final String text;
+
+  ellipseText({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          child: Row(
+            children: [
+              Text(
+                text,
+                style: TextStyle(
+                    fontFamily: "Heedo",
+                    fontSize: 40,
+                    fontWeight: FontWeight.w700,
+                    color: mainColor.MainColor),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15, left: 3),
+                  child: Image.asset('assets/images/Ellipse.png'))
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
