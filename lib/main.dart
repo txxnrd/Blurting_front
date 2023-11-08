@@ -10,6 +10,7 @@ import 'package:blurting/mainApp.dart';
 
 
 import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart';  // phonenumber.dart를 임포트
 
 void main() => runApp(MyApp());
 

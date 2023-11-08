@@ -1,3 +1,4 @@
+import 'package:blurting/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
@@ -163,7 +164,7 @@ class _HeightPageState extends State<HeightPage>
                         hintText: '',
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color(0xFFF66464),
+                            color: Color(DefinedColor.lightgrey),
                           ), // 초기 테두리 색상
                         ),
                         enabledBorder: OutlineInputBorder(

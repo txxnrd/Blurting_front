@@ -1,3 +1,4 @@
+import 'package:blurting/colors/colors.dart';
 import 'package:blurting/signupquestions/Alcohol.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
@@ -16,7 +17,7 @@ enum SexualPreference { different, same, both, etc }
 
 class _SexualPreferencePageState extends State<SexualPreferencePage>
     with SingleTickerProviderStateMixin {
-  SexualPreference? _selectedSexualPreference;
+  SexualPreference? _selectedSexPreference;
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -151,79 +152,116 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                // Container(
+                //   width: width * 0.42, // 원하는 너비 값
+                //   height: 48, // 원하는 높이 값
+                //   child: TextButton(
+                //     style: TextButton.styleFrom(
+                //       side: BorderSide(
+                //         color: Color(0xFF868686),
+                //         width: 2,
+                //       ),
+                //       primary: Color(0xFF303030),
+                //       backgroundColor: _selectedSexPreference ==
+                //               SexualPreference.different
+                //           ? Color(0xFF868686)
+                //           : Colors.transparent,
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius:
+                //             BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                //       ),
+                //     ),
+                //     onPressed: () {
+                //       setState(() {
+                //         _selectedSexPreference = SexualPreference.different;
+                //         IsSelected();
+                //       });
+                //     },
+                //     child: Text(
+                //       '이성애자',
+                //       style: TextStyle(
+                //         color: Color(0xFF303030),
+                //         fontFamily: 'Pretendard',
+                //         fontWeight: FontWeight.w500,
+                //         fontSize: 20,
+                //       ),
+                //     ),
+                //   ),자
+                // ),
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedSexPreference == SexualPreference.different,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedSexPreference = SexualPreference.different;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: _selectedSexualPreference ==
-                              SexualPreference.different
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedSexPreference = SexualPreference.different;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '이성애자',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _selectedSexualPreference = SexualPreference.different;
-                        IsSelected();
-                      });
-                    },
-                    child: Text(
-                      '이성애자',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
+
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedSexPreference == SexualPreference.same,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedSexPreference = SexualPreference.same;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                      primary: Color(0xFF303030),
-                      backgroundColor:
-                          _selectedSexualPreference == SexualPreference.same
-                              ? Color(0xFF868686)
-                              : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedSexPreference = SexualPreference.same;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '동성애자',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _selectedSexualPreference == SexualPreference.same;
-                        IsSelected();
-                      });
-                    },
-                    child: Text(
-                      '동성애자',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
               ],
@@ -237,37 +275,37 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedSexPreference == SexualPreference.both,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedSexPreference = SexualPreference.both;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                      primary: Color(0xFF303030),
-                      backgroundColor:
-                          _selectedSexualPreference == SexualPreference.both
-                              ? Color(0xFF868686)
-                              : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedSexPreference = SexualPreference.both;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '양성애자',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _selectedSexualPreference = SexualPreference.both;
-                        IsSelected();
-                      });
-                    },
-                    child: Text(
-                      '양성애자',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
 
@@ -276,38 +314,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor:
-                          _selectedSexualPreference == SexualPreference.etc
-                              ? Color(0xFF868686)
-                              : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _selectedSexualPreference = SexualPreference.etc;
-                        IsSelected();
-                      });
-                    },
-                    child: Text(
-                      '기타',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
+
                 ),
               ],
             ),

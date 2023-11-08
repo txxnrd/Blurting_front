@@ -5,7 +5,7 @@ import 'package:blurting/signupquestions/religion.dart';
 
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/mbti.dart';
-
+import '../colors/colors.dart';
 import 'majorlist.dart';  // sex.dart를 임포트
 
 
@@ -16,12 +16,18 @@ class MajorPage extends StatefulWidget {
   @override
   _MajorPageState createState() => _MajorPageState();
 }
-
-enum AlcoholPreference { none, rarely, enjoy, everyday }
+enum Major { humanities, // 인문계열
+  social, // 사회계열
+  education, // 교육계열
+  engineering, // 공학계열
+  medical, // 의학계열
+  artsPhysical, // 예체능계열
+  naturalScience // 자연계열
+}
 
 class _MajorPageState extends State<MajorPage>
     with SingleTickerProviderStateMixin {
-  AlcoholPreference? _selectedAlcoholPreference;
+  Major? _selectedMajor;
   double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
@@ -39,7 +45,11 @@ class _MajorPageState extends State<MajorPage>
       ),
     );
   }
-
+  bool IsValid = false;
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
   @override
   void initState() {
     super.initState();
@@ -147,135 +157,84 @@ class _MajorPageState extends State<MajorPage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-// <<<<<<< HEAD
-//             TextField(
-//               decoration: InputDecoration(
-//                 hintText: '컴퓨터공학과',
-//                 border: OutlineInputBorder(
-//                   borderSide: BorderSide(
-//                     color: Color(0xFFF66464),
-//                   ), // 초기 테두리 색상
-//                 ),
-//                 enabledBorder: OutlineInputBorder(
-//                   borderSide: BorderSide(
-//                     color: Color(0xFFF66464),
-//                   ), // 입력할 때 테두리 색상
-//                 ),
-//                 focusedBorder: OutlineInputBorder(
-//                   borderSide: BorderSide(
-//                     color: Color(0xFFF66464),
-//                   ), // 선택/포커스 됐을 때 테두리 색상
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 313),
-// =======
-            //검색 구현
-            // Autocomplete<String>(
-            //   optionsBuilder: (TextEditingValue textEditingValue) {
-            //     if (textEditingValue.text == '') {
-            //       return const Iterable.empty();
-            //     }
-            //     //majors는 majorlist.dart에서 import 해옴
-            //     return majors.where((String major) {
-            //       return major.contains(textEditingValue.text.toLowerCase());
-            //     });
-            //   },
-            //   onSelected: (String selection) {
-            //     print('You just selected $selection');
-            //   },
-            //
-            //   fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
-            //
-            //     //전공 입력창 ex)인문계열
-            //     return TextField(
-            //       controller: textEditingController,
-            //       focusNode: focusNode,
-            //       decoration: InputDecoration(
-            //         hintText: majors[0],
-            //         border: OutlineInputBorder(
-            //           borderSide: BorderSide(color: Color(0xFFF66464),), // 초기 테두리 색상
-            //         ),
-            //         enabledBorder: OutlineInputBorder(
-            //           borderSide: BorderSide(color: Color(0xFFF66464),), // 입력할 때 테두리 색상
-            //         ),
-            //         focusedBorder: OutlineInputBorder(
-            //           borderSide: BorderSide(color:Color(0xFFF66464),), // 선택/포커스 됐을 때 테두리 색상
-            //         ),
-            //       ),
-            //       style: DefaultTextStyle.of(context).style,
-            //     );
-            //   },
-            // ),
-
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
-                  alignment: Alignment.center,
-                  width: 200,
-                  height: 420,
-                  child: Center(
-                    child: ListView.builder(
-                      itemCount: majors.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(majors[index]),
-                          trailing: selectedMajor == majors[index]
-                              ? Icon(Icons.check, color: Color(0xFFF66464))
-                              : null,
-                          onTap: () {
-                            setState(() {
-                              selectedMajor = majors[index];
-                            });
-                          },
-                        );
-                      },
-                    ),
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '인문계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '이성애자',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          //   Row(
-          //     mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-          //     children: [
-          //       Container(
-          //         alignment: Alignment.center,
-          //         width: 200,
-          //         height: 420,
-          //         child: Center(
-          //           child: ListView.separated(
-          //             itemCount: majors.length,
-          //             itemBuilder: (context, index) {
-          //               return ListTile(
-          //                 shape: RoundedRectangleBorder( //<-- SEE HERE
-          //                   side: BorderSide(width: 2,color: Color(0xFF868686)),
-          //                   borderRadius: BorderRadius.circular(20),
-          //                 ),
-          //                 title: Text(majors[index]),
-          //                 trailing: selectedMajor == majors[index]
-          //                     ? Icon(Icons.check, color: Color(0xFFF66464))
-          //                     : null,
-          //                 onTap: () {
-          //                   setState(() {
-          //                     selectedMajor = majors[index];
-          //                   });
-          //                 },
-          //               );
-          //             },
-          //             separatorBuilder: (context, index) {
-          //               return SizedBox(height: 4);  // 여기에서 간격을 조절하실 수 있습니다.
-          //             },
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          //
-          //
-          // SizedBox(height: 35,),
-            //다음 버튼
+
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬

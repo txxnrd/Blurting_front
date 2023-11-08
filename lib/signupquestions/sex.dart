@@ -1,12 +1,34 @@
+import 'dart:convert';
+
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/phonenumber.dart'; // sex.dart를 임포트
+import 'package:blurting/colors/colors.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../config/app_config.dart';
 
 class SexPage extends StatefulWidget {
   @override
   _SexPageState createState() => _SexPageState();
 }
+Future<void> saveToken(String token) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('signupToken', token);
+  // 저장된 값을 확인하기 위해 바로 불러옵니다.
+  String savedToken = prefs.getString('signupToken') ?? 'No Token';
+  print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
+}
 
+// 저장된 토큰을 불러오는 함수
+Future<String> getToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+  // 값이 없을 경우 'No Token'을 반환합니다.
+  String token = prefs.getString('signupToken') ?? 'No Token';
+  return token;
+}
 enum Gender { male, female }
 
 class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
@@ -32,7 +54,38 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
   void IsSelected() {
     IsValid = true;
   }
+  Future<void> _sendPostRequest() async {
+    var url = Uri.parse(API.signup);
+    //API.sendphone
 
+    var sex = _selectedGender==Gender.male ? "M" : "F" ;
+    String savedToken = await getToken();
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"sex": sex}), // JSON 형태로 인코딩
+    );
+
+    if (response.statusCode == 200) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+
+      var data = json.decode(response.body);
+      var token = data['signupToken'];
+      print(token);
+      // 토큰을 로컬에 저장
+      await saveToken(token);
+      print('sucess');
+    }
+      else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -144,12 +197,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedGender == Gender.male
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -165,7 +218,9 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     child: Text(
                       '남성',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color: _selectedGender == Gender.male
+                            ? Colors.white
+                            : Color(0xFF303030),
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -181,10 +236,10 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                   height: 48, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2),
-                      primary: Color(0xFF303030),
+                      side: BorderSide(color: Color(DefinedColor.lightgrey), width: 2),
+                      primary: Color(DefinedColor.lightgrey),
                       backgroundColor: _selectedGender == Gender.female
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -200,7 +255,9 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     child: Text(
                       '여성',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color: _selectedGender == Gender.female
+                            ? Colors.white
+                            : Color(0xFF303030),
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -230,7 +287,8 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     ),
                     onPressed: (IsValid)
                         ? () {
-                            _increaseProgressAndNavigate();
+                        _sendPostRequest();
+                        _increaseProgressAndNavigate();
                           }
                         : null,
                     child: Text(

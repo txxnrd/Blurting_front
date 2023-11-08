@@ -184,7 +184,7 @@ class _PersonalityPageState extends State<PersonalityPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -221,7 +221,7 @@ class _PersonalityPageState extends State<PersonalityPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -244,7 +244,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '사교적인',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -257,7 +257,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -280,7 +280,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '모험적',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -300,7 +300,7 @@ class _PersonalityPageState extends State<PersonalityPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -323,7 +323,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '독립적',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -337,7 +337,7 @@ class _PersonalityPageState extends State<PersonalityPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -360,7 +360,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '신중한',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -373,7 +373,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -396,7 +396,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '온화한',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -416,7 +416,7 @@ class _PersonalityPageState extends State<PersonalityPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -439,7 +439,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '신비한',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -453,7 +453,7 @@ class _PersonalityPageState extends State<PersonalityPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -476,7 +476,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '유쾌한',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -489,7 +489,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -512,7 +512,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '창의적',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -532,7 +532,7 @@ class _PersonalityPageState extends State<PersonalityPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -555,7 +555,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '지적인',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -569,7 +569,7 @@ class _PersonalityPageState extends State<PersonalityPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -592,7 +592,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '침착한',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -605,7 +605,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -628,7 +628,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '열정적인',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -648,7 +648,7 @@ class _PersonalityPageState extends State<PersonalityPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -671,7 +671,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '자유로운',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -685,7 +685,7 @@ class _PersonalityPageState extends State<PersonalityPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -708,7 +708,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '실험적인',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -721,7 +721,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -744,7 +744,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '분석적',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',

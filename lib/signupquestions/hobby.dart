@@ -180,7 +180,7 @@ class HobbyPageState extends State<HobbyPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -203,7 +203,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '블로그',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -217,7 +217,7 @@ class HobbyPageState extends State<HobbyPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -240,7 +240,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '게임',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -253,7 +253,7 @@ class HobbyPageState extends State<HobbyPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -276,7 +276,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '헬스',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -296,7 +296,7 @@ class HobbyPageState extends State<HobbyPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -319,7 +319,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '음악감상',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -333,7 +333,7 @@ class HobbyPageState extends State<HobbyPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -356,7 +356,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '독서',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -369,7 +369,7 @@ class HobbyPageState extends State<HobbyPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -392,7 +392,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '영화감상',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -412,7 +412,7 @@ class HobbyPageState extends State<HobbyPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -435,7 +435,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '골프',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -449,7 +449,7 @@ class HobbyPageState extends State<HobbyPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -472,7 +472,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      widget.selectedGender == "Gender.male" ? '축구' : '요가',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -485,7 +485,7 @@ class HobbyPageState extends State<HobbyPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -508,7 +508,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '등산',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -528,7 +528,7 @@ class HobbyPageState extends State<HobbyPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -551,7 +551,7 @@ class HobbyPageState extends State<HobbyPage>
                       });
                     },
                     child: Text(
-                      '낙천적인',
+                      '사진찍기',
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -565,7 +565,7 @@ class HobbyPageState extends State<HobbyPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -601,7 +601,7 @@ class HobbyPageState extends State<HobbyPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -644,7 +644,7 @@ class HobbyPageState extends State<HobbyPage>
               children: <Widget>[
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -681,7 +681,7 @@ class HobbyPageState extends State<HobbyPage>
 
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
@@ -717,7 +717,7 @@ class HobbyPageState extends State<HobbyPage>
                 SizedBox(width: 17),
                 Container(
                   width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
+                  height: 40, // 원하는 높이 값
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
