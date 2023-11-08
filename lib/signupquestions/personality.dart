@@ -7,7 +7,7 @@ import 'package:blurting/signupquestions/hobby.dart'; // sex.dart를 임포트
 class PersonalityPage extends StatefulWidget {
   final String selectedGender;
 
-  PersonalityPage({required this.selectedGender});
+  PersonalityPage({super.key, required this.selectedGender});
   @override
   _PersonalityPageState createState() => _PersonalityPageState();
 }
@@ -182,7 +182,7 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -219,7 +219,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -298,7 +298,7 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -335,7 +335,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -414,7 +414,7 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -451,7 +451,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -530,7 +530,7 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -567,7 +567,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -646,7 +646,7 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -683,7 +683,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(

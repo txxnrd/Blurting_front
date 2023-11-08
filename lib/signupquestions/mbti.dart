@@ -7,7 +7,7 @@ import 'package:blurting/signupquestions/personality.dart'; // sex.dart를 임�
 class MBTIPage extends StatefulWidget {
   final String selectedGender;
 
-  MBTIPage({required this.selectedGender});
+  MBTIPage({super.key, required this.selectedGender});
   @override
   _MBTIPageState createState() => _MBTIPageState();
 }

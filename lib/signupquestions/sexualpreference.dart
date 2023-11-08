@@ -7,7 +7,7 @@ import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 class SexualPreferencePage extends StatefulWidget {
   final String selectedGender;
 
-  SexualPreferencePage({required this.selectedGender});
+  SexualPreferencePage({super.key, required this.selectedGender});
   @override
   _SexualPreferencePageState createState() => _SexualPreferencePageState();
 }

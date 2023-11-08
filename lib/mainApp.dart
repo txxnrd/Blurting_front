@@ -76,7 +76,6 @@ class _MainApp extends State<MainApp> {
                 _currentIndex = index;
               });
             },
-              
             items: [
               BottomNavigationBarItem(
                 icon: Column(
@@ -85,8 +84,11 @@ class _MainApp extends State<MainApp> {
                       margin: EdgeInsets.only(top: 0, bottom: 5),
                       height: 25,
                       child: _currentIndex == 0
-                      ? Image.asset('assets/images/home.png')
-                      : Image.asset('assets/images/home.png', color: Color.fromRGBO(217, 217, 217, 1),),
+                          ? Image.asset('assets/images/home.png')
+                          : Image.asset(
+                              'assets/images/home.png',
+                              color: Color.fromRGBO(217, 217, 217, 1),
+                            ),
                     ),
                     Text(
                       '홈',
@@ -104,12 +106,14 @@ class _MainApp extends State<MainApp> {
                 icon: Column(
                   children: [
                     Container(
-                     margin: EdgeInsets.only(top: 0, bottom: 5),
-                      height: 25,
-                      child: _currentIndex == 1
-                      ? Image.asset('assets/images/QnA.png')
-                      : Image.asset('assets/images/QnA.png', color: Color.fromRGBO(217, 217, 217, 1),)
-                    ),
+                        margin: EdgeInsets.only(top: 0, bottom: 5),
+                        height: 25,
+                        child: _currentIndex == 1
+                            ? Image.asset('assets/images/QnA.png')
+                            : Image.asset(
+                                'assets/images/QnA.png',
+                                color: Color.fromRGBO(217, 217, 217, 1),
+                              )),
                     Text(
                       '블러팅',
                       style: TextStyle(
@@ -129,8 +133,11 @@ class _MainApp extends State<MainApp> {
                       margin: EdgeInsets.only(top: 0, bottom: 5),
                       height: 25,
                       child: _currentIndex == 2
-                      ? Image.asset('assets/images/whisper.png')
-                      : Image.asset('assets/images/whisper.png', color: Color.fromRGBO(217, 217, 217, 1),),
+                          ? Image.asset('assets/images/whisper.png')
+                          : Image.asset(
+                              'assets/images/whisper.png',
+                              color: Color.fromRGBO(217, 217, 217, 1),
+                            ),
                     ),
                     Text(
                       '귓속말',
@@ -152,9 +159,12 @@ class _MainApp extends State<MainApp> {
                       margin: EdgeInsets.only(top: 0, bottom: 5),
                       height: 25,
                       child: _currentIndex == 3
-                      ? Image.asset('assets/images/mypage.png')
-                      : Image.asset('assets/images/mypage.png', color: Color.fromRGBO(217, 217, 217, 1),),
-                                        ),
+                          ? Image.asset('assets/images/mypage.png')
+                          : Image.asset(
+                              'assets/images/mypage.png',
+                              color: Color.fromRGBO(217, 217, 217, 1),
+                            ),
+                    ),
                     Text(
                       '마이페이지',
                       style: TextStyle(

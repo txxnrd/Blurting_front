@@ -9,7 +9,7 @@ final labels = ['안 핌', '가끔', '자주', '매일'];
 class HeightPage extends StatefulWidget {
   final String selectedGender;
 
-  HeightPage({required this.selectedGender});
+  HeightPage({super.key, required this.selectedGender});
   @override
   _HeightPageState createState() => _HeightPageState();
 }

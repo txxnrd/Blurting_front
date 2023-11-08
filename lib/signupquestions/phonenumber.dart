@@ -1,8 +1,11 @@
 import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/config/app_config.dart';
 
 class PhoneNumberPage extends StatefulWidget {
+  const PhoneNumberPage({super.key});
+
   @override
   _PhoneNumberPageState createState() => _PhoneNumberPageState();
 }
@@ -191,6 +194,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 maxLength: 13,
                 decoration: InputDecoration(
                   hintText: '010-1234-5678',
+                  counterText: '',  // 이 부분을 추가
                   hintStyle: TextStyle(
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w700,
@@ -223,6 +227,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 margin: EdgeInsets.only(top: 15),
                 width: 350,
                 child: TextField(
+                  maxLength: 6,
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w700,
@@ -231,6 +236,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   controller: _controller_certification,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
+                    counterText: "",
                     hintText: '인증번호를 입력해 주세요',
                     hintStyle: TextStyle(
                         fontFamily: 'Pretendard',
@@ -300,6 +306,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           ],
         ),
       ),
+      
     );
   }
 

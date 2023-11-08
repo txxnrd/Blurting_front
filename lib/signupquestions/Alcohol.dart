@@ -9,7 +9,7 @@ final labels = ['안 마심', '가끔', '자주', '매일'];
 class AlcoholPage extends StatefulWidget {
   final String selectedGender;
 
-  AlcoholPage({required this.selectedGender});
+  AlcoholPage({super.key, required this.selectedGender});
   @override
   _AlcoholPageState createState() => _AlcoholPageState();
 }

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';
 import 'image.dart'; // sex.dart를 임포트
 
 class HobbyPage extends StatefulWidget {
   final String selectedGender;
 
-  HobbyPage({required this.selectedGender});
+  HobbyPage({super.key, required this.selectedGender});
   @override
   HobbyPageState createState() => HobbyPageState();
 }
@@ -178,7 +176,7 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -215,7 +213,7 @@ class HobbyPageState extends State<HobbyPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -294,7 +292,7 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -331,7 +329,7 @@ class HobbyPageState extends State<HobbyPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -410,7 +408,7 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -447,7 +445,7 @@ class HobbyPageState extends State<HobbyPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -526,7 +524,7 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -563,7 +561,7 @@ class HobbyPageState extends State<HobbyPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -642,7 +640,7 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(
@@ -679,7 +677,7 @@ class HobbyPageState extends State<HobbyPage>
                 ),
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
+                SizedBox(
                   width: 88, // 원하는 너비 값
                   height: 36, // 원하는 높이 값
                   child: TextButton(

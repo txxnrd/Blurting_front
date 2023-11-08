@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/phonenumber.dart'; // sex.dart를 임포트
 
 class SexPage extends StatefulWidget {
+  const SexPage({super.key});
+
   @override
   _SexPageState createState() => _SexPageState();
 }

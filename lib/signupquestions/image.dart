@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart'; // 추가
 class ImagePage extends StatefulWidget {
   final String selectedGender;
 
-  ImagePage({required this.selectedGender});
+  ImagePage({super.key, required this.selectedGender});
 
   @override
   ImagePageState createState() => ImagePageState();
@@ -26,8 +26,8 @@ class ImagePageState extends State<ImagePage>
   File? _image3;
 
   Future<void> _pickImage1() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image1 = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image1 = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (image1 != null) {
@@ -37,8 +37,8 @@ class ImagePageState extends State<ImagePage>
   }
 
   Future<void> _pickImage2() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image2 = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image2 = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (image2 != null) {
@@ -48,8 +48,8 @@ class ImagePageState extends State<ImagePage>
   }
 
   Future<void> _pickImage3() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image3 = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image3 = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (image3 != null) {

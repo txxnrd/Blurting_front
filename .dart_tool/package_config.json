@@ -206,6 +206,24 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "location",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/location-5.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "location_platform_interface",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/location_platform_interface-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "location_web",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/location_web-4.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "logging",
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.2.0",
       "packageUri": "lib/",
@@ -332,6 +350,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "smooth_page_indicator",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/smooth_page_indicator-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "socket_io_client",
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_client-2.0.3+1",
       "packageUri": "lib/",
@@ -416,7 +440,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-08T06:45:21.716609Z",
+  "generated": "2023-11-08T06:45:48.013512Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }
