@@ -105,9 +105,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.0",
+      "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http-0.13.6",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "2.19"
     },
     {
       "name": "http_parser",
@@ -278,7 +278,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-08T06:49:00.065911Z",
+  "generated": "2023-11-08T06:50:38.594364Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }
