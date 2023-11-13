@@ -33,11 +33,19 @@ dependencies:
   image_picker: ^1.0.4
   location: ^5.0.3
   smooth_page_indicator: ^1.0.0+2
-  http: ^0.13.3
+  web_socket_channel: ^2.4.0
+  http: ^1.1.0
+
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  provider: ^6.0.5
+  socket_io_client: ^2.0.3+1
+  grouped_list: ^5.1.2
+  dio: ^5.3.3
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -68,12 +76,10 @@ flutter:
     - assets/images/setting.png
     - assets/images/profile_swipe.png
     - assets/images/icon_warning.png
-    - assets/images/whisper_body_background.png
-    - assets/images/whisper_appbar_background.png
-    - assets/images/chatList_appbar_background.png
+    - assets/images/body_background.png
+    - assets/images/appbar_background.png
     - assets/images/appbar_bottom.png
     - assets/images/Ellipse.png
-    - assets/images/chatList_body_background.png
     - assets/images/QnA.png
     - assets/images/mypage.png
     - assets/images/whisper.png
