@@ -16,7 +16,8 @@ class MajorPage extends StatefulWidget {
   @override
   _MajorPageState createState() => _MajorPageState();
 }
-enum Major { humanities, // 인문계열
+enum Major {
+  humanities, // 인문계열
   social, // 사회계열
   education, // 교육계열
   engineering, // 공학계열
@@ -220,7 +221,84 @@ class _MajorPageState extends State<MajorPage>
                           });
                         },
                         child: Text(
-                          '이성애자',
+                          '사회계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '교육계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '공학계열',
                           style: TextStyle(
                             color: Color(0xFF303030),
                             fontFamily: 'Pretendard',
@@ -235,6 +313,155 @@ class _MajorPageState extends State<MajorPage>
               ],
             ),
 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '자연계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '의약계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '예체능 계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 150,),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
