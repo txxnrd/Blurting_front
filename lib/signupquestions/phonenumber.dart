@@ -106,6 +106,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
         body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
       );
       if (second_response.statusCode == 200 || second_response.statusCode == 201) {
+        print('응답 제대로 받음');
         var data = json.decode(second_response.body);
         var token = data['signupToken'];
         print(token);
@@ -116,6 +117,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
         print('Response body: ${second_response.body}');
 
       } else {
+        print('응답 오류');
         var errorCode =second_response.statusCode;
         print('Second Request failed with status: ${errorCode}.');
         showError = true;
@@ -163,15 +165,42 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
-      var token = data['signupToken'];
-      print(token);
-      await saveToken(token);
-      _increaseProgressAndNavigate();
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedDialog();
+      }
+
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-
     }
+  }
+  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('인증 실패'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
