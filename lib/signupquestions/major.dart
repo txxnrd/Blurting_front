@@ -204,10 +204,10 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Major.humanities,
+                        value: _selectedMajor == Major.social,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.social;
                             IsSelected();
                           });
                         },
@@ -216,7 +216,7 @@ class _MajorPageState extends State<MajorPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.social;
                             IsSelected();
                           });
                         },
@@ -245,10 +245,10 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Major.humanities,
+                        value: _selectedMajor == Major.education,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.education;
                             IsSelected();
                           });
                         },
@@ -257,7 +257,7 @@ class _MajorPageState extends State<MajorPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.education;
                             IsSelected();
                           });
                         },
@@ -281,10 +281,10 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Major.humanities,
+                        value: _selectedMajor == Major.engineering,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.engineering;
                             IsSelected();
                           });
                         },
@@ -293,7 +293,7 @@ class _MajorPageState extends State<MajorPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.engineering;
                             IsSelected();
                           });
                         },
@@ -323,10 +323,10 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Major.humanities,
+                        value: _selectedMajor == Major.naturalScience,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.naturalScience;
                             IsSelected();
                           });
                         },
@@ -335,7 +335,7 @@ class _MajorPageState extends State<MajorPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.naturalScience;
                             IsSelected();
                           });
                         },
@@ -359,10 +359,10 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Major.humanities,
+                        value: _selectedMajor == Major.medical,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.medical;
                             IsSelected();
                           });
                         },
@@ -371,7 +371,7 @@ class _MajorPageState extends State<MajorPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.medical;
                             IsSelected();
                           });
                         },
@@ -402,10 +402,10 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Major.humanities,
+                        value: _selectedMajor == Major.artsPhysical,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.artsPhysical;
                             IsSelected();
                           });
                         },
@@ -414,7 +414,7 @@ class _MajorPageState extends State<MajorPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Major.humanities;
+                            _selectedMajor = Major.artsPhysical;
                             IsSelected();
                           });
                         },

@@ -204,7 +204,7 @@ class ImagePageState extends State<ImagePage>
                   ),
                 ),
                 GestureDetector(
-                  onTap: _pickImage1,
+                  onTap: _pickImage2,
                   child: Container(
                     width: 100,
                     height: 125,
@@ -226,7 +226,7 @@ class ImagePageState extends State<ImagePage>
                   ),
                 ),
                 GestureDetector(
-                  onTap: _pickImage1,
+                  onTap: _pickImage3,
                   child: Container(
                     width: 100,
                     height: 125,

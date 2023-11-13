@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';
+import '../colors/colors.dart';
 import 'image.dart'; // sex.dart를 임포트
 
 class HobbyPage extends StatefulWidget {
@@ -31,20 +32,6 @@ class HobbyPageState extends State<HobbyPage>
   bool isHobby13Selected = false;
   bool isHobby14Selected = false;
   bool isHobby15Selected = false;
-  Future<void> _increaseProgressAndNavigate() async {
-    await _animationController!.forward();
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            ImagePage(selectedGender: widget.selectedGender),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    );
-  }
-
-  bool IsValid = false;
 
   List<bool> isValidList = [
     false,
@@ -63,6 +50,62 @@ class HobbyPageState extends State<HobbyPage>
     false,
     false
   ];
+  Widget customHobbyCheckbox(String hobbyText, int index, width) {
+    return Container(
+      width: width*0.42,
+      height: 48,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Checkbox(
+            value: isValidList[index],
+            onChanged: (bool? newValue) {
+              setState(() {
+                IsSelected(index);
+              });
+            },
+            activeColor: Color(DefinedColor.darkpink),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                IsSelected(index);
+              });
+            },
+
+
+            child: Text(
+              hobbyText,
+              style: TextStyle(
+                color: Color(0xFF303030),
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Future<void> _increaseProgressAndNavigate() async {
+    await _animationController!.forward();
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            ImagePage(selectedGender: widget.selectedGender),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
+  }
+
+  bool IsValid = false;
+
+
 
   @override
   void IsSelected(int index) {
@@ -103,6 +146,7 @@ class HobbyPageState extends State<HobbyPage>
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -122,6 +166,7 @@ class HobbyPageState extends State<HobbyPage>
         ],
       ),
       body: Padding(
+
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,583 +221,73 @@ class HobbyPageState extends State<HobbyPage>
             ),
             SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby1Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(0);
-                        isHobby1Selected =!isHobby1Selected;
-                      });
-                    },
-                    child: Text(
-                      '블로그',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby2Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(1);
-                        isHobby2Selected =!isHobby2Selected;
-                      });
-                    },
-                    child: Text(
-                      '게임',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby3Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(2);
-                        isHobby3Selected =!isHobby3Selected;
-                      });
-                    },
-                    child: Text(
-                      '헬스',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                customHobbyCheckbox('개성있는', 0, width),
+                customHobbyCheckbox('책임감 있는', 1, width),
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby4Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(3);
-                        isHobby4Selected =!isHobby4Selected;
-                      });
-                    },
-                    child: Text(
-                      '음악감상',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby5Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(4);
-                        isHobby5Selected =!isHobby5Selected;
-                      });
-                    },
-                    child: Text(
-                      '독서',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby6Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(5);
-                        isHobby6Selected =!isHobby6Selected;
-                      });
-                    },
-                    child: Text(
-                      '영화감상',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                customHobbyCheckbox('열정적인', 2, width),
+                customHobbyCheckbox('귀여운', 3, width),
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby7Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(6);
-                        isHobby7Selected =!isHobby7Selected;
-                      });
-                    },
-                    child: Text(
-                      '골프',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby8Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(7);
-                        isHobby8Selected =!isHobby8Selected;
-                      });
-                    },
-                    child: Text(
-                      widget.selectedGender == "Gender.male" ? '축구' : '요가',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby9Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(8);
-                        isHobby9Selected =!isHobby9Selected;
-                      });
-                    },
-                    child: Text(
-                      '등산',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              children: [
+                customHobbyCheckbox('상냥한', 4, width),
+                customHobbyCheckbox('감성적인', 5, width),
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby10Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(9);
-                        isHobby10Selected =!isHobby10Selected;
-                      });
-                    },
-                    child: Text(
-                      '사진찍기',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby11Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(10);
-                        isHobby11Selected =!isHobby11Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby12Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(11);
-                        isHobby12Selected =!isHobby12Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              children: [
+                customHobbyCheckbox('나누는', 6, width),
+                customHobbyCheckbox('유머있는', 7, width),
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby13Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(12);
-                        isHobby13Selected =!isHobby13Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby14Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(13);
-                        isHobby14Selected =!isHobby14Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 40, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isHobby15Selected
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(14);
-                        isHobby15Selected =!isHobby15Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              children: [
+                customHobbyCheckbox('차분한', 8, width),
+                customHobbyCheckbox('지적인', 9, width),
               ],
             ),
-            SizedBox(height: 107),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                customHobbyCheckbox('섬세한', 10, width),
+                customHobbyCheckbox('무뚝뚝한', 11, width),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                customHobbyCheckbox('외향적인', 12, width),
+                customHobbyCheckbox('내향적인', 13, width),
+              ],
+            ),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
@@ -770,8 +305,8 @@ class HobbyPageState extends State<HobbyPage>
                     ),
                     onPressed: (IsValid)
                         ? () {
-                            _increaseProgressAndNavigate();
-                          }
+                      _increaseProgressAndNavigate();
+                    }
                         : null,
                     child: Text(
                       '다음',
@@ -792,6 +327,7 @@ class HobbyPageState extends State<HobbyPage>
     );
   }
 }
+
 
 class FaceIconPainter extends CustomPainter {
   final double progress;

@@ -138,26 +138,63 @@ class _EmailPageState extends State<EmailPage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'nrbsld@korea.ac.kr',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFF66464),
-                  ), // 초기 테두리 색상
+            Row(
+              children: [
+                Container(
+                  width:150,
+                  height:48,
+                  child:
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'abcd',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF66464)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF66464)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF66464)),
+                      ),
+                    ),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFF66464),
-                  ), // 입력할 때 테두리 색상
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFF66464),
-                  ), // 선택/포커스 됐을 때 테두리 색상
+                SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
+                Text('@',
+                style: TextStyle(
+                  fontSize: 24
+                ),),
+                SizedBox(width: 4),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
+                    alignment: Alignment.centerLeft,
+                    height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFFF66464)),
+                      borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'korea.ac.kr',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
+
+
+
+
             SizedBox(height: 312),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
