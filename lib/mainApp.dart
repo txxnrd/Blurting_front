@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/blurtingTab/blurting.dart';
-import 'package:blurting/homeTab/Home.dart';
+import 'package:blurting/pages/blurtingTab/blurting.dart';
+import 'package:blurting/pages/homeTab/Home.dart';
 import 'package:blurting/MyPage.dart';
-import 'package:blurting/whisperTab/chattingList.dart';
+import 'package:blurting/pages/whisperTab/chattingList.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/Static/provider.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/config/app_config.dart';
 
 class MainApp extends StatefulWidget {

@@ -7,6 +7,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class mainColor{
   static Color MainColor = Color.fromRGBO(246, 100, 100, 1);
+  static Color lightGray = Color.fromRGBO(170, 170, 170, 1);
 }
 
 class SocketProvider extends ChangeNotifier {

@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:ui';
 
-import 'package:blurting/Static/provider.dart';
-import 'package:blurting/whisperTab/whisper.dart';
+import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/Static/staticWidget.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
@@ -88,6 +89,7 @@ class _GroupChat extends State<GroupChat> {
   @override
   Widget build(BuildContext context) {
     TextEditingController _controller = TextEditingController();
+    ScrollController _scrollController = ScrollController();
 
     return Scaffold(
       appBar: AppBar(
@@ -100,31 +102,30 @@ class _GroupChat extends State<GroupChat> {
             Navigator.pop(context);
           },
         ),
-        automaticallyImplyLeading: false,
-        toolbarHeight: 244,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/appbar_background.png'),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.white.withOpacity(0.8), BlendMode.dstATop),
-            ),
-          ),
-        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: <Widget>[
-          Container(
-            //padding: EdgeInsets.all(10),
-            child: IconButton(
-              //alignment: Alignment.topCenter,
-              //style: ButtonStyle(alignment: Alignment.topCenter),
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {},
+        automaticallyImplyLeading: false,
+        toolbarHeight: 244,
+        flexibleSpace: Stack(
+          children: [
+            ClipRRect(
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(color: Colors.transparent))),
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/appbar_background.png'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.8), BlendMode.dstATop),
+                ),
+              ),
             ),
-          ),
+          ],
+        ),
+        actions: <Widget>[
+          pointAppbar(point: 120)
         ],
         title: Column(
           children: [
@@ -203,6 +204,7 @@ class _GroupChat extends State<GroupChat> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
+                      controller: _scrollController,
                   padding: EdgeInsets.only(top: 260), // 시작 위치에 여백 추가
                   child: Column(
                     children: [
@@ -215,19 +217,22 @@ class _GroupChat extends State<GroupChat> {
                                 message: '하하\n그냥 잘까',
                                 // jsonData: data,
                                 socket: widget.socket,
-                                userId: 36,),
+                                userId: 36,
+                                isAlready: false),
                             AnswerItem(
                                 userName: '개굴',
                                 message: '아 목 아파 감기 걸렷나',
                                 // jsonData: data,
                                 socket: widget.socket,
-                                userId: 6,),
+                                userId: 6,
+                                isAlready: true),
                             AnswerItem(
                                 userName: '감기',
                                 message: '양치하고 자야겟다..',
                                 // jsonData: data,
                                 socket: widget.socket,
-                                userId: 7,),
+                                userId: 7,
+                                isAlready: false),
                             for (var answer in answerList)
                               answer, // answerList에 있는 내용 순회하며 추가
                           ],
@@ -240,6 +245,7 @@ class _GroupChat extends State<GroupChat> {
               CustomInputField(
                   controller: _controller,
                   sendFunction: SendAnswer,
+                  scrollController: _scrollController,
                   now: DateTime.now().toString()),
             ],
           ),

@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:blurting/Static/staticWidget.dart';
-import 'package:blurting/Static/provider.dart';
+import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 
@@ -61,12 +62,14 @@ class _Whisper extends State<Whisper> {
   @override
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
+    ScrollController _scrollController = ScrollController();
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 170,
         backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
         elevation: 0, // 그림자 효과를 제거합니다.
+        automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -100,29 +103,28 @@ class _Whisper extends State<Whisper> {
             )
           ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Image.asset('assets/images/setting.png'),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              // 설정 버튼을 눌렀을 때의 동작
-            },
-          ),
-        ],
-        flexibleSpace: Container(
-        margin: EdgeInsets.only(top: 0),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/appbar_background.png'), // 배경 이미지 경로를 설정합니다.
-              fit: BoxFit.cover, // 이미지를 화면에 맞게 설정합니다.
-            ),
-          ),
+        actions: <Widget>[pointAppbar(point: 120)],
+        flexibleSpace: Stack(
+          children: [
+            ClipRRect(
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(color: Colors.transparent))),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //       image: AssetImage(
+            //           'assets/images/appbar_background.png'),
+            //       fit: BoxFit.cover,
+            //       colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.8), BlendMode.dstATop)
+            //     ),
+            //   ),
+            // ),
+          ],
         ),
       ),
-      extendBodyBehindAppBar: false,
+      extendBodyBehindAppBar: true,
       body: Container(
-        margin: EdgeInsets.only(top: 0),
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
@@ -139,8 +141,9 @@ class _Whisper extends State<Whisper> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data != null) {
                     return SingleChildScrollView(
+                      controller: _scrollController,
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 30),
+                        margin: EdgeInsets.only(top: 200),
                         child: Column(
                           children: <Widget>[
                             ListTile(
@@ -168,6 +171,7 @@ class _Whisper extends State<Whisper> {
             ),
             CustomInputField(
               controller: controller,
+              scrollController: _scrollController,
               sendFunction: sendChat,
               now: DateTime.now().toString(),
             ),
@@ -201,7 +205,7 @@ class _Whisper extends State<Whisper> {
     // 리스트에 추가 (클라이언트에서 바로바로 화면에 띄움, 전송 중...)
     // 리스트에 위젯을 추가한다
     messageList.add(newAnswer);
-    // _messageStreamController.sink.add(messageList); // 스트림을 통해 업데이트된 리스트 전달
+    _messageStreamController.sink.add(messageList); // 스트림을 통해 업데이트된 리스트 전달
 
     print("귓속말 전송 중...");
     setState(() {});

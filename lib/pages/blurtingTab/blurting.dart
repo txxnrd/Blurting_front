@@ -1,7 +1,7 @@
-import 'package:blurting/blurtingTab/groupChat.dart';
+import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/Static/staticWidget.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class Blurting extends StatefulWidget {
   final IO.Socket socket;

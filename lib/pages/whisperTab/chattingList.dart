@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:blurting/Static/provider.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/whisperTab/whisper.dart';
+import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'dart:ui';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 
-import 'package:blurting/Static/staticWidget.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class ChattingList extends StatefulWidget {
   final IO.Socket socket;
@@ -43,7 +43,6 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _chatListItemState extends State<ChatListItem> {
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -187,25 +186,6 @@ class _chattingList extends State<ChattingList> {
 
     fetchList(widget.token);
 
-    // http로 새로운 채팅방 불러 오기,, 지금은 소켓인데 http로 불러올 거양
-
-    // widget.socket.on('create_room', (data) {
-    //   Widget newChat = ChatListItem(
-    //     roomId: data,
-    //     userName: '새로운 채팅방',
-    //     message: '내가 누군가에게 새로운 채팅을 걸었어요',
-    //     time: '10:30',
-    //     image: 'assets/images/profile_image.png',
-    //     socket: widget.socket,
-    //   );
-
-    //   print('리스트 생성');
-
-    //   setState(() {
-    //     chatLists.insert(0, newChat);
-    //   });
-    // });
-
     widget.socket.on('invite_chat', (data) {
       Widget newChat = ChatListItem(
         roomId: data,
@@ -251,18 +231,7 @@ class _chattingList extends State<ChattingList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: <Widget>[
-          Container(
-            padding: EdgeInsets.all(10),
-            child: IconButton(
-              alignment: Alignment.topCenter,
-              style: ButtonStyle(alignment: Alignment.topCenter),
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
-              },
-            ),
-          ),
+          pointAppbar(point: 120),
         ],
         title: Container(
           margin: EdgeInsets.only(top: 70),
@@ -272,7 +241,7 @@ class _chattingList extends State<ChattingList> {
               Positioned(
                   left: 50,
                   child: Container(
-                      padding: EdgeInsets.all(3),
+                    padding: EdgeInsets.all(3),
                     child: Image(
                       image: AssetImage(
                         'assets/images/whisper.png',
