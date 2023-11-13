@@ -16,7 +16,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MyApp());
 }
