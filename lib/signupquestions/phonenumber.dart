@@ -174,7 +174,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
         _increaseProgressAndNavigate();
       }
       else{
-        _showVerificationFailedDialog();
+        _showVerificationFailedSnackBar();
       }
 
     } else {
@@ -201,6 +201,20 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
         );
       },
     );
+  }
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

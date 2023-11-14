@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		o4bfGREp/m9EY0cPJj8InMGTjAM=
+		tHTFePPmt9MLJT8m7ETAhrnRRoo=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		v+qlVUBUIVhWcu1AoFOuyqaQm34=
+		uEGh6l0Il2EzKfHVdM3XepQM9Bk=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
@@ -238,7 +238,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		rL1U7W525saqC7csosFmwHh5iZE=
+		a9Q9h1SMPoz6x2M1RyqOQL7Td8M=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -335,6 +335,18 @@
 		<key>Frameworks/Flutter.framework/icudtl.dat</key>
 		<data>
 		nMTZkkm9uooDDa8A2YJSyK73oP8=
+		</data>
+		<key>Frameworks/geolocator_apple.framework/Info.plist</key>
+		<data>
+		CXhJjSsEXW+o35b5y73kqFneG7M=
+		</data>
+		<key>Frameworks/geolocator_apple.framework/_CodeSignature/CodeResources</key>
+		<data>
+		/JP/W3LVp4Knr14tk00ly1MdC/M=
+		</data>
+		<key>Frameworks/geolocator_apple.framework/geolocator_apple</key>
+		<data>
+		Yuhzt/NzLj3LQrMzXge9kVboP6k=
 		</data>
 		<key>Frameworks/image_picker_ios.framework/Info.plist</key>
 		<data>
@@ -457,7 +469,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zQ/MfspGsauRX/IOGPMq19Be5hg9lyTL0Kb0DnZKAl0=
+			xepYdzVlqfIpMg36YTOAYTIFRx/pH/OiWffQavMGaO8=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -471,7 +483,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			gk2rb5LU8k5h4dOFIIAgqneKudruxhaq3yqH1d30h/U=
+			np4xuYOXBXVw3KD+k0sJFKaofp3UX3Ob+VAslnokGJA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
@@ -793,7 +805,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			StL/xLIXa9lA488R24eIlE0ChXfcvA1x+ZCfTJCjdzI=
+			Cb57tCDbkgkPn1UhktydMtCP9P6llnXX+T8mKZRDf30=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -962,6 +974,27 @@
 			<key>hash2</key>
 			<data>
 			rETMw/Yb9jC7IPuAQ9hs/kyJldBrRgCEQA20XXBJezA=
+			</data>
+		</dict>
+		<key>Frameworks/geolocator_apple.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			PnAHU+awhD0nLI/u6VycT/rtS7kKaG+PfkCe81cp6As=
+			</data>
+		</dict>
+		<key>Frameworks/geolocator_apple.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			6bdIn2ifLx5GQpGUnErU5juVaLP5Dka5z8REQSRf1Fw=
+			</data>
+		</dict>
+		<key>Frameworks/geolocator_apple.framework/geolocator_apple</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			F3OtRq6gOkb1GDu1ngZkBt+3sQ2dYhM+ssUzvPDCfH8=
 			</data>
 		</dict>
 		<key>Frameworks/image_picker_ios.framework/Info.plist</key>

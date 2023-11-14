@@ -50,7 +50,6 @@ class ImagePageState extends State<ImagePage>
   Future<void> _pickImage3() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image3 = await _picker.pickImage(source: ImageSource.gallery);
-
     setState(() {
       if (image3 != null) {
         _image3 = File(image3.path);

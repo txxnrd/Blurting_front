@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/sexualpreference.dart';
-
+import 'package:blurting/config/app_config.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/colors.dart'; // sex.dart를 임포트
 
 class ReligionPage extends StatefulWidget {
@@ -16,7 +20,7 @@ enum Religion { none, buddhism, christian, catholicism, etc }
 
 class _ReligionPageState extends State<ReligionPage>
     with SingleTickerProviderStateMixin {
-  Religion? _selectedMajor;
+  Religion? _selectedReligion;
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -57,7 +61,115 @@ class _ReligionPageState extends State<ReligionPage>
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
     });
   }
+  Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+    // 값이 없을 경우 'No Token'을 반환합니다.
+    String token = prefs.getString('signupToken') ?? 'No Token';
+    return token;
+  }
 
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('signupToken', token);
+    // 저장된 값을 확인하기 위해 바로 불러옵니다.
+    String savedToken = prefs.getString('signupToken') ?? 'No Token';
+    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
+  }
+
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+    print(_selectedReligion);
+    var religion ='';
+    if(_selectedReligion==Religion.none)
+      {
+        religion = 'none' ;
+      }
+    else if(_selectedReligion==Religion.christian)
+    {
+      religion = 'christian' ;
+    }
+    else if(_selectedReligion==Religion.catholicism)
+    {
+      religion = 'catholicism' ;
+    }
+    else if(_selectedReligion==Religion.buddhism)
+    {
+      religion = 'buddhism' ;
+    }
+    else{
+      religion='etc';
+    }
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"religion":religion }), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('인증 실패'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -151,41 +263,6 @@ class _ReligionPageState extends State<ReligionPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // Container(
-                //   width: width * 0.42, // 원하는 너비 값
-                //   height: 48, // 원하는 높이 값
-                //   child: TextButton(
-                //     style: TextButton.styleFrom(
-                //       side: BorderSide(
-                //         color: Color(0xFF868686),
-                //         width: 2,
-                //       ),
-                //       primary: Color(0xFF303030),
-                //       backgroundColor: _selectedMajor == Religion.none
-                //           ? Color(0xFF868686)
-                //           : Colors.transparent,
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius:
-                //             BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
-                //       ),
-                //     ),
-                //     onPressed: () {
-                //       setState(() {
-                //         IsSelected();
-                //         _selectedMajor = Religion.none;
-                //       });
-                //     },
-                //     child: Text(
-                //       '무교',
-                //       style: TextStyle(
-                //         color: Color(0xFF303030),
-                //         fontFamily: 'Pretendard',
-                //         fontWeight: FontWeight.w500,
-                //         fontSize: 20,
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -193,10 +270,10 @@ class _ReligionPageState extends State<ReligionPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Religion.none,
+                        value: _selectedReligion == Religion.none,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Religion.none;
+                            _selectedReligion = Religion.none;
                             IsSelected();
                           });
                         },
@@ -205,7 +282,7 @@ class _ReligionPageState extends State<ReligionPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Religion.none;
+                            _selectedReligion = Religion.none;
                             IsSelected();
                           });
                         },
@@ -231,10 +308,10 @@ class _ReligionPageState extends State<ReligionPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Religion.buddhism,
+                        value: _selectedReligion == Religion.buddhism,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Religion.buddhism;
+                            _selectedReligion = Religion.buddhism;
                             IsSelected();
                           });
                         },
@@ -243,7 +320,7 @@ class _ReligionPageState extends State<ReligionPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Religion.buddhism;
+                            _selectedReligion = Religion.buddhism;
                             IsSelected();
                           });
                         },
@@ -275,10 +352,10 @@ class _ReligionPageState extends State<ReligionPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Religion.christian,
+                        value: _selectedReligion == Religion.christian,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Religion.christian;
+                            _selectedReligion = Religion.christian;
                             IsSelected();
                           });
                         },
@@ -287,7 +364,7 @@ class _ReligionPageState extends State<ReligionPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Religion.christian;
+                            _selectedReligion = Religion.christian;
                             IsSelected();
                           });
                         },
@@ -314,10 +391,10 @@ class _ReligionPageState extends State<ReligionPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Religion.catholicism,
+                        value: _selectedReligion == Religion.catholicism,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Religion.catholicism;
+                            _selectedReligion = Religion.catholicism;
                             IsSelected();
                           });
                         },
@@ -326,7 +403,7 @@ class _ReligionPageState extends State<ReligionPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Religion.catholicism;
+                            _selectedReligion = Religion.catholicism;
                             IsSelected();
                           });
                         },
@@ -358,10 +435,10 @@ class _ReligionPageState extends State<ReligionPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedMajor == Religion.etc,
+                        value: _selectedReligion == Religion.etc,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            _selectedMajor = Religion.etc;
+                            _selectedReligion = Religion.etc;
                             IsSelected();
                           });
                         },
@@ -370,7 +447,7 @@ class _ReligionPageState extends State<ReligionPage>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedMajor = Religion.etc;
+                            _selectedReligion = Religion.etc;
                             IsSelected();
                           });
                         },
@@ -415,7 +492,7 @@ class _ReligionPageState extends State<ReligionPage>
                     ),
                     onPressed: (IsValid)
                         ? () {
-                            _increaseProgressAndNavigate();
+                            _sendPostRequest();
                           }
                         : null,
                     child: Text(

@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/colors.dart';
+import '../config/app_config.dart';
 import 'image.dart'; // sex.dart를 임포트
-
+import 'package:http/http.dart' as http;
 class HobbyPage extends StatefulWidget {
   final String selectedGender;
 
@@ -134,7 +138,78 @@ class HobbyPageState extends State<HobbyPage>
         setState(() {});
       });
   }
+  Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+    // 값이 없을 경우 'No Token'을 반환합니다.
+    String token = prefs.getString('signupToken') ?? 'No Token';
+    return token;
+  }
 
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('signupToken', token);
+    // 저장된 값을 확인하기 위해 바로 불러옵니다.
+    String savedToken = prefs.getString('signupToken') ?? 'No Token';
+    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
+  }
+
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+
+    String savedToken = await getToken();
+    print(savedToken);
+    var personality='독서';
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"hobby": [personality] }), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      print('faileddasds');
+      _showVerificationFailedSnackBar();
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -223,12 +298,12 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
-                customHobbyCheckbox('개성있는', 0, width),
+                customHobbyCheckbox('애니😎', 0, width),
                 customHobbyCheckbox('책임감 있는', 1, width),
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 10
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
@@ -305,7 +380,7 @@ class HobbyPageState extends State<HobbyPage>
                     ),
                     onPressed: (IsValid)
                         ? () {
-                      _increaseProgressAndNavigate();
+                      _sendPostRequest();
                     }
                         : null,
                     child: Text(

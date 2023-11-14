@@ -74,22 +74,61 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
       body: json.encode({"sex": sex}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 ||response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
-      print('sex sent sucessfully');
       var data = json.decode(response.body);
-      var token = data['signupToken'];
-      print(token);
-      // 토큰을 로컬에 저장
-      await saveToken(token);
-      print('sucess');
-      _increaseProgressAndNavigate();
-    }
-      else {
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
+  }
+  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('인증 실패'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
   @override
   void initState() {
