@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-
 import 'package:location/location.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/religion.dart';
 
-import 'activeplacesearch.dart';  // sex.dart를 임포트
+import 'activeplacesearch.dart'; // sex.dart를 임포트
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
@@ -64,7 +63,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     });
   }
 
-
   String content = '';
 
   Future<void> goToSearchPage(BuildContext context) async {
@@ -81,7 +79,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     IsSelected(content); //비었는지 확인하는
     print(content);
   }
-
 
   Future<void> _getLocation() async {
     _serviceEnabled = await location.serviceEnabled();
@@ -312,7 +309,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
             SizedBox(height: 331),
 
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,  // 가로축 중앙 정렬
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
 
               children: [
                 Container(
@@ -336,34 +333,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                       '다음',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: width*0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: () async {
-                      print("다음 버튼 클릭됨");
-                      await _getLocation();
-                      print('Latitude: ${_locationData?.latitude}');
-                      print('Longitude: ${_locationData?.longitude}');
-                    },
-                    child: Text(
-                      '위치 요청하기',
-                      style: TextStyle(
                         fontFamily: 'Pretendard',
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
