@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:blurting/Static/provider.dart';
 import 'package:blurting/whisperTab/whisper.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/Static/messageClass.dart';
+import 'package:blurting/Static/staticWidget.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
+import 'package:blurting/config/app_config.dart';
+
 
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
@@ -53,25 +56,19 @@ class QuestionNumber extends StatelessWidget {
             fontFamily: "Heedo",
             fontSize: 13,
             fontWeight: FontWeight.w700,
-            color: Color.fromRGBO(246, 100, 100, 1)),
+            color: mainColor.MainColor),
       ),
     );
   }
 }
 
 class _GroupChat extends State<GroupChat> {
-
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchComments(widget.token); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    TextEditingController _controller = TextEditingController();
 
     widget.socket.on('create_room', (data) {
       print(data);
@@ -82,14 +79,15 @@ class _GroupChat extends State<GroupChat> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                Whisper(socket: widget.socket, userName: '새로운 채팅방', roomId: roomId)),
+            builder: (context) => Whisper(
+                socket: widget.socket, userName: '새로운 채팅방', roomId: roomId)),
       );
     });
+  }
 
-    Map<String, dynamic> data = {
-      'users': [3, 5]
-    };
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController _controller = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -107,7 +105,7 @@ class _GroupChat extends State<GroupChat> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/chatList_appbar_background.png'),
+              image: AssetImage('assets/images/appbar_background.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                   Colors.white.withOpacity(0.8), BlendMode.dstATop),
@@ -142,7 +140,7 @@ class _GroupChat extends State<GroupChat> {
                             fontFamily: "Heedo",
                             fontSize: 40,
                             fontWeight: FontWeight.w700,
-                            color: Color.fromRGBO(246, 100, 100, 1)),
+                            color: mainColor.MainColor),
                       ),
                     ),
                   ],
@@ -193,7 +191,7 @@ class _GroupChat extends State<GroupChat> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/chatList_body_background.png'),
+                image: AssetImage('assets/images/body_background.png'),
               ),
             ),
           ),
@@ -206,29 +204,28 @@ class _GroupChat extends State<GroupChat> {
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(top: 260), // 시작 위치에 여백 추가
-
                   child: Column(
                     children: [
                       Container(
                         padding: EdgeInsets.only(left: 20, top: 10),
                         child: Column(
-                          children: <Widget>[                       // 왜  AnswerItem의 개수만큼 socket.on이 실행될까...?
+                          children: <Widget>[
                             AnswerItem(
                                 userName: '정원',
                                 message: '하하\n그냥 잘까',
-                                jsonData: data,
+                                // jsonData: data,
                                 socket: widget.socket,
-                                userId: 5,),
+                                userId: 36,),
                             AnswerItem(
                                 userName: '개굴',
                                 message: '아 목 아파 감기 걸렷나',
-                                jsonData: data,
+                                // jsonData: data,
                                 socket: widget.socket,
                                 userId: 6,),
                             AnswerItem(
                                 userName: '감기',
                                 message: '양치하고 자야겟다..',
-                                jsonData: data,
+                                // jsonData: data,
                                 socket: widget.socket,
                                 userId: 7,),
                             for (var answer in answerList)
@@ -258,8 +255,7 @@ class _GroupChat extends State<GroupChat> {
 
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    final url = Uri.parse('uri');
-
+    final url = Uri.parse('${ServerEndpoints.serverEndpoint}chat/rooms');
     final response = await http.post(
       url,
       headers: {
@@ -300,7 +296,7 @@ class _GroupChat extends State<GroupChat> {
       }
     } else {
       print(response.statusCode);
-      throw Exception('답변을 로드하는 데 실패했습니다');
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
   }
 
