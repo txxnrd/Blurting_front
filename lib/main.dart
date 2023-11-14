@@ -1,3 +1,4 @@
+import 'package:blurting/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         backgroundColor: Colors.white,
       ),
-      home: PhoneNumberPage(), // PhoneNumberPage를 홈으로 설정
+      home: LoginPage(), // PhoneNumberPage를 홈으로 설정
     );
   }
 }

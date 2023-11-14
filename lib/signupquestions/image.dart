@@ -4,6 +4,7 @@ import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/mbti.dart'; // sex.dart를 임포트
+import '../config/app_config.dart';
 
 import 'dart:io';
 import 'package:image_picker/image_picker.dart'; // 추가
