@@ -4,22 +4,23 @@ import 'package:provider/provider.dart';
 import 'package:blurting/Static/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:geolocator/geolocator.dart';
-
-// void main() {
-//   runApp(
-//     MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: MainApp()),
-//   );
-// }
-
 import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(MyApp());
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MainApp()),
+  );
 }
+
+
+
+// void main() {
+//   // WidgetsFlutterBinding.ensureInitialized();
+
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
