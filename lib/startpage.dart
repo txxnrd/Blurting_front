@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:blurting/signupquestions/phonenumber.dart';
 import 'package:flutter/material.dart';
-
+import 'package:blurting/config/app_config.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:blurting/colors/colors.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +27,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 class LoginPage extends StatefulWidget {
   String name = '';
@@ -50,48 +54,74 @@ Future<String> getToken() async {
   return token;
 }
 
+
+
+
 class _LoginPageState extends State<LoginPage> {
   String _errorMessage = '';  // 오류 메시지를 저장할 변수
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  Future<void> _increaseProgressAndNavigate() async {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => PhoneNumberPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
+  }
+
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.startsignup);
+
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
 
-  // Future<void> _sendPostRequest() async {
-  //   var url = Uri.parse(API.login);
-  //   var response = await http.post(
-  //     url,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: json.encode({
-  //       "name": name,
-  //       "password": password,
-  //     }), // JSON 형태로 인코딩
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-  //     print('Server returned OK');
-  //     print('Response body: ${response.body}');
-  //
-  //     var data =json.decode(response.body);
-  //     var result = data['result'];
-  //
-  //
-  //     if(result=='success'){
-  //       String accessToken = data['access_token'];
-  //       await saveToken(accessToken);
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => MainScreen()),
-  //       );}
-  //     else {
-  //       _showLoginFailedDialog();
-  //     }
-  //   } else {
-  //     _showLoginFailedDialog();
-  //   }
-  // }
   void _showLoginFailedDialog({String message = '유효하지 않은 정보이거나, 비밀번호가 틀렸습니다.'}) {
     showDialog(
       context: context,
@@ -130,25 +160,44 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/firstlogo.png'),
+          Container(
+            alignment: Alignment.center,
+              child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center, // Row 내부의 위젯들을 가로축 중앙 정렬
+                children: [
+                  Container(
+                    width: 62.7,
+                    height: 66.33,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/girl.png'),
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: 62.7,
+                    height: 66.33,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/boy.png'),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 10,
-              ),
+          ),
+              // SizedBox(
+              //   height: 10,
+              // ),
               Container(
                 alignment: Alignment.center,
-                width: 200,
-                height: 120,
+                width: 180,
+                height: 50,
                 child: Text(
                   'blurting',
                   style: TextStyle(
@@ -158,15 +207,9 @@ class _LoginPageState extends State<LoginPage> {
                       fontFamily: 'Pretendard'),
                 ),
               ),
+              SizedBox(height: 200,),
 
 
-              Visibility(
-                visible: _errorMessage.isNotEmpty,  // _errorMessage가 비어있지 않을 때만 보여집니다.
-                child: Text(
-                  _errorMessage,
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
               Container(
                 height: 48,
                 width: 350,
@@ -182,12 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   onPressed: () {
                      {
-
-                     Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => PhoneNumberPage()),
-                     );
-
+                       _sendPostRequest();
                     }
                   },
                   child: Text('회원가입',
@@ -198,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              SizedBox(height: 10,),
+              SizedBox(height: 1,),
               InkWell(
                 onTap: () {
 

@@ -100,6 +100,7 @@ class _MajorPageState extends State<MajorPage>
       print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
     }
 
+
     void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
       final snackBar = SnackBar(
         content: Text(message),
@@ -113,6 +114,43 @@ class _MajorPageState extends State<MajorPage>
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+    Future<void> _sendBackRequest() async {
+      print('_sendPostRequest called');
+      var url = Uri.parse(API.signupback);
+
+      String savedToken = await getToken();
+      print(savedToken);
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+      );
+      print(response.body);
+      if (response.statusCode == 200 ||response.statusCode == 201) {
+        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+        print('Server returned OK');
+        print('Response body: ${response.body}');
+        var data = json.decode(response.body);
+
+        if(data['signupToken']!=null)
+        {
+          var token = data['signupToken'];
+          print(token);
+          await saveToken(token);
+          Navigator.of(context).pop();
+
+        }
+        else{
+          _showVerificationFailedSnackBar();
+        }
+
+      } else {
+        // 오류가 발생한 경우 처리
+        print('Request failed with status: ${response.statusCode}.');
+      }
     }
 
     Future<void> _sendPostRequest() async {
@@ -212,8 +250,8 @@ class _MajorPageState extends State<MajorPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+            _sendBackRequest();
+            },
         ),
         actions: <Widget>[
           IconButton(

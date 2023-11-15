@@ -77,10 +77,16 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     var url = Uri.parse(API.sendphone);
     //API.sendphone
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
+
+    String savedToken = await getToken();
+    print(savedToken);
+
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+
       },
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );

@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:blurting/signupquestions/activeplace.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/phonenumber.dart'; // sex.dart를 임포트
 import 'package:blurting/colors/colors.dart';
@@ -41,23 +41,44 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
   void IsSelected() {
     IsValid = true;
   }
-  // 저장된 토큰을 불러오는 함수
-  Future<String> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-    // 값이 없을 경우 'No Token'을 반환합니다.
-    String token = prefs.getString('signupToken') ?? 'No Token';
-    return token;
-  }
 
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('signupToken', token);
-    // 저장된 값을 확인하기 위해 바로 불러옵니다.
-    String savedToken = prefs.getString('signupToken') ?? 'No Token';
-    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
-  }
+  Future<void> _sendBackRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupback);
 
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        Navigator.of(context).pop();
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
@@ -162,7 +183,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            _sendBackRequest();
           },
         ),
         actions: <Widget>[
