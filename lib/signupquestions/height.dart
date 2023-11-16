@@ -35,7 +35,7 @@ class _HeightPageState extends State<HeightPage>
     );
   }
 
-      bool IsValid = false;
+  bool IsValid = false;
 
   @override
   void IsSelected() {
