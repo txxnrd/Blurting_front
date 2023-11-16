@@ -218,27 +218,29 @@ class _UniversityPageState extends State<UniversityPage>
                 }
                 // 인덱스를 저장할 변수
                 // int? selectedIndex;
-                var options = universities.asMap().entries.where((entry) {
-                  bool matches = entry.value.toLowerCase().contains(textEditingValue.text.toLowerCase());
-                  if (matches) {
+                // var options = universities.asMap().entries.where((entry) {
+                //   bool matches = entry.value.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                //   if (matches) {
+                //     selectedIndex = entry.key;
+                //   }
+                //   return matches;
+                // }).map((entry) => entry.value);
 
-                    selectedIndex = entry.key;
-                  }
-                  return matches;
-                }).map((entry) => entry.value);
 
+
+                return universities.where((university) =>
+                    university.toLowerCase().contains(textEditingValue.text.toLowerCase())
+                );
+              },
+              onSelected: (String selection) {
+                print('You just selected $selection');
+                int selectedIndex = universities.indexOf(selection);
+                selectedUniversity = selection;
                 // 선택된 인덱스를 사용하거나 저장
                 if (selectedIndex != null) {
                   print('Selected university index: $selectedIndex');
-                      Domain= university_domain[selectedIndex!];
-                  }
-
-                return options;
-              },
-
-              onSelected: (String selection) {
-                print('You just selected $selection');
-                selectedUniversity = selection;
+                  Domain= university_domain[selectedIndex!];
+                }
 
               },
               fieldViewBuilder: (BuildContext context,

@@ -1,5 +1,7 @@
 import 'package:blurting/settings/setting.dart';
+import 'package:blurting/signupquestions/email.dart';
 import 'package:blurting/signupquestions/hobby.dart';
+import 'package:blurting/signupquestions/university.dart';
 import 'package:blurting/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
@@ -56,7 +58,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         backgroundColor: Colors.white,
       ),
-      home: LoginPage(), // PhoneNumberPage를 홈으로 설정
+      home: UniversityPage(selectedGender: 'me',), // PhoneNumberPage를 홈으로 설정
     );
   }
 }
