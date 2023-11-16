@@ -1,19 +1,21 @@
 import 'dart:convert';
+import 'dart:ui';
 
-import 'package:blurting/Static/provider.dart';
-import 'package:blurting/whisperTab/whisper.dart';
+import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/Static/staticWidget.dart';
+import 'package:blurting/Utils/utilWidget.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
-
 
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
   final String token;
 
-  GroupChat({required this.socket, Key? key, required this.token}) : super(key: key);
+  GroupChat({required this.socket, Key? key, required this.token})
+      : super(key: key);
 
   @override
   _GroupChat createState() => _GroupChat();
@@ -63,6 +65,9 @@ class QuestionNumber extends StatelessWidget {
 }
 
 class _GroupChat extends State<GroupChat> {
+  TextEditingController _controller = TextEditingController();
+  ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -80,14 +85,19 @@ class _GroupChat extends State<GroupChat> {
         context,
         MaterialPageRoute(
             builder: (context) => Whisper(
-                socket: widget.socket, userName: '새로운 채팅방', roomId: roomId)),
+                token: widget.token,
+                socket: widget.socket,
+                userName: '새로운 채팅방',
+                roomId: roomId)),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _controller = TextEditingController();
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -100,32 +110,29 @@ class _GroupChat extends State<GroupChat> {
             Navigator.pop(context);
           },
         ),
-        automaticallyImplyLeading: false,
-        toolbarHeight: 244,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/appbar_background.png'),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.white.withOpacity(0.8), BlendMode.dstATop),
-            ),
-          ),
-        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: <Widget>[
-          Container(
-            //padding: EdgeInsets.all(10),
-            child: IconButton(
-              //alignment: Alignment.topCenter,
-              //style: ButtonStyle(alignment: Alignment.topCenter),
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {},
-            ),
-          ),
-        ],
+        automaticallyImplyLeading: false,
+        toolbarHeight: 244,
+        flexibleSpace: Stack(
+          children: [
+            ClipRRect(
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(color: Colors.transparent))),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //       image: AssetImage('assets/images/body_background.png'),
+            //       fit: BoxFit.cover,
+            //       colorFilter: ColorFilter.mode(
+            //           Colors.white.withOpacity(1), BlendMode.dstATop),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
+        actions: <Widget>[pointAppbar(point: 120)],
         title: Column(
           children: [
             Container(
@@ -164,29 +171,37 @@ class _GroupChat extends State<GroupChat> {
           ],
         ),
         bottom: PreferredSize(
+          preferredSize: Size(10, 10),
           child: Stack(
             alignment: Alignment.center,
             children: [
               Container(
-                height: 65,
+                height: 70,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.35),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+                      Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+                    ],
+                  ),
                   borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
+                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(30),
+                  ),
                 ),
               ),
               QuestionItem(questionNumber: 1, question: '추어탕 좋아하세요?'),
             ],
           ),
-          preferredSize: Size(10, 10),
         ),
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
+            // padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -195,14 +210,15 @@ class _GroupChat extends State<GroupChat> {
               ),
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-            color: Colors.white.withOpacity(0.5),
-          ),
+          // Container(
+          //   height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
+          //   color: Colors.white.withOpacity(0.5),
+          // ),
           Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
+                  controller: _scrollController,
                   padding: EdgeInsets.only(top: 260), // 시작 위치에 여백 추가
                   child: Column(
                     children: [
@@ -215,19 +231,22 @@ class _GroupChat extends State<GroupChat> {
                                 message: '하하\n그냥 잘까',
                                 // jsonData: data,
                                 socket: widget.socket,
-                                userId: 36,),
+                                userId: 36,
+                                isAlready: false),
                             AnswerItem(
                                 userName: '개굴',
                                 message: '아 목 아파 감기 걸렷나',
                                 // jsonData: data,
                                 socket: widget.socket,
-                                userId: 6,),
+                                userId: 6,
+                                isAlready: true),
                             AnswerItem(
                                 userName: '감기',
                                 message: '양치하고 자야겟다..',
                                 // jsonData: data,
                                 socket: widget.socket,
-                                userId: 7,),
+                                userId: 7,
+                                isAlready: false),
                             for (var answer in answerList)
                               answer, // answerList에 있는 내용 순회하며 추가
                           ],
@@ -302,7 +321,10 @@ class _GroupChat extends State<GroupChat> {
 
   void SendAnswer(String answer, String now) async {
     // 입력한 내용을 ListTile에 추가
-    Widget newAnswer = MyChat(message: answer);
+    Widget newAnswer = MyChat(
+      message: answer,
+      createdAt: now,
+    );
 
     final url = Uri.parse('uri');
     String token = widget.token;

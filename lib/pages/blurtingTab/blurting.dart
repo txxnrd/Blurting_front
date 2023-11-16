@@ -1,7 +1,7 @@
-import 'package:blurting/blurtingTab/groupChat.dart';
+import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/Static/staticWidget.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class Blurting extends StatefulWidget {
   final IO.Socket socket;
@@ -35,11 +35,11 @@ class _Blurting extends State<Blurting> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(margin: EdgeInsets.only(left: 30, bottom: 15), child: ellipseText(text: 'Q&A')),
-          Container(
-            width: 344,
-            height: 344,
-            color: Colors.amber,
+          Container(margin: EdgeInsets.only(left: 30, bottom: 20), child: ellipseText(text: 'Blurting')),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+            child: Container(child: Image.asset('assets/images/blurting_Image.png'),),
           ),
           GestureDetector(
             child: staticButton(text: 'Start'),
