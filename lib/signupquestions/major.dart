@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:blurting/signupquestions/universitylist.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../colors/colors.dart';
+import '../config/app_config.dart';
 import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/mbti.dart';
 
@@ -16,13 +21,20 @@ class MajorPage extends StatefulWidget {
   @override
   _MajorPageState createState() => _MajorPageState();
 }
-
-enum AlcoholPreference { none, rarely, enjoy, everyday }
+enum Major {
+  humanities, // 인문계열
+  social, // 사회계열
+  education, // 교육계열
+  engineering, // 공학계열
+  medical, // 의학계열
+  artsPhysical, // 예체능계열
+  naturalScience // 자연계열
+}
 
 class _MajorPageState extends State<MajorPage>
     with SingleTickerProviderStateMixin {
-  AlcoholPreference? _selectedAlcoholPreference;
-  final double _currentHeightValue = 160.0; // 초기 키 값
+  Major? _selectedMajor;
+  double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   String? selectedMajor=majors[0];
@@ -39,7 +51,11 @@ class _MajorPageState extends State<MajorPage>
       ),
     );
   }
-
+  bool IsValid = false;
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
   @override
   void initState() {
     super.initState();
@@ -68,6 +84,161 @@ class _MajorPageState extends State<MajorPage>
       gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
+    Future<String> getToken() async {
+      final prefs = await SharedPreferences.getInstance();
+      // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+      // 값이 없을 경우 'No Token'을 반환합니다.
+      String token = prefs.getString('signupToken') ?? 'No Token';
+      return token;
+    }
+
+    Future<void> saveToken(String token) async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('signupToken', token);
+      // 저장된 값을 확인하기 위해 바로 불러옵니다.
+      String savedToken = prefs.getString('signupToken') ?? 'No Token';
+      print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
+    }
+
+
+    void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+      final snackBar = SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+          label: '닫기',
+          onPressed: () {
+            // SnackBar 닫기 액션
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+    Future<void> _sendBackRequest() async {
+      print('_sendPostRequest called');
+      var url = Uri.parse(API.signupback);
+
+      String savedToken = await getToken();
+      print(savedToken);
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+      );
+      print(response.body);
+      if (response.statusCode == 200 ||response.statusCode == 201) {
+        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+        print('Server returned OK');
+        print('Response body: ${response.body}');
+        var data = json.decode(response.body);
+
+        if(data['signupToken']!=null)
+        {
+          var token = data['signupToken'];
+          print(token);
+          await saveToken(token);
+          Navigator.of(context).pop();
+
+        }
+        else{
+          _showVerificationFailedSnackBar();
+        }
+
+      } else {
+        // 오류가 발생한 경우 처리
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    }
+
+    Future<void> _sendPostRequest() async {
+      print('_sendPostRequest called');
+      var url = Uri.parse(API.signup);
+      print(_selectedMajor);
+      var major ='';
+      if(_selectedMajor==Major.humanities)
+      {
+        major = '인문계열' ;
+      }
+      else if(_selectedMajor==Major.social)
+      {
+        major = '사회계열' ;
+      }
+      else if(_selectedMajor==Major.education)
+      {
+        major = '교육계열' ;
+      }
+      else if(_selectedMajor==Major.engineering)
+      {
+        major = '공학계열' ;
+      }else if(_selectedMajor==Major.naturalScience)
+      {
+        major = '자연계열' ;
+      }
+      else if(_selectedMajor==Major.medical)
+      {
+        major = '의학계열' ;
+      }
+      else{
+        major='예체능계열';
+      }
+
+      String savedToken = await getToken();
+      print(savedToken);
+
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+        body: json.encode({"major":major }), // JSON 형태로 인코딩
+      );
+      print(response.body);
+      if (response.statusCode == 200 ||response.statusCode == 201) {
+        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+        print('Server returned OK');
+        print('Response body: ${response.body}');
+        var data = json.decode(response.body);
+
+        if(data['signupToken']!=null)
+        {
+          var token = data['signupToken'];
+          print(token);
+          await saveToken(token);
+          _increaseProgressAndNavigate();
+        }
+        else{
+          _showVerificationFailedSnackBar();
+        }
+
+      } else {
+        // 오류가 발생한 경우 처리
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    }
+    void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('인증 실패'),
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                child: Text('닫기'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -79,8 +250,8 @@ class _MajorPageState extends State<MajorPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+            _sendBackRequest();
+            },
         ),
         actions: <Widget>[
           IconButton(
@@ -147,135 +318,310 @@ class _MajorPageState extends State<MajorPage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-// <<<<<<< HEAD
-//             TextField(
-//               decoration: InputDecoration(
-//                 hintText: '컴퓨터공학과',
-//                 border: OutlineInputBorder(
-//                   borderSide: BorderSide(
-//                     color: Color(0xFFF66464),
-//                   ), // 초기 테두리 색상
-//                 ),
-//                 enabledBorder: OutlineInputBorder(
-//                   borderSide: BorderSide(
-//                     color: Color(0xFFF66464),
-//                   ), // 입력할 때 테두리 색상
-//                 ),
-//                 focusedBorder: OutlineInputBorder(
-//                   borderSide: BorderSide(
-//                     color: Color(0xFFF66464),
-//                   ), // 선택/포커스 됐을 때 테두리 색상
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 313),
-// =======
-            //검색 구현
-            // Autocomplete<String>(
-            //   optionsBuilder: (TextEditingValue textEditingValue) {
-            //     if (textEditingValue.text == '') {
-            //       return const Iterable.empty();
-            //     }
-            //     //majors는 majorlist.dart에서 import 해옴
-            //     return majors.where((String major) {
-            //       return major.contains(textEditingValue.text.toLowerCase());
-            //     });
-            //   },
-            //   onSelected: (String selection) {
-            //     print('You just selected $selection');
-            //   },
-            //
-            //   fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
-            //
-            //     //전공 입력창 ex)인문계열
-            //     return TextField(
-            //       controller: textEditingController,
-            //       focusNode: focusNode,
-            //       decoration: InputDecoration(
-            //         hintText: majors[0],
-            //         border: OutlineInputBorder(
-            //           borderSide: BorderSide(color: Color(0xFFF66464),), // 초기 테두리 색상
-            //         ),
-            //         enabledBorder: OutlineInputBorder(
-            //           borderSide: BorderSide(color: Color(0xFFF66464),), // 입력할 때 테두리 색상
-            //         ),
-            //         focusedBorder: OutlineInputBorder(
-            //           borderSide: BorderSide(color:Color(0xFFF66464),), // 선택/포커스 됐을 때 테두리 색상
-            //         ),
-            //       ),
-            //       style: DefaultTextStyle.of(context).style,
-            //     );
-            //   },
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.humanities,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '인문계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.social,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.social;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.social;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '사회계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.education,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.education;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.education;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '교육계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.engineering,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.engineering;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.engineering;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '공학계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.naturalScience,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.naturalScience;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.naturalScience;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '자연계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.medical,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.medical;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.medical;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '의학계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
 
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
-                  alignment: Alignment.center,
-                  width: 200,
-                  height: 420,
-                  child: Center(
-                    child: ListView.builder(
-                      itemCount: majors.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(majors[index]),
-                          trailing: selectedMajor == majors[index]
-                              ? Icon(Icons.check, color: Color(0xFFF66464))
-                              : null,
-                          onTap: () {
-                            setState(() {
-                              selectedMajor = majors[index];
-                            });
-                          },
-                        );
-                      },
-                    ),
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedMajor == Major.artsPhysical,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedMajor = Major.artsPhysical;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.artsPhysical;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '예체능 계열',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  width: width * 0.42, // 원하는 너비 값
+                  height: 48, // 원하는 높이 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMajor = Major.humanities;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          //   Row(
-          //     mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-          //     children: [
-          //       Container(
-          //         alignment: Alignment.center,
-          //         width: 200,
-          //         height: 420,
-          //         child: Center(
-          //           child: ListView.separated(
-          //             itemCount: majors.length,
-          //             itemBuilder: (context, index) {
-          //               return ListTile(
-          //                 shape: RoundedRectangleBorder( //<-- SEE HERE
-          //                   side: BorderSide(width: 2,color: Color(0xFF868686)),
-          //                   borderRadius: BorderRadius.circular(20),
-          //                 ),
-          //                 title: Text(majors[index]),
-          //                 trailing: selectedMajor == majors[index]
-          //                     ? Icon(Icons.check, color: Color(0xFFF66464))
-          //                     : null,
-          //                 onTap: () {
-          //                   setState(() {
-          //                     selectedMajor = majors[index];
-          //                   });
-          //                 },
-          //               );
-          //             },
-          //             separatorBuilder: (context, index) {
-          //               return SizedBox(height: 4);  // 여기에서 간격을 조절하실 수 있습니다.
-          //             },
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          //
-          //
-          // SizedBox(height: 35,),
-            //다음 버튼
+
+            SizedBox(height: 150,),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
@@ -294,7 +640,7 @@ class _MajorPageState extends State<MajorPage>
                     ),
                     onPressed: () {
                       print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
+                      _sendPostRequest();
                     },
                     child: Text(
                       '다음',

@@ -1,3 +1,6 @@
+import 'package:blurting/settings/setting.dart';
+import 'package:blurting/signupquestions/hobby.dart';
+import 'package:blurting/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:provider/provider.dart';
@@ -20,13 +23,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
 
 
-void main() {
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MainApp()),
-  );
-}
+// void main() {
+//   runApp(
+//     MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: MainApp()),
+//   );
+// }
 
 
 
@@ -35,6 +38,11 @@ void main() {
 
 //   runApp(MyApp());
 // }
+import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart';  // phonenumber.dart를 임포트
+
+void main() => runApp(MyApp());
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,7 +56,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         backgroundColor: Colors.white,
       ),
-      home: PhoneNumberPage(), // PhoneNumberPage를 홈으로 설정
+      home: LoginPage(), // PhoneNumberPage를 홈으로 설정
     );
   }
 }
