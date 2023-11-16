@@ -82,7 +82,7 @@ class _MyPage extends State<MyPage> {
                             child: Text('My Profile',
                                 // textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    color: Color.fromARGB(163, 0, 0, 0),
+                                    color: Color(0xFFFF7D7D),
                                     fontFamily: 'Pretendard',
                                     fontSize: 40,
                                     fontWeight: FontWeight.w800)),
@@ -99,12 +99,11 @@ class _MyPage extends State<MyPage> {
                       width: 260,
                       height: 345, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(217, 217, 217, 1),
+                        color: Colors.white,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20)),
-                        border: Border.all(
-                            color: Color.fromARGB(144, 0, 0, 0), width: 3),
+                        border: Border.all(color: Color(0xFFFF7D7D), width: 3),
                         boxShadow: [
                           BoxShadow(
                             offset: Offset(5, 5),
@@ -201,46 +200,6 @@ class _MyPage extends State<MyPage> {
                                       fontSize: 24)),
                             ],
                           ),
-                          //네번째 페이지
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                '프로필 사진 2/3',
-                                style: TextStyle(
-                                    fontFamily: 'Heedo',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromRGBO(138, 138, 138, 1)),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 200, 0, 0)),
-                              Text('전신샷...',
-                                  style: TextStyle(
-                                      fontFamily: "Pretendard",
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 24)),
-                            ],
-                          ),
-                          //다섯번째 페이지
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                '프로필 사진 1/3',
-                                style: TextStyle(
-                                    fontFamily: 'Heedo',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromRGBO(138, 138, 138, 1)),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 200, 0, 0)),
-                              Text('취미를 즐기는 모습...',
-                                  style: TextStyle(
-                                      fontFamily: "Pretendard",
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 24)),
-                            ],
-                          ),
                         ],
                       ),
 
@@ -265,8 +224,9 @@ class _MyPage extends State<MyPage> {
                       alignment: Alignment.center,
                       child: SmoothPageIndicator(
                           controller: pageController,
-                          count: 5,
+                          count: 3,
                           effect: ScrollingDotsEffect(
+                            dotColor: Colors.grey,
                             activeDotColor: Color(0xFFF66464),
                             activeStrokeWidth: 10,
                             activeDotScale: 1.7,
