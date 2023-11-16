@@ -291,7 +291,7 @@
     },
     {
       "name": "web",
-      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.2.1-beta",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -302,7 +302,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-07T16:23:16.184166Z",
+  "generated": "2023-11-16T15:50:37.697516Z",
   "generator": "pub",
-  "generatorVersion": "3.2.0-210.0.dev"
+  "generatorVersion": "3.2.0"
 }
