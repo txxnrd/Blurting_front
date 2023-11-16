@@ -106,6 +106,18 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
+      if(response.statusCode== 409){
+        print("뭐하노");
+        errormessage = "이미 등록한 사용자입니다.";
+        _showVerificationFailedSnackBar(value:errormessage);
+      }else if(response.statusCode==401){
+        errormessage = "인증번호가 올바르지 않습니다.";
+        _showVerificationFailedSnackBar(value:errormessage);
+      }
+      else if(response.statusCode==408){
+        errormessage = "인증 유효 시간이 초과되었습니다.";
+        _showVerificationFailedSnackBar(value:errormessage);
+      }
     }
   }
 
@@ -149,20 +161,15 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-      if(response.statusCode==409){
-        errormessage = "이미 등록한 사용자입니다.";
-      }else if(response.statusCode==401){
-        errormessage = "인증번호가 올바르지 않습니다.";
-      }
-      else if(response.statusCode==408){
-        errormessage = "인증 유효 시간이 초과되었습니다.";
-      }
-      _showVerificationFailedSnackBar(value:errormessage);
+
+      print("error");
+
     }
   }
 
 
   void _showVerificationFailedSnackBar({String value = "인증에 실패하였습니다."}) {
+    print("snackbar 실행");
     final snackBar = SnackBar(
       content: Text(value),
       action: SnackBarAction(
