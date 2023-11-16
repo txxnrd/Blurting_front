@@ -17,23 +17,24 @@ import 'package:intl/date_symbol_data_local.dart';
 //}
 
 import 'package:geolocator/geolocator.dart';
-
-// void main() {
-//   runApp(
-//     MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: MainApp()),
-//   );
-// }
-
 import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
 
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(MyApp());
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MainApp()),
+  );
 }
+
+
+
+// void main() {
+//   // WidgetsFlutterBinding.ensureInitialized();
+
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
