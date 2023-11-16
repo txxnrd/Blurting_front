@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		o5wlNgjzBeqMrjPd6SAazuod6wE=
+		nKwNzWqsqY+VLdOEje5Ar/HsBNk=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		W06+aWMy8EfonzLHG5yNg5BvzoE=
+		mwZxf53IBY014aT8tIa+qYP1Eho=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -108,6 +108,10 @@
 		<data>
 		jxGGyp8OkdcQEHMHNdkacB4coBk=
 		</data>
+		<key>flutter_assets/assets/images/boy.png</key>
+		<data>
+		PGIvdVenQv1sEwgcFYESwwgOW3I=
+		</data>
 		<key>flutter_assets/assets/images/chatList_appbar_background.png</key>
 		<data>
 		wBxvTfO21B537lDB5I5SLQb/pnw=
@@ -115,6 +119,10 @@
 		<key>flutter_assets/assets/images/chatList_body_background.png</key>
 		<data>
 		cJU1cOvWnMs8TLoqkBHgLruxBGQ=
+		</data>
+		<key>flutter_assets/assets/images/girl.png</key>
+		<data>
+		V3GnQQprWacQWphKEZ1yT6HwrKc=
 		</data>
 		<key>flutter_assets/assets/images/home.png</key>
 		<data>
@@ -190,7 +198,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		hdlnl2lTkU42yYmk1qxzBHwhJyU=
+		ebpaxab1CDzs91NAsTS8ikpBkRs=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -211,14 +219,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ugB9rNJVr97phYOfqNMpqapl0kgKFp5n8xS5IwQWrv0=
+			hL5nIcPsIUZGSywyy8Ci/U8p8bTpEjaxI+btzRV8PCg=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			eI41dCog8iqJmUf9ZMuQkk39b1j9aOoyFTMVlxBYz8E=
+			TItzEqDH8P9idz8zIU63CyaB1KUzTO5BxvJoWt1dsY8=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -382,6 +390,13 @@
 			V2RD2BUxcQEwLk9hUlhWyHdIHealuoASJ1jnVrTjJxs=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/boy.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			9fOCAV8JxgzOIazp6CqHXeyd7iKy/esY2H9TG6JFug4=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/chatList_appbar_background.png</key>
 		<dict>
 			<key>hash2</key>
@@ -394,6 +409,13 @@
 			<key>hash2</key>
 			<data>
 			8zpzgKFUKF9YXKtL4/JQIDAZkmtzrEXy4zfckg765UY=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/girl.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			LEXPod1Xf/wtBHdVahX64cJDIW8t/89W2859Lxc7Y8k=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/home.png</key>
@@ -526,7 +548,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sUzo0yDv9wGwfZzCwA8AEEfl0U4zIiY3mc7XIY5wbyc=
+			1Cfil0fylLv1zMONdXA6/J0NYIB/C+SKK+4E2ZrmGMo=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

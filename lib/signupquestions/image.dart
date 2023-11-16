@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:blurting/signupquestions/university.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:dio/dio.dart';
@@ -31,35 +30,34 @@ class ImagePageState extends State<ImagePage>
 
   Future<void> _pickImage1() async {
     var picker = ImagePicker();
-    var image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    var image1 = await picker.pickImage(source: ImageSource.gallery);
+    if (image1 != null) {
       setState(() {
-        _image1 = File(image.path); // 선택된 이미지 경로를 저장
+        _image1 = File(image1.path); // 선택된 이미지 경로를 저장
+      });
+    }
+  }
+  Future<void> _pickImage2() async {
+    var picker = ImagePicker();
+    var image2 = await picker.pickImage(source: ImageSource.gallery);
+    if (image2 != null) {
+      setState(() {
+        _image2 = File(image2.path); // 선택된 이미지 경로를 저장
+      });
+    }
+  }
+
+  Future<void> _pickImage3() async {
+    var picker = ImagePicker();
+    var image3 = await picker.pickImage(source: ImageSource.gallery);
+    if (image3 != null) {
+      setState(() {
+        _image3 = File(image3.path); // 선택된 이미지 경로를 저장
       });
     }
   }
 
 
-  Future<void> _pickImage2() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image2 = await _picker.pickImage(source: ImageSource.gallery);
-
-    setState(() async{
-      if (image2 != null) {
-        _image2 = File(image2.path);
-      }
-    });
-  }
-
-  Future<void> _pickImage3() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image3 = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() async {
-      if (image3 != null) {
-        _image3 = File(image3.path);
-      }
-    });
-  }
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -73,10 +71,7 @@ class ImagePageState extends State<ImagePage>
       ),
     );
   }
-  Future<String> _convertToBase64(File imageFile) async {
-    final bytes = await imageFile.readAsBytes();
-    return base64Encode(bytes);
-  }
+
   @override
   void initState() {
     super.initState();
@@ -147,17 +142,54 @@ class ImagePageState extends State<ImagePage>
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void _showImageUploadingSnackBar({String message = '이미지를 업로드 중입니다.'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
 
 
   Future<void> _sendPostRequest() async {
+    _showImageUploadingSnackBar();
     print('_sendPostRequest called');
     var url = Uri.parse(API.uploadimage);
     String savedToken = await getToken();
     print(savedToken);
 
     Dio dio = Dio();
+    List<MultipartFile> multipartImageList = [];
+
+
+    if (_image1 != null) {
+      multipartImageList.add(await MultipartFile.fromFile(_image1!.path, filename: 'image1.jpg'));
+    }
+    if (_image2 != null) {
+      multipartImageList.add(await MultipartFile.fromFile(_image2!.path, filename: 'image2.jpg'));
+    }
+    if (_image3 != null) {
+      multipartImageList.add(await MultipartFile.fromFile(_image3!.path, filename: 'image3.jpg'));
+    }
+
+
+    // 파일이 하나도 없을 경우 처리를 해야 함.
+    if (multipartImageList.isEmpty) {
+      print('No images selected.');
+      return;
+    }
+
+
     FormData formData = FormData.fromMap({
-      'image': await MultipartFile.fromFile(_image1!.path, filename: 'image1.jpg'),
+      'files': multipartImageList,
     });
 
 
@@ -167,40 +199,84 @@ class ImagePageState extends State<ImagePage>
         data: formData,
         options: Options(
           headers: {
-            'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer $savedToken',
           },
         ),
       );
-      print(response.data);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         // 서버로부터 응답이 성공적으로 돌아온 경우 처리
         print('Server returned OK');
         print('Response body: ${response.data}');
-        var data = json.decode(response.data);
 
-        if(data['signupToken'] != null) {
-          var token = data['signupToken'];
-          print(token);
-          await saveToken(token);
-          _increaseProgressAndNavigate();
-        } else {
-          _showVerificationFailedSnackBar();
+        List<dynamic> urlList = response.data;
+          print(urlList);
+// URL 저장을 위한 리스트 초기화
+        List<String> savedUrls = [];
+
+// 각 URL을 순회하며 리스트에 추가
+        for (var item in urlList) {
+          print(item);
+          if (item.containsKey('url')) {
+            String url = item['url'];
+            savedUrls.add(url);
+            // URL을 저장하거나 처리하는 로직을 추가
+            print('Saved URL: $url');
+          }
         }
+
+        print(savedUrls);
+
+        var url2 = Uri.parse(API.signupimage);
+
+        try {
+          var response = await dio.post(
+            url2.toString(),
+            data: {"images" : savedUrls},
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $savedToken',
+              },
+            ),
+          );
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+            print("signupimagerequestsuccess");
+            print('Server returned OK');
+            print('Response body: ${response.data}');
+
+            var data = (response.data);
+
+            var token = data['signupToken'];
+            print("token 분해 완료");
+            await saveToken(token);
+            print("token 저장 완료");
+            _increaseProgressAndNavigate();
+
+          } else {
+            // 오류가 발생한 경우 처리
+            print('Request failed with status: ${response.statusCode}.');
+            _showVerificationFailedSnackBar();
+          }
+        } catch (e, stacktrace) {
+          print('Error: $e');
+          print('Stacktrace: $stacktrace');
+          // _showVerificationFailedSnackBar();
+        }
+
+
       } else {
         // 오류가 발생한 경우 처리
         print('Request failed with status: ${response.statusCode}.');
         _showVerificationFailedSnackBar();
       }
-    } catch (e) {
-      // 예외 처리
+    } catch (e, stacktrace) {
       print('Error: $e');
-      _showVerificationFailedSnackBar();
+      print('Stacktrace: $stacktrace');
+      // _showVerificationFailedSnackBar();
     }
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     Gender? gender;
     if (widget.selectedGender == "Gender.male") {
@@ -288,17 +364,16 @@ class ImagePageState extends State<ImagePage>
             ),
             SizedBox(height: 30),
             Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
               children: [
-                ElevatedButton(
-                  onPressed: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
+                InkWell(
+                  onTap: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
                   child: Container(
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
-                      color: Colors.transparent,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: ClipRRect(
@@ -309,52 +384,44 @@ class ImagePageState extends State<ImagePage>
                           : Image.file(_image1!, fit: BoxFit.cover), // 선택된 이미지 표시
                     ),
                   ),
-                ),
-
-                GestureDetector(
-                  onTap: _pickImage2,
+                ),InkWell(
+                  onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
                   child: Container(
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(
-                          10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: ClipRRect(
-                      // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
                       borderRadius: BorderRadius.circular(10.0),
                       child: _image2 == null
                           ? Center(
-                          child: Icon(Icons.add,
-                              color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image2!, fit: BoxFit.cover),
+                          child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
+                          : Image.file(_image2!, fit: BoxFit.cover), // 선택된 이미지 표시
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: _pickImage3,
+                ),InkWell(
+                  onTap: _pickImage3, // 버튼을 누를 때 _pickImage 함수 호출
                   child: Container(
                     width: 100,
                     height: 125,
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(
-                          10.0), // 원하는 둥글기 값. 여기서는 10.0을 사용.
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: ClipRRect(
-                      // 이미지도 둥근 모서리로 자르기 위해 ClipRRect를 사용
                       borderRadius: BorderRadius.circular(10.0),
                       child: _image3 == null
                           ? Center(
-                          child: Icon(Icons.add,
-                              color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image3!, fit: BoxFit.cover),
+                          child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
+                          : Image.file(_image3!, fit: BoxFit.cover), // 선택된 이미지 표시
                     ),
                   ),
                 ),
+
               ],
             ),
             SizedBox(height: 206),

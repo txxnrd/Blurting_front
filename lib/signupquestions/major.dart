@@ -179,7 +179,7 @@ class _MajorPageState extends State<MajorPage>
       }
       else if(_selectedMajor==Major.medical)
       {
-        major = '의약계열' ;
+        major = '의학계열' ;
       }
       else{
         major='예체능계열';
@@ -536,7 +536,7 @@ class _MajorPageState extends State<MajorPage>
                           });
                         },
                         child: Text(
-                          '의약계열',
+                          '의학계열',
                           style: TextStyle(
                             color: Color(0xFF303030),
                             fontFamily: 'Pretendard',

@@ -71,7 +71,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       if (value.length == 6) IsValid = true;
     });
   }
-
+  String errormessage = "";
 
   Future<void> _sendPostRequest(String phoneNumber) async {
     var url = Uri.parse(API.sendphone);
@@ -79,20 +79,20 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
 
     String savedToken = await getToken();
-    print(savedToken);
+
+    print("회원가입 버튼 누르고 받은 토큰"+savedToken);
 
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
-
       },
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
@@ -102,43 +102,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       print(token);
       // 토큰을 로컬에 저장
       await saveToken(token);
-      var second_response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
-        },
-
-        body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
-      );
-      if (second_response.statusCode == 200 || second_response.statusCode == 201) {
-        print('응답 제대로 받음');
-        var data = json.decode(second_response.body);
-        var token = data['signupToken'];
-        print(token);
-        // 토큰을 로컬에 저장
-        await saveToken(token);
-        // 성공적으로 요청을 보냈을 때의 처리
-        print('Second Request successful with body: ${second_response.body}');
-        print('Response body: ${second_response.body}');
-
-      } else {
-        print('응답 오류');
-        var errorCode =second_response.statusCode;
-        print('Second Request failed with status: ${errorCode}.');
-        showError = true;
-        if(errorCode==409)
-          {
-            Errormessage= '이미 등록된 사용자입니다.';
-          }
-        else if(errorCode==401) {
-          Errormessage = '인증번호가 틀렸습니다.';
-        }
-        else if(errorCode==408) {
-          Errormessage = '인증 시간이 초과되었습니다.';
-        }
-
-      }
 
     } else {
       // 오류가 발생한 경우 처리
@@ -186,31 +149,22 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
+      if(response.statusCode==409){
+        errormessage = "이미 등록한 사용자입니다.";
+      }else if(response.statusCode==401){
+        errormessage = "인증번호가 올바르지 않습니다.";
+      }
+      else if(response.statusCode==408){
+        errormessage = "인증 유효 시간이 초과되었습니다.";
+      }
+      _showVerificationFailedSnackBar(value:errormessage);
     }
   }
-  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('인증 실패'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('닫기'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+
+
+  void _showVerificationFailedSnackBar({String value = "인증에 실패하였습니다."}) {
     final snackBar = SnackBar(
-      content: Text(message),
+      content: Text(value),
       action: SnackBarAction(
         label: '닫기',
         onPressed: () {

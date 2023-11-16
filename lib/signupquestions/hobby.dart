@@ -56,7 +56,7 @@ class HobbyPageState extends State<HobbyPage>
   ];
   Widget customHobbyCheckbox(String hobbyText, int index, width) {
     return Container(
-      width: width*0.42,
+      width: width*0.44,
       height: 48,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -76,8 +76,6 @@ class HobbyPageState extends State<HobbyPage>
                 IsSelected(index);
               });
             },
-
-
             child: Text(
               hobbyText,
               style: TextStyle(
@@ -335,8 +333,8 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
-                customHobbyCheckbox('애니😎', 0, width),
-                customHobbyCheckbox('책임감 있는', 1, width),
+                customHobbyCheckbox('🍢애니', 0, width),
+                customHobbyCheckbox('🎨그림그리기', 1, width),
               ],
             ),
             SizedBox(
@@ -345,8 +343,8 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
-                customHobbyCheckbox('열정적인', 2, width),
-                customHobbyCheckbox('귀여운', 3, width),
+                customHobbyCheckbox('🍻술', 2, width),
+                customHobbyCheckbox('🎞️영화/드라마', 3, width),
               ],
             ),
             SizedBox(
@@ -355,8 +353,8 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customHobbyCheckbox('상냥한', 4, width),
-                customHobbyCheckbox('감성적인', 5, width),
+                customHobbyCheckbox('✈️여행', 4, width),
+                customHobbyCheckbox('🧑‍🍳요리', 5, width),
               ],
             ),
             SizedBox(
@@ -365,8 +363,8 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customHobbyCheckbox('나누는', 6, width),
-                customHobbyCheckbox('유머있는', 7, width),
+                customHobbyCheckbox('🤓자기계발', 6, width),
+                customHobbyCheckbox('📚독서', 7, width),
               ],
             ),
             SizedBox(
@@ -375,8 +373,8 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customHobbyCheckbox('차분한', 8, width),
-                customHobbyCheckbox('지적인', 9, width),
+                customHobbyCheckbox('🎮게임', 8, width),
+                customHobbyCheckbox('🎧노래듣기', 9, width),
               ],
             ),
             SizedBox(
@@ -385,8 +383,8 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customHobbyCheckbox('섬세한', 10, width),
-                customHobbyCheckbox('무뚝뚝한', 11, width),
+                customHobbyCheckbox('🕊️봉사활동', 10, width),
+                customHobbyCheckbox('🏃운동', 11, width),
               ],
             ),
             SizedBox(
@@ -395,8 +393,8 @@ class HobbyPageState extends State<HobbyPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customHobbyCheckbox('외향적인', 12, width),
-                customHobbyCheckbox('내향적인', 13, width),
+                customHobbyCheckbox('🎤노래부르기', 12, width),
+                customHobbyCheckbox('🚶‍산책', 13, width),
               ],
             ),
             SizedBox(height: 10),

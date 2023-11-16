@@ -364,7 +364,7 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customPersonalityCheckBox('나누는', 6, width),
+                customPersonalityCheckBox('낙천적인', 6, width),
                 customPersonalityCheckBox('유머있는', 7, width),
               ],
             ),
