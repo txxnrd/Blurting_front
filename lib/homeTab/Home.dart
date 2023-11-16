@@ -7,12 +7,16 @@ class CardItem {
   final String question;
   final String answer;
   final String date;
+  final String sex;
+  int likes; // 추가: 좋아요 수
 
   CardItem({
     required this.userName,
     required this.question,
     required this.answer,
     required this.date,
+    required this.sex,
+    this.likes = 0, // 초기값 0으로 설정
   });
 }
 
@@ -30,18 +34,21 @@ class _HomeState extends State<Home> {
       question: 'What is Flutter?',
       answer: 'Flutter is a UI toolkit...',
       date: '2023-11-13',
+      sex: 'man',
     ),
     CardItem(
       userName: 'User2',
       question: 'How does Dart work?',
       answer: 'Dart is a programming language...',
       date: '2023-11-14',
+      sex: 'woman',
     ),
     CardItem(
       userName: 'User3',
       question: 'Why use widgets in Flutter?',
       answer: 'Widgets are the basic building...',
       date: '2023-11-15',
+      sex: 'man',
     ),
     // Add more items as needed
   ];
@@ -79,16 +86,125 @@ class _HomeState extends State<Home> {
           ),
         ),
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        child: Container(
-          height: 280,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('User Name: ${cardItems[index].userName}'),
-              Text('Question: ${cardItems[index].question}'),
-              Text('Answer: ${cardItems[index].answer}'),
-              Text('Date: ${cardItems[index].date}'),
-            ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Container(
+            height: 280,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 34),
+                  child: Row(
+                    children: [
+                      if (cardItems[index].sex == 'man')
+                        ClipOval(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            color: Color(0xFFFF7D7D),
+                            child: Image.asset(
+                              './assets/man.png',
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
+                        ),
+                      if (cardItems[index].sex == 'woman')
+                        ClipOval(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            color: Color(0xFFFF7D7D),
+                            child: Image.asset(
+                              './assets/woman.png',
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
+                        ),
+                      SizedBox(width: 8),
+                      Text(
+                        'User Name: ${cardItems[index].userName}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                Text(
+                  'Question: ${cardItems[index].question}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Heebo',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(height: 11),
+                Text(
+                  'Answer: ${cardItems[index].answer}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Heebo',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(height: 11),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white,
+                        height: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 11),
+                Row(
+                  children: [
+                    Text(
+                      'Date: ${cardItems[index].date}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Heebo',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(width: 90),
+                    GestureDetector(
+                      onTap: () {
+                        // 좋아요 버튼을 눌렀을 때의 로직
+                        setState(() {
+                          cardItems[index].likes++; // 좋아요 수 증가
+                        });
+                      },
+                      child: Icon(
+                        Icons.thumb_up,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Likes: ${cardItems[index].likes}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Heebo',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -157,7 +273,7 @@ class _HomeState extends State<Home> {
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  '오늘의 블러팅',
+                  'Today Blurting',
                   style: TextStyle(
                     color: Colors.black87,
                     fontFamily: 'Heebo',
