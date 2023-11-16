@@ -13,7 +13,7 @@ import '../config/app_config.dart';
 class MBTIPage extends StatefulWidget {
   final String selectedGender;
 
-  MBTIPage({required this.selectedGender});
+  MBTIPage({super.key, required this.selectedGender});
   @override
   _MBTIPageState createState() => _MBTIPageState();
 }

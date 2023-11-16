@@ -14,7 +14,7 @@ final labels = ['안 피움', '가끔', '자주', '매일'];
 class SmokePage extends StatefulWidget {
   final String selectedGender;
 
-  SmokePage({required this.selectedGender});
+  SmokePage({super.key, required this.selectedGender});
   @override
   _SmokePageState createState() => _SmokePageState();
 }

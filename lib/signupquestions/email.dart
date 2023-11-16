@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blurting/mainApp.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
@@ -8,7 +9,6 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 
 import '../config/app_config.dart';
-import 'done.dart'; // sex.dart를 임포트
 
 class EmailPage extends StatefulWidget {
   final String selectedGender;
@@ -28,7 +28,7 @@ class _EmailPageState extends State<EmailPage>
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            DonePage(selectedGender: widget.selectedGender),
+            MainApp(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },

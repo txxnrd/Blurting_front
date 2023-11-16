@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/colors/colors.dart';
 
 class PhoneNumberPage extends StatefulWidget {
+  const PhoneNumberPage({super.key});
+
   @override
   _PhoneNumberPageState createState() => _PhoneNumberPageState();
 }
@@ -335,6 +337,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       fontSize: 15,
                       color: Color.fromRGBO(217, 217, 217, 1)),
                   border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       color: Color(DefinedColor.lightgrey),
                     ), // 초기 테두리 색상

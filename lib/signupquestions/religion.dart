@@ -11,7 +11,7 @@ import '../colors/colors.dart'; // sex.dart를 임포트
 class ReligionPage extends StatefulWidget {
   final String selectedGender;
 
-  ReligionPage({required this.selectedGender});
+  ReligionPage({super.key, required this.selectedGender});
   @override
   _ReligionPageState createState() => _ReligionPageState();
 }

@@ -17,7 +17,7 @@ import 'majorlist.dart';  // sex.dart를 임포트
 class MajorPage extends StatefulWidget {
   final String selectedGender;
 
-  MajorPage({required this.selectedGender});
+  MajorPage({super.key, required this.selectedGender});
   @override
   _MajorPageState createState() => _MajorPageState();
 }

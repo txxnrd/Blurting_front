@@ -259,31 +259,31 @@ class HobbyPageState extends State<HobbyPage>
       bottomNavigationBar: BottomAppBar(
         child:Padding(
           padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-        child: Container(
-          height: 48, // 높이 조정
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFFF66464),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+          child: Container(
+            height: 48, // 높이 조정
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFF66464),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 0,
+                padding: EdgeInsets.all(0),
               ),
-              elevation: 0,
-              padding: EdgeInsets.all(0),
-            ),
-            onPressed: (IsValid) ? () {
-              _sendPostRequest();
-            } : null,
-            child: Text(
-              '다음',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Pretendard',
-                fontSize: 20.0,
-                fontWeight: FontWeight.w500,
+              onPressed: (IsValid) ? () {
+                _sendPostRequest();
+              } : null,
+              child: Text(
+                '다음',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Pretendard',
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
-        ),
         ),
       ),
       backgroundColor: Colors.white,
@@ -295,7 +295,7 @@ class HobbyPageState extends State<HobbyPage>
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             _sendBackRequest();
-            },
+          },
         ),
         actions: <Widget>[
           IconButton(
@@ -336,15 +336,15 @@ class HobbyPageState extends State<HobbyPage>
                 ),
                 Positioned(
                   left: MediaQuery.of(context).size.width *
-                          (_progressAnimation?.value ?? 0.3) -
+                      (_progressAnimation?.value ?? 0.3) -
                       15,
                   bottom: -10,
                   child: Image.asset(
                     gender == Gender.male
                         ? 'assets/man.png'
                         : gender == Gender.female
-                            ? 'assets/woman.png'
-                            : 'assets/signupface.png', // 기본 이미지
+                        ? 'assets/woman.png'
+                        : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
@@ -367,7 +367,7 @@ class HobbyPageState extends State<HobbyPage>
               ],
             ),
             SizedBox(
-              height: 10
+                height: 10
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬

@@ -13,7 +13,7 @@ import '../colors/colors.dart'; // sex.dart를 임포트
 class PersonalityPage extends StatefulWidget {
   final String selectedGender;
 
-  PersonalityPage({required this.selectedGender});
+  PersonalityPage({super.key, required this.selectedGender});
   @override
   _PersonalityPageState createState() => _PersonalityPageState();
 }
@@ -331,21 +331,25 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             SizedBox(height: 30),
 
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 customPersonalityCheckBox('개성있는', 0, width),
                 customPersonalityCheckBox('책임감 있는', 1, width),
+
               ],
             ),
             SizedBox(
               height: 10,
             ),
             Row(
+
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 customPersonalityCheckBox('열정적인', 2, width),
                 customPersonalityCheckBox('귀여운', 3, width),
+
               ],
             ),
             SizedBox(
@@ -353,9 +357,11 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+
               children: [
                 customPersonalityCheckBox('상냥한', 4, width),
                 customPersonalityCheckBox('감성적인', 5, width),
+
               ],
             ),
             SizedBox(
@@ -363,9 +369,11 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+
               children: [
                 customPersonalityCheckBox('낙천적인', 6, width),
                 customPersonalityCheckBox('유머있는', 7, width),
+
               ],
             ),
             SizedBox(
@@ -373,9 +381,11 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+
               children: [
                 customPersonalityCheckBox('차분한', 8, width),
                 customPersonalityCheckBox('지적인', 9, width),
+
               ],
             ),
             SizedBox(

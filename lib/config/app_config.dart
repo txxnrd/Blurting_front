@@ -1,6 +1,7 @@
-
 class ServerEndpoints {
   static const String serverEndpoint = "http://54.180.85.164:3080";
+  static const String socketServerEndpoint = "ws://54.180.85.164:3080/";
+
 }
 
 class API {

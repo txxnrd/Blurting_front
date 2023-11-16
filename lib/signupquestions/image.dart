@@ -209,7 +209,7 @@ class ImagePageState extends State<ImagePage>
         print('Response body: ${response.data}');
 
         List<dynamic> urlList = response.data;
-          print(urlList);
+        print(urlList);
 // URL 저장을 위한 리스트 초기화
         List<String> savedUrls = [];
 
@@ -276,7 +276,7 @@ class ImagePageState extends State<ImagePage>
     }
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     Gender? gender;
     if (widget.selectedGender == "Gender.male") {
@@ -296,7 +296,7 @@ class ImagePageState extends State<ImagePage>
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             _sendBackRequest();
-            },
+          },
         ),
         actions: <Widget>[
           IconButton(

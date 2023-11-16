@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/colors.dart';
 import '../config/app_config.dart';
-import 'done.dart';
 
 
 import 'email.dart';  // email.dart를 임포트
@@ -17,7 +16,7 @@ import 'email.dart';  // email.dart를 임포트
 class UniversityPage extends StatefulWidget {
   final String selectedGender;
 
-  UniversityPage({required this.selectedGender});
+  UniversityPage({super.key, required this.selectedGender});
   @override
   _UniversityPageState createState() => _UniversityPageState();
 }
