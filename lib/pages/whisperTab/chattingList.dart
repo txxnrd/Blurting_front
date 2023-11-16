@@ -1,15 +1,15 @@
 import 'dart:convert';
-
 import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'dart:ui';
-
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
-
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:intl/intl.dart';
+
+DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
 class ChattingList extends StatefulWidget {
   final IO.Socket socket;
@@ -24,16 +24,21 @@ class ChattingList extends StatefulWidget {
 
 class ChatListItem extends StatefulWidget {
   final String userName;
-  final String message;
-  final String time;
+  final String latest_chat;
+  final DateTime latest_time;
   final String image;
   final String roomId;
+  final DateTime has_read;
+  final String token;
+
   final IO.Socket socket;
 
   ChatListItem(
-      {required this.userName,
-      required this.message,
-      required this.time,
+      {required this.token, 
+      required this.userName,
+      required this.latest_chat,
+      required this.latest_time,
+      required this.has_read,
       required this.image,
       required this.socket,
       required this.roomId});
@@ -43,14 +48,18 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _chatListItemState extends State<ChatListItem> {
+
   @override
   Widget build(BuildContext context) {
+  String latest_time = dateFormat.format(widget.latest_time);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => Whisper(
+              token: widget.token,
                 userName: widget.userName,
                 socket: widget.socket,
                 roomId: widget.roomId),
@@ -141,7 +150,7 @@ class _chatListItemState extends State<ChatListItem> {
                               right: 20,
                             ),
                             child: Text(
-                              widget.message,
+                              widget.latest_chat,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(
@@ -154,8 +163,7 @@ class _chatListItemState extends State<ChatListItem> {
                           Container(
                             alignment: Alignment.centerRight,
                             margin: EdgeInsets.only(right: 20),
-                            child: Text(
-                              widget.time,
+                            child: Text(latest_time,
                               style: TextStyle(
                                 fontFamily: "Pretendard",
                                 fontSize: 10,
@@ -184,14 +192,18 @@ class _chattingList extends State<ChattingList> {
   void initState() {
     super.initState();
 
-    fetchList(widget.token);
+    Future.delayed(Duration.zero, () {
+      fetchList(widget.token);
+    });
 
     widget.socket.on('invite_chat', (data) {
       Widget newChat = ChatListItem(
+        token: widget.token,
         roomId: data,
         userName: '새로운 채팅방',
-        message: '누군가가 나에게 새로운 채팅을 걸었어요',
-        time: '10:30',
+        latest_chat: '누군가가 나에게 새로운 채팅을 걸었어요',
+        latest_time: DateTime.now(),
+        has_read: DateTime.now(),
         image: 'assets/images/profile_image.png',
         socket: widget.socket,
       );
@@ -215,17 +227,6 @@ class _chattingList extends State<ChattingList> {
                 child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                     child: Container(color: Colors.transparent))),
-            Container(
-              // 레이어 최하단
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/appbar_background.png'),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.8), BlendMode.dstATop),
-                ),
-              ),
-            ),
           ],
         ),
         backgroundColor: Colors.transparent,
@@ -259,15 +260,23 @@ class _chattingList extends State<ChattingList> {
         bottom: PreferredSize(
           preferredSize: Size(10, 10),
           child: Stack(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             children: [
               Container(
                 height: 70,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.35),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+                      Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+                    ],
+                  ),
                   borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(50),
-                      topLeft: Radius.circular(50)),
+                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(30),
+                  ),
                 ),
               ),
               Container(
@@ -281,8 +290,7 @@ class _chattingList extends State<ChattingList> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              ),
-            ],
+              ),            ],
           ),
         ),
       ),
@@ -299,10 +307,6 @@ class _chattingList extends State<ChattingList> {
               ),
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-            color: Colors.white.withOpacity(0.5),
-          ),
           SingleChildScrollView(
             padding: EdgeInsets.only(top: 260, bottom: 100), // 시작 위치에 여백 추가
 
@@ -313,50 +317,17 @@ class _chattingList extends State<ChattingList> {
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: Column(
                     children: <Widget>[
-                      for (var chatItem in chatLists) ListTile(title: chatItem),
+                      for (var chatItem in chatLists) 
+                      ListTile(title: chatItem),
                       ListTile(
                           title: ChatListItem(
+                            token: widget.token,
                         roomId: '',
-                        userName: '개굴',
-                        message:
-                            '개굴개굴 개구리 노래를 한다 한 줄이 넘어가면 ...으로 처리되게 해놓았다 넘어가라',
-                        time: '10:30',
-                        image: 'assets/woman.png',
-                        socket: widget.socket,
-                      )),
-                      ListTile(
-                          title: ChatListItem(
-                        roomId: '',
-                        userName: '이얏',
-                        message: '위에서 만들어 두고 아래에선 호출만 하기',
-                        time: '10:30',
-                        image: 'assets/woman.png',
-                        socket: widget.socket,
-                      )),
-                      ListTile(
-                          title: ChatListItem(
-                        roomId: '',
-                        userName: '오호',
-                        message: '훨씬 코드가 간결해집니다',
-                        time: '10:30',
-                        image: 'assets/images/profile_image.png',
-                        socket: widget.socket,
-                      )),
-                      ListTile(
-                          title: ChatListItem(
-                        roomId: '',
-                        userName: '굿',
-                        message: '다른 것들도 바꿔 보세요',
-                        time: '10:30',
-                        image: 'assets/images/profile_image.png',
-                        socket: widget.socket,
-                      )),
-                      ListTile(
-                          title: ChatListItem(
-                        roomId: '',
-                        userName: '매개변수',
-                        message: '이름, 메시지, 시간, 성별에 따른 프로필 이미지',
-                        time: '10:30',
+                        userName: '테스트',
+                        latest_chat:
+                            '소켓 X',
+                        latest_time: DateTime.now(),
+                        has_read: DateTime.now(),
                         image: 'assets/woman.png',
                         socket: widget.socket,
                       )),
@@ -372,8 +343,6 @@ class _chattingList extends State<ChattingList> {
   }
 
   Future<void> fetchList(String token) async {
-    // 채팅 받아오기
-
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     final url = Uri.parse('${ServerEndpoints.serverEndpoint}chat/rooms');
@@ -384,24 +353,52 @@ class _chattingList extends State<ChattingList> {
     });
 
     if (response.statusCode == 200) {
-      // 요청 성공, 답변들을 받아 오기
       print('요청 성공');
-      dynamic responseData = jsonDecode(response.body)['data'];
 
-      if (responseData is Map<String, dynamic>) {
-        // final replyList = responseData['chatList'] as List<dynamic>;
+      try {
+        List<dynamic> responseData = jsonDecode(response.body);
 
-        // for (final replyData in replyList) {
-        //   setState(() {
-        //     // chatLists.insert(0, newChat);
-        //   });
-        // }
-      } else {
-        print('Invalid response data');
+        DateTime _parseDateTime(String? dateTimeString) {
+          if (dateTimeString == null) {
+            return DateTime.now(); // 혹은 다른 기본 값으로 대체
+          }
+
+          try {
+            return DateTime.parse(dateTimeString);
+          } catch (e) {
+            print('Error parsing DateTime: $e');
+            return DateTime.now(); // 혹은 다른 기본 값으로 대체
+          }
+        }
+
+        for (final chatData in responseData) {
+          setState(() {
+            chatLists.insert(
+              0,
+              ChatListItem(
+                token: widget.token,
+                roomId: chatData['roomId'] as String? ?? '',
+                userName: chatData['nickname'] as String? ?? '',
+                latest_chat: chatData['latest_chat'] as String? ?? '',
+                latest_time: _parseDateTime(chatData['latest_time']),
+                has_read: _parseDateTime(chatData['has_read']),
+                image: 'assets/images/profile_image.png',
+                socket: widget.socket,
+              ),
+            );
+          });
+        }
+
+        // print('Response body: ${response.body}');
+
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
       }
+
     } else {
       print(response.statusCode);
-      throw Exception('chattingList : 채팅방을 로드하는 데 실패했습니다');
+      throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
 }

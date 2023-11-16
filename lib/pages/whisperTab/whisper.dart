@@ -1,17 +1,29 @@
+import 'dart:convert';
 import 'dart:async';
 import 'dart:ui';
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:blurting/Utils/provider.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+
+DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
 class Whisper extends StatefulWidget {
   final IO.Socket socket;
   final String userName;
   final String roomId;
+  final String token;
 
-  Whisper({Key? key, required this.userName, required this.socket, required this.roomId})
+  Whisper(
+      {Key? key,
+      required this.userName,
+      required this.token,
+      required this.socket,
+      required this.roomId})
       : super(key: key);
 
   @override
@@ -19,56 +31,74 @@ class Whisper extends StatefulWidget {
 }
 
 class _Whisper extends State<Whisper> {
+  TextEditingController controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
   List<Widget> chatMessages = [];
+
   bool isValid = false;
 
-  final StreamController<List<Widget>> _messageStreamController =
-      StreamController<List<Widget>>();
-  Stream<List<Widget>> get messageStream => _messageStreamController.stream;
+  DateTime _parseDateTime(String? dateTimeString) {
+    if (dateTimeString == null) {
+      return DateTime.now(); // 혹은 다른 기본 값으로 대체
+    }
+
+    try {
+      return DateTime.parse(dateTimeString);
+    } catch (e) {
+      print('Error parsing DateTime: $e');
+      return DateTime.now(); // 혹은 다른 기본 값으로 대체
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
 
-    // 기존의 채팅 내역을 받아 오는 로직 추가 (http get 함수 사용)
-    // 기존의 채팅 내역, 상대의 정보 받아 오기
+    Future.delayed(Duration.zero, () {
+      fetchChats(widget.token);
+    });
 
     widget.socket.on('new_chat', (data) {
-      // 새로운 메시지가 도착하면 위젯을 추가해야 함. date, userId, message를 저장해서 전달해 줘야 함!
-
-      int userId = data['userId']; // 맵핑되어 있는 제이슨 데이터를 하나씩 변수에 저장
-      DateTime date =
-          DateTime.parse(data['createdAt']); // date 처리하는 거 또 따로 만들어 줘야 함... (groupedList?)
+      int userId = data['userId'];
+      // DateTime date = _parseDateTime(data['createdAt']);
       String message = data['chat'];
+      Widget newAnswer;
 
-      Widget newAnswer; // 위젯임. userId가 내 아이디와 같다면 MyChat, 다르다면 OtherChat을 저장해야 함!
-
-      if (userId == 3) {
-        // 일단은 내 유저 아이디를 3이라고 지정, 원래는 userProvider로 받아와야 한다
-        newAnswer = MyChat(message: message);
+      if (userId == 36) {
+        // userProvider
+        newAnswer = MyChat(
+          message: message,
+          createdAt: data['createdAt'],
+        );
+        sendingMessageList.clear();
         print('내 메시지 전송 완료: $message');
       } else {
-        newAnswer = ListTile(subtitle: OtherChat(message: message));
+        newAnswer = ListTile(subtitle: OtherChat(message: message, createdAt: data['createdAt'],));
         print('상대방 메시지 도착: $message');
       }
-
-      // 새로운 메시지가 도착하면 위젯을 추가하고 스트림을 통해 새로운 위젯 리스트를 전달
-      chatMessages.add(newAnswer); // 새로운 메시지 추가
-
-      _messageStreamController.sink.add(chatMessages); // 스트림을 통해 업데이트된 리스트 전달
+      setState(() {
+        chatMessages.add(newAnswer); // 새로운 메시지 추가
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController();
-    ScrollController _scrollController = ScrollController();
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 170,
-        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
-        elevation: 0, // 그림자 효과를 제거합니다.
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(
@@ -76,7 +106,7 @@ class _Whisper extends State<Whisper> {
             color: Color.fromRGBO(48, 48, 48, 1),
           ),
           onPressed: () {
-            // 뒤로가기 버튼을 눌렀을 때의 동작
+            // 새로고침 되도록 바꿔 주기
             Navigator.pop(context);
           },
         ),
@@ -110,16 +140,6 @@ class _Whisper extends State<Whisper> {
                 child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                     child: Container(color: Colors.transparent))),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     image: DecorationImage(
-            //       image: AssetImage(
-            //           'assets/images/appbar_background.png'),
-            //       fit: BoxFit.cover,
-            //       colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.8), BlendMode.dstATop)
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -134,44 +154,30 @@ class _Whisper extends State<Whisper> {
         child: Column(
           children: <Widget>[
             Expanded(
-              child: StreamBuilder<List<Widget>>(
-                stream:
-                    messageStream, // 위에서 선언한 StreamController로부터 상태 변화를 받아 옴
-                initialData: [],
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data != null) {
-                    return SingleChildScrollView(
-                      controller: _scrollController,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 200),
-                        child: Column(
-                          children: <Widget>[
-                            ListTile(
-                              subtitle: OtherChat(
-                                message: '개굴개굴개구리 노래를 애옹',
-                              ),
-                            ),
-                            ListTile(
-                              subtitle: OtherChat(
-                                message: '흠냐',
-                              ),
-                            ),
-                            if (snapshot.data != null)
-                              for (var chat in snapshot.data!)
-                                if (chat != null) chat,
-                          ],
-                        ),
+                child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Container(
+                margin: EdgeInsets.only(top: 180),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(5),
+                      child: Text(
+                        '2023년 11월 16일',
+                        style: TextStyle(
+                  color: mainColor.lightGray,
+                            fontSize: 10,
+                            fontFamily: 'Heedo'),
                       ),
-                    );
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
+                    ),
+                    for (var chatItem in chatMessages) chatItem,
+                    for (var chatItem in sendingMessageList) chatItem,
+                  ],
+                ),
               ),
-            ),
+            )),
             CustomInputField(
               controller: controller,
-              scrollController: _scrollController,
               sendFunction: sendChat,
               now: DateTime.now().toString(),
             ),
@@ -181,33 +187,99 @@ class _Whisper extends State<Whisper> {
     );
   }
 
-  List<Widget> messageList = []; // 전송 중인 답변을 저장할 리스트
+  List<Widget> sendingMessageList = []; // 전송 중인 답변을 저장할 리스트
 
   void sendChat(String message, String now) {
     Map<String, dynamic> data = {
-      // 소켓 서버에 보낼 roomId, 보내는 사람 id, 채팅 내용, 날짜 시간
-      // 'users': [3, 5],
+      // 'userId': 57,    // 내 아이디라고 함 일단
       'roomId': widget.roomId,
       'chat': message,
       'createdAt': now,
     };
 
-
     // 입력한 내용을 ListTile에 추가
-    Widget newAnswer = MyChat(message: message);
-    
+    Widget newAnswer = MyChat(
+      message: message,
+      createdAt: '전송 중...',
+    );
+
     // 소켓 서버에 데이터 전송
     if (message.isNotEmpty) {
       widget.socket.emit('send_chat', data);
       print("소켓 서버에 귓속말 전송 ($data)");
     }
-    
-    // 리스트에 추가 (클라이언트에서 바로바로 화면에 띄움, 전송 중...)
-    // 리스트에 위젯을 추가한다
-    messageList.add(newAnswer);
-    _messageStreamController.sink.add(messageList); // 스트림을 통해 업데이트된 리스트 전달
+
+    // 전송 중인 메시지를 띄워 줌
+    setState(() {
+      sendingMessageList.add(newAnswer);
+    });
 
     print("귓속말 전송 중...");
-    setState(() {});
+  }
+
+  Future<void> fetchChats(String token) async {
+    // final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    final url =
+        Uri.parse('${ServerEndpoints.serverEndpoint}chat/${widget.roomId}');
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      print('요청 성공');
+
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        List<dynamic> chatList = responseData['chats'];
+
+        DateTime _parseDateTime(String? dateTimeString) {
+          if (dateTimeString == null) {
+            return DateTime.now(); // 혹은 다른 기본 값으로 대체
+          }
+
+          try {
+            return DateTime.parse(dateTimeString);
+          } catch (e) {
+            print('Error parsing DateTime: $e');
+            return DateTime.now(); // 혹은 다른 기본 값으로 대체
+          }
+        }
+
+        for (final Map<String, dynamic> chatData in chatList) {
+          Widget fetchChatList;
+
+          setState(() {
+            if (chatData['userId'] == 36) {
+              fetchChatList = MyChat(
+                message: chatData['chat'] as String? ?? '',
+                createdAt: dateFormat.format(
+                    _parseDateTime(chatData['createdAt'] as String? ?? '')),
+              );              
+            } else {
+              fetchChatList = ListTile(
+                  subtitle:
+                      OtherChat(
+                      message: chatData['chat'] as String? ?? '',
+                      createdAt: dateFormat.format(
+                    _parseDateTime(
+                          chatData['createdAt'] as String? ?? ''))));
+            }
+            chatMessages.add(fetchChatList);
+          });
+        
+        }
+
+        // print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('채팅 내역을 로드하는 데 실패했습니다');
+    }
   }
 }

@@ -10,21 +10,21 @@ class mainColor{
   static Color lightGray = Color.fromRGBO(170, 170, 170, 1);
 }
 
-class SocketProvider extends ChangeNotifier {
+// class SocketProvider extends ChangeNotifier {
 
-  late IO.Socket socket;
+//   late IO.Socket socket;
 
-  SocketProvider(this.socket) {
+//   SocketProvider(this.socket) {
 
-    socket.on('disconnect', (_) {
-      print('연결이 끊어졌습니다.');
-      notifyListeners();
-    });
-  }
+//     socket.on('disconnect', (_) {
+//       print('연결이 끊어졌습니다.');
+//       notifyListeners();
+//     });
+//   }
 
-  @override
-  void dispose() {
-    socket.disconnect();
-    super.dispose();
-  }
-}
+//   @override
+//   void dispose() {
+//     socket.disconnect();
+//     super.dispose();
+//   }
+// }
