@@ -86,6 +86,11 @@ flutter:
     - assets/signupface.png
     - assets/man.png
     - assets/woman.png
+    - assets/images/arrow.png
+    - assets/images/match.png
+    - assets/images/chat.png
+    - assets/images/like.png
+    - assets/images/homecard.png
 
   fonts:
     - family: Pretendard
