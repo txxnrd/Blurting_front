@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         backgroundColor: Colors.white,
       ),
-      home: SettingPage(), // PhoneNumberPage를 홈으로 설정
+      home: LoginPage(), // PhoneNumberPage를 홈으로 설정
     );
   }
 }
