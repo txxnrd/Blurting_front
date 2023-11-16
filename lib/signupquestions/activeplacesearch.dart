@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
+
 // import 'package:blurting/signupquestions/activeplace.dart';
 // import 'package:blurting/signupquestions/activeplacedone.dart';
 
@@ -178,26 +180,33 @@ class _SearchPage extends State<SearchPage> {
 
   // 검색 버튼 클릭 시 서버 요청 후 검색 결과 업데이트
   Future<void> searchCurrentLocation() async {
-    final String apiUrl =
-        'http://54.180.85.164:3080/geocoding/search/district/by-geo?geo=POINT(127.0164 37.4984)';
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
 
-    final response = await http.get(Uri.parse(apiUrl));
+      final String apiUrl =
+          'http://54.180.85.164:3080/geocoding/search/district/by-geo?geo=POINT(${position.longitude} ${position.latitude})';
 
-    if (response.statusCode == 200) {
-      // 서버 응답이 성공한 경우
-      print('서버 응답: ${response.body}');
+      final response = await http.get(Uri.parse(apiUrl));
 
-      // 서버 응답을 사용하여 검색 결과 업데이트
-      List<String> serverResponse =
-          (json.decode(response.body) as List<dynamic>).cast<String>();
-      setState(() {
-        itemsByLocation = serverResponse;
-        filterItems();
-      });
-    } else {
-      // 서버 응답이 에러인 경우
-      print('에러: ${response.statusCode}');
-      print('에러 메시지: ${response.body}');
+      if (response.statusCode == 200) {
+        // 서버 응답이 성공한 경우
+        print('서버 응답: ${response.body}');
+
+        // 서버 응답을 사용하여 검색 결과 업데이트
+        List<String> serverResponse =
+            (json.decode(response.body) as List<dynamic>).cast<String>();
+        setState(() {
+          itemsByLocation = serverResponse;
+          filterItems();
+        });
+      } else {
+        // 서버 응답이 에러인 경우
+        print('에러: ${response.statusCode}');
+        print('에러 메시지: ${response.body}');
+      }
+    } catch (e) {
+      print('Error getting location: $e');
     }
   }
 

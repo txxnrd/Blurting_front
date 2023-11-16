@@ -26,6 +26,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+
+
     namespace "com.example.blurting"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
@@ -38,7 +40,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -60,12 +61,13 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+    flutter {
+    source '../..'
+}
     }
 }
 
-flutter {
-    source '../..'
-}
+
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

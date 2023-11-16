@@ -1,15 +1,20 @@
+import 'dart:convert';
+
+import 'package:blurting/mainApp.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/mbti.dart';
+import 'package:blurting/signupquestions/token.dart';
+import 'package:http/http.dart' as http;
 
-import 'done.dart'; // sex.dart를 임포트
+import '../config/app_config.dart';
 
 class EmailPage extends StatefulWidget {
   final String selectedGender;
+  final String domain;
 
-  EmailPage({required this.selectedGender});
+  EmailPage({required this.selectedGender, required this.domain});
   @override
   _EmailPageState createState() => _EmailPageState();
 }
@@ -23,7 +28,7 @@ class _EmailPageState extends State<EmailPage>
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            DonePage(selectedGender: widget.selectedGender),
+            MainApp(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -34,7 +39,6 @@ class _EmailPageState extends State<EmailPage>
   @override
   void initState() {
     super.initState();
-
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
       vsync: this,
@@ -49,6 +53,167 @@ class _EmailPageState extends State<EmailPage>
         setState(() {});
       });
   }
+
+
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showVerificationSuccessedSnackBar({String message = '이메일 전송 완료'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+  Future<void> _sendBackRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupback);
+
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        Navigator.of(context).pop();
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
+  Future<void> _sendPostRequest() async {
+    certification = true;
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupemail);
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"email":Email+'@'+widget.domain}), // JSON 형태로 인코딩
+    );
+
+    print(json.encode({"email":Email+'@'+widget.domain}));
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+
+      _showVerificationSuccessedSnackBar();
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+  Future<void> _sendVerificationRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+
+    );
+
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+
+      _showVerificationSuccessedSnackBar();
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+
+        //두번째로 complete 요청 보내야됨
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+  String Email ='';
+  @override
+  void InputEmail(String value) {
+    setState(() {
+      Email = value;
+    });
+  }
+  bool certification = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +235,8 @@ class _EmailPageState extends State<EmailPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+  _sendBackRequest();
+},
         ),
         actions: <Widget>[
           IconButton(
@@ -138,26 +303,66 @@ class _EmailPageState extends State<EmailPage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'nrbsld@korea.ac.kr',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFF66464),
-                  ), // 초기 테두리 색상
+            Row(
+              children: [
+                Container(
+                  width:150,
+                  height:48,
+                  child:
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'abcd',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF66464)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF66464)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF66464)),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      InputEmail(value);
+                    },
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFF66464),
-                  ), // 입력할 때 테두리 색상
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFF66464),
-                  ), // 선택/포커스 됐을 때 테두리 색상
+                SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
+                Text('@',
+                style: TextStyle(
+                  fontSize: 24
+                ),),
+                SizedBox(width: 4),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
+                    alignment: Alignment.centerLeft,
+                    height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFFF66464)),
+                      borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.domain,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
+
+
+
+
             SizedBox(height: 312),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
@@ -175,11 +380,17 @@ class _EmailPageState extends State<EmailPage>
                       padding: EdgeInsets.all(0),
                     ),
                     onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
+                      if (!certification) {
+                        // 인증번호를 요청할 때 이 부분이 실행됩니다.
+                         _sendPostRequest();
+
+                      } else {
+                        // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
+                        _sendVerificationRequest();
+                      }
                     },
                     child: Text(
-                      '이메일로 인증하기',
+                      !certification ? '이메일로 인증하기' : '인증완료',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Pretendard',
