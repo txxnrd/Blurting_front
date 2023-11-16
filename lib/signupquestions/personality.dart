@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/hobby.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/hobby.dart';
+import 'dart:convert';
+import 'package:blurting/config/app_config.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:blurting/colors/colors.dart';
+import '../colors/colors.dart'; // sex.dart를 임포트
 
 class PersonalityPage extends StatefulWidget {
   final String selectedGender;
 
-  PersonalityPage({required this.selectedGender});
+  PersonalityPage({super.key, required this.selectedGender});
   @override
   _PersonalityPageState createState() => _PersonalityPageState();
 }
@@ -82,7 +88,44 @@ class _PersonalityPageState extends State<PersonalityPage>
     false,
     false
   ];
+  Widget customPersonalityCheckBox(String hobbyText, int index, width) {
+    return Container(
+      width: width*0.42,
+      height: 48,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Checkbox(
+            value: isValidList[index],
+            onChanged: (bool? newValue) {
+              setState(() {
+                IsSelected(index);
+              });
+            },
+            activeColor: Color(DefinedColor.darkpink),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                IsSelected(index);
+              });
+            },
 
+
+            child: Text(
+              hobbyText,
+              style: TextStyle(
+                color: Color(0xFF303030),
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   void IsSelected(int index) {
     isValidList[index] = !isValidList[index];
@@ -91,7 +134,115 @@ class _PersonalityPageState extends State<PersonalityPage>
     } else
       IsValid = false;
   }
+  Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+    // 값이 없을 경우 'No Token'을 반환합니다.
+    String token = prefs.getString('signupToken') ?? 'No Token';
+    return token;
+  }
 
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('signupToken', token);
+    // 저장된 값을 확인하기 위해 바로 불러옵니다.
+    String savedToken = prefs.getString('signupToken') ?? 'No Token';
+    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
+  }
+
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+    var character='귀여운';
+
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"character":[character] }), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+      _showVerificationFailedSnackBar();
+    }
+  }
+  Future<void> _sendBackRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupback);
+
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        Navigator.of(context).pop();
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -111,8 +262,8 @@ class _PersonalityPageState extends State<PersonalityPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+            _sendBackRequest();
+            },
         ),
         actions: <Widget>[
           IconButton(
@@ -179,584 +330,86 @@ class _PersonalityPageState extends State<PersonalityPage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality1Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(0);
-                        isPersonality1Selected =!isPersonality1Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality2Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(1);
-                        isPersonality2Selected =!isPersonality2Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality3Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(2);
-                        isPersonality3Selected =!isPersonality3Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                customPersonalityCheckBox('개성있는', 0, width),
+                customPersonalityCheckBox('책임감 있는', 1, width),
+
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality4Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(3);
-                        isPersonality4Selected =!isPersonality4Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality5Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(4);
-                        isPersonality5Selected =!isPersonality5Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality6Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(5);
-                        isPersonality6Selected =!isPersonality6Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+              children: [
+                customPersonalityCheckBox('열정적인', 2, width),
+                customPersonalityCheckBox('귀여운', 3, width),
+
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality7Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(6);
-                        isPersonality7Selected =!isPersonality7Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality8Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(7);
-                        isPersonality8Selected =!isPersonality8Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality9Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(8);
-                        isPersonality9Selected =!isPersonality9Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              children: [
+                customPersonalityCheckBox('상냥한', 4, width),
+                customPersonalityCheckBox('감성적인', 5, width),
+
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality10Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(9);
-                        isPersonality10Selected =!isPersonality10Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality11Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(10);
-                        isPersonality11Selected =!isPersonality11Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality12Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(11);
-                        isPersonality12Selected =!isPersonality12Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              children: [
+                customPersonalityCheckBox('낙천적인', 6, width),
+                customPersonalityCheckBox('유머있는', 7, width),
+
               ],
             ),
             SizedBox(
-              height: 21,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality13Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(12);
-                        isPersonality13Selected =!isPersonality13Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality14Selected == true
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(13);
-                        isPersonality14Selected =!isPersonality14Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 17),
-                Container(
-                  width: 88, // 원하는 너비 값
-                  height: 36, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF868686),
-                        width: 2,
-                      ),
-                      primary: Color(0xFF303030),
-                      backgroundColor: isPersonality15Selected
-                          ? Color(0xFF868686)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected(14);
-                        isPersonality15Selected =!isPersonality15Selected;
-                      });
-                    },
-                    child: Text(
-                      '낙천적인',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+              children: [
+                customPersonalityCheckBox('차분한', 8, width),
+                customPersonalityCheckBox('지적인', 9, width),
+
               ],
             ),
-            SizedBox(height: 107),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                customPersonalityCheckBox('섬세한', 10, width),
+                customPersonalityCheckBox('무뚝뚝한', 11, width),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                customPersonalityCheckBox('외향적인', 12, width),
+                customPersonalityCheckBox('내향적인', 13, width),
+              ],
+            ),
+
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
@@ -774,7 +427,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                     ),
                     onPressed: (IsValid)
                         ? () {
-                            _increaseProgressAndNavigate();
+                      _sendPostRequest();
                           }
                         : null,
                     child: Text(

@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/religion.dart';
+import 'package:http/http.dart' as http;
+import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/smoke.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/smoke.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../config/app_config.dart'; // sex.dart를 임포트
 
 final labels = ['안 마심', '가끔', '자주', '매일'];
 
 class AlcoholPage extends StatefulWidget {
   final String selectedGender;
 
-  AlcoholPage({required this.selectedGender});
+  AlcoholPage({super.key, required this.selectedGender});
   @override
   _AlcoholPageState createState() => _AlcoholPageState();
 }
@@ -39,6 +44,7 @@ class _AlcoholPageState extends State<AlcoholPage>
   @override
   void initState() {
     super.initState();
+    _selectedAlcoholPreference = AlcoholPreference.none;
 
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
@@ -55,6 +61,128 @@ class _AlcoholPageState extends State<AlcoholPage>
       });
   }
 
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+    var drink=0;
+   if(_selectedAlcoholPreference==AlcoholPreference.none){
+     drink=0;
+   }
+    else if(_selectedAlcoholPreference==AlcoholPreference.rarely){
+      drink=1;
+    }
+   else if(_selectedAlcoholPreference==AlcoholPreference.enjoy){
+     drink=2;
+   }
+   else{
+     drink=3;
+   }
+   print(drink);
+    String savedToken = await getToken();
+    print(savedToken);
+    print(json.encode({"drink": drink}));
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"drink": drink}), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('인증 실패'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+  Future<void> _sendBackRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupback);
+
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        Navigator.of(context).pop();
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -73,8 +201,8 @@ class _AlcoholPageState extends State<AlcoholPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+              _sendBackRequest();
+},
         ),
         actions: <Widget>[
           IconButton(
@@ -187,7 +315,7 @@ class _AlcoholPageState extends State<AlcoholPage>
                     ),
                     onPressed: () {
                       print("다음 버튼 클릭됨");
-                      _increaseProgressAndNavigate();
+                      _sendPostRequest();
                     },
                     child: Text(
                       '다음',

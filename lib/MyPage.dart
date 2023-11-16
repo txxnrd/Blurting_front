@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:blurting/MyPageEdit.dart';
 
 void main() {
   runApp(MyPage());
 }
 
 class MyPage extends StatefulWidget {
+  const MyPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _MyPage();
@@ -17,6 +21,19 @@ class _MyPage extends State<MyPage> {
   final PageController pageController = PageController(
     initialPage: 0,
   );
+  Future<void> goToMyPageEdit(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyPageEdit()),
+    );
+
+    // 이후에 필요한 작업을 수행할 수 있습니다.
+    if (result != null) {
+      print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
+    }
+    print(result);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -99,6 +116,7 @@ class _MyPage extends State<MyPage> {
                       ),
                       child: PageView(
                         controller: pageController,
+                        physics: const BouncingScrollPhysics(),
                         children: [
                           //첫번째 페이지
                           Column(
@@ -147,7 +165,7 @@ class _MyPage extends State<MyPage> {
                           Column(
                             children: <Widget>[
                               Text(
-                                '서울',
+                                '키, 흡연, 음주 실루엣',
                                 style: TextStyle(
                                     fontFamily: 'Heedo',
                                     fontSize: 20,
@@ -155,8 +173,8 @@ class _MyPage extends State<MyPage> {
                                     color: Color.fromRGBO(138, 138, 138, 1)),
                               ),
                               Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                              Text('개굴',
+                                  padding: EdgeInsets.fromLTRB(0, 200, 0, 0)),
+                              Text('#기독교 #낙천적 #자전거타기',
                                   style: TextStyle(
                                       fontFamily: "Pretendard",
                                       fontWeight: FontWeight.w700,
@@ -164,6 +182,65 @@ class _MyPage extends State<MyPage> {
                             ],
                           ),
                           //세번째페이지
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                '프로필 사진 1/3',
+                                style: TextStyle(
+                                    fontFamily: 'Heedo',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(138, 138, 138, 1)),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 200, 0, 0)),
+                              Text('얼굴 사진...',
+                                  style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24)),
+                            ],
+                          ),
+                          //네번째 페이지
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                '프로필 사진 2/3',
+                                style: TextStyle(
+                                    fontFamily: 'Heedo',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(138, 138, 138, 1)),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 200, 0, 0)),
+                              Text('전신샷...',
+                                  style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24)),
+                            ],
+                          ),
+                          //다섯번째 페이지
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                '프로필 사진 1/3',
+                                style: TextStyle(
+                                    fontFamily: 'Heedo',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(138, 138, 138, 1)),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 200, 0, 0)),
+                              Text('취미를 즐기는 모습...',
+                                  style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24)),
+                            ],
+                          ),
                         ],
                       ),
 
@@ -182,6 +259,23 @@ class _MyPage extends State<MyPage> {
                                 ),*/
                     ),
                   ),
+                  Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                  Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: SmoothPageIndicator(
+                          controller: pageController,
+                          count: 5,
+                          effect: ScrollingDotsEffect(
+                            activeDotColor: Color(0xFFF66464),
+                            activeStrokeWidth: 10,
+                            activeDotScale: 1.7,
+                            maxVisibleDots: 5,
+                            radius: 8,
+                            spacing: 10,
+                            dotHeight: 5,
+                            dotWidth: 5,
+                          ))),
                   Center(
                     child: Padding(
                         padding: const EdgeInsets.only(top: 60),
@@ -203,7 +297,10 @@ class _MyPage extends State<MyPage> {
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w500),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              print("edit 버튼 클릭됨");
+                              goToMyPageEdit(context);
+                            },
                           ),
                         )),
                   )
