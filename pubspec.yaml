@@ -93,6 +93,10 @@ flutter:
     - assets/images/chat.png
     - assets/images/like.png
     - assets/images/homecard.png
+    - assets/images/boy.png
+    - assets/images/girl.png
+    - assets/images/check.png
+
   fonts:
     - family: Pretendard
       fonts:

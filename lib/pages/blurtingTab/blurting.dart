@@ -15,22 +15,13 @@ class Blurting extends StatefulWidget {
 
 class _Blurting extends State<Blurting> {
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-            size: 24,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -39,7 +30,7 @@ class _Blurting extends State<Blurting> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            child: Container(child: Image.asset('assets/images/blurting_Image.png'),),
+            child: Image.asset('assets/images/blurting_Image.png'),
           ),
           GestureDetector(
             child: staticButton(text: 'Start'),

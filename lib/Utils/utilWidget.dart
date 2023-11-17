@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
+import 'package:blurting/pages/blurtingTab/groupChat.dart';
+import 'package:provider/provider.dart';
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
@@ -97,12 +99,40 @@ class CustomInputField extends StatefulWidget {
 }
 
 class _CustomInputFieldState extends State<CustomInputField> {
+  late FocusNode _focusNode;
   bool isValid = false;
 
   void inputValid(bool state) {
     setState(() {
       isValid = state;
     });
+  }
+
+  void inputPointValid(bool state) {
+    Provider.of<GroupChatProvider>(context, listen: false).pointValid = state;
+  }
+
+  void isPocusState(bool state) {
+    Provider.of<GroupChatProvider>(context, listen: false).isPocus = state;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        isPocusState(true);
+      } else {
+        isPocusState(false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -118,11 +148,18 @@ class _CustomInputFieldState extends State<CustomInputField> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width - 20,
               child: TextField(
+                focusNode: _focusNode,
                 onChanged: (value) {
                   if (value != '') {
                     inputValid(true);
                   } else {
                     inputValid(false);
+                  }
+
+                  if (value.length >= 100) {
+                    inputPointValid(true);
+                  } else {
+                    inputPointValid(false);
                   }
                 },
                 style: TextStyle(fontSize: 12),
@@ -369,15 +406,14 @@ class AnswerItem extends StatelessWidget {
   final String userName;
   final String message;
   final int userId;
-  final bool isAlready;
+  final bool whisper;
 
   AnswerItem(
       {required this.userName,
       required this.message,
-      // required this.jsonData,
       required this.socket,
       required this.userId,
-      required this.isAlready});
+      required this.whisper});
 
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
@@ -714,9 +750,9 @@ class AnswerItem extends StatelessWidget {
     return ListTile(
       leading: GestureDetector(
         onTap: () {
-          _showProfileModal(context, userId, isAlready); // jsonData 매개변수
+          _showProfileModal(context, userId, whisper); // jsonData 매개변수
         },
-        child: Container(
+        child: SizedBox(
           width: 42.74,
           height: 48.56,
           child: Image.asset(
