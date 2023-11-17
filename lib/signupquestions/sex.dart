@@ -177,6 +177,39 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        child:Padding(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 124),
+          child: Container(
+            width: width * 0.9,
+            height: 48,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFF66464),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 0,
+                padding: EdgeInsets.all(0),
+              ),
+              onPressed: (IsValid)
+                  ? () {
+                _sendPostRequest();
+              }
+                  : null,
+              child: Text(
+                '다음',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Pretendard',
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -337,39 +370,6 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
 
             SizedBox(height: 321),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: (IsValid)
-                        ? () {
-                        _sendPostRequest();
-                          }
-                        : null,
-                    child: Text(
-                      '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
