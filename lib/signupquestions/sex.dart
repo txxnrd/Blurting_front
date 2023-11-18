@@ -188,12 +188,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
             _sendBackRequest();
           },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

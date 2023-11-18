@@ -284,15 +284,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
             // 뒤로가기 버튼을 눌렀을 때의 동작
           },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Image.asset('assets/images/setting.png'),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              // 설정 버튼을 눌렀을 때의 동작
-            },
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
