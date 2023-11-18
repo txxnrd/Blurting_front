@@ -89,8 +89,8 @@ class _ReligionPageState extends State<ReligionPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.3, // 시작 게이지 값
-      end: 0.4, // 종료 게이지 값
+      begin: 3/14, // 시작 게이지 값
+      end: 4/14, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -120,19 +120,19 @@ class _ReligionPageState extends State<ReligionPage>
     var religion ='';
     if(_selectedReligion==Religion.none)
       {
-        religion = 'none' ;
+        religion = '무교' ;
       }
     else if(_selectedReligion==Religion.christian)
     {
-      religion = 'christian' ;
+      religion = '불교' ;
     }
     else if(_selectedReligion==Religion.catholicism)
     {
-      religion = 'catholicism' ;
+      religion = '기독교' ;
     }
     else if(_selectedReligion==Religion.buddhism)
     {
-      religion = 'buddhism' ;
+      religion = '천주교' ;
     }
     else{
       religion='etc';
@@ -511,42 +511,41 @@ class _ReligionPageState extends State<ReligionPage>
             ),
 
             SizedBox(height: 191),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: (IsValid)
-                        ? () {
-                            _sendPostRequest();
-                          }
-                        : null,
-                    child: Text(
-                      '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }

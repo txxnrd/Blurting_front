@@ -45,8 +45,8 @@ class _EmailPageState extends State<EmailPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.7, // 시작 너비 (30%)
-      end: 0.8, // 종료 너비 (40%)
+      begin: 13/14, // 시작 너비 (30%)
+      end: 14/14, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -69,7 +69,13 @@ class _EmailPageState extends State<EmailPage>
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+  @override
+  void NowCertification() {
+    setState(() {
+      certification = true;
 
+    });
+  }
   void _showVerificationSuccessedSnackBar({String message = '이메일 전송 완료'}) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -85,7 +91,7 @@ class _EmailPageState extends State<EmailPage>
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
   Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
+    print('_sendBackRequest called');
     var url = Uri.parse(API.signupback);
 
     String savedToken = await getToken();
@@ -145,7 +151,7 @@ class _EmailPageState extends State<EmailPage>
       print('Server returned OK');
       print('Response body: ${response.body}');
 
-      _showVerificationSuccessedSnackBar();
+
       var data = json.decode(response.body);
 
       if(data['signupToken']!=null)
@@ -153,6 +159,7 @@ class _EmailPageState extends State<EmailPage>
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
+        _showVerificationSuccessedSnackBar();
 
       }
       else{
@@ -162,6 +169,7 @@ class _EmailPageState extends State<EmailPage>
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
+      _showVerificationFailedSnackBar();
     }
   }
   Future<void> _sendVerificationRequest() async {
@@ -177,33 +185,33 @@ class _EmailPageState extends State<EmailPage>
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-
     );
 
     if (response.statusCode == 200 ||response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
+      print('Server returned OK 200');
       print('Response body: ${response.body}');
 
       _showVerificationSuccessedSnackBar();
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
+      if(data['accesstoken']!=null)
       {
-        var token = data['signupToken'];
+        var token = data['accesstoken'];
         print(token);
         await saveToken(token);
-
-        //두번째로 complete 요청 보내야됨
         _increaseProgressAndNavigate();
       }
       else{
         _showVerificationFailedSnackBar();
+        print("_showVerificationFailedSnackBar();");
       }
 
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
+      print('Response body: ${response.body}');
+
     }
   }
   String Email ='';
@@ -312,7 +320,7 @@ class _EmailPageState extends State<EmailPage>
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'abcd',
+                      hintText: '이메일 입력',
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFFF66464)),
                       ),
@@ -364,47 +372,45 @@ class _EmailPageState extends State<EmailPage>
 
 
             SizedBox(height: 312),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: () {
-                      if (!certification) {
-                        // 인증번호를 요청할 때 이 부분이 실행됩니다.
-                         _sendPostRequest();
-
-                      } else {
-                        // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
-                        _sendVerificationRequest();
-                      }
-                    },
-                    child: Text(
-                      !certification ? '이메일로 인증하기' : '인증완료',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child:ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: () async{
+            if (!certification) {
+              // 인증번호를 요청할 때 이 부분이 실행됩니다.
+              await _sendPostRequest();
+              NowCertification();
+            } else {
+              // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
+              _sendVerificationRequest();
+            }
+          },
+          child: Text(
+            !certification ? '이메일로 인증하기' : '인증완료',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }

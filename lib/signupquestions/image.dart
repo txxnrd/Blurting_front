@@ -26,7 +26,8 @@ class ImagePageState extends State<ImagePage>
   File? _image1;
   File? _image2;
   File? _image3;
-
+  bool IsValid =false;
+  List<MultipartFile> multipartImageList = [];
 
   Future<void> _pickImage1() async {
     var picker = ImagePicker();
@@ -36,6 +37,9 @@ class ImagePageState extends State<ImagePage>
         _image1 = File(image1.path); // 선택된 이미지 경로를 저장
       });
     }
+    if (_image1 != null) {
+      multipartImageList.add(await MultipartFile.fromFile(_image1!.path, filename: 'image1.jpg'));
+    }
   }
   Future<void> _pickImage2() async {
     var picker = ImagePicker();
@@ -44,6 +48,9 @@ class ImagePageState extends State<ImagePage>
       setState(() {
         _image2 = File(image2.path); // 선택된 이미지 경로를 저장
       });
+    }
+    if (_image2 != null) {
+      multipartImageList.add(await MultipartFile.fromFile(_image2!.path, filename: 'image2.jpg'));
     }
   }
 
@@ -55,6 +62,10 @@ class ImagePageState extends State<ImagePage>
         _image3 = File(image3.path); // 선택된 이미지 경로를 저장
       });
     }
+    if (_image3 != null) {
+      multipartImageList.add(await MultipartFile.fromFile(_image3!.path, filename: 'image3.jpg'));
+    }
+    IsValid = true;
   }
 
 
@@ -82,8 +93,8 @@ class ImagePageState extends State<ImagePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.7, // 시작 너비 (30%)
-      end: 0.8, // 종료 너비 (40%)
+      begin: 12/14, // 시작 너비 (30%)
+      end: 13/14, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -167,18 +178,12 @@ class ImagePageState extends State<ImagePage>
     print(savedToken);
 
     Dio dio = Dio();
-    List<MultipartFile> multipartImageList = [];
 
 
-    if (_image1 != null) {
-      multipartImageList.add(await MultipartFile.fromFile(_image1!.path, filename: 'image1.jpg'));
-    }
-    if (_image2 != null) {
-      multipartImageList.add(await MultipartFile.fromFile(_image2!.path, filename: 'image2.jpg'));
-    }
-    if (_image3 != null) {
-      multipartImageList.add(await MultipartFile.fromFile(_image3!.path, filename: 'image3.jpg'));
-    }
+
+
+
+
 
 
     // 파일이 하나도 없을 경우 처리를 해야 함.
@@ -424,7 +429,7 @@ class ImagePageState extends State<ImagePage>
 
               ],
             ),
-            SizedBox(height: 206),
+            SizedBox(height: 356),
             Container(
               width: 180,
               height: 12,
@@ -453,41 +458,41 @@ class ImagePageState extends State<ImagePage>
               ),
             ),
             SizedBox(height: 28),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: () {
-                      print("다음 버튼 클릭됨");
-                      _sendPostRequest();
-                    },
-                    child: Text(
-                      '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }

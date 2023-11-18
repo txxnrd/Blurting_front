@@ -60,8 +60,8 @@ class _PersonalityPageState extends State<PersonalityPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.8, // 시작 너비 (30%)
-      end: 0.9, // 종료 너비 (40%)
+      begin: 10/14, // 시작 너비 (30%)
+      end: 11/14, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -70,6 +70,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   }
 
   bool IsValid = false;
+
 
   List<bool> isValidList = [
     false,
@@ -88,6 +89,31 @@ class _PersonalityPageState extends State<PersonalityPage>
     false,
     false
   ];
+
+  List<String> selectedCharacteristics = [];
+
+  List<String> characteristic = [
+  "개성적인", "책임감있는", "열정적인", "귀여운", "낙천적인", "유머있는", "차분한", "지적인", "섬세한", "무뚝뚝한", "외향적인", "내향적인"
+  ];
+
+  void updateSelectedCharacteristics() {
+    // 임시 리스트를 생성하여 선택된 특성들을 저장합니다.
+    List<String> tempSelectedCharacteristics = [];
+
+    for (int i = 0; i < isValidList.length; i++) {
+      if (isValidList[i]) {
+        // isValidList[i]가 true이면, 해당 인덱스의 characteristic을 추가합니다.
+        tempSelectedCharacteristics.add(characteristic[i]);
+      }
+    }
+
+    // 상태를 업데이트합니다.
+    setState(() {
+      selectedCharacteristics = tempSelectedCharacteristics;
+    });
+  }
+
+
   Widget customPersonalityCheckBox(String hobbyText, int index, width) {
     return Container(
       width: width*0.42,
@@ -168,9 +194,9 @@ class _PersonalityPageState extends State<PersonalityPage>
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
-    var character='귀여운';
+    updateSelectedCharacteristics();
 
-
+    print(selectedCharacteristics);
     String savedToken = await getToken();
     print(savedToken);
 
@@ -180,7 +206,7 @@ class _PersonalityPageState extends State<PersonalityPage>
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"character":[character] }), // JSON 형태로 인코딩
+      body: json.encode({"character":selectedCharacteristics }), // JSON 형태로 인코딩
     );
     print(response.body);
     if (response.statusCode == 200 ||response.statusCode == 201) {
@@ -336,7 +362,7 @@ class _PersonalityPageState extends State<PersonalityPage>
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 customPersonalityCheckBox('개성있는', 0, width),
-                customPersonalityCheckBox('책임감 있는', 1, width),
+                customPersonalityCheckBox('책임감있는', 1, width),
 
               ],
             ),
@@ -410,42 +436,41 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
 
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: (IsValid)
-                        ? () {
-                      _sendPostRequest();
-                          }
-                        : null,
-                    child: Text(
-                      '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }

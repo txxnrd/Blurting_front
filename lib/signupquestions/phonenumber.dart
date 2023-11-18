@@ -105,20 +105,24 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     String savedToken = await getToken();
 
-    print("회원가입 버튼 누르고 받은 토큰"+savedToken);
-    String token = first_post ? savedToken : login_token;
+    if(first_post)
+      login_token = savedToken;
+    var token = first_post ? savedToken : login_token;
+
+    first_post = false;
+
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
+        'Authorization': 'Bearer $token',
       },
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
 
 
-  first_post = false;
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
@@ -126,12 +130,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
       var data = json.decode(response.body);
       var token = data['signupToken'];
-      if(first_post)
-        login_token = token;
-
-      print(token);
-      // 토큰을 로컬에 저장
-      await saveToken(token);
+      if(token != null)
+        {
+          startTimer();
+          NowCertification();
+          print(token);
+          // 토큰을 로컬에 저장
+          await saveToken(token);
+        }
 
     } else {
       // 오류가 발생한 경우 처리
@@ -250,7 +256,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     _progressAnimation = Tween<double>(
       begin: 0, // 시작 게이지 값
-      end: 0.1, // 종료 게이지 값
+      end: 1/14, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -263,47 +269,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        child:Padding(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 124),
-          child: Container(
-            width: width * 0.9,
-            height: 48,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFFF66464),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 0,
-                padding: EdgeInsets.all(0),
-              ),
-              onPressed: (IsValid) ? () async {
-                if (!certification) {
-                  // 인증번호를 요청할 때 이 부분이 실행됩니다.
-                  await _sendPostRequest(_controller.text);
-                  startTimer();
-                  NowCertification();
-
-                } else {
-                  // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
-                  _sendVerificationRequest(phonenumber);
-                }
-              } : null,
-
-              child: Text(
-                !certification ? '인증번호 요청' : '다음',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Pretendard',
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -487,9 +452,11 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
                           ),
-                          backgroundColor: Color(DefinedColor.darkpink)
+                          backgroundColor: Color(DefinedColor.darkpink),
+                          elevation: 0.0,
                         ),
                         child: Text('재전송',
+
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 15,
@@ -531,7 +498,39 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           ],
         ),
       ),
-      
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: FloatingActionButton(
+          onPressed: IsValid ? () async {
+            if (!certification) {
+              // 인증번호를 요청할 때 이 부분이 실행됩니다.
+              await _sendPostRequest(_controller.text);
+
+            } else {
+              // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
+              _sendVerificationRequest(phonenumber);
+            }
+          } : null,
+          backgroundColor: Color(0xFFF66464), // 버튼의 배경색
+          elevation: 0.0,
+          hoverElevation: 50,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Text(
+            !certification ? '인증번호 요청' : '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 16.0, // 텍스트 크기 조정
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 

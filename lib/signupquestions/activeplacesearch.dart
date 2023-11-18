@@ -38,8 +38,10 @@ class _SearchPage extends State<SearchPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'MemoApp', // 앱의 아이콘 이름
       home: Scaffold(
+
         backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 80,
@@ -71,7 +73,7 @@ class _SearchPage extends State<SearchPage> {
               child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                      hintText: '동명(읍,면)으로 검색 (ex. 안암동)',
+                      hintText: '구명으로 검색 (ex. 강남구)',
                       contentPadding: EdgeInsets.all(10.0),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(

@@ -163,8 +163,8 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.1, // 시작 게이지 값
-      end: 0.2, // 종료 게이지 값
+      begin: 1/14, // 시작 게이지 값
+      end: 2/14, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -177,39 +177,6 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        child:Padding(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 124),
-          child: Container(
-            width: width * 0.9,
-            height: 48,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFFF66464),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 0,
-                padding: EdgeInsets.all(0),
-              ),
-              onPressed: (IsValid)
-                  ? () {
-                _sendPostRequest();
-              }
-                  : null,
-              child: Text(
-                '다음',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Pretendard',
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -373,6 +340,36 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

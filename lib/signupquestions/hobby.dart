@@ -54,6 +54,27 @@ class HobbyPageState extends State<HobbyPage>
     false,
     false
   ];
+  List<String> selectedCharacteristics = [];
+
+  List<String> characteristic = [
+    "애니", "그림그리기", "술", "영화/드라마", "여행", "요리", "자기계발", "독서", "게임", "노래듣기", "봉사활동", "운동","노래부르기","산책"
+  ];
+  void updateSelectedCharacteristics() {
+    // 임시 리스트를 생성하여 선택된 특성들을 저장합니다.
+    List<String> tempSelectedCharacteristics = [];
+
+    for (int i = 0; i < isValidList.length; i++) {
+      if (isValidList[i]) {
+        // isValidList[i]가 true이면, 해당 인덱스의 characteristic을 추가합니다.
+        tempSelectedCharacteristics.add(characteristic[i]);
+      }
+    }
+
+    // 상태를 업데이트합니다.
+    setState(() {
+      selectedCharacteristics = tempSelectedCharacteristics;
+    });
+  }
   Widget customHobbyCheckbox(String hobbyText, int index, width) {
     return Container(
       width: width*0.44,
@@ -82,7 +103,9 @@ class HobbyPageState extends State<HobbyPage>
                 color: Color(0xFF303030),
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
-                fontSize: 20,
+                fontSize: index == 3 ? 18.6 : 20,
+
+
               ),
             ),
           ),
@@ -128,8 +151,8 @@ class HobbyPageState extends State<HobbyPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.8, // 시작 너비 (30%)
-      end: 0.9, // 종료 너비 (40%)
+      begin: 11/14, // 시작 너비 (30%)
+      end: 12/14, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -174,14 +197,15 @@ class HobbyPageState extends State<HobbyPage>
 
     String savedToken = await getToken();
     print(savedToken);
-    var personality='독서';
+    updateSelectedCharacteristics();
+
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"hobby": [personality] }), // JSON 형태로 인코딩
+      body: json.encode({"hobby": selectedCharacteristics }), // JSON 형태로 인코딩
     );
     print(response.body);
     if (response.statusCode == 200 ||response.statusCode == 201) {
@@ -256,36 +280,6 @@ class HobbyPageState extends State<HobbyPage>
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        child:Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-          child: Container(
-            height: 48, // 높이 조정
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFFF66464),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 0,
-                padding: EdgeInsets.all(0),
-              ),
-              onPressed: (IsValid) ? () {
-                _sendPostRequest();
-              } : null,
-              child: Text(
-                '다음',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Pretendard',
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -305,10 +299,9 @@ class HobbyPageState extends State<HobbyPage>
         ],
       ),
       body: Padding(
-
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             SizedBox(
               height: 25,
@@ -427,42 +420,41 @@ class HobbyPageState extends State<HobbyPage>
               ],
             ),
             SizedBox(height: 10),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-            //   children: [
-            //     Container(
-            //       width: width * 0.9,
-            //       height: 48,
-            //       child: ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //           primary: Color(0xFFF66464),
-            //           shape: RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(10.0),
-            //           ),
-            //           elevation: 0,
-            //           padding: EdgeInsets.all(0),
-            //         ),
-            //         onPressed: (IsValid)
-            //             ? () {
-            //           _sendPostRequest();
-            //         }
-            //             : null,
-            //         child: Text(
-            //           '다음',
-            //           style: TextStyle(
-            //             color: Colors.white,
-            //             fontFamily: 'Pretendard',
-            //             fontSize: 20.0,
-            //             fontWeight: FontWeight.w500,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
+
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }
