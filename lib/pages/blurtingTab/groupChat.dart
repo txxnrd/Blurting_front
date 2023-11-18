@@ -274,7 +274,7 @@ class _GroupChat extends State<GroupChat> {
 
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}chat/rooms');
+    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/chat/rooms');
     final response = await http.post(
       url,
       headers: {

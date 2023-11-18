@@ -30,12 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.1.0
   image_picker: ^1.0.4
   location: ^5.0.3
   smooth_page_indicator: ^1.0.0+2
   web_socket_channel: ^2.4.0
+  http: ^1.1.0
   geolocator: ^7.7.1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -71,12 +72,21 @@ flutter:
     - image/profile_swipe_now.png
     - image/profile_swipe_next.png
     - assets/images/profile_image.png
+<<<<<<< HEAD
+=======
+    - assets/images/blurting_Image.png
+>>>>>>> 367b1e49f0166fd5de9cbab1cf37b9517a112818
     - assets/images/icon_group.png
     - assets/images/setting.png
     - assets/images/profile_swipe.png
     - assets/images/icon_warning.png
+<<<<<<< HEAD
     - assets/images/boy.png
     - assets/images/girl.png
+=======
+    - assets/images/body_background.png
+    - assets/images/appbar_background.png
+>>>>>>> 367b1e49f0166fd5de9cbab1cf37b9517a112818
     - assets/images/appbar_bottom.png
     - assets/images/Ellipse.png
     - assets/images/QnA.png
@@ -86,13 +96,20 @@ flutter:
     - assets/signupface.png
     - assets/man.png
     - assets/woman.png
+<<<<<<< HEAD
     - assets/images/arrow.png
+=======
+    - assets/images/arrow.png 
+>>>>>>> 367b1e49f0166fd5de9cbab1cf37b9517a112818
     - assets/images/match.png
     - assets/images/chat.png
     - assets/images/like.png
     - assets/images/homecard.png
+<<<<<<< HEAD
     - assets/images/blurting_Image.png
 
+=======
+>>>>>>> 367b1e49f0166fd5de9cbab1cf37b9517a112818
   fonts:
     - family: Pretendard
       fonts:

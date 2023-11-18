@@ -10,17 +10,28 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
+<<<<<<< HEAD
   await initializeDateFormatting('ko_KR', null);
   //여기에 나머지 코드를 추가하세요.
   runApp(
     MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
   );
+=======
+ await initializeDateFormatting('ko_KR', null);
+  // 여기에 나머지 코드를 추가하세요.
+ runApp(
+   MaterialApp(
+     debugShowCheckedModeBanner: false,
+    home: MainApp()),
+ );
+>>>>>>> 367b1e49f0166fd5de9cbab1cf37b9517a112818
 }
 
 // import 'package:geolocator/geolocator.dart';
 // import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
 
 
+<<<<<<< HEAD
 // // void main() {
 // //   runApp(
 // //     MaterialApp(
@@ -36,6 +47,23 @@ void main() async {
 
 // //   runApp(MyApp());
 // // }
+=======
+// void main() {
+//   runApp(
+//     MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: MainApp()),
+//   );
+// }
+
+
+
+// void main() {
+//   // WidgetsFlutterBinding.ensureInitialized();
+
+//   runApp(MyApp());
+// }
+>>>>>>> 367b1e49f0166fd5de9cbab1cf37b9517a112818
 // import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
 // import 'package:blurting/signupquestions/sex.dart';  // phonenumber.dart를 임포트
 
