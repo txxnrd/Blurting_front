@@ -1,10 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/token.dart';  // sex.dart를 임포트
 import 'package:blurting/signupquestions/religion.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../config/app_config.dart';
+import 'activeplacesearch.dart';  // sex.dart를 임포트
 
-import 'activeplacesearch.dart'; // sex.dart를 임포트
+
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
@@ -36,7 +42,43 @@ class _ActivePlacePageState extends State<ActivePlacePage>
   }
 
   bool IsValid = false;
+  Future<void> _sendBackRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupback);
 
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        Navigator.of(context).pop();
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
   @override
   void IsSelected(String content) {
     setState(() {
@@ -101,6 +143,79 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     setState(() {});
   }
 
+
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"region": "string" }), // JSON 형태로 인코딩
+    );
+    print(response.body);
+
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('인증 실패'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -121,8 +236,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+            _sendBackRequest();
+            },
         ),
         actions: <Widget>[
           IconButton(
@@ -219,92 +334,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     ),
                   )),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: <Widget>[
-            //     Container(
-            //       width: width * 0.42, // 원하는 너비 값
-            //       height: 48, // 원하는 높이 값
-            //       child: TextField(
-            //         style: TextStyle(
-            //           color: Color(0xFF303030),
-            //           fontFamily: 'Pretendard',
-            //           fontWeight: FontWeight.w500,
-            //           fontSize: 20,
-            //         ),
-            //         decoration: InputDecoration(
-            //           contentPadding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
-            //           hintText: '시 입력',
-            //           hintStyle: TextStyle(
-            //             color: Color(0xFF303030),
-            //             fontFamily: 'Pretendard',
-            //             fontWeight: FontWeight.w500,
-            //             fontSize: 20,
-            //           ),
-            //           enabledBorder: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(10.0),
-            //             borderSide:
-            //                 BorderSide(color: Color(0xFF868686), width: 2),
-            //           ),
-            //           focusedBorder: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(10.0),
-            //             borderSide:
-            //                 BorderSide(color: Color(0xFF868686), width: 2),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
 
-            //     SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-            //     Container(
-            //       width: width * 0.42, // 원하는 너비 값
-            //       height: 48, // 원하는 높이 값
-            //       child: TextField(
-            //         style: TextStyle(
-            //           color: Color(0xFF303030),
-            //           fontFamily: 'Pretendard',
-            //           fontWeight: FontWeight.w500,
-            //           fontSize: 20,
-            //         ),
-            //         decoration: InputDecoration(
-            //           contentPadding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
-            //           hintText: '구 입력',
-            //           hintStyle: TextStyle(
-            //             color: Color(0xFF303030),
-            //             fontFamily: 'Pretendard',
-            //             fontWeight: FontWeight.w500,
-            //             fontSize: 20,
-            //           ),
-            //           enabledBorder: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(10.0),
-            //             borderSide:
-            //                 BorderSide(color: Color(0xFF868686), width: 2),
-            //           ),
-            //           focusedBorder: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(10.0),
-            //             borderSide:
-            //                 BorderSide(color: Color(0xFF868686), width: 2),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // TextField(
-            //   decoration: InputDecoration(
-            //     hintText: '010-1234-5678',
-            //     border: OutlineInputBorder(
-            //       borderSide: BorderSide(color: Color(0xFFF66464),), // 초기 테두리 색상
-            //     ),
-            //     enabledBorder: OutlineInputBorder(
-            //       borderSide: BorderSide(color: Color(0xFFF66464),), // 입력할 때 테두리 색상
-            //     ),
-            //     focusedBorder: OutlineInputBorder(
-            //       borderSide: BorderSide(color:Color(0xFFF66464),), // 선택/포커스 됐을 때 테두리 색상
-            //     ),
-            //   ),
-            // ),
 
             SizedBox(height: 331),
 
@@ -326,7 +356,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     ),
                     onPressed: (IsValid)
                         ? () {
-                            _increaseProgressAndNavigate();
+                      _sendPostRequest();
                           }
                         : null,
                     child: Text(
