@@ -177,7 +177,7 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 90),
+                    SizedBox(width: 50),
                     GestureDetector(
                       onTap: () {
                         // 좋아요 버튼을 눌렀을 때의 로직
