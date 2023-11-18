@@ -21,6 +21,7 @@ class _MyPage extends State<MyPage> {
   String modify = 'Edit';
   final PageController mainPageController = PageController(initialPage: 0);
   final PageController imagePageController = PageController(initialPage: 0);
+
   Future<void> goToMyPageEdit(BuildContext context) async {
     final result = await Navigator.push(
       context,
@@ -69,8 +70,9 @@ class _MyPage extends State<MyPage> {
           margin: EdgeInsets.only(top: 70),
           height: 80,
           child: Container(
-              padding: EdgeInsets.all(13),
-              child: ellipseText(text: 'My Profile')),
+            padding: EdgeInsets.all(13),
+            child: ellipseText(text: 'My Profile'),
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: Size(10, 10),
@@ -90,346 +92,227 @@ class _MyPage extends State<MyPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Column(
-              children: [
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 20),
-                    alignment: Alignment.center,
-                    width: 300,
-                    height: 400, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                      border: Border.all(color: Color(0xFFFF7D7D), width: 3),
-                    ),
-                    child: PageView(
-                      controller: mainPageController,
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        //첫번째 페이지
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Column(children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                              Text(
-                                'Profile',
-                                style: TextStyle(
-                                    fontFamily: 'Heedo',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0XFFF66464)),
-                              ),
-                              Expanded(
-                                child: PageView.builder(
-                                  controller: imagePageController,
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: imagePaths.length,
-                                  onPageChanged: (index) {
-                                    setState(() {
-                                      currentPage = index;
-                                    });
-                                  },
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      // color: Colors.amber,
-                                      child: Image.asset(
-                                        imagePaths[index],
-                                        width: 128,
-                                        // fit: BoxFit.fill,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ]),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.arrow_back_ios),
-                                  onPressed: (currentPage != 0)
-                                      ? () {
-                                          imagePageController.previousPage(
-                                            duration:
-                                                Duration(milliseconds: 300),
-                                            curve: Curves.easeInOut,
-                                          );
-                                        }
-                                      : null,
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.arrow_forward_ios),
-                                  onPressed: (currentPage != 2)
-                                      ? () {
-                                          imagePageController.nextPage(
-                                            duration:
-                                                Duration(milliseconds: 300),
-                                            curve: Curves.easeInOut,
-                                          );
-                                        }
-                                      : null,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        //두번째 페이지
-                        Column(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                            Text(
-                              'Profile',
-                              style: TextStyle(
-                                  fontFamily: 'Heedo',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0XFFF66464)),
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                            Row(
-                              children: [
-                                SizedBox(width: 25),
-                                Text('개굴',
-                                    style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 24,
-                                        color: Color(0XFFF66464))),
-                                SizedBox(width: 5),
-                                Text('INFJ',
-                                    style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15,
-                                        color: Color(0XFFF66464))),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                            Row(
-                              children: [
-                                Container(
-                                    margin: EdgeInsets.only(
-                                        top: 10,
-                                        bottom: 5,
-                                        right: 24,
-                                        left: 29),
-                                    child: Text(
-                                        '지역:' + '\n' + '종교:' + '\n' + '전공:',
-                                        textAlign:
-                                            TextAlign.start, // 텍스트를 가운데 정렬
-                                        style: TextStyle(
-                                            fontFamily: "Pretendard",
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15,
-                                            color: Color(0XFFF66464)))),
-                                Container(
-                                    margin: EdgeInsets.only(top: 10, bottom: 5),
-                                    child: Text(
-                                        '안암동' + '\n' + '무교' + '\n' + '예체능계열',
-                                        textAlign:
-                                            TextAlign.start, // 텍스트를 가운데 정렬
-                                        style: TextStyle(
-                                            fontFamily: "Pretendard",
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15,
-                                            color: Color(0XFFF66464)))),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 34,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Color(0xFFFFD2D2),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              margin: EdgeInsets.only(top: 10),
-                              child: Text(
-                                '#개성있는',
-                                style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Color(0xFFFFD2D2),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              margin: EdgeInsets.only(top: 10),
-                              child: Text(
-                                '#유머러스한',
-                                style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        //세번째페이지
-                        Column(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                            Text(
-                              'Profile',
-                              style: TextStyle(
-                                  fontFamily: 'Heedo',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0XFFF66464)),
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                            Row(
-                              children: [
-                                SizedBox(width: 25),
-                                Text('개굴',
-                                    style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 24,
-                                        color: Color(0XFFF66464))),
-                                SizedBox(width: 5),
-                                Text('INFJ',
-                                    style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15,
-                                        color: Color(0XFFF66464))),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                            Row(
-                              children: [
-                                Container(
-                                    margin: EdgeInsets.only(
-                                        top: 10,
-                                        bottom: 5,
-                                        right: 24,
-                                        left: 29),
-                                    child: Text(
-                                        '키:' + '\n' + '흡연정도:' + '\n' + '음주정도:',
-                                        textAlign:
-                                            TextAlign.start, // 텍스트를 가운데 정렬
-                                        style: TextStyle(
-                                            fontFamily: "Pretendard",
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15,
-                                            color: Color(0XFFF66464)))),
-                                Container(
-                                    margin: EdgeInsets.only(top: 10, bottom: 5),
-                                    child: Text(
-                                        '172' +
-                                            '\n' +
-                                            '전혀 안 마심' +
-                                            '\n' +
-                                            '전혀 안 핌',
-                                        textAlign:
-                                            TextAlign.start, // 텍스트를 가운데 정렬
-                                        style: TextStyle(
-                                            fontFamily: "Pretendard",
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15,
-                                            color: Color(0XFFF66464)))),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 34,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Color(0xFFFFD2D2),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              margin: EdgeInsets.only(top: 10),
-                              child: Text(
-                                '#애니',
-                                style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Color(0xFFFFD2D2),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              margin: EdgeInsets.only(top: 10),
-                              child: Text(
-                                '#그림그리기',
-                                style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    //동적으로 user data를 받아올땐 아래 코드를 써야할 것임
-                    /*child: Center(child: data!.length == 0
-                                          ? Text('유저 정보가 없습니다. 로그인하세요.', style: TextStyle(fontSize: 20),textAlign: TextAlign.center,)
-                                          :Container(
-                          child: Column(children: <Widget>[
-                            Text(data!['Sex'].toString()),
-                            Image.network(data!['Face'], height: 100, width: 100, fit: BoxFit.contain),
-                            Text(data!['Name'].toString()),
-                            Text(data!['Age'].toString()),
-                            Text(data!['University'].toString()),
-                          ]),
-                                          ),
-                                    ),*/
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(top: 20),
+                alignment: Alignment.center,
+                width: 300,
+                height: 400, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
+                  border: Border.all(color: Color(0xFFFF7D7D), width: 3),
                 ),
-                Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                Container(
-                    // color: Colors.black,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: SmoothPageIndicator(
-                        controller: mainPageController,
-                        count: 3,
-                        effect: ScrollingDotsEffect(
-                          dotColor: Colors.grey,
-                          activeDotColor: Color(0xFFF66464),
-                          activeStrokeWidth: 10,
-                          activeDotScale: 1.7,
-                          maxVisibleDots: 5,
-                          radius: 8,
-                          spacing: 10,
-                          dotHeight: 5,
-                          dotWidth: 5,
-                        ))),
-              ],
+                child: PageView(controller: mainPageController, children: [
+                  _buildPhotoPage(),
+                  Column(
+                    children: [
+                      _buildInfoPage(
+                        titles: ['지역:', '종교:', '전공:'],
+                        values: ['안암동', '무교', '예체능계열'],
+                      ),
+                      buildPinkBox('#개성있는'),
+                      buildPinkBox('#유머러스한')
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      _buildInfoPage(
+                        titles: ['키:', '흡연정도:', '음주정도:'],
+                        values: ['172', '전혀 안 마심', '전혀 안 핌'],
+                      ),
+                      buildPinkBox('#🍢애니'),
+                      buildPinkBox('#🎨그림그리기')
+                    ],
+                  ),
+                ]),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: SmoothPageIndicator(
+                controller: mainPageController,
+                count: 3,
+                effect: ScrollingDotsEffect(
+                  dotColor: Color(0xFFFFD2D2),
+                  activeDotColor: Color(0xFFF66464),
+                  activeStrokeWidth: 10,
+                  activeDotScale: 1.7,
+                  maxVisibleDots: 5,
+                  radius: 8,
+                  spacing: 10,
+                  dotHeight: 5,
+                  dotWidth: 5,
+                ),
+              ),
             ),
             GestureDetector(
               child: staticButton(text: 'Edit'),
               onTap: () {
                 goToMyPageEdit(context);
               },
-            )
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPhotoPage() {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+        ),
+        Text(
+          'Profile',
+          style: TextStyle(
+            fontFamily: 'Heedo',
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            color: Color(0XFFF66464),
+          ),
+        ),
+        SizedBox(
+          height: 50,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: (currentPage != 0)
+                  ? () {
+                      setState(() {
+                        currentPage--;
+                      });
+                    }
+                  : null,
+            ),
+            Container(
+              color: Colors.amber,
+              width: 200,
+              height: 200,
+              child: Image.asset(
+                imagePaths[currentPage],
+                // fit: BoxFit.fill,
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_forward_ios),
+              onPressed: (currentPage != imagePaths.length - 1)
+                  ? () {
+                      setState(() {
+                        currentPage++;
+                      });
+                    }
+                  : null,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoPage({
+    required List<String> titles,
+    required List<String> values,
+  }) {
+    return Column(
+      children: <Widget>[
+        Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+        Text(
+          'Profile',
+          style: TextStyle(
+              fontFamily: 'Heedo',
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+              color: Color(0XFFF66464)),
+        ),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        Row(
+          children: [
+            SizedBox(width: 25),
+            Text('개굴',
+                style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    color: Color(0XFFF66464))),
+            SizedBox(width: 5),
+            Text('INFJ',
+                style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464))),
+          ],
+        ),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 10, bottom: 5, right: 24, left: 29),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: titles
+                    .map((title) => Text(
+                          title,
+                          style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            color: Color(0XFFF66464),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: values
+                  .map(
+                    (value) => Text(
+                      value,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                        color: Color(0XFFF66464),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 34,
+        ),
+      ],
+    );
+  }
+
+  Widget buildPinkBox(String text) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(11),
+        color: Color(0xFFFFD2D2),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(top: 10),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontFamily: "Pretendard",
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
+          color: Colors.white,
         ),
       ),
     );
