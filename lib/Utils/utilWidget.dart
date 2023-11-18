@@ -192,7 +192,7 @@ class pointAppbar extends StatelessWidget {
         onPressed: () {},
         child: Container(
           padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: mainColor.MainColor.withOpacity(0.5),
@@ -226,7 +226,7 @@ class DateItem extends StatelessWidget {
         style: TextStyle(
           fontSize: 10,
           color: mainColor.lightGray,
-),
+        ),
       ),
     );
   }
@@ -285,7 +285,7 @@ class OtherChat extends StatelessWidget {
               style: TextStyle(
                 fontFamily: "Pretendard",
                 fontSize: 10,
-                  color: mainColor.lightGray,
+                color: mainColor.lightGray,
               ),
             ),
           )

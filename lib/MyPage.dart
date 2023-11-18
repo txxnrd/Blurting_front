@@ -85,7 +85,6 @@ class _MyPage extends State<MyPage> {
                       child: Row(
                         children: [
                           Container(
-                            margin: EdgeInsets.all(5),
                             child: Text('My Profile',
                                 // textAlign: TextAlign.left,
                                 style: TextStyle(
@@ -144,7 +143,7 @@ class _MyPage extends State<MyPage> {
                                     return Image.asset(
                                       imagePaths[index],
                                       width: 128,
-                                      fit: BoxFit.cover,
+                                      // fit: BoxFit.fill,
                                     );
                                   },
                                 ),
@@ -419,7 +418,7 @@ class _MyPage extends State<MyPage> {
                           controller: mainPageController,
                           count: 3,
                           effect: ScrollingDotsEffect(
-                            dotColor: Colors.grey,
+                            dotColor: Color(0xFFFFD2D2),
                             activeDotColor: Color(0xFFF66464),
                             activeStrokeWidth: 10,
                             activeDotScale: 1.7,
