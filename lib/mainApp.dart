@@ -16,12 +16,12 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token ='';
-IO.Socket socket = IO.io(
-      '${ServerEndpoints.socketServerEndpoint}/whisper',
-      <String, dynamic>{
-        'transports': ['websocket'],
-        'auth': {'authorization': 'Bearer $token'},
+  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYwLCJzaWduZWRBdCI6IjIwMjMtMTEtMThUMjE6MzM6MDQuNTAzWiIsImlhdCI6MTcwMDMxMDc4NCwiZXhwIjoxNzAwMzE0Mzg0fQ.Qgdds1bKDhpvD5P6WSv4nz8fEbFVnM23hQREBO0BJG8';
+  IO.Socket socket = IO
+      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+    'transports': ['websocket'],
+    'auth': {'authorization': 'Bearer $token'},
+    'reconnectionAttempts': 0,
   });
 
   late List<Widget> _pages;

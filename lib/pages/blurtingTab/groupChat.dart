@@ -95,7 +95,6 @@ class _GroupChat extends State<GroupChat> {
                 roomId: roomId)),
       );
     });
-
   }
 
   @override
@@ -221,14 +220,14 @@ class _GroupChat extends State<GroupChat> {
                                 userName: '정원',
                                 message: '하하\n그냥 잘까',
                                 socket: widget.socket,
-                                userId: 36,
+                                userId: 164,
                                 whisper: true),
                             AnswerItem(
                                 userName: '개굴',
                                 message: '아 목 아파 감기 걸렷나',
                                 socket: widget.socket,
                                 userId: 6,
-                                whisper: true),
+                                whisper: false),
                             AnswerItem(
                                 userName: '감기',
                                 message: '양치하고 자야겟다..',
@@ -271,9 +270,9 @@ class _GroupChat extends State<GroupChat> {
                   ),
                 ),
               CustomInputField(
-                  controller: _controller,
-                  sendFunction: SendAnswer,
-                  now: DateTime.now().toString()),
+                controller: _controller,
+                sendFunction: SendAnswer,
+              ),
             ],
           ),
         ],
@@ -308,7 +307,7 @@ class _GroupChat extends State<GroupChat> {
     }
   }
 
-  void SendAnswer(String answer, String now) async {
+  void SendAnswer(String answer) async {
     if(Provider.of<GroupChatProvider>(context, listen: false).pointValid) {
       print('포인트 지급');
     }
@@ -316,7 +315,8 @@ class _GroupChat extends State<GroupChat> {
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(
       message: answer,
-      createdAt: now,
+      createdAt: '',
+      read: true,
     );
 
     final url = Uri.parse('uri');

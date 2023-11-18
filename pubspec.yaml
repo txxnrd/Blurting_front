@@ -71,7 +71,8 @@ flutter:
     - image/girl.png
     - image/profile_swipe_now.png
     - image/profile_swipe_next.png
-    - assets/images/profile_image.png
+    - assets/images/profile_man.png
+    - assets/images/profile_woman.png
     - assets/images/blurting_Image.png
     - assets/images/icon_group.png
     - assets/images/setting.png

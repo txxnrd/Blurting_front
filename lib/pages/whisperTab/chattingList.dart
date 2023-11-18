@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:intl/intl.dart';
-import 'package:grouped_list/grouped_list.dart';
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 DateTime _parseDateTime(String? dateTimeString) {
@@ -41,9 +40,8 @@ class ChatListItem extends StatefulWidget {
   final DateTime latest_time;
   final String image;
   final String roomId;
-  final DateTime has_read;
   final String token;
-  final bool Unread;
+  final bool read;
 
   final IO.Socket socket;
 
@@ -52,10 +50,9 @@ class ChatListItem extends StatefulWidget {
       required this.userName,
       required this.latest_chat,
       required this.latest_time,
-      required this.has_read,
       required this.image,
       required this.socket,
-      required this.Unread,
+      required this.read,
       required this.roomId});
 
   @override
@@ -115,69 +112,69 @@ class _chatListItemState extends State<ChatListItem> {
                 ),
                 child: Row(
                   children: [
-                    Center(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Color.fromRGBO(255, 210, 210, 1),
-                        ),
-                        width: 55,
-                        height: 55,
-                        child: Image.asset(widget.image),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Color.fromRGBO(255, 210, 210, 1),
                       ),
+                      width: 60,
+                      height: 60,
+                      child: Image.asset(widget.image),
                     ),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      left: 20, top: 6, bottom: 6),
-                                  child: Text(
-                                    widget.userName,
-                                    style: TextStyle(
-                                      fontFamily: "Pretendard",
-                                      fontSize: 15,
-                                      color: Color.fromRGBO(48, 48, 48, 1),
-                                      fontWeight: FontWeight.w700,
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left: 20, top: 6, bottom: 6),
+                                    child: Text(
+                                      widget.userName,
+                                      style: TextStyle(
+                                        fontFamily: "Pretendard",
+                                        fontSize: 15,
+                                        color: Color.fromRGBO(48, 48, 48, 1),
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                if (widget.Unread)
-                                  Container(
-                                    width: 10,
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                        color: mainColor.MainColor,
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                            ),
-                            child: Text(
-                              widget.latest_chat,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                fontFamily: "Pretendard",
-                                fontSize: 15,
-                                color: Color.fromRGBO(48, 48, 48, 1),
+                                  if (!widget.read)
+                                    Container(
+                                      width: 10,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                          color: mainColor.MainColor,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                    ),
+                                ],
                               ),
-                            ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                ),
+                                child: Text(
+                                  widget.latest_chat,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontSize: 15,
+                                    color: Color.fromRGBO(48, 48, 48, 1),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Container(
-                            alignment: Alignment.centerRight,
                             margin: EdgeInsets.only(right: 20),
                             child: Text(
                               latest_time,
@@ -213,17 +210,17 @@ class _chattingList extends State<ChattingList> {
       fetchList(widget.token);
     });
 
-      widget.socket.on('invite_chat', (data) {
-        Widget newChat = ChatListItem(
-          token: widget.token,
-          roomId: data,
-          userName: '새로운 채팅방',
-          latest_chat: '누군가가 나에게 새로운 채팅을 걸었어요',
-          latest_time: DateTime.now(),
-          has_read: DateTime.now(),
-          image: 'assets/images/profile_image.png',
-          socket: widget.socket,
-        Unread: false,
+    widget.socket.on('invite_chat', (data) {
+      print('새로운 채팅: $data');
+      Widget newChat = ChatListItem(
+        token: widget.token,
+        roomId: data,
+        userName: '새로운 채팅방',
+        latest_chat: '누군가가 나에게 새로운 채팅을 걸었어요',
+        latest_time: DateTime.now(),
+        image: 'assets/man.png',
+        socket: widget.socket,
+        read: false,
       );
 
       widget.socket.emit('join_chat', data);
@@ -235,26 +232,22 @@ class _chattingList extends State<ChattingList> {
     });
 
       widget.socket.on('new_chat', (data) {
-        print('새 메시지 도착${data}');
+        print('새 메시지 도착$data');
 
-        // 새로운 메시지가 오면, chatLists의 인덱스들 중에서 해당 메시지의 roomId가 동일한 요소를 배열의 첫 번째 인덱스로 끌어올리기
-        for (int i = 0; i < chatLists.length; i++) {
+      for (int i = 0; i < chatLists.length; i++) {
         Widget widget = chatLists[i];
         if (widget is ChatListItem) {
           DateTime latestTime = _parseDateTime(data['createdAt']);
-          DateTime hasRead;
+          bool read;
 
           if (data['userId'] == UserProvider.UserId) {
-            // 만약 내가 보냈으면 받아 온 걸로
-            hasRead = _parseDateTime(data['has_read']);
+            read = true;
           } else {
-            // 내가 보낸 게 아니면 원래 있는 걸로
-            hasRead = widget.has_read;
+            read = data['read'];
           }
 
-          print(hasRead);
-          
-          bool unread = hasRead.isBefore(latestTime);
+          print(read);
+
           String roomId = widget.roomId;
 
           if (roomId == data['roomId']) {
@@ -270,15 +263,42 @@ class _chattingList extends State<ChattingList> {
                       userName: userName,
                       latest_chat: data['chat'] as String? ?? '',
                       latest_time: latestTime,
-                      has_read: hasRead,
-                      image: 'assets/images/profile_image.png',
+                      image: data['sex'] == "F"
+                          ? 'assets/woman.png'
+                          : 'assets/man.png',
                       socket: widget.socket,
-                      Unread: unread,
+                      read: read,
                     ));
-                    print('닉네임: ${widget.userName}');
               });
             }
             return;
+          }
+        }
+      }
+    });
+
+    widget.socket.on('out_room', (data) {
+      // roomId를 받아서 그 값을 갱신..
+      for (int i = 0; i < chatLists.length; i++) {
+        Widget widget = chatLists[i];
+        if (widget is ChatListItem) {
+          if (data == widget.roomId) {
+            if(mounted){
+            setState(() {
+              chatLists.removeAt(i);
+              chatLists.insert(
+                  i,
+                  ChatListItem(
+                    token: widget.token,
+                    roomId: widget.roomId,
+                    userName: widget.userName,
+                    latest_chat: widget.latest_chat,
+                    latest_time: widget.latest_time,
+                    image: widget.image,
+                    socket: widget.socket,
+                    read: true,
+                  ));
+            });}
           }
         }
       }
@@ -317,10 +337,9 @@ class _chattingList extends State<ChattingList> {
         title: Container(
           margin: EdgeInsets.only(top: 70),
           height: 80,
-          child: Positioned(
-              child: Container(
-                  padding: EdgeInsets.all(13),
-                  child: ellipseText(text: 'Connect'))),
+          child: Container(
+              padding: EdgeInsets.all(13),
+              child: ellipseText(text: 'Connect')),
         ),
         bottom: PreferredSize(
           preferredSize: Size(10, 10),
@@ -391,10 +410,9 @@ class _chattingList extends State<ChattingList> {
                         userName: '테스트',
                         latest_chat: '소켓 X',
                         latest_time: DateTime.now(),
-                        has_read: DateTime.now(),
                         image: 'assets/woman.png',
                         socket: widget.socket,
-                        Unread: true,
+                        read: true,
                       )),
                     ],
                   ),
@@ -431,7 +449,11 @@ class _chattingList extends State<ChattingList> {
           DateTime latestTime = _parseDateTime(chatData['latest_time']);
           DateTime hasRead = _parseDateTime(chatData['has_read']);
 
-          bool unread = hasRead.isBefore(latestTime);
+          bool read = hasRead.isBefore(latestTime);
+
+          if (latestTime == hasRead) {
+            read = true;
+          }
 
           if (mounted) {
             setState(() {
@@ -441,18 +463,19 @@ class _chattingList extends State<ChattingList> {
                   token: widget.token,
                   roomId: chatData['roomId'] as String? ?? '',
                   userName: chatData['nickname'] as String? ?? '',
-                  latest_chat: chatData['latest_chat'] as String? ?? '',
+                  latest_chat:
+                      chatData['latest_chat'] as String? ?? '채팅을 걸어 보세요!',
                   latest_time: latestTime,
-                  has_read: hasRead,
-                  image: 'assets/images/profile_image.png',
+                  image: chatData['sex'] == "F"
+                      ? 'assets/woman.png'
+                      : 'assets/man.png',
                   socket: widget.socket,
-                  Unread: unread,
+                  read: read,
                 ),
               );
             });
           }
         }
-
         print('Response body: ${response.body}');
       } catch (e) {
         print('Error decoding JSON: $e');

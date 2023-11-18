@@ -54,37 +54,55 @@ class _Whisper extends State<Whisper> {
   @override
   void dispose() {
     super.dispose();
+
+        Map<String, dynamic> data = 
+    {
+      'roomId': widget.roomId, 
+      'inRoom': false
+    };
+
+    widget.socket.emit('in_room', data);
   }
 
   @override
   void initState() {
     super.initState();
 
-      Future.delayed(Duration.zero, () {
-        fetchChats(widget.token);
-      });
+    Map<String, dynamic> data = 
+    {
+      'roomId': widget.roomId, 
+      'inRoom': true
+    };
 
-      widget.socket.on('new_chat', (data) {
-        int userId = data['userId'];
-        String message = data['chat'];
-        Widget newAnswer;
+    widget.socket.emit('in_room', data);
 
-        if (userId == UserProvider.UserId) {
-          // userProvider
-          newAnswer = MyChat(
-            message: message,
-            createdAt: dateFormat
-                .format(_parseDateTime(data['createdAt'] as String? ?? '')),
-          );
-          sendingMessageList.clear();
-          print('내 메시지 전송 완료: $message');
+    Future.delayed(Duration.zero, () {
+      fetchChats(widget.token);
+    });
+
+    widget.socket.on('new_chat', (data) {
+      int userId = data['userId'];
+      String chat = data['chat'];
+      bool read = data['read'];       // (읽음 표시)
+      Widget newAnswer;
+
+      if (userId == UserProvider.UserId) {
+        // userProvider
+        newAnswer = MyChat(
+          message: chat,
+          createdAt: dateFormat
+              .format(_parseDateTime(data['createdAt'] as String? ?? '')),
+          read: read,
+        );
+        sendingMessageList.clear();
+        print('내 메시지 전송 완료: $chat');
       } else {
         newAnswer = ListTile(
             subtitle: OtherChat(
-                message: message,
+                message: chat,
                 createdAt: dateFormat.format(
                     _parseDateTime(data['createdAt'] as String? ?? ''))));
-        print('상대방 메시지 도착: $message');
+        print('상대방 메시지 도착: $chat');
       }
       if (mounted) {
         setState(() {
@@ -183,7 +201,7 @@ class _Whisper extends State<Whisper> {
                       child: Text(
                         '2023년 11월 16일',
                         style: TextStyle(
-                  color: mainColor.lightGray,
+                            color: mainColor.lightGray,
                             fontSize: 10,
                             fontFamily: 'Heedo'),
                       ),
@@ -197,7 +215,6 @@ class _Whisper extends State<Whisper> {
             CustomInputField(
               controller: controller,
               sendFunction: sendChat,
-              now: DateTime.now().toString(),
             ),
           ],
         ),
@@ -207,18 +224,18 @@ class _Whisper extends State<Whisper> {
 
   List<Widget> sendingMessageList = []; // 전송 중인 답변을 저장할 리스트
 
-  void sendChat(String message, String now) {
+  void sendChat(String message) {
     Map<String, dynamic> data = {
       // 'userId': 57,    // 내 아이디라고 함 일단
       'roomId': widget.roomId,
       'chat': message,
-      'createdAt': now,
     };
 
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(
       message: message,
       createdAt: '전송 중...',
+      read: true,
     );
 
     // 소켓 서버에 데이터 전송
@@ -275,19 +292,17 @@ class _Whisper extends State<Whisper> {
                 message: chatData['chat'] as String? ?? '',
                 createdAt: dateFormat.format(
                     _parseDateTime(chatData['createdAt'] as String? ?? '')),
-              );              
+                read: true,         // http에서 받아오는 거니까..
+              );
             } else {
               fetchChatList = ListTile(
-                  subtitle:
-                      OtherChat(
+                  subtitle: OtherChat(
                       message: chatData['chat'] as String? ?? '',
-                      createdAt: dateFormat.format(
-                    _parseDateTime(
+                      createdAt: dateFormat.format(_parseDateTime(
                           chatData['createdAt'] as String? ?? ''))));
             }
             chatMessages.add(fetchChatList);
           });
-        
         }
 
         print('Response body: ${response.body}');
