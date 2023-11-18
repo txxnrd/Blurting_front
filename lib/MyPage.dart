@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/MyPageEdit.dart';
+import 'package:blurting/Utils/provider.dart';
 
 void main() {
   runApp(MyPage());
@@ -47,11 +48,10 @@ class _MyPage extends State<MyPage> {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          //나중에 색깔 통일할때나 쓸듯?
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
           useMaterial3: true,
         ),
         home: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               toolbarHeight: 80,
               backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
@@ -117,59 +117,64 @@ class _MyPage extends State<MyPage> {
                         physics: const BouncingScrollPhysics(),
                         children: [
                           //첫번째 페이지
-                          Column(children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                            Text(
-                              'Profile',
-                              style: TextStyle(
-                                  fontFamily: 'Heedo',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0XFFF66464)),
-                            ),
-                            Expanded(
-                              child: PageView.builder(
-                                controller: imagePageController,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: imagePaths.length,
-                                onPageChanged: (index) {
-                                  setState(() {
-                                    currentPage = index;
-                                  });
-                                },
-                                itemBuilder: (context, index) {
-                                  return Image.asset(
-                                    imagePaths[index],
-                                    width: 128,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
+                          Container(
+                            width: 30,
+                            child: Column(children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                              Text(
+                                'Profile',
+                                style: TextStyle(
+                                    fontFamily: 'Heedo',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0XFFF66464)),
                               ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.arrow_back_ios),
-                                  onPressed: () {
-                                    imagePageController.previousPage(
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.easeInOut,
+                              Expanded(
+                                child: PageView.builder(
+                                  controller: imagePageController,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: imagePaths.length,
+                                  onPageChanged: (index) {
+                                    setState(() {
+                                      currentPage = index;
+                                    });
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return Image.asset(
+                                      imagePaths[index],
+                                      width: 128,
+                                      fit: BoxFit.cover,
                                     );
                                   },
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.arrow_forward_ios),
-                                  onPressed: () {
-                                    imagePageController.nextPage(
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.easeInOut,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ]),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.arrow_back_ios),
+                                    onPressed: () {
+                                      imagePageController.previousPage(
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.arrow_forward_ios),
+                                    onPressed: () {
+                                      imagePageController.nextPage(
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ]),
+                          ),
                           //두번째 페이지
                           Column(
                             children: <Widget>[
@@ -180,7 +185,7 @@ class _MyPage extends State<MyPage> {
                                 style: TextStyle(
                                     fontFamily: 'Heedo',
                                     fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w400,
                                     color: Color(0XFFF66464)),
                               ),
                               Padding(
@@ -285,7 +290,7 @@ class _MyPage extends State<MyPage> {
                                 style: TextStyle(
                                     fontFamily: 'Heedo',
                                     fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w400,
                                     color: Color(0XFFF66464)),
                               ),
                               Padding(
