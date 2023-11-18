@@ -16,13 +16,12 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token =
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsInNpZ25lZEF0IjoiMjAyMy0xMS0xNlQxNjoyNzo0OC41MjBaIiwiaWF0IjoxNzAwMTUyMDY4LCJleHAiOjE3MDAxNTU2Njh9.fYWI30ReLhfi3JoFEJ0BwQFHdfcnqbQ4uSm0w4dZUT4';  
-IO.Socket socket = IO.io(
-      '${ServerEndpoints.socketServerEndpoint}whisper',
-      <String, dynamic>{
-        'transports': ['websocket'],
-        'auth': {'authorization': 'Bearer $token'},
+  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYwLCJzaWduZWRBdCI6IjIwMjMtMTEtMThUMjI6Mzc6MjkuMTE0WiIsImlhdCI6MTcwMDMxNDY0OSwiZXhwIjoxNzAwMzE4MjQ5fQ._opOZodwDpbuokoOQI1Q4nISWxJaW8COsGyemBlV_aA';
+  IO.Socket socket = IO
+      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+    'transports': ['websocket'],
+    'auth': {'authorization': 'Bearer $token'},
+    'reconnectionAttempts': 0,
   });
 
   late List<Widget> _pages;
@@ -53,9 +52,9 @@ IO.Socket socket = IO.io(
       extendBody: true,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: [
+        decoration: BoxDecoration(boxShadow: const [
           BoxShadow(
-            color: const Color.fromARGB(255, 212, 212, 212), // 그림자 색상
+            color: Color.fromARGB(255, 212, 212, 212), // 그림자 색상
             blurRadius: 20, // 그림자의 흐림 정도
             spreadRadius: 4, // 그림자의 확산 정도
             offset: Offset(0, 1), // 그림자의 위치 (가로, 세로)
@@ -128,7 +127,7 @@ class TabItem extends StatelessWidget {
   final String name;
 
   TabItem(
-      {required this.currentIndex, required this.image, required this.name});
+      {super.key, required this.currentIndex, required this.image, required this.name});
 
   @override
   Widget build(BuildContext context) {

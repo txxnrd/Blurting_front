@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
+import 'package:blurting/pages/blurtingTab/groupChat.dart';
+import 'package:provider/provider.dart';
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
@@ -83,13 +85,11 @@ class InputfieldClipper extends CustomClipper<Path> {
 // 인풋필드 위젯 (컨트롤러, 시간, 보내는 함수)
 class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
-  final Function(String, String)? sendFunction;
-  final String now;
+  final Function(String)? sendFunction;
 
   CustomInputField({
     required this.controller,
     this.sendFunction,
-    required this.now,
   });
 
   @override
@@ -97,12 +97,40 @@ class CustomInputField extends StatefulWidget {
 }
 
 class _CustomInputFieldState extends State<CustomInputField> {
+  late FocusNode _focusNode;
   bool isValid = false;
 
   void inputValid(bool state) {
     setState(() {
       isValid = state;
     });
+  }
+
+  void inputPointValid(bool state) {
+    Provider.of<GroupChatProvider>(context, listen: false).pointValid = state;
+  }
+
+  void isPocusState(bool state) {
+    Provider.of<GroupChatProvider>(context, listen: false).isPocus = state;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        isPocusState(true);
+      } else {
+        isPocusState(false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -118,11 +146,18 @@ class _CustomInputFieldState extends State<CustomInputField> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width - 20,
               child: TextField(
+                focusNode: _focusNode,
                 onChanged: (value) {
                   if (value != '') {
                     inputValid(true);
                   } else {
                     inputValid(false);
+                  }
+
+                  if (value.length >= 100) {
+                    inputPointValid(true);
+                  } else {
+                    inputPointValid(false);
                   }
                 },
                 style: TextStyle(fontSize: 12),
@@ -148,10 +183,10 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   suffixIcon: IconButton(
                     onPressed: (isValid)
                         ? () {
-                            widget.sendFunction!(
-                                widget.controller.text, widget.now);
+                            widget.sendFunction!(widget.controller.text);
                             setState(() {
                               inputValid(false);
+                              inputPointValid(false);
                               widget.controller.clear();
                             });
                           }
@@ -278,16 +313,33 @@ class OtherChat extends StatelessWidget {
               ),
             ],
           ),
-          Container(
-            margin: EdgeInsets.only(top: 20, left: 5),
-            child: Text(
-              createdAt,
-              style: TextStyle(
-                fontFamily: "Pretendard",
-                fontSize: 10,
-                color: mainColor.lightGray,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //  Container(
+              //     margin: EdgeInsets.only(top: 20, left: 5),
+              //     child:
+              //     Text(
+              //       '읽지 않음',
+              //       style: TextStyle(
+              //         fontFamily: "Pretendard",
+              //         fontSize: 10,
+              //         color: mainColor.lightGray,
+              //       ),
+              //     ),
+              //   ),
+              Container(
+                margin: EdgeInsets.only(top: 5, left: 5),
+                child: Text(
+                  createdAt,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontSize: 10,
+                    color: mainColor.lightGray,
+                  ),
+                ),
               ),
-            ),
+            ],
           )
         ],
       ),
@@ -299,8 +351,13 @@ class OtherChat extends StatelessWidget {
 class MyChat extends StatelessWidget {
   final String message;
   final String createdAt;
+  final bool read;
 
-  MyChat({super.key, required this.message, required this.createdAt});
+  MyChat(
+      {super.key,
+      required this.message,
+      required this.createdAt,
+      required this.read});
 
   @override
   Widget build(BuildContext context) {
@@ -309,18 +366,37 @@ class MyChat extends StatelessWidget {
           Container(
         margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              margin: EdgeInsets.only(top: 20, right: 5),
-              child: Text(
-                createdAt,
-                style: TextStyle(
-                  fontFamily: "Pretendard",
-                  fontSize: 10,
-                  color: mainColor.lightGray,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                //   if(!read)
+                //  Container(
+                //     margin: EdgeInsets.only(top: 20, right: 5),
+                //     child:
+                //     Text(
+                //       '읽지 않음',
+                //       style: TextStyle(
+                //         fontFamily: "Pretendard",
+                //         fontSize: 10,
+                //         color: mainColor.lightGray,
+                //       ),
+                //     ),
+                //   ),
+                Container(
+                  margin: EdgeInsets.only(top: 5, right: 5),
+                  child: Text(
+                    createdAt,
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      fontSize: 10,
+                      color: mainColor.lightGray,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             Column(
               children: [
@@ -369,15 +445,14 @@ class AnswerItem extends StatelessWidget {
   final String userName;
   final String message;
   final int userId;
-  final bool isAlready;
+  final bool whisper;
 
   AnswerItem(
       {required this.userName,
       required this.message,
-      // required this.jsonData,
       required this.socket,
       required this.userId,
-      required this.isAlready});
+      required this.whisper});
 
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
@@ -525,7 +600,7 @@ class AnswerItem extends StatelessWidget {
                         margin: EdgeInsets.only(top: 5),
                         width: 127.99,
                         child: Image.asset(
-                          'assets/images/profile_image.png',
+                          'assets/images/profile_man.png',
                           fit: BoxFit.cover,
                         )),
                     Container(
@@ -714,13 +789,16 @@ class AnswerItem extends StatelessWidget {
     return ListTile(
       leading: GestureDetector(
         onTap: () {
-          _showProfileModal(context, userId, isAlready); // jsonData 매개변수
+          _showProfileModal(context, userId, whisper); // jsonData 매개변수
         },
         child: Container(
-          width: 42.74,
-          height: 48.56,
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(50)),
           child: Image.asset(
-            'assets/images/profile_image.png',
+            'assets/man.png',
           ),
         ),
       ),
@@ -737,7 +815,7 @@ class AnswerItem extends StatelessWidget {
       ),
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(bottom: 20, top: 0, left: 10),
+        margin: EdgeInsets.only(bottom: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -54,11 +54,27 @@ class _Whisper extends State<Whisper> {
   @override
   void dispose() {
     super.dispose();
+
+        Map<String, dynamic> data = 
+    {
+      'roomId': widget.roomId, 
+      'inRoom': false
+    };
+
+    widget.socket.emit('in_room', data);
   }
 
   @override
   void initState() {
     super.initState();
+
+    Map<String, dynamic> data = 
+    {
+      'roomId': widget.roomId, 
+      'inRoom': true
+    };
+
+    widget.socket.emit('in_room', data);
 
     Future.delayed(Duration.zero, () {
       fetchChats(widget.token);
@@ -66,25 +82,33 @@ class _Whisper extends State<Whisper> {
 
     widget.socket.on('new_chat', (data) {
       int userId = data['userId'];
-      // DateTime date = _parseDateTime(data['createdAt']);
-      String message = data['chat'];
+      String chat = data['chat'];
+      bool read = data['read'];       // (읽음 표시)
       Widget newAnswer;
 
-      if (userId == 36) {
+      if (userId == UserProvider.UserId) {
         // userProvider
         newAnswer = MyChat(
-          message: message,
-          createdAt: data['createdAt'],
+          message: chat,
+          createdAt: dateFormat
+              .format(_parseDateTime(data['createdAt'] as String? ?? '')),
+          read: read,
         );
         sendingMessageList.clear();
-        print('내 메시지 전송 완료: $message');
+        print('내 메시지 전송 완료: $chat');
       } else {
-        newAnswer = ListTile(subtitle: OtherChat(message: message, createdAt: data['createdAt'],));
-        print('상대방 메시지 도착: $message');
+        newAnswer = ListTile(
+            subtitle: OtherChat(
+                message: chat,
+                createdAt: dateFormat.format(
+                    _parseDateTime(data['createdAt'] as String? ?? ''))));
+        print('상대방 메시지 도착: $chat');
       }
-      setState(() {
-        chatMessages.add(newAnswer); // 새로운 메시지 추가
-      });
+      if (mounted) {
+        setState(() {
+          chatMessages.add(newAnswer); // 새로운 메시지 추가
+        });
+      }
     });
   }
 
@@ -133,7 +157,19 @@ class _Whisper extends State<Whisper> {
             )
           ],
         ),
-        actions: <Widget>[pointAppbar(point: 120)],
+        actions: <Widget>[
+          pointAppbar(point: 120),
+          Container(
+            margin: EdgeInsets.only(right: 20),
+            child: IconButton(
+              icon: Image.asset('assets/images/setting.png'),
+              color: Color.fromRGBO(48, 48, 48, 1),
+              onPressed: () {
+                // 설정 버튼을 눌렀을 때의 동작
+              },
+            ),
+          ),
+        ],
         flexibleSpace: Stack(
           children: [
             ClipRRect(
@@ -165,7 +201,7 @@ class _Whisper extends State<Whisper> {
                       child: Text(
                         '2023년 11월 16일',
                         style: TextStyle(
-                  color: mainColor.lightGray,
+                            color: mainColor.lightGray,
                             fontSize: 10,
                             fontFamily: 'Heedo'),
                       ),
@@ -179,7 +215,6 @@ class _Whisper extends State<Whisper> {
             CustomInputField(
               controller: controller,
               sendFunction: sendChat,
-              now: DateTime.now().toString(),
             ),
           ],
         ),
@@ -189,18 +224,18 @@ class _Whisper extends State<Whisper> {
 
   List<Widget> sendingMessageList = []; // 전송 중인 답변을 저장할 리스트
 
-  void sendChat(String message, String now) {
+  void sendChat(String message) {
     Map<String, dynamic> data = {
       // 'userId': 57,    // 내 아이디라고 함 일단
       'roomId': widget.roomId,
       'chat': message,
-      'createdAt': now,
     };
 
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(
       message: message,
       createdAt: '전송 중...',
+      read: true,
     );
 
     // 소켓 서버에 데이터 전송
@@ -221,7 +256,7 @@ class _Whisper extends State<Whisper> {
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     final url =
-        Uri.parse('${ServerEndpoints.serverEndpoint}chat/${widget.roomId}');
+        Uri.parse('${ServerEndpoints.serverEndpoint}/chat/${widget.roomId}');
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -252,27 +287,25 @@ class _Whisper extends State<Whisper> {
           Widget fetchChatList;
 
           setState(() {
-            if (chatData['userId'] == 36) {
+            if (chatData['userId'] == UserProvider.UserId) {
               fetchChatList = MyChat(
                 message: chatData['chat'] as String? ?? '',
                 createdAt: dateFormat.format(
                     _parseDateTime(chatData['createdAt'] as String? ?? '')),
-              );              
+                read: true,         // http에서 받아오는 거니까..
+              );
             } else {
               fetchChatList = ListTile(
-                  subtitle:
-                      OtherChat(
+                  subtitle: OtherChat(
                       message: chatData['chat'] as String? ?? '',
-                      createdAt: dateFormat.format(
-                    _parseDateTime(
+                      createdAt: dateFormat.format(_parseDateTime(
                           chatData['createdAt'] as String? ?? ''))));
             }
             chatMessages.add(fetchChatList);
           });
-        
         }
 
-        // print('Response body: ${response.body}');
+        print('Response body: ${response.body}');
       } catch (e) {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
