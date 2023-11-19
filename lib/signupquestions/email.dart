@@ -20,7 +20,7 @@ class EmailPage extends StatefulWidget {
 }
 
 class _EmailPageState extends State<EmailPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin,WidgetsBindingObserver {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -39,11 +39,11 @@ class _EmailPageState extends State<EmailPage>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addObserver(this); // 생명주기 감지를 위한 옵저버 추가
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
-
     _progressAnimation = Tween<double>(
       begin: 13/14, // 시작 너비 (30%)
       end: 14/14, // 종료 너비 (40%)
@@ -53,8 +53,20 @@ class _EmailPageState extends State<EmailPage>
         setState(() {});
       });
   }
-
-
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // 화면이 다시 활성화될 때 애니메이션 리셋
+      _animationController?.reset();
+      _animationController?.forward();
+    }
+  }
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    WidgetsBinding.instance?.removeObserver(this); // 옵저버 제거
+    super.dispose();
+  }
   void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -194,6 +206,8 @@ class _EmailPageState extends State<EmailPage>
 
       _showVerificationSuccessedSnackBar();
       var data = json.decode(response.body);
+
+
 
       if(data['accesstoken']!=null)
       {

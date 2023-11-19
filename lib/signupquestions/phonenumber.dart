@@ -16,7 +16,7 @@ class PhoneNumberPage extends StatefulWidget {
 }
 
 class _PhoneNumberPageState extends State<PhoneNumberPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin,WidgetsBindingObserver {
   AnimationController? _animationController;
   String? _previousText;
   Animation<double>? _progressAnimation;
@@ -282,6 +282,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           ),
           onPressed: () {
             // 뒤로가기 버튼을 눌렀을 때의 동작
+            Navigator.pop(context);
           },
         ),
 
