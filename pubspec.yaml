@@ -31,16 +31,11 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: ^1.0.4
+  url_launcher: ^6.2.1
   location: ^5.0.3
   smooth_page_indicator: ^1.0.0+2
   web_socket_channel: ^2.4.0
-<<<<<<< HEAD
-
   geolocator: ^10.1.0
-
-=======
-  geolocator: ^10.1.0
->>>>>>> 28de55a321109dfca63a3e7286aa350418563946
   http: ^1.1.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -52,6 +47,7 @@ dependencies:
   dio: ^5.3.3
   shared_preferences: ^2.2.2
   intl: ^0.18.1
+  flarelane_flutter: 1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -74,10 +70,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-<<<<<<< HEAD
-
-=======
->>>>>>> 28de55a321109dfca63a3e7286aa350418563946
     - image/girl.png
     - image/profile_swipe_now.png
     - image/profile_swipe_next.png
@@ -103,10 +95,9 @@ flutter:
     - assets/images/chat.png
     - assets/images/like.png
     - assets/images/homecard.png
-<<<<<<< HEAD
-=======
+    - assets/images/setting_boy.png
+    - assets/images/setting_girl.png
 
->>>>>>> 28de55a321109dfca63a3e7286aa350418563946
   fonts:
     - family: Pretendard
       fonts:

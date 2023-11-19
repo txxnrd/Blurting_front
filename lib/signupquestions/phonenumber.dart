@@ -199,13 +199,16 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     print("snackbar 실행");
     final snackBar = SnackBar(
       content: Text(value),
+      // backgroundColor: ,
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -39,12 +39,6 @@ void main() async {
 //   runApp(MyApp());
 // }
 
-import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
-import 'package:blurting/signupquestions/sex.dart';  // phonenumber.dart를 임포트
-
-void main() => runApp(MyApp());
-
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -60,4 +54,4 @@ class MyApp extends StatelessWidget {
       home: LoginPage(), // PhoneNumberPage를 홈으로 설정
     );
   }
-
+}
