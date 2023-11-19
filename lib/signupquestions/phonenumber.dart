@@ -419,7 +419,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       ), // 선택/포커스 됐을 때 테두리 색상
                     ),
                     suffixIcon: Container(
-                      width: 120,
+                      width: 110,
                       margin: EdgeInsets.only(right: 11,top: 9,bottom:9), // 필요에 따라 마진 조정
                       child:Row(
                         children:[
@@ -433,33 +433,35 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                         ),
                       ),
                       ),
-                      SizedBox(width: 4,),
-                      Container(
-                        width: 71,
-                        child:
-                        ElevatedButton(
-                        onPressed: () {
-                          _sendPostRequest(phonenumber);
-                          startTimer();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                          Container(
+                            width: 56, // 버튼의 너비를 설정합니다.
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _sendPostRequest(phonenumber);
+                                startTimer();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                                ),
+                                backgroundColor: Color(DefinedColor.darkpink),
+                                elevation: 0.0,
+                                padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                              ),
+                              child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
+                                fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                child: Text('재전송',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                    fontFamily: 'Pretendard',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                          backgroundColor: Color(DefinedColor.darkpink),
-                          elevation: 0.0,
-                        ),
-                        child: Text('재전송',
-
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                            fontFamily: 'Pretendard',
-                          ),
-                        ),
-                      ),
-                      ),
-                      ]
+                        ]
                     ),
                   ),
                   ),

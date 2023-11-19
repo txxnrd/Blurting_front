@@ -17,7 +17,7 @@ class API {
   static const String uploadimage = "${ServerEndpoints.serverEndpoint}/s3";
   static const String startsignup = "${ServerEndpoints.serverEndpoint}/auth/signup/start";
   static const String user = "${ServerEndpoints.serverEndpoint}/user";
-
+  static const String userprofile = "${ServerEndpoints.serverEndpoint}/user/profile";
   /*현재 위치 불러오기*/
   static const String geobyname = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";
   static const String geobygeo = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";

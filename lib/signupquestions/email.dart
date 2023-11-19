@@ -203,12 +203,7 @@ class _EmailPageState extends State<EmailPage>
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK 200');
       print('Response body: ${response.body}');
-
-      _showVerificationSuccessedSnackBar();
       var data = json.decode(response.body);
-
-
-
       if(data['accessToken']!=null)
       {
         var token = data['accessToken'];
