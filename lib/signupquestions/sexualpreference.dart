@@ -386,7 +386,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
             ),
             
             // 두 버튼 사이의 간격 조정
-            SizedBox(height: 365),
+            SizedBox(height: 25),
             Container(
               width: 180,
               height: 12,

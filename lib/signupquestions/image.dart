@@ -424,7 +424,7 @@ class ImagePageState extends State<ImagePage>
 
               ],
             ),
-            SizedBox(height: 356),
+            SizedBox(height: 26),
             Container(
               width: 180,
               height: 12,

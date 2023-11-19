@@ -209,11 +209,13 @@ class _EmailPageState extends State<EmailPage>
 
 
 
-      if(data['accesstoken']!=null)
+      if(data['accessToken']!=null)
       {
-        var token = data['accesstoken'];
+        var token = data['accessToken'];
+        var refreshtoken = data['refreshToken'];
         print(token);
         await saveToken(token);
+        await saveRefreshToken(refreshtoken);
         _increaseProgressAndNavigate();
       }
       else{

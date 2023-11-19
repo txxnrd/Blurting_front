@@ -93,7 +93,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   List<String> selectedCharacteristics = [];
 
   List<String> characteristic = [
-  "개성적인", "책임감있는", "열정적인", "귀여운", "낙천적인", "유머있는", "차분한", "지적인", "섬세한", "무뚝뚝한", "외향적인", "내향적인"
+  "개성적인", "책임감있는", "열정적인", "귀여운", "상냥한","감성적인","낙천적인", "유머있는", "차분한", "지적인", "섬세한", "무뚝뚝한", "외향적인", "내향적인"
   ];
 
   void updateSelectedCharacteristics() {

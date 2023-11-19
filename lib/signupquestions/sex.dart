@@ -156,7 +156,6 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,

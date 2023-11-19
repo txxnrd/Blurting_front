@@ -135,7 +135,7 @@ class _ReligionPageState extends State<ReligionPage>
       religion = '천주교' ;
     }
     else{
-      religion='etc';
+      religion='기타';
     }
 
     String savedToken = await getToken();

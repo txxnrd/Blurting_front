@@ -190,9 +190,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-
       print("error");
-
     }
   }
 
