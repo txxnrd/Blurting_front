@@ -1,9 +1,5 @@
 import 'package:blurting/settings/setting.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/activeplacesearch.dart';
-import 'package:blurting/signupquestions/email.dart';
 import 'package:blurting/signupquestions/hobby.dart';
-import 'package:blurting/signupquestions/university.dart';
 import 'package:blurting/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
@@ -13,18 +9,18 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:intl/date_symbol_data_local.dart';
 
-//void main() async {
-//  await initializeDateFormatting('ko_KR', null);
+void main() async {
+  await initializeDateFormatting('ko_KR', null);
   // 여기에 나머지 코드를 추가하세요.
-//  runApp(
-//    MaterialApp(
-//      debugShowCheckedModeBanner: false,
-//     home: MainApp()),
-//  );
-//}
+  runApp(
+    MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: LoginPage()),
+  );
+}
 
-import 'package:geolocator/geolocator.dart';
-import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
+// import 'package:geolocator/geolocator.dart';
+// import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
 
 
 // void main() {
@@ -42,14 +38,14 @@ import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart�
 
 //   runApp(MyApp());
 // }
-import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
-import 'package:blurting/signupquestions/sex.dart';  // phonenumber.dart를 임포트
+// import 'package:blurting/signupquestions/phonenumber.dart';  // phonenumber.dart를 임포트
+// import 'package:blurting/signupquestions/sex.dart';  // phonenumber.dart를 임포트
 
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
 
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +56,6 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         backgroundColor: Colors.white,
       ),
-      home: LoginPage(), // LoginPage를 홈으로 설정
+      home: LoginPage(), // PhoneNumberPage를 홈으로 설정
     );
   }
-}
