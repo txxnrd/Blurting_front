@@ -118,7 +118,7 @@ class _MyPage extends State<MyPage> {
                               Text(
                                 'Profile',
                                 style: TextStyle(
-                                    fontFamily: 'Heedo',
+                                    fontFamily: 'Heebo',
                                     fontSize: 20,
                                     fontWeight: FontWeight.w400,
                                     color: Color(0XFFF66464)),
@@ -178,7 +178,7 @@ class _MyPage extends State<MyPage> {
                             Text(
                               'Profile',
                               style: TextStyle(
-                                  fontFamily: 'Heedo',
+                                  fontFamily: 'Heebo',
                                   fontSize: 20,
                                   fontWeight: FontWeight.w400,
                                   color: Color(0XFFF66464)),
@@ -274,7 +274,7 @@ class _MyPage extends State<MyPage> {
                             Text(
                               'Profile',
                               style: TextStyle(
-                                  fontFamily: 'Heedo',
+                                  fontFamily: 'Heebo',
                                   fontSize: 20,
                                   fontWeight: FontWeight.w400,
                                   color: Color(0XFFF66464)),

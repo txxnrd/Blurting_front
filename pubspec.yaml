@@ -97,7 +97,8 @@ flutter:
     - assets/images/boy.png
     - assets/images/girl.png
     - assets/images/check.png
-
+    - assets/images/block.png
+    - assets/images/leaveRoom.png
   fonts:
     - family: Pretendard
       fonts:
@@ -120,7 +121,7 @@ flutter:
         - asset: assets/fonts/Pretendard-Black.ttf
           weight: 900
 
-    - family: Heedo
+    - family: Heebo
       fonts:
         - asset: assets/fonts/Heebo-Thin.ttf
         - asset: assets/fonts/Heebo-ExtraLight.ttf

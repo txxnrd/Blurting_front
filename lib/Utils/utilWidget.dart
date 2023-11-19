@@ -86,10 +86,12 @@ class InputfieldClipper extends CustomClipper<Path> {
 class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
   final Function(String)? sendFunction;
+  final bool isBlock;
 
   CustomInputField({
     required this.controller,
     this.sendFunction,
+    required this.isBlock
   });
 
   @override
@@ -146,6 +148,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width - 20,
               child: TextField(
+                enabled: !widget.isBlock,     // 블락이 되지 않았을 때 사용 가능
                 focusNode: _focusNode,
                 onChanged: (value) {
                   if (value != '') {
@@ -178,13 +181,12 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: "내 생각 쓰기...",
+                  hintText: !widget.isBlock ? "내 생각 쓰기..." : "메시지를 보낼 수 없습니다",
                   hintStyle: TextStyle(fontSize: 12),
                   suffixIcon: IconButton(
                     onPressed: (isValid)
                         ? () {
-                            widget.sendFunction!(
-                                widget.controller.text);
+                            widget.sendFunction!(widget.controller.text);
                             setState(() {
                               inputValid(false);
                               inputPointValid(false);
@@ -237,7 +239,7 @@ class pointAppbar extends StatelessWidget {
             '${point}p',
             style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontFamily: 'Heedo',
+                fontFamily: 'Heebo',
                 color: Colors.white,
                 fontSize: 15),
           ),
@@ -251,7 +253,8 @@ class DateItem extends StatelessWidget {
   final int month;
   final int date;
 
-  DateItem({required this.year, required this.month, required this.date});
+  DateItem(
+      {super.key, required this.year, required this.month, required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -272,79 +275,79 @@ class DateItem extends StatelessWidget {
 class OtherChat extends StatelessWidget {
   final String message;
   final String createdAt;
+  bool read = false;
 
   OtherChat({super.key, required this.message, required this.createdAt});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ListTile(
+        subtitle: Container(
       margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipPath(
-                clipper: LeftTailClipper(),
-                child: Container(
-                  width: 250,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Color.fromRGBO(255, 238, 238, 1),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 20, right: 20, top: 10, bottom: 10),
-                        child: Text(
-                          message,
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontSize: 10,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+          ClipPath(
+            clipper: LeftTailClipper(),
+            child: Container(
+              width: 250,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color.fromRGBO(255, 238, 238, 1),
               ),
-            ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 20, right: 20, top: 10, bottom: 10),
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //  Container(
-              //     margin: EdgeInsets.only(top: 20, left: 5),
-              //     child: 
-              //     Text(
-              //       '읽지 않음',
-              //       style: TextStyle(
-              //         fontFamily: "Pretendard",
-              //         fontSize: 10,
-              //         color: mainColor.lightGray,
-              //       ),
-              //     ),
-              //   ),
+              if (read)
                 Container(
-                  margin: EdgeInsets.only(top: 5, left: 5),
+                  margin: EdgeInsets.only(top: 20, left: 5),
+                  child: Text(
+                    '읽지 않음',
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      fontSize: 10,
+                      color: mainColor.lightGray,
+                    ),
+                  ),
+                ),
+              Container(
+                margin: EdgeInsets.only(top: 5, left: 5),
                 child: Text(
                   createdAt,
                   style: TextStyle(
                     fontFamily: "Pretendard",
                     fontSize: 10,
-                      color: mainColor.lightGray,
+                    color: mainColor.lightGray,
                   ),
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
-    );
+    ));
   }
 }
 
@@ -354,7 +357,11 @@ class MyChat extends StatelessWidget {
   final String createdAt;
   final bool read;
 
-  MyChat({super.key, required this.message, required this.createdAt, required this.read});
+  MyChat(
+      {super.key,
+      required this.message,
+      required this.createdAt,
+      required this.read});
 
   @override
   Widget build(BuildContext context) {
@@ -369,19 +376,18 @@ class MyChat extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-              //   if(!read)
-              //  Container(
-              //     margin: EdgeInsets.only(top: 20, right: 5),
-              //     child: 
-              //     Text(
-              //       '읽지 않음',
-              //       style: TextStyle(
-              //         fontFamily: "Pretendard",
-              //         fontSize: 10,
-              //         color: mainColor.lightGray,
-              //       ),
-              //     ),
-              //   ),
+                if (!read)
+                  Container(
+                    margin: EdgeInsets.only(top: 20, right: 5),
+                    child: Text(
+                      '읽지 않음',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontSize: 10,
+                        color: mainColor.lightGray,
+                      ),
+                    ),
+                  ),
                 Container(
                   margin: EdgeInsets.only(top: 5, right: 5),
                   child: Text(
@@ -462,40 +468,18 @@ class AnswerItem extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(7)),
             ),
-            title: Container(
-              child: Stack(
-                children: [
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.all(5),
-                      child: Text(
-                        '차단하기',
-                        style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                      right: 0,
-                      child: IconButton(
-                        alignment: Alignment.topRight,
-                        icon: Image.asset('assets/images/icon_warning.png'),
-                        iconSize: 20,
-                        color: mainColor.MainColor,
-                        onPressed: () {
-                          // 신고하기 다이얼로그로 바뀌어야 함
-                        },
-                      )),
-                ],
+            title: Center(
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Text(
+                  '신고하기',
+                  style: TextStyle(
+                      fontFamily: "Pretendard",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700),
+                ),
               ),
             ),
-            // content: Column(
-            //   children: [
-            //     Container(),
-            //   ],
-            // ),
             actions: <Widget>[
               Container(
                 margin: EdgeInsets.only(top: 0, bottom: 5),
@@ -505,7 +489,7 @@ class AnswerItem extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop(); // 모달 닫기
-                        print('차단 접수');
+                        print('신고 접수');
                         setState(() {});
                       },
                       child: Container(
@@ -518,7 +502,7 @@ class AnswerItem extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            '차단하기',
+                            '신고하기',
                             style: TextStyle(
                                 fontFamily: "Pretendard",
                                 fontSize: 15,
@@ -570,7 +554,7 @@ class AnswerItem extends StatelessWidget {
                           'Profile',
                           style: TextStyle(
                               color: mainColor.MainColor,
-                              fontFamily: "Heedo",
+                              fontFamily: "Heebo",
                               fontSize: 20,
                               fontWeight: FontWeight.w500),
                         ),
@@ -579,8 +563,8 @@ class AnswerItem extends StatelessWidget {
                     Align(
                       alignment: Alignment.topRight,
                       child: IconButton(
-                        icon: Image.asset('assets/images/icon_warning.png'),
-                        color: Color.fromRGBO(48, 48, 48, 1),
+                        iconSize: 20,
+                        icon: Image.asset('assets/images/block.png'),
                         onPressed: () {
                           _ClickWarningButton(context); // jsonData 줘야 함
                           print('신고 버튼 눌림');
@@ -686,63 +670,94 @@ class AnswerItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Column(
-                          children: [
-                            Text(
-                              '상대방에게 귓속말을\n거시겠습니까?',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                            Text(
-                              '* 귓속말을 걸면 10 포인트가 차감돼요!',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
                         width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.only(top: 30),
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.MainColor),
-                                height: 50,
-                                // color: mainColor.MainColor,
-                                child: Center(
-                                  child: Text(
-                                    '예',
-                                    style: TextStyle(
-                                        fontFamily: 'Heedo',
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.lightGray
+                                            .withOpacity(0.8)),
+                                    alignment: Alignment.topCenter,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '귓속말을 걸면 10p가 차감됩니다.',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                            Text(
+                                              '계속 진행하시겠습니까?',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        if(!isValid)
+                                        {
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    ),
                                   ),
-                                ),
+                                  GestureDetector(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      // color: mainColor.MainColor,
+                                      child: Center(
+                                        child: Text(
+                                          '귓속말 걸기',
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      if (isValid) {
+                                        socket.emit('create_room', userId);
+                                        print("$userId에게 귓속말 거는 중...");
+                                        Navigator.of(context).pop();
+                                      } else {
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                  ),
+                                ],
                               ),
-                              onTap: () {
-                                if (isValid) {
-                                  socket.emit('create_room', userId);
-                                  print("$userId에게 귓속말 거는 중...");
-                                } else {
-                                  Navigator.of(context).pop();
-                                }
-                              },
                             ),
                             GestureDetector(
                               child: Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
+                                width: MediaQuery.of(context).size.width * 0.8,
                                 height: 50,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
@@ -750,12 +765,12 @@ class AnswerItem extends StatelessWidget {
                                 // color: mainColor.MainColor,
                                 child: Center(
                                   child: Text(
-                                    '아니오',
+                                    '취소',
                                     style: TextStyle(
-                                        fontFamily: 'Heedo',
+                                        fontFamily: 'Heebo',
                                         color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ),
                               ),
@@ -792,9 +807,8 @@ class AnswerItem extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(50)
-          ),
+              color: Colors.white.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(50)),
           child: Image.asset(
             'assets/man.png',
           ),
@@ -874,7 +888,7 @@ class staticButton extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-                color: mainColor.MainColor, fontSize: 20, fontFamily: 'Heedo'),
+                color: mainColor.MainColor, fontSize: 20, fontFamily: 'Heebo'),
           ),
         ],
       ),
@@ -897,7 +911,7 @@ class ellipseText extends StatelessWidget {
               Text(
                 text,
                 style: TextStyle(
-                    fontFamily: "Heedo",
+                    fontFamily: 'Heebo',
                     fontSize: 40,
                     fontWeight: FontWeight.w700,
                     color: mainColor.MainColor),
@@ -909,6 +923,137 @@ class ellipseText extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class LeaveRoomDialog {
+  final BuildContext context_;
+
+  LeaveRoomDialog({required this.context_});
+
+  static void show(BuildContext context_) {
+    showDialog(
+      context: context_,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Stack(
+            children: [
+              Positioned(
+                bottom: 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(top: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 20),
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.lightGray.withOpacity(0.8),
+                                  ),
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    margin: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10,
+                                            fontFamily: "Heebo",
+                                          ),
+                                        ),
+                                        Text(
+                                          '채팅 상대방과 다시는 매칭되지 않습니다.',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10,
+                                            fontFamily: "Heebo",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: mainColor.MainColor,
+                                    ),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        '방 나가기',
+                                        style: TextStyle(
+                                          fontFamily: 'Heebo',
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    print('채팅 나가는 중...');
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: mainColor.lightGray,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(
+                                    fontFamily: 'Heebo',
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                Navigator.of(context).pop();
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        });
+      },
     );
   }
 }
