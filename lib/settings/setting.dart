@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../colors/colors.dart';
+import 'notificationandsound.dart';
 // StatefulWidget으로 변경합니다.
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
 }
 class _SettingPageState extends State<SettingPage>{
-  bool _personalInfo = false;
-  bool _loginAndSecurity = false;
-  bool _notificationSettings = false;
+
   @override
   Widget build(BuildContext context) {
 
@@ -51,12 +50,29 @@ class _SettingPageState extends State<SettingPage>{
                   ),
                   ),
                   SizedBox(height: 18,),
-                  Container(
-                    width:77, height: 22,
-                    child:
-                    Text(
-                      '알림 및 소리',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+                  // Container(
+                  //   width:77, height: 22,
+                  //   child:
+                  //   Text(
+                  //     '알림 및 소리',
+                  //     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+                  //   ),
+                  // ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=> NotificationandSound()),
+                      );
+                    },
+                    child: Container(
+                      width:77, height: 22,
+                      child:
+                      Text(
+                        '알림 및 소리',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+                      ),
                     ),
                   ),
                   SizedBox(height: 34,),
