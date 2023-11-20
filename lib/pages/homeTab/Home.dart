@@ -177,7 +177,7 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 90),
+                    SizedBox(width: 50),
                     GestureDetector(
                       onTap: () {
                         // 좋아요 버튼을 눌렀을 때의 로직
@@ -412,7 +412,7 @@ class PointAppbar extends StatelessWidget {
           '${point}p',
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontFamily: 'Heedo',
+            fontFamily: 'Heebo',
             color: Colors.white,
             fontSize: 15,
           ),
