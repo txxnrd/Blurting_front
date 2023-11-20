@@ -60,8 +60,8 @@ class _PersonalityPageState extends State<PersonalityPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 10/14, // 시작 너비 (30%)
-      end: 11/14, // 종료 너비 (40%)
+      begin: 10/15, // 시작 너비 (30%)
+      end: 11/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {

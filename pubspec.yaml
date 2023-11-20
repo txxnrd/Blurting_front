@@ -70,7 +70,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - image/girl.png
+    - assets/images/girl.png
     - image/profile_swipe_now.png
     - image/profile_swipe_next.png
     - assets/images/profile_image.png
@@ -88,8 +88,9 @@ flutter:
     - assets/images/whisper.png
     - assets/images/home.png
     - assets/signupface.png
-    - assets/man.png
+    - assets/images/boy.png
     - assets/woman.png
+    - assets/man.png
     - assets/images/arrow.png 
     - assets/images/match.png
     - assets/images/chat.png

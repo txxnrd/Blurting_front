@@ -52,8 +52,8 @@ class _AlcoholPageState extends State<AlcoholPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 5/14, // 시작 너비 (30%)
-      end: 6/14, // 종료 너비 (40%)
+      begin: 5/15, // 시작 너비 (30%)
+      end: 6/15, // 종료 너비 (40%)
 
 
     ).animate(

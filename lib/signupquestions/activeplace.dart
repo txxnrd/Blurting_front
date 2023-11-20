@@ -97,8 +97,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 2/14, // 시작 게이지 값
-      end: 3/14, // 종료 게이지 값
+      begin: 2/15, // 시작 게이지 값
+      end: 3/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {

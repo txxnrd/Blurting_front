@@ -6,7 +6,6 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:dio/dio.dart';
 import '../config/app_config.dart';
-
 import 'dart:io';
 import 'package:image_picker/image_picker.dart'; // 추가
 
@@ -32,43 +31,57 @@ class ImagePageState extends State<ImagePage>
   Future<void> _pickImage1() async {
     var picker = ImagePicker();
     var image1 = await picker.pickImage(source: ImageSource.gallery);
+
+    // 새로운 이미지를 선택한 경우에만 처리
     if (image1 != null) {
+      File selectedImage = File(image1.path); // 선택된 이미지 파일
+      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
+      multipartImageList.clear();
+      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
+      // UI 업데이트를 위해 setState 호출
       setState(() {
-        _image1 = File(image1.path); // 선택된 이미지 경로를 저장
+        _image1 = selectedImage;
       });
     }
-    if (_image1 != null) {
-      multipartImageList.add(await MultipartFile.fromFile(_image1!.path, filename: 'image1.jpg'));
-    }
   }
+
   Future<void> _pickImage2() async {
     var picker = ImagePicker();
     var image2 = await picker.pickImage(source: ImageSource.gallery);
+
+    // 새로운 이미지를 선택한 경우에만 처리
     if (image2 != null) {
+      File selectedImage = File(image2.path); // 선택된 이미지 파일
+
+      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
+      multipartImageList.clear();
+      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
+
+      // UI 업데이트를 위해 setState 호출
       setState(() {
-        _image2 = File(image2.path); // 선택된 이미지 경로를 저장
+        _image2 = selectedImage;
       });
-    }
-    if (_image2 != null) {
-      multipartImageList.add(await MultipartFile.fromFile(_image2!.path, filename: 'image2.jpg'));
     }
   }
 
   Future<void> _pickImage3() async {
     var picker = ImagePicker();
     var image3 = await picker.pickImage(source: ImageSource.gallery);
+    // 새로운 이미지를 선택한 경우에만 처리
     if (image3 != null) {
+      File selectedImage = File(image3.path); // 선택된 이미지 파일
+
+      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
+      multipartImageList.clear();
+      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
+
+      // UI 업데이트를 위해 setState 호출
       setState(() {
-        _image3 = File(image3.path); // 선택된 이미지 경로를 저장
+        _image3 = selectedImage;
+        IsValid=true;
       });
     }
-    if (_image3 != null) {
-      multipartImageList.add(await MultipartFile.fromFile(_image3!.path, filename: 'image3.jpg'));
-    }
-    IsValid = true;
   }
-
-
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -80,8 +93,18 @@ class ImagePageState extends State<ImagePage>
           return FadeTransition(opacity: animation, child: child);
         },
       ),
-    );
+    ).then((_) {
+      // 첫 번째 화면으로 돌아왔을 때 실행될 로직
+      setState(() {
+        multipartImageList.clear();
+        _image1 = null;
+        _image2 = null;
+        _image3 = null;
+        IsValid = false; // 이 변수도 초기화하는 것으로 보임
+      });
+    });
   }
+
 
   @override
   void initState() {
@@ -93,8 +116,8 @@ class ImagePageState extends State<ImagePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 12/14, // 시작 너비 (30%)
-      end: 13/14, // 종료 너비 (40%)
+      begin: 12/15, // 시작 너비 (30%)
+      end: 13/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -178,13 +201,6 @@ class ImagePageState extends State<ImagePage>
     print(savedToken);
 
     Dio dio = Dio();
-
-
-
-
-
-
-
 
     // 파일이 하나도 없을 경우 처리를 해야 함.
     if (multipartImageList.isEmpty) {
@@ -384,7 +400,8 @@ class ImagePageState extends State<ImagePage>
                           : Image.file(_image1!, fit: BoxFit.cover), // 선택된 이미지 표시
                     ),
                   ),
-                ),InkWell(
+                ),
+                InkWell(
                   onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
                   child: Container(
                     width: 100,

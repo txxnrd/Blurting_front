@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import '../colors/colors.dart';
+import '../signupquestions/token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
 // StatefulWidget으로 변경합니다.
@@ -16,6 +17,34 @@ class SettingPage extends StatefulWidget {
   _SettingPageState createState() => _SettingPageState();
 }
 class _SettingPageState extends State<SettingPage>{
+
+
+  Future<void> _sendIsnowloginRequest() async {
+  print('now login set');
+    String savedToken = await getToken();
+    if (savedToken!=null){
+      _showVerificationFailedSnackBar('로그인 됨');
+    }
+    else{
+      _showVerificationFailedSnackBar('로그인 안 됨');
+
+    }
+  }
+
+  void _showVerificationFailedSnackBar(value) {
+    final snackBar = SnackBar(
+      content: Text(value),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 Future<void> _sendDeleteRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.user);
@@ -137,15 +166,15 @@ Future<void> _sendDeleteRequest() async {
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
                     ),
                   ),
-                  SizedBox(height: 18,),
-                  Container(
-                    width:120, height: 22,
-                    child:
-                    Text(
-                      '차단 사용자 관리',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
-                    ),
-                  ),
+                  // SizedBox(height: 18,),
+                  // Container(
+                  //   width:120, height: 22,
+                  //   child:
+                  //   Text(
+                  //     '차단 사용자 단관리',
+                  //     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+                  //   ),
+                  // ),
                   SizedBox(height: 18,),
 
                   InkWell(
@@ -157,6 +186,20 @@ Future<void> _sendDeleteRequest() async {
                       child:
                       Text(
                         '계정 삭제하기',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 14,),
+                  InkWell(
+                    onTap: () {
+                      _sendIsnowloginRequest();
+                    },
+                    child:  Container(
+                      width:150, height: 22,
+                      child:
+                      Text(
+                        '로그인 여부 확인하기',
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
                       ),
                     ),

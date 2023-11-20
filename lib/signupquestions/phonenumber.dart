@@ -257,7 +257,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     _progressAnimation = Tween<double>(
       begin: 0, // 시작 게이지 값
-      end: 1/14, // 종료 게이지 값
+      end: 1/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -273,20 +273,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 80,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(48, 48, 48, 1),
-          ),
-          onPressed: () {
-            // 뒤로가기 버튼을 눌렀을 때의 동작
-            Navigator.pop(context);
-          },
-        ),
-
+        leading:SizedBox(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

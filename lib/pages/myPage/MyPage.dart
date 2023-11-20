@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'package:blurting/signupquestions/token.dart';
+import 'package:http/http.dart' as http;
+import 'package:blurting/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
 
+import '../../config/app_config.dart';
 import '../../settings/setting.dart';
 import 'MyPageEdit.dart';
 
@@ -25,16 +30,57 @@ class _MyPage extends State<MyPage> {
     initialPage: 0,
   );
   Future<void> goToMyPageEdit(BuildContext context) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MyPageEdit()),
-    );
+    print("설정 버튼 눌러짐");
+    var token = getToken();
+    print(token);
 
-    // 이후에 필요한 작업을 수행할 수 있습니다.
-    if (result != null) {
-      print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
-    }
-    print(result);
+/*여기서부터 내 정보 요청하기*/
+      var url = Uri.parse(API.userprofile);
+
+      String accessToken = await getToken();
+      String refreshToken = await getRefreshToken();
+      print("access Token" + accessToken);
+      print("access Token" + refreshToken);
+
+    var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      print(response.body);
+      if (response.statusCode == 200 ||response.statusCode == 201) {
+        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+        print('Server returned OK');
+        print('Response body: ${response.body}');
+        var data = json.decode(response.body);
+
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyPageEdit(data: data),
+          ),
+        );
+
+
+        // 이후에 필요한 작업을 수행할 수 있습니다.
+        if (result != null) {
+          print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
+        }
+      } else {
+        // 오류가 발생한 경우 처리
+        print('Request failed with status: ${response.statusCode}.');
+        if(response.statusCode==401)
+          {
+            //refresh token으로 새로운 accesstoken 불러오는 코드.
+            //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+            getnewaccesstoken(context);
+            goToMyPageEdit(context);
+          }
+      }
+
   }
 
   @override
@@ -67,6 +113,9 @@ class _MyPage extends State<MyPage> {
                   icon:Icon(Icons.settings),
                   color: Color.fromRGBO(48, 48, 48, 1),
                   onPressed: () {
+                    print("설정 버튼 눌러짐");
+                    var token = getToken();
+                    print(token);
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => SettingPage()),
                     );
@@ -284,7 +333,7 @@ class _MyPage extends State<MyPage> {
                           ))),
                   Center(
                     child: Padding(
-                        padding: const EdgeInsets.only(top: 60),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Container(
                           width: 350,
                           height: 48,

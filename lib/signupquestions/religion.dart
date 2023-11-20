@@ -89,8 +89,8 @@ class _ReligionPageState extends State<ReligionPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 3/14, // 시작 게이지 값
-      end: 4/14, // 종료 게이지 값
+      begin: 3/15, // 시작 게이지 값
+      end: 4/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
