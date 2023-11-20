@@ -30,6 +30,7 @@ android {
 
     namespace "com.example.blurting"
     compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
