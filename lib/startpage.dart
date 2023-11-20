@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
@@ -231,6 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text('회원가입',
                     style: TextStyle(
                       fontSize: 20,
+                      color: Colors.white
                     ),
                   ),
                 ),
@@ -239,7 +241,10 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 1,),
               InkWell(
                 onTap: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=> MainApp()),
+                    );
                 },
                 child: Container(
                   alignment: Alignment.center,

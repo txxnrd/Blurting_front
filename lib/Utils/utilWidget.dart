@@ -230,7 +230,7 @@ class pointAppbar extends StatelessWidget {
         onPressed: () {},
         child: Container(
           padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: mainColor.MainColor.withOpacity(0.5),
@@ -332,6 +332,18 @@ class OtherChat extends StatelessWidget {
                     ),
                   ),
                 ),
+              //  Container(
+              //     margin: EdgeInsets.only(top: 20, left: 5),
+              //     child:
+              //     Text(
+              //       '읽지 않음',
+              //       style: TextStyle(
+              //         fontFamily: "Pretendard",
+              //         fontSize: 10,
+              //         color: mainColor.lightGray,
+              //       ),
+              //     ),
+              //   ),
               Container(
                 margin: EdgeInsets.only(top: 5, left: 5),
                 child: Text(
@@ -388,6 +400,19 @@ class MyChat extends StatelessWidget {
                       ),
                     ),
                   ),
+                //   if(!read)
+                //  Container(
+                //     margin: EdgeInsets.only(top: 20, right: 5),
+                //     child:
+                //     Text(
+                //       '읽지 않음',
+                //       style: TextStyle(
+                //         fontFamily: "Pretendard",
+                //         fontSize: 10,
+                //         color: mainColor.lightGray,
+                //       ),
+                //     ),
+                //   ),
                 Container(
                   margin: EdgeInsets.only(top: 5, right: 5),
                   child: Text(

@@ -1,12 +1,15 @@
-import 'package:blurting/MyPage.dart';
+import 'dart:convert';
+
 import 'package:blurting/signupquestions/activeplacesearch.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:http/http.dart' as http;
 
-// void main() {
-//   runApp(MyPageEdit());
-// }
+import '../../config/app_config.dart';
+import '../../signupquestions/token.dart';
+
+
 
 class MyPageEdit extends StatefulWidget {
   @override
@@ -14,6 +17,89 @@ class MyPageEdit extends StatefulWidget {
     return _MyPageEditState();
   }
 }
+@override
+void initState() {
+  _sendprofileGetRequest(); // 비동기 함수 호출
+}
+
+Future<void> _sendprofileGetRequest() async {
+
+  print('_sendprofilegetRequest called');
+  var url = Uri.parse(API.userprofile);
+
+  String savedToken = await getToken();
+  print(savedToken);
+
+  var response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $savedToken',
+    },
+  );
+
+
+  if (response.statusCode == 200 ||response.statusCode == 201) {
+    // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+    print('Server returned OK');
+    print('Response body: ${response.body}');
+
+    var data = json.decode(response.body);
+
+
+  } else {
+    // 오류가 발생한 경우 처리
+    print('Request failed with status: ${response.statusCode}.');
+
+  }
+}
+
+Future<void> _sendFixRequest() async {
+
+  print('_sendPostRequest called');
+  var url = Uri.parse(API.signupemail);
+
+  String savedToken = await getToken();
+  print(savedToken);
+
+  var response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $savedToken',
+    },
+    body: json.encode({""}), // JSON 형태로 인코딩
+  );
+
+
+  if (response.statusCode == 200 ||response.statusCode == 201) {
+    // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+    print('Server returned OK');
+    print('Response body: ${response.body}');
+
+
+    var data = json.decode(response.body);
+
+    if(data['signupToken']!=null)
+    {
+      var token = data['signupToken'];
+      print(token);
+      await saveToken(token);
+
+
+    }
+    else{
+
+    }
+
+  } else {
+    // 오류가 발생한 경우 처리
+    print('Request failed with status: ${response.statusCode}.');
+
+  }
+}
+
+
 
 const List<Widget> religion = <Widget>[
   Text('무교'),
@@ -46,13 +132,15 @@ const List<Widget> smoke = <Widget>[
 ];
 List<bool> _selectedsmoke = <bool>[true, false, false, false];
 
+@override
 class _MyPageEditState extends State<MyPageEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation:0.0,
         toolbarHeight: 80,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정합니다.
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -67,7 +155,7 @@ class _MyPageEditState extends State<MyPageEdit> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Image.asset('assets/images/setting.png'),
+            icon: Icon(Icons.settings),
             color: Color.fromRGBO(48, 48, 48, 1),
             onPressed: () {
               // 설정 버튼을 눌렀을 때의 동작
@@ -121,6 +209,28 @@ class _MyPageEditState extends State<MyPageEdit> {
                   color: Colors.black,
                 ),
               ),
+               Container(
+                 height: 48,
+                 child:
+               TextField(
+                        decoration: InputDecoration(
+                          hintText: '이메일 입력',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
+                        ),
+                        onChanged: (value) {
+                        },
+                      ),
+               ),
+
+
               SizedBox(
                 height: 13,
               ),
@@ -313,41 +423,40 @@ class _MyPageEditState extends State<MyPageEdit> {
                   color: Colors.black,
                 ),
               ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 60),
-                  child: Container(
-                    width: 350,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFF66464),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'Save', // 수정 내용 저장 버튼
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontFamily: 'pretendard',
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      onPressed: () {
-                        // 수정 내용 저장 동작
-                        // 데이터를 저장하고 MyPage로 돌아갈 수 있도록 구현
-                        Navigator.of(context).pop();
-                      },
+              SizedBox(height:10),
+              Container(
+                width: 350.0, // 너비 조정
+                height: 80.0, // 높이 조정
+                padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFF66464),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 0,
+                    padding: EdgeInsets.all(0),
+                  ),
+                  onPressed:()
+                  {
+                    _sendFixRequest();
+                  },
+                  child: Text(
+                    '수정 완료',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Pretendard',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
+
     );
   }
 }
