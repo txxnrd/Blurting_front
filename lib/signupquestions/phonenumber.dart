@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
@@ -16,10 +16,31 @@ class PhoneNumberPage extends StatefulWidget {
 }
 
 class _PhoneNumberPageState extends State<PhoneNumberPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin,WidgetsBindingObserver {
   AnimationController? _animationController;
   String? _previousText;
   Animation<double>? _progressAnimation;
+
+  Timer? _timer;
+  Duration _duration = Duration(minutes: 3);
+
+
+  void startTimer() {
+    _timer?.cancel(); // 이전 타이머가 있다면 취소
+    _duration = Duration(minutes: 3); // 타이머 초기화
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_duration.inSeconds == 0) {
+        timer.cancel();
+      } else {
+        setState(() {
+          _duration -= Duration(seconds: 1);
+        });
+      }
+    });
+  }
+
+
 
   final _controller = TextEditingController();
   final _controller_certification = TextEditingController();
@@ -74,6 +95,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     });
   }
   String errormessage = "";
+  var login_token ="";
+  bool first_post= true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
     var url = Uri.parse(API.sendphone);
@@ -82,16 +105,22 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     String savedToken = await getToken();
 
-    print("회원가입 버튼 누르고 받은 토큰"+savedToken);
+    if(first_post)
+      login_token = savedToken;
+    var token = first_post ? savedToken : login_token;
+
+    first_post = false;
 
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
+        'Authorization': 'Bearer $token',
       },
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
+
+
 
 
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -101,25 +130,21 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
       var data = json.decode(response.body);
       var token = data['signupToken'];
-      print(token);
-      // 토큰을 로컬에 저장
-      await saveToken(token);
+      if(token != null)
+        {
+          startTimer();
+          NowCertification();
+          print(token);
+          // 토큰을 로컬에 저장
+          await saveToken(token);
+        }
 
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-      if(response.statusCode== 409){
-        print("뭐하노");
-        errormessage = "이미 등록한 사용자입니다.";
-        _showVerificationFailedSnackBar(value:errormessage);
-      }else if(response.statusCode==401){
-        errormessage = "인증번호가 올바르지 않습니다.";
-        _showVerificationFailedSnackBar(value:errormessage);
-      }
-      else if(response.statusCode==408){
-        errormessage = "인증 유효 시간이 초과되었습니다.";
-        _showVerificationFailedSnackBar(value:errormessage);
-      }
+      var data = json.decode(response.body);
+      errormessage= data['message'];
+      _showVerificationFailedSnackBar(errormessage);
     }
   }
 
@@ -157,30 +182,33 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
         _increaseProgressAndNavigate();
       }
       else{
-        _showVerificationFailedSnackBar();
+        var data = json.decode(response.body);
+        errormessage= data['message'];
+        _showVerificationFailedSnackBar(errormessage);
       }
 
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-
       print("error");
-
     }
   }
 
 
-  void _showVerificationFailedSnackBar({String value = "인증에 실패하였습니다."}) {
+  void _showVerificationFailedSnackBar(value) {
     print("snackbar 실행");
     final snackBar = SnackBar(
       content: Text(value),
+      // backgroundColor: ,
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -229,7 +257,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     _progressAnimation = Tween<double>(
       begin: 0, // 시작 게이지 값
-      end: 0.1, // 종료 게이지 값
+      end: 1/14, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -255,17 +283,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           ),
           onPressed: () {
             // 뒤로가기 버튼을 눌렀을 때의 동작
+            Navigator.pop(context);
           },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Image.asset('assets/images/setting.png'),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              // 설정 버튼을 눌렀을 때의 동작
-            },
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -319,6 +340,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
             SizedBox(height: 20),
             Container(
               width: 350,
+              height: 48,
               child: TextField(
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -363,6 +385,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
               child: Container(
                 margin: EdgeInsets.only(top: 15),
                 width: 350,
+                height: 48,
                 child: TextField(
                   maxLength: 6,
                   style: TextStyle(
@@ -395,6 +418,52 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                         color: Color(0xFFF66464),
                       ), // 선택/포커스 됐을 때 테두리 색상
                     ),
+                    suffixIcon: Container(
+                      width: 110,
+                      margin: EdgeInsets.only(right: 11,top: 9,bottom:9), // 필요에 따라 마진 조정
+                      child:Row(
+                        children:[
+                      Expanded(
+                      child: Text(
+                      formatDuration(_duration), // 타이머 초기값
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(DefinedColor.darkpink), // 타이머 색상
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      ),
+                          Container(
+                            width: 56, // 버튼의 너비를 설정합니다.
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _sendPostRequest(phonenumber);
+                                startTimer();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                                ),
+                                backgroundColor: Color(DefinedColor.darkpink),
+                                elevation: 0.0,
+                                padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                              ),
+                              child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
+                                fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                child: Text('재전송',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                    fontFamily: 'Pretendard',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]
+                    ),
+                  ),
                   ),
                   onChanged: (value) {
                     InputCertification(value);
@@ -402,6 +471,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 ),
               ),
             ),
+
             SizedBox(height: 268),
             Visibility(
               visible: showError,
@@ -421,53 +491,42 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 ),
               ),
             ),
-
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: (IsValid) ? () async {
-                      if (!certification) {
-                        // 인증번호를 요청할 때 이 부분이 실행됩니다.
-                        await _sendPostRequest(_controller.text);
-                        NowCertification();
-
-                      } else {
-                        // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
-                        _sendVerificationRequest(phonenumber);
-                      }
-                    } : null,
-
-
-                    child: Text(
-                      !certification ? '인증번호 요청' : '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
-      
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: FloatingActionButton(
+          onPressed: IsValid ? () async {
+            if (!certification) {
+              // 인증번호를 요청할 때 이 부분이 실행됩니다.
+              await _sendPostRequest(_controller.text);
+
+            } else {
+              // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
+              _sendVerificationRequest(phonenumber);
+            }
+          } : null,
+          backgroundColor: Color(0xFFF66464), // 버튼의 배경색
+          elevation: 0.0,
+          hoverElevation: 50,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Text(
+            !certification ? '인증번호 요청' : '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 16.0, // 텍스트 크기 조정
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 
@@ -498,3 +557,11 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
+String formatDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
+  final minutes = twoDigits(duration.inMinutes.remainder(60));
+  final seconds = twoDigits(duration.inSeconds.remainder(60));
+  return "$minutes:$seconds";
+}
+
+
