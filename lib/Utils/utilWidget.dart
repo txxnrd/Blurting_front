@@ -181,7 +181,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: !widget.isBlock ? "내 생각 쓰기..." : "메시지를 보낼 수 없습니다",
+                  hintText: !widget.isBlock ? "내 생각 쓰기..." : "귓속말이 끊긴 상대입니다",
                   hintStyle: TextStyle(fontSize: 12),
                   suffixIcon: IconButton(
                     onPressed: (isValid)
@@ -687,7 +687,7 @@ class AnswerItem extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: mainColor.lightGray
-                                            .withOpacity(0.8)),
+                                            .withOpacity(0.5)),
                                     alignment: Alignment.topCenter,
                                     child: GestureDetector(
                                       child: Container(
@@ -961,7 +961,7 @@ class LeaveRoomDialog {
                                   height: 100,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray.withOpacity(0.8),
+                                    color: mainColor.lightGray.withOpacity(0.5),
                                   ),
                                   alignment: Alignment.topCenter,
                                   child: Container(

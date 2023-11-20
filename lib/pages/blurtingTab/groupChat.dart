@@ -11,8 +11,6 @@ import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:provider/provider.dart';
 
-
-
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
   final String token;
@@ -29,7 +27,8 @@ class QuestionItem extends StatelessWidget {
   final int questionNumber;
   final String question;
 
-  QuestionItem({super.key, required this.questionNumber, required this.question});
+  QuestionItem(
+      {super.key, required this.questionNumber, required this.question});
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +100,7 @@ class _GroupChat extends State<GroupChat> {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -216,19 +216,19 @@ class _GroupChat extends State<GroupChat> {
                                 userName: '정원',
                                 message: '하하\n그냥 잘까',
                                 socket: widget.socket,
-                                userId: 152,
+                                userId: 205,
                                 whisper: false),
                             AnswerItem(
                                 userName: '개굴',
                                 message: '아 목 아파 감기 걸렷나',
                                 socket: widget.socket,
-                                userId: 177,
+                                userId: 207,
                                 whisper: false),
                             AnswerItem(
                                 userName: '감기',
                                 message: '양치하고 자야겟다..',
                                 socket: widget.socket,
-                                userId: 178,
+                                userId: 208,
                                 whisper: false),
                             for (var answer in answerList)
                               answer, // answerList에 있는 내용 순회하며 추가
@@ -239,7 +239,7 @@ class _GroupChat extends State<GroupChat> {
                   ),
                 ),
               ),
-              if(Provider.of<GroupChatProvider>(context).isPocus)
+              if (Provider.of<GroupChatProvider>(context).isPocus)
                 AnimatedContainer(
                   duration: Duration(milliseconds: 500),
                   margin: EdgeInsets.all(10),
@@ -247,19 +247,30 @@ class _GroupChat extends State<GroupChat> {
                   height: 20,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Provider.of<GroupChatProvider>(context).pointValid ? mainColor.MainColor : Colors.white,
+                    color: Provider.of<GroupChatProvider>(context).pointValid
+                        ? mainColor.MainColor
+                        : Colors.white,
                   ),
                   child: Row(
                     children: [
                       Container(
                           margin: EdgeInsets.only(left: 5, right: 3),
-                          child: Image.asset('assets/images/check.png', color: Provider.of<GroupChatProvider>(context).pointValid ? Colors.white : mainColor.lightGray,)),
+                          child: Image.asset(
+                            'assets/images/check.png',
+                            color: Provider.of<GroupChatProvider>(context)
+                                    .pointValid
+                                ? Colors.white
+                                : mainColor.lightGray,
+                          )),
                       Text(
                         '100자 이상',
                         style: TextStyle(
                             fontSize: 10,
                             fontFamily: "Heebo",
-                            color: Provider.of<GroupChatProvider>(context).pointValid ? Colors.white : mainColor.lightGray),
+                            color: Provider.of<GroupChatProvider>(context)
+                                    .pointValid
+                                ? Colors.white
+                                : mainColor.lightGray),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -305,7 +316,7 @@ class _GroupChat extends State<GroupChat> {
   }
 
   void SendAnswer(String answer) async {
-    if(Provider.of<GroupChatProvider>(context, listen: false).pointValid) {
+    if (Provider.of<GroupChatProvider>(context, listen: false).pointValid) {
       print('포인트 지급');
     }
 

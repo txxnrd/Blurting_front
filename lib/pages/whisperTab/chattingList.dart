@@ -93,7 +93,7 @@ class _chatListItemState extends State<ChatListItem> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color:
-                                          mainColor.lightGray.withOpacity(0.8)),
+                                          mainColor.lightGray.withOpacity(0.5)),
                                   alignment: Alignment.topCenter,
                                   child: Container(
                                     margin: EdgeInsets.all(10),
@@ -457,12 +457,10 @@ class _chattingList extends State<ChattingList> {
                                                 // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
       print(data);
       if (data['userId'] == UserProvider.UserId) {
-        // print('내가 귓속말 안에서 나감');
         for (int i = 0; i < chatLists.length; i++) {
           Widget widget = chatLists[i];
           if (widget is ChatListItem) {
             if (data['roomId'] == widget.roomId) {
-              print('삭제');
               if (mounted) {
                 setState(() {
                   chatLists.removeAt(i);
@@ -480,6 +478,7 @@ class _chattingList extends State<ChattingList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         automaticallyImplyLeading: false,
         toolbarHeight: 244,
         flexibleSpace: Stack(
@@ -500,7 +499,6 @@ class _chattingList extends State<ChattingList> {
               icon: Image.asset('assets/images/setting.png'),
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
               },
             ),
           ),
@@ -573,17 +571,6 @@ class _chattingList extends State<ChattingList> {
                   child: Column(
                     children: <Widget>[
                       for (var chatItem in chatLists) ListTile(title: chatItem),
-                      ListTile(
-                          title: ChatListItem(
-                        token: widget.token,
-                        roomId: '',
-                        userName: '테스트',
-                        latest_chat: '소켓 X',
-                        latest_time: DateTime.now(),
-                        image: 'assets/woman.png',
-                        socket: widget.socket,
-                        read: true,
-                      )),
                     ],
                   ),
                 ),

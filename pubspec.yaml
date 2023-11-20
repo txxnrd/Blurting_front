@@ -99,6 +99,9 @@ flutter:
     - assets/images/check.png
     - assets/images/block.png
     - assets/images/leaveRoom.png
+    - assets/animation/girl.png
+    - assets/animation/boy.png
+
   fonts:
     - family: Pretendard
       fonts:
