@@ -9,6 +9,32 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:intl/date_symbol_data_local.dart';
 
+
+void main() async {
+  await initializeDateFormatting('ko_KR', null);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GroupChatProvider()),
+        // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
+      ],
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MainApp(),
+    );
+  }
+}
+
+
 // void main() async {
 //   await initializeDateFormatting('ko_KR', null);
 //   // 여기에 나머지 코드를 추가하세요.
@@ -17,14 +43,8 @@ import 'package:intl/date_symbol_data_local.dart';
 //   );
 // }
 
-import 'package:geolocator/geolocator.dart';
-import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
-
-void main() {
-  runApp(
-    MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
-  );
-}
+// import 'package:geolocator/geolocator.dart';
+// import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
 
 // void main() {
 //   // WidgetsFlutterBinding.ensureInitialized();
@@ -32,19 +52,19 @@ void main() {
 //   runApp(MyApp());
 // }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Phone Number App',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        backgroundColor: Colors.white,
-      ),
-      home: LoginPage(), // PhoneNumberPage를 홈으로 설정
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Phone Number App',
+//       theme: ThemeData(
+//         primaryColor: Colors.white,
+//         backgroundColor: Colors.white,
+//       ),
+//       home: LoginPage(), // PhoneNumberPage를 홈으로 설정
+//     );
+//   }
+// }
