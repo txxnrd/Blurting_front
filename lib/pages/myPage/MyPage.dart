@@ -90,7 +90,8 @@ class _MyPage extends State<MyPage> {
 
     // var savedToken = getToken();
     var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
+        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTg6MjM6MTYuODY4WiIsImlhdCI6MTcwMDQ3MjE5NiwiZXhwIjoxNzAwNDc1Nzk2fQ.dupIHGs5jWIql0-kwQJj21Hue-fXNqCLToB6FkUJ5hU';
     print(savedToken);
 
     var response = await http.get(
@@ -179,37 +180,35 @@ class _MyPage extends State<MyPage> {
                   border: Border.all(color: Color(0xFFFF7D7D), width: 3),
                 ),
                 child: PageView(controller: mainPageController, children: [
-                  _buildPhotoPage(0),
-                  _buildPhotoPage(1),
-                  _buildPhotoPage(2),
+                  // _buildPhotoPage(1),
+                  // _buildPhotoPage(2),
+                  Column(
+                    children: [
+                      _buildPhotoPage(0),
+                      for (String character in userProfile['character'] ?? [])
+                        buildPinkBox('#$character'),
+                      for (String hobby in userProfile['hobby'] ?? [])
+                        buildPinkBox('#$hobby'),
+                    ],
+                  ),
                   Column(
                     children: [
                       _buildInfoPage(titles: [
                         '지역:',
                         '종교:',
-                        '전공:'
+                        '전공:',
+                        '키:',
+                        '흡연정도:',
+                        '음주정도:',
                       ], values: [
                         userProfile['region'].toString() ?? 'Unknown',
                         userProfile['religion'].toString() ?? 'Unknown',
                         userProfile['major'].toString() ?? 'Unknown',
+                        userProfile['height'].toString() ?? 'Unknown',
+                        getCigaretteString(userProfile['cigarette']) ??
+                            'Unknown',
+                        getDrinkString(userProfile['drink']) ?? 'Unknown',
                       ]),
-                      for (String character in userProfile['character'] ?? [])
-                        buildPinkBox('#$character'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      _buildInfoPage(
-                        titles: ['키:', '흡연정도:', '음주정도:'],
-                        values: [
-                          userProfile['height'].toString() ?? 'Unknown',
-                          getCigaretteString(userProfile['cigarette']) ??
-                              'Unknown',
-                          getDrinkString(userProfile['drink']) ?? 'Unknown',
-                        ],
-                      ),
-                      for (String hobby in userProfile['hobby'] ?? [])
-                        buildPinkBox('#$hobby'),
                     ],
                   ),
                 ]),
@@ -220,7 +219,7 @@ class _MyPage extends State<MyPage> {
               alignment: Alignment.center,
               child: SmoothPageIndicator(
                 controller: mainPageController,
-                count: 5,
+                count: 2,
                 effect: ScrollingDotsEffect(
                   dotColor: Color(0xFFFFD2D2),
                   activeDotColor: Color(0xFFF66464),
@@ -261,7 +260,7 @@ class _MyPage extends State<MyPage> {
           padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
         ),
         Text(
-          'Photo ${index + 1}',
+          'Photo',
           style: TextStyle(
             fontFamily: 'Heedo',
             fontSize: 20,
@@ -270,7 +269,7 @@ class _MyPage extends State<MyPage> {
           ),
         ),
         SizedBox(
-          height: 50,
+          height: 20,
         ),
         Container(
           color: Colors.white,

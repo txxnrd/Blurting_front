@@ -108,7 +108,6 @@
       "rootUri": "file:///C:/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
-      "languageVersion": "3.2"
     },
     {
       "name": "flutter_lints",
@@ -127,13 +126,11 @@
       "rootUri": "file:///C:/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
-      "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
       "rootUri": "file:///C:/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
       "languageVersion": "3.2"
     },
     {
@@ -291,7 +288,6 @@
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/material_color_utilities-0.5.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
-      "languageVersion": "2.17"
     },
     {
       "name": "meta",
@@ -400,7 +396,6 @@
       "rootUri": "file:///C:/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
-      "languageVersion": "3.2"
     },
     {
       "name": "smooth_page_indicator",
@@ -443,7 +438,6 @@
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/stream_channel-2.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
-      "languageVersion": "2.19"
     },
     {
       "name": "string_scanner",
@@ -461,7 +455,6 @@
       "name": "test_api",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.6.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
       "languageVersion": "3.0"
     },
     {
@@ -561,8 +554,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-20T05:39:37.081082Z",
+  "generated": "2023-11-20T09:19:05.880134Z",
   "generator": "pub",
-  "generatorVersion": "3.2.0"
   "generatorVersion": "3.2.0"
 }
