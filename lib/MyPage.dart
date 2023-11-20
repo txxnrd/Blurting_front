@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/MyPageEdit.dart';
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MyPage());
@@ -20,7 +22,8 @@ class _MyPage extends State<MyPage> {
   var switchValue = false;
   String modify = 'Edit';
   final PageController mainPageController = PageController(initialPage: 0);
-  final PageController imagePageController = PageController(initialPage: 0);
+  List<String> imagePaths = [];
+  Map<String, dynamic> userProfile = {};
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     final result = await Navigator.push(
@@ -35,14 +38,45 @@ class _MyPage extends State<MyPage> {
     print(result);
   }
 
-  // 이미지 경로 리스트
-  final List<String> imagePaths = [
-    'assets/woman.png',
-    'assets/man.png',
-    'assets/signupface.png',
-  ];
+  // // 이미지 경로 리스트
+  // final List<String> imagePaths = [
+  //   'assets/woman.png',
+  //   'assets/man.png',
+  //   'assets/signupface.png',
+  // ];
 
-  int currentPage = 0;
+  // int currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserProfile();
+  }
+
+  Future<void> fetchUserProfile() async {
+    var url = Uri.parse('http://54.180.85.164:3080/user/profile');
+    String savedToken =
+        'your_saved_token'; // Replace with your token retrieval logic
+    print(savedToken);
+
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      setState(() {
+        userProfile = data;
+        imagePaths = List<String>.from(userProfile['images']);
+      });
+    } else {
+      print('Failed to load user profile. Status code: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +141,9 @@ class _MyPage extends State<MyPage> {
                   border: Border.all(color: Color(0xFFFF7D7D), width: 3),
                 ),
                 child: PageView(controller: mainPageController, children: [
-                  _buildPhotoPage(),
+                  _buildPhotoPage(0),
+                  _buildPhotoPage(1),
+                  _buildPhotoPage(2),
                   Column(
                     children: [
                       _buildInfoPage(
@@ -136,7 +172,7 @@ class _MyPage extends State<MyPage> {
               alignment: Alignment.center,
               child: SmoothPageIndicator(
                 controller: mainPageController,
-                count: 3,
+                count: 5,
                 effect: ScrollingDotsEffect(
                   dotColor: Color(0xFFFFD2D2),
                   activeDotColor: Color(0xFFF66464),
@@ -162,14 +198,14 @@ class _MyPage extends State<MyPage> {
     );
   }
 
-  Widget _buildPhotoPage() {
+  Widget _buildPhotoPage(int index) {
     return Column(
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
         ),
         Text(
-          'Profile',
+          'Profile ${index + 1}',
           style: TextStyle(
             fontFamily: 'Heedo',
             fontSize: 20,
@@ -180,39 +216,14 @@ class _MyPage extends State<MyPage> {
         SizedBox(
           height: 50,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: (currentPage != 0)
-                  ? () {
-                      setState(() {
-                        currentPage--;
-                      });
-                    }
-                  : null,
-            ),
-            Container(
-              color: Colors.amber,
-              width: 200,
-              height: 200,
-              child: Image.asset(
-                imagePaths[currentPage],
-                // fit: BoxFit.fill,
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.arrow_forward_ios),
-              onPressed: (currentPage != imagePaths.length - 1)
-                  ? () {
-                      setState(() {
-                        currentPage++;
-                      });
-                    }
-                  : null,
-            ),
-          ],
+        Container(
+          color: Colors.amber,
+          width: 200,
+          height: 200,
+          child: Image.network(
+            imagePaths[index],
+            // fit: BoxFit.fill,
+          ),
         ),
       ],
     );
