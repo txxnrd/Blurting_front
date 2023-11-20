@@ -1,3 +1,4 @@
+import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -37,8 +38,10 @@ class _SearchPage extends State<SearchPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'MemoApp', // 앱의 아이콘 이름
       home: Scaffold(
+
         backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 80,
@@ -70,7 +73,7 @@ class _SearchPage extends State<SearchPage> {
               child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                      hintText: '동명(읍,면)으로 검색 (ex. 안암동)',
+                      hintText: '구명으로 검색 (ex. 강남구)',
                       contentPadding: EdgeInsets.all(10.0),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -180,13 +183,40 @@ class _SearchPage extends State<SearchPage> {
 
   // 검색 버튼 클릭 시 서버 요청 후 검색 결과 업데이트
   Future<void> searchCurrentLocation() async {
+
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // 위치 서비스가 활성화되어 있는지 확인
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // 위치 서비스가 비활성화 되어 있다면 사용자에게 활성화 요청
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // 권한이 거부되었다면 오류 반환
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // 권한이 영구적으로 거부된 경우
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
+      print("위도,경도"+ "${position.longitude}"+","+"${position.latitude}");
+      double new_longtitude =position.longitude;
 
       final String apiUrl =
-          'http://54.180.85.164:3080/geocoding/search/district/by-geo?geo=POINT(${position.longitude} ${position.latitude})';
-
+      '${API.geobygeo}?geo=POINT(${new_longtitude} ${position.latitude})}';
+      print(apiUrl);
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
@@ -213,9 +243,7 @@ class _SearchPage extends State<SearchPage> {
   Future<void> searchByLocationName() async {
     String searchText = _searchController.text;
 
-    final String apiUrl =
-        'http://54.180.85.164:3080/geocoding/search/district/by-name?name=${Uri.encodeComponent(searchText)}';
-
+    final String apiUrl ='${API.geobyname}?name=${Uri.encodeComponent(searchText)}';
     final response = await http.get(Uri.parse(apiUrl));
     print('검색어: $searchText');
     if (response.statusCode == 200) {

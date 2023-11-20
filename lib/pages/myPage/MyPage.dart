@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:blurting/MyPageEdit.dart';
+import 'package:blurting/pages/myPage/MyPageEdit.dart';
+
+import '../../settings/setting.dart';
+import 'MyPageEdit.dart';
 
 void main() {
   runApp(MyPage());
@@ -60,10 +63,13 @@ class _MyPage extends State<MyPage> {
               ),
               actions: <Widget>[
                 IconButton(
-                  icon: Image.asset('assets/images/setting.png'),
+                  // icon: Image.asset('assets/images/setting.png'),
+                  icon:Icon(Icons.settings),
                   color: Color.fromRGBO(48, 48, 48, 1),
                   onPressed: () {
-                    // 설정 버튼을 눌렀을 때의 동작
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => SettingPage()),
+                    );
                   },
                 ),
               ],
