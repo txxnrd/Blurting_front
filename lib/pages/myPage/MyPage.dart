@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/startpage.dart';
@@ -29,6 +30,7 @@ class _MyPage extends State<MyPage> {
   final PageController pageController = PageController(
     initialPage: 0,
   );
+  int count =0;
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("설정 버튼 눌러짐");
     var token = getToken();
@@ -74,10 +76,15 @@ class _MyPage extends State<MyPage> {
         print('Request failed with status: ${response.statusCode}.');
         if(response.statusCode==401)
           {
+            count+=1;
             //refresh token으로 새로운 accesstoken 불러오는 코드.
             //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
             getnewaccesstoken(context);
             goToMyPageEdit(context);
+            if(count==10)
+              {
+                exit(1);
+              }
           }
       }
 

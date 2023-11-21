@@ -44,7 +44,6 @@ Future<void> _sendFixRequest() async {
     print('Server returned OK');
     print('Response body: ${response.body}');
 
-
     var data = json.decode(response.body);
 
     if(data['signupToken']!=null)
@@ -69,16 +68,17 @@ const List<Widget> religion = <Widget>[
   Text('무교'),
   Text('불교'),
   Text('기독교'),
-  Text('천주교')
+  Text('천주교'),
+  Text('기타'),
 ];
-List<bool> _selectedreligion = <bool>[true, false, false, false];
+List<bool> _selectedreligion = <bool>[true, false, false, false,false];
 
 const List<Widget> sexualpreference = <Widget>[
   Text('이성애자'),
   Text('동성애자'),
   Text('양성애자'),
 ];
-List<bool> _selectedsexualpreference = <bool>[true, false, false];
+// List<bool> _selectedsexualpreference = <bool>[false, false, false];
 
 const List<Widget> alcohol = <Widget>[
   Text('안 마심'),
@@ -86,14 +86,14 @@ const List<Widget> alcohol = <Widget>[
   Text('자주'),
   Text('매일')
 ];
-List<bool> _selectedalcohol = <bool>[true, false, false, false];
+List<bool> _selectedalcohol = <bool>[false, false, false, false];
 const List<Widget> smoke = <Widget>[
   Text('안 피움'),
   Text('가끔'),
   Text('자주'),
   Text('매일')
 ];
-List<bool> _selectedsmoke = <bool>[true, false, false, false];
+List<bool> _selectedsmoke = <bool>[false, false, false, false];
 
 
 //Hobby 각각 선택 되었는지 보여줌.
@@ -117,16 +117,23 @@ List<String> characteristic = [
 
 
 
+enum EorI {e,i}
+enum SorN {s,n}
+enum TorF {t,f}
+enum JorP {j,p}
 
 
 @override
 class _MyPageEditState extends State<MyPageEdit> {
-
   /*이미지 형식을 바꿔줌*/
   List<MultipartFile> multipartImageList = [];
   File? _image1;
   File? _image2;
   File? _image3;
+  EorI? _selectedEorI;
+  SorN? _selectedSorN;
+  TorF? _selectedTorF;
+  JorP? _selectedJorP;
   Future<void> _pickImage1() async {
     var picker = ImagePicker();
     var image1 = await picker.pickImage(source: ImageSource.gallery);
@@ -135,8 +142,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     if (image1 != null) {
       File selectedImage = File(image1.path); // 선택된 이미지 파일
 
-      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
+
       multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
 
       // UI 업데이트를 위해 setState 호출
@@ -154,8 +160,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     if (image2 != null) {
       File selectedImage = File(image2.path); // 선택된 이미지 파일
 
-      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
       multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
 
       // UI 업데이트를 위해 setState 호출
@@ -172,8 +176,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     if (image3 != null) {
       File selectedImage = File(image3.path); // 선택된 이미지 파일
 
-      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
       multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
 
       // UI 업데이트를 위해 setState 호출
@@ -230,16 +232,85 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
   }
 
+  void setMbtiEnums(String mbti) {
+    // EorI 설정
+    _selectedEorI = (mbti[0].toLowerCase() == 'e') ? EorI.e : EorI.i;
+
+    // SorN 설정
+    _selectedSorN = (mbti[1].toLowerCase() == 's') ? SorN.s : SorN.n;
+
+    // TorF 설정
+    _selectedTorF = (mbti[2].toLowerCase() == 't') ? TorF.t : TorF.f;
+
+    // JorP 설정
+    _selectedJorP = (mbti[3].toLowerCase() == 'j') ? JorP.j : JorP.p;
+  }
+  @override
+  void initState() {
+    super.initState();
+    // _selectedreligion 초기화
+    _selectedreligion = [false, false, false, false,false];
+
+    // widget.data['religion']에 따라 초기값 설정
+    if (widget.data['religion'] == "무교") {
+      _selectedreligion[0] = true;
+    } else if (widget.data['religion'] == "불교") {
+      _selectedreligion[1] = true;
+    } else if (widget.data['religion'] == "기독교") {
+      _selectedreligion[2] = true;
+    } else if (widget.data['religion'] == "천주교") {
+      _selectedreligion[3] = true;
+    }
+    else{
+      _selectedreligion[4] = true;
+    }
+    _selectedalcohol = <bool>[false, false, false, false];
+    _selectedsmoke= <bool>[false, false, false, false];
+    // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
+    for (int i = 0; i < characteristic.length; i++) {
+      if (widget.data['character'].contains(hobby[i])) {
+        isValidCharacterList[i] = true;
+      }
+    }
+    for (int i = 0; i < hobby.length; i++) {
+      if (widget.data['hobby'].contains(characteristic[i])) {
+        isValidHobbyList[i] = true;
+      }
+    }
+    _selectedalcohol[widget.data["drink"]]=true;
+    _selectedsmoke[widget.data["cigarette"]]=true;
+    if (widget.data.containsKey('mbti') && widget.data['mbti'] is String) {
+      setMbtiEnums(widget.data['mbti']);
+    }
+
+  }
+  List<bool> isValidList = [false, false, false, false];
+  bool IsValid = false;
+
+  @override
+  void IsSelected(int index) {
+    isValidList[index] = true;
+    if (isValidList.every((isValid) => isValid)) {
+      IsValid = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
     String characters = widget.data['character'].toString();
-    String hobby = widget.data['hobby'].toString();
+    String showinghobby = widget.data['hobby'].toString();
     List<String> images = List<String>.from(widget.data['images']);
 
-    hobby = hobby.replaceAll('[', '').replaceAll(']', '');
+
+
+
+
+    print(isValidCharacterList);
+
+
+    showinghobby = showinghobby.replaceAll('[', '').replaceAll(']', '');
 // 대괄호 제거
     characters = characters.replaceAll('[', '').replaceAll(']', '');
 
@@ -262,14 +333,7 @@ class _MyPageEditState extends State<MyPageEdit> {
           },
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
 
-              // 설정 버튼을 눌렀을 때의 동작
-            },
-          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -318,23 +382,23 @@ class _MyPageEditState extends State<MyPageEdit> {
               ),
               SizedBox(height: 3,),
               Container(
-                height: 48,
-                child:
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: widget.data['nickname'],
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF66464)),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF66464)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF66464)),
+                padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
+                alignment: Alignment.centerLeft,
+                height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFFF66464)),
+                  borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.data['nickname'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
                     ),
                   ),
-                  onChanged: (value) {
-                  },
                 ),
               ),
               SizedBox(
@@ -385,15 +449,20 @@ class _MyPageEditState extends State<MyPageEdit> {
                   color: Colors.black,
                 ),
               ),
+
               ToggleButtons(
                 onPressed: (int index) {
                   setState(() {
+                    // 모든 항목을 먼저 false로 설정
                     for (int i = 0; i < _selectedreligion.length; i++) {
-                      _selectedreligion[i] = i == index;
+                      _selectedreligion[i] = false;
                     }
+                    // 선택된 항목만 true로 설정
+                    _selectedreligion[index] = true;
                     print(_selectedreligion);
                   });
                 },
+
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 selectedBorderColor: Color(DefinedColor.darkpink),
                 selectedColor: Color(DefinedColor.darkpink),
@@ -401,44 +470,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                 color: Color(DefinedColor.darkpink),
                 constraints: BoxConstraints(
                   minHeight: 40.0,
-                  minWidth: screenWidth*0.21,
+                  minWidth: screenWidth*0.168,
                 ),
                 isSelected: _selectedreligion,
                 children: religion,
               ),
-              SizedBox(
-                height: 13,
-              ),
-              Text(
-                '성적지향성',
-                style: TextStyle(
-                  fontFamily: 'Heedo',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                ),
-              ),
-              ToggleButtons(
-                onPressed: (int index) {
-                  setState(() {
-                    for (int i = 0; i < _selectedsexualpreference.length; i++) {
-                      _selectedsexualpreference[i] = i == index;
-                    }
-                    print(_selectedsexualpreference);
-                  });
-                },
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Color(DefinedColor.darkpink),
-                selectedColor: Color(DefinedColor.darkpink),
-                fillColor: Colors.white,
-                color: Color(DefinedColor.darkpink),
-                constraints:  BoxConstraints(
-                  minHeight: 40.0,
-                  minWidth: screenWidth*0.28,
-                ),
-                isSelected: _selectedsexualpreference,
-                children: sexualpreference,
-              ),
+
               SizedBox(
                 height: 13,
               ),
@@ -454,9 +491,12 @@ class _MyPageEditState extends State<MyPageEdit> {
               ToggleButtons(
                 onPressed: (int index) {
                   setState(() {
+                    // 모든 항목을 먼저 false로 설정
                     for (int i = 0; i < _selectedalcohol.length; i++) {
-                      _selectedalcohol[i] = i == index;
+                      _selectedalcohol[i] = false;
                     }
+                    // 선택된 항목만 true로 설정
+                    _selectedalcohol[index] = true;
                     print(_selectedalcohol);
                   });
                 },
@@ -487,9 +527,12 @@ class _MyPageEditState extends State<MyPageEdit> {
               ToggleButtons(
                 onPressed: (int index) {
                   setState(() {
+                    // 모든 항목을 먼저 false로 설정
                     for (int i = 0; i < _selectedsmoke.length; i++) {
-                      _selectedsmoke[i] = i == index;
+                      _selectedsmoke[i] = false;
                     }
+                    // 선택된 항목만 true로 설정
+                    _selectedsmoke[index] = true;
                     print(_selectedsmoke);
                   });
                 },
@@ -552,26 +595,495 @@ class _MyPageEditState extends State<MyPageEdit> {
                   color: Colors.black,
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
-                alignment: Alignment.centerLeft,
-                height: 48, // TextField의 높이와 일치하도록 설정합니다.
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xFFF66464)),
-                  borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    widget.data['mbti'],
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 13,
                     ),
-                  ),
+                    Container(
+                      width: 60,
+                      height: 12,
+                      child: Text(
+                        '에너지방향',
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          width: width * 00.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedEorI == EorI.e
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              IsSelected(0);
+                              setState(() {
+                                _selectedEorI = EorI.e;
+                              });
+                            },
+                            child: Text(
+                              'E',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 15,),
+                        Container(
+                          width: width * 00.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedEorI == EorI.i
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              IsSelected(0);
+                              setState(() {
+                                _selectedEorI = EorI.i;
+                              });
+                            },
+                            child: Text(
+                              'I',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.all(0),
+                          child: Text(
+                            '외향형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.all(0),
+                          child: Text(
+                            '내항형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Container(
+                      width: 44,
+                      height: 12,
+                      child: Text(
+                        '인식',
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          width: width * 00.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedSorN == SorN.s
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              IsSelected(1);
+                              setState(() {
+                                _selectedSorN = SorN.s;
+                              });
+                            },
+                            child: Text(
+                              'S',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 15,),
+                        Container(
+                          width: width * 00.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedSorN == SorN.n
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              IsSelected(1);
+                              setState(() {
+                                _selectedSorN = SorN.n;
+                              });
+                            },
+                            child: Text(
+                              'N',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            '감각형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            '직관형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Container(
+                      width: 44,
+                      height: 12,
+                      child: Text(
+                        '판단',
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          width: width * 00.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedTorF == TorF.t
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                IsSelected(2);
+                                _selectedTorF = TorF.t;
+                              });
+                            },
+                            child: Text(
+                              'T',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 15,),
+                        Container(
+                          width: width * 00.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedTorF == TorF.f
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                IsSelected(2);
+                                _selectedTorF = TorF.f ;
+                              });
+                            },
+                            child: Text(
+                              'F',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            '사고형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            '감각형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Container(
+                      width: 44,
+                      height: 12,
+                      child: Text(
+                        '계획성',
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          width: width * 00.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedJorP == JorP.j
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                IsSelected(3);
+                                _selectedJorP = JorP.j;
+                              });
+                            },
+                            child: Text(
+                              'J',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 15,),
+                        Container(
+                          width: width * 0.4, // 원하는 너비 값
+                          height: 48, // 원하는 높이 값
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                color: Color(0xFF868686),
+                                width: 2,
+                              ),
+                              primary: Color(0xFF303030),
+                              backgroundColor: _selectedJorP == JorP.p
+                                  ? Color(0xFF868686)
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                IsSelected(3);
+                                _selectedJorP = JorP.p ;
+                              });
+                            },
+                            child: Text(
+                              'P',
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            '판단형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            '인식형',
+                            style: TextStyle(
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 58),
+
+                  ],
                 ),
-              ),
 
               SizedBox(
                 height: 13,
@@ -585,26 +1097,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                   color: Colors.black,
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
-                alignment: Alignment.centerLeft,
-                height: 48, // TextField의 높이와 일치하도록 설정합니다.
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xFFF66464)),
-                  borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    characters,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
-                    ),
-                  ),
-                ),
-              ),
+
 
               SizedBox(height: 5,),
 
@@ -697,26 +1190,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                 ),
               ),
 
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
-                alignment: Alignment.centerLeft,
-                height: 48, // TextField의 높이와 일치하도록 설정합니다.
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xFFF66464)),
-                  borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    hobby,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
-                    ),
-                  ),
-                ),
-              ),
               SizedBox(height:5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
@@ -820,6 +1293,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                       ),
                     ),
                   ),
+
                   InkWell(
                     onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
                     child: Container(

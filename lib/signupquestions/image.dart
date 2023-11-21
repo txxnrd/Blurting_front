@@ -37,7 +37,6 @@ class ImagePageState extends State<ImagePage>
     if (image1 != null) {
       File selectedImage = File(image1.path); // 선택된 이미지 파일
       // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
       multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
       // UI 업데이트를 위해 setState 호출
       setState(() {
@@ -55,7 +54,7 @@ class ImagePageState extends State<ImagePage>
       File selectedImage = File(image2.path); // 선택된 이미지 파일
 
       // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
+
       multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
 
       // UI 업데이트를 위해 setState 호출
@@ -73,7 +72,6 @@ class ImagePageState extends State<ImagePage>
       File selectedImage = File(image3.path); // 선택된 이미지 파일
 
       // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
       multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
 
       // UI 업데이트를 위해 setState 호출

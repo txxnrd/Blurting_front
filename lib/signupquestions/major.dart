@@ -317,7 +317,7 @@ class _MajorPageState extends State<MajorPage>
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 Container(
-                  width: width * 0.42, // 원하는 너비 값
+                  width: width * 0.3, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
