@@ -13,51 +13,16 @@ class MyPageEdit extends StatefulWidget {
   final dynamic data;
   MyPageEdit({Key? key, this.data}) : super(key: key); // Key 타입을 Key?로 변경
 
+  /*MYPAGE에서 버튼 누르면 api 요청 보내서 정보 가져옴.*/
+  /*그게 this.data임 (widget.data['region])식으로 접근 가능.*/
+
   @override
   _MyPageEditState createState() => _MyPageEditState();
 }
 
-@override
-void initState() {
-  _sendprofileGetRequest(); // 비동기 함수 호출
-}
 
-
-
-Future<void> _sendprofileGetRequest() async {
-
-  print('_sendprofilegetRequest called');
-  var url = Uri.parse(API.userprofile);
-
-  String savedToken = await getToken();
-  print(savedToken);
-
-  var response = await http.post(
-    url,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $savedToken',
-    },
-  );
-
-
-  if (response.statusCode == 200 ||response.statusCode == 201) {
-    // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-    print('Server returned OK');
-    print('Response body: ${response.body}');
-
-    var data = json.decode(response.body);
-
-
-  } else {
-    // 오류가 발생한 경우 처리
-    print('Request failed with status: ${response.statusCode}.');
-
-  }
-}
-
+/*요기에서 수정 요청 보내야되는데, 아직 함수 수정 안됨*/
 Future<void> _sendFixRequest() async {
-
   print('_sendPostRequest called');
   var url = Uri.parse(API.signupemail);
 
@@ -87,11 +52,8 @@ Future<void> _sendFixRequest() async {
       var token = data['signupToken'];
       print(token);
       await saveToken(token);
-
-
     }
     else{
-
     }
 
   } else {
@@ -133,12 +95,18 @@ const List<Widget> smoke = <Widget>[
 ];
 List<bool> _selectedsmoke = <bool>[true, false, false, false];
 
+
+//Hobby 각각 선택 되었는지 보여줌.
 List<bool> isValidHobbyList = [
   false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
 ];
+
+//Character 각각 선택 되었는지 보여줌.
+
 List<bool> isValidCharacterList = [
   false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
 ];
+
 List<String> hobby = [
   "개성적인", "책임감있는", "열정적인", "귀여운", "상냥한","감성적인","낙천적인", "유머있는", "차분한", "지적인", "섬세한", "무뚝뚝한", "외향적인", "내향적인"
 ];
@@ -153,6 +121,8 @@ List<String> characteristic = [
 
 @override
 class _MyPageEditState extends State<MyPageEdit> {
+
+  /*이미지 형식을 바꿔줌*/
   List<MultipartFile> multipartImageList = [];
   File? _image1;
   File? _image2;
@@ -212,7 +182,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       });
     }
   }
-
+///체크하면 아까 ValidList가 수정이됨
   @override
   void IsHobbySelected(int index) {
     isValidHobbyList[index] = !isValidHobbyList[index];
@@ -222,6 +192,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     isValidCharacterList[index] = !isValidCharacterList[index];
   }
 
+  ///취미 및 성격 chewckbox. bool 하나로 두개의 위젯 다 처리함
   Widget customHobbyCheckbox(String hobbyText, int index, width,bool ishobby) {
     return Container(
       width: width*0.37,
@@ -262,6 +233,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
   @override
   Widget build(BuildContext context) {
+
     double width = MediaQuery.of(context).size.width;
     String characters = widget.data['character'].toString();
     String hobby = widget.data['hobby'].toString();

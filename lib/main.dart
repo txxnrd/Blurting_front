@@ -1,6 +1,5 @@
 import 'package:blurting/settings/setting.dart';
 import 'package:blurting/signupquestions/hobby.dart';
-import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:blurting/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
@@ -16,7 +15,7 @@ void main() async {
   runApp(
     MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: WelcomeScreen()),
+        home: LoginPage()),
   );
 }
 
@@ -52,7 +51,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         backgroundColor: Colors.white,
       ),
-      home: WelcomeScreen(), // PhoneNumberPage를 홈으로 설정
+      home: LoginPage(), // PhoneNumberPage를 홈으로 설정
     );
   }
 }

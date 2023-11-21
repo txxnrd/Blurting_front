@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:flutter/material.dart';
@@ -73,13 +74,14 @@ class _EmailPageState extends State<EmailPage>
       content: Text(value),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating,
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
   @override
@@ -94,11 +96,13 @@ class _EmailPageState extends State<EmailPage>
       content: Text(message),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating,
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

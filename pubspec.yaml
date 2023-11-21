@@ -48,6 +48,8 @@ dependencies:
   shared_preferences: ^2.2.2
   intl: ^0.18.1
   flarelane_flutter: 1.4.0
+  contacts_service: ^0.6.3
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:

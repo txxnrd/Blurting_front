@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blurting/colors/colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/signupquestions/university.dart';
 import 'package:flutter/material.dart';
@@ -166,11 +167,13 @@ class ImagePageState extends State<ImagePage>
       content: Text(message),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -181,11 +184,14 @@ class ImagePageState extends State<ImagePage>
       content: Text(message),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
