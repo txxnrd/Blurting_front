@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/personality.dart'; // sex.dart를 임포트
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../colors/colors.dart';
+import '../config/app_config.dart';
 
 class MBTIPage extends StatefulWidget {
   final String selectedGender;
@@ -60,15 +66,132 @@ bool IsValid = false;
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.8, // 시작 너비 (30%)
-      end: 0.9, // 종료 너비 (40%)
+      begin: 9/15, // 시작 너비 (30%)
+      end: 10/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
   }
+  Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+    // 값이 없을 경우 'No Token'을 반환합니다.
+    String token = prefs.getString('signupToken') ?? 'No Token';
+    return token;
+  }
 
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('signupToken', token);
+    // 저장된 값을 확인하기 위해 바로 불러옵니다.
+    String savedToken = prefs.getString('signupToken') ?? 'No Token';
+    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
+  }
+
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+  String getMBTIType() {
+    String eOrI = _selectedEorI == EorI.i ? 'i' : 'e';
+    String sOrN = _selectedSorN == SorN.s ? 's' : 'n';
+    String tOrF = _selectedTorF == TorF.t ? 't' : 'f';
+    String jOrP = _selectedJorP == JorP.j ? 'j' : 'p';
+
+    return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
+  }
+
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+    var mbti =getMBTIType();
+
+
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"mbti":mbti }), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
+  Future<void> _sendBackRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupback);
+
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        Navigator.of(context).pop();
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -88,15 +211,10 @@ bool IsValid = false;
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+            _sendBackRequest();
+            },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -632,42 +750,41 @@ bool IsValid = false;
               ],
             ),
             SizedBox(height: 58),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: (IsValid)
-                        ? () {
-                            _increaseProgressAndNavigate();
-                          }
-                        : null,
-                    child: Text(
-                      '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }

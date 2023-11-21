@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/blurtingTab/blurting.dart';
-import 'package:blurting/homeTab/Home.dart';
-import 'package:blurting/MyPage.dart';
-import 'package:blurting/whisperTab/chattingList.dart';
+import 'package:blurting/pages/blurtingTab/blurting.dart';
+import 'package:blurting/pages/homeTab/Home.dart';
+import 'package:blurting/pages/myPage/MyPage.dart';
+import 'package:blurting/pages/whisperTab/chattingList.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/Static/provider.dart';
 import 'package:blurting/config/app_config.dart';
 
 class MainApp extends StatefulWidget {
@@ -17,15 +16,13 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInNpZ25lZEF0IjoiMjAyMy0xMS0wOFQxNzoxODo0MC4zMDRaIiwiaWF0IjoxNjk5NDYzOTIwLCJleHAiOjE2OTk0Njc1MjB9.GB1SHpE4GLans26IO1crmiYhgATuqgMmtlTaFKzqHBM';
-  IO.Socket socket =
-      IO.io('${ServerEndpoints.socketServerEndpoint}whisper', <String, dynamic>{
+  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTc6MDg6NDguNzcwWiIsImlhdCI6MTcwMDQ2NzcyOCwiZXhwIjoxNzAwNDcxMzI4fQ.Qd9uRgY33SXG5aHR0vJ0ke5ssQNjUv0GeBt60hqXcbQ';
+  IO.Socket socket = IO
+      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
     'transports': ['websocket'],
     'auth': {'authorization': 'Bearer $token'},
+    // 'reconnectionAttempts': 0,
   });
-
-  late SocketProvider socketProvider; // SocketProvider 변수 추가
 
   late List<Widget> _pages;
 
@@ -33,9 +30,12 @@ class _MainApp extends State<MainApp> {
   void initState() {
     super.initState();
 
-    // 서버에 연결되었을 때 동작
     socket.on('connect', (_) {
       print('소켓 연결됨');
+    });
+
+    socket.on('disconnect', (_) {
+      print('소켓 연결 끊김');
     });
 
     _pages = [
@@ -52,9 +52,9 @@ class _MainApp extends State<MainApp> {
       extendBody: true,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: [
+        decoration: BoxDecoration(boxShadow: const [
           BoxShadow(
-            color: const Color.fromARGB(255, 212, 212, 212), // 그림자 색상
+            color: Color.fromARGB(255, 212, 212, 212), // 그림자 색상
             blurRadius: 20, // 그림자의 흐림 정도
             spreadRadius: 4, // 그림자의 확산 정도
             offset: Offset(0, 1), // 그림자의 위치 (가로, 세로)
@@ -127,7 +127,7 @@ class TabItem extends StatelessWidget {
   final String name;
 
   TabItem(
-      {required this.currentIndex, required this.image, required this.name});
+      {super.key, required this.currentIndex, required this.image, required this.name});
 
   @override
   Widget build(BuildContext context) {
