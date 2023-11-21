@@ -87,8 +87,8 @@ class _SmokePageState extends State<SmokePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 6/14,
-      end: 7/14,
+      begin: 6/15,
+      end: 7/15,
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {

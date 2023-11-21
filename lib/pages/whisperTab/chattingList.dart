@@ -10,9 +10,11 @@ import 'package:blurting/Utils/utilWidget.dart';
 import 'package:intl/intl.dart';
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
+DateFormat dateFormatDate = DateFormat('MM월 dd일'); // 필요한 포맷으로 수정
+
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
-    return DateTime.now(); // 혹은 다른 기본 값으로 대체
+    return DateTime(1, 11, 30, 0, 0, 0, 0); // 혹은 다른 기본 값으로 대체
   }
 
   try {
@@ -60,11 +62,147 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _chatListItemState extends State<ChatListItem> {
+  
+  void _leaveRoom(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Stack(
+            children: [
+              Positioned(
+                bottom: 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(top: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 20),
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color:
+                                          mainColor.lightGray.withOpacity(0.5)),
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    margin: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 10,
+                                              fontFamily: "Heebo"),
+                                        ),
+                                        Text(
+                                          '채팅 상대방과 다시는 매칭되지 않습니다.',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 10,
+                                              fontFamily: "Heebo"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.MainColor),
+                                    height: 50,
+                                    // color: mainColor.MainColor,
+                                    child: Center(
+                                      child: Text(
+                                        '방 나가기',
+                                        style: TextStyle(
+                                            fontFamily: 'Heebo',
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    widget.socket.emit('leave_room', widget.roomId);
+                                    print('채팅 나가는 중...');
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: mainColor.lightGray),
+                              // color: mainColor.MainColor,
+                              child: Center(
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(
+                                      fontFamily: 'Heebo',
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                Navigator.of(context).pop();
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String latest_time = dateFormat.format(widget.latest_time);
 
+    if (dateFormatDate.format(widget.latest_time) !=
+        dateFormatDate.format(DateTime.now())) {
+      latest_time = dateFormatDate.format(widget.latest_time);
+    }
+
+    if (widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)) {
+      latest_time = ' ';
+    }
+
     return GestureDetector(
+      onLongPress: () {
+        _leaveRoom(context);
+      },
       onTap: () {
         Navigator.push(
           context,
@@ -214,13 +352,13 @@ class _chattingList extends State<ChattingList> {
       print('새로운 채팅: $data');
       Widget newChat = ChatListItem(
         token: widget.token,
-        roomId: data,
-        userName: '새로운 채팅방',
-        latest_chat: '누군가가 나에게 새로운 채팅을 걸었어요',
-        latest_time: DateTime.now(),
-        image: 'assets/man.png',
+        roomId: data['roomId'],
+        userName: data['nickname'],
+        latest_chat: '지금 귓속말을 보내 보세요!',
+        latest_time: DateTime(1, 11, 30, 0, 0, 0, 0),
+        image: data['sex'] == 'M' ? 'assets/man.png' : 'assets/woman.png',
         socket: widget.socket,
-        read: false,
+        read: true,
       );
 
       widget.socket.emit('join_chat', data);
@@ -231,8 +369,19 @@ class _chattingList extends State<ChattingList> {
       }
     });
 
-      widget.socket.on('new_chat', (data) {
-        print('새 메시지 도착$data');
+    widget.socket.on('new_chat', (data) {
+      int index = 0;
+
+      print('채팅 리스트 새 메시지 도착$data');
+      for (int i = 0; i < chatLists.length; i++) {
+        Widget widget = chatLists[i];
+
+        if (widget is ChatListItem) {
+          if (widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)) {
+            index++;
+          }
+        }
+      }
 
       for (int i = 0; i < chatLists.length; i++) {
         Widget widget = chatLists[i];
@@ -246,8 +395,6 @@ class _chattingList extends State<ChattingList> {
             read = data['read'];
           }
 
-          print(read);
-
           String roomId = widget.roomId;
 
           if (roomId == data['roomId']) {
@@ -256,7 +403,9 @@ class _chattingList extends State<ChattingList> {
                 final userName = widget.userName;
                 chatLists.removeAt(i);
                 chatLists.insert(
-                    0,
+                    widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)
+                        ? index - 1
+                        : index,
                     ChatListItem(
                       token: widget.token,
                       roomId: data['roomId'] as String? ?? '',
@@ -278,27 +427,47 @@ class _chattingList extends State<ChattingList> {
     });
 
     widget.socket.on('out_room', (data) {
-      // roomId를 받아서 그 값을 갱신..
       for (int i = 0; i < chatLists.length; i++) {
         Widget widget = chatLists[i];
         if (widget is ChatListItem) {
           if (data == widget.roomId) {
-            if(mounted){
-            setState(() {
-              chatLists.removeAt(i);
-              chatLists.insert(
-                  i,
-                  ChatListItem(
-                    token: widget.token,
-                    roomId: widget.roomId,
-                    userName: widget.userName,
-                    latest_chat: widget.latest_chat,
-                    latest_time: widget.latest_time,
-                    image: widget.image,
-                    socket: widget.socket,
-                    read: true,
-                  ));
-            });}
+            if (mounted) {
+              setState(() {
+                chatLists.removeAt(i);
+                chatLists.insert(
+                    i,
+                    ChatListItem(
+                      token: widget.token,
+                      roomId: widget.roomId,
+                      userName: widget.userName,
+                      latest_chat: widget.latest_chat,
+                      latest_time: widget.latest_time,
+                      image: widget.image,
+                      socket: widget.socket,
+                      read: true,
+                    ));
+              });
+            }
+          }
+        }
+      }
+    });
+
+    widget.socket.on('leave_room', (data) {     // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
+                                                // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
+      print(data);
+      if (data['userId'] == UserProvider.UserId) {
+        for (int i = 0; i < chatLists.length; i++) {
+          Widget widget = chatLists[i];
+          if (widget is ChatListItem) {
+            if (data['roomId'] == widget.roomId) {
+              if (mounted) {
+                setState(() {
+                  chatLists.removeAt(i);
+                });
+              }
+            }
+            return;
           }
         }
       }
@@ -309,6 +478,7 @@ class _chattingList extends State<ChattingList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         automaticallyImplyLeading: false,
         toolbarHeight: 244,
         flexibleSpace: Stack(
@@ -329,7 +499,6 @@ class _chattingList extends State<ChattingList> {
               icon: Image.asset('assets/images/setting.png'),
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
               },
             ),
           ),
@@ -338,8 +507,7 @@ class _chattingList extends State<ChattingList> {
           margin: EdgeInsets.only(top: 70),
           height: 80,
           child: Container(
-              padding: EdgeInsets.all(13),
-              child: ellipseText(text: 'Connect')),
+              padding: EdgeInsets.all(13), child: ellipseText(text: 'Connect')),
         ),
         bottom: PreferredSize(
           preferredSize: Size(10, 10),
@@ -403,17 +571,6 @@ class _chattingList extends State<ChattingList> {
                   child: Column(
                     children: <Widget>[
                       for (var chatItem in chatLists) ListTile(title: chatItem),
-                      ListTile(
-                          title: ChatListItem(
-                        token: widget.token,
-                        roomId: '',
-                        userName: '테스트',
-                        latest_chat: '소켓 X',
-                        latest_time: DateTime.now(),
-                        image: 'assets/woman.png',
-                        socket: widget.socket,
-                        read: true,
-                      )),
                     ],
                   ),
                 ),
@@ -439,12 +596,6 @@ class _chattingList extends State<ChattingList> {
       try {
         List<dynamic> responseData = jsonDecode(response.body);
 
-        responseData.sort((a, b) {
-          DateTime timeA = _parseDateTime(a['latest_time']);
-          DateTime timeB = _parseDateTime(b['latest_time']);
-          return timeA.compareTo(timeB);
-        });
-
         for (final chatData in responseData) {
           DateTime latestTime = _parseDateTime(chatData['latest_time']);
           DateTime hasRead = _parseDateTime(chatData['has_read']);
@@ -457,14 +608,13 @@ class _chattingList extends State<ChattingList> {
 
           if (mounted) {
             setState(() {
-              chatLists.insert(
-                0,
+              chatLists.add(
                 ChatListItem(
                   token: widget.token,
                   roomId: chatData['roomId'] as String? ?? '',
                   userName: chatData['nickname'] as String? ?? '',
                   latest_chat:
-                      chatData['latest_chat'] as String? ?? '채팅을 걸어 보세요!',
+                      chatData['latest_chat'] as String? ?? '지금 귓속말을 보내 보세요!',
                   latest_time: latestTime,
                   image: chatData['sex'] == "F"
                       ? 'assets/woman.png'

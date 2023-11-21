@@ -11,8 +11,6 @@ import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:provider/provider.dart';
 
-
-
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
   final String token;
@@ -29,19 +27,18 @@ class QuestionItem extends StatelessWidget {
   final int questionNumber;
   final String question;
 
-  QuestionItem({required this.questionNumber, required this.question});
+  QuestionItem(
+      {super.key, required this.questionNumber, required this.question});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        'Q$questionNumber. $question',
-        style: TextStyle(
-          fontFamily: 'Pretendard',
-          fontSize: 15,
-          color: Color.fromRGBO(134, 134, 134, 1),
-          fontWeight: FontWeight.w500,
-        ),
+    return Text(
+      'Q$questionNumber. $question',
+      style: TextStyle(
+        fontFamily: 'Pretendard',
+        fontSize: 15,
+        color: Color.fromRGBO(134, 134, 134, 1),
+        fontWeight: FontWeight.w500,
       ),
     );
   }
@@ -50,7 +47,7 @@ class QuestionItem extends StatelessWidget {
 class QuestionNumber extends StatelessWidget {
   final int questionNumber;
 
-  QuestionNumber({required this.questionNumber});
+  QuestionNumber({super.key, required this.questionNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +56,7 @@ class QuestionNumber extends StatelessWidget {
       child: Text(
         '$questionNumber',
         style: TextStyle(
-            fontFamily: "Heedo",
+            fontFamily: "Heebo",
             fontSize: 13,
             fontWeight: FontWeight.w700,
             color: mainColor.MainColor),
@@ -81,9 +78,7 @@ class _GroupChat extends State<GroupChat> {
 
     widget.socket.on('create_room', (data) {
       print(data);
-
-      // 서버로부터 roomId를 전달받아서 해당 room으로 화면 전환,
-      String roomId = data;
+      print('${data['nickname']}${data['roomId']}');
 
       Navigator.push(
         context,
@@ -91,8 +86,8 @@ class _GroupChat extends State<GroupChat> {
             builder: (context) => Whisper(
                 token: widget.token,
                 socket: widget.socket,
-                userName: '새로운 채팅방',
-                roomId: roomId)),
+                userName: data['nickname'] as String? ?? '',
+                roomId: data['roomId'] as String? ?? '')),
       );
     });
   }
@@ -105,6 +100,7 @@ class _GroupChat extends State<GroupChat> {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -139,7 +135,7 @@ class _GroupChat extends State<GroupChat> {
                     Text(
                       'Day1',
                       style: TextStyle(
-                          fontFamily: "Heedo",
+                          fontFamily: "Heebo",
                           fontSize: 40,
                           fontWeight: FontWeight.w700,
                           color: mainColor.MainColor),
@@ -220,20 +216,20 @@ class _GroupChat extends State<GroupChat> {
                                 userName: '정원',
                                 message: '하하\n그냥 잘까',
                                 socket: widget.socket,
-                                userId: 164,
-                                whisper: true),
+                                userId: 205,
+                                whisper: false),
                             AnswerItem(
                                 userName: '개굴',
                                 message: '아 목 아파 감기 걸렷나',
                                 socket: widget.socket,
-                                userId: 6,
+                                userId: 207,
                                 whisper: false),
                             AnswerItem(
                                 userName: '감기',
                                 message: '양치하고 자야겟다..',
                                 socket: widget.socket,
-                                userId: 7,
-                                whisper: true),
+                                userId: 208,
+                                whisper: false),
                             for (var answer in answerList)
                               answer, // answerList에 있는 내용 순회하며 추가
                           ],
@@ -243,7 +239,7 @@ class _GroupChat extends State<GroupChat> {
                   ),
                 ),
               ),
-              if(Provider.of<GroupChatProvider>(context).isPocus)
+              if (Provider.of<GroupChatProvider>(context).isPocus)
                 AnimatedContainer(
                   duration: Duration(milliseconds: 500),
                   margin: EdgeInsets.all(10),
@@ -251,19 +247,30 @@ class _GroupChat extends State<GroupChat> {
                   height: 20,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Provider.of<GroupChatProvider>(context).pointValid ? mainColor.MainColor : Colors.white,
+                    color: Provider.of<GroupChatProvider>(context).pointValid
+                        ? mainColor.MainColor
+                        : Colors.white,
                   ),
                   child: Row(
                     children: [
                       Container(
                           margin: EdgeInsets.only(left: 5, right: 3),
-                          child: Image.asset('assets/images/check.png', color: Provider.of<GroupChatProvider>(context).pointValid ? Colors.white : mainColor.lightGray,)),
+                          child: Image.asset(
+                            'assets/images/check.png',
+                            color: Provider.of<GroupChatProvider>(context)
+                                    .pointValid
+                                ? Colors.white
+                                : mainColor.lightGray,
+                          )),
                       Text(
                         '100자 이상',
                         style: TextStyle(
                             fontSize: 10,
-                            fontFamily: "Heedo",
-                            color: Provider.of<GroupChatProvider>(context).pointValid ? Colors.white : mainColor.lightGray),
+                            fontFamily: "Heebo",
+                            color: Provider.of<GroupChatProvider>(context)
+                                    .pointValid
+                                ? Colors.white
+                                : mainColor.lightGray),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -272,6 +279,7 @@ class _GroupChat extends State<GroupChat> {
               CustomInputField(
                 controller: _controller,
                 sendFunction: SendAnswer,
+                isBlock: false,
               ),
             ],
           ),
@@ -308,7 +316,7 @@ class _GroupChat extends State<GroupChat> {
   }
 
   void SendAnswer(String answer) async {
-    if(Provider.of<GroupChatProvider>(context, listen: false).pointValid) {
+    if (Provider.of<GroupChatProvider>(context, listen: false).pointValid) {
       print('포인트 지급');
     }
 

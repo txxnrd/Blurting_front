@@ -103,8 +103,7 @@ class HobbyPageState extends State<HobbyPage>
                 color: Color(0xFF303030),
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
-                fontSize: index == 3 ? 18.6 : 20,
-
+                fontSize: 18.6,
 
               ),
             ),
@@ -151,8 +150,8 @@ class HobbyPageState extends State<HobbyPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 11/14, // 시작 너비 (30%)
-      end: 12/14, // 종료 너비 (40%)
+      begin: 11/15, // 시작 너비 (30%)
+      end: 12/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {

@@ -55,8 +55,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 4/14, // 시작 게이지 값
-      end: 5/14, // 종료 게이지 값
+      begin: 4/15, // 시작 게이지 값
+      end: 5/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {

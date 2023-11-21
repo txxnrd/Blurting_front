@@ -48,6 +48,8 @@ dependencies:
   shared_preferences: ^2.2.2
   intl: ^0.18.1
   flarelane_flutter: 1.4.0
+  contacts_service: ^0.6.3
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +72,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - image/girl.png
+    - assets/images/girl.png
     - image/profile_swipe_now.png
     - image/profile_swipe_next.png
     - assets/images/profile_man.png
@@ -89,13 +91,23 @@ flutter:
     - assets/images/whisper.png
     - assets/images/home.png
     - assets/signupface.png
-    - assets/man.png
+    - assets/images/boy.png
     - assets/woman.png
-    - assets/images/arrow.png
+
+    - assets/man.png
+    - assets/images/arrow.png 
+
     - assets/images/match.png
     - assets/images/chat.png
     - assets/images/like.png
     - assets/images/homecard.png
+    - assets/images/boy.png
+    - assets/images/girl.png
+    - assets/images/check.png
+    - assets/images/block.png
+    - assets/images/leaveRoom.png
+    - assets/animation/girl.png
+    - assets/animation/boy.png
     - assets/images/setting_boy.png
     - assets/images/setting_girl.png
 
@@ -121,7 +133,7 @@ flutter:
         - asset: assets/fonts/Pretendard-Black.ttf
           weight: 900
 
-    - family: Heedo
+    - family: Heebo
       fonts:
         - asset: assets/fonts/Heebo-Thin.ttf
         - asset: assets/fonts/Heebo-ExtraLight.ttf

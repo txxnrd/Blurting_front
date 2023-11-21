@@ -162,8 +162,8 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
     );
 
     _progressAnimation = Tween<double>(
-      begin: 1/14, // 시작 게이지 값
-      end: 2/14, // 종료 게이지 값
+      begin: 1/15, // 시작 게이지 값
+      end: 2/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {

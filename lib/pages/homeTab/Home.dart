@@ -424,7 +424,7 @@ class PointAppbar extends StatelessWidget {
           '${point}p',
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontFamily: 'Heedo',
+            fontFamily: 'Heebo',
             color: Colors.white,
             fontSize: 15,
           ),

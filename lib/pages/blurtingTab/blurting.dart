@@ -2,18 +2,26 @@ import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/pages/blurtingTab/matchingAni.dart';
 
 class Blurting extends StatefulWidget {
   final IO.Socket socket;
   final String token;
-  
-  Blurting({required this.socket, Key? key, required this.token}) : super(key: key);
+
+  Blurting({required this.socket, Key? key, required this.token})
+      : super(key: key);
 
   @override
   _Blurting createState() => _Blurting();
 }
 
 class _Blurting extends State<Blurting> {
+  bool isContinue = true; // 방이 있으면 true, 없으면 false
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +66,7 @@ class _Blurting extends State<Blurting> {
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-            padding: EdgeInsets.only(top: 150), // 시작 위치에 여백 추가
+        padding: EdgeInsets.only(top: 150), // 시작 위치에 여백 추가
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -68,10 +76,18 @@ class _Blurting extends State<Blurting> {
               child: Image.asset('assets/images/blurting_Image.png'),
             ),
             GestureDetector(
-              child: staticButton(text: 'Start'),
+              child: staticButton(text: isContinue ? 'Continue' : 'Start'),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => GroupChat(socket: widget.socket, token: widget.token)));
+                if (isContinue) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupChat(
+                              socket: widget.socket, token: widget.token)));
+                } else {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Matching()));
+                }
               },
             )
           ],
