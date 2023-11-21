@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:blurting/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +29,6 @@ class _SettingPageState extends State<SettingPage>{
     }
     else{
       _showVerificationFailedSnackBar('로그인 안 됨');
-
     }
   }
 
@@ -45,6 +46,7 @@ class _SettingPageState extends State<SettingPage>{
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+  int count =10;
 Future<void> _sendDeleteRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.user);
@@ -81,6 +83,16 @@ Future<void> _sendDeleteRequest() async {
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
+      if(response.statusCode==401)
+      {
+        //refresh token으로 새로운 accesstoken 불러오는 코드.
+        //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+        getnewaccesstoken(context);
+        _sendDeleteRequest();
+        count+=1;
+        if(count==100)
+          exit(1);
+      }
     }
   }
   @override

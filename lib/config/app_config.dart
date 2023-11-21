@@ -1,6 +1,6 @@
 class ServerEndpoints {
-  static const String serverEndpoint = "http://13.124.149.234:3080";
-  static const String socketServerEndpoint = "ws://13.124.149.234:3080/";
+  static const String serverEndpoint = "https://api.blurting.devkor.club";
+  static const String socketServerEndpoint = "ws://api.blurting.devkor.club";
 
 }
 

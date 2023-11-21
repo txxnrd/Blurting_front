@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blurting/mainApp.dart';
+import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
@@ -211,7 +212,12 @@ class _EmailPageState extends State<EmailPage>
         print(token);
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WelcomeScreen()));
+
         _increaseProgressAndNavigate();
+        Future.delayed(Duration(seconds: 2), _increaseProgressAndNavigate);
+
+
       }
       else{
         _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');

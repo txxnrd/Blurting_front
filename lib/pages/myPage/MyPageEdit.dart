@@ -149,6 +149,8 @@ List<String> characteristic = [
 
 
 
+
+
 @override
 class _MyPageEditState extends State<MyPageEdit> {
   List<MultipartFile> multipartImageList = [];
@@ -263,11 +265,11 @@ class _MyPageEditState extends State<MyPageEdit> {
     double width = MediaQuery.of(context).size.width;
     String characters = widget.data['character'].toString();
     String hobby = widget.data['hobby'].toString();
+    List<String> images = List<String>.from(widget.data['images']);
 
     hobby = hobby.replaceAll('[', '').replaceAll(']', '');
 // 대괄호 제거
     characters = characters.replaceAll('[', '').replaceAll(']', '');
-    List<String> images = List<String>.from(widget.data['images']);
 
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -460,7 +462,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 color: Color(DefinedColor.darkpink),
                 constraints:  BoxConstraints(
                   minHeight: 40.0,
-                  minWidth: screenWidth*0.21,
+                  minWidth: screenWidth*0.28,
                 ),
                 isSelected: _selectedsexualpreference,
                 children: sexualpreference,
@@ -839,7 +841,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: _image1 == null
+                        child: images[0]!=null ? Image.network(images[0]) : _image1 == null
                             ? Center(
                             child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
                             : Image.file(_image1!, fit: BoxFit.cover), // 선택된 이미지 표시
@@ -858,10 +860,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: _image2 == null
+                        child: images.length > 1 && images[1] != null
+                            ? Image.network(images[1], fit: BoxFit.cover) // 서버에서 받은 두 번째 이미지 표시
+                            : _image2 == null
                             ? Center(
-                            child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
-                            : Image.file(_image2!, fit: BoxFit.cover), // 선택된 이미지 표시
+                            child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0)) // 기본 아이콘 표시
+                            : Image.file(_image2!, fit: BoxFit.cover), // 사용자가 선택한 이미지 표시
                       ),
                     ),
                   ),InkWell(
@@ -874,12 +878,14 @@ class _MyPageEditState extends State<MyPageEdit> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      child: ClipRRect(
+                      child:ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: _image3 == null
+                        child: images.length > 2 && images[2] != null
+                            ? Image.network(images[2], fit: BoxFit.cover) // 서버에서 받은 두 번째 이미지 표시
+                            : _image2 == null
                             ? Center(
-                            child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
-                            : Image.file(_image3!, fit: BoxFit.cover), // 선택된 이미지 표시
+                            child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0)) // 기본 아이콘 표시
+                            : Image.file(_image3!, fit: BoxFit.cover), // 사용자가 선택한 이미지 표시
                       ),
                     ),
                   ),
