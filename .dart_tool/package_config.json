@@ -32,6 +32,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "contacts_service",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/contacts_service-0.6.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "cross_file",
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/cross_file-0.3.3+6",
       "packageUri": "lib/",
@@ -105,7 +111,9 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/Users/4_da_/Downloads/flutter_windows_3.10.5-stable/flutter/packages/flutter",
+
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter",
+
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -123,13 +131,17 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/Users/4_da_/Downloads/flutter_windows_3.10.5-stable/flutter/packages/flutter_test",
+
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_test",
+
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///C:/Users/4_da_/Downloads/flutter_windows_3.10.5-stable/flutter/packages/flutter_web_plugins",
+
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_web_plugins",
+
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -332,6 +344,36 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "permission_handler",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler-11.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_android-11.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_apple-9.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-3.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "platform",
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.3",
       "packageUri": "lib/",
@@ -348,6 +390,12 @@
       "rootUri": "file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "quiver",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/quiver-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "shared_preferences",
@@ -393,7 +441,8 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///C:/Users/4_da_/Downloads/flutter_windows_3.10.5-stable/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
+
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -554,7 +603,9 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-20T09:46:10.068435Z",
+
+  "generated": "2023-11-21T06:16:36.676467Z",
+
   "generator": "pub",
   "generatorVersion": "3.2.0"
 }

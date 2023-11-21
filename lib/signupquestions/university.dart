@@ -90,7 +90,6 @@ class _UniversityPageState extends State<UniversityPage>
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
       }
       else{
         _showVerificationFailedSnackBar();
@@ -113,8 +112,8 @@ class _UniversityPageState extends State<UniversityPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 12/14, // 시작 너비 (30%)
-      end: 13/14, // 종료 너비 (40%)
+      begin: 13/15, // 시작 너비 (30%)
+      end: 14/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {

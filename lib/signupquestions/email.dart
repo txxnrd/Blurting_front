@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
+import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
@@ -45,8 +47,8 @@ class _EmailPageState extends State<EmailPage>
       vsync: this,
     );
     _progressAnimation = Tween<double>(
-      begin: 13/14, // 시작 너비 (30%)
-      end: 14/14, // 종료 너비 (40%)
+      begin: 14/15, // 시작 너비 (30%)
+      end: 15/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -67,18 +69,19 @@ class _EmailPageState extends State<EmailPage>
     WidgetsBinding.instance?.removeObserver(this); // 옵저버 제거
     super.dispose();
   }
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+  void _showVerificationFailedSnackBar(value) {
     final snackBar = SnackBar(
-      content: Text(message),
+      content: Text(value),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating,
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
   @override
@@ -93,11 +96,13 @@ class _EmailPageState extends State<EmailPage>
       content: Text(message),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating,
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -131,7 +136,7 @@ class _EmailPageState extends State<EmailPage>
 
       }
       else{
-        _showVerificationFailedSnackBar();
+        _showVerificationFailedSnackBar('뒤로 가기가 완료되지 않았습니다.');
       }
 
     } else {
@@ -175,13 +180,13 @@ class _EmailPageState extends State<EmailPage>
 
       }
       else{
-        _showVerificationFailedSnackBar();
+        _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니디.');
       }
 
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-      _showVerificationFailedSnackBar();
+      _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니다.');
     }
   }
   Future<void> _sendVerificationRequest() async {
@@ -211,10 +216,15 @@ class _EmailPageState extends State<EmailPage>
         print(token);
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WelcomeScreen()));
+
         _increaseProgressAndNavigate();
+        Future.delayed(Duration(seconds: 2), _increaseProgressAndNavigate);
+
+
       }
       else{
-        _showVerificationFailedSnackBar();
+        _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
         print("_showVerificationFailedSnackBar();");
       }
 
@@ -222,6 +232,7 @@ class _EmailPageState extends State<EmailPage>
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
       print('Response body: ${response.body}');
+      _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
 
     }
   }
