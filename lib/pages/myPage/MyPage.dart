@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +42,6 @@ String getDrinkString(int? drink) {
   }
 }
 
-
 void main() {
   runApp(MyPage());
 }
@@ -70,52 +68,49 @@ class _MyPage extends State<MyPage> {
     print(token);
 
 /*여기서부터 내 정보 요청하기*/
-      var url = Uri.parse(API.userprofile);
+    var url = Uri.parse(API.userprofile);
 
-      String accessToken = await getToken();
-      String refreshToken = await getRefreshToken();
-      print("access Token" + accessToken);
-      print("access Token" + refreshToken);
+    String accessToken = await getToken();
+    String refreshToken = await getRefreshToken();
+    print("access Token" + accessToken);
+    print("access Token" + refreshToken);
 
     var response = await http.get(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $accessToken',
-        },
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    print(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyPageEdit(data: data),
+        ),
       );
 
-      print(response.body);
-      if (response.statusCode == 200 ||response.statusCode == 201) {
-        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-        print('Server returned OK');
-        print('Response body: ${response.body}');
-        var data = json.decode(response.body);
-
-        final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyPageEdit(data: data),
-          ),
-        );
-
-
-        // 이후에 필요한 작업을 수행할 수 있습니다.
-        if (result != null) {
-          print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
-        }
-      } else {
-        // 오류가 발생한 경우 처리
-        print('Request failed with status: ${response.statusCode}.');
-        if(response.statusCode==401)
-          {
-            //refresh token으로 새로운 accesstoken 불러오는 코드.
-            //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-            getnewaccesstoken(context);
-            goToMyPageEdit(context);
-          }
+      // 이후에 필요한 작업을 수행할 수 있습니다.
+      if (result != null) {
+        print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
       }
-
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+      if (response.statusCode == 401) {
+        //refresh token으로 새로운 accesstoken 불러오는 코드.
+        //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+        getnewaccesstoken(context);
+        goToMyPageEdit(context);
+      }
+    }
   }
 
   // 이미지 경로 리스트
@@ -182,7 +177,12 @@ class _MyPage extends State<MyPage> {
               icon: Image.asset('assets/images/setting.png'),
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
+                print("설정 버튼 눌러짐");
+                var token = getToken();
+                print(token);
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SettingPage()),
+                );
               },
             ),
           ),
@@ -257,25 +257,38 @@ class _MyPage extends State<MyPage> {
                             'Unknown',
                         getDrinkString(userProfile['drink']) ?? 'Unknown',
                       ]),
+                      Center(
+                        child: Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Container(
+                              width: 350,
+                              height: 48,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFFF66464),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Edit',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      fontFamily: 'pretendard',
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                onPressed: () {
+                                  print("edit 버튼 클릭됨");
+                                  goToMyPageEdit(context);
+                                },
+                              ),
+                            )),
+                      )
                     ],
                   ),
                 ]),
               ),
-
-              actions: <Widget>[
-                IconButton(
-                  // icon: Image.asset('assets/images/setting.png'),
-                  icon:Icon(Icons.settings),
-                  color: Color.fromRGBO(48, 48, 48, 1),
-                  onPressed: () {
-                    print("설정 버튼 눌러짐");
-                    var token = getToken();
-                    print(token);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SettingPage()),
-                    );
-                  },
-
             ),
             Container(
               width: double.infinity,
@@ -293,7 +306,6 @@ class _MyPage extends State<MyPage> {
                   spacing: 10,
                   dotHeight: 5,
                   dotWidth: 5,
-
                 ),
               ),
             ),
@@ -420,56 +432,26 @@ class _MyPage extends State<MyPage> {
                         color: Color(0XFFF66464),
                       ),
                     ),
-
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                  Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      child: SmoothPageIndicator(
-                          controller: pageController,
-                          count: 5,
-                          effect: ScrollingDotsEffect(
-                            activeDotColor: Color(0xFFF66464),
-                            activeStrokeWidth: 10,
-                            activeDotScale: 1.7,
-                            maxVisibleDots: 5,
-                            radius: 8,
-                            spacing: 10,
-                            dotHeight: 5,
-                            dotWidth: 5,
-                          ))),
-                  Center(
-                    child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Container(
-                          width: 350,
-                          height: 48,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFF66464),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            child: const Text(
-                              'Edit',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontFamily: 'pretendard',
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            onPressed: () {
-                              print("edit 버튼 클릭됨");
-                              goToMyPageEdit(context);
-                            },
-                          ),
-                        )),
-
                   )
                   .toList(),
             ),
+            Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+            Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: SmoothPageIndicator(
+                    controller: mainPageController,
+                    count: 5,
+                    effect: ScrollingDotsEffect(
+                      activeDotColor: Color(0xFFF66464),
+                      activeStrokeWidth: 10,
+                      activeDotScale: 1.7,
+                      maxVisibleDots: 5,
+                      radius: 8,
+                      spacing: 10,
+                      dotHeight: 5,
+                      dotWidth: 5,
+                    ))),
           ],
         ),
         SizedBox(
