@@ -33,7 +33,7 @@
     },
     {
       "name": "cross_file",
-      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/cross_file-0.3.3+6",
+      "rootUri": "file:///C:/Users/yerak/AppData/Local/Pub/Cache/hosted/pub.dev/cross_file-0.3.3+6",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -111,7 +111,7 @@
     },
     {
       "name": "flutter_plugin_android_lifecycle",
-      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.17",
+      "rootUri": "file:///C:/Users/yerak/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.17",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -183,7 +183,7 @@
     },
     {
       "name": "image_picker_android",
-      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.8+2",
+      "rootUri": "file:///C:/Users/yerak/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.8+2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -195,7 +195,7 @@
     },
     {
       "name": "image_picker_ios",
-      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_ios-0.8.8+4",
+      "rootUri": "file:///C:/Users/yerak/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_ios-0.8.8+4",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -327,7 +327,7 @@
     },
     {
       "name": "provider",
-      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.1",
+      "rootUri": "file:///C:/Users/yerak/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -476,7 +476,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-14T05:35:48.603291Z",
+  "generated": "2023-11-21T14:10:16.428912Z",
   "generator": "pub",
   "generatorVersion": "3.1.3"
 }
