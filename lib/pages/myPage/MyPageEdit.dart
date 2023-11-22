@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../config/app_config.dart';
+import '../../signupquestions/activeplacesearch.dart';
 import '../../signupquestions/token.dart';
 import 'dart:io';
 
@@ -18,48 +19,6 @@ class MyPageEdit extends StatefulWidget {
 
   @override
   _MyPageEditState createState() => _MyPageEditState();
-}
-
-
-/*요기에서 수정 요청 보내야되는데, 아직 함수 수정 안됨*/
-Future<void> _sendFixRequest() async {
-  print('_sendPostRequest called');
-  var url = Uri.parse(API.signupemail);
-
-  String savedToken = await getToken();
-  print(savedToken);
-
-  var response = await http.post(
-    url,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $savedToken',
-    },
-    body: json.encode({""}), // JSON 형태로 인코딩
-  );
-
-
-  if (response.statusCode == 200 ||response.statusCode == 201) {
-    // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-    print('Server returned OK');
-    print('Response body: ${response.body}');
-
-    var data = json.decode(response.body);
-
-    if(data['signupToken']!=null)
-    {
-      var token = data['signupToken'];
-      print(token);
-      await saveToken(token);
-    }
-    else{
-    }
-
-  } else {
-    // 오류가 발생한 경우 처리
-    print('Request failed with status: ${response.statusCode}.');
-
-  }
 }
 
 
@@ -107,10 +66,10 @@ List<bool> isValidCharacterList = [
   false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
 ];
 
-List<String> hobby = [
+List<String>characteristic  = [
   "개성적인", "책임감있는", "열정적인", "귀여운", "상냥한","감성적인","낙천적인", "유머있는", "차분한", "지적인", "섬세한", "무뚝뚝한", "외향적인", "내향적인"
 ];
-List<String> characteristic = [
+List<String> hobby= [
   "애니", "그림그리기", "술", "영화/드라마", "여행", "요리", "자기계발", "독서", "게임", "노래듣기", "봉사활동", "운동","노래부르기","산책"
 ];
 
@@ -135,53 +94,183 @@ class _MyPageEditState extends State<MyPageEdit> {
   TorF? _selectedTorF;
   JorP? _selectedJorP;
   Future<void> _pickImage1() async {
+    count+=1;
+    if(count>=3)
+      IsValid=true;
     var picker = ImagePicker();
+    String savedToken = await getToken();
     var image1 = await picker.pickImage(source: ImageSource.gallery);
-
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
     if (image1 != null) {
       File selectedImage = File(image1.path); // 선택된 이미지 파일
-
-
-      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
-
       // UI 업데이트를 위해 setState 호출
       setState(() {
         _image1 = selectedImage;
+
       });
+      FormData formData = FormData.fromMap({
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          print('Server returned OK');
+          print('Response body: ${response.data}');
+          var urlList = response.data;
+          print(urlList);
+
+
+// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+              _image1Url = urlList[0]['url'];
+              print('Image 1 URL: $_image1Url');
+            }
+          }
+          setState(() {
+            _image1Url = urlList[0]['url'];
+          });
+        }  else {
+          // 오류가 발생한 경우 처리
+          print('Request failed with status: ${response.statusCode}.');
+        }
+      } catch (e, stacktrace) {
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+        // _showVerificationFailedSnackBar();
+      }
     }
   }
-
+  String? _image1Url;
+  String? _image2Url;
+  String? _image3Url;
+  int count =0;
   Future<void> _pickImage2() async {
+    count+=1;
+    if(count>=3)
+      IsValid=true;
     var picker = ImagePicker();
+    String savedToken = await getToken();
     var image2 = await picker.pickImage(source: ImageSource.gallery);
-
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
     if (image2 != null) {
       File selectedImage = File(image2.path); // 선택된 이미지 파일
-
-      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
-
       // UI 업데이트를 위해 setState 호출
       setState(() {
         _image2 = selectedImage;
       });
-    }
-  }
 
+      FormData formData = FormData.fromMap({
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          print('Server returned OK');
+          print('Response body: ${response.data}');
+          var urlList = response.data;
+          print(urlList);
+// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
+          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            _image2Url = urlList[0]['url'];
+            print('Image 2 URL: $_image2Url');
+          }
+          setState(() {
+            _image2Url = urlList[0]['url'];
+          });
+          // URL을 저장하거나 처리하는 로직을 추가
+        } else {
+          // 오류가 발생한 경우 처리
+          print('Request failed with status: ${response.statusCode}.');
+        }
+      } catch (e, stacktrace) {
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+        // _showVerificationFailedSnackBar();
+      }
+
+    }
+
+  }
   Future<void> _pickImage3() async {
+    count+=1;
+    if(count>=3)
+      IsValid=true;
     var picker = ImagePicker();
+    String savedToken = await getToken();
     var image3 = await picker.pickImage(source: ImageSource.gallery);
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
     if (image3 != null) {
       File selectedImage = File(image3.path); // 선택된 이미지 파일
-
-      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
-
       // UI 업데이트를 위해 setState 호출
       setState(() {
         _image3 = selectedImage;
       });
+      FormData formData = FormData.fromMap({
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          print('Server returned OK');
+          print('Response body: ${response.data}');
+          var urlList = response.data;
+          print(urlList);
+// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
+          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            _image3Url = urlList[0]['url'];
+            print('Image 3 URL: $_image3Url');
+          }
+          setState(() {
+            _image3Url = urlList[0]['url'];
+          });
+          // URL을 저장하거나 처리하는 로직을 추가
+          // print(savedUrls);
+        } else {
+          // 오류가 발생한 경우 처리
+          print('Request failed with status: ${response.statusCode}.');
+        }
+      } catch (e, stacktrace) {
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+        // _showVerificationFailedSnackBar();
+      }
     }
   }
 ///체크하면 아까 ValidList가 수정이됨
@@ -247,7 +336,13 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
   @override
   void initState() {
+
     super.initState();
+
+    _image1Url=widget.data['images'][0];
+    _image2Url=widget.data['images'][1];
+    _image3Url=widget.data['images'][2];
+    print(_image1Url);
     // _selectedreligion 초기화
     _selectedreligion = [false, false, false, false,false];
 
@@ -264,19 +359,21 @@ class _MyPageEditState extends State<MyPageEdit> {
     else{
       _selectedreligion[4] = true;
     }
-    _selectedalcohol = <bool>[false, false, false, false];
-    _selectedsmoke= <bool>[false, false, false, false];
     // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
     for (int i = 0; i < characteristic.length; i++) {
-      if (widget.data['character'].contains(hobby[i])) {
+      if (widget.data['character'].contains(characteristic[i])) {
         isValidCharacterList[i] = true;
       }
     }
     for (int i = 0; i < hobby.length; i++) {
-      if (widget.data['hobby'].contains(characteristic[i])) {
+      if (widget.data['hobby'].contains(hobby[i])) {
         isValidHobbyList[i] = true;
       }
     }
+    _selectedalcohol = <bool>[false, false, false, false];
+    _selectedsmoke= <bool>[false, false, false, false];
+    // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
+
     _selectedalcohol[widget.data["drink"]]=true;
     _selectedsmoke[widget.data["cigarette"]]=true;
     if (widget.data.containsKey('mbti') && widget.data['mbti'] is String) {
@@ -294,6 +391,125 @@ class _MyPageEditState extends State<MyPageEdit> {
       IsValid = true;
     }
   }
+  String selectedReligionString = '';
+  String selectedDrinkString = '';
+  String selectedSmokeString = '';
+  int height= 100;
+
+  @override
+  void InputHeightNumber(int value) {
+    setState(() {
+      height = value;
+      if(140<=height && height<=240)
+      {
+        IsValid=true;
+      }
+    });
+  }
+
+  String getMBTIType() {
+    String eOrI = _selectedEorI == EorI.i ? 'i' : 'e';
+    String sOrN = _selectedSorN == SorN.s ? 's' : 'n';
+    String tOrF = _selectedTorF == TorF.t ? 't' : 'f';
+    String jOrP = _selectedJorP == JorP.j ? 'j' : 'p';
+
+    return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
+  }
+  String content = '';
+  Future<void> _sendFixRequest() async {
+
+    List<String> selectedCharacteristics = [];
+    List<String> selectedHobby = [];
+    int drink =0;
+    int smoke=0;
+    print('_sendFixRequest called');
+    var mbti =getMBTIType();
+
+    for (int i = 0; i < characteristic.length; i++) {
+      if (isValidCharacterList[i] == true) {
+        selectedCharacteristics.add(characteristic[i]);
+      }
+    }
+    for (int i = 0; i < hobby.length; i++) {
+      if (isValidHobbyList[i] == true) {
+        selectedHobby.add(hobby[i]);
+      }
+    }
+
+    for (int i = 0; i < _selectedalcohol.length; i++) {
+      if (_selectedalcohol[i]) {
+         drink =i;
+      }
+    }
+    for (int i = 0; i < _selectedsmoke.length; i++) {
+      if (_selectedsmoke[i]) {
+       smoke =i;
+      }
+    }
+
+    for (int i = 0; i < _selectedreligion.length; i++) {
+      if (_selectedreligion[i]) {
+        // Data is a Text widget, we cast it and get its data.
+        String religionText = (religion[i] as Text).data!;
+        selectedReligionString = religionText;
+        break; // If only one selection is possible, break the loop once found
+      }
+    }
+
+    var url = Uri.parse(API.userupdate);
+    String savedToken = await getToken();
+    print(savedToken);
+    print(selectedHobby);
+    print(selectedCharacteristics);
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({
+        "religion": selectedReligionString,
+        "region":content,
+        "cigarette":smoke,
+        "drink": drink,
+        "height": height,
+        "mbti": mbti,
+        "hobby":selectedHobby,
+        "character":selectedCharacteristics,
+        "images":[_image1Url,_image2Url,_image3Url]
+      }), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      _showEditsuccess("수정에 성공하였습니다.");
+      Navigator.pop(context);
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
+
+  void _showEditsuccess(value) {
+    final snackBar = SnackBar(
+      content: Text(value),
+      action: SnackBarAction(
+        label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +517,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     double width = MediaQuery.of(context).size.width;
     String characters = widget.data['character'].toString();
     String showinghobby = widget.data['hobby'].toString();
-    List<String> images = List<String>.from(widget.data['images']);
 
 
 
@@ -419,7 +634,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                  child:
                TextField(
                         decoration: InputDecoration(
-                          hintText: widget.data['region'],
+                          hintText: content== "" ? widget.data['region']: content,
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFFF66464)),
                           ),
@@ -428,6 +643,46 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
+                          suffixIcon: Container(
+                            width: 80,
+                            margin: EdgeInsets.all(10),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SearchPage()),
+                                );
+                                setState(() {
+                                  // 'result'가 null이 아닐 경우에만 content 업데이트
+                                  if (result != null) {
+                                    content = result;
+                                  }
+                                });
+                              },
+
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                                ),
+                                backgroundColor: Color(DefinedColor.darkpink),
+                                elevation: 0.0,
+                                padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                              ),
+                              child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
+                                fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                child: Text('수정하기',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                    fontFamily: 'Pretendard',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                            ),
+                          ),
+
+
                           ),
                         ),
                         onChanged: (value) {
@@ -580,7 +835,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                     ),
                   ),
                   onChanged: (value) {
-                  },
+                    setState(() {
+                      int intValue = int.parse(value);
+                      InputHeightNumber(intValue);
+                    });
+                  }
+
                 ),
               ),
               SizedBox(
@@ -1286,14 +1546,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: images[0]!=null ? Image.network(images[0]) : _image1 == null
-                            ? Center(
-                            child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
-                            : Image.file(_image1!, fit: BoxFit.cover), // 선택된 이미지 표시
+                        child: Image.network(_image1Url!),// 선택된 이미지 표시
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
                     child: Container(
@@ -1306,12 +1562,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: images.length > 1 && images[1] != null
-                            ? Image.network(images[1], fit: BoxFit.cover) // 서버에서 받은 두 번째 이미지 표시
-                            : _image2 == null
-                            ? Center(
-                            child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0)) // 기본 아이콘 표시
-                            : Image.file(_image2!, fit: BoxFit.cover), // 사용자가 선택한 이미지 표시
+                        child: Image.network(_image2Url!),
                       ),
                     ),
                   ),InkWell(
@@ -1324,14 +1575,9 @@ class _MyPageEditState extends State<MyPageEdit> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      child:ClipRRect(
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: images.length > 2 && images[2] != null
-                            ? Image.network(images[2], fit: BoxFit.cover) // 서버에서 받은 두 번째 이미지 표시
-                            : _image2 == null
-                            ? Center(
-                            child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0)) // 기본 아이콘 표시
-                            : Image.file(_image3!, fit: BoxFit.cover), // 사용자가 선택한 이미지 표시
+                        child: Image.network(_image3Url!),
                       ),
                     ),
                   ),

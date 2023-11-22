@@ -113,14 +113,7 @@ class _MyPage extends State<MyPage> {
     }
   }
 
-  // 이미지 경로 리스트
-  // final List<String> imagePaths = [
-  //   'assets/woman.png',
-  //   'assets/man.png',
-  //   'assets/signupface.png',
-  // ];
 
-  // int currentPage = 0;
 
   @override
   void initState() {
@@ -130,13 +123,11 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-
     // var savedToken = getToken();
     var savedToken =
     // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTg6MjM6MTYuODY4WiIsImlhdCI6MTcwMDQ3MjE5NiwiZXhwIjoxNzAwNDc1Nzk2fQ.dupIHGs5jWIql0-kwQJj21Hue-fXNqCLToB6FkUJ5hU';
     print(savedToken);
-
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -144,11 +135,9 @@ class _MyPage extends State<MyPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-
     print('Response Status Code: ${response.statusCode}');
     print('Response Body: ${response.body}');
     print('Response Headers: ${response.headers}');
-
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       setState(() {
@@ -159,6 +148,11 @@ class _MyPage extends State<MyPage> {
       print('Failed to load user profile. Status code: ${response.statusCode}');
     }
   }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +168,7 @@ class _MyPage extends State<MyPage> {
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(
-              icon: Image.asset('assets/images/setting.png'),
+              icon: Icon(Icons.settings),
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
                 print("설정 버튼 눌러짐");

@@ -234,7 +234,7 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           PointAppbar(point: 100),
           IconButton(
-            icon: Image.asset('assets/images/setting.png'),
+            icon: Icon(Icons.settings),
             color: Color.fromRGBO(48, 48, 48, 1),
             onPressed: () {
               // 설정 버튼을 눌렀을 때의 동작

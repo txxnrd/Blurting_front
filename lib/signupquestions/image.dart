@@ -33,6 +33,7 @@ class ImagePageState extends State<ImagePage>
   String? _image2Url;
   String? _image3Url;
   int count =0;
+
   Future<void> _pickImage1() async {
     count+=1;
     if(count>=3)
@@ -282,6 +283,7 @@ class ImagePageState extends State<ImagePage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
   void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
     final snackBar = SnackBar(
       content: Text(message),
