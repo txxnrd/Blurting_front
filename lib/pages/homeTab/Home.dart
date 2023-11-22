@@ -210,8 +210,15 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    return Scaffold(
+    return
+      WillPopScope(
+        onWillPop: () async {
+      // false를 반환하여 뒤로 가기를 막습니다.
+      return false;
+    },
+    child: Scaffold(
       appBar: AppBar(
+        leading: SizedBox(),
         title: Text(
           '다음 질문까지 ${formatDuration(remainingTime)}',
           style: TextStyle(
@@ -310,6 +317,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
+    ),
     );
   }
 
