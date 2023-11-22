@@ -11,6 +11,7 @@ import 'dart:io';
 
 
 class MyPageEdit extends StatefulWidget {
+
   final dynamic data;
   MyPageEdit({Key? key, this.data}) : super(key: key); // Key 타입을 Key?로 변경
 
@@ -86,6 +87,7 @@ enum JorP {j,p}
 class _MyPageEditState extends State<MyPageEdit> {
   /*이미지 형식을 바꿔줌*/
   List<MultipartFile> multipartImageList = [];
+  String content = '';
   File? _image1;
   File? _image2;
   File? _image3;
@@ -336,9 +338,9 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
   @override
   void initState() {
-
     super.initState();
-
+    content = "";
+    print(content);
     _image1Url=widget.data['images'][0];
     _image2Url=widget.data['images'][1];
     _image3Url=widget.data['images'][2];
@@ -415,7 +417,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
   }
-  String content = '';
+
   Future<void> _sendFixRequest() async {
 
     List<String> selectedCharacteristics = [];
@@ -479,6 +481,19 @@ class _MyPageEditState extends State<MyPageEdit> {
         "images":[_image1Url,_image2Url,_image3Url]
       }), // JSON 형태로 인코딩
     );
+    print(json.encode({
+      "religion": selectedReligionString,
+      "region":content,
+      "cigarette":smoke,
+      "drink": drink,
+      "height": height,
+      "mbti": mbti,
+      "hobby":selectedHobby,
+      "character":selectedCharacteristics,
+      "images":[_image1Url,_image2Url,_image3Url]
+    }), // JSON 형태로 인코딩
+    );
+
     print(response.body);
     if (response.statusCode == 200 ||response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
