@@ -28,59 +28,180 @@ class ImagePageState extends State<ImagePage>
   File? _image3;
   bool IsValid =false;
   List<MultipartFile> multipartImageList = [];
+  List<String> savedUrls = [];
+  String? _image1Url;
+  String? _image2Url;
+  String? _image3Url;
+  int count =0;
 
   Future<void> _pickImage1() async {
+    count+=1;
+    if(count>=3)
+      IsValid=true;
     var picker = ImagePicker();
+    String savedToken = await getToken();
     var image1 = await picker.pickImage(source: ImageSource.gallery);
-
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
     if (image1 != null) {
       File selectedImage = File(image1.path); // 선택된 이미지 파일
-      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
-      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
       // UI 업데이트를 위해 setState 호출
       setState(() {
         _image1 = selectedImage;
       });
+      FormData formData = FormData.fromMap({
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          print('Server returned OK');
+          print('Response body: ${response.data}');
+          var urlList = response.data;
+          print(urlList);
+// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            // ... 기존 코드 ...
+            if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+              _image1Url = urlList[0]['url'];
+              print('Image 1 URL: $_image1Url');
+            }
+          }
+          // URL을 저장하거나 처리하는 로직을 추가
+          // print(savedUrls);
+        }  else {
+          // 오류가 발생한 경우 처리
+          print('Request failed with status: ${response.statusCode}.');
+          _showVerificationFailedSnackBar();
+        }
+      } catch (e, stacktrace) {
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+        // _showVerificationFailedSnackBar();
+      }
     }
   }
 
   Future<void> _pickImage2() async {
+    count+=1;
+    if(count>=3)
+      IsValid=true;
     var picker = ImagePicker();
+    String savedToken = await getToken();
     var image2 = await picker.pickImage(source: ImageSource.gallery);
-
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
     if (image2 != null) {
       File selectedImage = File(image2.path); // 선택된 이미지 파일
-
-      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
-      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
-
       // UI 업데이트를 위해 setState 호출
       setState(() {
         _image2 = selectedImage;
       });
-    }
-  }
+      FormData formData = FormData.fromMap({
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+      });
 
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          print('Server returned OK');
+          print('Response body: ${response.data}');
+          var urlList = response.data;
+          print(urlList);
+// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
+          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            _image2Url = urlList[0]['url'];
+            print('Image 2 URL: $_image2Url');
+          }
+          // URL을 저장하거나 처리하는 로직을 추가
+        } else {
+          // 오류가 발생한 경우 처리
+          print('Request failed with status: ${response.statusCode}.');
+          _showVerificationFailedSnackBar();
+        }
+      } catch (e, stacktrace) {
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+        // _showVerificationFailedSnackBar();
+      }
+
+    }
+
+  }
   Future<void> _pickImage3() async {
+    count+=1;
+    if(count>=3)
+      IsValid=true;
     var picker = ImagePicker();
+    String savedToken = await getToken();
     var image3 = await picker.pickImage(source: ImageSource.gallery);
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
     if (image3 != null) {
       File selectedImage = File(image3.path); // 선택된 이미지 파일
-
-      // multipartImageList를 초기화하고 현재 선택된 이미지만 추가
-      multipartImageList.clear();
-      multipartImageList.add(await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'));
-
       // UI 업데이트를 위해 setState 호출
       setState(() {
         _image3 = selectedImage;
-        IsValid=true;
       });
+      FormData formData = FormData.fromMap({
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          print('Server returned OK');
+          print('Response body: ${response.data}');
+          var urlList = response.data;
+          print(urlList);
+// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
+          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            _image3Url = urlList[0]['url'];
+            print('Image 3 URL: $_image3Url');
+          }
+          // URL을 저장하거나 처리하는 로직을 추가
+          // print(savedUrls);
+        } else {
+          // 오류가 발생한 경우 처리
+          print('Request failed with status: ${response.statusCode}.');
+          _showVerificationFailedSnackBar();
+        }
+      } catch (e, stacktrace) {
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+        // _showVerificationFailedSnackBar();
+      }
     }
   }
 
@@ -162,6 +283,7 @@ class ImagePageState extends State<ImagePage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
   void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -202,28 +324,14 @@ class ImagePageState extends State<ImagePage>
   Future<void> _sendPostRequest() async {
     _showImageUploadingSnackBar();
     print('_sendPostRequest called');
-    var url = Uri.parse(API.uploadimage);
     String savedToken = await getToken();
     print(savedToken);
-
     Dio dio = Dio();
-
-    // 파일이 하나도 없을 경우 처리를 해야 함.
-    if (multipartImageList.isEmpty) {
-      print('No images selected.');
-      return;
-    }
-
-
-    FormData formData = FormData.fromMap({
-      'files': multipartImageList,
-    });
-
-
+    var url2 = Uri.parse(API.signupimage);
     try {
       var response = await dio.post(
-        url.toString(),
-        data: formData,
+        url2.toString(),
+        data: {"images" : [_image1Url,_image2Url,_image3Url]},
         options: Options(
           headers: {
             'Authorization': 'Bearer $savedToken',
@@ -232,65 +340,17 @@ class ImagePageState extends State<ImagePage>
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+        print("signupimagerequestsuccess");
         print('Server returned OK');
         print('Response body: ${response.data}');
 
-        List<dynamic> urlList = response.data;
-        print(urlList);
-// URL 저장을 위한 리스트 초기화
-        List<String> savedUrls = [];
+        var data = (response.data);
 
-// 각 URL을 순회하며 리스트에 추가
-        for (var item in urlList) {
-          print(item);
-          if (item.containsKey('url')) {
-            String url = item['url'];
-            savedUrls.add(url);
-            // URL을 저장하거나 처리하는 로직을 추가
-            print('Saved URL: $url');
-          }
-        }
-
-        print(savedUrls);
-
-        var url2 = Uri.parse(API.signupimage);
-
-        try {
-          var response = await dio.post(
-            url2.toString(),
-            data: {"images" : savedUrls},
-            options: Options(
-              headers: {
-                'Authorization': 'Bearer $savedToken',
-              },
-            ),
-          );
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-            print("signupimagerequestsuccess");
-            print('Server returned OK');
-            print('Response body: ${response.data}');
-
-            var data = (response.data);
-
-            var token = data['signupToken'];
-            print("token 분해 완료");
-            await saveToken(token);
-            print("token 저장 완료");
-            _increaseProgressAndNavigate();
-
-          } else {
-            // 오류가 발생한 경우 처리
-            print('Request failed with status: ${response.statusCode}.');
-            _showVerificationFailedSnackBar();
-          }
-        } catch (e, stacktrace) {
-          print('Error: $e');
-          print('Stacktrace: $stacktrace');
-          // _showVerificationFailedSnackBar();
-        }
-
-
+        var token = data['signupToken'];
+        print("token 분해 완료");
+        await saveToken(token);
+        print("token 저장 완료");
+        _increaseProgressAndNavigate();
       } else {
         // 오류가 발생한 경우 처리
         print('Request failed with status: ${response.statusCode}.');
@@ -299,7 +359,6 @@ class ImagePageState extends State<ImagePage>
     } catch (e, stacktrace) {
       print('Error: $e');
       print('Stacktrace: $stacktrace');
-      // _showVerificationFailedSnackBar();
     }
   }
 

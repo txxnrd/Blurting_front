@@ -1,4 +1,3 @@
-import 'package:blurting/MyPage.dart';
 import 'package:blurting/signupquestions/activeplacesearch.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:flutter/material.dart';

@@ -210,8 +210,15 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    return Scaffold(
+    return
+      WillPopScope(
+        onWillPop: () async {
+      // false를 반환하여 뒤로 가기를 막습니다.
+      return false;
+    },
+    child: Scaffold(
       appBar: AppBar(
+        leading: SizedBox(),
         toolbarHeight: 80,
         backgroundColor: Colors.white, // 배경색을 투명하게 설정합니다.
         elevation: 0,
@@ -227,7 +234,7 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           PointAppbar(point: 100),
           IconButton(
-            icon: Image.asset('assets/images/setting.png'),
+            icon: Icon(Icons.settings),
             color: Color.fromRGBO(48, 48, 48, 1),
             onPressed: () {
               // 설정 버튼을 눌렀을 때의 동작
@@ -322,6 +329,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
+    ),
     );
   }
 
