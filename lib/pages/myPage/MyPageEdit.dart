@@ -485,6 +485,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       print('Server returned OK');
       print('Response body: ${response.body}');
       _showEditsuccess("수정에 성공하였습니다.");
+      sleep(const Duration(seconds:2));
       Navigator.pop(context);
     } else {
       // 오류가 발생한 경우 처리
