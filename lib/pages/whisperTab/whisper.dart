@@ -91,6 +91,8 @@ class _Whisper extends State<Whisper> {
           createdAt: dateFormat
               .format(_parseDateTime(data['createdAt'] as String? ?? '')),
           read: read,
+          isBlurting: false,
+          likedNum: 0,
         );
         sendingMessageList.clear();
         print('내 메시지 전송 완료: $chat');
@@ -124,6 +126,8 @@ class _Whisper extends State<Whisper> {
                     message: widget.message,
                     createdAt: widget.createdAt,
                     read: true,
+                    isBlurting: false,
+                    likedNum: 0,
                   ));
             });
           }
@@ -148,10 +152,10 @@ class _Whisper extends State<Whisper> {
           setState(() {
             isBlock = true;
           });
-          if (data['userId'] == UserProvider.UserId) {
-            Navigator.pop(context);
-          } else {}
         }
+          // if (data['userId'] == UserProvider.UserId) {
+          //   print(context);
+          // } else {}
       }
     });
 
@@ -206,7 +210,6 @@ class _Whisper extends State<Whisper> {
                   barrierDismissible: true,
                   context: context,
                   builder: (BuildContext context) {
-                    return StatefulBuilder(builder: (context, setState) {
                       return Scaffold(
                         backgroundColor: Colors.black.withOpacity(0.2),
                         body: Stack(
@@ -236,7 +239,8 @@ class _Whisper extends State<Whisper> {
                                                 height: 100,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     color: mainColor.lightGray
                                                         .withOpacity(0.5)),
                                                 alignment: Alignment.topCenter,
@@ -251,7 +255,8 @@ class _Whisper extends State<Whisper> {
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontSize: 10,
-                                                            fontFamily: "Heebo"),
+                                                            fontFamily:
+                                                                "Heebo"),
                                                       ),
                                                       Text(
                                                         '채팅 상대방과 다시는 매칭되지 않습니다.',
@@ -260,7 +265,8 @@ class _Whisper extends State<Whisper> {
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontSize: 10,
-                                                            fontFamily: "Heebo"),
+                                                            fontFamily:
+                                                                "Heebo"),
                                                       ),
                                                     ],
                                                   ),
@@ -276,7 +282,8 @@ class _Whisper extends State<Whisper> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      color: mainColor.MainColor),
+                                                      color:
+                                                          mainColor.MainColor),
                                                   height: 50,
                                                   // color: mainColor.MainColor,
                                                   child: Center(
@@ -293,10 +300,11 @@ class _Whisper extends State<Whisper> {
                                                 ),
                                                 onTap: () {
                                                   widget.socket.emit('leave_room',
-                                                      widget.roomId);
-                                                  print('채팅 나가는 중...');
-                                                  Navigator.pop(context);
-                                                },
+                                                    widget.roomId);
+                                                print('채팅 나가는 중...');
+                                                Navigator.pop(context);
+                                                Navigator.pop(context);
+                                              },
                                               ),
                                             ],
                                           ),
@@ -320,15 +328,16 @@ class _Whisper extends State<Whisper> {
                                                     fontFamily: 'Heebo',
                                                     color: Colors.white,
                                                     fontSize: 20,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                             ),
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              Navigator.of(context).pop();
-                                            });
-                                          },
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
                                         ),
                                       ],
                                     ),
@@ -339,7 +348,6 @@ class _Whisper extends State<Whisper> {
                           ],
                         ),
                       );
-                    });
                   },
                 );
               },
@@ -403,6 +411,8 @@ class _Whisper extends State<Whisper> {
       message: message,
       createdAt: '전송 중...',
       read: true,
+      isBlurting: false,
+                likedNum: 0,
     );
 
     // 소켓 서버에 데이터 전송
@@ -468,6 +478,8 @@ class _Whisper extends State<Whisper> {
                 createdAt: dateFormat.format(
                     _parseDateTime(chatData['createdAt'] as String? ?? '')),
                 read: read, // http에서 받아오는 거니까..
+                isBlurting: false,
+                likedNum: 0,
               );
             } else {
               fetchChatList = OtherChat(

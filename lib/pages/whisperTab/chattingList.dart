@@ -493,15 +493,6 @@ class _chattingList extends State<ChattingList> {
         elevation: 0,
         actions: <Widget>[
           pointAppbar(point: 120),
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-              },
-            ),
-          ),
         ],
         title: Container(
           margin: EdgeInsets.only(top: 70),

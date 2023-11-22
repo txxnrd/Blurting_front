@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/pages/blurtingTab/matchingAni.dart';
+import 'package:blurting/pages/blurtingTab/dayAni.dart';
+import 'package:http/http.dart' as http;
+
 
 class Blurting extends StatefulWidget {
   final IO.Socket socket;
@@ -15,12 +21,17 @@ class Blurting extends StatefulWidget {
   _Blurting createState() => _Blurting();
 }
 
+String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
+
 class _Blurting extends State<Blurting> {
-  bool isContinue = true; // 방이 있으면 true, 없으면 false
 
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(Duration.zero, () {
+      isMatched(widget.token);
+    });
   }
 
   @override
@@ -32,19 +43,9 @@ class _Blurting extends State<Blurting> {
         toolbarHeight: 244,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: <Widget>[
-          pointAppbar(point: 120),
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
-              },
-            ),
-          ),
-        ],
+        // actions: <Widget>[
+        //   pointAppbar(point: 120)
+        // ],
         title: Container(
           margin: EdgeInsets.only(top: 70),
           height: 80,
@@ -76,15 +77,15 @@ class _Blurting extends State<Blurting> {
               child: Image.asset('assets/images/blurting_Image.png'),
             ),
             GestureDetector(
-              child: staticButton(text: isContinue ? 'Continue' : 'Start'),
+              child: staticButton(text: isState),
               onTap: () {
-                if (isContinue) {
+                if (isState == 'Continue') {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => GroupChat(
                               socket: widget.socket, token: widget.token)));
-                } else {
+                } else if (isState == 'Start') {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Matching()));
                 }
@@ -94,5 +95,38 @@ class _Blurting extends State<Blurting> {
         ),
       ),
     );
+  }
+
+    Future<void> isMatched(String token) async {
+    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/blurting');
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      print('요청 성공');
+
+      try {
+        bool responseData = jsonDecode(response.body);
+        setState(() {
+          if (responseData) {
+            isState = 'Continue';
+          }
+          else{
+            isState = 'Start';
+          }
+        });
+
+        print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('채팅방을 로드하는 데 실패했습니다');
+    }
   }
 }

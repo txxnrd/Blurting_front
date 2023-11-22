@@ -1,6 +1,6 @@
 class ServerEndpoints {
-  static const String serverEndpoint = "http://54.180.85.164:3080";
-  static const String socketServerEndpoint = "ws://54.180.85.164:3080/";
+  static const String serverEndpoint = "https://api.blurting.devkor.club";
+  static const String socketServerEndpoint = "ws://13.124.149.234:3080";
 
 }
 
@@ -21,8 +21,4 @@ class API {
   /*현재 위치 불러오기*/
   static const String geobyname = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";
   static const String geobygeo = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";
-
-
-
-
 }

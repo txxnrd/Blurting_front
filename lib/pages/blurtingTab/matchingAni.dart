@@ -1,38 +1,129 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:blurting/Utils/provider.dart';
+import 'package:flutter/material.dart';
 
 class Matching extends StatefulWidget {
-  const Matching({Key? key}) : super(key: key);
-
   @override
-  _MatchingState createState() => _MatchingState();
+  State<Matching> createState() => _MatchingState();
 }
 
-class _MatchingState extends State<Matching> {
-  late Timer _timer;
-  Color _textColor = Colors.white;
+class _MatchingState extends State<Matching> with TickerProviderStateMixin {
+  late AnimationController controller;
+
+  double leftValue = -230.0;
+  double rightValue = -130.0;
+  double bottomValue = -130.0;
+  double topValue = -100.0;
+  double girlWidth = 500.0;
+  double boyWidth = 240.0;
+  Color textColor = Color.fromRGBO(255, 125, 125, 1);
+  int seconds = 0; // 초를 저장할 변수 추가
 
   @override
   void initState() {
     super.initState();
-
-    // 1초마다 _changeColor 함수 호출
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      _changeColor();
-    });
-  }
-
-  void _changeColor() {
-    setState(() {
-      // Toggle between two colors (you can customize this logic)
-      _textColor = _textColor == Colors.white ? Colors.blue : Colors.white;
-    });
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    _startInfiniteAnimation();
+    _startAnimation();
   }
 
   @override
   void dispose() {
-    _timer.cancel(); // 타이머 해제
+    controller.dispose();
     super.dispose();
+  }
+
+  void _startInfiniteAnimation() {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (mounted) {
+        controller.forward(from: 0);
+        seconds++; // 초 증가
+      }
+    });
+  }
+
+  void _startAnimation() {
+    Timer.periodic(Duration(milliseconds: 1500), (timer) {
+      if (mounted) {
+        setState(() {
+          textColor = textColor == Color.fromRGBO(255, 125, 125, 1)
+              ? Color.fromRGBO(255, 210, 210, 1)
+              : textColor == Color.fromRGBO(255, 210, 210, 1)
+                  ? mainColor.MainColor
+                  : Color.fromRGBO(255, 125, 125, 1);
+          bottomValue = bottomValue == -130.0
+              ? 110
+              : bottomValue == 110
+                  ? 260
+                  : bottomValue == 260
+                      ? 280
+                      : bottomValue == 280
+                          ? 550
+                          : bottomValue == 550
+                              ? 330
+                              : -130;
+          leftValue = leftValue == -230.0
+              ? -4
+              : leftValue == -4
+                  ? 260
+                  : leftValue == 260
+                      ? 330
+                      : leftValue == 330
+                          ? 340
+                          : leftValue == 340
+                              ? -180
+                              : -230.0;
+          girlWidth = girlWidth == 500
+              ? 350
+              : girlWidth == 350
+                  ? 180
+                  : girlWidth == 180
+                      ? 250
+                      : girlWidth == 250
+                          ? 251
+                          : girlWidth == 251
+                              ? 364
+                              : 500;
+
+          boyWidth = boyWidth == 240
+              ? 241
+              : boyWidth == 241
+                  ? 360
+                  : boyWidth == 360
+                      ? 530
+                      : boyWidth == 530
+                          ? 355
+                          : boyWidth == 355
+                              ? 180
+                              : 240;
+          topValue = topValue == -100.0
+              ? 110
+              : topValue == 110
+                  ? 260
+                  : topValue == 260
+                      ? 280
+                      : topValue == 280
+                          ? 550
+                          : topValue == 550
+                              ? 330
+                              : -100;
+          rightValue = rightValue == -130.0
+              ? -4
+              : rightValue == -4
+                  ? 260
+                  : rightValue == 260
+                      ? 330
+                      : rightValue == 330
+                          ? 340
+                          : rightValue == 340
+                              ? -140
+                              : -130.0;          
+        });
+      }
+    });
   }
 
   @override
@@ -40,9 +131,8 @@ class _MatchingState extends State<Matching> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 0.0,
+        backgroundColor: Colors.white.withOpacity(0),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -56,27 +146,66 @@ class _MatchingState extends State<Matching> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Center(
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 1500),
+            curve: Curves.easeInOut,
+            left: leftValue,
+            bottom: bottomValue,
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
+              color: Colors.transparent,
+              duration: Duration(milliseconds: 1500),
+            curve: Curves.easeInOut,
+              width: girlWidth,
+              child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 1500),
+                  opacity: (seconds != 0 && seconds % 2 == 0) ? 0.5 : 1.0,
+                  child: Image.asset('assets/animation/girl.png')),
+            ),
+          ),
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 1500),
+            curve: Curves.easeInOut,
+            right: rightValue,
+            top: topValue,
+            child: AnimatedContainer(
+              color: Colors.transparent,
+              duration: Duration(milliseconds: 1500),
+            curve: Curves.easeInOut,
+              width: boyWidth,
+              child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 1500),
+            curve: Curves.easeInOut,
+                  opacity: (seconds != 0 && seconds % 5 == 0) ? 0.5 : 1.0,
+                  child: Image.asset('assets/animation/boy.png')),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: AnimatedDefaultTextStyle(
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 40,
+                fontFamily: 'Heebo',
+              ),
+              duration: Duration(milliseconds: 1200),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '블러팅 방을 만드는 중입니다.',
+                    'matching',
+                  ),
+                  Text(
+                    '블러팅 방을 만드는 중입니다',
                     style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Heedo',
-                      color: _textColor,
                     ),
                   ),
                   Text(
                     '완료가 되면 알림을 보내 드릴게요!',
                     style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Heedo',
-                      color: _textColor,
                     ),
                   ),
                 ],

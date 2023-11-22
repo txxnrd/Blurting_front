@@ -103,8 +103,14 @@ flutter:
     - assets/images/leaveRoom.png
     - assets/animation/girl.png
     - assets/animation/boy.png
+    - assets/animation/leftBottom.png
+    - assets/animation/leftCenter.png
+    - assets/animation/leftTop.png
+    - assets/animation/rightBottom.png
+    - assets/animation/rightTop.png
     - assets/images/setting_boy.png
     - assets/images/setting_girl.png
+    - assets/images/heart.png
 
   fonts:
     - family: Pretendard
