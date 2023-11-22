@@ -63,7 +63,7 @@ class _MyPage extends State<MyPage> {
   Map<String, dynamic> userProfile = {};
 
   Future<void> goToMyPageEdit(BuildContext context) async {
-    print("설정 버튼 눌러짐");
+    print("수정 버튼 눌러짐");
     var token = getToken();
     print(token);
 
@@ -131,10 +131,13 @@ class _MyPage extends State<MyPage> {
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
 
-    // var savedToken = getToken();
-    var savedToken =
-        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTg6MjM6MTYuODY4WiIsImlhdCI6MTcwMDQ3MjE5NiwiZXhwIjoxNzAwNDc1Nzk2fQ.dupIHGs5jWIql0-kwQJj21Hue-fXNqCLToB6FkUJ5hU';
+    var savedToken = getToken();
+    //var savedToken =
+    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
+    //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTg6MjM6MTYuODY4WiIsImlhdCI6MTcwMDQ3MjE5NiwiZXhwIjoxNzAwNDc1Nzk2fQ.dupIHGs5jWIql0-kwQJj21Hue-fXNqCLToB6FkUJ5hU';
+    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjFUMjM6NTg6NTEuNTQzWiIsImlhdCI6MTcwMDU3ODczMSwiZXhwIjoxNzAwNTgyMzMxfQ.3O85qDrCSq75CfPkGVtbOIUf1w-ayOtfne9qQbKBCnY';
+    //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjJUMDA6NTQ6NDguNzAyWiIsImlhdCI6MTcwMDU4MjA4OCwiZXhwIjoxNzAwNTg1Njg4fQ._ZVJlXM-FGUVM7yIkfDIxKJxU8v-3Pk9AXm-NReloNU';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjJUMjE6MDg6NTEuMzI2WiIsImlhdCI6MTcwMDY1NDkzMSwiZXhwIjoxNzAwNjU4NTMxfQ.fLwedTXdzyeS3BoWZPZ6IZajKAW1d6DKOKJzgmjUj68';
     print(savedToken);
 
     var response = await http.get(
@@ -257,34 +260,6 @@ class _MyPage extends State<MyPage> {
                             'Unknown',
                         getDrinkString(userProfile['drink']) ?? 'Unknown',
                       ]),
-                      Center(
-                        child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Container(
-                              width: 350,
-                              height: 48,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF66464),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Edit',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      fontFamily: 'pretendard',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                onPressed: () {
-                                  print("edit 버튼 클릭됨");
-                                  goToMyPageEdit(context);
-                                },
-                              ),
-                            )),
-                      )
                     ],
                   ),
                 ]),
@@ -436,22 +411,6 @@ class _MyPage extends State<MyPage> {
                   .toList(),
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-            Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: SmoothPageIndicator(
-                    controller: mainPageController,
-                    count: 5,
-                    effect: ScrollingDotsEffect(
-                      activeDotColor: Color(0xFFF66464),
-                      activeStrokeWidth: 10,
-                      activeDotScale: 1.7,
-                      maxVisibleDots: 5,
-                      radius: 8,
-                      spacing: 10,
-                      dotHeight: 5,
-                      dotWidth: 5,
-                    ))),
           ],
         ),
         SizedBox(

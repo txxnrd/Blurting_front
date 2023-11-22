@@ -9,7 +9,6 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:intl/date_symbol_data_local.dart';
 
-
 void main() async {
   await initializeDateFormatting('ko_KR', null);
 
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 // void main() async {
 //   await initializeDateFormatting('ko_KR', null);
