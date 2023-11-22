@@ -177,7 +177,7 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 90),
+                    SizedBox(width: 30),
                     GestureDetector(
                       onTap: () {
                         // 좋아요 버튼을 눌렀을 때의 로직
@@ -219,6 +219,9 @@ class _HomeState extends State<Home> {
     child: Scaffold(
       appBar: AppBar(
         leading: SizedBox(),
+        toolbarHeight: 80,
+        backgroundColor: Colors.white, // 배경색을 투명하게 설정합니다.
+        elevation: 0,
         title: Text(
           '다음 질문까지 ${formatDuration(remainingTime)}',
           style: TextStyle(
@@ -228,8 +231,17 @@ class _HomeState extends State<Home> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        actions: [
+        actions: <Widget>[
           PointAppbar(point: 100),
+          IconButton(
+            icon: Image.asset('assets/images/setting.png'),
+            color: Color.fromRGBO(48, 48, 48, 1),
+            onPressed: () {
+              // 설정 버튼을 눌렀을 때의 동작
+              print('설정 버튼 클릭됨');
+            },
+          ),
+          SizedBox(width: 10),
         ],
       ),
       body: Column(
@@ -420,7 +432,7 @@ class PointAppbar extends StatelessWidget {
           '${point}p',
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontFamily: 'Heedo',
+            fontFamily: 'Heebo',
             color: Colors.white,
             fontSize: 15,
           ),

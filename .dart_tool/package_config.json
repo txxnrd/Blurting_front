@@ -375,9 +375,9 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.6",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.7",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "provider",
@@ -423,9 +423,9 @@
     },
     {
       "name": "shared_preferences_web",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/shared_preferences_web-2.2.1",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/shared_preferences_web-2.2.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.2"
     },
     {
       "name": "shared_preferences_windows",
@@ -579,9 +579,9 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/win32-5.0.9",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/win32-5.1.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.1"
     },
     {
       "name": "xdg_directories",
@@ -596,7 +596,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-21T13:51:04.848215Z",
+  "generated": "2023-11-22T04:40:38.401329Z",
   "generator": "pub",
   "generatorVersion": "3.2.0"
 }
