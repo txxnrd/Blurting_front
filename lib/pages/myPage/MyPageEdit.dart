@@ -1558,11 +1558,14 @@ class _MyPageEditState extends State<MyPageEdit> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xFF868686)),
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(_image1Url!),// 선택된 이미지 표시
+                        child: Image.network(_image1Url!,
+                          fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
+                        ),// 선택된 이미지 표시
+
                       ),
                     ),
                   ),
@@ -1574,11 +1577,13 @@ class _MyPageEditState extends State<MyPageEdit> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xFF868686)),
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(_image2Url!),
+                        child: Image.network(_image2Url!,
+                          fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
+                        ),
                       ),
                     ),
                   ),InkWell(
@@ -1589,11 +1594,13 @@ class _MyPageEditState extends State<MyPageEdit> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xFF868686)),
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(_image3Url!),
+                        child: Image.network(_image3Url!,
+                          fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
+                        ),
                       ),
                     ),
                   ),
