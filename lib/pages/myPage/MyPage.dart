@@ -55,7 +55,9 @@ class MyPage extends StatefulWidget {
     return _MyPage();
   }
 }
-int count =0;
+
+int count = 0;
+
 class _MyPage extends State<MyPage> {
   var switchValue = false;
   String modify = 'Edit';
@@ -74,9 +76,9 @@ class _MyPage extends State<MyPage> {
     // String accessToken = await getToken();
     // String refreshToken = await getRefreshToken();
     String accessToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
     String refreshToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc0WiIsImlhdCI6MTcwMDc1Mjk4OX0.KONXiflA11zXpg7r-ELMi41DQH_g-8iI5KhR1dqfMOQ';
 
     print("access Token" + accessToken);
     print("access Token" + refreshToken);
@@ -116,15 +118,11 @@ class _MyPage extends State<MyPage> {
         getnewaccesstoken(context);
         goToMyPageEdit(context);
 
-        count +=1;
-        if(count==10)
-          exit(1);
-
+        count += 1;
+        if (count == 10) exit(1);
       }
     }
   }
-
-
 
   @override
   void initState() {
@@ -136,8 +134,8 @@ class _MyPage extends State<MyPage> {
     var url = Uri.parse(API.userprofile);
     // var savedToken = getToken();
     var savedToken =
-
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
 
     print(savedToken);
     var response = await http.get(
@@ -160,11 +158,6 @@ class _MyPage extends State<MyPage> {
       print('Failed to load user profile. Status code: ${response.statusCode}');
     }
   }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -223,26 +216,88 @@ class _MyPage extends State<MyPage> {
               child: Container(
                 margin: EdgeInsets.only(top: 20),
                 alignment: Alignment.center,
-                width: 300,
-                height: 400, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
+                width: 259,
+                height: 346, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
                   border: Border.all(color: Color(0xFFFF7D7D), width: 3),
                 ),
                 child: PageView(controller: mainPageController, children: [
-                  // _buildPhotoPage(1),
-                  // _buildPhotoPage(2),
                   Column(
                     children: [
                       _buildPhotoPage(0),
-                      for (String character in userProfile['character'] ?? [])
-                        buildPinkBox('#$character'),
-                      for (String hobby in userProfile['hobby'] ?? [])
-                        buildPinkBox('#$hobby'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 40,
+                          ),
+                          buildPinkBox(
+                              '#${userProfile['nickname']}' ?? 'Unknown'),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          buildPinkBox('#${userProfile['mbti']}' ?? 'Unknown')
+                        ],
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      _buildPhotoPage(1),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            for (int i = 0;
+                                i < (userProfile['hobby']?.length ?? 0);
+                                i += 2)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: 40), // 들여쓰기 시작
+                                  buildPinkBox('#${userProfile['hobby'][i]}'),
+                                  SizedBox(
+                                      width:
+                                          8), // Adjust the spacing between boxes
+                                  if (i + 1 < userProfile['hobby']!.length)
+                                    buildPinkBox(
+                                        '#${userProfile['hobby'][i + 1]}'),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      _buildPhotoPage(2),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            for (int i = 0;
+                                i < (userProfile['character']?.length ?? 0);
+                                i += 2)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: 40), // 들여쓰기 시작
+                                  buildPinkBox(
+                                      '#${userProfile['character'][i]}'),
+                                  SizedBox(
+                                      width:
+                                          8), // Adjust the spacing between boxes
+                                  if (i + 1 < userProfile['character']!.length)
+                                    buildPinkBox(
+                                        '#${userProfile['hobby'][i + 1]}'),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   Column(
@@ -273,7 +328,7 @@ class _MyPage extends State<MyPage> {
               alignment: Alignment.center,
               child: SmoothPageIndicator(
                 controller: mainPageController,
-                count: 2,
+                count: 4,
                 effect: ScrollingDotsEffect(
                   dotColor: Color(0xFFFFD2D2),
                   activeDotColor: Color(0xFFF66464),
@@ -312,10 +367,10 @@ class _MyPage extends State<MyPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 13, 0, 0),
         ),
         Text(
-          'Photo',
+          'Photo ${index + 1}',
           style: TextStyle(
             fontFamily: 'Heedo',
             fontSize: 20,
@@ -324,13 +379,14 @@ class _MyPage extends State<MyPage> {
           ),
         ),
         SizedBox(
-          height: 20,
+          height: 14,
         ),
         Container(
           color: Colors.white,
-          width: 200,
-          height: 200,
-          child: ClipOval(
+          width: 175,
+          height: 190,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
             child: Image.network(
               imagePaths[index],
               fit: BoxFit.cover,
@@ -384,14 +440,14 @@ class _MyPage extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: titles
                     .map((title) => Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
-                    color: Color(0XFFF66464),
-                  ),
-                ))
+                          title,
+                          style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            color: Color(0XFFF66464),
+                          ),
+                        ))
                     .toList(),
               ),
             ),
@@ -440,6 +496,7 @@ class _MyPage extends State<MyPage> {
           fontSize: 15,
           color: Colors.white,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }
