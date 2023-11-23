@@ -12,17 +12,6 @@ import 'package:intl/date_symbol_data_local.dart';
 // void main() async {
 //   await initializeDateFormatting('ko_KR', null);
 
-//   runApp(
-//     MultiProvider(
-//       providers: [
-//         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
-//         // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
-//       ],
-//       child: MyApp(),
-//     ),
-//   );
-// }
-
 // class MyApp extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {

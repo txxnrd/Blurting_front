@@ -46,13 +46,9 @@ class _NoticePageState extends State<NoticePage>{
           children: [
             InkWell(
               onTap: () async {
-                const url = 'https://txxnrd.github.io/'; // 여기에 원하는 웹사이트 URL을 입력하세요
-                if (await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  // URL을 실행할 수 없을 때 처리
-                  print('웹사이트를 열 수 없습니다: $url');
-                }
+                launchUrl(
+                  Uri.parse('https://ten-epoch-033.notion.site/bc049be7846747a7a65da0e135869ee0/'),
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,13 +68,9 @@ class _NoticePageState extends State<NoticePage>{
             SizedBox(height: 10,)
             ,InkWell(
               onTap: () async {
-                const url = 'https://txxnrd.github.io/'; // 여기에 원하는 웹사이트 URL을 입력하세요
-                if (await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  // URL을 실행할 수 없을 때 처리
-                  print('웹사이트를 열 수 없습니다: $url');
-                }
+                launchUrl(
+                  Uri.parse('https://txxnrd.github.io/'),
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

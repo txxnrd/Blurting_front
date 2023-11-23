@@ -63,6 +63,7 @@ class _EmailPageState extends State<EmailPage>
       _animationController?.forward();
     }
   }
+
   @override
   void dispose() {
     _animationController?.dispose();

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/startpage.dart';
@@ -54,7 +55,7 @@ class MyPage extends StatefulWidget {
     return _MyPage();
   }
 }
-
+int count =0;
 class _MyPage extends State<MyPage> {
   var switchValue = false;
   String modify = 'Edit';
@@ -76,6 +77,7 @@ class _MyPage extends State<MyPage> {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
     String refreshToken =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
+
     print("access Token" + accessToken);
     print("access Token" + refreshToken);
 
@@ -113,18 +115,16 @@ class _MyPage extends State<MyPage> {
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         getnewaccesstoken(context);
         goToMyPageEdit(context);
+
+        count +=1;
+        if(count==10)
+          exit(1);
+
       }
     }
   }
 
-  // 이미지 경로 리스트
-  // final List<String> imagePaths = [
-  //   'assets/woman.png',
-  //   'assets/man.png',
-  //   'assets/signupface.png',
-  // ];
 
-  // int currentPage = 0;
 
   @override
   void initState() {
@@ -134,12 +134,12 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-
     // var savedToken = getToken();
     var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-    print(savedToken);
 
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+
+    print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -147,11 +147,9 @@ class _MyPage extends State<MyPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-
     print('Response Status Code: ${response.statusCode}');
     print('Response Body: ${response.body}');
     print('Response Headers: ${response.headers}');
-
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       setState(() {
@@ -162,6 +160,11 @@ class _MyPage extends State<MyPage> {
       print('Failed to load user profile. Status code: ${response.statusCode}');
     }
   }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +180,7 @@ class _MyPage extends State<MyPage> {
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(
-              icon: Image.asset('assets/images/setting.png'),
+              icon: Icon(Icons.settings),
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
                 print("설정 버튼 눌러짐");
@@ -381,14 +384,14 @@ class _MyPage extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: titles
                     .map((title) => Text(
-                          title,
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Color(0XFFF66464),
-                          ),
-                        ))
+                  title,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464),
+                  ),
+                ))
                     .toList(),
               ),
             ),

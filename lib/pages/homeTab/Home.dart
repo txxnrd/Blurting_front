@@ -224,9 +224,15 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return
+      WillPopScope(
+        onWillPop: () async {
+      // false를 반환하여 뒤로 가기를 막습니다.
+      return false;
+    },
+    child: Scaffold(
       appBar: AppBar(
+        leading: SizedBox(),
         toolbarHeight: 80,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -241,6 +247,16 @@ class _HomeState extends State<Home> {
         ),
         actions: <Widget>[
           PointAppbar(point: 100),
+          IconButton(
+            icon: Icon(Icons.settings),
+            color: Color.fromRGBO(48, 48, 48, 1),
+            onPressed: () {
+              // 설정 버튼을 눌렀을 때의 동작
+              print('설정 버튼 클릭됨');
+            },
+          ),
+          SizedBox(width: 10),
+
         ],
       ),
       body: Column(
@@ -328,6 +344,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
+    ),
     );
   }
 
