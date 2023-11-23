@@ -275,7 +275,7 @@ bool IsValid = false;
             ),
             SizedBox(height: 30),
             Container(
-              width: 44,
+              width: 60,
               height: 12,
               child: Text(
                 '에너지방향',

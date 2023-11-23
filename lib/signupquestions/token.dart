@@ -60,6 +60,7 @@ Future<void> getnewaccesstoken(BuildContext context) async {
     print('Response body: ${response.body}');
     var data = json.decode(response.body);
     await saveToken(data['accessToken']);
+    await saveRefreshToken(data['refreshToken']);
     // 이후에 필요한 작업을 수행할 수 있습니다.
   } else {
     // 오류가 발생한 경우 처리

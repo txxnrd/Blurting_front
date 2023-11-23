@@ -11,6 +11,7 @@ import 'dart:io';
 
 
 class MyPageEdit extends StatefulWidget {
+
   final dynamic data;
   MyPageEdit({Key? key, this.data}) : super(key: key); // Key 타입을 Key?로 변경
 
@@ -86,6 +87,7 @@ enum JorP {j,p}
 class _MyPageEditState extends State<MyPageEdit> {
   /*이미지 형식을 바꿔줌*/
   List<MultipartFile> multipartImageList = [];
+  String content = '';
   File? _image1;
   File? _image2;
   File? _image3;
@@ -336,9 +338,9 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
   @override
   void initState() {
-
     super.initState();
-
+    content = "";
+    print(content);
     _image1Url=widget.data['images'][0];
     _image2Url=widget.data['images'][1];
     _image3Url=widget.data['images'][2];
@@ -415,7 +417,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
   }
-  String content = '';
+
   Future<void> _sendFixRequest() async {
 
     List<String> selectedCharacteristics = [];
@@ -479,12 +481,26 @@ class _MyPageEditState extends State<MyPageEdit> {
         "images":[_image1Url,_image2Url,_image3Url]
       }), // JSON 형태로 인코딩
     );
+    print(json.encode({
+      "religion": selectedReligionString,
+      "region":content,
+      "cigarette":smoke,
+      "drink": drink,
+      "height": height,
+      "mbti": mbti,
+      "hobby":selectedHobby,
+      "character":selectedCharacteristics,
+      "images":[_image1Url,_image2Url,_image3Url]
+    }), // JSON 형태로 인코딩
+    );
+
     print(response.body);
     if (response.statusCode == 200 ||response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       _showEditsuccess("수정에 성공하였습니다.");
+      sleep(const Duration(seconds:2));
       Navigator.pop(context);
     } else {
       // 오류가 발생한 경우 처리
@@ -1542,11 +1558,14 @@ class _MyPageEditState extends State<MyPageEdit> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xFF868686)),
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(_image1Url!),// 선택된 이미지 표시
+                        child: Image.network(_image1Url!,
+                          fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
+                        ),// 선택된 이미지 표시
+
                       ),
                     ),
                   ),
@@ -1558,11 +1577,13 @@ class _MyPageEditState extends State<MyPageEdit> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xFF868686)),
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(_image2Url!),
+                        child: Image.network(_image2Url!,
+                          fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
+                        ),
                       ),
                     ),
                   ),InkWell(
@@ -1573,11 +1594,13 @@ class _MyPageEditState extends State<MyPageEdit> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xFF868686)),
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(_image3Url!),
+                        child: Image.network(_image3Url!,
+                          fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
+                        ),
                       ),
                     ),
                   ),
