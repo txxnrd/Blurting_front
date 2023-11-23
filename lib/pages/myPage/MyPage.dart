@@ -70,8 +70,12 @@ class _MyPage extends State<MyPage> {
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-    String accessToken = await getToken();
-    String refreshToken = await getRefreshToken();
+    // String accessToken = await getToken();
+    // String refreshToken = await getRefreshToken();
+    String accessToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+    String refreshToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
     print("access Token" + accessToken);
     print("access Token" + refreshToken);
 
@@ -131,13 +135,9 @@ class _MyPage extends State<MyPage> {
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
 
-    var savedToken = getToken();
-    //var savedToken =
-    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
-    //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTg6MjM6MTYuODY4WiIsImlhdCI6MTcwMDQ3MjE5NiwiZXhwIjoxNzAwNDc1Nzk2fQ.dupIHGs5jWIql0-kwQJj21Hue-fXNqCLToB6FkUJ5hU';
-    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjFUMjM6NTg6NTEuNTQzWiIsImlhdCI6MTcwMDU3ODczMSwiZXhwIjoxNzAwNTgyMzMxfQ.3O85qDrCSq75CfPkGVtbOIUf1w-ayOtfne9qQbKBCnY';
-    //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjJUMDA6NTQ6NDguNzAyWiIsImlhdCI6MTcwMDU4MjA4OCwiZXhwIjoxNzAwNTg1Njg4fQ._ZVJlXM-FGUVM7yIkfDIxKJxU8v-3Pk9AXm-NReloNU';
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjJUMjE6MDg6NTEuMzI2WiIsImlhdCI6MTcwMDY1NDkzMSwiZXhwIjoxNzAwNjU4NTMxfQ.fLwedTXdzyeS3BoWZPZ6IZajKAW1d6DKOKJzgmjUj68';
+    // var savedToken = getToken();
+    var savedToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
     print(savedToken);
 
     var response = await http.get(
@@ -288,6 +288,7 @@ class _MyPage extends State<MyPage> {
               child: staticButton(text: 'Edit'),
               onTap: () {
                 goToMyPageEdit(context);
+                print('edit 버튼 클릭됨');
               },
             ),
           ],
