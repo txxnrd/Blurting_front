@@ -4,6 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:provider/provider.dart';
+import 'package:blurting/pages/myPage/PointHistory.dart';
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
@@ -88,11 +89,8 @@ class CustomInputField extends StatefulWidget {
   final Function(String)? sendFunction;
   final bool isBlock;
 
-  CustomInputField({
-    required this.controller,
-    this.sendFunction,
-    required this.isBlock
-  });
+  CustomInputField(
+      {required this.controller, this.sendFunction, required this.isBlock});
 
   @override
   _CustomInputFieldState createState() => _CustomInputFieldState();
@@ -148,7 +146,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width - 20,
               child: TextField(
-                enabled: !widget.isBlock,     // 블락이 되지 않았을 때 사용 가능
+                enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
                 focusNode: _focusNode,
                 onChanged: (value) {
                   if (value != '') {
@@ -227,7 +225,12 @@ class pointAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PointHistoryPage()),
+          );
+        },
         child: Container(
           padding: EdgeInsets.all(5),
           margin: EdgeInsets.all(5),
@@ -739,8 +742,7 @@ class AnswerItem extends StatelessWidget {
                                         ),
                                       ),
                                       onTap: () {
-                                        if(!isValid)
-                                        {
+                                        if (!isValid) {
                                           Navigator.of(context).pop();
                                         }
                                       },

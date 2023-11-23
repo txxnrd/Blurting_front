@@ -292,7 +292,7 @@ class _MyPage extends State<MyPage> {
                                           8), // Adjust the spacing between boxes
                                   if (i + 1 < userProfile['character']!.length)
                                     buildPinkBox(
-                                        '#${userProfile['hobby'][i + 1]}'),
+                                        '#${userProfile['character'][i + 1]}'),
                                 ],
                               ),
                           ],
