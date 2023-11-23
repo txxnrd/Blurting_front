@@ -32,21 +32,24 @@ class _HomeState extends State<Home> {
     CardItem(
       userName: 'User1',
       question: 'What is Flutter?',
-      answer: 'Flutter is a UI toolkit...',
+      answer:
+          'Flutter is a UI toolkit toolkit toolkit toolkit Modified code with SingleChildScrollView how you can modify your existing code:',
       date: '2023-11-13',
       sex: 'man',
     ),
     CardItem(
       userName: 'User2',
       question: 'How does Dart work?',
-      answer: 'Dart is a programming language...',
+      answer:
+          'Dart is a programming language toolkit toolkit toolkit Modified code with SingleChildScrollView how you can modify your existing code:',
       date: '2023-11-14',
       sex: 'woman',
     ),
     CardItem(
       userName: 'User3',
       question: 'Why use widgets in Flutter?',
-      answer: 'Widgets are the basic building...',
+      answer:
+          'Widgets are the basic building toolkit toolkit toolkit Modified code with SingleChildScrollView Modified code with SingleChildScrollView',
       date: '2023-11-15',
       sex: 'man',
     ),
@@ -94,7 +97,7 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 34),
+                  padding: EdgeInsets.only(top: 20),
                   child: Row(
                     children: [
                       if (cardItems[index].sex == 'man')
@@ -134,24 +137,32 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: 13),
                 Text(
                   'Question: ${cardItems[index].question}',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Heebo',
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.w700,
                   ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
                 SizedBox(height: 11),
-                Text(
-                  'Answer: ${cardItems[index].answer}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Heebo',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                Expanded(
+                  child: Container(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        'Answer: ${cardItems[index].answer}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Heebo',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 11),
@@ -160,12 +171,12 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: Divider(
                         color: Colors.white,
-                        height: 20,
+                        height: 10,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 11),
+                SizedBox(height: 10),
                 Row(
                   children: [
                     Text(
@@ -173,11 +184,11 @@ class _HomeState extends State<Home> {
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Heebo',
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 30),
+                    SizedBox(width: 50),
                     GestureDetector(
                       onTap: () {
                         // 좋아요 버튼을 눌렀을 때의 로직
@@ -188,10 +199,10 @@ class _HomeState extends State<Home> {
                       child: Icon(
                         Icons.thumb_up,
                         color: Colors.white,
-                        size: 20,
+                        size: 15,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: 10),
                     Text(
                       'Likes: ${cardItems[index].likes}',
                       style: TextStyle(
@@ -203,6 +214,9 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                )
               ],
             ),
           ),
@@ -220,7 +234,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         leading: SizedBox(),
         toolbarHeight: 80,
-        backgroundColor: Colors.white, // 배경색을 투명하게 설정합니다.
+        backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
           '다음 질문까지 ${formatDuration(remainingTime)}',
@@ -242,6 +256,7 @@ class _HomeState extends State<Home> {
             },
           ),
           SizedBox(width: 10),
+
         ],
       ),
       body: Column(

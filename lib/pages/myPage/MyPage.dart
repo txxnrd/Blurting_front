@@ -64,15 +64,20 @@ class _MyPage extends State<MyPage> {
   Map<String, dynamic> userProfile = {};
 
   Future<void> goToMyPageEdit(BuildContext context) async {
-    print("설정 버튼 눌러짐");
+    print("수정 버튼 눌러짐");
     var token = getToken();
     print(token);
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-    String accessToken = await getToken();
-    String refreshToken = await getRefreshToken();
+    // String accessToken = await getToken();
+    // String refreshToken = await getRefreshToken();
+    String accessToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+    String refreshToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
+
     print("access Token" + accessToken);
     print("access Token" + refreshToken);
 
@@ -110,9 +115,11 @@ class _MyPage extends State<MyPage> {
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         getnewaccesstoken(context);
         goToMyPageEdit(context);
+
         count +=1;
         if(count==10)
           exit(1);
+
       }
     }
   }
@@ -129,8 +136,9 @@ class _MyPage extends State<MyPage> {
     var url = Uri.parse(API.userprofile);
     // var savedToken = getToken();
     var savedToken =
-    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTg6MjM6MTYuODY4WiIsImlhdCI6MTcwMDQ3MjE5NiwiZXhwIjoxNzAwNDc1Nzk2fQ.dupIHGs5jWIql0-kwQJj21Hue-fXNqCLToB6FkUJ5hU';
+
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+
     print(savedToken);
     var response = await http.get(
       url,
@@ -255,34 +263,6 @@ class _MyPage extends State<MyPage> {
                             'Unknown',
                         getDrinkString(userProfile['drink']) ?? 'Unknown',
                       ]),
-                      Center(
-                        child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Container(
-                              width: 350,
-                              height: 48,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF66464),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Edit',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      fontFamily: 'pretendard',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                onPressed: () {
-                                  print("edit 버튼 클릭됨");
-                                  goToMyPageEdit(context);
-                                },
-                              ),
-                            )),
-                      )
                     ],
                   ),
                 ]),
@@ -311,6 +291,7 @@ class _MyPage extends State<MyPage> {
               child: staticButton(text: 'Edit'),
               onTap: () {
                 goToMyPageEdit(context);
+                print('edit 버튼 클릭됨');
               },
             ),
           ],
@@ -421,35 +402,19 @@ class _MyPage extends State<MyPage> {
                   .entries
                   .map(
                     (entry) => Text(
-                  entry.value,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
-                    color: Color(0XFFF66464),
-                  ),
-                ),
-              )
+                      entry.value,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                        color: Color(0XFFF66464),
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-            Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: SmoothPageIndicator(
-                    controller: mainPageController,
-                    count: 5,
-                    effect: ScrollingDotsEffect(
-                      activeDotColor: Color(0xFFF66464),
-                      activeStrokeWidth: 10,
-                      activeDotScale: 1.7,
-                      maxVisibleDots: 5,
-                      radius: 8,
-                      spacing: 10,
-                      dotHeight: 5,
-                      dotWidth: 5,
-                    ))),
           ],
         ),
         SizedBox(
