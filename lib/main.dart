@@ -1,6 +1,7 @@
 import 'package:blurting/settings/setting.dart';
 import 'package:blurting/signupquestions/hobby.dart';
-import 'package:blurting/startpage.dart';
+import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/StartPage/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:provider/provider.dart';
@@ -23,13 +24,15 @@ void main() async {
     ),
   );
 }
+var token = getToken();
+bool isLoggedIn = token != null && token != "";
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: isLoggedIn ? MainApp() : LoginPage(),
     );
   }
 }

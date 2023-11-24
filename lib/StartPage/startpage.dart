@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blurting/StartPage/email_alreadyuser.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 import 'package:blurting/signupquestions/token.dart';
@@ -12,8 +13,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'colors/colors.dart';
-import 'config/app_config.dart';
+import '../colors/colors.dart';
+import '../config/app_config.dart';
 
 
 
@@ -132,12 +133,19 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      WillPopScope(onWillPop: () async {
+      // false를 반환하여 뒤로 가기를 막습니다.
+      return false;
+    },
+    child:
+      Scaffold(
       key: _scaffoldKey, // Scaffold에 GlobalKey 할당
       resizeToAvoidBottomInset: false,
 
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: SizedBox(),
         backgroundColor: Colors.white, //appBar 투명색
         elevation: 0.0,
       ),
@@ -228,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                 onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context)=> MainApp()),
+                      MaterialPageRoute(builder: (context)=> EmailAlreadyUserPage()),
                     );
                 },
                 child: Container(
@@ -248,6 +256,7 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

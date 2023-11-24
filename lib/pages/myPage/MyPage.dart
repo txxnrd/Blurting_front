@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/startpage.dart';
+import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -73,8 +73,8 @@ class _MyPage extends State<MyPage> {
 
     String accessToken = await getToken();
     String refreshToken = await getRefreshToken();
-    print("access Token" + accessToken);
-    print("access Token" + refreshToken);
+    print("access Token$accessToken");
+    print("refresh Token$refreshToken");
 
     var response = await http.get(
       url,

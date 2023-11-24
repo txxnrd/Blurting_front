@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:blurting/startpage.dart';
+import 'package:blurting/StartPage/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
