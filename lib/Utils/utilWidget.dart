@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
@@ -85,11 +89,17 @@ class InputfieldClipper extends CustomClipper<Path> {
 // 인풋필드 위젯 (컨트롤러, 시간, 보내는 함수)
 class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
-  final Function(String)? sendFunction;
+  final Function(String, int)? sendFunction;
   final bool isBlock;
+  final String hintText;
+  final int questionId;
 
   CustomInputField(
-      {required this.controller, this.sendFunction, required this.isBlock});
+      {required this.controller,
+      this.sendFunction,
+      required this.isBlock,
+      required this.hintText,
+      required this.questionId});
 
   @override
   _CustomInputFieldState createState() => _CustomInputFieldState();
@@ -178,12 +188,13 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: !widget.isBlock ? "내 생각 쓰기..." : "귓속말이 끊긴 상대입니다",
+                  hintText: !widget.isBlock ? "내 생각 쓰기..." : widget.hintText,
                   hintStyle: TextStyle(fontSize: 12),
                   suffixIcon: IconButton(
                     onPressed: (isValid)
                         ? () {
-                            widget.sendFunction!(widget.controller.text);
+                            widget.sendFunction!(
+                                widget.controller.text, widget.questionId);
                             setState(() {
                               inputValid(false);
                               inputPointValid(false);
@@ -217,28 +228,31 @@ class _CustomInputFieldState extends State<CustomInputField> {
 }
 
 class pointAppbar extends StatelessWidget {
-  final int point;
 
-  pointAppbar({super.key, required this.point});
+  pointAppbar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: () {},
         child: Container(
-          padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(5),
+          height: 30,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: mainColor.MainColor.withOpacity(0.5),
           ),
-          child: Text(
-            '${point}p',
-            style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Heebo',
-                color: Colors.white,
-                fontSize: 15),
+          child: Center(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(9, 0, 9, 0),
+              child: Text(
+                '${Provider.of<UserProvider>(context, listen: false).point}p',
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Heebo',
+                    color: Colors.white,
+                    fontSize: 15),
+              ),
+            ),
           ),
         ));
   }
@@ -369,7 +383,6 @@ class MyChat extends StatefulWidget {
 }
 
 class _MyChatState extends State<MyChat> {
-
   @override
   void initState() {
     super.initState();
@@ -451,7 +464,7 @@ class _MyChatState extends State<MyChat> {
                     if (widget.isBlurting)
                       Positioned(
                         bottom: 0,
-                        left:(widget.likedNum == 0) ? 10 : 0,
+                        left: (widget.likedNum == 0) ? 10 : 0,
                         child: Container(
                           width: (widget.likedNum == 0) ? 15 : 25,
                           height: 15,
@@ -496,23 +509,26 @@ class _MyChatState extends State<MyChat> {
 // 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatefulWidget {
   final IO.Socket socket;
-  // final Map<String, dynamic> jsonData; // JSON 데이터를 저장할 변수
 
   final String userName;
   final String message;
   final int userId;
-  final bool whisper;
   final bool isLiked;
   final int likedNum;
+  final String token;
+  final bool isAlready;
+  final String image;
 
   AnswerItem(
       {required this.userName,
       required this.message,
       required this.socket,
       required this.userId,
-      required this.whisper,
       required this.isLiked,
-      required this.likedNum});
+      required this.likedNum,
+      required this.token,
+      required this.isAlready,
+      required this.image});
 
   @override
   State<AnswerItem> createState() => _AnswerItemState();
@@ -584,8 +600,7 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
 // 프로필 클릭 시 모달 띄우는 함수
-  void _showProfileModal(BuildContext context, int userId, bool isAlready) {
-    // bool isAlready = false;           // post로 받아 오기
+  void _showProfileModal(BuildContext context, bool isAlready) {
     bool isValid = false;
 
     void isTap(bool status) {
@@ -642,7 +657,9 @@ class _AnswerItemState extends State<AnswerItem> {
                         margin: EdgeInsets.only(top: 5),
                         width: 127.99,
                         child: Image.asset(
-                          'assets/images/profile_man.png',
+                          widget.image == "F"
+                              ? 'assets/images/profile_woman.png'
+                              : 'assets/images/profile_man.png',
                           fit: BoxFit.cover,
                         )),
                     Container(
@@ -707,13 +724,14 @@ class _AnswerItemState extends State<AnswerItem> {
                                   });
                                 },
                               ),
-                              Text(
-                                '귓속말 걸기',
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color: mainColor.lightGray),
-                              ),
+                              if (!isAlready)
+                                Text(
+                                  '귓속말 걸기',
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                      color: mainColor.lightGray),
+                                ),
                             ],
                           )
                         ],
@@ -804,9 +822,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                     ),
                                     onTap: () {
                                       if (isValid) {
-                                        widget.socket
-                                            .emit('create_room', userId);
-                                        print("$userId에게 귓속말 거는 중...");
+                                        startWhisper(widget.token);
                                         Navigator.of(context).pop();
                                       } else {
                                         Navigator.of(context).pop();
@@ -881,126 +897,196 @@ class _AnswerItemState extends State<AnswerItem> {
   // 답변 위젯
   @override
   Widget build(BuildContext context) {
-
-    return ListTile(
-      leading: GestureDetector(
-        onTap: () {
-          _showProfileModal(
-              context, widget.userId, widget.whisper); // jsonData 매개변수
-        },
-        child: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(50)),
-          child: Image.asset(
-            'assets/man.png',
-          ),
-        ),
-      ),
-      title: Container(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        child: Text(
-          widget.userName,
-          style: TextStyle(
-            fontSize: 12,
-            color: Color.fromRGBO(48, 48, 48, 1),
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
-      subtitle: // 답변 내용
-          Container(
-        margin: EdgeInsets.only(bottom: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      child: ListTile(
+        subtitle: // 답변 내용
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+              child: GestureDetector(
+                onTap: () {
+                  _showProfileModal(context, widget.isAlready); // jsonData 매개변수
+                  fetchProfile(widget.token);
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Image.asset(
+                    widget.image == 'F' ? 'assets/woman.png' : 'assets/man.png',
+                  ),
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onDoubleTap: () {
-                    changeLike();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                    child: ClipPath(
-                      clipper: LeftTailClipper(),
-                      child: Container(
-                        width: 200,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Color.fromRGBO(255, 238, 238, 1),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 20, right: 20, top: 10, bottom: 10),
-                              child: Text(
-                                widget.message,
-                                style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontSize: 10,
-                                  color: Colors.black,
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    widget.userName,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color.fromRGBO(48, 48, 48, 1),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          GestureDetector(
+                            onDoubleTap: () {
+                              changeLike();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                              child: ClipPath(
+                                clipper: LeftTailClipper(),
+                                child: Container(
+                                  width: 200,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color.fromRGBO(255, 238, 238, 1),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Text(
+                                          widget.message,
+                                          style: TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 10,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: (likedNum == 0) ? 10 : 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      changeLike();
-                    },
-                    child: Container(
-                      width: (likedNum == 0) ? 15 : 25,
-                      height: 15,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 210, 210, 1),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image(
-                            image: AssetImage('assets/images/heart.png'),
-                            color:
-                                isLiked ? mainColor.MainColor : Colors.white,
                           ),
-                          if (likedNum != 0)
-                            Container(
-                              margin: EdgeInsets.only(left: 3, top: 1),
-                              child: Text(
-                                '$likedNum',
-                                style: TextStyle(
-                                    color: isLiked
-                                        ? mainColor.MainColor
-                                        : Colors.white,
-                                    fontSize: 10,
-                                    fontFamily: 'Heebo'),
+                          Positioned(
+                            bottom: 0,
+                            right: (likedNum == 0) ? 10 : 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                changeLike();
+                              },
+                              child: Container(
+                                width: (likedNum == 0) ? 15 : 25,
+                                height: 15,
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 210, 210, 1),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image(
+                                      image: AssetImage('assets/images/heart.png'),
+                                      color: isLiked
+                                          ? mainColor.MainColor
+                                          : Colors.white,
+                                    ),
+                                    if (likedNum != 0)
+                                      Container(
+                                        margin: EdgeInsets.only(left: 3, top: 1),
+                                        child: Text(
+                                          '$likedNum',
+                                          style: TextStyle(
+                                              color: isLiked
+                                                  ? mainColor.MainColor
+                                                  : Colors.white,
+                                              fontSize: 10,
+                                              fontFamily: 'Heebo'),
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
+                          ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
                 ),
+                          ],
+                        ),
               ],
             ),
-          ],
-        ),
       ),
     );
+  }
+
+  Future<void> fetchProfile(String token) async {
+    final url = Uri.parse(
+        '${ServerEndpoints.serverEndpoint}/blurting/profile/${widget.userId}');
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      print('요청 성공');
+
+      try {
+        Map responseData = jsonDecode(response.body);
+
+        print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('프로필을 로드하는 데 실패했습니다');
+    }
+  }
+
+  Future<void> startWhisper(String token) async {
+    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/point/chat');
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
+    dynamic responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      print('요청 성공');
+
+      if (responseData != false) {
+        widget.socket.emit('create_room', widget.userId);
+        print("${widget.userId}에게 귓속말 거는 중...");
+      
+        Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+        print('귓속말 포인트 차감: $responseData');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('프로필을 로드하는 데 실패했습니다');
+    }
   }
 }
 
@@ -1044,6 +1130,7 @@ class ellipseText extends StatelessWidget {
     return Row(
       children: [
         Container(
+          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
           child: Row(
             children: [
               Text(
@@ -1061,137 +1148,6 @@ class ellipseText extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class LeaveRoomDialog {
-  final BuildContext context_;
-
-  LeaveRoomDialog({required this.context_});
-
-  static void show(BuildContext context_) {
-    showDialog(
-      context: context_,
-      builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return Stack(
-            children: [
-              Positioned(
-                bottom: 100,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(top: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 20),
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray.withOpacity(0.5),
-                                  ),
-                                  alignment: Alignment.topCenter,
-                                  child: Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 10,
-                                            fontFamily: "Heebo",
-                                          ),
-                                        ),
-                                        Text(
-                                          '채팅 상대방과 다시는 매칭되지 않습니다.',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 10,
-                                            fontFamily: "Heebo",
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: mainColor.MainColor,
-                                    ),
-                                    height: 50,
-                                    child: Center(
-                                      child: Text(
-                                        '방 나가기',
-                                        style: TextStyle(
-                                          fontFamily: 'Heebo',
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    print('채팅 나가는 중...');
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: mainColor.lightGray,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '취소',
-                                  style: TextStyle(
-                                    fontFamily: 'Heebo',
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                Navigator.of(context).pop();
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          );
-        });
-      },
     );
   }
 }

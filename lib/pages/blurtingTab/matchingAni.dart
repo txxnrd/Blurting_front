@@ -1,8 +1,15 @@
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
 
 class Matching extends StatefulWidget {
+
+  final String token;
+
+  Matching({required this.token});
+
   @override
   State<Matching> createState() => _MatchingState();
 }
@@ -22,6 +29,9 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    register(widget.token);
+    
     controller = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
@@ -215,5 +225,30 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  Future<void> register(String token) async {
+    final url =
+        Uri.parse('${ServerEndpoints.serverEndpoint}/blurting/register');
+
+    final response = await http.post(url, headers: {
+      'authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 201) {
+      print('요청 성공');
+      print('등록 완료');
+      print('Response body: ${response.body}');
+    } else if(response.statusCode == 400) {
+      print('매칭 중');
+    }
+    else if(response.statusCode == 409) {
+      print('매칭 완료');
+    }
+    else {
+      print(response.statusCode);
+      throw Exception('매칭 등록 실패');
+    }
   }
 }

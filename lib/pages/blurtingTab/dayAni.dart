@@ -6,21 +6,29 @@ import 'package:flutter/material.dart';
 class DayAni extends StatefulWidget {
   final IO.Socket socket;
   final String token;
+  final String day;
 
-  DayAni({required this.socket, Key? key, required this.token})
+  DayAni({required this.socket, Key? key, required this.token, required this.day})
       : super(key: key);
 
   @override
   State<DayAni> createState() => _DayAniState();
 }
 
-class _DayAniState extends State<DayAni> {
+class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
   late AnimationController controller;
+
+  int seconds = 0; // 초를 저장할 변수 추가
 
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 2000), () {
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    Timer(Duration(milliseconds: 5000), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -45,6 +53,16 @@ class _DayAniState extends State<DayAni> {
         ),
       );
     });
+
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (mounted) {
+        controller.forward(from: 0);
+        setState(() {
+          seconds++; // 초 증가
+          print(seconds);
+        });
+      }
+    });
   }
 
   @override
@@ -58,20 +76,46 @@ class _DayAniState extends State<DayAni> {
     return PopScope(
       canPop: false, // 뒤로가기 금지
       child: Scaffold(
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Stack(
-            children: [
-              AnimatedPositioned(
-                duration: Duration(milliseconds: 1500),
-                curve: Curves.easeInOut,
-                // left: leftValue,
-                // bottom: bottomValue,
-                child: Image.asset('assets/animation/rightTop.png'),
+        backgroundColor: Color.fromRGBO(245, 220, 220, 1),
+        body: Stack(
+          children: [
+            AnimatedPositioned(
+                left: (seconds > 0 ? -200 : -1000),
+                bottom: 100,
+                duration: Duration(milliseconds: 2000),
+                child: Image.asset('assets/animation/leftCenter.png')),
+            AnimatedPositioned(
+                right: (seconds >= 1 ? -300 : -1000),
+                bottom: (seconds >= 1 ? -200 : -1000),
+                duration: Duration(milliseconds: 2000),
+                child: Image.asset('assets/animation/rightBottom.png')),
+            AnimatedPositioned(
+                left: (seconds > 0 ? -200 : -1000),
+                bottom: (seconds > 0 ? -200 : -1000),
+                duration: Duration(milliseconds: 2000),
+                child: Image.asset('assets/animation/leftBottom.png')),
+            AnimatedPositioned(
+                left: (seconds >= 1 ? -50 : -500),
+                top: (seconds >= 1 ? -50 : -500),
+                duration: Duration(milliseconds: 2000),
+                child: Image.asset('assets/animation/leftTop.png')),
+            AnimatedPositioned(
+                right: (seconds >= 1 ? -200 : -1000),
+                top: (seconds >= 1 ? -200 : -1000),
+                duration: Duration(milliseconds: 2000),
+                child: Image.asset('assets/animation/rightTop.png')),
+            Center(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 2000),
+                opacity: seconds >= 1 ? 1 : 0,
+                child: Text(day,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 48,
+                        fontWeight: FontWeight.w700)),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
