@@ -439,7 +439,7 @@ class _Whisper extends State<Whisper> {
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     final url =
-        Uri.parse('${ServerEndpoints.serverEndpoint}/chat/${widget.roomId}');
+        Uri.parse('${API.chatList}${widget.roomId}');
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',

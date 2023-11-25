@@ -535,6 +535,9 @@ class AnswerItem extends StatefulWidget {
 }
 
 class _AnswerItemState extends State<AnswerItem> {
+    bool enoughPoint = true;
+    bool isValid = false;
+
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
     showDialog(
@@ -598,14 +601,15 @@ class _AnswerItemState extends State<AnswerItem> {
       },
     );
   }
+    
+  void isTap(bool status) {
+    isValid = status;
+  }
 
 // 프로필 클릭 시 모달 띄우는 함수
   void _showProfileModal(BuildContext context, bool isAlready) {
-    bool isValid = false;
 
-    void isTap(bool status) {
-      isValid = status;
-    }
+    enoughPoint = true;
 
     showDialog(
       context: context,
@@ -676,7 +680,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                 color: mainColor.MainColor),
                           ),
                           Text(
-                            'INFJ',
+                            mbti.toUpperCase(),
                             style: TextStyle(
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500,
@@ -718,9 +722,10 @@ class _AnswerItemState extends State<AnswerItem> {
                                     ],
                                   ),
                                 ),
-                                onTap: () {
+                                onTap: () async {
+                                  await checkPoint(widget.token);
                                   setState(() {
-                                    if (!isAlready) isTap(true);
+                                    if (!isAlready && enoughPoint) isTap(true);
                                   });
                                 },
                               ),
@@ -799,7 +804,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                       },
                                     ),
                                   ),
-                                  GestureDetector(
+                                  GestureDetector(        // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.8,
@@ -864,7 +869,88 @@ class _AnswerItemState extends State<AnswerItem> {
                     ],
                   ),
                 ),
-              )
+              ),
+              Positioned(
+                bottom: 170,
+                child: AnimatedOpacity(
+                  opacity: enoughPoint ? 0.0 : 1.0,
+                  duration: Duration(milliseconds: 500),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              width:
+                                  MediaQuery.of(context).size.width * 0.8,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color:  mainColor.lightGray.withOpacity(0.5)),
+                              child: Stack(
+                                alignment: Alignment.centerLeft,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(left: 50),
+                                    child: Image.asset(
+                                      'assets/images/alert.png',
+                                      width: 30,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '앗! 포인트 부족',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w800,
+                                                  fontSize: 15,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                            Text(
+                                              '포인트가 부족하여 귓속말을 걸 수 없습니다.',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                            Text(
+                                              '포인트를 모은 뒤 다시 시도해 주세요!',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        if (enoughPoint) {
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           );
         });
@@ -874,12 +960,14 @@ class _AnswerItemState extends State<AnswerItem> {
 
   bool isLiked = false;
   int likedNum = 0;
+  String mbti = '';
 
   @override
   void initState() {
     super.initState();
     isLiked = widget.isLiked;
     likedNum = widget.likedNum;
+    fetchProfile(widget.token);
   }
 
   void changeLike() {
@@ -1029,17 +1117,17 @@ class _AnswerItemState extends State<AnswerItem> {
                     ],
                   ),
                 ),
-                          ],
-                        ),
               ],
             ),
+          ],
+        ),
       ),
     );
   }
 
   Future<void> fetchProfile(String token) async {
     final url = Uri.parse(
-        '${ServerEndpoints.serverEndpoint}/blurting/profile/${widget.userId}');
+        '${API.answerProfile}${widget.userId}');
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -1052,10 +1140,44 @@ class _AnswerItemState extends State<AnswerItem> {
       try {
         Map responseData = jsonDecode(response.body);
 
+        setState(() {
+          mbti = responseData['mbti'];
+        });
+
         print('Response body: ${response.body}');
       } catch (e) {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('프로필을 로드하는 데 실패했습니다');
+    }
+  }
+
+  Future<void> checkPoint(String token) async {
+    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/point/chat');
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
+    dynamic responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      print('요청 성공');
+
+      if(responseData == false){
+        print('포인트 부족');
+        if(mounted){
+          setState(() {
+            enoughPoint = false;
+            isTap(false);
+            print(enoughPoint);
+            print(isValid);
+          });
+        }
       }
     } else {
       print(response.statusCode);
@@ -1084,6 +1206,7 @@ class _AnswerItemState extends State<AnswerItem> {
         print('귓속말 포인트 차감: $responseData');
       }
     } else {
+
       print(response.statusCode);
       throw Exception('프로필을 로드하는 데 실패했습니다');
     }

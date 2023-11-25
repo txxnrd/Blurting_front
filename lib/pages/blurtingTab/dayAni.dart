@@ -59,7 +59,6 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
         controller.forward(from: 0);
         setState(() {
           seconds++; // 초 증가
-          print(seconds);
         });
       }
     });

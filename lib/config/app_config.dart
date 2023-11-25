@@ -21,4 +21,16 @@ class API {
   /*현재 위치 불러오기*/
   static const String geobyname = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";
   static const String geobygeo = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";
+  /*BLURTING */
+  static const String matching = "${ServerEndpoints.serverEndpoint}/blurting";
+  static const String latest = "${ServerEndpoints.serverEndpoint}/blurting/latest";
+  static const String answerNo = "${ServerEndpoints.serverEndpoint}/blurting/";
+  static const String answer = "${ServerEndpoints.serverEndpoint}/blurting/answer";
+  static const String register = "${ServerEndpoints.serverEndpoint}/blurting/register";
+  static const String answerProfile = "${ServerEndpoints.serverEndpoint}/blurting/profile/";
+  /*WHISPER */
+  static const String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
+  static const String chatList = "${ServerEndpoints.serverEndpoint}/chat/";
+  static const String chatProfile = "${ServerEndpoints.serverEndpoint}/chat/profile/";
+
 }

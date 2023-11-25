@@ -585,7 +585,7 @@ class _chattingList extends State<ChattingList> {
   }
 
   Future<void> fetchList(String token) async {
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/chat/rooms');
+    final url = Uri.parse(API.roomList);
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',

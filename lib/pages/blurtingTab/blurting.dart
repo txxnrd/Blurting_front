@@ -115,7 +115,6 @@ class _Blurting extends State<Blurting> {
                                 )));
                   }
                 } else if (isState == 'Start') {      // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
-                Provider.of<GroupChatProvider>(context, listen: false).lastTime = DateTime(2000, 11, 24, 15, 30);;
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -130,7 +129,7 @@ class _Blurting extends State<Blurting> {
   }
 
   Future<void> isMatched(String token) async {
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/blurting');
+    final url = Uri.parse(API.matching);
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -166,7 +165,7 @@ class _Blurting extends State<Blurting> {
   Future<void> fetchLatestComments(String token) async {
     // day 정보 (dayAni 띄울지 말지 결정)
 
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/blurting/latest');
+    final url = Uri.parse(API.latest);
     final response = await http.get(
       url,
       headers: {

@@ -114,6 +114,7 @@ flutter:
     - assets/images/setting_boy.png
     - assets/images/setting_girl.png
     - assets/images/heart.png
+    - assets/images/alert.png
 
   fonts:
     - family: Pretendard

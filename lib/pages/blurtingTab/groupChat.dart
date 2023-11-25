@@ -357,7 +357,7 @@ class _GroupChat extends State<GroupChat> {
 
     DateTime createdAt;
 
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/blurting/latest');
+    final url = Uri.parse(API.latest);
     final response = await http.get(
       url,
       headers: {
@@ -443,7 +443,7 @@ class _GroupChat extends State<GroupChat> {
     // 선택된 QnA
     // 선택된 QnA로 화면 새로 그리기
 
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/blurting/$no');
+    final url = Uri.parse('${API.answerNo}$no');
     final response = await http.get(
       url,
       headers: {
@@ -520,7 +520,7 @@ class _GroupChat extends State<GroupChat> {
     );
 
     String token = widget.token;
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/blurting/answer');
+    final url = Uri.parse(API.answer);
 
     var response = await http.post(url,
         headers: {

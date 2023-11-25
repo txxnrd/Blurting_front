@@ -229,7 +229,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
 
   Future<void> register(String token) async {
     final url =
-        Uri.parse('${ServerEndpoints.serverEndpoint}/blurting/register');
+        Uri.parse(API.register);
 
     final response = await http.post(url, headers: {
       'authorization': 'Bearer $token',
