@@ -57,8 +57,8 @@ class _HeightPageState extends State<HeightPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 7/14, // 시작 너비 (30%)
-      end: 8/14, // 종료 너비 (40%)
+      begin: 7/15, // 시작 너비 (30%)
+      end: 8/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {

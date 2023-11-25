@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import '../config/app_config.dart';
 
 Future<void> saveToken(String token) async {
   final prefs = await SharedPreferences.getInstance();
@@ -32,4 +37,33 @@ Future<String> getRefreshToken() async {
   // 값이 없을 경우 'No Token'을 반환합니다.
   String token = prefs.getString('refreshToken') ?? 'No Token';
   return token;
+}
+
+Future<void> getnewaccesstoken(BuildContext context) async {
+  var token = getToken();
+  print(token);
+
+/*여기서부터 내 정보 요청하기*/
+  var url = Uri.parse(API.refresh);
+  String refreshToken = await getRefreshToken();
+  var response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $refreshToken',
+    },
+  );
+  print(response.body);
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+    print('Server returned OK');
+    print('Response body: ${response.body}');
+    var data = json.decode(response.body);
+    await saveToken(data['accessToken']);
+    await saveRefreshToken(data['refreshToken']);
+    // 이후에 필요한 작업을 수행할 수 있습니다.
+  } else {
+    // 오류가 발생한 경우 처리
+    print('Request failed with status: ${response.statusCode}.');
+  }
 }

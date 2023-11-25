@@ -26,6 +26,8 @@
 	<string>????</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
     <string>이 앱에서 위치 서비스를 사용하려면 권한을 부여해주세요.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>이 앱은 연락처 정보를 가져오기 위해 연락처 접근이 필요합니다.</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>이 앱에서 위치 서비스를 사용하려면 권한을 부여해주세요.</string>
 	<key>CFBundleVersion</key>

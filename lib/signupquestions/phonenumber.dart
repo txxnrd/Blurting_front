@@ -7,6 +7,10 @@ import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/colors/colors.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+
 
 class PhoneNumberPage extends StatefulWidget {
   const PhoneNumberPage({super.key});
@@ -20,7 +24,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   AnimationController? _animationController;
   String? _previousText;
   Animation<double>? _progressAnimation;
-
   Timer? _timer;
   Duration _duration = Duration(minutes: 3);
 
@@ -39,8 +42,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       }
     });
   }
-
-
+  Future<String?> getDefaultContact() async {
+    Iterable<Contact> contacts = await ContactsService.getContacts();
+    return contacts.isNotEmpty ? contacts.first.phones!.first.value : "";
+  }
 
   final _controller = TextEditingController();
   final _controller_certification = TextEditingController();
@@ -83,7 +88,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   void InputPhoneNumber(String value) {
     setState(() {
       phonenumber = value;
-      if (phonenumber.length == 13) IsValid = true;
+      if (phonenumber.length >=10) IsValid = true;
     });
   }
 
@@ -221,11 +226,30 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       IsValid = false;
     });
   }
+  Future<void> initContact() async {
+    await requestPermission();
+    String? contactNumber = await getDefaultContact();
+    if (contactNumber != null && contactNumber.isNotEmpty) {
+      setState(() {
+        _controller.text = contactNumber;
+        InputPhoneNumber(contactNumber);  // 여기에 추가
+      });
+    }
+  }
+
+   requestPermission() async {
+    var status = await Permission.contacts.status;
+    if (!status.isGranted) {
+      await Permission.contacts.request();
+    }
+  }
+
 
 
   @override
   void initState() {
     super.initState();
+    initContact();
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
@@ -257,7 +281,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     _progressAnimation = Tween<double>(
       begin: 0, // 시작 게이지 값
-      end: 1/14, // 종료 게이지 값
+      end: 1/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -273,20 +297,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 80,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(48, 48, 48, 1),
-          ),
-          onPressed: () {
-            // 뒤로가기 버튼을 눌렀을 때의 동작
-            Navigator.pop(context);
-          },
-        ),
-
+        leading:SizedBox(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -503,10 +516,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
             if (!certification) {
               // 인증번호를 요청할 때 이 부분이 실행됩니다.
               await _sendPostRequest(_controller.text);
-
+              print('눌러짐');
             } else {
               // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
+
               _sendVerificationRequest(phonenumber);
+
             }
           } : null,
           backgroundColor: Color(0xFFF66464), // 버튼의 배경색

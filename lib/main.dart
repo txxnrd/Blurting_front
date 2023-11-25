@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:blurting/settings/setting.dart';
 import 'package:blurting/signupquestions/hobby.dart';
 import 'package:blurting/startpage.dart';
@@ -9,6 +11,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:intl/date_symbol_data_local.dart';
 
+// void main() async {
+//   await initializeDateFormatting('ko_KR', null);
 
 void main() async {
   await initializeDateFormatting('ko_KR', null);
@@ -17,7 +21,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
-        // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
+        ChangeNotifierProvider(create: (context) => UserProvider()),        
       ],
       child: MyApp(),
     ),

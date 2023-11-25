@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/signupquestions/Major.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/height.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,12 +66,10 @@ class _SmokePageState extends State<SmokePage>
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
       }
       else{
         _showVerificationFailedSnackBar();
       }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
@@ -87,29 +85,15 @@ class _SmokePageState extends State<SmokePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 6/14,
-      end: 7/14,
+      begin: 6/15,
+      end: 7/15,
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
   }
-  Future<String> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-    // 값이 없을 경우 'No Token'을 반환합니다.
-    String token = prefs.getString('signupToken') ?? 'No Token';
-    return token;
-  }
 
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('signupToken', token);
-    // 저장된 값을 확인하기 위해 바로 불러옵니다.
-    String savedToken = prefs.getString('signupToken') ?? 'No Token';
-    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
-  }
 
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
@@ -164,6 +148,8 @@ class _SmokePageState extends State<SmokePage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
+
   void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
     showDialog(
       context: context,

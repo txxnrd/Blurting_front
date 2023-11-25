@@ -1,4 +1,4 @@
-import 'package:blurting/MyPage.dart';
+import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/signupquestions/activeplacesearch.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:flutter/material.dart';
@@ -338,6 +338,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                       onPressed: () {
                         // 수정 내용 저장 동작
                         // 데이터를 저장하고 MyPage로 돌아갈 수 있도록 구현
+                        print('저장 클릭됨');
                         Navigator.of(context).pop();
                       },
                     ),
