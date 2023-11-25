@@ -1,6 +1,7 @@
 class ServerEndpoints {
   static const String serverEndpoint = "https://api.blurting.devkor.club";
   static const String socketServerEndpoint = "ws://13.124.149.234:3080";
+  static const String socketServerEndpoint = "ws://api.blurting.devkor.club";
 
 }
 
@@ -17,6 +18,7 @@ class API {
   static const String uploadimage = "${ServerEndpoints.serverEndpoint}/s3";
   static const String startsignup = "${ServerEndpoints.serverEndpoint}/auth/signup/start";
   static const String user = "${ServerEndpoints.serverEndpoint}/user";
+  static const String userupdate = "${ServerEndpoints.serverEndpoint}/user/update";
   static const String userprofile = "${ServerEndpoints.serverEndpoint}/user/profile";
   /*현재 위치 불러오기*/
   static const String geobyname = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";

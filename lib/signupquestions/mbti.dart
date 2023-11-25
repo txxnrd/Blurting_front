@@ -66,8 +66,8 @@ bool IsValid = false;
     );
 
     _progressAnimation = Tween<double>(
-      begin: 9/14, // 시작 너비 (30%)
-      end: 10/14, // 종료 너비 (40%)
+      begin: 9/15, // 시작 너비 (30%)
+      end: 10/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -275,7 +275,7 @@ bool IsValid = false;
             ),
             SizedBox(height: 30),
             Container(
-              width: 44,
+              width: 60,
               height: 12,
               child: Text(
                 '에너지방향',
