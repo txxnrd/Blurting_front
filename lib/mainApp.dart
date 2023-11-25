@@ -16,7 +16,7 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjZUMDI6NDg6MTYuOTg4WiIsImlhdCI6MTcwMDkzNDQ5NiwiZXhwIjoxNzAwOTM4MDk2fQ.WrV1O9_JZabSwK1zqn-mlh_1hepO6fRPRTQ2gDgWF94';
+  static String token = '';
   IO.Socket socket = IO
       .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
     'transports': ['websocket'],
