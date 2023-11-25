@@ -170,17 +170,27 @@ class _MyPage extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 244,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: <Widget>[
-          pointAppbar(point: 120),
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: IconButton(
-              icon: Icon(Icons.settings),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(244),
+        child: AppBar(
+        toolbarHeight: 80,
+          scrolledUnderElevation: 0.0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: 80),
+                  padding: EdgeInsets.all(13),
+                  child: ellipseText(text: 'My Profile')),
+            ],
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            pointAppbar(),
+            IconButton(
+              icon: Image.asset('assets/images/setting.png'),
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
                 print("설정 버튼 눌러짐");
@@ -191,26 +201,8 @@ class _MyPage extends State<MyPage> {
                 );
               },
             ),
-          ),
-        ],
-        title: Container(
-          margin: EdgeInsets.only(top: 70),
-          height: 80,
-          child: Container(
-            padding: EdgeInsets.all(13),
-            child: ellipseText(text: 'My Profile'),
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size(10, 10),
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              Container(
-                height: 70,
-              ),
-            ],
-          ),
+          SizedBox(width: 10),
+          ],
         ),
       ),
       extendBodyBehindAppBar: true,

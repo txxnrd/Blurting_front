@@ -48,6 +48,9 @@ dependencies:
   shared_preferences: ^2.2.2
   intl: ^0.18.1
   flarelane_flutter: 1.4.0
+  top_snackbar_flutter: ^3.1.0
+  flutter_native_splash: ^2.3.6
+  animated_splash_screen: ^1.3.0
   contacts_service: ^0.6.3
   permission_handler: ^11.0.1
 
@@ -108,8 +111,15 @@ flutter:
     - assets/images/leaveRoom.png
     - assets/animation/girl.png
     - assets/animation/boy.png
+    - assets/animation/leftBottom.png
+    - assets/animation/leftCenter.png
+    - assets/animation/leftTop.png
+    - assets/animation/rightBottom.png
+    - assets/animation/rightTop.png
     - assets/images/setting_boy.png
     - assets/images/setting_girl.png
+    - assets/images/heart.png
+    - assets/images/alert.png
 
   fonts:
     - family: Pretendard
