@@ -249,6 +249,17 @@ class _GroupChat extends State<GroupChat> {
                             children: <Widget>[
                               for (var answer in answerList)
                                 answer, // answerList에 있는 내용 순회하며 추가
+                              AnswerItem(
+                                message: 'd',
+                                isLiked: false,
+                                likedNum: 2,
+                                socket: widget.socket,
+                                userId: 265,
+                                userName: 'd',
+                                token: widget.token,
+                                isAlready: false,
+                                image: 'F',
+                              )
                             ],
                           ),
                         ),
@@ -408,7 +419,7 @@ class _GroupChat extends State<GroupChat> {
                         read: true,
                         isBlurting: true,
                         likedNum: 0));
-                    isBlock[currentIndex] = true; // true가 맞음
+                    isBlock[currentIndex] = false; // true가 맞음
                   } else {
                     answerList.add(AnswerItem(
                       message: answerData['answer'],
@@ -479,7 +490,7 @@ class _GroupChat extends State<GroupChat> {
                     read: true,
                     isBlurting: true,
                     likedNum: 0));
-                isBlock[currentIndex] = true; // true가 맞음
+                isBlock[currentIndex] = false; // true가 맞음
               } else {
                 answerList.add(AnswerItem(
                   // AnswerItem로 바꿔라
@@ -542,7 +553,7 @@ class _GroupChat extends State<GroupChat> {
       // 성공적으로 응답
       if (mounted) {
         setState(() {
-          isBlock[currentIndex] = true; // true가 맞음
+          isBlock[currentIndex] = false; // true가 맞음
           answerList.add(newAnswer);
           print(response.body);
         });

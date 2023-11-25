@@ -32,5 +32,7 @@ class API {
   static const String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
   static const String chatList = "${ServerEndpoints.serverEndpoint}/chat/";
   static const String chatProfile = "${ServerEndpoints.serverEndpoint}/chat/profile/";
+  /*POINT */
+  static const String pointchat = "${ServerEndpoints.serverEndpoint}/point/chat";
 
 }

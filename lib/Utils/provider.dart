@@ -42,7 +42,7 @@ class WhisperProvider with ChangeNotifier {
 }
 
 class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
-  static int UserId = 262;
+  static int UserId = 228;
   int _point = 0;
 
   int get point => _point;

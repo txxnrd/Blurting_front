@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
@@ -610,7 +611,8 @@ class _AnswerItemState extends State<AnswerItem> {
   void _showProfileModal(BuildContext context, bool isAlready) {
 
     enoughPoint = true;
-
+    isValid = false;
+    
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -690,6 +692,12 @@ class _AnswerItemState extends State<AnswerItem> {
                           Column(
                             children: [
                               GestureDetector(
+                                onTap: (!isAlready) ? () async {
+                                  await checkPoint(widget.token);
+                                  setState(() {
+                                    if (!isAlready && enoughPoint) isTap(true);
+                                  });
+                                } : null,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 20, bottom: 5),
                                   child: Stack(
@@ -722,12 +730,6 @@ class _AnswerItemState extends State<AnswerItem> {
                                     ],
                                   ),
                                 ),
-                                onTap: () async {
-                                  await checkPoint(widget.token);
-                                  setState(() {
-                                    if (!isAlready && enoughPoint) isTap(true);
-                                  });
-                                },
                               ),
                               if (!isAlready)
                                 Text(
@@ -1156,7 +1158,10 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   Future<void> checkPoint(String token) async {
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/point/chat');
+
+    print('포인트 확인');     // 확인만 하고 차감은 X
+
+    final url = Uri.parse(API.pointchat);     // 포인트 확인하는 api로 바꿔서 해야 한다... ㄱ-
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -1167,6 +1172,7 @@ class _AnswerItemState extends State<AnswerItem> {
 
     if (response.statusCode == 200) {
       print('요청 성공');
+      print(response.body);
 
       if(responseData == false){
         print('포인트 부족');
@@ -1179,6 +1185,10 @@ class _AnswerItemState extends State<AnswerItem> {
           });
         }
       }
+      else {
+        Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+      }
+
     } else {
       print(response.statusCode);
       throw Exception('프로필을 로드하는 데 실패했습니다');
@@ -1186,7 +1196,9 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   Future<void> startWhisper(String token) async {
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/point/chat');
+    print('귓속말 걸기');
+
+    final url = Uri.parse(API.pointchat);
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -1198,15 +1210,15 @@ class _AnswerItemState extends State<AnswerItem> {
     if (response.statusCode == 200) {
       print('요청 성공');
 
-      if (responseData != false) {
+      if (responseData != false || responseData['point'] >= 10) {
         widget.socket.emit('create_room', widget.userId);
         print("${widget.userId}에게 귓속말 거는 중...");
-      
-        Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+
+        Provider.of<UserProvider>(context, listen: false).point =
+            responseData['point'];
         print('귓속말 포인트 차감: $responseData');
       }
     } else {
-
       print(response.statusCode);
       throw Exception('프로필을 로드하는 데 실패했습니다');
     }
