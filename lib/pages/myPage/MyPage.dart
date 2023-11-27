@@ -169,7 +169,10 @@ class _MyPage extends State<MyPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: <Widget>[
-          pointAppbar(point: 120),
+          pointAppbar(
+              point: 120,
+              userToken:
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjZUMDE6MzU6MjEuNDU0WiIsImlhdCI6MTcwMDkzMDEyMSwiZXhwIjoxNzAwOTMzNzIxfQ.MZbWII_KZtuxtJma2mhXddZBio9OTU5dYQSGAtVrnyE'),
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(

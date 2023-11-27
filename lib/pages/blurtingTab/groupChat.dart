@@ -123,7 +123,10 @@ class _GroupChat extends State<GroupChat> {
           ],
         ),
         actions: <Widget>[
-          pointAppbar(point: 120),
+          pointAppbar(
+              point: 120,
+              userToken:
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjVUMjA6NTQ6NDMuOTExWiIsImlhdCI6MTcwMDkxMzI4MywiZXhwIjoxNzAwOTE2ODgzfQ.v1fR-Gm8fH9rC5ZrHchBwtCxeubRNGMPcCOISjxoyQ0'),
         ],
         title: Column(
           children: [

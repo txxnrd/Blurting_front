@@ -195,7 +195,10 @@ class _Whisper extends State<Whisper> {
           ],
         ),
         actions: <Widget>[
-          pointAppbar(point: 120),
+          pointAppbar(
+              point: 120,
+              userToken:
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjVUMjA6NTQ6NDMuOTExWiIsImlhdCI6MTcwMDkxMzI4MywiZXhwIjoxNzAwOTE2ODgzfQ.v1fR-Gm8fH9rC5ZrHchBwtCxeubRNGMPcCOISjxoyQ0'),
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(
@@ -236,7 +239,8 @@ class _Whisper extends State<Whisper> {
                                                 height: 100,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     color: mainColor.lightGray
                                                         .withOpacity(0.5)),
                                                 alignment: Alignment.topCenter,
@@ -251,7 +255,8 @@ class _Whisper extends State<Whisper> {
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontSize: 10,
-                                                            fontFamily: "Heebo"),
+                                                            fontFamily:
+                                                                "Heebo"),
                                                       ),
                                                       Text(
                                                         '채팅 상대방과 다시는 매칭되지 않습니다.',
@@ -260,7 +265,8 @@ class _Whisper extends State<Whisper> {
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontSize: 10,
-                                                            fontFamily: "Heebo"),
+                                                            fontFamily:
+                                                                "Heebo"),
                                                       ),
                                                     ],
                                                   ),
@@ -276,7 +282,8 @@ class _Whisper extends State<Whisper> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      color: mainColor.MainColor),
+                                                      color:
+                                                          mainColor.MainColor),
                                                   height: 50,
                                                   // color: mainColor.MainColor,
                                                   child: Center(
@@ -292,7 +299,8 @@ class _Whisper extends State<Whisper> {
                                                   ),
                                                 ),
                                                 onTap: () {
-                                                  widget.socket.emit('leave_room',
+                                                  widget.socket.emit(
+                                                      'leave_room',
                                                       widget.roomId);
                                                   print('채팅 나가는 중...');
                                                   Navigator.pop(context);
@@ -320,7 +328,8 @@ class _Whisper extends State<Whisper> {
                                                     fontFamily: 'Heebo',
                                                     color: Colors.white,
                                                     fontSize: 20,
-                                                    fontWeight: FontWeight.w500),
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
                                             ),
                                           ),

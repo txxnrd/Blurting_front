@@ -62,7 +62,6 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _chatListItemState extends State<ChatListItem> {
-  
   void _leaveRoom(BuildContext context) {
     showDialog(
       context: context,
@@ -140,7 +139,8 @@ class _chatListItemState extends State<ChatListItem> {
                                     ),
                                   ),
                                   onTap: () {
-                                    widget.socket.emit('leave_room', widget.roomId);
+                                    widget.socket
+                                        .emit('leave_room', widget.roomId);
                                     print('채팅 나가는 중...');
                                     Navigator.pop(context);
                                   },
@@ -453,8 +453,9 @@ class _chattingList extends State<ChattingList> {
       }
     });
 
-    widget.socket.on('leave_room', (data) {     // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
-                                                // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
+    widget.socket.on('leave_room', (data) {
+      // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
+      // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
       print(data);
       if (data['userId'] == UserProvider.UserId) {
         for (int i = 0; i < chatLists.length; i++) {
@@ -492,14 +493,16 @@ class _chattingList extends State<ChattingList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: <Widget>[
-          pointAppbar(point: 120),
+          pointAppbar(
+              point: 120,
+              userToken:
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjVUMjA6NTQ6NDMuOTExWiIsImlhdCI6MTcwMDkxMzI4MywiZXhwIjoxNzAwOTE2ODgzfQ.v1fR-Gm8fH9rC5ZrHchBwtCxeubRNGMPcCOISjxoyQ0'),
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(
               icon: Image.asset('assets/images/setting.png'),
               color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
           ),
         ],
