@@ -205,6 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text('회원가입',
                     style: TextStyle(
                       fontSize: 20,
+                      color: Colors.white,
                     ),
                   ),
                 ),
