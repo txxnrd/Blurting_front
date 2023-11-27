@@ -57,5 +57,8 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+    <key>FirebaseMessagingAutoInitEnabled</key>
+    <true/>
+
 </dict>
 </plist>
