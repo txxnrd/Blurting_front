@@ -1,18 +1,64 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm', 'ko');
+
+int currentIndex = 0; // 현재 보고 있는 페이지
+int _questionNumber = 0; // 최신 질문 번호
+int currentQuestionId = 0;
+String _question = '';
+String day = 'Day1';
+
+DateTime _parseDateTime(String? dateTimeString) {
+  if (dateTimeString == null) {
+    return DateTime(1, 11, 30, 0, 0, 0, 0); // 혹은 다른 기본 값으로 대체
+  }
+
+  try {
+    return DateTime.parse(dateTimeString);
+  } catch (e) {
+    print('Error parsing DateTime: $e');
+    return DateTime.now(); // 혹은 다른 기본 값으로 대체
+  }
+}
+
+class QuestionItem extends StatelessWidget {
+  final int questionNumber;
+  final String question;
+
+  QuestionItem(
+      {super.key, required this.questionNumber, required this.question});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Q$questionNumber. $question',
+      style: TextStyle(
+        fontFamily: 'Pretendard',
+        fontSize: 15,
+        color: Color.fromRGBO(134, 134, 134, 1),
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+}
 
 class GroupChat extends StatefulWidget {
   final IO.Socket socket;
   final String token;
+  static bool pointValid = false;
 
   GroupChat({required this.socket, Key? key, required this.token})
       : super(key: key);
@@ -21,65 +67,22 @@ class GroupChat extends StatefulWidget {
   _GroupChat createState() => _GroupChat();
 }
 
-class QuestionItem extends StatelessWidget {
-  final int questionNumber;
-  final String question;
-
-  QuestionItem({required this.questionNumber, required this.question});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        'Q$questionNumber. $question',
-        style: TextStyle(
-          fontFamily: 'Pretendard',
-          fontSize: 15,
-          color: Color.fromRGBO(134, 134, 134, 1),
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-}
-
-class QuestionNumber extends StatelessWidget {
-  final int questionNumber;
-
-  QuestionNumber({required this.questionNumber});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 10),
-      child: Text(
-        '$questionNumber',
-        style: TextStyle(
-            fontFamily: "Heedo",
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            color: mainColor.MainColor),
-      ),
-    );
-  }
-}
-
 class _GroupChat extends State<GroupChat> {
   TextEditingController _controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  List<bool> isBlock = List<bool>.filled(10, false);
+  late DateTime lastTime = DateTime.now();
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      fetchComments(widget.token); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
+      fetchLatestComments(widget.token); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
     });
 
     widget.socket.on('create_room', (data) {
       print(data);
-
-      // 서버로부터 roomId를 전달받아서 해당 room으로 화면 전환,
-      String roomId = data;
+      print('${data['nickname']}, ${data['roomId']}');
 
       Navigator.push(
         context,
@@ -87,10 +90,40 @@ class _GroupChat extends State<GroupChat> {
             builder: (context) => Whisper(
                 token: widget.token,
                 socket: widget.socket,
-                userName: '새로운 채팅방',
-                roomId: roomId)),
-      );
+                userName: data['nickname'] as String? ?? '',
+                roomId: data['roomId'] as String? ?? '')),
+      ).then((value) {
+        setState(() {
+          fetchIndexComments(widget.token, currentIndex);
+        });
+      });
     });
+
+    loadTime();
+
+    print(lastTime);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    saveTime();
+  }
+
+  // 데이터를 로컬에 저장하는 함수
+  saveTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('timeInSeconds', DateTime.now().toString());
+  }
+
+  // 저장된 데이터를 로컬에서 불러오는 함수
+  loadTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
+    });
+    Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
   }
 
   @override
@@ -101,73 +134,64 @@ class _GroupChat extends State<GroupChat> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(48, 48, 48, 1),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        toolbarHeight: 244,
-        flexibleSpace: Stack(
+        toolbarHeight: 220,
+        title: Stack(
+          alignment: Alignment.center,
           children: [
-            ClipRRect(
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(color: Colors.transparent))),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     image: DecorationImage(
-            //       image: AssetImage('assets/images/body_background.png'),
-            //       fit: BoxFit.cover,
-            //       colorFilter: ColorFilter.mode(
-            //           Colors.white.withOpacity(1), BlendMode.dstATop),
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-        actions: <Widget>[pointAppbar(point: 120)],
-        title: Column(
-          children: [
-            Container(
-                margin: EdgeInsets.only(top: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Day1',
-                        style: TextStyle(
-                            fontFamily: "Heedo",
-                            fontSize: 40,
-                            fontWeight: FontWeight.w700,
-                            color: mainColor.MainColor),
-                      ),
-                    ),
-                  ],
-                )),
-            Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    QuestionNumber(questionNumber: 1),
-                    QuestionNumber(questionNumber: 2),
-                    QuestionNumber(questionNumber: 3),
-                    QuestionNumber(questionNumber: 4),
-                    QuestionNumber(questionNumber: 5),
-                    QuestionNumber(questionNumber: 6),
-                    QuestionNumber(questionNumber: 7),
-                    QuestionNumber(questionNumber: 8),
-                    QuestionNumber(questionNumber: 9),
-                  ],
-                )),
+            Positioned(
+              left: 0,
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Color.fromRGBO(48, 48, 48, 1),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            Column(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          day,
+                          style: TextStyle(
+                              fontFamily: "Heebo",
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                              color: mainColor.MainColor),
+                        ),
+                      ],
+                    )),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: 25,
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        QuestionNumber(1),
+                        QuestionNumber(2),
+                        QuestionNumber(3),
+                        QuestionNumber(4),
+                        QuestionNumber(5),
+                        QuestionNumber(6),
+                        QuestionNumber(7),
+                        QuestionNumber(8),
+                        QuestionNumber(9),
+                      ],
+                    )),
+              ],
+            ),
+            Positioned(right: 0, child: pointAppbar()),
           ],
         ),
         bottom: PreferredSize(
@@ -192,7 +216,7 @@ class _GroupChat extends State<GroupChat> {
                   ),
                 ),
               ),
-              QuestionItem(questionNumber: 1, question: '추어탕 좋아하세요?'),
+              QuestionItem(questionNumber: currentIndex, question: _question),
             ],
           ),
         ),
@@ -201,7 +225,6 @@ class _GroupChat extends State<GroupChat> {
       body: Stack(
         children: [
           Container(
-            // padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -210,56 +233,85 @@ class _GroupChat extends State<GroupChat> {
               ),
             ),
           ),
-          // Container(
-          //   height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-          //   color: Colors.white.withOpacity(0.5),
-          // ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  padding: EdgeInsets.only(top: 260), // 시작 위치에 여백 추가
-                  child: Column(
+                child: Container(
+                  margin: EdgeInsets.only(top: 220), // 시작 위치에 여백 추가
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 20, top: 10),
+                          child: Column(
+                            children: <Widget>[
+                              for (var answer in answerList)
+                                answer, // answerList에 있는 내용 순회하며 추가
+                              AnswerItem(
+                                message: 'd',
+                                isLiked: false,
+                                likedNum: 2,
+                                socket: widget.socket,
+                                userId: 265,
+                                userName: 'd',
+                                token: widget.token,
+                                isAlready: false,
+                                image: 'F',
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              if (Provider.of<GroupChatProvider>(context).isPocus)
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  margin: EdgeInsets.all(10),
+                  width: 73,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Provider.of<GroupChatProvider>(context).pointValid
+                        ? mainColor.MainColor
+                        : Colors.white,
+                  ),
+                  child: Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(left: 20, top: 10),
-                        child: Column(
-                          children: <Widget>[
-                            AnswerItem(
-                                userName: '정원',
-                                message: '하하\n그냥 잘까',
-                                // jsonData: data,
-                                socket: widget.socket,
-                                userId: 36,
-                                isAlready: false),
-                            AnswerItem(
-                                userName: '개굴',
-                                message: '아 목 아파 감기 걸렷나',
-                                // jsonData: data,
-                                socket: widget.socket,
-                                userId: 6,
-                                isAlready: true),
-                            AnswerItem(
-                                userName: '감기',
-                                message: '양치하고 자야겟다..',
-                                // jsonData: data,
-                                socket: widget.socket,
-                                userId: 7,
-                                isAlready: false),
-                            for (var answer in answerList)
-                              answer, // answerList에 있는 내용 순회하며 추가
-                          ],
-                        ),
+                          margin: EdgeInsets.only(left: 5, right: 3),
+                          child: Image.asset(
+                            'assets/images/check.png',
+                            color: Provider.of<GroupChatProvider>(context)
+                                    .pointValid
+                                ? Colors.white
+                                : mainColor.lightGray,
+                          )),
+                      Text(
+                        '100자 이상',
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: "Heebo",
+                            color: Provider.of<GroupChatProvider>(context)
+                                    .pointValid
+                                ? Colors.white
+                                : mainColor.lightGray),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
                 ),
-              ),
               CustomInputField(
-                  controller: _controller,
-                  sendFunction: SendAnswer,
-                  now: DateTime.now().toString()),
+                controller: _controller,
+                sendFunction: SendAnswer,
+                isBlock: isBlock[currentIndex],
+                hintText: "이미 답변이 완료된 질문입니다.",
+                questionId: 1,
+              ),
             ],
           ),
         ],
@@ -267,51 +319,130 @@ class _GroupChat extends State<GroupChat> {
     );
   }
 
-  List<Widget> answerList = []; // 답변을 저장할 리스트
+  Widget QuestionNumber(int index) {
+    // 누르면
+    return Container(
+      margin: EdgeInsets.zero,
+      child: GestureDetector(
+        onTap: (_questionNumber >= index)
+            ? () {
+                currentIndex = index;
+                fetchIndexComments(widget.token, currentIndex);
+                print('');
+              }
+            : null,
+        child: AnimatedDefaultTextStyle(
+          duration: Duration(milliseconds: 500),
+          style: TextStyle(
+            fontFamily: "Heebo",
+            fontSize: currentIndex == index ? 18 : 15,
+            fontWeight: FontWeight.w500,
+            color: currentIndex == index
+                ? mainColor.MainColor
+                : _questionNumber >= index
+                    ? Color.fromRGBO(255, 125, 125, 1)
+                    : mainColor.lightGray,
+            shadows: const [
+              Shadow(
+                offset: Offset(1.0, 2.0),
+                blurRadius: 2.0,
+                color: Color.fromARGB(255, 189, 176, 176),
+              ),
+            ],
+          ),
+          child: Text(
+            '${index}',
+          ),
+        ),
+      ),
+    );
+  }
 
-  Future<void> fetchComments(String token) async {
-    // 채팅 받아오기
+  List<Widget> answerList = [];
+  bool isAlready = false;
 
-    // final userProvider = Provider.of<UserProvider>(context, listen: false);
+  Future<void> fetchLatestComments(String token) async {
+    // 딱 누르자마자 뜨는 거...
+    // 최신 QnA
+    // 이 방이 만들어진 시간에서 24시간 계산, day 띄워 주기
 
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}chat/rooms');
-    final response = await http.post(
+    DateTime createdAt;
+
+    final url = Uri.parse(API.latest);
+    final response = await http.get(
       url,
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode(<String, dynamic>{
-        // 보내 줄 데이터
-      }),
     );
 
     if (response.statusCode == 200) {
-      // 요청 성공, 답변들을 받아 오기
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
 
-      dynamic responseData = jsonDecode(response.body)['data'];
+        createdAt = _parseDateTime(responseData['createdAt']);
 
-      if (responseData is Map<String, dynamic>) {
-        final replyList = responseData['chatList'] as List<dynamic>;
-        for (final replyData in replyList) {
-          // final Chat newComment = Chat(
-          //   uid: replyData['uid'] as String? ?? '', // 댓글의 텍스트 받아오기
-          //   tid: replyData['tid'] as String? ?? '', // 댓글의 uid 받아오기
-          //   chatRoomId: replyData['chatRoomId'] as String,
-          //   chatId: replyData['chatId'] as String? ?? '',
-          //   time: replyData['time'] as String, // liked 값 설정
-          //   cText: replyData['cText'] as String? ?? '',       // uid의 프로필 사진 가져오기
-          //   like: replyData['like'] as bool,       // uid의 프로필 사진 가져오기
-          // );
-
-          // 데이터 받아 오기
-
+        if (mounted) {
           setState(() {
-            // answerList.add(newComment); // 받아 온 답변 추가하기
+            _questionNumber = responseData['questionNo'];
+            _question = responseData['question'];
+            currentIndex = _questionNumber;
+            currentQuestionId = responseData['questionId'];
+
+            Duration timeDifference =
+                DateTime.now().add(Duration(hours: 9)).difference(createdAt);
+
+            if (timeDifference >= Duration(hours: 24)) {
+              // 24시간 지났으면 2일차
+              day = 'Day2';
+              print('하루 지남');
+            }
+            if (timeDifference >= Duration(hours: 48)) {
+              // 48시간 지났으면 3일차
+              day = 'Day3';
+              print('이틀 지남');
+            }
+
+            for (final answerData in responseData['answers']) {
+              if (answerData['room'] != null) {
+                isAlready = true;
+              } else {
+                isAlready = false;
+              }
+              if (mounted) {
+                setState(() {
+                  if (answerData['userId'] == UserProvider.UserId) {
+                    answerList.add(MyChat(
+                        message: answerData['answer'],
+                        createdAt: '',
+                        read: true,
+                        isBlurting: true,
+                        likedNum: 0));
+                    isBlock[currentIndex] = false; // true가 맞음
+                  } else {
+                    answerList.add(AnswerItem(
+                      message: answerData['answer'],
+                      isLiked: false,
+                      likedNum: 2,
+                      socket: widget.socket,
+                      userId: answerData['userId'],
+                      userName: answerData['userNickname'],
+                      token: widget.token,
+                      isAlready: isAlready,
+                      image: answerData['userSex'],
+                    ));
+                  }
+                });
+              }
+            }
           });
         }
-      } else {
-        print('Invalid response data');
+
+        print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
       }
     } else {
       print(response.statusCode);
@@ -319,34 +450,117 @@ class _GroupChat extends State<GroupChat> {
     }
   }
 
-  void SendAnswer(String answer, String now) async {
-    // 입력한 내용을 ListTile에 추가
-    Widget newAnswer = MyChat(
-      message: answer,
-      createdAt: now,
-    );
+  Future<void> fetchIndexComments(String token, int no) async {
+    // 선택된 QnA
+    // 선택된 QnA로 화면 새로 그리기
 
-    final url = Uri.parse('uri');
-    String token = widget.token;
-
-    final response = await http.put(
-      // 서버에 답변 전송하기
+    final url = Uri.parse('${API.answerNo}$no');
+    final response = await http.get(
       url,
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({'answer': answer}),
     );
 
     if (response.statusCode == 200) {
-      // 성공적으로 응답
-    } else {
-      // 요청 실패 시 처리
-    }
+      try {
+        answerList.clear();
 
-    // 리스트에 추가
-    answerList.add(newAnswer);
-    setState(() {});
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            currentIndex = responseData['questionNo'];
+            _question = responseData['question'];
+            currentQuestionId = responseData['questionId'];
+          });
+
+          for (final answerData in responseData['answers']) {
+            if (answerData['room'] != null) {
+              isAlready = true;
+            } else {
+              isAlready = false;
+            }
+
+            setState(() {
+              if (answerData['userId'] == UserProvider.UserId) {
+                answerList.add(MyChat(
+                    message: answerData['answer'],
+                    createdAt: '',
+                    read: true,
+                    isBlurting: true,
+                    likedNum: 0));
+                isBlock[currentIndex] = false; // true가 맞음
+              } else {
+                answerList.add(AnswerItem(
+                  // AnswerItem로 바꿔라
+                  message: answerData['answer'],
+                  isLiked: false,
+                  likedNum: 2,
+                  socket: widget.socket,
+                  userId: answerData['userId'],
+                  userName: answerData['userNickname'],
+                  token: widget.token,
+                  isAlready: isAlready,
+                  image: answerData['userSex'],
+                ));
+              }
+            });
+          }
+        }
+
+        print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+    }
+  }
+
+  Future<void> SendAnswer(String answer, int questionId) async {
+    // 입력한 내용을 ListTile에 추가
+    Widget newAnswer = MyChat(
+      message: answer,
+      createdAt: '',
+      read: true,
+      isBlurting: true,
+      likedNum: 0,
+    );
+
+    String token = widget.token;
+    final url = Uri.parse(API.answer);
+
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'questionId': currentQuestionId, 'answer': answer}));
+
+    if (response.statusCode == 201) {
+      if (response.body != 'Created') {
+        Map responseData = jsonDecode(response.body);
+        Provider.of<UserProvider>(context, listen: false).point =
+            responseData['point'];
+        print(Provider.of<UserProvider>(context, listen: false).point);
+      } else {
+        print('포인트 반환 X');
+      }
+
+      // 성공적으로 응답
+      if (mounted) {
+        setState(() {
+          isBlock[currentIndex] = false; // true가 맞음
+          answerList.add(newAnswer);
+          print(response.body);
+        });
+      }
+    } else {
+      print('요청 실패');
+      print(response.statusCode);
+    }
   }
 }

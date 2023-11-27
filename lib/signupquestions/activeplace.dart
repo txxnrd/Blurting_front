@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blurting/colors/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -96,8 +97,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.2, // 시작 게이지 값
-      end: 0.3, // 종료 게이지 값
+      begin: 2/15, // 시작 게이지 값
+      end: 3/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -156,7 +157,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"region": "string" }), // JSON 형태로 인코딩
+      body: json.encode({"region": content }), // JSON 형태로 인코딩
     );
     print(response.body);
 
@@ -181,26 +182,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
-  }
-  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('인증 실패'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('닫기'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
   void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
     final snackBar = SnackBar(
@@ -227,6 +208,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -239,12 +221,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
             _sendBackRequest();
             },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -318,13 +295,13 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xFF868686), // 초기 테두리 색상
+                        color: Color(DefinedColor.lightgrey), // 초기 테두리 색상
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Text(
-                      (content == '') ? '동명(읍,면)으로 검색 (ex. 안암동)' : content,
+                      (content == '') ? '구명으로 검색 (ex. 강남구)' : content,
                       style: TextStyle(
                         color: Color(0xFF303030),
                         fontFamily: 'Pretendard',
@@ -338,43 +315,40 @@ class _ActivePlacePageState extends State<ActivePlacePage>
 
             SizedBox(height: 331),
 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: (IsValid)
-                        ? () {
-                      _sendPostRequest();
-                          }
-                        : null,
-                    child: Text(
-                      '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }

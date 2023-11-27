@@ -55,8 +55,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.4, // 시작 게이지 값
-      end: 0.5, // 종료 게이지 값
+      begin: 4/15, // 시작 게이지 값
+      end: 5/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -188,12 +188,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
             _sendBackRequest();
             },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -389,11 +384,9 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                 ),
               ],
             ),
-            SizedBox(
-              height: 223,
-            ),
+            
             // 두 버튼 사이의 간격 조정
-            // SizedBox(height: 255),
+            SizedBox(height: 25),
             Container(
               width: 180,
               height: 12,
@@ -424,42 +417,41 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
             SizedBox(
               height: 21,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                Container(
-                  width: width * 0.9,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFF66464),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 0,
-                      padding: EdgeInsets.all(0),
-                    ),
-                    onPressed: (IsValid)
-                        ? () {
-                      _sendPostRequest();
-                          }
-                        : null,
-                    child: Text(
-                      '다음',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Pretendard',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }

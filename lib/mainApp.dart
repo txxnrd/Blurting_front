@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/homeTab/Home.dart';
-import 'package:blurting/MyPage.dart';
+import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
@@ -16,13 +16,12 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token =
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsInNpZ25lZEF0IjoiMjAyMy0xMS0xNlQwOTo1NToyOC4yNzZaIiwiaWF0IjoxNzAwMTI4NTI4LCJleHAiOjE3MDAxMzIxMjh9.YOkapf-iyktKq_i-XVc62g8ky53C05CCGdXY18fqXX8';  
-IO.Socket socket = IO.io(
-      '${ServerEndpoints.socketServerEndpoint}whisper',
-      <String, dynamic>{
-        'transports': ['websocket'],
-        'auth': {'authorization': 'Bearer $token'},
+  static String token = '';
+  IO.Socket socket = IO
+      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+    'transports': ['websocket'],
+    'auth': {'authorization': 'Bearer $token'},
+    // 'reconnectionAttempts': 0,
   });
 
   late List<Widget> _pages;
@@ -53,9 +52,9 @@ IO.Socket socket = IO.io(
       extendBody: true,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: [
+        decoration: BoxDecoration(boxShadow: const [
           BoxShadow(
-            color: const Color.fromARGB(255, 212, 212, 212), // 그림자 색상
+            color: Color.fromARGB(255, 212, 212, 212), // 그림자 색상
             blurRadius: 20, // 그림자의 흐림 정도
             spreadRadius: 4, // 그림자의 확산 정도
             offset: Offset(0, 1), // 그림자의 위치 (가로, 세로)
@@ -128,7 +127,7 @@ class TabItem extends StatelessWidget {
   final String name;
 
   TabItem(
-      {required this.currentIndex, required this.image, required this.name});
+      {super.key, required this.currentIndex, required this.image, required this.name});
 
   @override
   Widget build(BuildContext context) {

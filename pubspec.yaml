@@ -31,11 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: ^1.0.4
+  url_launcher: ^6.2.1
   location: ^5.0.3
   smooth_page_indicator: ^1.0.0+2
   web_socket_channel: ^2.4.0
   http: ^1.1.0
-  geolocator: ^7.7.1
+  geolocator: ^10.1.0
+  firebase_core: ^2.23.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -46,6 +48,15 @@ dependencies:
   dio: ^5.3.3
   shared_preferences: ^2.2.2
   intl: ^0.18.1
+  flarelane_flutter: 1.4.0
+  top_snackbar_flutter: ^3.1.0
+  flutter_native_splash: ^2.3.6
+  animated_splash_screen: ^1.3.0
+  contacts_service: ^0.6.3
+  permission_handler: ^11.0.1
+  firebase_messaging: ^14.7.5
+  flutter_local_notifications: ^16.1.0
+  cloud_firestore: ^4.13.2
 
 dev_dependencies:
   flutter_test:
@@ -68,10 +79,18 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+
     - image/girl.png
     - image/profile_swipe_now.png
     - image/profile_swipe_next.png
     - assets/images/profile_image.png
+
+    - assets/images/girl.png
+    - image/profile_swipe_now.png
+    - image/profile_swipe_next.png
+    - assets/images/profile_man.png
+    - assets/images/profile_woman.png
+
     - assets/images/blurting_Image.png
     - assets/images/icon_group.png
     - assets/images/setting.png
@@ -89,11 +108,32 @@ flutter:
     - assets/man.png
     - assets/woman.png
     - assets/images/arrow.png
+    - assets/images/boy.png
+    - assets/woman.png
+    - assets/man.png
+    - assets/images/arrow.png
     - assets/images/match.png
     - assets/images/chat.png
     - assets/images/like.png
     - assets/images/homecard.png
-    -
+    - assets/images/boy.png
+    - assets/images/girl.png
+    - assets/images/check.png
+    - assets/images/block.png
+    - assets/images/leaveRoom.png
+    - assets/animation/girl.png
+    - assets/animation/boy.png
+    - assets/animation/leftBottom.png
+    - assets/animation/leftCenter.png
+    - assets/animation/leftTop.png
+    - assets/animation/rightBottom.png
+    - assets/animation/rightTop.png
+    - assets/images/setting_boy.png
+    - assets/images/setting_girl.png
+    - assets/images/heart.png
+    - assets/images/alert.png
+
+
   fonts:
     - family: Pretendard
       fonts:
@@ -116,7 +156,7 @@ flutter:
         - asset: assets/fonts/Pretendard-Black.ttf
           weight: 900
 
-    - family: Heedo
+    - family: Heebo
       fonts:
         - asset: assets/fonts/Heebo-Thin.ttf
         - asset: assets/fonts/Heebo-ExtraLight.ttf
