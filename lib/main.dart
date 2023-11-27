@@ -25,6 +25,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
         // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
       ],
       child: MyApp(),

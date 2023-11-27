@@ -191,7 +191,7 @@ class _GroupChat extends State<GroupChat> {
                     )),
               ],
             ),
-            Positioned(right: 0, child: pointAppbar()),
+            Positioned(right: 0, child: pointAppbar(token: widget.token,)),
           ],
         ),
         bottom: PreferredSize(

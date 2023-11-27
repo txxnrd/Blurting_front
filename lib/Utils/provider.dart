@@ -59,7 +59,7 @@ Future<int> getuserId() async {
   int userId = prefs.getInt('userId') ?? -1;
   return userId;
 }
-=======
+
 class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
   static int UserId = 228;
   int _point = 0;
