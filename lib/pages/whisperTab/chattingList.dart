@@ -506,7 +506,7 @@ class _chattingList extends State<ChattingList> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            // pointAppbar(),
+            pointAppbar(token: widget.token),
           SizedBox(width: 10),
           ],
           bottom: PreferredSize(

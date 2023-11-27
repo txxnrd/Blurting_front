@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 
 import 'dart:io';
 import '../../config/app_config.dart';
+import 'package:http/http.dart' as http;
 
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
@@ -236,10 +237,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
 }
 
 class pointAppbar extends StatelessWidget {
-  final int point;
-  final String userToken;
+  final String token;
 
-  pointAppbar({Key? key, required this.point, required this.userToken})
+  pointAppbar({Key? key, required this.token})
       : super(key: key);
 
   Future<void> fetchPointAdd() async {
@@ -321,7 +321,7 @@ class pointAppbar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PointHistoryPage(userToken: userToken)),
+                builder: (context) => PointHistoryPage(userToken: token)),
           );
         },
         child: Container(

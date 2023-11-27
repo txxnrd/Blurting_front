@@ -248,7 +248,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           actions: <Widget>[
-            PointAppbar(point: 100),
+            // pointAppbar(userToken: ),
             IconButton(
               icon: Icon(Icons.settings),
               color: Color.fromRGBO(48, 48, 48, 1),
