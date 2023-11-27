@@ -93,9 +93,9 @@
     },
     {
       "name": "cross_file",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/cross_file-0.3.3+6",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/cross_file-0.3.3+7",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "crypto",
@@ -123,7 +123,7 @@
     },
     {
       "name": "dio",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/dio-5.3.3",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/dio-5.3.4",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -213,19 +213,19 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/flutter_lints-2.0.3",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/flutter_lints-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter_local_notifications",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/flutter_local_notifications-16.1.0",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/flutter_local_notifications-16.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -255,13 +255,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_test",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -393,7 +393,7 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/lints-2.1.1",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/lints-3.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -483,31 +483,37 @@
     },
     {
       "name": "permission_handler",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler-11.0.1",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler-11.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "permission_handler_android",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_android-11.1.0",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_android-12.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "permission_handler_apple",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_apple-9.1.4",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_apple-9.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
+      "name": "permission_handler_html",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_html-0.1.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "permission_handler_platform_interface",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-3.12.0",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "permission_handler_windows",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.3",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/permission_handler_windows-0.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -591,7 +597,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -717,9 +723,9 @@
     },
     {
       "name": "url_launcher_web",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.0",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.1",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "url_launcher_windows",
@@ -782,7 +788,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-27T08:56:46.542625Z",
+  "generated": "2023-11-27T09:05:11.332601Z",
   "generator": "pub",
   "generatorVersion": "3.2.0"
 }

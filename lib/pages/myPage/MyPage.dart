@@ -141,10 +141,7 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-    // var savedToken = getToken();
-    var savedToken =
-
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+    var savedToken = getToken();
 
     print(savedToken);
     var response = await http.get(

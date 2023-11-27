@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:blurting/settings/setting.dart';
 import 'package:blurting/signupquestions/hobby.dart';
 import 'package:blurting/signupquestions/token.dart';

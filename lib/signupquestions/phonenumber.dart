@@ -299,7 +299,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-<<<<<<< HEAD
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -318,9 +317,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
             },
           ),
         ],
-=======
-        leading:SizedBox(),
->>>>>>> 2480ca8173e152f0f1044d3947c0c2b367027813
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
