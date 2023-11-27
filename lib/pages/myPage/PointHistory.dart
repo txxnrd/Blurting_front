@@ -5,6 +5,7 @@ import 'dart:io';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:blurting/signupquestions/token.dart';
 
 class PointHistoryPage extends StatefulWidget {
   final String userToken;
@@ -26,9 +27,9 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     if (!mounted) return [];
     print('fetchPointAdd called');
     var url = Uri.parse(API.pointadd);
-    // var savedToken = getToken();
-    var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
+    var savedToken = getToken();
+    // var savedToken =
+    //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
     print(savedToken);
 
     try {
