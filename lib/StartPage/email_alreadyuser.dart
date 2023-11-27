@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/welcomepage.dart';
@@ -13,48 +12,25 @@ import 'package:http/http.dart' as http;
 
 import '../config/app_config.dart';
 
-class EmailPage extends StatefulWidget {
-  final String selectedGender;
-  final String domain;
-
-  EmailPage({required this.selectedGender, required this.domain});
+class EmailAlreadyUserPage extends StatefulWidget {
   @override
-  _EmailPageState createState() => _EmailPageState();
+  _EmailAlreadyUserPageState createState() => _EmailAlreadyUserPageState();
 }
 
-class _EmailPageState extends State<EmailPage>
+class _EmailAlreadyUserPageState extends State<EmailAlreadyUserPage>
     with SingleTickerProviderStateMixin,WidgetsBindingObserver {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
-    await _animationController!.forward();
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            MainApp(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context)=> MainApp()),
     );
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this); // 생명주기 감지를 위한 옵저버 추가
-    _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
-      vsync: this,
-    );
-    _progressAnimation = Tween<double>(
-      begin: 14/15, // 시작 너비 (30%)
-      end: 15/15, // 종료 너비 (40%)
-    ).animate(
-        CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
-      ..addListener(() {
-        setState(() {});
-      });
   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -147,28 +123,29 @@ class _EmailPageState extends State<EmailPage>
     }
   }
 
+
   Future<void> _sendPostRequest() async {
     certification = true;
     print('_sendPostRequest called');
+
+    /*여기 수정 필요*/
     var url = Uri.parse(API.signupemail);
 
-    String savedToken = await getToken();
-    print(savedToken);
 
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"email":Email+'@'+widget.domain}), // JSON 형태로 인코딩
+      body: json.encode({"email":Email+'@'+Domain}), // JSON 형태로 인코딩
     );
 
-    print(json.encode({"email":Email+'@'+widget.domain}));
+    print(json.encode({"email":Email+'@'+Domain}));
     if (response.statusCode == 200 ||response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
+
 
       var data = json.decode(response.body);
 
@@ -178,6 +155,7 @@ class _EmailPageState extends State<EmailPage>
         print(token);
         await saveToken(token);
         _showVerificationSuccessedSnackBar();
+
       }
       else{
         _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니디.');
@@ -189,6 +167,7 @@ class _EmailPageState extends State<EmailPage>
       _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니다.');
     }
   }
+
   Future<void> _sendVerificationRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
@@ -213,11 +192,9 @@ class _EmailPageState extends State<EmailPage>
       {
         var token = data['accessToken'];
         var refreshtoken = data['refreshToken'];
-        var userId=data['userId'];
         print(token);
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
-        await saveuserId(userId);
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WelcomeScreen()));
 
         _increaseProgressAndNavigate();
@@ -245,16 +222,17 @@ class _EmailPageState extends State<EmailPage>
       Email = value;
     });
   }
+  String Domain ='';
+  @override
+  void InputDomain(String value) {
+    setState(() {
+      Domain = value;
+    });
+  }
   bool certification = false;
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
-    if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
-    } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
-    }
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -267,8 +245,8 @@ class _EmailPageState extends State<EmailPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-  _sendBackRequest();
-},
+            _sendBackRequest();
+          },
         ),
 
       ),
@@ -277,50 +255,7 @@ class _EmailPageState extends State<EmailPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            Stack(
-              clipBehavior: Clip.none, // 이 부분 추가
-              children: [
-                // 전체 배경색 설정 (하늘색)
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9), // 하늘색
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                // 완료된 부분 배경색 설정 (파란색)
-                Container(
-                  height: 10,
-                  width: MediaQuery.of(context).size.width *
-                      (_progressAnimation?.value ?? 0.3),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF303030),
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width *
-                          (_progressAnimation?.value ?? 0.3) -
-                      15,
-                  bottom: -10,
-                  child: Image.asset(
-                    gender == Gender.male
-                        ? 'assets/man.png'
-                        : gender == Gender.female
-                            ? 'assets/woman.png'
-                            : 'assets/signupface.png', // 기본 이미지
-                    width: 30,
-                    height: 30,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
+            SizedBox(height: 20,),
             Text(
               '이메일을 입력해주세요.',
               style: TextStyle(
@@ -336,50 +271,56 @@ class _EmailPageState extends State<EmailPage>
                   width:150,
                   height:48,
                   child:
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: '이메일 입력',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFF66464)),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: '이메일 입력',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFF66464)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFF66464)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFF66464)),
+                        ),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFF66464)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFF66464)),
-                      ),
+                      onChanged: (value) {
+                        InputEmail(value);
+                      },
                     ),
-                    onChanged: (value) {
-                      InputEmail(value);
-                    },
                   ),
-                ),
                 ),
                 SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
                 Text('@',
-                style: TextStyle(
-                  fontSize: 24
-                ),),
+                  style: TextStyle(
+                      fontSize: 24
+                  ),),
                 SizedBox(width: 4),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
                     alignment: Alignment.centerLeft,
                     height: 48, // TextField의 높이와 일치하도록 설정합니다.
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFFF66464)),
-                      borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
-                    ),
+
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        widget.domain,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                          // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                      child:  TextField(
+                        decoration: InputDecoration(
+                          hintText: '이메일 입력',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
                         ),
+                        onChanged: (value) {
+                          InputEmail(value);
+                        },
                       ),
                     ),
                   ),

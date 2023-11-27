@@ -36,8 +36,7 @@ class ImagePageState extends State<ImagePage>
 
   Future<void> _pickImage1() async {
     count+=1;
-    if(count>=3)
-      IsValid=true;
+
     var picker = ImagePicker();
     String savedToken = await getToken();
     var image1 = await picker.pickImage(source: ImageSource.gallery);
@@ -65,6 +64,10 @@ class ImagePageState extends State<ImagePage>
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
+          if(count>=3) {
+            IsValid = true;
+          }
+
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
           print('Server returned OK');
           print('Response body: ${response.data}');
@@ -78,6 +81,7 @@ class ImagePageState extends State<ImagePage>
               print('Image 1 URL: $_image1Url');
             }
           }
+
           // URL을 저장하거나 처리하는 로직을 추가
           // print(savedUrls);
         }  else {
@@ -95,8 +99,6 @@ class ImagePageState extends State<ImagePage>
 
   Future<void> _pickImage2() async {
     count+=1;
-    if(count>=3)
-      IsValid=true;
     var picker = ImagePicker();
     String savedToken = await getToken();
     var image2 = await picker.pickImage(source: ImageSource.gallery);
@@ -124,6 +126,9 @@ class ImagePageState extends State<ImagePage>
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
+          if(count>=3) {
+            IsValid = true;
+          }
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
           print('Server returned OK');
           print('Response body: ${response.data}');
@@ -150,14 +155,16 @@ class ImagePageState extends State<ImagePage>
 
   }
   Future<void> _pickImage3() async {
+
     count+=1;
-    if(count>=3)
-      IsValid=true;
+
+
     var picker = ImagePicker();
     String savedToken = await getToken();
     var image3 = await picker.pickImage(source: ImageSource.gallery);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
+    _showImageUploadingSnackBar();
     // 새로운 이미지를 선택한 경우에만 처리
     if (image3 != null) {
       File selectedImage = File(image3.path); // 선택된 이미지 파일
@@ -181,6 +188,10 @@ class ImagePageState extends State<ImagePage>
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          if(count>=3) {
+            IsValid = true;
+            _showImageUploadingSnackBar();
+          }
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
@@ -322,7 +333,7 @@ class ImagePageState extends State<ImagePage>
 
 
   Future<void> _sendPostRequest() async {
-    _showImageUploadingSnackBar();
+
     print('_sendPostRequest called');
     String savedToken = await getToken();
     print(savedToken);

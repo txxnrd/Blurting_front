@@ -25,16 +25,6 @@ DateTime _parseDateTime(String? dateTimeString) {
   }
 }
 
-class ChattingList extends StatefulWidget {
-  final IO.Socket socket;
-  final String token;
-
-  ChattingList({required this.socket, Key? key, required this.token})
-      : super(key: key);
-
-  @override
-  _chattingList createState() => _chattingList();
-}
 
 class ChatListItem extends StatefulWidget {
   final String userName;
@@ -168,9 +158,11 @@ class _chatListItemState extends State<ChatListItem> {
                               ),
                             ),
                             onTap: () {
-                              setState(() {
-                                Navigator.of(context).pop();
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  Navigator.of(context).pop();
+                                });
+                              }
                             },
                           ),
                         ],
@@ -337,6 +329,17 @@ class _chatListItemState extends State<ChatListItem> {
   }
 }
 
+class ChattingList extends StatefulWidget {
+  final IO.Socket socket;
+  final String token;
+
+  ChattingList({required this.socket, Key? key, required this.token})
+      : super(key: key);
+
+  @override
+  _chattingList createState() => _chattingList();
+}
+
 class _chattingList extends State<ChattingList> {
   List<Widget> chatLists = [];
 
@@ -401,6 +404,7 @@ class _chattingList extends State<ChattingList> {
             if (mounted) {
               setState(() {
                 final userName = widget.userName;
+                final image = widget.image;
                 chatLists.removeAt(i);
                 chatLists.insert(
                     widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)
@@ -412,9 +416,7 @@ class _chattingList extends State<ChattingList> {
                       userName: userName,
                       latest_chat: data['chat'] as String? ?? '',
                       latest_time: latestTime,
-                      image: data['sex'] == "F"
-                          ? 'assets/woman.png'
-                          : 'assets/man.png',
+                      image: image,
                       socket: widget.socket,
                       read: read,
                     ));
@@ -427,6 +429,8 @@ class _chattingList extends State<ChattingList> {
     });
 
     widget.socket.on('out_room', (data) {
+      print('내가 방에서 나올 때');
+
       for (int i = 0; i < chatLists.length; i++) {
         Widget widget = chatLists[i];
         if (widget is ChatListItem) {
@@ -457,6 +461,8 @@ class _chattingList extends State<ChattingList> {
       // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
       // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
       print(data);
+      print(data['userId']);
+      print(UserProvider.UserId);
       if (data['userId'] == UserProvider.UserId) {
         for (int i = 0; i < chatLists.length; i++) {
           Widget widget = chatLists[i];
@@ -478,75 +484,69 @@ class _chattingList extends State<ChattingList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        automaticallyImplyLeading: false,
-        toolbarHeight: 244,
-        flexibleSpace: Stack(
-          children: [
-            ClipRRect(
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(color: Colors.transparent))),
-          ],
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: <Widget>[
-          pointAppbar(
-              point: 120,
-              userToken:
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjVUMjA6NTQ6NDMuOTExWiIsImlhdCI6MTcwMDkxMzI4MywiZXhwIjoxNzAwOTE2ODgzfQ.v1fR-Gm8fH9rC5ZrHchBwtCxeubRNGMPcCOISjxoyQ0'),
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {},
-            ),
-          ),
-        ],
-        title: Container(
-          margin: EdgeInsets.only(top: 70),
-          height: 80,
-          child: Container(
-              padding: EdgeInsets.all(13), child: ellipseText(text: 'Connect')),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size(10, 10),
-          child: Stack(
-            alignment: Alignment.centerLeft,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(244),
+        child: AppBar(
+        toolbarHeight: 80,
+          scrolledUnderElevation: 0.0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Stack(
+            alignment: Alignment.topRight,
             children: [
+              ClipRRect(
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(color: Colors.transparent))),
               Container(
-                height: 70,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
-                      Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
-                    ],
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    topLeft: Radius.circular(30),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 20, top: 20),
-                child: Text(
-                  '최근 메시지',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 15,
-                    color: Color.fromRGBO(134, 134, 134, 1),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+                margin: EdgeInsets.only(top: 80),
+                  padding: EdgeInsets.all(13),
+                  child: ellipseText(text: 'Connect')),
             ],
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            pointAppbar(),
+          SizedBox(width: 10),
+          ],
+          bottom: PreferredSize(
+            preferredSize: Size(10, 10),
+            child: Container(
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Container(
+                    height: 70,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+                          Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+                        ],
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20, top: 20),
+                    child: Text(
+                      '최근 메시지',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 15,
+                        color: Color.fromRGBO(134, 134, 134, 1),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -586,7 +586,7 @@ class _chattingList extends State<ChattingList> {
   }
 
   Future<void> fetchList(String token) async {
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/chat/rooms');
+    final url = Uri.parse(API.roomList);
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -601,9 +601,9 @@ class _chattingList extends State<ChattingList> {
 
         for (final chatData in responseData) {
           DateTime latestTime = _parseDateTime(chatData['latest_time']);
-          DateTime hasRead = _parseDateTime(chatData['has_read']);
+          DateTime hasRead = _parseDateTime(chatData['hasRead']);
 
-          bool read = hasRead.isBefore(latestTime);
+          bool read = hasRead.isAfter(latestTime);
 
           if (latestTime == hasRead) {
             read = true;
