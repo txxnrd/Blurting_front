@@ -10,6 +10,8 @@ import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:provider/provider.dart';
 import 'package:blurting/pages/myPage/PointHistory.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'dart:io';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
