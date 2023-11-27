@@ -52,7 +52,6 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _chatListItemState extends State<ChatListItem> {
-  
   void _leaveRoom(BuildContext context) {
     showDialog(
       context: context,
@@ -130,7 +129,8 @@ class _chatListItemState extends State<ChatListItem> {
                                     ),
                                   ),
                                   onTap: () {
-                                    widget.socket.emit('leave_room', widget.roomId);
+                                    widget.socket
+                                        .emit('leave_room', widget.roomId);
                                     print('채팅 나가는 중...');
                                     Navigator.pop(context);
                                   },
@@ -457,8 +457,9 @@ class _chattingList extends State<ChattingList> {
       }
     });
 
-    widget.socket.on('leave_room', (data) {     // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
-                                                // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
+    widget.socket.on('leave_room', (data) {
+      // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
+      // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
       print(data);
       print(data['userId']);
       print(UserProvider.UserId);
