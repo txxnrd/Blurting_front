@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/startpage.dart';
+import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -71,15 +71,22 @@ class _MyPage extends State<MyPage> {
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-    // String accessToken = await getToken();
-    // String refreshToken = await getRefreshToken();
-    String accessToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-    String refreshToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
 
-    print("access Token" + accessToken);
-    print("access Token" + refreshToken);
+    String accessToken = await getToken();
+    String refreshToken = await getRefreshToken();
+    print("access Token$accessToken");
+    print("refresh Token$refreshToken");
+// =======
+//     // String accessToken = await getToken();
+//     // String refreshToken = await getRefreshToken();
+//     String accessToken =
+//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+//     String refreshToken =
+//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
+
+//     print("access Token" + accessToken);
+//     print("access Token" + refreshToken);
+// >>>>>>> main
 
     var response = await http.get(
       url,
