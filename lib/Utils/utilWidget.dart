@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:blurting/config/app_config.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -13,9 +14,6 @@ import 'dart:convert';
 import 'dart:io';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
-
-
-DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
 // 상대방 말풍선 클리퍼
 class LeftTailClipper extends CustomClipper<Path> {
@@ -101,7 +99,6 @@ class CustomInputField extends StatefulWidget {
   final int questionId;
 
   CustomInputField(
-
       {required this.controller,
       this.sendFunction,
       required this.isBlock,
@@ -237,8 +234,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
 class pointAppbar extends StatelessWidget {
   final String token;
 
-  pointAppbar({Key? key, required this.token})
-      : super(key: key);
+  pointAppbar({Key? key, required this.token}) : super(key: key);
 
   Future<void> fetchPointAdd() async {
     print('fetchPointAdd called');
@@ -319,7 +315,7 @@ class pointAppbar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PointHistoryPage(userToken: token)),
+                builder: (context) => PointHistoryPage(token: token)),
           );
         },
         child: Container(
@@ -600,30 +596,36 @@ class AnswerItem extends StatefulWidget {
   final String userName;
   final String message;
   final int userId;
-  final bool isLiked;
+  final bool iLike;
   final int likedNum;
   final String token;
   final bool isAlready;
   final String image;
+  final String mbti;
+  final int answerId;
 
   AnswerItem(
       {required this.userName,
       required this.message,
       required this.socket,
       required this.userId,
-      required this.isLiked,
+      required this.iLike,
       required this.likedNum,
       required this.token,
       required this.isAlready,
-      required this.image});
+      required this.image,
+      required this.mbti,
+      required this.answerId});
 
   @override
   State<AnswerItem> createState() => _AnswerItemState();
 }
 
 class _AnswerItemState extends State<AnswerItem> {
-    bool enoughPoint = true;
-    bool isValid = false;
+  bool enoughPoint = true;
+  bool isValid = false;
+  bool iLike = false;
+  int likedNum = 0;
 
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
@@ -688,17 +690,16 @@ class _AnswerItemState extends State<AnswerItem> {
       },
     );
   }
-    
+
   void isTap(bool status) {
     isValid = status;
   }
 
 // 프로필 클릭 시 모달 띄우는 함수
   void _showProfileModal(BuildContext context, bool isAlready) {
-
     enoughPoint = true;
     isValid = false;
-    
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -768,7 +769,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                 color: mainColor.MainColor),
                           ),
                           Text(
-                            mbti.toUpperCase(),
+                            widget.mbti.toUpperCase(),
                             style: TextStyle(
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500,
@@ -778,12 +779,15 @@ class _AnswerItemState extends State<AnswerItem> {
                           Column(
                             children: [
                               GestureDetector(
-                                onTap: (!isAlready) ? () async {
-                                  await checkPoint(widget.token);
-                                  setState(() {
-                                    if (!isAlready && enoughPoint) isTap(true);
-                                  });
-                                } : null,
+                                onTap: (!isAlready)
+                                    ? () async {
+                                        await checkPoint(widget.token);
+                                        setState(() {
+                                          if (!isAlready && enoughPoint)
+                                            isTap(true);
+                                        });
+                                      }
+                                    : null,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 20, bottom: 5),
                                   child: Stack(
@@ -892,7 +896,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                       },
                                     ),
                                   ),
-                                  GestureDetector(        // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
+                                  GestureDetector(
+                                    // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.8,
@@ -973,11 +978,10 @@ class _AnswerItemState extends State<AnswerItem> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
-                              width:
-                                  MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.8,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color:  mainColor.lightGray.withOpacity(0.5)),
+                                  color: mainColor.lightGray.withOpacity(0.5)),
                               child: Stack(
                                 alignment: Alignment.centerLeft,
                                 children: [
@@ -1046,208 +1050,194 @@ class _AnswerItemState extends State<AnswerItem> {
     );
   }
 
-  bool isLiked = false;
-  int likedNum = 0;
-  String mbti = '';
-
   @override
-  void initState() {
+  void initState() {        // 처음 호출될 때에만...
     super.initState();
-    isLiked = widget.isLiked;
-    likedNum = widget.likedNum;
-    fetchProfile(widget.token);
-  }
-
-  void changeLike() {
-    setState(() {
-      if (isLiked) {
-        likedNum--;
-      } else {
-        likedNum++;
-      }
-
-      isLiked = !(isLiked);
-    });
   }
 
   // 답변 위젯
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListTile(
-        subtitle: // 답변 내용
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-              child: GestureDetector(
-                onTap: () {
-                  _showProfileModal(context, widget.isAlready); // jsonData 매개변수
-                  fetchProfile(widget.token);
-                },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Image.asset(
-                    widget.image == 'F' ? 'assets/woman.png' : 'assets/man.png',
-                  ),
+  Widget build(BuildContext context) {      // setState...
+    iLike = widget.iLike;
+    likedNum = widget.likedNum;
+
+    return ListTile(
+      subtitle: // 답변 내용
+          Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+            child: GestureDetector(
+              onTap: () {
+                _showProfileModal(context, widget.isAlready); // jsonData 매개변수
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(50)),
+                child: Image.asset(
+                  widget.image == 'F' ? 'assets/woman.png' : 'assets/man.png',
                 ),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    widget.userName,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color.fromRGBO(48, 48, 48, 1),
-                      fontWeight: FontWeight.w700,
-                    ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  widget.userName,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color.fromRGBO(48, 48, 48, 1),
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        children: [
-                          GestureDetector(
-                            onDoubleTap: () {
-                              changeLike();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                              child: ClipPath(
-                                clipper: LeftTailClipper(),
-                                child: Container(
-                                  width: 200,
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Color.fromRGBO(255, 238, 238, 1),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                            top: 10,
-                                            bottom: 10),
-                                        child: Text(
-                                          widget.message,
-                                          style: TextStyle(
-                                            fontFamily: "Pretendard",
-                                            fontSize: 10,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: (likedNum == 0) ? 10 : 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                changeLike();
-                              },
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        GestureDetector(
+                          onDoubleTap: () {
+                            changeLike(widget.token, widget.answerId);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                            child: ClipPath(
+                              clipper: LeftTailClipper(),
                               child: Container(
-                                width: (likedNum == 0) ? 15 : 25,
-                                height: 15,
+                                width: 200,
+                                padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: Color.fromRGBO(255, 210, 210, 1),
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Color.fromRGBO(255, 238, 238, 1),
                                 ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image(
-                                      image: AssetImage('assets/images/heart.png'),
-                                      color: isLiked
-                                          ? mainColor.MainColor
-                                          : Colors.white,
-                                    ),
-                                    if (likedNum != 0)
-                                      Container(
-                                        margin: EdgeInsets.only(left: 3, top: 1),
-                                        child: Text(
-                                          '$likedNum',
-                                          style: TextStyle(
-                                              color: isLiked
-                                                  ? mainColor.MainColor
-                                                  : Colors.white,
-                                              fontSize: 10,
-                                              fontFamily: 'Heebo'),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                          top: 10,
+                                          bottom: 10),
+                                      child: Text(
+                                        widget.message,
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 10,
+                                          color: Colors.black,
                                         ),
                                       ),
+                                    ),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: (likedNum == 0) ? 10 : 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              changeLike(widget.token, widget.answerId);
+                            },
+                            child: Container(
+                              width: (likedNum == 0) ? 15 : 25,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                color: Color.fromRGBO(255, 210, 210, 1),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image:
+                                        AssetImage('assets/images/heart.png'),
+                                    color: iLike
+                                        ? mainColor.MainColor
+                                        : Colors.white,
+                                  ),
+                                  if (likedNum != 0)
+                                    Container(
+                                      margin:
+                                          EdgeInsets.only(left: 3, top: 1),
+                                      child: Text(
+                                        '${likedNum}',
+                                        style: TextStyle(
+                                            color: iLike
+                                                ? mainColor.MainColor
+                                                : Colors.white,
+                                            fontSize: 10,
+                                            fontFamily: 'Heebo'),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  Future<void> fetchProfile(String token) async {
-    final url = Uri.parse(
-        '${API.answerProfile}${widget.userId}');
+  Future<void> changeLike(String token, int answerId) async {
+    print('좋아요 누름');
 
-    final response = await http.get(url, headers: {
-      'authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
+    // answerId 보내
+    final url = Uri.parse('${API.like}$answerId');
+
+    final response = await http.put(url,
+        headers: {
+          'authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        });
+
+    setState(() {       // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
+      if (iLike) {
+        likedNum--;
+      } else {
+        likedNum++;
+      }
+
+      iLike = !(iLike);
+
+      print(answerId);
     });
 
     if (response.statusCode == 200) {
       print('요청 성공');
-
-      try {
-        Map responseData = jsonDecode(response.body);
-
-        setState(() {
-          mbti = responseData['mbti'];
-        });
-
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
-    } else {
+      print(response.body);
+    }
+    else{
       print(response.statusCode);
-      throw Exception('프로필을 로드하는 데 실패했습니다');
     }
   }
 
   Future<void> checkPoint(String token) async {
+    print('포인트 확인');
 
-    print('포인트 확인');     // 확인만 하고 차감은 X
-
-    final url = Uri.parse(API.pointchat);     // 포인트 확인하는 api로 바꿔서 해야 한다... ㄱ-
+    final url = Uri.parse(API.pointcheck);
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -1260,9 +1250,9 @@ class _AnswerItemState extends State<AnswerItem> {
       print('요청 성공');
       print(response.body);
 
-      if(responseData == false){
+      if (responseData == false) {
         print('포인트 부족');
-        if(mounted){
+        if (mounted) {
           setState(() {
             enoughPoint = false;
             isTap(false);
@@ -1271,10 +1261,6 @@ class _AnswerItemState extends State<AnswerItem> {
           });
         }
       }
-      else {
-        Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
-      }
-
     } else {
       print(response.statusCode);
       throw Exception('프로필을 로드하는 데 실패했습니다');
@@ -1286,10 +1272,14 @@ class _AnswerItemState extends State<AnswerItem> {
 
     final url = Uri.parse(API.pointchat);
 
-    final response = await http.get(url, headers: {
-      'authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    });
+    final response = await http.get(
+      url,
+      headers: {
+        'authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      // body: json.encode({'userId': widget.userId})
+    );
 
     dynamic responseData = jsonDecode(response.body);
 
@@ -1363,8 +1353,13 @@ class ellipseText extends StatelessWidget {
                     color: mainColor.MainColor),
               ),
               Container(
-                  margin: EdgeInsets.only(top: 15, left: 3),
-                  child: Image.asset('assets/images/Ellipse.png'))
+                margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(color: mainColor.MainColor, width: 3)),
+              )
             ],
           ),
         ),
