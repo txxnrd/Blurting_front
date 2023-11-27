@@ -1,3 +1,4 @@
+import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -246,12 +247,11 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: <Widget>[
-          PointAppbar(point: 100),
+          pointAppbar(),
           IconButton(
             icon: Icon(Icons.settings),
             color: Color.fromRGBO(48, 48, 48, 1),
             onPressed: () {
-              // 설정 버튼을 눌렀을 때의 동작
               print('설정 버튼 클릭됨');
             },
           ),
@@ -427,32 +427,3 @@ class YourBlurtingWidget extends StatelessWidget {
   }
 }
 
-class PointAppbar extends StatelessWidget {
-  final int point;
-
-  PointAppbar({Key? key, required this.point}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Color(0xFFFF7D7D).withOpacity(0.5),
-        ),
-        child: Text(
-          '${point}p',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Heebo',
-            color: Colors.white,
-            fontSize: 15,
-          ),
-        ),
-      ),
-    );
-  }
-}
