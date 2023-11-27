@@ -8,7 +8,13 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:provider/provider.dart';
+import 'package:blurting/pages/myPage/PointHistory.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import 'dart:io';
+import '../../config/app_config.dart';
+
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
@@ -96,6 +102,7 @@ class CustomInputField extends StatefulWidget {
   final int questionId;
 
   CustomInputField(
+
       {required this.controller,
       this.sendFunction,
       required this.isBlock,
@@ -229,13 +236,94 @@ class _CustomInputFieldState extends State<CustomInputField> {
 }
 
 class pointAppbar extends StatelessWidget {
+  final int point;
+  final String userToken;
 
-  pointAppbar({super.key});
+  pointAppbar({Key? key, required this.point, required this.userToken})
+      : super(key: key);
+
+  Future<void> fetchPointAdd() async {
+    print('fetchPointAdd called');
+    var url = Uri.parse(API.pointadd);
+    var savedToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjZUMDE6MzU6MjEuNDU0WiIsImlhdCI6MTcwMDkzMDEyMSwiZXhwIjoxNzAwOTMzNzIxfQ.MZbWII_KZtuxtJma2mhXddZBio9OTU5dYQSGAtVrnyE';
+
+    print(savedToken);
+
+    try {
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+      );
+
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      print('Response Headers: ${response.headers}');
+
+      // Handle the response as needed
+      if (response.statusCode == 200) {
+        // Handle success
+        print('Points added successfully.');
+      } else {
+        // Handle error
+        print(
+            'Failed to load added points. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error occurred while loading added points: $error');
+    }
+  }
+
+  Future<void> fetchPointSubtract() async {
+    print('fetchPointSubtract called');
+    var url = Uri.parse(API.pointsubtract);
+    var savedToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjZUMDE6MzU6MjEuNDU0WiIsImlhdCI6MTcwMDkzMDEyMSwiZXhwIjoxNzAwOTMzNzIxfQ.MZbWII_KZtuxtJma2mhXddZBio9OTU5dYQSGAtVrnyE';
+
+    print(savedToken);
+
+    try {
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+      );
+
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      print('Response Headers: ${response.headers}');
+
+      // Handle the response as needed
+      if (response.statusCode == 200) {
+        // Handle success
+        print('Points subtracted successfully.');
+      } else {
+        // Handle error
+        print('Failed to subtract points. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error occurred while subtracting points: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: () {},
+        onPressed: () async {
+          print('포인트 내역 버튼 눌러짐');
+          await fetchPointAdd();
+          await fetchPointSubtract();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PointHistoryPage(userToken: userToken)),
+          );
+        },
         child: Container(
           height: 30,
           decoration: BoxDecoration(
