@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class PointHistoryPage extends StatefulWidget {
   final String userToken;
@@ -27,8 +28,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     var url = Uri.parse(API.pointadd);
     // var savedToken = getToken();
     var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMDk6MDg6MDguNzQ2WiIsImlhdCI6MTcwMTA0MzY4OCwiZXhwIjoxNzAxMDQ3Mjg4fQ.DvGnnpeRlEfquBNXKPYXD-_HQCEWaay3Tvnr9_7GsTk';
-
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
     print(savedToken);
 
     try {
@@ -75,8 +75,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     var url = Uri.parse(API.pointsubtract);
     // var savedToken = getToken();
     var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMDk6MDg6MDguNzQ2WiIsImlhdCI6MTcwMTA0MzY4OCwiZXhwIjoxNzAxMDQ3Mjg4fQ.DvGnnpeRlEfquBNXKPYXD-_HQCEWaay3Tvnr9_7GsTk';
-
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
     print(savedToken);
 
     try {
@@ -116,13 +115,98 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     }
   }
 
+  String extractTimeFromDate(String dateTimeString) {
+    try {
+      if (dateTimeString.isNotEmpty) {
+        // Split the time string
+        List<String> timeParts = dateTimeString.split(':');
+
+        // Ensure that there are at least three parts (hours, minutes, seconds)
+        if (timeParts.length >= 3) {
+          int hours = int.parse(timeParts[0]);
+          int minutes = int.parse(timeParts[1]);
+          // Split seconds and milliseconds
+          List<String> secondsAndMilliseconds = timeParts[2].split('.');
+          int seconds = int.parse(secondsAndMilliseconds[0]);
+
+          DateTime dateTime = DateTime(1, 1, 1, hours, minutes, seconds);
+
+          return DateFormat.Hms().format(dateTime);
+        }
+      }
+    } catch (e) {
+      // Handle the exception or log the error
+      print("Error parsing date-time: $e");
+    }
+
+    return 'Unknown time';
+  }
+
+// Function to extract date and time from the date-time string
+  List<String> splitDateTime(String dateTimeString) {
+    try {
+      // Ensure that the dateTimeString is not empty
+      if (dateTimeString.isNotEmpty) {
+        // Split the date-time string
+        List<String> dateTimeParts = dateTimeString.split('T');
+
+        // Ensure that there are two parts (date and time)
+        if (dateTimeParts.length == 2) {
+          String date = dateTimeParts[0];
+          String time = extractTimeFromDate(dateTimeParts[1]);
+
+          return [date, time];
+        }
+      }
+    } catch (e) {
+      // Handle the exception or log the error
+      print("Error parsing date-time: $e");
+    }
+
+    // Return a default value or handle the error as needed
+    return ['Unknown date', 'Unknown time'];
+  }
+
+// Function to group the data by date
+  Map<String, List<Map<String, dynamic>>> groupDataByDate(
+      List<Map<String, dynamic>> data) {
+    Map<String, List<Map<String, dynamic>>> groupedData = {};
+
+    for (var entry in data) {
+      String dateTimeString = entry['date'].toString();
+      List<String> dateAndTime = splitDateTime(dateTimeString);
+      String formattedDate = dateAndTime[0];
+      String formattedTime = dateAndTime[1];
+
+      if (groupedData.containsKey(formattedDate)) {
+        groupedData[formattedDate]!.add({...entry, 'time': formattedTime});
+      } else {
+        groupedData[formattedDate] = [
+          {...entry, 'time': formattedTime}
+        ];
+      }
+    }
+
+    return groupedData;
+  }
+
   Future<void> fetchDataForCurrentTab() async {
     if (mounted) {
       try {
+        List<Map<String, dynamic>> data = [];
         if (_tabController.index == 0) {
-          await fetchPointAdd(); // Fetch data for 지급내역 tab
+          data = await fetchPointAdd();
         } else if (_tabController.index == 1) {
-          await fetchPointSubtract(); // Fetch data for 사용내역 tab
+          data = await fetchPointSubtract();
+        }
+        if (mounted) {
+          setState(() {
+            if (_tabController.index == 0) {
+              earningHistoryList = data;
+            } else if (_tabController.index == 1) {
+              usageHistoryList = data;
+            }
+          });
         }
       } catch (error) {
         print('Error in fetchDataForCurrentTab: $error');
@@ -236,67 +320,122 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         children: [
           // 1. 지급내역
           FutureBuilder(
-              future: fetchDataForCurrentTab(),
-              builder: (context, snapshot) {
-                return ListView.builder(
-                  padding: EdgeInsets.all(16),
-                  itemCount: earningHistoryList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        earningHistoryList[index]['history'] ?? 'Unknown',
+            future: _tabController.index == 0 ? fetchPointAdd() : null,
+            builder: (context, snapshot) {
+              if (earningHistoryList.isEmpty) {
+                return Center(child: Text('No data available'));
+              }
+
+              // Group data by date
+              Map<String, List<Map<String, dynamic>>> groupedData =
+                  groupDataByDate(earningHistoryList);
+
+              return ListView.builder(
+                padding: EdgeInsets.all(16),
+                itemCount: groupedData.length,
+                itemBuilder: (context, index) {
+                  String date = groupedData.keys.elementAt(index);
+                  List<Map<String, dynamic>> dateEntries = groupedData[date]!;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        date, // Show only date
                         style: TextStyle(
                           fontFamily: "Pretendard",
                           fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),
-                      ),
-                      trailing: Text(
-                        earningHistoryList[index]['date'] ?? '',
-                        style: TextStyle(
-                          fontFamily: "Pretendard",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
+                          fontSize: 17,
                           color: Colors.grey,
                         ),
+                        textAlign: TextAlign.right,
                       ),
-                    );
-                  },
-                );
-              }),
+                      for (var entry in dateEntries)
+                        ListTile(
+                          title: Text(
+                            entry['history'] ?? 'Unknown',
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                              color: Colors.black,
+                            ),
+                          ),
+                          trailing: Text(
+                            entry['time'] ?? 'Unknown',
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
 
           // 2. 사용내역
           FutureBuilder(
-              future: fetchDataForCurrentTab(),
-              builder: (context, snapshot) {
-                return ListView.builder(
-                  padding: EdgeInsets.all(16),
-                  itemCount: usageHistoryList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        usageHistoryList[index]['history'] ?? 'Unknown',
+            future: _tabController.index == 1 ? fetchPointSubtract() : null,
+            builder: (context, snapshot) {
+              if (usageHistoryList.isEmpty) {
+                return Center(child: Text('No data available'));
+              }
+
+              // Group data by date
+              Map<String, List<Map<String, dynamic>>> groupedData =
+                  groupDataByDate(usageHistoryList);
+
+              return ListView.builder(
+                padding: EdgeInsets.all(16),
+                itemCount: groupedData.length,
+                itemBuilder: (context, index) {
+                  String date = groupedData.keys.elementAt(index);
+                  List<Map<String, dynamic>> dateEntries = groupedData[date]!;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        date, // Show only date
                         style: TextStyle(
                           fontFamily: "Pretendard",
                           fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),
-                      ),
-                      trailing: Text(
-                        usageHistoryList[index]['date'] ?? '',
-                        style: TextStyle(
-                          fontFamily: "Pretendard",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
+                          fontSize: 17,
                           color: Colors.grey,
                         ),
                       ),
-                    );
-                  },
-                );
-              }),
+                      for (var entry in dateEntries)
+                        ListTile(
+                          title: Text(
+                            entry['history'] ?? 'Unknown',
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                              color: Colors.black,
+                            ),
+                          ),
+                          trailing: Text(
+                            entry['time'] ?? 'Unknown',
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );

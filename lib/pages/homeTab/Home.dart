@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class CardItem {
   final String userName;
