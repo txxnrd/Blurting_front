@@ -65,17 +65,17 @@ class _MyPage extends State<MyPage> {
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("수정 버튼 눌러짐");
-    var token = getToken();
-    print(token);
+    // var token = getToken();
+    // print(token);
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
 
-    String accessToken = await getToken();
-    String refreshToken = await getRefreshToken();
-    print("access Token$accessToken");
-    print("refresh Token$refreshToken");
+    // String accessToken = await getToken();
+    // String refreshToken = await getRefreshToken();
+    // print("access Token$accessToken");
+    // print("refresh Token$refreshToken");
 // =======
 //     // String accessToken = await getToken();
 //     // String refreshToken = await getRefreshToken();
@@ -92,7 +92,7 @@ class _MyPage extends State<MyPage> {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer ${widget.token}',
       },
     );
 
@@ -138,16 +138,16 @@ class _MyPage extends State<MyPage> {
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
     // var savedToken = getToken();
-    var savedToken =
+    // var savedToken =
         //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
+        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
 
-    print(savedToken);
+    // print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
+        'Authorization': 'Bearer ${widget.token}',
       },
     );
     print('Response Status Code: ${response.statusCode}');

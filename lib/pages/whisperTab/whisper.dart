@@ -2,16 +2,13 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/time.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-
-DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
-DateFormat dateFormatDate = DateFormat('yyyy년 MM월 dd일'); // 필요한 포맷으로 수정
 
 class Whisper extends StatefulWidget {
   final IO.Socket socket;
@@ -81,14 +78,14 @@ class _Whisper extends State<Whisper> {
       bool read = data['read']; // (읽음 표시)
       Widget newAnswer;
 
-      String formattedDate = dateFormatDate
+      String formattedDate = dateFormatFull
           .format(_parseDateTime(data['createdAt'] as String? ?? ''));
 
       if (userId == UserProvider.UserId) {
         // userProvider
         newAnswer = MyChat(
           message: chat,
-          createdAt: dateFormat
+          createdAt: dateFormatAA
               .format(_parseDateTime(data['createdAt'] as String? ?? '')),
           read: read,
           isBlurting: false,
@@ -99,7 +96,7 @@ class _Whisper extends State<Whisper> {
       } else {
         newAnswer = OtherChat(
             message: chat,
-            createdAt: dateFormat
+            createdAt: dateFormatAA
                 .format(_parseDateTime(data['createdAt'] as String? ?? '')));
         print('상대방 메시지 도착: $chat');
       }
@@ -481,7 +478,7 @@ class _Whisper extends State<Whisper> {
               if (chatData['userId'] == UserProvider.UserId) {
                 fetchChatList = MyChat(
                   message: chatData['chat'] as String? ?? '',
-                  createdAt: dateFormat.format(
+                  createdAt: dateFormatAA.format(
                       _parseDateTime(chatData['createdAt'] as String? ?? '')),
                   read: read, // http에서 받아오는 거니까..
                   isBlurting: false,
@@ -490,17 +487,17 @@ class _Whisper extends State<Whisper> {
               } else {
                 fetchChatList = OtherChat(
                     message: chatData['chat'] as String? ?? '',
-                    createdAt: dateFormat.format(_parseDateTime(
+                    createdAt: dateFormatAA.format(_parseDateTime(
                         chatData['createdAt'] as String? ?? '')));
               }
 
-              String formattedDate = dateFormatDate.format(
+              String formattedDate = dateFormatFull.format(
                   _parseDateTime(chatData['createdAt'] as String? ?? ''));
 
               if (i != 0) {
                 final Map<String, dynamic> preciousChatData = chatList[i - 1];
 
-                String preciousformattedDate = dateFormatDate.format(
+                String preciousformattedDate = dateFormatFull.format(
                     _parseDateTime(
                         preciousChatData['createdAt'] as String? ?? ''));
 

@@ -105,7 +105,6 @@ class _Blurting extends State<Blurting> {
                                 )));
                   } else {
                     // 날이 바뀌고 처음 들어간 게 아님
-                    // ignore: use_build_context_synchronously
                     Navigator.push(
                         context,
                         MaterialPageRoute(
