@@ -318,116 +318,75 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            Stack(
-              clipBehavior: Clip.none, // 이 부분 추가
-              children: [
-                // 전체 배경색 설정 (하늘색)
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9), // 하늘색
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                // 완료된 부분 배경색 설정 (파란색)
-                Container(
-                  height: 10,
-                  width: MediaQuery.of(context).size.width *
-                      _progressAnimation!.value,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF303030), // 파란색
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width *
-                          _progressAnimation!.value -
-                      15,
-                  bottom: -10,
-                  child: Image.asset('assets/signupface.png',
-                      width: 30, height: 30),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              '반가워요! 전화번호를 입력해 주세요',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF303030),
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(height: 20),
-            Container(
-              width: 350,
-              height: 48,
-              child: TextField(
-                style: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
-                ),
-                controller: _controller,
-                keyboardType: TextInputType.number,
-                maxLength: 13,
-                decoration: InputDecoration(
-                  hintText: '010-1234-5678',
-                  counterText: '',  // 이 부분을 추가
-                  hintStyle: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: Color.fromRGBO(217, 217, 217, 1)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Color(DefinedColor.lightgrey),
-                    ), // 초기 테두리 색상
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFF66464),
-                    ), // 입력할 때 테두리 색상
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFF66464),
-                    ), // 선택/포커스 됐을 때 테두리 색상
-                  ),
-                ),
-                onChanged: (value) {
-                  InputPhoneNumber(value);
-                },
+      body: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 25,
               ),
-            ),
-            Visibility(
-              visible: certification, // showButton이 true이면 보이고, false이면 숨김
-              child: Container(
-                margin: EdgeInsets.only(top: 15),
+              Stack(
+                clipBehavior: Clip.none, // 이 부분 추가
+                children: [
+                  // 전체 배경색 설정 (하늘색)
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD9D9D9), // 하늘색
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  // 완료된 부분 배경색 설정 (파란색)
+                  Container(
+                    height: 10,
+                    width: MediaQuery.of(context).size.width *
+                        _progressAnimation!.value,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF303030), // 파란색
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  Positioned(
+                    left: MediaQuery.of(context).size.width *
+                            _progressAnimation!.value -
+                        15,
+                    bottom: -10,
+                    child: Image.asset('assets/signupface.png',
+                        width: 30, height: 30),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                '반가워요! 전화번호를 입력해 주세요',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF303030),
+                    fontFamily: 'Pretendard'),
+              ),
+              SizedBox(height: 20),
+              Container(
                 width: 350,
                 height: 48,
                 child: TextField(
-                  maxLength: 6,
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
-                  controller: _controller_certification,
+                  controller: _controller,
                   keyboardType: TextInputType.number,
+                  maxLength: 13,
                   decoration: InputDecoration(
-                    counterText: "",
-                    hintText: '인증번호를 입력해 주세요',
+                    hintText: '010-1234-5678',
+                    counterText: '',  // 이 부분을 추가
                     hintStyle: TextStyle(
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w700,
@@ -436,7 +395,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
-                        color: Color(0xFFF66464),
+                        color: Color(DefinedColor.lightgrey),
                       ), // 초기 테두리 색상
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -449,80 +408,126 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                         color: Color(0xFFF66464),
                       ), // 선택/포커스 됐을 때 테두리 색상
                     ),
-                    suffixIcon: Container(
-                      width: 110,
-                      margin: EdgeInsets.only(right: 11,top: 9,bottom:9), // 필요에 따라 마진 조정
-                      child:Row(
-                        children:[
-                      Expanded(
-                      child: Text(
-                      formatDuration(_duration), // 타이머 초기값
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(DefinedColor.darkpink), // 타이머 색상
-                          fontWeight: FontWeight.bold,
+                  ),
+                  onChanged: (value) {
+                    InputPhoneNumber(value);
+                  },
+                ),
+              ),
+              Visibility(
+                visible: certification, // showButton이 true이면 보이고, false이면 숨김
+                child: Container(
+                  margin: EdgeInsets.only(top: 15),
+                  width: 350,
+                  height: 48,
+                  child: TextField(
+                    maxLength: 6,
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
+                    controller: _controller_certification,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      counterText: "",
+                      hintText: '인증번호를 입력해 주세요',
+                      hintStyle: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: Color.fromRGBO(217, 217, 217, 1)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ), // 초기 테두리 색상
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ), // 입력할 때 테두리 색상
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ), // 선택/포커스 됐을 때 테두리 색상
+                      ),
+                      suffixIcon: Container(
+                        width: 110,
+                        margin: EdgeInsets.only(right: 11,top: 9,bottom:9), // 필요에 따라 마진 조정
+                        child:Row(
+                          children:[
+                        Expanded(
+                        child: Text(
+                        formatDuration(_duration), // 타이머 초기값
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(DefinedColor.darkpink), // 타이머 색상
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      ),
-                          Container(
-                            width: 56, // 버튼의 너비를 설정합니다.
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _sendPostRequest(phonenumber);
-                                startTimer();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                        ),
+                            Container(
+                              width: 56, // 버튼의 너비를 설정합니다.
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _sendPostRequest(phonenumber);
+                                  startTimer();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                                  ),
+                                  backgroundColor: Color(DefinedColor.darkpink),
+                                  elevation: 0.0,
+                                  padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
                                 ),
-                                backgroundColor: Color(DefinedColor.darkpink),
-                                elevation: 0.0,
-                                padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
-                              ),
-                              child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
-                                fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
-                                child: Text('재전송',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                    fontFamily: 'Pretendard',
-                                    color: Colors.white,
+                                child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
+                                  fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                  child: Text('재전송',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15,
+                                      fontFamily: 'Pretendard',
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ]
+                          ]
+                      ),
+                    ),
+                    ),
+                    onChanged: (value) {
+                      InputCertification(value);
+                    },
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 268),
+              Visibility(
+                visible: showError,
+                child: Container(
+                  padding: EdgeInsets.all(8.0),
+                  margin: EdgeInsets.only(top: 5.0, bottom: 10),
+                  decoration: BoxDecoration(
+                    color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정합니다.
+                    borderRadius: BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정합니다.
+                  ),
+                  child: Text(
+                    Errormessage,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14.0,
                     ),
                   ),
-                  ),
-                  onChanged: (value) {
-                    InputCertification(value);
-                  },
                 ),
               ),
-            ),
-
-            SizedBox(height: 268),
-            Visibility(
-              visible: showError,
-              child: Container(
-                padding: EdgeInsets.all(8.0),
-                margin: EdgeInsets.only(top: 5.0, bottom: 10),
-                decoration: BoxDecoration(
-                  color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정합니다.
-                  borderRadius: BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정합니다.
-                ),
-                child: Text(
-                  Errormessage,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.0,
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: Container(

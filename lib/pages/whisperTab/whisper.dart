@@ -200,7 +200,7 @@ class _Whisper extends State<Whisper> {
           ],
         ),
         actions: <Widget>[
-          pointAppbar(),
+          // pointAppbar(),
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(
