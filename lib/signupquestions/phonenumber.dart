@@ -4,7 +4,6 @@ import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:blurting/signupquestions/sex.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
@@ -16,7 +15,6 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 
-
 class PhoneNumberPage extends StatefulWidget {
   const PhoneNumberPage({super.key});
 
@@ -25,13 +23,12 @@ class PhoneNumberPage extends StatefulWidget {
 }
 
 class _PhoneNumberPageState extends State<PhoneNumberPage>
-    with SingleTickerProviderStateMixin,WidgetsBindingObserver {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   AnimationController? _animationController;
   String? _previousText;
   Animation<double>? _progressAnimation;
   Timer? _timer;
   Duration _duration = Duration(minutes: 3);
-
 
   void startTimer() {
     _timer?.cancel(); // 이전 타이머가 있다면 취소
@@ -47,6 +44,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       }
     });
   }
+
   Future<String?> getDefaultContact() async {
     Iterable<Contact> contacts = await ContactsService.getContacts();
     return contacts.isNotEmpty ? contacts.first.phones!.first.value : "";
@@ -67,34 +65,37 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     );
   }
 
-  String phonenumber='';
-  String verificationnumber='';
+  String phonenumber = '';
+  String verificationnumber = '';
   bool certification = false;
   bool IsValid = false;
   bool showError = false;
-  String Errormessage ='';
+  String Errormessage = '';
 
   @override
   void InputPhoneNumber(String value) {
     setState(() {
       phonenumber = value;
-      if (phonenumber.length >=10) IsValid = true;
+      if (phonenumber.length >= 10) IsValid = true;
     });
   }
 
   @override
   void InputCertification(String value) {
     setState(() {
-      verificationnumber=value;
+      verificationnumber = value;
       if (value.length == 6) IsValid = true;
     });
   }
+
   String errormessage = "";
-  var login_token ="";
-  bool first_post= true;
+  var login_token = "";
+  bool first_post = true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
-    var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+    var fcmToken = await FirebaseMessaging.instance.getToken(
+        vapidKey:
+            "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
     print("------------");
     print(fcmToken);
 
@@ -104,8 +105,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     String savedToken = await getToken();
 
-    if(first_post)
-      login_token = savedToken;
+    if (first_post) login_token = savedToken;
     var token = first_post ? savedToken : login_token;
 
     first_post = false;
@@ -119,9 +119,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
-
-
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
@@ -129,20 +126,18 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
       var data = json.decode(response.body);
       var token = data['signupToken'];
-      if(token != null)
-      {
+      if (token != null) {
         startTimer();
         NowCertification();
         print(token);
         // 토큰을 로컬에 저장
         await saveToken(token);
       }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
       var data = json.decode(response.body);
-      errormessage= data['message'];
+      errormessage = data['message'];
       _showVerificationFailedSnackBar(errormessage);
     }
   }
@@ -166,33 +161,28 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
-
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
-      }
-      else{
+      } else {
         var data = json.decode(response.body);
-        errormessage= data['message'];
+        errormessage = data['message'];
         _showVerificationFailedSnackBar(errormessage);
       }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
       print("error");
     }
   }
-
 
   void _showVerificationFailedSnackBar(value) {
     print("snackbar 실행");
@@ -220,13 +210,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       IsValid = false;
     });
   }
+
   Future<void> initContact() async {
     await requestPermission();
     String? contactNumber = await getDefaultContact();
     if (contactNumber != null && contactNumber.isNotEmpty) {
       setState(() {
         _controller.text = contactNumber;
-        InputPhoneNumber(contactNumber);  // 여기에 추가
+        InputPhoneNumber(contactNumber); // 여기에 추가
       });
     }
   }
@@ -238,10 +229,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     }
   }
 
-
-
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     initContact();
     _animationController = AnimationController(
@@ -279,7 +268,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     _progressAnimation = Tween<double>(
       begin: 0, // 시작 게이지 값
-      end: 1/15, // 종료 게이지 값
+      end: 1 / 15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -319,7 +308,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Padding(
@@ -352,7 +341,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   ),
                   Positioned(
                     left: MediaQuery.of(context).size.width *
-                        _progressAnimation!.value -
+                            _progressAnimation!.value -
                         15,
                     bottom: -10,
                     child: Image.asset('assets/signupface.png',
@@ -386,7 +375,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   maxLength: 13,
                   decoration: InputDecoration(
                     hintText: '010-1234-5678',
-                    counterText: '',  // 이 부분을 추가
+                    counterText: '', // 이 부분을 추가
                     hintStyle: TextStyle(
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w700,
@@ -455,49 +444,51 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       ),
                       suffixIcon: Container(
                         width: 110,
-                        margin: EdgeInsets.only(right: 11,top: 9,bottom:9), // 필요에 따라 마진 조정
-                        child:Row(
-                            children:[
-                              Expanded(
+                        margin: EdgeInsets.only(
+                            right: 11, top: 9, bottom: 9), // 필요에 따라 마진 조정
+                        child: Row(children: [
+                          Expanded(
+                            child: Text(
+                              formatDuration(_duration), // 타이머 초기값
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(DefinedColor.darkpink), // 타이머 색상
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 56, // 버튼의 너비를 설정합니다.
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _sendPostRequest(phonenumber);
+                                startTimer();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      5), // 버튼의 모서리 둥글게 조정
+                                ),
+                                backgroundColor: Color(DefinedColor.darkpink),
+                                elevation: 0.0,
+                                padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                              ),
+                              child: FittedBox(
+                                // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
+                                fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
                                 child: Text(
-                                  formatDuration(_duration), // 타이머 초기값
-                                  textAlign: TextAlign.center,
+                                  '재전송',
                                   style: TextStyle(
-                                    color: Color(DefinedColor.darkpink), // 타이머 색상
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                    fontFamily: 'Pretendard',
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              Container(
-                                width: 56, // 버튼의 너비를 설정합니다.
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    _sendPostRequest(phonenumber);
-                                    startTimer();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
-                                    ),
-                                    backgroundColor: Color(DefinedColor.darkpink),
-                                    elevation: 0.0,
-                                    padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
-                                  ),
-                                  child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
-                                    fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
-                                    child: Text('재전송',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 15,
-                                        fontFamily: 'Pretendard',
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]
-                        ),
+                            ),
+                          ),
+                        ]),
                       ),
                     ),
                     onChanged: (value) {
@@ -506,7 +497,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   ),
                 ),
               ),
-
               SizedBox(height: 268),
               Visibility(
                 visible: showError,
@@ -515,7 +505,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   margin: EdgeInsets.only(top: 5.0, bottom: 10),
                   decoration: BoxDecoration(
                     color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정합니다.
-                    borderRadius: BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정합니다.
+                    borderRadius:
+                        BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정합니다.
                   ),
                   child: Text(
                     Errormessage,
@@ -533,21 +524,21 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: FloatingActionButton(
-          onPressed: IsValid ? () async {
-            if (!certification) {
-              // 인증번호를 요청할 때 이 부분이 실행됩니다.
-              print('눌러짐');
-              await _sendPostRequest(_controller.text);
+          onPressed: IsValid
+              ? () async {
+                  if (!certification) {
+                    // 인증번호를 요청할 때 이 부분이 실행됩니다.
+                    print('눌러짐');
+                    await _sendPostRequest(_controller.text);
+                  } else {
+                    // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
 
-            } else {
-              // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
-
-              _sendVerificationRequest(phonenumber);
-
-            }
-          } : null,
+                    _sendVerificationRequest(phonenumber);
+                  }
+                }
+              : null,
           backgroundColor: Color(0xFFF66464), // 버튼의 배경색
           elevation: 0.0,
           hoverElevation: 50,
@@ -565,7 +556,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 
@@ -596,12 +588,14 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
+
 String formatDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, '0');
   final minutes = twoDigits(duration.inMinutes.remainder(60));
   final seconds = twoDigits(duration.inSeconds.remainder(60));
   return "$minutes:$seconds";
 }
+
 // 키보드 숨기기를 위한 위젯
 class DismissKeyboard extends StatelessWidget {
   final Widget child;
@@ -619,4 +613,3 @@ class DismissKeyboard extends StatelessWidget {
     );
   }
 }
-

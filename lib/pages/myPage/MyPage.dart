@@ -44,7 +44,6 @@ String getDrinkString(int? drink) {
 }
 
 class MyPage extends StatefulWidget {
-
   final String token;
   const MyPage({super.key, required this.token});
 
@@ -70,7 +69,6 @@ class _MyPage extends State<MyPage> {
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
-
 
     // String accessToken = await getToken();
     // String refreshToken = await getRefreshToken();
@@ -139,8 +137,8 @@ class _MyPage extends State<MyPage> {
     var url = Uri.parse(API.userprofile);
     // var savedToken = getToken();
     // var savedToken =
-        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
+    //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
 
     // print(savedToken);
     var response = await http.get(
@@ -167,40 +165,41 @@ class _MyPage extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(244),
-        child: AppBar(
-        toolbarHeight: 80,
-          scrolledUnderElevation: 0.0,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              Container(
-                  margin: EdgeInsets.only(top: 80),
-                  padding: EdgeInsets.all(13),
-                  child: ellipseText(text: 'My Profile')),
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(244),
+          child: AppBar(
+            toolbarHeight: 80,
+            scrolledUnderElevation: 0.0,
+            automaticallyImplyLeading: false,
+            flexibleSpace: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 80),
+                    padding: EdgeInsets.all(13),
+                    child: ellipseText(text: 'My Profile')),
+              ],
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              pointAppbar(token: widget.token),
+              IconButton(
+                icon: Image.asset('assets/images/setting.png'),
+                color: Color.fromRGBO(48, 48, 48, 1),
+                onPressed: () {
+                  print("설정 버튼 눌러짐");
+                  var token = getToken();
+                  print(token);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SettingPage()),
+                  );
+                },
+              ),
+              SizedBox(width: 10),
             ],
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            pointAppbar(token: widget.token),
-            IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-                print("설정 버튼 눌러짐");
-                var token = getToken();
-                print(token);
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SettingPage()),
-                );
-              },
-            ),
-            SizedBox(width: 10),
-          ],
         ),
         extendBodyBehindAppBar: true,
         body: Container(
