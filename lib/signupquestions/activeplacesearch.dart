@@ -66,116 +66,122 @@ class _SearchPage extends State<SearchPage> {
             ),
           ],
         ),
-        body: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                      hintText: '구명으로 검색 (ex. 강남구)',
-                      contentPadding: EdgeInsets.all(10.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFF868686),
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: (){
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                        hintText: '구명으로 검색 (ex. 강남구)',
+                        contentPadding: EdgeInsets.all(10.0),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFF868686),
+                          ),
                         ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFF66464),
-                        ), // 입력할 때 테두리 색상
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFF66464),
+                          ), // 입력할 때 테두리 색상
                         ),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          searchByLocation =
-                              false; //위치로 검색 모드가 아니라 이름검색 모드임을 알려주는 것
-                          searchByLocationName();
-                        },
-                      )),
-                  onChanged: (value) {
-                    setState(() {
-                      searchText = value;
-                    });
-                    filterItems();
-                  },
-                  onSubmitted: (value) {
-                    searchByLocation = false;
-                    searchByLocationName();
-                  }),
-            ),
-            Container(
-              width: width * 0.9,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFF66464),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            searchByLocation =
+                                false; //위치로 검색 모드가 아니라 이름검색 모드임을 알려주는 것
+                            searchByLocationName();
+                          },
+                        )),
+                    onChanged: (value) {
+                      setState(() {
+                        searchText = value;
+                      });
+                      filterItems();
+                    },
+                    onSubmitted: (value) {
+                      searchByLocation = false;
+                      searchByLocationName();
+                    }),
+              ),
+              Container(
+                width: width * 0.9,
+                height: 48,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFF66464),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 0,
+                    padding: EdgeInsets.all(0),
                   ),
-                  elevation: 0,
-                  padding: EdgeInsets.all(0),
-                ),
-                onPressed: () async {
-                  print("현위치 검색 버튼 클릭됨");
-                  searchByLocation = true;
-                  await searchCurrentLocation();
-                },
-                child: Text(
-                  '현재 위치로 검색하기',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
+                  onPressed: () async {
+                    print("현위치 검색 버튼 클릭됨");
+                    searchByLocation = true;
+                    await searchCurrentLocation();
+                  },
+                  child: Text(
+                    '현재 위치로 검색하기',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Pretendard',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                  // items 변수에 저장되어 있는 모든 값 출력
-                  itemCount: filteredItems.length,
-                  itemBuilder: (BuildContext currentcontext, int index) {
-                    // // 검색 기능, 검색어가 있을 경우
-                    // if (searchText.isNotEmpty &&
-                    //     !items[index]
-                    //         .toLowerCase()
-                    //         .contains(searchText.toLowerCase())) {
-                    //   return SizedBox.shrink();
-                    // }
-                    // // 검색어가 없을 경우, 모든 항목 표시
-                    // else {
-                    return Card(
-                      elevation: 0,
-                      // shadowColor: null,
-                      borderOnForeground: false,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.elliptical(10, 10))),
-                      child: ListTile(
-                          title: Text(
-                            filteredItems[index],
-                            style: TextStyle(
-                              color: Color(0xFF303030),
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
+              Expanded(
+                child: ListView.builder(
+                    // items 변수에 저장되어 있는 모든 값 출력
+                    itemCount: filteredItems.length,
+                    itemBuilder: (BuildContext currentcontext, int index) {
+                      // // 검색 기능, 검색어가 있을 경우
+                      // if (searchText.isNotEmpty &&
+                      //     !items[index]
+                      //         .toLowerCase()
+                      //         .contains(searchText.toLowerCase())) {
+                      //   return SizedBox.shrink();
+                      // }
+                      // // 검색어가 없을 경우, 모든 항목 표시
+                      // else {
+                      return Card(
+                        elevation: 0,
+                        // shadowColor: null,
+                        borderOnForeground: false,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.elliptical(10, 10))),
+                        child: ListTile(
+                            title: Text(
+                              filteredItems[index],
+                              style: TextStyle(
+                                color: Color(0xFF303030),
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          onTap: () => {
-                                cardClickEvent(context, index),
-                              }),
-                    );
-                  }),
-            ),
-          ],
+                            onTap: () => {
+                                  cardClickEvent(context, index),
+                                }),
+                      );
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     );

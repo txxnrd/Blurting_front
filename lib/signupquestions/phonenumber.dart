@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:blurting/signupquestions/sex.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
 import 'package:blurting/config/app_config.dart';
@@ -10,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:flutter/services.dart';
 
 
 class PhoneNumberPage extends StatefulWidget {
@@ -90,6 +94,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   bool first_post= true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
+    var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+    print("------------");
+    print(fcmToken);
+
     var url = Uri.parse(API.sendphone);
     //API.sendphone
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
@@ -233,13 +241,17 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     initContact();
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
     );
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
 
     _controller.addListener(() {
       String text = _controller.text;
@@ -305,7 +317,11 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
         ],
       ),
 
-      body: DismissKeyboard(
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: (){
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -522,8 +538,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           onPressed: IsValid ? () async {
             if (!certification) {
               // 인증번호를 요청할 때 이 부분이 실행됩니다.
-              await _sendPostRequest(_controller.text);
               print('눌러짐');
+              await _sendPostRequest(_controller.text);
+
             } else {
               // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
 

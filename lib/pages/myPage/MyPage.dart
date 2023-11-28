@@ -65,37 +65,22 @@ class _MyPage extends State<MyPage> {
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("수정 버튼 눌러짐");
-    // var token = getToken();
-    // print(token);
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
 
-    // String accessToken = await getToken();
-    // String refreshToken = await getRefreshToken();
-    // print("access Token$accessToken");
-    // print("refresh Token$refreshToken");
-// =======
-//     // String accessToken = await getToken();
-//     // String refreshToken = await getRefreshToken();
-//     String accessToken =
-//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-//     String refreshToken =
-//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
+    String accessToken = await getToken();
+    String refreshToken = await getRefreshToken();
 
-//     print("access Token" + accessToken);
-//     print("access Token" + refreshToken);
-// >>>>>>> main
 
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${widget.token}',
+        'Authorization': 'Bearer ${accessToken}',
       },
     );
-
     print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
@@ -137,17 +122,14 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-    // var savedToken = getToken();
-    // var savedToken =
-        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
+    String savedToken = await getToken();
 
     // print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${widget.token}',
+        'Authorization': 'Bearer $savedToken',
       },
     );
     print('Response Status Code: ${response.statusCode}');

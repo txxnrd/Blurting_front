@@ -214,8 +214,9 @@ class _HeightPageState extends State<HeightPage>
 
       ),
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: (){
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
