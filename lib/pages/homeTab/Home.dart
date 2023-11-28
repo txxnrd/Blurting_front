@@ -1,6 +1,8 @@
+import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class CardItem {
   final String userName;
@@ -21,13 +23,16 @@ class CardItem {
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String token;
+
+  const Home({Key? key, required this.token}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+
   List<CardItem> cardItems = [
     CardItem(
       userName: 'User1',
@@ -224,127 +229,118 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    return
-      WillPopScope(
-        onWillPop: () async {
-      // false를 반환하여 뒤로 가기를 막습니다.
-      return false;
-    },
-    child: Scaffold(
-      appBar: AppBar(
-        leading: SizedBox(),
-        toolbarHeight: 80,
+    return WillPopScope(
+      onWillPop: () async {
+        // false를 반환하여 뒤로 가기를 막습니다.
+        return false;
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          '다음 질문까지 ${formatDuration(remainingTime)}',
-          style: TextStyle(
-            color: Colors.black87,
-            fontFamily: 'Heebo',
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: 80,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            '다음 질문까지 ${formatDuration(remainingTime)}',
+            style: TextStyle(
+              color: Colors.black87,
+              fontFamily: 'Heebo',
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
           ),
+          actions: <Widget>[
+            pointAppbar(token: widget.token),
+            SizedBox(width: 10),
+          ],
         ),
-        actions: <Widget>[
-          PointAppbar(point: 100),
-          IconButton(
-            icon: Icon(Icons.settings),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              // 설정 버튼을 눌렀을 때의 동작
-              print('설정 버튼 클릭됨');
-            },
-          ),
-          SizedBox(width: 10),
-
-        ],
-      ),
-      body: Column(
-        children: [
-          // 오늘의 MVP
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 20, bottom: 9, top: 10),
-                child: Text(
-                  '오늘의 MVP',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontFamily: 'Heebo',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w700,
+        body: Column(
+          children: [
+            // 오늘의 MVP
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, bottom: 9, top: 10),
+                  child: Text(
+                    '오늘의 MVP',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontFamily: 'Heebo',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 9),
-              SizedBox(
-                height: 240,
-                child: PageView.builder(
-                  controller: controller,
-                  itemBuilder: (_, index) {
-                    return pages[index % pages.length];
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: SmoothPageIndicator(
-                  controller: controller,
-                  count: pages.length,
-                  effect: const WormEffect(
-                      dotHeight: 10,
-                      dotWidth: 30,
-                      type: WormType.thinUnderground,
-                      dotColor: Color(0xFFD9D9D9),
-                      activeDotColor: Color(0xFFFF7D7D)),
-                ),
-              ),
-              SizedBox(height: 25),
-              // Today's Blurting
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  'Today Blurting',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontFamily: 'Heebo',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w700,
+                SizedBox(height: 9),
+                SizedBox(
+                  height: 240,
+                  child: PageView.builder(
+                    controller: controller,
+                    itemBuilder: (_, index) {
+                      return pages[index % pages.length];
+                    },
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    YourBlurtingWidget(icon: 'arrow', count: 5),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    YourBlurtingWidget(icon: 'match', count: 10),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    YourBlurtingWidget(icon: 'chat', count: 15),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    YourBlurtingWidget(icon: 'like', count: 25),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
-          ),
-        ],
+                Center(
+                  child: SmoothPageIndicator(
+                    controller: controller,
+                    count: pages.length,
+                    effect: const WormEffect(
+                        dotHeight: 10,
+                        dotWidth: 30,
+                        type: WormType.thinUnderground,
+                        dotColor: Color(0xFFD9D9D9),
+                        activeDotColor: Color(0xFFFF7D7D)),
+                  ),
+                ),
+                SizedBox(height: 25),
+                // Today's Blurting
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    'Today Blurting',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontFamily: 'Heebo',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      YourBlurtingWidget(icon: 'arrow', count: 5),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      YourBlurtingWidget(icon: 'match', count: 10),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      YourBlurtingWidget(icon: 'chat', count: 15),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      YourBlurtingWidget(icon: 'like', count: 25),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 
@@ -427,32 +423,3 @@ class YourBlurtingWidget extends StatelessWidget {
   }
 }
 
-class PointAppbar extends StatelessWidget {
-  final int point;
-
-  PointAppbar({Key? key, required this.point}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Color(0xFFFF7D7D).withOpacity(0.5),
-        ),
-        child: Text(
-          '${point}p',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Heebo',
-            color: Colors.white,
-            fontSize: 15,
-          ),
-        ),
-      ),
-    );
-  }
-}

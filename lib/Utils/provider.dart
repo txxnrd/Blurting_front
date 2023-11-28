@@ -6,16 +6,14 @@ class mainColor {
   static Color lightGray = Color.fromRGBO(170, 170, 170, 1);
 }
 
-class UserProvider {
-  static int UserId = 201;
-}
-
 class GroupChatProvider with ChangeNotifier {
   bool _pointValid = false;
   bool _isPocus = false;
+  DateTime _lastTime = DateTime(2000, 11, 24, 15, 30);      // 처음에는 아주 예전으로 초기화해서... 없다고 침
 
   bool get pointValid => _pointValid;
   bool get isPocus => _isPocus;
+  DateTime get lastTime => _lastTime;
 
   set pointValid(bool value) {
     _pointValid = value;
@@ -24,6 +22,11 @@ class GroupChatProvider with ChangeNotifier {
 
   set isPocus(bool value) {
     _isPocus = value;
+    notifyListeners();
+  }
+
+  set lastTime(DateTime value){
+    _lastTime = value;
     notifyListeners();
   }
 }
@@ -38,6 +41,7 @@ class WhisperProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
 
 Future<void> saveuserId(int userId) async {
   final prefs = await SharedPreferences.getInstance();
@@ -54,4 +58,16 @@ Future<int> getuserId() async {
   // 값이 없을 경우 'No Token'을 반환합니다.
   int userId = prefs.getInt('userId') ?? -1;
   return userId;
+}
+
+class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
+  static int UserId = 228;
+  int _point = 0;
+
+  int get point => _point;
+
+  set point(int value) {
+    _point = value;
+    notifyListeners();
+  }
 }

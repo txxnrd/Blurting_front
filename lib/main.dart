@@ -15,7 +15,6 @@ import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart�
 // void main() async {
 //   await initializeDateFormatting('ko_KR', null);
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
@@ -24,7 +23,9 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
         // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MyApp(),
     ),
@@ -46,4 +47,39 @@ class MyApp extends StatelessWidget {
 
 
 
+
+
+
+// void main() async {
+//   await initializeDateFormatting('ko_KR', null);
+//   // 여기에 나머지 코드를 추가하세요.
+//   runApp(
+//     MaterialApp(debugShowCheckedModeBanner: false, home: LoginPage()),
+//   );
+// }
+
+// import 'package:geolocator/geolocator.dart';
+// import 'package:blurting/signupquestions/phonenumber.dart'; // phonenumber.dart를 임포트
+
+// void main() {
+//   // WidgetsFlutterBinding.ensureInitialized();
+
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Phone Number App',
+//       theme: ThemeData(
+//         primaryColor: Colors.white,
+//         backgroundColor: Colors.white,
+//       ),
+//       home: LoginPage(), // PhoneNumberPage를 홈으로 설정
+//     );
+//   }
 

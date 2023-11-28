@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/signupquestions/phonecertification.dart';
+import 'package:blurting/signupquestions/sex.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,22 +62,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       ),
     );
   }
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('signupToken', token);
-    // 저장된 값을 확인하기 위해 바로 불러옵니다.
-    String savedToken = prefs.getString('signupToken') ?? 'No Token';
-    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
-  }
 
-  // 저장된 토큰을 불러오는 함수
-  Future<String> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-    // 값이 없을 경우 'No Token'을 반환합니다.
-    String token = prefs.getString('signupToken') ?? 'No Token';
-    return token;
-  }
     String phonenumber='';
     String verificationnumber='';
     bool certification = false;
@@ -299,8 +285,26 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading:SizedBox(),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 48, 48, 1),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/images/setting.png'),
+            color: Color.fromRGBO(48, 48, 48, 1),
+            onPressed: () {
+              // 설정 버튼을 눌렀을 때의 동작
+            },
+          ),
+        ],
       ),
+
       body: DismissKeyboard(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -418,6 +422,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                           fontSize: 15,
                           color: Color.fromRGBO(217, 217, 217, 1)),
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           color: Color(0xFFF66464),
                         ), // 초기 테두리 색상

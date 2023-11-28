@@ -2,16 +2,13 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/time.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-
-DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
-DateFormat dateFormatDate = DateFormat('yyyy년 MM월 dd일'); // 필요한 포맷으로 수정
 
 class Whisper extends StatefulWidget {
   final IO.Socket socket;
@@ -81,30 +78,33 @@ class _Whisper extends State<Whisper> {
       bool read = data['read']; // (읽음 표시)
       Widget newAnswer;
 
-      String formattedDate = dateFormatDate
+      String formattedDate = dateFormatFull
           .format(_parseDateTime(data['createdAt'] as String? ?? ''));
 
       if (userId == UserProvider.UserId) {
         // userProvider
         newAnswer = MyChat(
           message: chat,
-          createdAt: dateFormat
+          createdAt: dateFormatAA
               .format(_parseDateTime(data['createdAt'] as String? ?? '')),
           read: read,
+          isBlurting: false,
+          likedNum: 0,
         );
         sendingMessageList.clear();
         print('내 메시지 전송 완료: $chat');
       } else {
         newAnswer = OtherChat(
             message: chat,
-            createdAt: dateFormat
+            createdAt: dateFormatAA
                 .format(_parseDateTime(data['createdAt'] as String? ?? '')));
         print('상대방 메시지 도착: $chat');
       }
       if (mounted) {
         setState(() {
-          if (chatMessages.length == 0)
+          if (chatMessages.isEmpty) {
             chatMessages.add(Center(child: DateWidget(date: formattedDate)));
+          }
 
           chatMessages.add(newAnswer); // 새로운 메시지 추가
         });
@@ -124,6 +124,8 @@ class _Whisper extends State<Whisper> {
                     message: widget.message,
                     createdAt: widget.createdAt,
                     read: true,
+                    isBlurting: false,
+                    likedNum: 0,
                   ));
             });
           }
@@ -148,10 +150,10 @@ class _Whisper extends State<Whisper> {
           setState(() {
             isBlock = true;
           });
-          if (data['userId'] == UserProvider.UserId) {
-            Navigator.pop(context);
-          } else {}
         }
+          // if (data['userId'] == UserProvider.UserId) {
+          //   print(context);
+          // } else {}
       }
     });
 
@@ -195,7 +197,7 @@ class _Whisper extends State<Whisper> {
           ],
         ),
         actions: <Widget>[
-          pointAppbar(point: 120),
+          pointAppbar(token: widget.token),
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(
@@ -206,7 +208,6 @@ class _Whisper extends State<Whisper> {
                   barrierDismissible: true,
                   context: context,
                   builder: (BuildContext context) {
-                    return StatefulBuilder(builder: (context, setState) {
                       return Scaffold(
                         backgroundColor: Colors.black.withOpacity(0.2),
                         body: Stack(
@@ -236,7 +237,8 @@ class _Whisper extends State<Whisper> {
                                                 height: 100,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     color: mainColor.lightGray
                                                         .withOpacity(0.5)),
                                                 alignment: Alignment.topCenter,
@@ -251,7 +253,8 @@ class _Whisper extends State<Whisper> {
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontSize: 10,
-                                                            fontFamily: "Heebo"),
+                                                            fontFamily:
+                                                                "Heebo"),
                                                       ),
                                                       Text(
                                                         '채팅 상대방과 다시는 매칭되지 않습니다.',
@@ -260,7 +263,8 @@ class _Whisper extends State<Whisper> {
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontSize: 10,
-                                                            fontFamily: "Heebo"),
+                                                            fontFamily:
+                                                                "Heebo"),
                                                       ),
                                                     ],
                                                   ),
@@ -276,7 +280,8 @@ class _Whisper extends State<Whisper> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      color: mainColor.MainColor),
+                                                      color:
+                                                          mainColor.MainColor),
                                                   height: 50,
                                                   // color: mainColor.MainColor,
                                                   child: Center(
@@ -293,10 +298,11 @@ class _Whisper extends State<Whisper> {
                                                 ),
                                                 onTap: () {
                                                   widget.socket.emit('leave_room',
-                                                      widget.roomId);
-                                                  print('채팅 나가는 중...');
-                                                  Navigator.pop(context);
-                                                },
+                                                    widget.roomId);
+                                                print('채팅 나가는 중...');
+                                                Navigator.pop(context);
+                                                Navigator.pop(context);
+                                              },
                                               ),
                                             ],
                                           ),
@@ -321,14 +327,16 @@ class _Whisper extends State<Whisper> {
                                                     color: Colors.white,
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.w500),
-                                              ),
                                             ),
                                           ),
-                                          onTap: () {
+                                        ),
+                                        onTap: () {
+                                          if (mounted) {
                                             setState(() {
                                               Navigator.of(context).pop();
                                             });
-                                          },
+                                          }
+                                        },
                                         ),
                                       ],
                                     ),
@@ -339,7 +347,6 @@ class _Whisper extends State<Whisper> {
                           ],
                         ),
                       );
-                    });
                   },
                 );
               },
@@ -382,6 +389,8 @@ class _Whisper extends State<Whisper> {
               controller: controller,
               sendFunction: sendChat,
               isBlock: isBlock,
+              hintText: "귓속말이 끊긴 상대입니다",
+              questionId: 0,
             ),
           ],
         ),
@@ -391,7 +400,7 @@ class _Whisper extends State<Whisper> {
 
   List<Widget> sendingMessageList = []; // 전송 중인 답변을 저장할 리스트
 
-  void sendChat(String message) {
+  void sendChat(String message, int i) {
     Map<String, dynamic> data = {
       // 'userId': 57,    // 내 아이디라고 함 일단
       'roomId': widget.roomId,
@@ -403,6 +412,8 @@ class _Whisper extends State<Whisper> {
       message: message,
       createdAt: '전송 중...',
       read: true,
+      isBlurting: false,
+                likedNum: 0,
     );
 
     // 소켓 서버에 데이터 전송
@@ -412,9 +423,11 @@ class _Whisper extends State<Whisper> {
     }
 
     // 전송 중인 메시지를 띄워 줌
-    setState(() {
-      sendingMessageList.add(newAnswer);
-    });
+    if (mounted) {
+      setState(() {
+        sendingMessageList.add(newAnswer);
+      });
+    }
 
     print("귓속말 전송 중...");
   }
@@ -423,7 +436,7 @@ class _Whisper extends State<Whisper> {
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     final url =
-        Uri.parse('${ServerEndpoints.serverEndpoint}/chat/${widget.roomId}');
+        Uri.parse('${API.chatList}${widget.roomId}');
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -459,43 +472,47 @@ class _Whisper extends State<Whisper> {
           bool read = createdAt.isBefore(hasRead);
 
           Widget fetchChatList;
-
-          setState(() {
-            // 만약에 지금 보고 있는 애의 날짜가 이전에 본 애의 날짜랑 같다면 냅두고, 다르다면 날짜 위젯을 chatMessages에 추가
-            if (chatData['userId'] == UserProvider.UserId) {
-              fetchChatList = MyChat(
-                message: chatData['chat'] as String? ?? '',
-                createdAt: dateFormat.format(
-                    _parseDateTime(chatData['createdAt'] as String? ?? '')),
-                read: read, // http에서 받아오는 거니까..
-              );
-            } else {
-              fetchChatList = OtherChat(
+          if (mounted) {
+            setState(() {
+              // 만약에 지금 보고 있는 애의 날짜가 이전에 본 애의 날짜랑 같다면 냅두고, 다르다면 날짜 위젯을 chatMessages에 추가
+              if (chatData['userId'] == UserProvider.UserId) {
+                fetchChatList = MyChat(
                   message: chatData['chat'] as String? ?? '',
-                  createdAt: dateFormat.format(
-                      _parseDateTime(chatData['createdAt'] as String? ?? '')));
-            }
+                  createdAt: dateFormatAA.format(
+                      _parseDateTime(chatData['createdAt'] as String? ?? '')),
+                  read: read, // http에서 받아오는 거니까..
+                  isBlurting: false,
+                  likedNum: 0,
+                );
+              } else {
+                fetchChatList = OtherChat(
+                    message: chatData['chat'] as String? ?? '',
+                    createdAt: dateFormatAA.format(_parseDateTime(
+                        chatData['createdAt'] as String? ?? '')));
+              }
 
-            String formattedDate = dateFormatDate
-                .format(_parseDateTime(chatData['createdAt'] as String? ?? ''));
+              String formattedDate = dateFormatFull.format(
+                  _parseDateTime(chatData['createdAt'] as String? ?? ''));
 
-            if (i != 0) {
-              final Map<String, dynamic> preciousChatData = chatList[i - 1];
+              if (i != 0) {
+                final Map<String, dynamic> preciousChatData = chatList[i - 1];
 
-              String preciousformattedDate = dateFormatDate.format(
-                  _parseDateTime(
-                      preciousChatData['createdAt'] as String? ?? ''));
+                String preciousformattedDate = dateFormatFull.format(
+                    _parseDateTime(
+                        preciousChatData['createdAt'] as String? ?? ''));
 
-              if (formattedDate != preciousformattedDate) {
+                if (formattedDate != preciousformattedDate) {
+                  chatMessages
+                      .add(Center(child: DateWidget(date: formattedDate)));
+                }
+              } else {
                 chatMessages
                     .add(Center(child: DateWidget(date: formattedDate)));
               }
-            } else {
-              chatMessages.add(Center(child: DateWidget(date: formattedDate)));
-            }
 
-            chatMessages.add(fetchChatList);
-          });
+              chatMessages.add(fetchChatList);
+            });
+          }
         }
 
         print('Response body: ${response.body}');
