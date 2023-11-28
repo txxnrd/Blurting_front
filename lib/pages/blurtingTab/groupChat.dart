@@ -254,18 +254,6 @@ class _GroupChat extends State<GroupChat> {
                             children: <Widget>[
                               for (var answer in answerList[currentIndex])
                                 answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
-                              AnswerItem(
-                        message: 'answerData['']',
-                        iLike: true,
-                        likedNum: 5,
-                        socket: widget.socket,
-                        userId: 5,
-                        userName: 'answerData['']',
-                        token: widget.token,
-                        isAlready: isAlready,
-                        image: 'F',
-                        mbti: 'answerData['']',
-                        answerId: 999)
                             ],
                           ),
                         ),
@@ -403,17 +391,13 @@ class _GroupChat extends State<GroupChat> {
             if (timeDifference >= Duration(hours: 24)) {
               // 24시간 지났으면 2일차
               day = 'Day2';
-              print('하루 지남');
             }
             if (timeDifference >= Duration(hours: 48)) {
               // 48시간 지났으면 3일차
               day = 'Day3';
-              print('이틀 지남');
             }
 
             for (final answerData in responseData['answers']) {
-              print('좋아요 개수: ${answerData['likes']}');
-
               if (answerData['room'] != null) {
                 isAlready = true;
               } else {
@@ -431,6 +415,7 @@ class _GroupChat extends State<GroupChat> {
                     isBlock[currentIndex] = false; // true가 맞음
                   } else {
                     answerList[currentIndex].add(AnswerItem(
+                        key: ObjectKey(answerData['id']),
                         message: answerData['answer'],
                         iLike: answerData['ilike'],
                         likedNum: answerData['likes'],
@@ -507,6 +492,7 @@ class _GroupChat extends State<GroupChat> {
                 isBlock[currentIndex] = false; // true가 맞음
               } else {
                 answerList[currentIndex].add(AnswerItem(
+                    key: ObjectKey(answerData['id']),
                     message: answerData['answer'],
                     iLike: answerData['ilike'],
                     likedNum: answerData['likes'],
@@ -523,9 +509,8 @@ class _GroupChat extends State<GroupChat> {
           }
         }
 
-        print(answerList);
 
-        // print('Response body: ${response.body}');
+        print('Response body: ${response.body}');
       } catch (e) {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');

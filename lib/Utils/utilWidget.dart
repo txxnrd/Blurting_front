@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
@@ -607,7 +608,7 @@ class AnswerItem extends StatefulWidget {
   final int answerId;
 
   AnswerItem(
-      {required this.userName,
+      {super.key, required this.userName,
       required this.message,
       required this.socket,
       required this.userId,
@@ -1053,15 +1054,15 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   @override
-  void initState() {        // 처음 호출될 때에만...
+  void initState() {        // 맨 처음에 호출될 때에만... 즉, blurting방으로 처음 들어왔을 때에만! -> 다 각자 다른 걸로 쓰면 안 되나?
     super.initState();
+    iLike = widget.iLike;
+    likedNum = widget.likedNum;
   }
 
   // 답변 위젯
   @override
   Widget build(BuildContext context) {      // setState...
-    iLike = widget.iLike;
-    likedNum = widget.likedNum;
 
     return ListTile(
       subtitle: // 답변 내용
@@ -1215,7 +1216,8 @@ class _AnswerItemState extends State<AnswerItem> {
           'Content-Type': 'application/json',
         });
 
-    setState(() {       // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
+if(mounted)
+    {setState(() {       // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
       if (iLike) {
         likedNum--;
       } else {
@@ -1226,7 +1228,7 @@ class _AnswerItemState extends State<AnswerItem> {
 
       print(answerId);
     });
-
+}
     if (response.statusCode == 200) {
       print('요청 성공');
       print(response.body);
