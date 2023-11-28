@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:blurting/signupquestions/sex.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
 import 'package:blurting/config/app_config.dart';
@@ -90,6 +91,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   bool first_post= true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
+    var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
     var url = Uri.parse(API.sendphone);
     //API.sendphone
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
