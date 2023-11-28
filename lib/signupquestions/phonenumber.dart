@@ -1,15 +1,20 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/signupquestions/phonecertification.dart';
+import 'package:blurting/signupquestions/sex.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:flutter/services.dart';
 
 
 class PhoneNumberPage extends StatefulWidget {
@@ -61,28 +66,13 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       ),
     );
   }
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('signupToken', token);
-    // 저장된 값을 확인하기 위해 바로 불러옵니다.
-    String savedToken = prefs.getString('signupToken') ?? 'No Token';
-    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
-  }
 
-  // 저장된 토큰을 불러오는 함수
-  Future<String> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-    // 값이 없을 경우 'No Token'을 반환합니다.
-    String token = prefs.getString('signupToken') ?? 'No Token';
-    return token;
-  }
-    String phonenumber='';
-    String verificationnumber='';
-    bool certification = false;
-    bool IsValid = false;
-    bool showError = false;
-    String Errormessage ='';
+  String phonenumber='';
+  String verificationnumber='';
+  bool certification = false;
+  bool IsValid = false;
+  bool showError = false;
+  String Errormessage ='';
 
   @override
   void InputPhoneNumber(String value) {
@@ -104,6 +94,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   bool first_post= true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
+    var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+    print("------------");
+    print(fcmToken);
+
     var url = Uri.parse(API.sendphone);
     //API.sendphone
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
@@ -136,13 +130,13 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       var data = json.decode(response.body);
       var token = data['signupToken'];
       if(token != null)
-        {
-          startTimer();
-          NowCertification();
-          print(token);
-          // 토큰을 로컬에 저장
-          await saveToken(token);
-        }
+      {
+        startTimer();
+        NowCertification();
+        print(token);
+        // 토큰을 로컬에 저장
+        await saveToken(token);
+      }
 
     } else {
       // 오류가 발생한 경우 처리
@@ -237,7 +231,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     }
   }
 
-   requestPermission() async {
+  requestPermission() async {
     var status = await Permission.contacts.status;
     if (!status.isGranted) {
       await Permission.contacts.request();
@@ -247,13 +241,17 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     initContact();
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
     );
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
 
     _controller.addListener(() {
       String text = _controller.text;
@@ -318,9 +316,11 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           ),
         ],
       ),
+
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: (){
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -352,7 +352,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   ),
                   Positioned(
                     left: MediaQuery.of(context).size.width *
-                            _progressAnimation!.value -
+                        _progressAnimation!.value -
                         15,
                     bottom: -10,
                     child: Image.asset('assets/signupface.png',
@@ -457,48 +457,48 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                         width: 110,
                         margin: EdgeInsets.only(right: 11,top: 9,bottom:9), // 필요에 따라 마진 조정
                         child:Row(
-                          children:[
-                        Expanded(
-                        child: Text(
-                        formatDuration(_duration), // 타이머 초기값
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(DefinedColor.darkpink), // 타이머 색상
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        ),
-                            Container(
-                              width: 56, // 버튼의 너비를 설정합니다.
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _sendPostRequest(phonenumber);
-                                  startTimer();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                            children:[
+                              Expanded(
+                                child: Text(
+                                  formatDuration(_duration), // 타이머 초기값
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color(DefinedColor.darkpink), // 타이머 색상
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  backgroundColor: Color(DefinedColor.darkpink),
-                                  elevation: 0.0,
-                                  padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
                                 ),
-                                child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
-                                  fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
-                                  child: Text('재전송',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 15,
-                                      fontFamily: 'Pretendard',
-                                      color: Colors.white,
+                              ),
+                              Container(
+                                width: 56, // 버튼의 너비를 설정합니다.
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    _sendPostRequest(phonenumber);
+                                    startTimer();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                                    ),
+                                    backgroundColor: Color(DefinedColor.darkpink),
+                                    elevation: 0.0,
+                                    padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                                  ),
+                                  child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
+                                    fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                    child: Text('재전송',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15,
+                                        fontFamily: 'Pretendard',
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ]
+                            ]
+                        ),
                       ),
-                    ),
                     ),
                     onChanged: (value) {
                       InputCertification(value);
@@ -538,8 +538,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           onPressed: IsValid ? () async {
             if (!certification) {
               // 인증번호를 요청할 때 이 부분이 실행됩니다.
-              await _sendPostRequest(_controller.text);
               print('눌러짐');
+              await _sendPostRequest(_controller.text);
+
             } else {
               // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
 
@@ -601,5 +602,21 @@ String formatDuration(Duration duration) {
   final seconds = twoDigits(duration.inSeconds.remainder(60));
   return "$minutes:$seconds";
 }
+// 키보드 숨기기를 위한 위젯
+class DismissKeyboard extends StatelessWidget {
+  final Widget child;
 
+  const DismissKeyboard({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // 현재의 포커스를 해제합니다.
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: child,
+    );
+  }
+}
 
