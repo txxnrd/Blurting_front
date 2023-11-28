@@ -45,8 +45,7 @@ class API {
       "${ServerEndpoints.serverEndpoint}/blurting/answer";
   static const String register =
       "${ServerEndpoints.serverEndpoint}/blurting/register";
-  static const String answerProfile =
-      "${ServerEndpoints.serverEndpoint}/blurting/profile/";
+  static const String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
   /*WHISPER */
   static const String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
   static const String chatList = "${ServerEndpoints.serverEndpoint}/chat/";
@@ -55,4 +54,6 @@ class API {
   /*POINT */
   static const String pointchat =
       "${ServerEndpoints.serverEndpoint}/point/chat";
+  static const String pointcheck =
+      "${ServerEndpoints.serverEndpoint}/point/check";
 }

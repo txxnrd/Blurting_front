@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:blurting/settings/setting.dart';
 import 'package:blurting/signupquestions/hobby.dart';
 import 'package:blurting/signupquestions/token.dart';
@@ -25,7 +23,9 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
         // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MyApp(),
     ),

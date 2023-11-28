@@ -23,7 +23,9 @@ class CardItem {
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String token;
+
+  const Home({Key? key, required this.token}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -248,19 +250,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           actions: <Widget>[
-            pointAppbar(
-              point: 100,
-              userToken:
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMjM6MTk6NTguNzk1WiIsImlhdCI6MTcwMTA5NDc5OCwiZXhwIjoxNzAxMDk4Mzk4fQ.YePqxFBvH1DP7f0VILs7Gh696xaNv3_auOOyGd8xyKc',
-            ),
-            IconButton(
-              icon: Icon(Icons.settings),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
-                print('설정 버튼 클릭됨');
-              },
-            ),
+            pointAppbar(token: widget.token),
             SizedBox(width: 10),
           ],
         ),

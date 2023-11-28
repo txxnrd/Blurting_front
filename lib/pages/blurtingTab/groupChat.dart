@@ -13,8 +13,6 @@ import 'package:blurting/config/app_config.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm', 'ko');
-
 int currentIndex = 0; // 현재 보고 있는 페이지
 int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
@@ -126,6 +124,8 @@ class _GroupChat extends State<GroupChat> {
     Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
   }
 
+  List<List<Widget>> answerList = List.generate(10, (index) => <Widget>[]);
+
   @override
   Widget build(BuildContext context) {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
@@ -194,9 +194,7 @@ class _GroupChat extends State<GroupChat> {
             Positioned(
                 right: 0,
                 child: pointAppbar(
-                  point: 110,
-                  userToken:
-                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMjM6MTk6NTguNzk1WiIsImlhdCI6MTcwMTA5NDc5OCwiZXhwIjoxNzAxMDk4Mzk4fQ.YePqxFBvH1DP7f0VILs7Gh696xaNv3_auOOyGd8xyKc',
+                  token: widget.token,
                 )),
           ],
         ),
@@ -253,19 +251,20 @@ class _GroupChat extends State<GroupChat> {
                           padding: EdgeInsets.only(left: 20, top: 10),
                           child: Column(
                             children: <Widget>[
-                              for (var answer in answerList)
-                                answer, // answerList에 있는 내용 순회하며 추가
+                              for (var answer in answerList[currentIndex])
+                                answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
                               AnswerItem(
-                                message: 'd',
-                                isLiked: false,
-                                likedNum: 2,
-                                socket: widget.socket,
-                                userId: 265,
-                                userName: 'd',
-                                token: widget.token,
-                                isAlready: false,
-                                image: 'F',
-                              )
+                                  message: 'answerData[' ']',
+                                  iLike: true,
+                                  likedNum: 5,
+                                  socket: widget.socket,
+                                  userId: 5,
+                                  userName: 'answerData[' ']',
+                                  token: widget.token,
+                                  isAlready: isAlready,
+                                  image: 'F',
+                                  mbti: 'answerData[' ']',
+                                  answerId: 999)
                             ],
                           ),
                         ),
@@ -334,7 +333,6 @@ class _GroupChat extends State<GroupChat> {
             ? () {
                 currentIndex = index;
                 fetchIndexComments(widget.token, currentIndex);
-                print('');
               }
             : null,
         child: AnimatedDefaultTextStyle(
@@ -364,7 +362,6 @@ class _GroupChat extends State<GroupChat> {
     );
   }
 
-  List<Widget> answerList = [];
   bool isAlready = false;
 
   Future<void> fetchLatestComments(String token) async {
@@ -396,6 +393,9 @@ class _GroupChat extends State<GroupChat> {
             currentIndex = _questionNumber;
             currentQuestionId = responseData['questionId'];
 
+            print(currentIndex);
+            answerList[currentIndex].clear();
+
             Duration timeDifference =
                 DateTime.now().add(Duration(hours: 9)).difference(createdAt);
 
@@ -411,6 +411,8 @@ class _GroupChat extends State<GroupChat> {
             }
 
             for (final answerData in responseData['answers']) {
+              print('좋아요 개수: ${answerData['likes']}');
+
               if (answerData['room'] != null) {
                 isAlready = true;
               } else {
@@ -419,7 +421,7 @@ class _GroupChat extends State<GroupChat> {
               if (mounted) {
                 setState(() {
                   if (answerData['userId'] == UserProvider.UserId) {
-                    answerList.add(MyChat(
+                    answerList[currentIndex].add(MyChat(
                         message: answerData['answer'],
                         createdAt: '',
                         read: true,
@@ -427,17 +429,18 @@ class _GroupChat extends State<GroupChat> {
                         likedNum: 0));
                     isBlock[currentIndex] = false; // true가 맞음
                   } else {
-                    answerList.add(AnswerItem(
-                      message: answerData['answer'],
-                      isLiked: false,
-                      likedNum: 2,
-                      socket: widget.socket,
-                      userId: answerData['userId'],
-                      userName: answerData['userNickname'],
-                      token: widget.token,
-                      isAlready: isAlready,
-                      image: answerData['userSex'],
-                    ));
+                    answerList[currentIndex].add(AnswerItem(
+                        message: answerData['answer'],
+                        iLike: answerData['ilike'],
+                        likedNum: answerData['likes'],
+                        socket: widget.socket,
+                        userId: answerData['userId'],
+                        userName: answerData['userNickname'],
+                        token: widget.token,
+                        isAlready: isAlready,
+                        image: answerData['userSex'],
+                        mbti: answerData['mbti'],
+                        answerId: answerData['id']));
                   }
                 });
               }
@@ -457,6 +460,8 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> fetchIndexComments(String token, int no) async {
+    answerList[currentIndex].clear();
+
     // 선택된 QnA
     // 선택된 QnA로 화면 새로 그리기
 
@@ -471,14 +476,14 @@ class _GroupChat extends State<GroupChat> {
 
     if (response.statusCode == 200) {
       try {
-        answerList.clear();
-
         Map<String, dynamic> responseData = jsonDecode(response.body);
         if (mounted) {
           setState(() {
             currentIndex = responseData['questionNo'];
             _question = responseData['question'];
             currentQuestionId = responseData['questionId'];
+
+            print(currentIndex);
           });
 
           for (final answerData in responseData['answers']) {
@@ -490,7 +495,7 @@ class _GroupChat extends State<GroupChat> {
 
             setState(() {
               if (answerData['userId'] == UserProvider.UserId) {
-                answerList.add(MyChat(
+                answerList[currentIndex].add(MyChat(
                     message: answerData['answer'],
                     createdAt: '',
                     read: true,
@@ -498,24 +503,26 @@ class _GroupChat extends State<GroupChat> {
                     likedNum: 0));
                 isBlock[currentIndex] = false; // true가 맞음
               } else {
-                answerList.add(AnswerItem(
-                  // AnswerItem로 바꿔라
-                  message: answerData['answer'],
-                  isLiked: false,
-                  likedNum: 2,
-                  socket: widget.socket,
-                  userId: answerData['userId'],
-                  userName: answerData['userNickname'],
-                  token: widget.token,
-                  isAlready: isAlready,
-                  image: answerData['userSex'],
-                ));
+                answerList[currentIndex].add(AnswerItem(
+                    message: answerData['answer'],
+                    iLike: answerData['ilike'],
+                    likedNum: answerData['likes'],
+                    socket: widget.socket,
+                    userId: answerData['userId'],
+                    userName: answerData['userNickname'],
+                    token: widget.token,
+                    isAlready: isAlready,
+                    image: answerData['userSex'],
+                    mbti: answerData['mbti'],
+                    answerId: answerData['id']));
               }
             });
           }
         }
 
-        print('Response body: ${response.body}');
+        print(answerList);
+
+        // print('Response body: ${response.body}');
       } catch (e) {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
@@ -560,7 +567,7 @@ class _GroupChat extends State<GroupChat> {
       if (mounted) {
         setState(() {
           isBlock[currentIndex] = false; // true가 맞음
-          answerList.add(newAnswer);
+          answerList[currentIndex].add(newAnswer);
           print(response.body);
         });
       }

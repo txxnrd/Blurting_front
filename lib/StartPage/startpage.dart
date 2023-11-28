@@ -18,6 +18,7 @@ import '../config/app_config.dart';
 
 
 
+
 void main() {
   runApp(MyApp());
 }
@@ -157,34 +158,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-              child:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center, // Row 내부의 위젯들을 가로축 중앙 정렬
-                children: [
-                  Container(
-                    width: 62.7,
-                    height: 66.33,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/girl.png'),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 62.7,
-                    height: 66.33,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/boy.png'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-          ),
+
               // SizedBox(
               //   height: 10,
               // ),
@@ -225,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text('회원가입',
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -234,11 +208,14 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 1,),
               InkWell(
                 onTap: () {
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context)=> EmailAlreadyUserPage()),
                     );
+
                 },
+
                 child: Container(
                   alignment: Alignment.center,
                   width: 50,

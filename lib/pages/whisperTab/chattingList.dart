@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/time.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'dart:ui';
@@ -8,9 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:intl/intl.dart';
-
-DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
-DateFormat dateFormatDate = DateFormat('MM월 dd일'); // 필요한 포맷으로 수정
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -179,11 +177,11 @@ class _chatListItemState extends State<ChatListItem> {
 
   @override
   Widget build(BuildContext context) {
-    String latest_time = dateFormat.format(widget.latest_time);
+    String latest_time = dateFormatAA.format(widget.latest_time);
 
-    if (dateFormatDate.format(widget.latest_time) !=
-        dateFormatDate.format(DateTime.now())) {
-      latest_time = dateFormatDate.format(widget.latest_time);
+    if (dateFormatMM.format(widget.latest_time) !=
+        dateFormatMM.format(DateTime.now())) {
+      latest_time = dateFormatMM.format(widget.latest_time);
     }
 
     if (widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)) {
@@ -428,8 +426,6 @@ class _chattingList extends State<ChattingList> {
     });
 
     widget.socket.on('out_room', (data) {
-      print('내가 방에서 나올 때');
-
       for (int i = 0; i < chatLists.length; i++) {
         Widget widget = chatLists[i];
         if (widget is ChatListItem) {
@@ -505,11 +501,7 @@ class _chattingList extends State<ChattingList> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            pointAppbar(
-              point: 120,
-              userToken:
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMjM6MTk6NTguNzk1WiIsImlhdCI6MTcwMTA5NDc5OCwiZXhwIjoxNzAxMDk4Mzk4fQ.YePqxFBvH1DP7f0VILs7Gh696xaNv3_auOOyGd8xyKc',
-            ),
+            pointAppbar(token: widget.token),
             SizedBox(width: 10),
           ],
           bottom: PreferredSize(

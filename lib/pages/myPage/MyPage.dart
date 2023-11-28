@@ -43,12 +43,10 @@ String getDrinkString(int? drink) {
   }
 }
 
-void main() {
-  runApp(MyPage());
-}
-
 class MyPage extends StatefulWidget {
-  const MyPage({super.key});
+
+  final String token;
+  const MyPage({super.key, required this.token});
 
   @override
   State<StatefulWidget> createState() {
@@ -67,16 +65,17 @@ class _MyPage extends State<MyPage> {
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("수정 버튼 눌러짐");
-    var token = getToken();
-    print(token);
+    // var token = getToken();
+    // print(token);
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-    String accessToken = await getToken();
-    String refreshToken = await getRefreshToken();
-    print("access Token$accessToken");
-    print("refresh Token$refreshToken");
+
+    // String accessToken = await getToken();
+    // String refreshToken = await getRefreshToken();
+    // print("access Token$accessToken");
+    // print("refresh Token$refreshToken");
 // =======
 //     // String accessToken = await getToken();
 //     // String refreshToken = await getRefreshToken();
@@ -93,7 +92,7 @@ class _MyPage extends State<MyPage> {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer ${widget.token}',
       },
     );
 
@@ -139,16 +138,16 @@ class _MyPage extends State<MyPage> {
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
     // var savedToken = getToken();
-    var savedToken =
+    // var savedToken =
         //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
+        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
 
-    print(savedToken);
+    // print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
+        'Authorization': 'Bearer ${widget.token}',
       },
     );
     print('Response Status Code: ${response.statusCode}');
@@ -168,31 +167,37 @@ class _MyPage extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(244),
+        child: AppBar(
+        toolbarHeight: 80,
+          scrolledUnderElevation: 0.0,
           automaticallyImplyLeading: false,
-          toolbarHeight: 244,
+          flexibleSpace: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: 80),
+                  padding: EdgeInsets.all(13),
+                  child: ellipseText(text: 'My Profile')),
+            ],
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: <Widget>[
-            pointAppbar(
-                point: 120,
-                userToken:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjZUMDE6MzU6MjEuNDU0WiIsImlhdCI6MTcwMDkzMDEyMSwiZXhwIjoxNzAwOTMzNzIxfQ.MZbWII_KZtuxtJma2mhXddZBio9OTU5dYQSGAtVrnyE'),
-            Container(
-              margin: EdgeInsets.only(right: 20),
-              child: IconButton(
-                icon: Icon(Icons.settings),
-                color: Color.fromRGBO(48, 48, 48, 1),
-                onPressed: () {
-                  print("설정 버튼 눌러짐");
-                  var token = getToken();
-                  print(token);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SettingPage()),
-                  );
-                },
-              ),
+          actions: [
+            pointAppbar(token: widget.token),
+            IconButton(
+              icon: Image.asset('assets/images/setting.png'),
+              color: Color.fromRGBO(48, 48, 48, 1),
+              onPressed: () {
+                print("설정 버튼 눌러짐");
+                var token = getToken();
+                print(token);
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SettingPage()),
+                );
+              },
             ),
             SizedBox(width: 10),
           ],

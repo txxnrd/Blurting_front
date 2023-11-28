@@ -8,10 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:blurting/signupquestions/token.dart';
 
 class PointHistoryPage extends StatefulWidget {
-  final String userToken;
+  final String token;
 
   // Constructor to receive the user token
-  PointHistoryPage({required this.userToken});
+  PointHistoryPage({required this.token});
 
   @override
   _PointHistoryPageState createState() => _PointHistoryPageState();
@@ -28,17 +28,16 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     print('fetchPointAdd called');
     var url = Uri.parse(API.pointadd);
     // var savedToken = getToken();
-    var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTg6MTA6MjguNTI2WiIsImlhdCI6MTcwMTA3NjIyOCwiZXhwIjoxNzAxMDc5ODI4fQ.Dz5yR3Et0kaRXAAJZrz1hzxEE4fprwILypmaDSlzVBc';
-
-    print(savedToken);
+    // var savedToken =
+    //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
+    // print(savedToken);
 
     try {
       var response = await http.get(
         Uri.parse('$url?amount=100'), // Query parameter added to the URL
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
+          'Authorization': 'Bearer ${widget.token}',
         },
       );
 
@@ -76,16 +75,16 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     print('fetchPointSubtract called');
     var url = Uri.parse(API.pointsubtract);
     // var savedToken = getToken();
-    var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTg6MTA6MjguNTI2WiIsImlhdCI6MTcwMTA3NjIyOCwiZXhwIjoxNzAxMDc5ODI4fQ.Dz5yR3Et0kaRXAAJZrz1hzxEE4fprwILypmaDSlzVBc';
-    print(savedToken);
+    // var savedToken =
+    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
+    // print(savedToken);
 
     try {
       var response = await http.get(
         Uri.parse('$url?amount=100'), // Query parameter added to the URL
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
+          'Authorization': 'Bearer ${widget.token}',
         },
       );
 
