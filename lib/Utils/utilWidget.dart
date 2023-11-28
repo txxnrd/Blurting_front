@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:http/http.dart' as http;
 
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:blurting/pages/myPage/PointHistory.dart';
 import 'dart:convert';
 import 'dart:io';
 import '../../config/app_config.dart';
-
 
 DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
 
@@ -100,7 +100,6 @@ class CustomInputField extends StatefulWidget {
   final int questionId;
 
   CustomInputField(
-
       {required this.controller,
       this.sendFunction,
       required this.isBlock,
@@ -622,8 +621,8 @@ class AnswerItem extends StatefulWidget {
 }
 
 class _AnswerItemState extends State<AnswerItem> {
-    bool enoughPoint = true;
-    bool isValid = false;
+  bool enoughPoint = true;
+  bool isValid = false;
 
   // 신고하시겠습니까? 모달 띄우는 함수
   void _ClickWarningButton(BuildContext context) {
@@ -688,17 +687,16 @@ class _AnswerItemState extends State<AnswerItem> {
       },
     );
   }
-    
+
   void isTap(bool status) {
     isValid = status;
   }
 
 // 프로필 클릭 시 모달 띄우는 함수
   void _showProfileModal(BuildContext context, bool isAlready) {
-
     enoughPoint = true;
     isValid = false;
-    
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -778,12 +776,15 @@ class _AnswerItemState extends State<AnswerItem> {
                           Column(
                             children: [
                               GestureDetector(
-                                onTap: (!isAlready) ? () async {
-                                  await checkPoint(widget.token);
-                                  setState(() {
-                                    if (!isAlready && enoughPoint) isTap(true);
-                                  });
-                                } : null,
+                                onTap: (!isAlready)
+                                    ? () async {
+                                        await checkPoint(widget.token);
+                                        setState(() {
+                                          if (!isAlready && enoughPoint)
+                                            isTap(true);
+                                        });
+                                      }
+                                    : null,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 20, bottom: 5),
                                   child: Stack(
@@ -892,7 +893,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                       },
                                     ),
                                   ),
-                                  GestureDetector(        // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
+                                  GestureDetector(
+                                    // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.8,
@@ -973,11 +975,10 @@ class _AnswerItemState extends State<AnswerItem> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
-                              width:
-                                  MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.8,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color:  mainColor.lightGray.withOpacity(0.5)),
+                                  color: mainColor.lightGray.withOpacity(0.5)),
                               child: Stack(
                                 alignment: Alignment.centerLeft,
                                 children: [
@@ -1077,7 +1078,7 @@ class _AnswerItemState extends State<AnswerItem> {
       child: ListTile(
         subtitle: // 답변 내용
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
@@ -1135,7 +1136,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                     color: Color.fromRGBO(255, 238, 238, 1),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
                                         margin: EdgeInsets.only(
@@ -1177,14 +1179,16 @@ class _AnswerItemState extends State<AnswerItem> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image(
-                                      image: AssetImage('assets/images/heart.png'),
+                                      image:
+                                          AssetImage('assets/images/heart.png'),
                                       color: isLiked
                                           ? mainColor.MainColor
                                           : Colors.white,
                                     ),
                                     if (likedNum != 0)
                                       Container(
-                                        margin: EdgeInsets.only(left: 3, top: 1),
+                                        margin:
+                                            EdgeInsets.only(left: 3, top: 1),
                                         child: Text(
                                           '$likedNum',
                                           style: TextStyle(
@@ -1214,8 +1218,7 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   Future<void> fetchProfile(String token) async {
-    final url = Uri.parse(
-        '${API.answerProfile}${widget.userId}');
+    final url = Uri.parse('${API.answerProfile}${widget.userId}');
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -1244,10 +1247,9 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   Future<void> checkPoint(String token) async {
+    print('포인트 확인'); // 확인만 하고 차감은 X
 
-    print('포인트 확인');     // 확인만 하고 차감은 X
-
-    final url = Uri.parse(API.pointchat);     // 포인트 확인하는 api로 바꿔서 해야 한다... ㄱ-
+    final url = Uri.parse(API.pointchat); // 포인트 확인하는 api로 바꿔서 해야 한다... ㄱ-
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',
@@ -1260,9 +1262,9 @@ class _AnswerItemState extends State<AnswerItem> {
       print('요청 성공');
       print(response.body);
 
-      if(responseData == false){
+      if (responseData == false) {
         print('포인트 부족');
-        if(mounted){
+        if (mounted) {
           setState(() {
             enoughPoint = false;
             isTap(false);
@@ -1270,11 +1272,10 @@ class _AnswerItemState extends State<AnswerItem> {
             print(isValid);
           });
         }
+      } else {
+        Provider.of<UserProvider>(context, listen: false).point =
+            responseData['point'];
       }
-      else {
-        Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
-      }
-
     } else {
       print(response.statusCode);
       throw Exception('프로필을 로드하는 데 실패했습니다');

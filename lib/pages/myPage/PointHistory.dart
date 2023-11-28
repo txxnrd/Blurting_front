@@ -27,9 +27,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     if (!mounted) return [];
     print('fetchPointAdd called');
     var url = Uri.parse(API.pointadd);
-    var savedToken = getToken();
-    // var savedToken =
-    //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
+    // var savedToken = getToken();
+    var savedToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTg6MTA6MjguNTI2WiIsImlhdCI6MTcwMTA3NjIyOCwiZXhwIjoxNzAxMDc5ODI4fQ.Dz5yR3Et0kaRXAAJZrz1hzxEE4fprwILypmaDSlzVBc';
+
     print(savedToken);
 
     try {
@@ -76,7 +77,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     var url = Uri.parse(API.pointsubtract);
     // var savedToken = getToken();
     var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTg6MTA6MjguNTI2WiIsImlhdCI6MTcwMTA3NjIyOCwiZXhwIjoxNzAxMDc5ODI4fQ.Dz5yR3Et0kaRXAAJZrz1hzxEE4fprwILypmaDSlzVBc';
     print(savedToken);
 
     try {

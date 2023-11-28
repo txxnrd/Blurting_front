@@ -248,7 +248,11 @@ class _HomeState extends State<Home> {
             ),
           ),
           actions: <Widget>[
-            PointAppbar(point: 100),
+            pointAppbar(
+              point: 100,
+              userToken:
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMjM6MTk6NTguNzk1WiIsImlhdCI6MTcwMTA5NDc5OCwiZXhwIjoxNzAxMDk4Mzk4fQ.YePqxFBvH1DP7f0VILs7Gh696xaNv3_auOOyGd8xyKc',
+            ),
             IconButton(
               icon: Icon(Icons.settings),
               color: Color.fromRGBO(48, 48, 48, 1),
@@ -427,4 +431,3 @@ class YourBlurtingWidget extends StatelessWidget {
     }
   }
 }
-

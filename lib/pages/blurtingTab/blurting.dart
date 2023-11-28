@@ -85,7 +85,6 @@ class _Blurting extends State<Blurting> {
           preferredSize: Size(10, 10),
           child: Stack(
             alignment: Alignment.centerLeft,
-
             children: [
               Container(
                   margin: EdgeInsets.only(top: 80),
@@ -93,8 +92,6 @@ class _Blurting extends State<Blurting> {
                   child: ellipseText(text: 'Blurting')),
             ],
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -111,14 +108,18 @@ class _Blurting extends State<Blurting> {
             GestureDetector(
               child: staticButton(text: isState),
               onTap: () async {
-                
-                DateTime lastTime = Provider.of<GroupChatProvider>(context, listen: false).lastTime.add(Duration(hours: 9));
-                
+                DateTime lastTime =
+                    Provider.of<GroupChatProvider>(context, listen: false)
+                        .lastTime
+                        .add(Duration(hours: 9));
+
                 if (isState == 'Continue') {
                   await fetchLatestComments(widget.token);
 
                   if (lastTime.isBefore(createdAt.add(Duration(hours: 24))) ||
-                      lastTime.isBefore(createdAt.add(Duration(hours:48)))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                      lastTime.isBefore(createdAt.add(Duration(
+                          hours:
+                              48)))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
                   {
                     // ignore: use_build_context_synchronously
                     Navigator.push(
@@ -140,7 +141,8 @@ class _Blurting extends State<Blurting> {
                                   token: widget.token,
                                 )));
                   }
-                } else if (isState == 'Start') {      // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
+                } else if (isState == 'Start') {
+                  // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
                   Navigator.push(
                       context,
                       MaterialPageRoute(

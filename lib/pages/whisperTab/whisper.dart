@@ -154,9 +154,9 @@ class _Whisper extends State<Whisper> {
             isBlock = true;
           });
         }
-          // if (data['userId'] == UserProvider.UserId) {
-          //   print(context);
-          // } else {}
+        // if (data['userId'] == UserProvider.UserId) {
+        //   print(context);
+        // } else {}
       }
     });
 
@@ -200,7 +200,11 @@ class _Whisper extends State<Whisper> {
           ],
         ),
         actions: <Widget>[
-          pointAppbar(),
+          pointAppbar(
+            point: 150,
+            userToken:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMjM6MTk6NTguNzk1WiIsImlhdCI6MTcwMTA5NDc5OCwiZXhwIjoxNzAxMDk4Mzk4fQ.YePqxFBvH1DP7f0VILs7Gh696xaNv3_auOOyGd8xyKc',
+          ),
           Container(
             margin: EdgeInsets.only(right: 20),
             child: IconButton(
@@ -211,125 +215,121 @@ class _Whisper extends State<Whisper> {
                   barrierDismissible: true,
                   context: context,
                   builder: (BuildContext context) {
-                      return Scaffold(
-                        backgroundColor: Colors.black.withOpacity(0.2),
-                        body: Stack(
-                          children: [
-                            Positioned(
-                              bottom: 100,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.only(top: 30),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(bottom: 20),
-                                          child: Stack(
-                                            alignment: Alignment.bottomCenter,
-                                            children: [
-                                              Container(
+                    return Scaffold(
+                      backgroundColor: Colors.black.withOpacity(0.2),
+                      body: Stack(
+                        children: [
+                          Positioned(
+                            bottom: 100,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.only(top: 30),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 20),
+                                        child: Stack(
+                                          alignment: Alignment.bottomCenter,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8,
+                                              height: 100,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: mainColor.lightGray
+                                                      .withOpacity(0.5)),
+                                              alignment: Alignment.topCenter,
+                                              child: Container(
+                                                margin: EdgeInsets.all(10),
+                                                child: Column(
+                                                  children: const [
+                                                    Text(
+                                                      '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 10,
+                                                          fontFamily: "Heebo"),
+                                                    ),
+                                                    Text(
+                                                      '채팅 상대방과 다시는 매칭되지 않습니다.',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 10,
+                                                          fontFamily: "Heebo"),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              child: Container(
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
                                                     0.8,
-                                                height: 100,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10),
-                                                    color: mainColor.lightGray
-                                                        .withOpacity(0.5)),
-                                                alignment: Alignment.topCenter,
-                                                child: Container(
-                                                  margin: EdgeInsets.all(10),
-                                                  child: Column(
-                                                    children: const [
-                                                      Text(
-                                                        '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 10,
-                                                            fontFamily:
-                                                                "Heebo"),
-                                                      ),
-                                                      Text(
-                                                        '채팅 상대방과 다시는 매칭되지 않습니다.',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 10,
-                                                            fontFamily:
-                                                                "Heebo"),
-                                                      ),
-                                                    ],
+                                                    color: mainColor.MainColor),
+                                                height: 50,
+                                                // color: mainColor.MainColor,
+                                                child: Center(
+                                                  child: Text(
+                                                    '방 나가기',
+                                                    style: TextStyle(
+                                                        fontFamily: 'Heebo',
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w500),
                                                   ),
                                                 ),
                                               ),
-                                              GestureDetector(
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.8,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color:
-                                                          mainColor.MainColor),
-                                                  height: 50,
-                                                  // color: mainColor.MainColor,
-                                                  child: Center(
-                                                    child: Text(
-                                                      '방 나가기',
-                                                      style: TextStyle(
-                                                          fontFamily: 'Heebo',
-                                                          color: Colors.white,
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                  ),
-                                                ),
-                                                onTap: () {
-                                                  widget.socket.emit('leave_room',
+                                              onTap: () {
+                                                widget.socket.emit('leave_room',
                                                     widget.roomId);
                                                 print('채팅 나가는 중...');
                                                 Navigator.pop(context);
                                                 Navigator.pop(context);
                                               },
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                        GestureDetector(
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.8,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: mainColor.lightGray),
-                                            // color: mainColor.MainColor,
-                                            child: Center(
-                                              child: Text(
-                                                '취소',
-                                                style: TextStyle(
-                                                    fontFamily: 'Heebo',
-                                                    color: Colors.white,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w500),
+                                      ),
+                                      GestureDetector(
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.8,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: mainColor.lightGray),
+                                          // color: mainColor.MainColor,
+                                          child: Center(
+                                            child: Text(
+                                              '취소',
+                                              style: TextStyle(
+                                                  fontFamily: 'Heebo',
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                           ),
                                         ),
@@ -340,16 +340,16 @@ class _Whisper extends State<Whisper> {
                                             });
                                           }
                                         },
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      );
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
                   },
                 );
               },
@@ -416,7 +416,7 @@ class _Whisper extends State<Whisper> {
       createdAt: '전송 중...',
       read: true,
       isBlurting: false,
-                likedNum: 0,
+      likedNum: 0,
     );
 
     // 소켓 서버에 데이터 전송
@@ -438,8 +438,7 @@ class _Whisper extends State<Whisper> {
   Future<void> fetchChats(String token) async {
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    final url =
-        Uri.parse('${API.chatList}${widget.roomId}');
+    final url = Uri.parse('${API.chatList}${widget.roomId}');
 
     final response = await http.get(url, headers: {
       'authorization': 'Bearer $token',

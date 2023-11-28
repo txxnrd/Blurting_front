@@ -191,7 +191,13 @@ class _GroupChat extends State<GroupChat> {
                     )),
               ],
             ),
-            Positioned(right: 0, child: pointAppbar()),
+            Positioned(
+                right: 0,
+                child: pointAppbar(
+                  point: 110,
+                  userToken:
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMjM6MTk6NTguNzk1WiIsImlhdCI6MTcwMTA5NDc5OCwiZXhwIjoxNzAxMDk4Mzk4fQ.YePqxFBvH1DP7f0VILs7Gh696xaNv3_auOOyGd8xyKc',
+                )),
           ],
         ),
         bottom: PreferredSize(
