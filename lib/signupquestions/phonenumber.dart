@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/signupquestions/sex.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +44,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       }
     });
   }
-  Future<String?> getDefaultContact() async {
-    Iterable<Contact> contacts = await ContactsService.getContacts();
-    return contacts.isNotEmpty ? contacts.first.phones!.first.value : "";
-  }
+
 
   final _controller = TextEditingController();
   final _controller_certification = TextEditingController();
@@ -63,12 +61,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     );
   }
 
-    String phonenumber='';
-    String verificationnumber='';
-    bool certification = false;
-    bool IsValid = false;
-    bool showError = false;
-    String Errormessage ='';
+  String phonenumber='';
+  String verificationnumber='';
+  bool certification = false;
+  bool IsValid = false;
+  bool showError = false;
+  String Errormessage ='';
 
   @override
   void InputPhoneNumber(String value) {
@@ -126,13 +124,13 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       var data = json.decode(response.body);
       var token = data['signupToken'];
       if(token != null)
-        {
-          startTimer();
-          NowCertification();
-          print(token);
-          // 토큰을 로컬에 저장
-          await saveToken(token);
-        }
+      {
+        startTimer();
+        NowCertification();
+        print(token);
+        // 토큰을 로컬에 저장
+        await saveToken(token);
+      }
 
     } else {
       // 오류가 발생한 경우 처리
@@ -216,18 +214,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       IsValid = false;
     });
   }
-  Future<void> initContact() async {
-    await requestPermission();
-    String? contactNumber = await getDefaultContact();
-    if (contactNumber != null && contactNumber.isNotEmpty) {
-      setState(() {
-        _controller.text = contactNumber;
-        InputPhoneNumber(contactNumber);  // 여기에 추가
-      });
-    }
-  }
 
-   requestPermission() async {
+
+  requestPermission() async {
     var status = await Permission.contacts.status;
     if (!status.isGranted) {
       await Permission.contacts.request();
@@ -239,7 +228,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   @override
   void initState()  {
     super.initState();
-    initContact();
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
@@ -348,7 +336,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   ),
                   Positioned(
                     left: MediaQuery.of(context).size.width *
-                            _progressAnimation!.value -
+                        _progressAnimation!.value -
                         15,
                     bottom: -10,
                     child: Image.asset('assets/signupface.png',
@@ -453,48 +441,48 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                         width: 110,
                         margin: EdgeInsets.only(right: 11,top: 9,bottom:9), // 필요에 따라 마진 조정
                         child:Row(
-                          children:[
-                        Expanded(
-                        child: Text(
-                        formatDuration(_duration), // 타이머 초기값
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(DefinedColor.darkpink), // 타이머 색상
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        ),
-                            Container(
-                              width: 56, // 버튼의 너비를 설정합니다.
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _sendPostRequest(phonenumber);
-                                  startTimer();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                            children:[
+                              Expanded(
+                                child: Text(
+                                  formatDuration(_duration), // 타이머 초기값
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color(DefinedColor.darkpink), // 타이머 색상
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  backgroundColor: Color(DefinedColor.darkpink),
-                                  elevation: 0.0,
-                                  padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
                                 ),
-                                child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
-                                  fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
-                                  child: Text('재전송',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 15,
-                                      fontFamily: 'Pretendard',
-                                      color: Colors.white,
+                              ),
+                              Container(
+                                width: 56, // 버튼의 너비를 설정합니다.
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    _sendPostRequest(phonenumber);
+                                    startTimer();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5), // 버튼의 모서리 둥글게 조정
+                                    ),
+                                    backgroundColor: Color(DefinedColor.darkpink),
+                                    elevation: 0.0,
+                                    padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                                  ),
+                                  child: FittedBox( // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
+                                    fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                    child: Text('재전송',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15,
+                                        fontFamily: 'Pretendard',
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ]
+                            ]
+                        ),
                       ),
-                    ),
                     ),
                     onChanged: (value) {
                       InputCertification(value);
