@@ -71,28 +71,14 @@ class _MyPage extends State<MyPage> {
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-
-    // String accessToken = await getToken();
-    // String refreshToken = await getRefreshToken();
-    // print("access Token$accessToken");
-    // print("refresh Token$refreshToken");
-// =======
-//     // String accessToken = await getToken();
-//     // String refreshToken = await getRefreshToken();
-//     String accessToken =
-//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-//     String refreshToken =
-//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
-
-//     print("access Token" + accessToken);
-//     print("access Token" + refreshToken);
-// >>>>>>> main
+    String accessToken = await getToken();
+    String refreshToken = await getRefreshToken();
 
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${widget.token}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
 
@@ -137,7 +123,7 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-    // var savedToken = getToken();
+    String accessToken = await getToken();
     // var savedToken =
         //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
         // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
@@ -147,7 +133,7 @@ class _MyPage extends State<MyPage> {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${widget.token}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     print('Response Status Code: ${response.statusCode}');

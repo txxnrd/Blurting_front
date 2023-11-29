@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:blurting/StartPage/email_alreadyuser.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 import 'package:blurting/signupquestions/token.dart';
@@ -15,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../colors/colors.dart';
 import '../config/app_config.dart';
+import 'alreadyuser.dart';
 
 
 
@@ -208,12 +208,10 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 1,),
               InkWell(
                 onTap: () {
-
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context)=> EmailAlreadyUserPage()),
+                      MaterialPageRoute(builder: (context)=> AlreadyUserPage()),
                     );
-
                 },
 
                 child: Container(

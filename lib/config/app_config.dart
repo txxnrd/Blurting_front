@@ -8,6 +8,10 @@ class API {
   /*signup 과정에서 필요한 api */
   static const String sendphone =
       "${ServerEndpoints.serverEndpoint}/auth/signup/phonenumber";
+  static const String alreadyuser =
+      "${ServerEndpoints.serverEndpoint}/auth/already/signed";
+  static const String alreadyusercheck =
+      "${ServerEndpoints.serverEndpoint}/auth/alreay/signed/check";
   static const String checkphone =
       "${ServerEndpoints.serverEndpoint}/auth/check/phone";
   static const String checkemail =
