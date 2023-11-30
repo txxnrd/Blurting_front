@@ -1012,8 +1012,8 @@ class _AnswerItemState extends State<AnswerItem> {
                 _showProfileModal(context, widget.isAlready); // jsonData 매개변수
               },
               child: Container(
-                width: 50,
-                height: 50,
+                width: 55,
+                height: 55,
                 decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(50)),
@@ -1212,18 +1212,18 @@ if(mounted)
 
     final url = Uri.parse(API.pointchat);
 
-    final response = await http.get(
+    final response = await http.post(
       url,
       headers: {
         'authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      // body: json.encode({'userId': widget.userId})
+      body: json.encode({'userId': widget.userId})
     );
 
     dynamic responseData = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       print('요청 성공');
 
       if (responseData != false || responseData['point'] >= 10) {
@@ -1251,10 +1251,10 @@ class staticButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromRGBO(255, 210, 210, 1),
+        color: mainColor.MainColor,
       ),
       margin: EdgeInsets.only(bottom: 140),
-      width: 344,
+      width: MediaQuery.of(context).size.width * 0.8,
       height: 48,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1263,7 +1263,7 @@ class staticButton extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-                color: mainColor.MainColor, fontSize: 20, fontFamily: 'Heebo'),
+                color: Colors.white, fontSize: 20, fontFamily: 'Heebo', fontWeight: FontWeight.w400),
           ),
         ],
       ),
