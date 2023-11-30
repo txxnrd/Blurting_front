@@ -231,7 +231,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -249,7 +249,7 @@
     },
     {
       "name": "flutter_local_notifications",
-      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/flutter_local_notifications-16.1.0",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/flutter_local_notifications-16.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -279,13 +279,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_test",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -651,7 +651,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -860,7 +860,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-30T09:05:20.263034Z",
+  "generated": "2023-11-30T14:57:23.221967Z",
   "generator": "pub",
   "generatorVersion": "3.2.0"
 }

@@ -157,14 +157,11 @@ class ImagePageState extends State<ImagePage>
   Future<void> _pickImage3() async {
 
     count+=1;
-
-
     var picker = ImagePicker();
     String savedToken = await getToken();
     var image3 = await picker.pickImage(source: ImageSource.gallery);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
-    _showImageUploadingSnackBar();
     // 새로운 이미지를 선택한 경우에만 처리
     if (image3 != null) {
       File selectedImage = File(image3.path); // 선택된 이미지 파일

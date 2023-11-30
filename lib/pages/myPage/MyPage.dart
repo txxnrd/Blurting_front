@@ -65,23 +65,31 @@ class _MyPage extends State<MyPage> {
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("수정 버튼 눌러짐");
-    // var token = getToken();
-    // print(token);
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
+<<<<<<< HEAD
     String accessToken = await getToken();
     String refreshToken = await getRefreshToken();
+=======
+
+    String accessToken = await getToken();
+    String refreshToken = await getRefreshToken();
+
+>>>>>>> taeyun
 
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+<<<<<<< HEAD
         'Authorization': 'Bearer $accessToken',
+=======
+        'Authorization': 'Bearer ${accessToken}',
+>>>>>>> taeyun
       },
     );
-
     print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
@@ -126,12 +134,22 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
+<<<<<<< HEAD
     String accessToken = await getToken();
+=======
+    String savedToken = await getToken();
+
+    // print(savedToken);
+>>>>>>> taeyun
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+<<<<<<< HEAD
         'Authorization': 'Bearer $accessToken',
+=======
+        'Authorization': 'Bearer $savedToken',
+>>>>>>> taeyun
       },
     );
     print('Response Status Code: ${response.statusCode}');
