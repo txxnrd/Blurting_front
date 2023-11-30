@@ -158,10 +158,24 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-
-              // SizedBox(
-              //   height: 10,
-              // ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                 Container(
+                   width: 62.7,
+                   height: 66,
+                   child: Image.asset("assets/images/girl.png"),
+                 ),
+                 SizedBox(width: 4,),
+                 Container(
+                   width: 62.7,
+                   height: 66,
+                   child: Image.asset("assets/images/boy.png"),
+                 )
+               ],
+             ),
+            ),
               Container(
                 alignment: Alignment.center,
                 width: 180,
