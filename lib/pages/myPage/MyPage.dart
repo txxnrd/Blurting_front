@@ -119,16 +119,14 @@ class _MyPage extends State<MyPage> {
   void initState() {
     super.initState();
     fetchUserProfile();
+    for (String imagePath in imagePaths) {
+      precacheImage(NetworkImage(imagePath), context);
+    }
   }
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
     String accessToken = await getToken();
-    // var savedToken =
-        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
-
-    // print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
