@@ -69,25 +69,16 @@ class _MyPage extends State<MyPage> {
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-<<<<<<< HEAD
-    String accessToken = await getToken();
-    String refreshToken = await getRefreshToken();
-=======
 
     String accessToken = await getToken();
     String refreshToken = await getRefreshToken();
-
->>>>>>> taeyun
 
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-<<<<<<< HEAD
         'Authorization': 'Bearer $accessToken',
-=======
-        'Authorization': 'Bearer ${accessToken}',
->>>>>>> taeyun
+
       },
     );
     print(response.body);
@@ -134,22 +125,16 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-<<<<<<< HEAD
-    String accessToken = await getToken();
-=======
-    String savedToken = await getToken();
 
-    // print(savedToken);
->>>>>>> taeyun
+    String accessToken = await getToken();
+
+
+
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-<<<<<<< HEAD
         'Authorization': 'Bearer $accessToken',
-=======
-        'Authorization': 'Bearer $savedToken',
->>>>>>> taeyun
       },
     );
     print('Response Status Code: ${response.statusCode}');
