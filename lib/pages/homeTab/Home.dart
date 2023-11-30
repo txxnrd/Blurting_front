@@ -2,7 +2,26 @@ import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<Map<String, dynamic>> fetchData(String token) async {
+  final response = await http.get(
+      Uri.parse(
+          'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
+      headers: {
+        'authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      });
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    print('Server Response: $data'); // Add this line to print server response
+    return data;
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
 
 class CardItem {
   final String userName;
@@ -60,12 +79,21 @@ class _HomeState extends State<Home> {
     // Add more items as needed
   ];
 
-  Duration remainingTime = Duration(hours: 1, minutes: 30, seconds: 32);
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
+  Map<String, dynamic>? apiResponse;
+  late Duration remainingTime;
 
   @override
   void initState() {
     super.initState();
+    fetchData(widget.token).then((data) {
+      setState(() {
+        apiResponse = data;
+
+        int seconds = data['seconds'];
+        remainingTime = Duration(seconds: seconds);
+      });
+    });
     updateRemainingTime();
   }
 
@@ -75,9 +103,20 @@ class _HomeState extends State<Home> {
         setState(() {
           remainingTime = remainingTime - Duration(seconds: 1);
         });
-        updateRemainingTime(); // 다음 업데이트 예약
+        updateRemainingTime();
+      } // 다음 업데이트 예약
+      else {
+        print("블러팅 탭에 접속하여, 새로운 질문을 확인하세요!");
       }
     });
+  }
+
+  String formatDuration(Duration duration) {
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes.remainder(60);
+    int remainingSeconds = duration.inSeconds.remainder(60);
+
+    return '$hours : $minutes : $remainingSeconds';
   }
 
   @override
@@ -183,8 +222,16 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 10),
                 Row(
                   children: [
+                    Icon(
+                      Icons.calendar_today,
+                      color: Colors.white,
+                      size: 15,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
                     Text(
-                      'Date: ${cardItems[index].date}',
+                      '${cardItems[index].date}',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Heebo',
@@ -192,7 +239,7 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 50),
+                    SizedBox(width: 70),
                     GestureDetector(
                       onTap: () {
                         // 좋아요 버튼을 눌렀을 때의 로직
@@ -206,13 +253,13 @@ class _HomeState extends State<Home> {
                         size: 15,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 7),
                     Text(
-                      'Likes: ${cardItems[index].likes}',
+                      '${cardItems[index].likes}',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Heebo',
-                        fontSize: 15,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -240,14 +287,27 @@ class _HomeState extends State<Home> {
           toolbarHeight: 80,
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text(
-            '다음 질문까지 ${formatDuration(remainingTime)}',
-            style: TextStyle(
-              color: Colors.black87,
-              fontFamily: 'Heebo',
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-            ),
+          title: Row(
+            children: [
+              Text(
+                '다음 질문까지   ',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontFamily: 'Heebo',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Text(
+                '${formatDuration(remainingTime)}',
+                style: TextStyle(
+                  color: Color(0XFFF66464),
+                  fontFamily: 'Heebo',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+            ],
           ),
           actions: <Widget>[
             pointAppbar(token: widget.token),
@@ -265,7 +325,7 @@ class _HomeState extends State<Home> {
                   child: Text(
                     '오늘의 MVP',
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Color(0XFF303030),
                       fontFamily: 'Heebo',
                       fontSize: 20.0,
                       fontWeight: FontWeight.w700,
@@ -302,9 +362,9 @@ class _HomeState extends State<Home> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Text(
-                    'Today Blurting',
+                    'Now Blurting',
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Color(0XFF303030),
                       fontFamily: 'Heebo',
                       fontSize: 20.0,
                       fontWeight: FontWeight.w700,
@@ -316,19 +376,23 @@ class _HomeState extends State<Home> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      YourBlurtingWidget(icon: 'arrow', count: 5),
+                      YourBlurtingWidget(
+                          icon: 'arrow', apiResponse: apiResponse),
                       SizedBox(
                         height: 25,
                       ),
-                      YourBlurtingWidget(icon: 'match', count: 10),
+                      YourBlurtingWidget(
+                          icon: 'match', apiResponse: apiResponse),
                       SizedBox(
                         height: 25,
                       ),
-                      YourBlurtingWidget(icon: 'chat', count: 15),
+                      YourBlurtingWidget(
+                          icon: 'chat', apiResponse: apiResponse),
                       SizedBox(
                         height: 25,
                       ),
-                      YourBlurtingWidget(icon: 'like', count: 25),
+                      YourBlurtingWidget(
+                          icon: 'like', apiResponse: apiResponse),
                       SizedBox(
                         height: 20,
                       ),
@@ -342,24 +406,35 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  String formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return '${twoDigits(duration.inHours)}:${twoDigitMinutes}:${twoDigitSeconds}';
-  }
 }
 
 class YourBlurtingWidget extends StatelessWidget {
   final String icon;
-  final int count;
+  final Map<String, dynamic>? apiResponse;
 
-  YourBlurtingWidget({Key? key, required this.icon, required this.count})
+  YourBlurtingWidget({Key? key, required this.icon, required this.apiResponse})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int dynamicCount = 0;
+    if (apiResponse != null) {
+      switch (icon) {
+        case 'arrow':
+          dynamicCount = apiResponse!['arrows'];
+          break;
+        case 'match':
+          dynamicCount = apiResponse!['matchedArrows'];
+          break;
+        case 'chat':
+          dynamicCount = apiResponse!['chats'];
+          break;
+        case 'like':
+          dynamicCount = apiResponse!['likes'];
+          break;
+      }
+    }
+
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -368,7 +443,7 @@ class YourBlurtingWidget extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20),
             child:
                 Image.asset('./assets/images/$icon.png', width: 24, height: 24),
-          ), // 이미지 추가
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
@@ -394,9 +469,9 @@ class YourBlurtingWidget extends StatelessWidget {
           height: 28,
           child: Center(
             child: Text(
-              '$count',
+              '$dynamicCount', // Use dynamic count here
               style: TextStyle(
-                color: Colors.black87,
+                color: Colors.grey,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -409,11 +484,11 @@ class YourBlurtingWidget extends StatelessWidget {
   String getCountText() {
     switch (icon) {
       case 'arrow':
-        return '현재 블러팅에서 날아다니는 화살의 개수';
+        return '현재 블러팅에서 날아다니는 화살';
       case 'match':
-        return '오늘 블러팅에서 매치된 화살표의 개수';
+        return '블러팅에서 매치된 화살표의 개수';
       case 'chat':
-        return '오늘 블러팅에서 이루어진 귓속말 채팅';
+        return '블러팅에서 오고가는 귓속말 채팅방';
       case 'like':
         return '지금까지 당신의 답변을 좋아한 사람';
       default:

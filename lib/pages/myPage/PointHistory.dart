@@ -22,6 +22,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   late TabController _tabController;
   List<Map<String, dynamic>> earningHistoryList = [];
   List<Map<String, dynamic>> usageHistoryList = [];
+  bool isFetchingData = false; //무한 http 호출 방지
 
   Future<List<Map<String, dynamic>>> fetchPointAdd() async {
     if (!mounted) return [];
@@ -53,10 +54,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
         if (mounted) {
-          setState(() {
+          {
             usageHistoryList = [];
             earningHistoryList = data;
-          });
+          }
         }
         print('added Points loaded successfully.');
         return data;
@@ -99,10 +100,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
         if (mounted) {
-          setState(() {
+          {
             earningHistoryList = [];
             usageHistoryList = data;
-          });
+          }
         }
         print('subtracted Points loaded successfully.');
         return data;
@@ -193,14 +194,19 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   }
 
   Future<void> fetchDataForCurrentTab() async {
-    if (mounted) {
+    if (!isFetchingData && mounted) {
       try {
+        setState(() {
+          isFetchingData = true;
+        });
+
         List<Map<String, dynamic>> data = [];
         if (_tabController.index == 0) {
           data = await fetchPointAdd();
         } else if (_tabController.index == 1) {
           data = await fetchPointSubtract();
         }
+
         if (mounted) {
           setState(() {
             if (_tabController.index == 0) {
@@ -212,6 +218,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         }
       } catch (error) {
         print('Error in fetchDataForCurrentTab: $error');
+      } finally {
+        isFetchingData = false; //한번 fetch하고나선 다시 false로 유지
       }
     }
   }
@@ -219,11 +227,17 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.index = 1;
-    _tabController.addListener(() {
-      fetchDataForCurrentTab();
-    });
+    _tabController = TabController(length: 2, vsync: this)
+      ..addListener(() {
+        if (_tabController.indexIsChanging) {
+          print(
+              "tab is animating. from active (getting the index) to inactive(getting the index) ");
+        } else {
+          //tab is finished animating you get the current index
+          //here you can get your index or run some method once.
+          print(_tabController.index);
+        }
+      });
   }
 
   @override

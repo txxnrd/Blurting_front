@@ -17,7 +17,7 @@ int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
   static String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjhUMTQ6MzE6MDMuNTE0WiIsImlhdCI6MTcwMTE0OTQ2MywiZXhwIjoxNzAxMTUzMDYzfQ.okvR_jJyWEaWvj2u_FBlQqkFMBC13HxvilHitXyj2iY';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTItMDFUMDI6Mzg6MTUuODQ4WiIsImlhdCI6MTcwMTM2NTg5NSwiZXhwIjoxNzAxMzY5NDk1fQ.WBCn2L_ymrKcbEp18pQscWQ3R3x3Pt2bSb3dBk0q64s';
   IO.Socket socket = IO
       .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
     'transports': ['websocket'],
