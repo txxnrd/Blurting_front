@@ -243,7 +243,7 @@ class _GroupChat extends State<GroupChat> {
             children: [
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(top: 220), // 시작 위치에 여백 추가
+                  margin: EdgeInsets.only(top: 240), // 시작 위치에 여백 추가
                   child: SingleChildScrollView(
                     controller: _scrollController,
                     child: Column(
@@ -411,7 +411,7 @@ class _GroupChat extends State<GroupChat> {
                         createdAt: '',
                         read: true,
                         isBlurting: true,
-                        likedNum: 0));
+                        likedNum: answerData['likes']));
                     isBlock[currentIndex] = false; // true가 맞음
                   } else {
                     answerList[currentIndex].add(AnswerItem(

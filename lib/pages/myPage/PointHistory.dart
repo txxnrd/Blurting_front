@@ -51,12 +51,12 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
-        if (mounted) {
-          setState(() {
+        // if (mounted) {
+          // setState(() {
             usageHistoryList = [];
             earningHistoryList = data;
-          });
-        }
+          // });
+        // }
         print('added Points loaded successfully.');
         return data;
       } else {
@@ -97,12 +97,12 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         // Extract data from the response and update the state
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
-        if (mounted) {
-          setState(() {
+        // if (mounted) {
+          // setState(() {
             earningHistoryList = [];
             usageHistoryList = data;
-          });
-        }
+          // });
+        // }
         print('subtracted Points loaded successfully.');
         return data;
       } else {
