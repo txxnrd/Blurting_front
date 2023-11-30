@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:blurting/signupquestions/sex.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,18 +17,16 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 
 
-class PhoneNumberPage extends StatefulWidget {
-  const PhoneNumberPage({super.key});
+class AlreadyUserPage extends StatefulWidget {
+  const AlreadyUserPage({super.key});
 
   @override
-  _PhoneNumberPageState createState() => _PhoneNumberPageState();
+  _AlreadyUserPageState createState() => _AlreadyUserPageState();
 }
 
-class _PhoneNumberPageState extends State<PhoneNumberPage>
+class _AlreadyUserPageState extends State<AlreadyUserPage>
     with SingleTickerProviderStateMixin,WidgetsBindingObserver {
-  AnimationController? _animationController;
   String? _previousText;
-  Animation<double>? _progressAnimation;
   Timer? _timer;
   Duration _duration = Duration(minutes: 3);
 
@@ -46,6 +45,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       }
     });
   }
+
   Future<String?> getDefaultContact() async {
     Iterable<Contact> contacts = await ContactsService.getContacts();
     return contacts.isNotEmpty ? contacts.first.phones!.first.value : "";
@@ -55,10 +55,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   final _controller_certification = TextEditingController();
 
   Future<void> _increaseProgressAndNavigate() async {
-    await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => SexPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => MainApp(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -81,6 +80,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     });
   }
 
+
   @override
   void InputCertification(String value) {
     setState(() {
@@ -93,50 +93,25 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   bool first_post= true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
-    // var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-    // print("------------");
-    // print(fcmToken);
 
-    var url = Uri.parse(API.sendphone);
+    var url = Uri.parse(API.alreadyuser);
     //API.sendphone
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
-
-    String savedToken = await getToken();
-
-    if(first_post)
-      login_token = savedToken;
-    var token = first_post ? savedToken : login_token;
-
-    first_post = false;
-
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
       },
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
-
-
 
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
-
-      var data = json.decode(response.body);
-      var token = data['signupToken'];
-      if(token != null)
-      {
         startTimer();
         NowCertification();
-        print(token);
-        // 토큰을 로컬에 저장
-        await saveToken(token);
-      }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
@@ -147,22 +122,19 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   }
 
   Future<void> _sendVerificationRequest(String phoneNumber) async {
-    var url = Uri.parse(API.checkphone);
+    var url = Uri.parse(API.alreadyusercheck);
     //API.sendphone
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
     var queryParameters = {
       'code': verificationnumber,
     };
     var uri = url.replace(queryParameters: queryParameters);
-    String savedToken = await getToken();
 
     var response = await http.post(
       uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
 
@@ -172,11 +144,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
+      if(data['accessToken']!=null)
       {
-        var token = data['signupToken'];
+        var token = data['accessToken'];
+        var refreshtoken = data['refreshToken'];
+
         print(token);
         await saveToken(token);
+        await saveRefreshToken(refreshtoken);
         _increaseProgressAndNavigate();
       }
       else{
@@ -219,6 +194,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       IsValid = false;
     });
   }
+
   Future<void> initContact() async {
     await requestPermission();
     String? contactNumber = await getDefaultContact();
@@ -242,16 +218,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   @override
   void initState()  {
     super.initState();
-    initContact();
-    _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
-      vsync: this,
-    );
-    Firebase.initializeApp().whenComplete(() {
-      print("completed");
-      setState(() {});
-    });
-
     _controller.addListener(() {
       String text = _controller.text;
 
@@ -275,15 +241,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
       _previousText = _controller.text;
     });
-
-    _progressAnimation = Tween<double>(
-      begin: 0, // 시작 게이지 값
-      end: 1/15, // 종료 게이지 값
-    ).animate(_animationController!);
-
-    _animationController?.addListener(() {
-      setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
-    });
   }
 
   @override
@@ -306,13 +263,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           },
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Image.asset('assets/images/setting.png'),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              // 설정 버튼을 눌렀을 때의 동작
-            },
-          ),
+
         ],
       ),
 
@@ -327,40 +278,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
             children: <Widget>[
               SizedBox(
                 height: 25,
-              ),
-              Stack(
-                clipBehavior: Clip.none, // 이 부분 추가
-                children: [
-                  // 전체 배경색 설정 (하늘색)
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // 하늘색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  // 완료된 부분 배경색 설정 (파란색)
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        _progressAnimation!.value,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF303030), // 파란색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                        _progressAnimation!.value -
-                        15,
-                    bottom: -10,
-                    child: Image.asset('assets/signupface.png',
-                        width: 30, height: 30),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 50,
               ),
               Text(
                 '반가워요! 전화번호를 입력해 주세요',

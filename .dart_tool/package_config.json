@@ -44,6 +44,24 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "cached_network_image",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/cached_network_image-3.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cached_network_image_platform_interface",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/cached_network_image_platform_interface-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cached_network_image_web",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/cached_network_image_web-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "characters",
       "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/characters-1.3.0",
       "packageUri": "lib/",
@@ -213,9 +231,15 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter",
+      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
+    },
+    {
+      "name": "flutter_cache_manager",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/flutter_cache_manager-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_lints",
@@ -255,13 +279,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_test",
+      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -452,6 +476,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "octo_image",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/octo_image-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "page_transition",
       "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/page_transition-2.1.0",
       "packageUri": "lib/",
@@ -462,6 +492,24 @@
       "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/path-1.8.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "path_provider",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/path_provider-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "path_provider_android",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/path_provider_android-2.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "path_provider_foundation",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "path_provider_linux",
@@ -554,6 +602,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "rxdart",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/rxdart-0.27.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "shared_preferences",
       "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/shared_preferences-2.2.2",
       "packageUri": "lib/",
@@ -597,7 +651,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -632,6 +686,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "sqflite",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/sqflite-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/sqflite_common-2.5.0+2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
       "packageUri": "lib/",
@@ -646,6 +712,12 @@
     {
       "name": "string_scanner",
       "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "synchronized",
+      "rootUri": "file:///Users/taeyunroh/.pub-cache/hosted/pub.dev/synchronized-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -788,7 +860,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-29T05:37:07.189918Z",
+  "generated": "2023-11-30T09:05:20.263034Z",
   "generator": "pub",
   "generatorVersion": "3.2.0"
 }
