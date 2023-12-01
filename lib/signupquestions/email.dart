@@ -220,6 +220,21 @@ class _EmailPageState extends State<EmailPage>
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
         await saveuserId(userId);
+
+        var url = Uri.parse(API.notification);
+
+        String savedToken = await getToken();
+        print(savedToken);
+        var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+        var response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $savedToken',
+          },
+          body: json.encode({"token":fcmToken }),
+        );
+
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WelcomeScreen()));
 
         _increaseProgressAndNavigate();

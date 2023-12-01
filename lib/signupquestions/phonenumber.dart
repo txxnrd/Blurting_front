@@ -88,9 +88,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   bool first_post= true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
-    // var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-    // print("------------");
-    // print(fcmToken);
+    var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+    print("------------");
+    print(fcmToken);
 
     var url = Uri.parse(API.sendphone);
     //API.sendphone

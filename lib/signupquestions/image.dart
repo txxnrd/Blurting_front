@@ -185,10 +185,7 @@ class ImagePageState extends State<ImagePage>
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          if(count>=3) {
-            IsValid = true;
-            _showImageUploadingSnackBar();
-          }
+
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
@@ -197,6 +194,10 @@ class ImagePageState extends State<ImagePage>
           if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
             _image3Url = urlList[0]['url'];
             print('Image 3 URL: $_image3Url');
+          }
+          if(count>=3) {
+            IsValid = true;
+            _showImageUploadingSnackBar();
           }
           // URL을 저장하거나 처리하는 로직을 추가
           // print(savedUrls);

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blurting/StartPage/startpage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -93,6 +94,38 @@ Future<void> _sendDeleteRequest() async {
         if(count==100)
           exit(1);
       }
+    }
+  }
+
+  Future<void> _testfcm() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.testfcm);
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body:json.encode({"title":"테스트 성공","text":"이 정도는 껌이지"})
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201||response.statusCode == 204) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context)=> LoginPage()),
+      );
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+
+      var data = json.decode(response.body);
+
+
+    } else {
+      // 오류가 발생한 경우 처리
+
     }
   }
   @override
@@ -263,8 +296,52 @@ Future<void> _sendDeleteRequest() async {
                       ),
                     ),
                   ),
+          SizedBox(height: 20,),
+          InkWell(
+            onTap: ()async {
+              var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+              print("------------");
+              print(fcmToken);
+            },
+            child:  Container(
+              width:100, height: 22,
+              child:
+              Text(
+                'fcm 토큰 확인하기',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+              ),
+            ),
+          ),
+                  SizedBox(height: 20,),
+          InkWell(
+            onTap: ()async {
+              String Token = await getToken();
+              print("------------");
+              print(Token);
+            },
+            child:  Container(
+              width:100, height: 22,
+              child:
+              Text(
+                '현재 토큰 확인하기',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+              ),
+            ),
+          ),
+                  SizedBox(height: 20,),
+                  InkWell(
+                    onTap: () {
 
-
+                    },
+                    child:  Container(
+                      width:100, height: 22,
+                      child:
+                      Text(
+                        '알림 테스트하기',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

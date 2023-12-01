@@ -231,7 +231,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter",
+      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -279,13 +279,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_test",
+      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///users/taeyunroh/development/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -651,7 +651,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///users/taeyunroh/development/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -860,7 +860,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-30T15:02:47.467833Z",
+  "generated": "2023-11-30T17:32:26.790677Z",
   "generator": "pub",
   "generatorVersion": "3.2.0"
 }

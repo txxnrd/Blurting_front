@@ -36,6 +36,11 @@ class API {
   static const String pointadd = "${ServerEndpoints.serverEndpoint}/point/add";
   static const String pointsubtract =
       "${ServerEndpoints.serverEndpoint}/point/sub";
+  static const String notification =
+      "${ServerEndpoints.serverEndpoint}/user/notification";
+  static const String testfcm =
+      "${ServerEndpoints.serverEndpoint}/user/testfcm";
+
   /*현재 위치 불러오기*/
   static const String geobyname = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";
   static const String geobygeo = "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";
