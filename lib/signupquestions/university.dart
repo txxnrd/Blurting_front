@@ -132,178 +132,184 @@ class _UniversityPageState extends State<UniversityPage>
     }
     double width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: (){
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        title: Text(''),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            _sendBackRequest();
-            },
-        ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(''),
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              _sendBackRequest();
+              },
+          ),
 
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            Stack(
-              clipBehavior: Clip.none, // 이 부분 추가
-              children: [
-                // 전체 배경색 설정 (하늘색)
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9), // 하늘색
-                    borderRadius: BorderRadius.circular(4.0),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+              ),
+              Stack(
+                clipBehavior: Clip.none, // 이 부분 추가
+                children: [
+                  // 전체 배경색 설정 (하늘색)
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD9D9D9), // 하늘색
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
                   ),
-                ),
-                // 완료된 부분 배경색 설정 (파란색)
-                Container(
-                  height: 10,
-                  width: MediaQuery.of(context).size.width *
-                      (_progressAnimation?.value ?? 0.3),
-                  decoration: BoxDecoration(
+                  // 완료된 부분 배경색 설정 (파란색)
+                  Container(
+                    height: 10,
+                    width: MediaQuery.of(context).size.width *
+                        (_progressAnimation?.value ?? 0.3),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF303030),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  Positioned(
+                    left: MediaQuery.of(context).size.width *
+                            (_progressAnimation?.value ?? 0.3) -
+                        15,
+                    bottom: -10,
+                    child: Image.asset(
+                      gender == Gender.male
+                          ? 'assets/man.png'
+                          : gender == Gender.female
+                              ? 'assets/woman.png'
+                              : 'assets/signupface.png', // 기본 이미지
+                      width: 30,
+                      height: 30,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                '당신의 대학은 어디인가요?',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     color: Color(0xFF303030),
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width *
-                          (_progressAnimation?.value ?? 0.3) -
-                      15,
-                  bottom: -10,
-                  child: Image.asset(
-                    gender == Gender.male
-                        ? 'assets/man.png'
-                        : gender == Gender.female
-                            ? 'assets/woman.png'
-                            : 'assets/signupface.png', // 기본 이미지
-                    width: 30,
-                    height: 30,
-                  ),
-                )
-              ],
+                    fontFamily: 'Pretendard'),
+              ),
+              SizedBox(height: 30),
+              Autocomplete<String>(
+                optionsBuilder: (TextEditingValue textEditingValue) {
+                  if (textEditingValue.text == '') {
+                    return const Iterable.empty();
+                  }
+                  // 인덱스를 저장할 변수
+                  // int? selectedIndex;
+                  // var options = universities.asMap().entries.where((entry) {
+                  //   bool matches = entry.value.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                  //   if (matches) {
+                  //     selectedIndex = entry.key;
+                  //   }
+                  //   return matches;
+                  // }).map((entry) => entry.value);
+
+
+
+                  return universities.where((university) =>
+                      university.toLowerCase().contains(textEditingValue.text.toLowerCase())
+                  );
+                },
+                onSelected: (String selection) {
+                  print('You just selected $selection');
+                  int selectedIndex = universities.indexOf(selection);
+                  selectedUniversity = selection;
+                  // 선택된 인덱스를 사용하거나 저장
+                  if (selectedIndex != null) {
+                    print('Selected university index: $selectedIndex');
+                    Domain= university_domain[selectedIndex!];
+                  }
+
+                },
+                fieldViewBuilder: (BuildContext context,
+                    TextEditingController textEditingController,
+                    FocusNode focusNode,
+                    VoidCallback onFieldSubmitted) {
+                  return TextField(
+                    controller: textEditingController,
+                    focusNode: focusNode,
+                    decoration: InputDecoration(
+                      hintText: '당신의 대학교를 입력하세요',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ), // 초기 테두리 색상
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ), // 입력할 때 테두리 색상
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFF66464),
+                        ), // 선택/포커스 됐을 때 테두리 색상
+                      ),
+                    ),
+                    onChanged: (value) {
+                      InputUniversity(value);
+                    },
+                    style: DefaultTextStyle.of(context).style,
+                  );
+                },
+              ),
+              SizedBox(height: 312),
+
+            ],
+          ),
+        ),
+        floatingActionButton: Container(
+          width: 350.0, // 너비 조정
+          height: 80.0, // 높이 조정
+          padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+          child:ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFFF66464),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 0,
+              padding: EdgeInsets.all(0),
             ),
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              '당신의 대학은 어디인가요?',
+            onPressed: IsValid ? () {
+              print("다음 버튼 클릭됨");
+              _increaseProgressAndNavigate();
+            } : null, //
+            child: Text(
+              '다음',
               style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF303030),
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(height: 30),
-            Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text == '') {
-                  return const Iterable.empty();
-                }
-                // 인덱스를 저장할 변수
-                // int? selectedIndex;
-                // var options = universities.asMap().entries.where((entry) {
-                //   bool matches = entry.value.toLowerCase().contains(textEditingValue.text.toLowerCase());
-                //   if (matches) {
-                //     selectedIndex = entry.key;
-                //   }
-                //   return matches;
-                // }).map((entry) => entry.value);
-
-
-
-                return universities.where((university) =>
-                    university.toLowerCase().contains(textEditingValue.text.toLowerCase())
-                );
-              },
-              onSelected: (String selection) {
-                print('You just selected $selection');
-                int selectedIndex = universities.indexOf(selection);
-                selectedUniversity = selection;
-                // 선택된 인덱스를 사용하거나 저장
-                if (selectedIndex != null) {
-                  print('Selected university index: $selectedIndex');
-                  Domain= university_domain[selectedIndex!];
-                }
-
-              },
-              fieldViewBuilder: (BuildContext context,
-                  TextEditingController textEditingController,
-                  FocusNode focusNode,
-                  VoidCallback onFieldSubmitted) {
-                return TextField(
-                  controller: textEditingController,
-                  focusNode: focusNode,
-                  decoration: InputDecoration(
-                    hintText: '당신의 대학교를 입력하세요',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFF66464),
-                      ), // 초기 테두리 색상
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFF66464),
-                      ), // 입력할 때 테두리 색상
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFF66464),
-                      ), // 선택/포커스 됐을 때 테두리 색상
-                    ),
-                  ),
-                  onChanged: (value) {
-                    InputUniversity(value);
-                  },
-                  style: DefaultTextStyle.of(context).style,
-                );
-              },
-            ),
-            SizedBox(height: 312),
-
-          ],
-        ),
-      ),
-      floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
-        child:ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 0,
-            padding: EdgeInsets.all(0),
-          ),
-          onPressed: IsValid ? () {
-            print("다음 버튼 클릭됨");
-            _increaseProgressAndNavigate();
-          } : null, //
-          child: Text(
-            '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
+                color: Colors.white,
+                fontFamily: 'Pretendard',
+                fontSize: 20.0,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
 
+      ),
     );
   }
 }

@@ -110,7 +110,6 @@ class _MyPageEditState extends State<MyPageEdit> {
       // UI 업데이트를 위해 setState 호출
       setState(() {
         _image1 = selectedImage;
-
       });
       FormData formData = FormData.fromMap({
         'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),

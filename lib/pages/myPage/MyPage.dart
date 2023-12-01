@@ -56,10 +56,10 @@ class _MyPage extends State<MyPage> {
   Map<String, dynamic> userProfile = {};
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("수정 버튼 눌러짐");
-    // var token = getToken();
-    // print(token);
+
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
+
     String accessToken = await getToken();
     String refreshToken = await getRefreshToken();
     var response = await http.get(
@@ -67,6 +67,7 @@ class _MyPage extends State<MyPage> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $accessToken',
+
       },
     );
     print(response.body);
@@ -109,7 +110,11 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
+
     String accessToken = await getToken();
+
+
+
     var response = await http.get(
       url,
       headers: <String, String>{
