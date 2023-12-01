@@ -162,6 +162,10 @@ class ImagePageState extends State<ImagePage>
     var image3 = await picker.pickImage(source: ImageSource.gallery);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
+    if(count>=3) {
+      IsValid = true;
+      _showImageUploadingSnackBar();
+    }
     // 새로운 이미지를 선택한 경우에만 처리
     if (image3 != null) {
       File selectedImage = File(image3.path); // 선택된 이미지 파일
@@ -195,10 +199,7 @@ class ImagePageState extends State<ImagePage>
             _image3Url = urlList[0]['url'];
             print('Image 3 URL: $_image3Url');
           }
-          if(count>=3) {
-            IsValid = true;
-            _showImageUploadingSnackBar();
-          }
+
           // URL을 저장하거나 처리하는 로직을 추가
           // print(savedUrls);
         } else {

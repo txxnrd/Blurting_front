@@ -48,6 +48,9 @@ class _SettingPageState extends State<SettingPage>{
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
   int count =10;
+
+
+
 Future<void> _sendDeleteRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.user);
@@ -97,11 +100,13 @@ Future<void> _sendDeleteRequest() async {
     }
   }
 
+
   Future<void> _testfcm() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.testfcm);
     String savedToken = await getToken();
     print(savedToken);
+    print(json.encode({"title":"테스트 성공","text":"이 정도는 껌이지"}));
 
     var response = await http.post(
       url,
@@ -109,24 +114,8 @@ Future<void> _sendDeleteRequest() async {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body:json.encode({"title":"테스트 성공","text":"이 정도는 껌이지"})
+      body:json.encode({"title":"테스트 성공","text":"이 정도는 껌이지"}),
     );
-    print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201||response.statusCode == 204) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context)=> LoginPage()),
-      );
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-
-      var data = json.decode(response.body);
-
-
-    } else {
-      // 오류가 발생한 경우 처리
-
-    }
   }
   @override
   Widget build(BuildContext context) {
@@ -331,7 +320,7 @@ Future<void> _sendDeleteRequest() async {
                   SizedBox(height: 20,),
                   InkWell(
                     onTap: () {
-
+                      _testfcm();
                     },
                     child:  Container(
                       width:100, height: 22,

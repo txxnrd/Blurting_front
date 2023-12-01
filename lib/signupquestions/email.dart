@@ -226,6 +226,8 @@ class _EmailPageState extends State<EmailPage>
         String savedToken = await getToken();
         print(savedToken);
         var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+        print("-------");
+        print(fcmToken);
         var response = await http.post(
           url,
           headers: <String, String>{
@@ -234,6 +236,7 @@ class _EmailPageState extends State<EmailPage>
           },
           body: json.encode({"token":fcmToken }),
         );
+        print(response);
 
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WelcomeScreen()));
 

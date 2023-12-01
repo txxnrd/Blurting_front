@@ -114,8 +114,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     );
 
 
-
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
