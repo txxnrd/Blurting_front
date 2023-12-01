@@ -1,7 +1,6 @@
 class ServerEndpoints {
   static const String serverEndpoint = "https://api.blurting.devkor.club";
   static const String socketServerEndpoint = "ws://13.124.149.234:3080";
-
 }
 
 class API {
@@ -51,6 +50,10 @@ class API {
   static const String answer = "${ServerEndpoints.serverEndpoint}/blurting/answer";
   static const String register = "${ServerEndpoints.serverEndpoint}/blurting/register";
   static const String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
+  static const String blurtingInfo = "${ServerEndpoints.serverEndpoint}/blurting/group-info";
+  /*ARROW */
+  static const String sendArrow = "${ServerEndpoints.serverEndpoint}/blurting/arrow/";
+  static const String myArrow = "${ServerEndpoints.serverEndpoint}/blurting/arrow";
   /*WHISPER */
   static const String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
   static const String chatList = "${ServerEndpoints.serverEndpoint}/chat/";
