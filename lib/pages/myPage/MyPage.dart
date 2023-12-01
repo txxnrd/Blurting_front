@@ -8,11 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-
 import '../../config/app_config.dart';
 import '../../settings/setting.dart';
 import 'MyPageEdit.dart';
-
 String getCigaretteString(int? cigarette) {
   switch (cigarette) {
     case 0:
@@ -27,7 +25,6 @@ String getCigaretteString(int? cigarette) {
       return 'Unknown';
   }
 }
-
 String getDrinkString(int? drink) {
   switch (drink) {
     case 0:
@@ -42,37 +39,29 @@ String getDrinkString(int? drink) {
       return 'Unknown';
   }
 }
-
 class MyPage extends StatefulWidget {
-
   final String token;
   const MyPage({super.key, required this.token});
-
   @override
   State<StatefulWidget> createState() {
     return _MyPage();
   }
 }
-
 int count = 0;
-
 class _MyPage extends State<MyPage> {
   var switchValue = false;
   String modify = 'Edit';
   final PageController mainPageController = PageController(initialPage: 0);
   List<String> imagePaths = [];
   Map<String, dynamic> userProfile = {};
-
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("수정 버튼 눌러짐");
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-
     String accessToken = await getToken();
     String refreshToken = await getRefreshToken();
-
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -87,14 +76,12 @@ class _MyPage extends State<MyPage> {
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
-
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => MyPageEdit(data: data),
         ),
       );
-
       // 이후에 필요한 작업을 수행할 수 있습니다.
       if (result != null) {
         print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
@@ -107,13 +94,11 @@ class _MyPage extends State<MyPage> {
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         getnewaccesstoken(context);
         goToMyPageEdit(context);
-
         count += 1;
         if (count == 10) exit(1);
       }
     }
   }
-
   @override
   void initState() {
     super.initState();
@@ -150,7 +135,6 @@ class _MyPage extends State<MyPage> {
       print('Failed to load user profile. Status code: ${response.statusCode}');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -338,7 +322,6 @@ class _MyPage extends State<MyPage> {
       ),
     );
   }
-
   Widget _buildPhotoPage(int index) {
     if (imagePaths.isEmpty || index >= imagePaths.length) {
       // Handle the case where imagePaths is empty or the index is out of bounds.
@@ -347,7 +330,6 @@ class _MyPage extends State<MyPage> {
         child: Text('No Image'),
       );
     }
-
     return Column(
       children: [
         Padding(
@@ -380,7 +362,6 @@ class _MyPage extends State<MyPage> {
       ],
     );
   }
-
   Widget _buildInfoPage({
     required List<String> titles,
     required List<String> values,
@@ -463,7 +444,6 @@ class _MyPage extends State<MyPage> {
       ],
     );
   }
-
   Widget buildPinkBox(String text) {
     return Container(
       decoration: BoxDecoration(
