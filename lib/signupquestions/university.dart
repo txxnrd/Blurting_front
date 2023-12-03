@@ -253,12 +253,12 @@ class _UniversityPageState extends State<UniversityPage>
                       hintText: '당신의 대학교를 입력하세요',
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                          color: Color(DefinedColor.lightgrey),
                         ), // 초기 테두리 색상
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                          color: Color(DefinedColor.lightgrey),
                         ), // 입력할 때 테두리 색상
                       ),
                       focusedBorder: OutlineInputBorder(

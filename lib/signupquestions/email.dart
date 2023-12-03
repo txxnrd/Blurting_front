@@ -361,15 +361,14 @@ class _EmailPageState extends State<EmailPage>
                     width:150,
                     height:48,
                     child:
-                  Expanded(
-                    child: TextField(
+                    TextField(
                       decoration: InputDecoration(
                         hintText: '이메일 입력',
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFF66464)),
+                          borderSide: BorderSide(color: Color(DefinedColor.lightgrey)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFF66464)),
+                          borderSide: BorderSide(color: Color(DefinedColor.lightgrey)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF66464)),
@@ -379,7 +378,6 @@ class _EmailPageState extends State<EmailPage>
                         InputEmail(value);
                       },
                     ),
-                  ),
                   ),
                   SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
                   Text('@',
@@ -393,7 +391,7 @@ class _EmailPageState extends State<EmailPage>
                       alignment: Alignment.centerLeft,
                       height: 48, // TextField의 높이와 일치하도록 설정합니다.
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFF66464)),
+                        border: Border.all(color: Color(DefinedColor.lightgrey)),
                         borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
                       ),
                       child: Align(
@@ -411,11 +409,6 @@ class _EmailPageState extends State<EmailPage>
                   ),
                 ],
               ),
-
-
-
-
-              SizedBox(height: 312),
             ],
           ),
         ),

@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'main.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> initFcm() async {
@@ -14,6 +16,9 @@ Future<void> initFcm() async {
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage? message) async {
     RemoteNotification? notification = message?.notification;
@@ -23,7 +28,7 @@ Future<void> initFcm() async {
         notification.hashCode,
         notification.title,
         notification.body,
-        const NotificationDetails(android: AndroidNotificationDetails('channel.id', 'channel.name')),
+        const NotificationDetails(android: AndroidNotificationDetails('blurting_project', 'Blurting')),
         payload: json.encode(message?.data),
       );
     }
