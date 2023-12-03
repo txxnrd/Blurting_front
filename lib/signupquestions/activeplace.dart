@@ -295,7 +295,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(DefinedColor.lightgrey), // 초기 테두리 색상
+                        color:
+                        (content == '') ? Color(DefinedColor.lightgrey) : Color(DefinedColor.darkpink),// 초기 테두리 색상
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(10.0),

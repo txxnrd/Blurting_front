@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -17,8 +18,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'blurting_project', // id
+  'Blurting', // title
+  importance: Importance.max,
+);
 
 void main() async {
+
+
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
 
@@ -48,6 +56,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   final bool isLoggedIn;
 
   MyApp({required this.isLoggedIn});
@@ -60,3 +69,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+

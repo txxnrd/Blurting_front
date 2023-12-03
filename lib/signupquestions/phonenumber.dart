@@ -45,6 +45,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   }
 
 
+  late FocusNode myFocusNode;
+
   final _controller = TextEditingController();
   final _controller_certification = TextEditingController();
 
@@ -233,7 +235,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       print("completed");
       setState(() {});
     });
-
+    myFocusNode = FocusNode();
+    myFocusNode.unfocus();
     _controller.addListener(() {
       String text = _controller.text;
 
@@ -363,6 +366,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     fontSize: 15,
                   ),
                   controller: _controller,
+                  focusNode: myFocusNode, // FocusNode를 연결합니다.
                   keyboardType: TextInputType.number,
                   maxLength: 13,
                   decoration: InputDecoration(
@@ -381,7 +385,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0xFFF66464),
+                        color: Color(DefinedColor.lightgrey),
                       ), // 입력할 때 테두리 색상
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -421,12 +425,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                          color: Color(DefinedColor.lightgrey),
                         ), // 초기 테두리 색상
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                          color: Color(DefinedColor.lightgrey),
                         ), // 입력할 때 테두리 색상
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -553,6 +557,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   @override
   void dispose() {
     _controller.dispose();
+    myFocusNode.dispose();
     super.dispose();
   }
 }

@@ -110,28 +110,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  void _showLoginFailedDialog({String message = '유효하지 않은 정보이거나, 비밀번호가 틀렸습니다.'}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('로그인 실패'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('닫기'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return
