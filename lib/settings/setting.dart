@@ -200,15 +200,7 @@ Future<void> _sendDeleteRequest() async {
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
                     ),
                   ),
-                  // SizedBox(height: 18,),
-                  // Container(
-                  //   width:120, height: 22,
-                  //   child:
-                  //   Text(
-                  //     '차단 사용자 단관리',
-                  //     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
-                  //   ),
-                  // ),
+
                   SizedBox(height: 18,),
 
                   InkWell(

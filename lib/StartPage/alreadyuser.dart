@@ -156,13 +156,14 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
         var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
         print("-------");
         print(fcmToken);
+
         var response = await http.post(
           url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
           },
-          body: json.encode({"token":fcmToken }),
+          body: json.encode({"token":fcmToken}),
         );
         _increaseProgressAndNavigate();
 
