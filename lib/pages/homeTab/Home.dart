@@ -30,6 +30,7 @@ class CardItem {
   final String postedAt;
   final String userSex;
   int likes; // 추가: 좋아요 수
+  bool ilike; //내가 좋아요 눌렀는지 여부
 
   CardItem({
     required this.userName,
@@ -37,7 +38,8 @@ class CardItem {
     required this.answer,
     required this.postedAt,
     required this.userSex,
-    this.likes = 0, // 초기값 0으로 설정
+    required this.likes,
+    required this.ilike,
   });
 }
 
@@ -74,6 +76,7 @@ class _HomeState extends State<Home> {
             postedAt: answer['postedAt'],
             userSex: answer['userSex'],
             likes: answer['likes'],
+            ilike: answer['ilike'],
           );
         }).toList();
 
@@ -104,6 +107,18 @@ class _HomeState extends State<Home> {
     int remainingSeconds = duration.inSeconds.remainder(60);
 
     return '$hours : $minutes : $remainingSeconds';
+  }
+
+  void handleLike(int index) {
+    setState(() {
+      if (!cardItems[index].ilike) {
+        // If not liked, increase likes count and set ilike to true
+        cardItems[index].likes++;
+        cardItems[index].ilike = true;
+      } else {
+        print('이미 좋아요 누름');
+      }
+    });
   }
 
   @override
@@ -238,13 +253,15 @@ class _HomeState extends State<Home> {
                         GestureDetector(
                           onTap: () {
                             // 좋아요 버튼을 눌렀을 때의 로직
-                            setState(() {
-                              cardItems[index].likes++; // 좋아요 수 증가
-                            });
+                            if (!cardItems[index].ilike) {
+                              handleLike(index);
+                            }
                           },
                           child: Icon(
                             Icons.thumb_up,
-                            color: Colors.white,
+                            color: cardItems[index].ilike
+                                ? Color(0xFFFF7D7D)
+                                : Colors.grey,
                             size: 15,
                           ),
                         ),
