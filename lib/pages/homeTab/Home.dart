@@ -27,16 +27,16 @@ class CardItem {
   final String userName;
   final String question;
   final String answer;
-  final String date;
-  final String sex;
+  final String postedAt;
+  final String userSex;
   int likes; // 추가: 좋아요 수
 
   CardItem({
     required this.userName,
     required this.question,
     required this.answer,
-    required this.date,
-    required this.sex,
+    required this.postedAt,
+    required this.userSex,
     this.likes = 0, // 초기값 0으로 설정
   });
 }
@@ -51,47 +51,34 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<CardItem> cardItems = [
-    CardItem(
-      userName: 'User1',
-      question: 'What is Flutter?',
-      answer:
-          'Flutter is a UI toolkit toolkit toolkit toolkit Modified code with SingleChildScrollView how you can modify your existing code:',
-      date: '2023-11-13',
-      sex: 'man',
-    ),
-    CardItem(
-      userName: 'User2',
-      question: 'How does Dart work?',
-      answer:
-          'Dart is a programming language toolkit toolkit toolkit Modified code with SingleChildScrollView how you can modify your existing code:',
-      date: '2023-11-14',
-      sex: 'woman',
-    ),
-    CardItem(
-      userName: 'User3',
-      question: 'Why use widgets in Flutter?',
-      answer:
-          'Widgets are the basic building toolkit toolkit toolkit Modified code with SingleChildScrollView Modified code with SingleChildScrollView',
-      date: '2023-11-15',
-      sex: 'man',
-    ),
-    // Add more items as needed
-  ];
-
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
   Map<String, dynamic>? apiResponse;
   late Duration remainingTime;
+  late List<CardItem> cardItems;
 
   @override
   void initState() {
     super.initState();
+    cardItems = [];
     fetchData(widget.token).then((data) {
       setState(() {
         apiResponse = data;
 
-        int seconds = data['seconds'];
-        remainingTime = Duration(seconds: seconds);
+        List<dynamic> answers = data['answers'];
+
+        cardItems = answers.map((answer) {
+          return CardItem(
+            userName: answer['userNickname'],
+            question: answer['question'],
+            answer: answer['answer'],
+            postedAt: answer['postedAt'],
+            userSex: answer['userSex'],
+            likes: answer['likes'],
+          );
+        }).toList();
+
+        int milliseconds = data['seconds'];
+        remainingTime = Duration(milliseconds: milliseconds);
       });
     });
     updateRemainingTime();
@@ -106,7 +93,7 @@ class _HomeState extends State<Home> {
         updateRemainingTime();
       } // 다음 업데이트 예약
       else {
-        print("블러팅 탭에 접속하여, 새로운 질문을 확인하세요!");
+        print("지금 블러팅 탭에 접속하여, 새로운 질문을 확인하세요!");
       }
     });
   }
@@ -143,7 +130,7 @@ class _HomeState extends State<Home> {
                   padding: EdgeInsets.only(top: 20),
                   child: Row(
                     children: [
-                      if (cardItems[index].sex == 'man')
+                      if (cardItems[index].userSex == 'M')
                         ClipOval(
                           child: Container(
                             padding: EdgeInsets.all(5),
@@ -155,7 +142,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                      if (cardItems[index].sex == 'woman')
+                      if (cardItems[index].userSex == 'F')
                         ClipOval(
                           child: Container(
                             padding: EdgeInsets.all(5),
@@ -221,47 +208,57 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(height: 10),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.calendar_today,
-                      color: Colors.white,
-                      size: 15,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: Colors.white,
+                          size: 15,
+                        ),
+                        SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          '${cardItems[index].postedAt}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Heebo',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text(
-                      '${cardItems[index].date}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Heebo',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(width: 70),
-                    GestureDetector(
-                      onTap: () {
-                        // 좋아요 버튼을 눌렀을 때의 로직
-                        setState(() {
-                          cardItems[index].likes++; // 좋아요 수 증가
-                        });
-                      },
-                      child: Icon(
-                        Icons.thumb_up,
-                        color: Colors.white,
-                        size: 15,
-                      ),
-                    ),
-                    SizedBox(width: 7),
-                    Text(
-                      '${cardItems[index].likes}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Heebo',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
+
+                    // SizedBox(width: 70),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // 좋아요 버튼을 눌렀을 때의 로직
+                            setState(() {
+                              cardItems[index].likes++; // 좋아요 수 증가
+                            });
+                          },
+                          child: Icon(
+                            Icons.thumb_up,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                        ),
+                        SizedBox(width: 7),
+                        Text(
+                          '${cardItems[index].likes}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Heebo',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
