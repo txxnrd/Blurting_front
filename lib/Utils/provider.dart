@@ -10,7 +10,8 @@ class mainColor {
 class GroupChatProvider with ChangeNotifier {
   bool _pointValid = false;
   bool _isPocus = false;
-  DateTime _lastTime = DateTime(2000, 11, 24, 15, 30);      // 처음에는 아주 예전으로 초기화해서... 없다고 침
+  DateTime _lastTime =
+      DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
 
   bool get pointValid => _pointValid;
   bool get isPocus => _isPocus;
@@ -26,7 +27,7 @@ class GroupChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  set lastTime(DateTime value){
+  set lastTime(DateTime value) {
     _lastTime = value;
     notifyListeners();
   }
@@ -42,7 +43,6 @@ class WhisperProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
 
 Future<void> saveuserId(int userId) async {
   final prefs = await SharedPreferences.getInstance();
@@ -61,8 +61,10 @@ Future<int> getuserId() async {
   return userId;
 }
 
+
 class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
   static int UserId = 262;
+
   int _point = 0;
 
   int get point => _point;

@@ -104,8 +104,6 @@ class _Blurting extends State<Blurting> {
                   child: ellipseText(text: 'Blurting')),
             ],
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
         ),
       ),
       extendBodyBehindAppBar: false,
@@ -300,7 +298,7 @@ class _Blurting extends State<Blurting> {
                 ],
               ),
             ),
-          ),
+
           GestureDetector(
             child: staticButton(text: isState),
             onTap: () async {
@@ -707,7 +705,6 @@ class _Blurting extends State<Blurting> {
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
-  
   void clickProfile(bool status, int userId_){
     setState(() {
       isSelected[currentPage] = status;
@@ -794,4 +791,5 @@ class _profileState extends State<profile> {
       ),
     );
   }
+
 }

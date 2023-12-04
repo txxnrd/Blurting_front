@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
+import 'package:http/http.dart' as http;
 
 import 'package:blurting/config/app_config.dart';
 import 'package:dio/dio.dart';
@@ -990,7 +991,9 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   @override
+
   void initState() {        // 맨 처음에 호출될 때에만... 즉, blurting방으로 처음 들어왔을 때에만! -> 다 각자 다른 걸로 쓰면 안 되나?
+
     super.initState();
     iLike = widget.iLike;
     likedNum = widget.likedNum;
@@ -998,7 +1001,11 @@ class _AnswerItemState extends State<AnswerItem> {
 
   // 답변 위젯
   @override
-  Widget build(BuildContext context) {      // setState...
+
+  Widget build(BuildContext context) {
+    // setState...
+    iLike = widget.iLike;
+    likedNum = widget.likedNum;
 
     return ListTile(
       subtitle: // 답변 내용
@@ -1060,8 +1067,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                   color: Color.fromRGBO(255, 238, 238, 1),
                                 ),
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
                                       margin: EdgeInsets.only(
@@ -1111,8 +1117,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                   ),
                                   if (likedNum != 0)
                                     Container(
-                                      margin:
-                                          EdgeInsets.only(left: 3, top: 1),
+                                      margin: EdgeInsets.only(left: 3, top: 1),
                                       child: Text(
                                         '${likedNum}',
                                         style: TextStyle(
@@ -1146,11 +1151,11 @@ class _AnswerItemState extends State<AnswerItem> {
     // answerId 보내
     final url = Uri.parse('${API.like}$answerId');
 
-    final response = await http.put(url,
-        headers: {
-          'authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        });
+    final response = await http.put(url, headers: {
+      'authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
 
 if(mounted)
     {setState(() {       // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
@@ -1168,8 +1173,7 @@ if(mounted)
     if (response.statusCode == 200) {
       print('요청 성공');
       print(response.body);
-    }
-    else{
+    } else {
       print(response.statusCode);
     }
   }
@@ -1200,6 +1204,9 @@ if(mounted)
             print(isValid);
           });
         }
+      } else {
+        Provider.of<UserProvider>(context, listen: false).point =
+            responseData['point'];
       }
     } else {
       print(response.statusCode);
