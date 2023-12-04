@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class mainColor {
   static Color MainColor = Color.fromRGBO(246, 100, 100, 1);
   static Color lightGray = Color.fromRGBO(170, 170, 170, 1);
+  static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
 }
 
 class GroupChatProvider with ChangeNotifier {
@@ -60,9 +61,10 @@ Future<int> getuserId() async {
   return userId;
 }
 
-class UserProvider with ChangeNotifier {
-  // userId, point 등 모든 정보 관리
-  static int UserId = 228;
+
+class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
+  static int UserId = 262;
+
   int _point = 0;
 
   int get point => _point;
