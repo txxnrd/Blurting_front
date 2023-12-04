@@ -18,11 +18,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'blurting_project', // id
-  'Blurting', // title
-  importance: Importance.max,
-);
+// const AndroidNotificationChannel channel = AndroidNotificationChannel(
+//   'blurting_project', // id
+//   'Blurting', // title
+//   importance: Importance.max,
+// );
 
 void main() async {
 
@@ -69,5 +69,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 
