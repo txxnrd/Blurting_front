@@ -13,24 +13,32 @@ Future<void> initFcm() async {
   var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettingsIOS = const DarwinInitializationSettings();
   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage? message) async {
-    RemoteNotification? notification = message?.notification;
-    AndroidNotification? android = message?.notification?.android;
-    if (notification != null && android != null) {
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        const NotificationDetails(android: AndroidNotificationDetails('blurting_project', 'Blurting')),
-        payload: json.encode(message?.data),
-      );
+    try {
+      RemoteNotification? notification = message?.notification;
+      AndroidNotification? android = message?.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(android: AndroidNotificationDetails('blurting_project', 'Blurting')),
+          payload: json.encode(message?.data),
+        );
+        print("yse");
+      }
+    } catch (e) {
+      // 오류 처리 로직
+      // 예: 오류 로그를 출력하거나 사용자에게 알림을 보내는 등의 처리
+      print('FirebaseMessaging onMessage error: $e');
+      // 필요한 경우 추가적인 오류 처리 로직을 여기에 작성하세요.
     }
   });
+
 }

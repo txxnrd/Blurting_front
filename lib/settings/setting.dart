@@ -114,8 +114,9 @@ Future<void> _sendDeleteRequest() async {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body:json.encode({"title":"테스트 성공","text":"이 정도는 껌이지"}),
+      body:json.encode({"title":"테스트 성공","text":"이 정도는 껌이지","type":"whisper"}),
     );
+    print(response.body);
   }
   @override
   Widget build(BuildContext context) {

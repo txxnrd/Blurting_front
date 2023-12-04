@@ -157,14 +157,17 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
         print("-------");
         print(fcmToken);
 
+        var urlfcm = Uri.parse(API.notification);
+
         var response = await http.post(
-          url,
+          urlfcm,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
           },
           body: json.encode({"token":fcmToken}),
         );
+        print(response.body);
         _increaseProgressAndNavigate();
 
       }
