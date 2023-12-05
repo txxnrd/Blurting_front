@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
@@ -6,6 +7,7 @@ import 'package:blurting/config/app_config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
@@ -164,6 +166,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
               child: TextField(
                 enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
                 focusNode: _focusNode,
+                onTapOutside: (event) => _focusNode.unfocus(),
                 onChanged: (value) {
                   if (value != '') {
                     inputValid(true);
@@ -237,84 +240,13 @@ class _CustomInputFieldState extends State<CustomInputField> {
 class pointAppbar extends StatelessWidget {
   final String token;
 
-  pointAppbar({Key? key, required this.token}) : super(key: key);
-
-  Future<void> fetchPointAdd() async {
-    print('fetchPointAdd called');
-    var url = Uri.parse(API.pointadd);
-    var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjZUMDE6MzU6MjEuNDU0WiIsImlhdCI6MTcwMDkzMDEyMSwiZXhwIjoxNzAwOTMzNzIxfQ.MZbWII_KZtuxtJma2mhXddZBio9OTU5dYQSGAtVrnyE';
-
-    print(savedToken);
-
-    try {
-      var response = await http.get(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
-        },
-      );
-
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-      print('Response Headers: ${response.headers}');
-
-      // Handle the response as needed
-      if (response.statusCode == 200) {
-        // Handle success
-        print('Points added successfully.');
-      } else {
-        // Handle error
-        print(
-            'Failed to load added points. Status code: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error occurred while loading added points: $error');
-    }
-  }
-
-  Future<void> fetchPointSubtract() async {
-    print('fetchPointSubtract called');
-    var url = Uri.parse(API.pointsubtract);
-    var savedToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjZUMDE6MzU6MjEuNDU0WiIsImlhdCI6MTcwMDkzMDEyMSwiZXhwIjoxNzAwOTMzNzIxfQ.MZbWII_KZtuxtJma2mhXddZBio9OTU5dYQSGAtVrnyE';
-
-    print(savedToken);
-
-    try {
-      var response = await http.get(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
-        },
-      );
-
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-      print('Response Headers: ${response.headers}');
-
-      // Handle the response as needed
-      if (response.statusCode == 200) {
-        // Handle success
-        print('Points subtracted successfully.');
-      } else {
-        // Handle error
-        print('Failed to subtract points. Status code: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error occurred while subtracting points: $error');
-    }
-  }
+  pointAppbar({super.key, required this.token});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: () async {
+        onPressed: ()  {
           print('포인트 내역 버튼 눌러짐');
-          await fetchPointAdd();
-          await fetchPointSubtract();
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -485,39 +417,11 @@ class _MyChatState extends State<MyChat> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (!widget.read)
-                  Container(
-                    margin: EdgeInsets.only(top: 20, right: 5),
-                    child: Text(
-                      '읽지 않음',
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontSize: 10,
-                        color: mainColor.lightGray,
-                      ),
-                    ),
-                  ),
-                Container(
-                  margin: EdgeInsets.only(top: 5, right: 5),
-                  child: Text(
-                    widget.createdAt,
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontSize: 10,
-                      color: mainColor.lightGray,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Column(
               children: [
                 Stack(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
                       child: ClipPath(
                         clipper: RightTailClipper(),
                         child: Container(
@@ -547,10 +451,42 @@ class _MyChatState extends State<MyChat> {
                         ),
                       ),
                     ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (!widget.read)
+                            Container(
+                              margin: EdgeInsets.only(top: 20, right: 5),
+                              child: Text(
+                                '읽지 않음',
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 10,
+                                  color: mainColor.lightGray,
+                                ),
+                              ),
+                            ),
+                          Container(
+                            margin: EdgeInsets.only(top: 5, right: 5),
+                            child: Text(
+                              widget.createdAt,
+                              style: TextStyle(
+                                fontFamily: "Pretendard",
+                                fontSize: 10,
+                                color: mainColor.lightGray,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     if (widget.isBlurting)
                       Positioned(
                         bottom: 0,
-                        left: (widget.likedNum == 0) ? 10 : 0,
+                        left: (widget.likedNum == 0) ? 40 : 30,
                         child: Container(
                           width: (widget.likedNum == 0) ? 15 : 25,
                           height: 15,
@@ -608,7 +544,7 @@ class AnswerItem extends StatefulWidget {
   final int answerId;
 
   AnswerItem(
-      {required this.userName,
+      {super.key, required this.userName,
       required this.message,
       required this.socket,
       required this.userId,
@@ -636,8 +572,9 @@ class _AnswerItemState extends State<AnswerItem> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
+          Colors.white;
           return AlertDialog(
-            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(7)),
             ),
@@ -710,7 +647,7 @@ class _AnswerItemState extends State<AnswerItem> {
           return Stack(
             children: [
               AlertDialog(
-                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   side: BorderSide(color: mainColor.MainColor, width: 2.0),
@@ -728,7 +665,7 @@ class _AnswerItemState extends State<AnswerItem> {
                               color: mainColor.MainColor,
                               fontFamily: "Heebo",
                               fontSize: 20,
-                              fontWeight: FontWeight.w500),
+                              fontWeight: FontWeight.w400),
                         ),
                       ),
                     ),
@@ -1054,13 +991,17 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   @override
-  void initState() {
-    // 처음 호출될 때에만...
+
+  void initState() {        // 맨 처음에 호출될 때에만... 즉, blurting방으로 처음 들어왔을 때에만! -> 다 각자 다른 걸로 쓰면 안 되나?
+
     super.initState();
+    iLike = widget.iLike;
+    likedNum = widget.likedNum;
   }
 
   // 답변 위젯
   @override
+
   Widget build(BuildContext context) {
     // setState...
     iLike = widget.iLike;
@@ -1078,8 +1019,8 @@ class _AnswerItemState extends State<AnswerItem> {
                 _showProfileModal(context, widget.isAlready); // jsonData 매개변수
               },
               child: Container(
-                width: 50,
-                height: 50,
+                width: 55,
+                height: 55,
                 decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(50)),
@@ -1215,8 +1156,9 @@ class _AnswerItemState extends State<AnswerItem> {
       'Content-Type': 'application/json',
     });
 
-    setState(() {
-      // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
+
+if(mounted)
+    {setState(() {       // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
       if (iLike) {
         likedNum--;
       } else {
@@ -1227,7 +1169,7 @@ class _AnswerItemState extends State<AnswerItem> {
 
       print(answerId);
     });
-
+}
     if (response.statusCode == 200) {
       print('요청 성공');
       print(response.body);
@@ -1277,18 +1219,18 @@ class _AnswerItemState extends State<AnswerItem> {
 
     final url = Uri.parse(API.pointchat);
 
-    final response = await http.get(
+    final response = await http.post(
       url,
       headers: {
         'authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      // body: json.encode({'userId': widget.userId})
+      body: json.encode({'userId': widget.userId})
     );
 
     dynamic responseData = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       print('요청 성공');
 
       if (responseData != false || responseData['point'] >= 10) {
@@ -1316,10 +1258,10 @@ class staticButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromRGBO(255, 210, 210, 1),
+        color: mainColor.MainColor,
       ),
       margin: EdgeInsets.only(bottom: 140),
-      width: 344,
+      width: MediaQuery.of(context).size.width * 0.8,
       height: 48,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1328,7 +1270,7 @@ class staticButton extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-                color: mainColor.MainColor, fontSize: 20, fontFamily: 'Heebo'),
+                color: Colors.white, fontSize: 20, fontFamily: 'Heebo', fontWeight: FontWeight.w400),
           ),
         ],
       ),

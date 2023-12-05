@@ -160,7 +160,7 @@ class _Whisper extends State<Whisper> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        toolbarHeight: 170,
+        toolbarHeight: 150,
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -199,7 +199,7 @@ class _Whisper extends State<Whisper> {
         actions: <Widget>[
           pointAppbar(token: widget.token),
           Container(
-            margin: EdgeInsets.only(right: 20),
+            margin: EdgeInsets.only(right: 10),
             child: IconButton(
               icon: Image.asset('assets/images/leaveRoom.png'),
               color: Color.fromRGBO(48, 48, 48, 1),

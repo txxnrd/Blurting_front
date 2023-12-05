@@ -1,15 +1,13 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:blurting/signupquestions/sex.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -45,10 +43,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     });
   }
 
-  Future<String?> getDefaultContact() async {
-    Iterable<Contact> contacts = await ContactsService.getContacts();
-    return contacts.isNotEmpty ? contacts.first.phones!.first.value : "";
-  }
+
+
+  late FocusNode myFocusNode;
+
 
   final _controller = TextEditingController();
   final _controller_certification = TextEditingController();
@@ -118,6 +116,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       },
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
+
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
@@ -211,16 +210,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     });
   }
 
-  Future<void> initContact() async {
-    await requestPermission();
-    String? contactNumber = await getDefaultContact();
-    if (contactNumber != null && contactNumber.isNotEmpty) {
-      setState(() {
-        _controller.text = contactNumber;
-        InputPhoneNumber(contactNumber); // 여기에 추가
-      });
-    }
-  }
+
 
   requestPermission() async {
     var status = await Permission.contacts.status;
@@ -232,7 +222,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   @override
   void initState() {
     super.initState();
-    initContact();
     _animationController = AnimationController(
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
@@ -241,7 +230,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       print("completed");
       setState(() {});
     });
-
+    myFocusNode = FocusNode();
+    myFocusNode.unfocus();
     _controller.addListener(() {
       String text = _controller.text;
 
@@ -371,6 +361,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     fontSize: 15,
                   ),
                   controller: _controller,
+                  focusNode: myFocusNode, // FocusNode를 연결합니다.
                   keyboardType: TextInputType.number,
                   maxLength: 13,
                   decoration: InputDecoration(
@@ -389,7 +380,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0xFFF66464),
+                        color: Color(DefinedColor.lightgrey),
                       ), // 입력할 때 테두리 색상
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -429,12 +420,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                          color: Color(DefinedColor.lightgrey),
                         ), // 초기 테두리 색상
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                          color: Color(DefinedColor.lightgrey),
                         ), // 입력할 때 테두리 색상
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -564,6 +555,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   @override
   void dispose() {
     _controller.dispose();
+    myFocusNode.dispose();
     super.dispose();
   }
 }

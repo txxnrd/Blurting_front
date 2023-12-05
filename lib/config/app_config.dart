@@ -7,6 +7,10 @@ class API {
   /*signup 과정에서 필요한 api */
   static const String sendphone =
       "${ServerEndpoints.serverEndpoint}/auth/signup/phonenumber";
+  static const String alreadyuser =
+      "${ServerEndpoints.serverEndpoint}/auth/already/signed";
+  static const String alreadyusercheck =
+      "${ServerEndpoints.serverEndpoint}/auth/alreay/signed/check";
   static const String checkphone =
       "${ServerEndpoints.serverEndpoint}/auth/check/phone";
   static const String checkemail =
@@ -31,6 +35,11 @@ class API {
   static const String pointadd = "${ServerEndpoints.serverEndpoint}/point/add";
   static const String pointsubtract =
       "${ServerEndpoints.serverEndpoint}/point/sub";
+  static const String notification =
+      "${ServerEndpoints.serverEndpoint}/user/notification";
+  static const String testfcm =
+      "${ServerEndpoints.serverEndpoint}/user/testfcm";
+
   /*현재 위치 불러오기*/
   static const String geobyname =
       "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";
@@ -46,6 +55,10 @@ class API {
   static const String register =
       "${ServerEndpoints.serverEndpoint}/blurting/register";
   static const String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
+  static const String blurtingInfo = "${ServerEndpoints.serverEndpoint}/blurting/group-info";
+  /*ARROW */
+  static const String sendArrow = "${ServerEndpoints.serverEndpoint}/blurting/arrow/";
+  static const String myArrow = "${ServerEndpoints.serverEndpoint}/blurting/arrow";
   /*WHISPER */
   static const String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
   static const String chatList = "${ServerEndpoints.serverEndpoint}/chat/";

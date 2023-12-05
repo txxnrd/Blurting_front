@@ -214,8 +214,9 @@ class _HeightPageState extends State<HeightPage>
 
       ),
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: (){
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -294,7 +295,7 @@ class _HeightPageState extends State<HeightPage>
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Color(0xFFF66464),
+                              color: Color(DefinedColor.lightgrey),
                             ), // 입력할 때 테두리 색상
                           ),
                           focusedBorder: OutlineInputBorder(
