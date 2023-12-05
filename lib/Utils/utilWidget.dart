@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
-import 'package:http/http.dart' as http;
 
 import 'package:blurting/config/app_config.dart';
 import 'package:dio/dio.dart';
@@ -245,7 +244,7 @@ class pointAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: ()  {
+        onPressed: () {
           print('포인트 내역 버튼 눌러짐');
           Navigator.push(
             context,
@@ -357,7 +356,7 @@ class OtherChat extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: "Pretendard",
                       fontSize: 10,
-                      color: mainColor.lightGray,
+                      color: mainColor.Gray,
                     ),
                   ),
                 ),
@@ -465,7 +464,7 @@ class _MyChatState extends State<MyChat> {
                                 style: TextStyle(
                                   fontFamily: "Pretendard",
                                   fontSize: 10,
-                                  color: mainColor.lightGray,
+                                  color: mainColor.Gray,
                                 ),
                               ),
                             ),
@@ -476,7 +475,7 @@ class _MyChatState extends State<MyChat> {
                               style: TextStyle(
                                 fontFamily: "Pretendard",
                                 fontSize: 10,
-                                color: mainColor.lightGray,
+                                color: mainColor.Gray,
                               ),
                             ),
                           ),
@@ -528,6 +527,8 @@ class _MyChatState extends State<MyChat> {
   }
 }
 
+
+
 // 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatefulWidget {
   final IO.Socket socket;
@@ -544,7 +545,8 @@ class AnswerItem extends StatefulWidget {
   final int answerId;
 
   AnswerItem(
-      {super.key, required this.userName,
+      {super.key,
+      required this.userName,
       required this.message,
       required this.socket,
       required this.userId,
@@ -566,12 +568,29 @@ class _AnswerItemState extends State<AnswerItem> {
   bool iLike = false;
   int likedNum = 0;
 
+  Future<void> sendReport(IO.Socket socket, String reason) async {
+    print(reason);
+    Map<String, dynamic> data = {'reportingId': widget.userId, 'reason': reason};
+    widget.socket.emit('report', data);
+
+    print('신고 내용 서버에 전송 완료 $data');
+  }
+
   // 신고하시겠습니까? 모달 띄우는 함수
-  void _ClickWarningButton(BuildContext context) {
+  void _ClickWarningButton(BuildContext context, int userId) {
+    bool isCheckSexuality = false;
+    bool isCheckedAbuse = false;
+    bool isCheckedEtc = false;
+    List<bool> checkReason = [false, false, false];
+    String reason = '';
+
+    print(checkReason);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
+          print(checkReason);
           Colors.white;
           return AlertDialog(
             surfaceTintColor: Colors.white,
@@ -584,29 +603,129 @@ class _AnswerItemState extends State<AnswerItem> {
                 child: Text(
                   '신고하기',
                   style: TextStyle(
-                      fontFamily: "Pretendard",
+                    color: Colors.black,
+                      fontFamily: "Heebo",
                       fontSize: 20,
-                      fontWeight: FontWeight.w700),
+                      fontWeight: FontWeight.w400),
                 ),
               ),
             ),
-            actions: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 0, bottom: 5),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckSexuality,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckSexuality = value!;
+                              checkReason[0] = !checkReason[0];
+                              reason = '음란성/선정성';
+                            }
+                          });
+                        }),
+                    Text(
+                      '음란성/선정성',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckedAbuse,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckedAbuse = value!;
+                              checkReason[1] = !checkReason[1];
+                              reason = '욕설/인신공격';
+                            }
+                          });
+                        }),
+                    Text(
+                      '욕설/인신공격',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckedEtc,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckedEtc = value!;
+                              checkReason[2] = !checkReason[2];
+                              reason = '기타';
+                            }
+                          });
+                        }),
+                    Text(
+                      '기타',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Container(
+                margin: EdgeInsets.only(top: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () {
+                      onPressed: (checkReason.any((element) => element == true)) ? () {
                         Navigator.of(context).pop(); // 모달 닫기
                         print('신고 접수');
+                        sendReport(widget.socket, reason);
                         setState(() {});
-                      },
+                      } : null,
                       child: Container(
-                        width: 75,
-                        height: 31,
+                        width: 210,
+                        height: 50,
                         decoration: BoxDecoration(
-                          color: mainColor.MainColor,
+                          color: (checkReason.any((element) => element == true)) ? mainColor.MainColor : mainColor.lightGray,
                           borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
                         ),
                         child: Align(
@@ -614,8 +733,9 @@ class _AnswerItemState extends State<AnswerItem> {
                           child: Text(
                             '신고하기',
                             style: TextStyle(
-                                fontFamily: "Pretendard",
-                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Heebo",
+                                fontSize: 20,
                                 color: Colors.white),
                           ),
                         ),
@@ -623,8 +743,9 @@ class _AnswerItemState extends State<AnswerItem> {
                     ),
                   ],
                 ),
-              ),
-            ],
+              ),  
+              ],
+            ),
           );
         });
       },
@@ -646,164 +767,173 @@ class _AnswerItemState extends State<AnswerItem> {
         return StatefulBuilder(builder: (context, setState) {
           return Stack(
             children: [
-              AlertDialog(
-                surfaceTintColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  side: BorderSide(color: mainColor.MainColor, width: 2.0),
-                ),
-                title: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Profile',
-                          style: TextStyle(
-                              color: mainColor.MainColor,
-                              fontFamily: "Heebo",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ),
+              Center(
+                child: SizedBox(
+                  height: 470,
+                  width: 330,
+                  child: AlertDialog(
+                    surfaceTintColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      side: BorderSide(color: mainColor.MainColor, width: 1.0),
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        iconSize: 20,
-                        icon: Image.asset('assets/images/block.png'),
-                        onPressed: () {
-                          _ClickWarningButton(context); // jsonData 줘야 함
-                          print('신고 버튼 눌림');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                content: Column(
-                  // 동적으로 눌린 유저의 정보 받아오기
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(top: 5),
-                        width: 127.99,
-                        child: Image.asset(
-                          widget.image == "F"
-                              ? 'assets/images/profile_woman.png'
-                              : 'assets/images/profile_man.png',
-                          fit: BoxFit.cover,
-                        )),
-                    Container(
-                      margin: EdgeInsets.all(15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.userName,
-                            style: TextStyle(
-                                fontFamily: "Pretendard",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 24,
-                                color: mainColor.MainColor),
-                          ),
-                          Text(
-                            widget.mbti.toUpperCase(),
-                            style: TextStyle(
-                                fontFamily: "Pretendard",
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15,
-                                color: mainColor.MainColor),
-                          ),
-                          Column(
+                    // title:
+                    content: Column(
+                      // 동적으로 눌린 유저의 정보 받아오기
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: Stack(
                             children: [
-                              GestureDetector(
-                                onTap: (!isAlready)
-                                    ? () async {
-                                        await checkPoint(widget.token);
-                                        setState(() {
-                                          if (!isAlready && enoughPoint)
-                                            isTap(true);
-                                        });
-                                      }
-                                    : null,
+                              Align(
+                                alignment: Alignment.center,
                                 child: Container(
-                                  margin: EdgeInsets.only(top: 20, bottom: 5),
-                                  child: Stack(
-                                    children: [
-                                      AnimatedContainer(
-                                        duration: Duration(milliseconds: 500),
-                                        width: 60,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                            color: isValid || isAlready
-                                                ? mainColor.MainColor
-                                                : mainColor.lightGray,
-                                            borderRadius:
-                                                BorderRadius.circular(50)),
-                                      ),
-                                      AnimatedPositioned(
-                                        duration: Duration(milliseconds: 500),
-                                        top: 2.5,
-                                        right:
-                                            isValid || isAlready ? 32.5 : 2.5,
-                                        child: Container(
-                                          width: 25,
-                                          height: 25,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: Colors.white),
-                                        ),
-                                      )
-                                    ],
+                                  // padding: EdgeInsets.only(top: 10),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Profile',
+                                    style: TextStyle(
+                                        color: mainColor.MainColor,
+                                        fontFamily: "Heebo",
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400),
                                   ),
                                 ),
                               ),
-                              if (!isAlready)
-                                Text(
-                                  '귓속말 걸기',
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500,
-                                      color: mainColor.lightGray),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: GestureDetector(
+                                  child: Image.asset('assets/images/block.png'),
+                                  // icon: Image.asset('assets/images/block.png'),
+                                  onTap: () {
+                                    _ClickWarningButton(context,
+                                        widget.userId); // jsonData 줘야 함
+                                    print('신고 버튼 눌림');
+                                  },
                                 ),
+                              ),
                             ],
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                        SizedBox(
+                            // margin: EdgeInsets.only(top: 5),
+                            width: 150,
+                            child: Image.asset(
+                              widget.image == "F"
+                                  ? 'assets/images/profile_woman.png'
+                                  : 'assets/images/profile_man.png',
+                              fit: BoxFit.fitHeight,
+                            )),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.userName,
+                              style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 24,
+                                  color: mainColor.MainColor),
+                            ),
+                            Text(
+                              widget.mbti.toUpperCase(),
+                              style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  color: mainColor.MainColor),
+                            ),
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: (!isAlready)
+                                      ? () async {
+                                          await checkPoint(widget.token);
+                                          setState(() {
+                                            if (!isAlready && enoughPoint) {
+                                              isTap(true);
+                                            }
+                                          });
+                                        }
+                                      : null,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    child: Stack(
+                                      children: [
+                                        AnimatedContainer(
+                                          duration: Duration(milliseconds: 500),
+                                          width: 60,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: isValid || isAlready
+                                                  ? mainColor.MainColor
+                                                  : mainColor.lightGray,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                        ),
+                                        AnimatedPositioned(
+                                          duration: Duration(milliseconds: 500),
+                                          top: 2.5,
+                                          right:
+                                              isValid || isAlready ? 32.5 : 2.5,
+                                          child: Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                if (!isAlready)
+                                  Text(
+                                    '귓속말 걸기',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w500,
+                                        color: mainColor.lightGray),
+                                  ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
               Positioned(
-                bottom: 50,
+                bottom: 20,
                 child: AnimatedOpacity(
                   opacity: isValid ? 1.0 : 0.0,
                   duration: Duration(milliseconds: 500),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(top: 30),
+                        // margin: EdgeInsets.only(top: 30),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
-                              margin: EdgeInsets.only(bottom: 20),
+                              margin: EdgeInsets.only(bottom: 5),
                               child: Stack(
                                 alignment: Alignment.bottomCenter,
                                 children: [
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width * 0.8,
+                                        MediaQuery.of(context).size.width * 0.9,
                                     height: 100,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: mainColor.lightGray
-                                            .withOpacity(0.5)),
+                                            .withOpacity(0.8)),
                                     alignment: Alignment.topCenter,
                                     child: GestureDetector(
                                       child: Container(
@@ -840,7 +970,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                     // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
-                                          0.8,
+                                          0.9,
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -872,7 +1002,8 @@ class _AnswerItemState extends State<AnswerItem> {
                             ),
                             GestureDetector(
                               child: Container(
-                                width: MediaQuery.of(context).size.width * 0.8,
+                                margin: EdgeInsets.only(top: 5),
+                                width: MediaQuery.of(context).size.width * 0.9,
                                 height: 50,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
@@ -904,7 +1035,7 @@ class _AnswerItemState extends State<AnswerItem> {
                 ),
               ),
               Positioned(
-                bottom: 170,
+                bottom: 50,
                 child: AnimatedOpacity(
                   opacity: enoughPoint ? 0.0 : 1.0,
                   duration: Duration(milliseconds: 500),
@@ -918,7 +1049,7 @@ class _AnswerItemState extends State<AnswerItem> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: mainColor.lightGray.withOpacity(0.5)),
@@ -926,7 +1057,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                 alignment: Alignment.centerLeft,
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(left: 50),
+                                    margin: EdgeInsets.only(left: 20),
                                     child: Image.asset(
                                       'assets/images/alert.png',
                                       width: 30,
@@ -991,9 +1122,8 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   @override
-
-  void initState() {        // 맨 처음에 호출될 때에만... 즉, blurting방으로 처음 들어왔을 때에만! -> 다 각자 다른 걸로 쓰면 안 되나?
-
+  void initState() {
+    // 맨 처음에 호출될 때에만... 즉, blurting방으로 처음 들어왔을 때에만! -> 다 각자 다른 걸로 쓰면 안 되나?
     super.initState();
     iLike = widget.iLike;
     likedNum = widget.likedNum;
@@ -1001,11 +1131,8 @@ class _AnswerItemState extends State<AnswerItem> {
 
   // 답변 위젯
   @override
-
   Widget build(BuildContext context) {
     // setState...
-    iLike = widget.iLike;
-    likedNum = widget.likedNum;
 
     return ListTile(
       subtitle: // 답변 내용
@@ -1156,20 +1283,20 @@ class _AnswerItemState extends State<AnswerItem> {
       'Content-Type': 'application/json',
     });
 
+    if (mounted) {
+      setState(() {
+        // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
+        if (iLike) {
+          likedNum--;
+        } else {
+          likedNum++;
+        }
 
-if(mounted)
-    {setState(() {       // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
-      if (iLike) {
-        likedNum--;
-      } else {
-        likedNum++;
-      }
+        iLike = !(iLike);
 
-      iLike = !(iLike);
-
-      print(answerId);
-    });
-}
+        print(answerId);
+      });
+    }
     if (response.statusCode == 200) {
       print('요청 성공');
       print(response.body);
@@ -1204,9 +1331,6 @@ if(mounted)
             print(isValid);
           });
         }
-      } else {
-        Provider.of<UserProvider>(context, listen: false).point =
-            responseData['point'];
       }
     } else {
       print(response.statusCode);
@@ -1219,21 +1343,19 @@ if(mounted)
 
     final url = Uri.parse(API.pointchat);
 
-    final response = await http.post(
-      url,
-      headers: {
-        'authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({'userId': widget.userId})
-    );
+    final response = await http.post(url,
+        headers: {
+          'authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'userId': widget.userId}));
 
     dynamic responseData = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
       print('요청 성공');
 
-      if (responseData != false || responseData['point'] >= 10) {
+      if (responseData != false) {      // 귓속말을 걸 수 있으면
         widget.socket.emit('create_room', widget.userId);
         print("${widget.userId}에게 귓속말 거는 중...");
 
@@ -1260,8 +1382,8 @@ class staticButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: mainColor.MainColor,
       ),
-      margin: EdgeInsets.only(bottom: 140),
-      width: MediaQuery.of(context).size.width * 0.8,
+      margin: EdgeInsets.only(bottom: 100),
+      width: MediaQuery.of(context).size.width * 0.9,
       height: 48,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1270,7 +1392,10 @@ class staticButton extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-                color: Colors.white, fontSize: 20, fontFamily: 'Heebo', fontWeight: FontWeight.w400),
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'Heebo',
+                fontWeight: FontWeight.w400),
           ),
         ],
       ),
