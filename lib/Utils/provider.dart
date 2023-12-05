@@ -3,7 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class mainColor {
   static Color MainColor = Color.fromRGBO(246, 100, 100, 1);
-  static Color lightGray = Color.fromRGBO(170, 170, 170, 1);
+  static Color Gray = Color.fromRGBO(134, 134, 134, 1);
+  static Color lightGray = Color.fromRGBO(217, 217, 217, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
 }
 
@@ -66,6 +67,7 @@ class UserProvider with ChangeNotifier {            // userId, point 등 모든 
   static int UserId = 262;
 
   int _point = 0;
+  String token = '';
 
   int get point => _point;
 
