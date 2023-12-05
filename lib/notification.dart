@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:html';
+import 'dart:js';
+import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'main.dart';
@@ -15,9 +19,7 @@ Future<void> initFcm() async {
   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  // await flutterLocalNotificationsPlugin
-  //     .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-  //     ?.createNotificationChannel(channel);
+
 
   FirebaseMessaging.onMessage.listen((RemoteMessage? message) async {
     try {
@@ -31,7 +33,14 @@ Future<void> initFcm() async {
           const NotificationDetails(android: AndroidNotificationDetails('blurting_project', 'Blurting')),
           payload: json.encode(message?.data),
         );
-        print("yse");
+        print("디버깅 문구"+json.encode(message?.data));
+        if(message?.data["type"]=="whisper")
+          {
+            Navigator.of(context as BuildContext).push(
+              MaterialPageRoute(builder: (context) => Whisper(userName: '', token: '', socket: widget.socket, roomId: '',)),
+            );
+          }
+        print("yes");
       }
     } catch (e) {
       // 오류 처리 로직
