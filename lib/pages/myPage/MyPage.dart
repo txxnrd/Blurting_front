@@ -110,6 +110,7 @@ class _MyPage extends State<MyPage> {
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
     String accessToken = await getToken();
+    
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -158,7 +159,7 @@ class _MyPage extends State<MyPage> {
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
                 print("설정 버튼 눌러짐");
-                var token = getToken();
+                var token = getToken;
                 print(token);
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => SettingPage()),

@@ -56,4 +56,5 @@ class API {
   /*POINT */
   static const String pointchat = "${ServerEndpoints.serverEndpoint}/point/chat";
   static const String pointcheck = "${ServerEndpoints.serverEndpoint}/point/check";
+  static const String userpoint = "${ServerEndpoints.serverEndpoint}/user";
 }

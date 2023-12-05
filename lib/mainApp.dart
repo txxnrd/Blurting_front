@@ -1,13 +1,18 @@
+import 'dart:convert';
+
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/homeTab/Home.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
+import 'package:http/http.dart' as http;
 
 class MainApp extends StatefulWidget {
-  MainApp({Key? key}) : super(key: key);
+  MainApp({super.key});
 
   @override
   _MainApp createState() => _MainApp();
@@ -16,7 +21,7 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDFUMDM6MjQ6NTIuMjI3WiIsImlhdCI6MTcwMTM2ODY5MiwiZXhwIjoxNzAxMzcyMjkyfQ.09W_3gSyEQCM0DTd-DzjVk1SKqp2cm_z3an6V4N3bmQ';
+  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDVUMTY6NTc6NTUuNTg0WiIsImlhdCI6MTcwMTc2MzA3NSwiZXhwIjoxNzAxNzY2Njc1fQ.nnLHxps57ZXXvRaSLRq4gfqx3hXjP__GSBu3SNyOUIk';
   IO.Socket socket = IO
       .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
     'transports': ['websocket'],
@@ -29,6 +34,7 @@ class _MainApp extends State<MainApp> {
   @override
   void initState() {
     super.initState();
+    fetchPoint(token);
 
     socket.on('connect', (_) {
       print('소켓 연결됨');
@@ -55,12 +61,9 @@ class _MainApp extends State<MainApp> {
         decoration: BoxDecoration(boxShadow: const [
           BoxShadow(
             color: Color.fromARGB(255, 212, 212, 212), // 그림자 색상
-            blurRadius: 20, // 그림자의 흐림 정도
-            spreadRadius: 4, // 그림자의 확산 정도
-            offset: Offset(0, 1), // 그림자의 위치 (가로, 세로)
+            blurRadius: 10, // 그림자의 흐림 정도
           ),
         ]),
-        height: 120,
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30.0),
@@ -119,6 +122,39 @@ class _MainApp extends State<MainApp> {
       ),
     );
   }
+
+  Future<void> fetchPoint(String token) async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
+
+    final url = Uri.parse(API.userpoint);
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+          });
+        }
+        print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+    }
+
+  }
 }
 
 class TabItem extends StatelessWidget {
@@ -134,7 +170,7 @@ class TabItem extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 0, bottom: 5),
+          margin: EdgeInsets.only(top: 20, bottom: 5),
           height: 25,
           child: _currentIndex == currentIndex
               ? Image.asset(image)
