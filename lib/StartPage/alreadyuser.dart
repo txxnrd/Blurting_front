@@ -152,7 +152,24 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
         print(token);
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
+
+        var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+        print("-------");
+        print(fcmToken);
+
+        var urlfcm = Uri.parse(API.notification);
+
+        var response = await http.post(
+          urlfcm,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({"token":fcmToken}),
+        );
+        print(response.body);
         _increaseProgressAndNavigate();
+
       }
       else{
         var data = json.decode(response.body);
@@ -316,7 +333,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0xFFF66464),
+                        color: Color(DefinedColor.lightgrey),
                       ), // 입력할 때 테두리 색상
                     ),
                     focusedBorder: OutlineInputBorder(

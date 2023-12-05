@@ -163,7 +163,10 @@ class TabItem extends StatelessWidget {
   final String name;
 
   TabItem(
-      {super.key, required this.currentIndex, required this.image, required this.name});
+      {super.key,
+      required this.currentIndex,
+      required this.image,
+      required this.name});
 
   @override
   Widget build(BuildContext context) {

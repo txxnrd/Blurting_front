@@ -10,7 +10,6 @@ import 'package:blurting/config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:intl/intl.dart';
 
-
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
     return DateTime(1, 11, 30, 0, 0, 0, 0); // 혹은 다른 기본 값으로 대체
@@ -23,7 +22,6 @@ DateTime _parseDateTime(String? dateTimeString) {
     return DateTime.now(); // 혹은 다른 기본 값으로 대체
   }
 }
-
 
 class ChatListItem extends StatefulWidget {
   final String userName;
@@ -483,7 +481,7 @@ class _chattingList extends State<ChattingList> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(244),
         child: AppBar(
-        toolbarHeight: 80,
+          toolbarHeight: 80,
           scrolledUnderElevation: 0.0,
           automaticallyImplyLeading: false,
           flexibleSpace: Stack(
@@ -494,7 +492,7 @@ class _chattingList extends State<ChattingList> {
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: Container(color: Colors.transparent))),
               Container(
-                margin: EdgeInsets.only(top: 80),
+                  margin: EdgeInsets.only(top: 80),
                   padding: EdgeInsets.all(13),
                   child: ellipseText(text: 'Connect')),
             ],
@@ -503,7 +501,7 @@ class _chattingList extends State<ChattingList> {
           elevation: 0,
           actions: [
             pointAppbar(token: widget.token),
-          SizedBox(width: 10),
+            SizedBox(width: 10),
           ],
           bottom: PreferredSize(
             preferredSize: Size(10, 10),

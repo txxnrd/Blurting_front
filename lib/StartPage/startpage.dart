@@ -110,28 +110,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  void _showLoginFailedDialog({String message = '유효하지 않은 정보이거나, 비밀번호가 틀렸습니다.'}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('로그인 실패'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('닫기'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return
@@ -158,10 +136,24 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-
-              // SizedBox(
-              //   height: 10,
-              // ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                 Container(
+                   width: 62.7,
+                   height: 66,
+                   child: Image.asset("assets/images/girl.png"),
+                 ),
+                 SizedBox(width: 4,),
+                 Container(
+                   width: 62.7,
+                   height: 66,
+                   child: Image.asset("assets/images/boy.png"),
+                 )
+               ],
+             ),
+            ),
               Container(
                 alignment: Alignment.center,
                 width: 180,
