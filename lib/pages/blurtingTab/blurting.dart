@@ -62,10 +62,9 @@ DateTime _parseDateTime(String? dateTimeString) {
 }
 
 class Blurting extends StatefulWidget {
-  final IO.Socket socket;
   final String token;
 
-  Blurting({required this.socket, Key? key, required this.token})
+  Blurting({Key? key, required this.token})
       : super(key: key);
 
   @override
@@ -74,10 +73,13 @@ class Blurting extends StatefulWidget {
 
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
+    socket =
+        Provider.of<SocketProvider>(context, listen: false).socket;
 
     Future.delayed(Duration.zero, () async {
       await isMatched(widget.token);
@@ -345,7 +347,6 @@ class _Blurting extends State<Blurting> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => DayAni(
-                                socket: widget.socket,
                                 token: widget.token,
                                 day: day,
                               )));
@@ -355,7 +356,6 @@ class _Blurting extends State<Blurting> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => GroupChat(
-                                socket: widget.socket,
                                 token: widget.token,
                               )));
                 }

@@ -54,11 +54,10 @@ class QuestionItem extends StatelessWidget {
 }
 
 class GroupChat extends StatefulWidget {
-  final IO.Socket socket;
   final String token;
   static bool pointValid = false;
 
-  GroupChat({required this.socket, Key? key, required this.token})
+  GroupChat({Key? key, required this.token})
       : super(key: key);
 
   @override
@@ -70,15 +69,17 @@ class _GroupChat extends State<GroupChat> {
   ScrollController _scrollController = ScrollController();
   List<bool> isBlock = List<bool>.filled(10, false);
   late DateTime lastTime = DateTime.now();
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
+    socket = Provider.of<SocketProvider>(context, listen: false).socket;
     Future.delayed(Duration.zero, () {
       fetchLatestComments(widget.token); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
     });
 
-    widget.socket.on('create_room', (data) {
+    socket.on('create_room', (data) {
       print(data);
       print('${data['nickname']}, ${data['roomId']}');
 
@@ -87,7 +88,6 @@ class _GroupChat extends State<GroupChat> {
         MaterialPageRoute(
             builder: (context) => Whisper(
                 token: widget.token,
-                socket: widget.socket,
                 userName: data['nickname'] as String? ?? '',
                 roomId: data['roomId'] as String? ?? '')),
       ).then((value) {
@@ -419,7 +419,7 @@ class _GroupChat extends State<GroupChat> {
                         message: answerData['answer'],
                         iLike: answerData['ilike'],
                         likedNum: answerData['likes'],
-                        socket: widget.socket,
+                        socket: socket,
                         userId: answerData['userId'],
                         userName: answerData['userNickname'],
                         token: widget.token,
@@ -494,7 +494,7 @@ class _GroupChat extends State<GroupChat> {
                     message: answerData['answer'],
                     iLike: answerData['ilike'],
                     likedNum: answerData['likes'],
-                    socket: widget.socket,
+                    socket: socket,
                     userId: answerData['userId'],
                     userName: answerData['userNickname'],
                     token: widget.token,
