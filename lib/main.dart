@@ -26,7 +26,7 @@ import 'notification.dart'; // phonenumber.dart를 임포트
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
-  // await initializeDateFormatting('ko_KR', null);
+  await initializeDateFormatting('ko_KR', null);
 
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
   print("첫번째에 token이 무엇인지: $token");

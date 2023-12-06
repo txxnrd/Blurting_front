@@ -9,6 +9,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:blurting/pages/myPage/MyPage.dart';
+import 'package:blurting/pages/whisperTab/profileCard.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class Whisper extends StatefulWidget {
   final IO.Socket socket;
@@ -16,13 +19,13 @@ class Whisper extends StatefulWidget {
   final String roomId;
   final String token;
 
-  Whisper(
-      {Key? key,
-      required this.userName,
-      required this.token,
-      required this.socket,
-      required this.roomId})
-      : super(key: key);
+  Whisper({
+    Key? key,
+    required this.userName,
+    required this.token,
+    required this.socket,
+    required this.roomId,
+  }) : super(key: key);
 
   @override
   _Whisper createState() => _Whisper();
@@ -32,10 +35,33 @@ class _Whisper extends State<Whisper> {
   TextEditingController controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool isBlock = false;
+  final PageController mainPageController = PageController(initialPage: 0);
+  List<String> imagePaths = [];
+  Map<String, dynamic> userProfile = {};
+  final String userName = '';
+  final String roomId = '';
 
   List<Widget> chatMessages = [];
 
   bool isValid = false;
+
+  void _showWhisperModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: ProfileCard(
+            mainPageController: mainPageController,
+            token: widget.token,
+            imagePaths: imagePaths,
+            roomId: roomId,
+            userName: userName,
+          ),
+          // You can customize AlertDialog properties here
+        );
+      },
+    );
+  }
 
   DateTime _parseDateTime(String? dateTimeString) {
     if (dateTimeString == null) {
@@ -175,13 +201,19 @@ class _Whisper extends State<Whisper> {
         ),
         title: Row(
           children: [
-            Container(
-              width: 70,
-              height: 70,
-              margin: EdgeInsets.all(0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Colors.white,
+            GestureDetector(
+              onTap: () {
+                // Show the profile card as a bottom sheet
+                _showWhisperModal(context);
+              },
+              child: Container(
+                width: 70,
+                height: 70,
+                margin: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Colors.white,
+                ),
               ),
             ),
             Container(
