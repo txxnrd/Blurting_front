@@ -15,6 +15,11 @@ Future<void> initFcm() async {
   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cfa88d42d7a00ad5c20834ac4c816bea962b555a
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);

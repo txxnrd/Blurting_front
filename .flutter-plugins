@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # This is a generated file; do not edit or check into version control.
 cloud_firestore=/Users/taeyunroh/.pub-cache/hosted/pub.dev/cloud_firestore-4.13.2/
 cloud_firestore_web=/Users/taeyunroh/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.8.6/
@@ -51,3 +52,5 @@ url_launcher_linux=/Users/taeyunroh/.pub-cache/hosted/pub.dev/url_launcher_linux
 url_launcher_macos=/Users/taeyunroh/.pub-cache/hosted/pub.dev/url_launcher_macos-3.1.0/
 url_launcher_web=/Users/taeyunroh/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.1/
 url_launcher_windows=/Users/taeyunroh/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.0/
+=======
+>>>>>>> cfa88d42d7a00ad5c20834ac4c816bea962b555a

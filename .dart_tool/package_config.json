@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "configVersion": 2,
   "packages": [
@@ -864,3 +865,5 @@
   "generator": "pub",
   "generatorVersion": "3.2.0"
 }
+=======
+>>>>>>> cfa88d42d7a00ad5c20834ac4c816bea962b555a

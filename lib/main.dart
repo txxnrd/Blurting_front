@@ -22,26 +22,35 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'blurting_project', // id
   'Blurting', // title
   importance: Importance.max,
+<<<<<<< HEAD
+);
+=======
+
 );
 
+>>>>>>> cfa88d42d7a00ad5c20834ac4c816bea962b555a
+
 void main() async {
-
-
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
 
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
   print("첫번째에 token이 무엇인지: $token");
-  bool isLoggedIn = token != null && token != "";
+  bool isLoggedIn = true;
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
+  if(token=="No Token")
+    {
+      isLoggedIn = false;
     }
-  });
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await initFcm();
+
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Permission.notification.isDenied.then((value) {
+  //   if (value) {
+  //     Permission.notification.request();
+  //   }
+  // });
+  // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // await initFcm();
 
   runApp(
     MultiProvider(
@@ -56,7 +65,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final bool isLoggedIn;
 
   MyApp({required this.isLoggedIn});
@@ -69,5 +77,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> cfa88d42d7a00ad5c20834ac4c816bea962b555a
