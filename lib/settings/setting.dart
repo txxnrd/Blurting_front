@@ -114,7 +114,7 @@ Future<void> _sendDeleteRequest() async {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body:json.encode({"title":"테스트 성공","text":"이 정도는 껌이지","type":"whisper"}),
+      body:json.encode({"title":"나는 이제 시험 공부하러","text":"총총총","type":"whisper"}),
     );
     print(response.body);
   }

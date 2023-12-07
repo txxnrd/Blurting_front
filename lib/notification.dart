@@ -5,13 +5,23 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'main.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'blurting_project', // id
+  'Blurting', // title
+  importance: Importance.max,
+  description: "제발 되라 ㅠㅠ,",
+);
 
 Future<void> initFcm() async {
   await Firebase.initializeApp();
-  var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true);
+
+  var initializationSettingsAndroid = const AndroidInitializationSettings('@drawable/ic_stat_icon_noti');
   var initializationSettingsIOS = const DarwinInitializationSettings();
   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   await flutterLocalNotificationsPlugin
@@ -22,16 +32,18 @@ Future<void> initFcm() async {
     try {
       RemoteNotification? notification = message?.notification;
       AndroidNotification? android = message?.notification?.android;
-      if (notification != null && android != null) {
+      // if (notification != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          notification.title,
-          notification.body,
-          const NotificationDetails(android: AndroidNotificationDetails('blurting_project', 'Blurting')),
+          notification?.title,
+          notification?.body,
+          const NotificationDetails(android: AndroidNotificationDetails('blurting_project','Blurting',importance: Importance.max)),
           payload: json.encode(message?.data),
         );
+
+
         print("yes");
-      }
+      // }
     } catch (e) {
       // 오류 처리 로직
       // 예: 오류 로그를 출력하거나 사용자에게 알림을 보내는 등의 처리

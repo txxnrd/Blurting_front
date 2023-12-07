@@ -11,14 +11,9 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'blurting_project', // id
-  'Blurting', // title
-  importance: Importance.max,
-);
+
 
 void main() async {
-
 
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);

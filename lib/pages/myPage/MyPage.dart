@@ -64,14 +64,14 @@ class _MyPage extends State<MyPage> {
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     print("수정 버튼 눌러짐");
-    var token = getToken();
-    print(token);
+    // var token = getToken();
+    // print(token);
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
 
-    String accessToken = await getToken();
-    String refreshToken = await getRefreshToken();
+    // String accessToken = await getToken();
+    // String refreshToken = await getRefreshToken();
     // print("access Token$accessToken");
     // print("refresh Token$refreshToken");
 // =======
@@ -90,7 +90,7 @@ class _MyPage extends State<MyPage> {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer ${widget.token}',
       },
     );
 
@@ -120,6 +120,7 @@ class _MyPage extends State<MyPage> {
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         getnewaccesstoken(context);
         goToMyPageEdit(context);
+
         count += 1;
         if (count == 10) exit(1);
       }
@@ -134,17 +135,17 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-    String savedToken = await getToken();
+    // var savedToken = getToken();
     // var savedToken =
     //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
     // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
 
-    print(savedToken);
+    // print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
+        'Authorization': 'Bearer ${widget.token}',
       },
     );
     print('Response Status Code: ${response.statusCode}');
@@ -246,8 +247,8 @@ class _MyPage extends State<MyPage> {
                           child: Column(
                             children: [
                               for (int i = 0;
-                                  i < (userProfile['hobby']?.length ?? 0);
-                                  i += 2)
+                              i < (userProfile['hobby']?.length ?? 0);
+                              i += 2)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -255,7 +256,7 @@ class _MyPage extends State<MyPage> {
                                     buildPinkBox('#${userProfile['hobby'][i]}'),
                                     SizedBox(
                                         width:
-                                            8), // Adjust the spacing between boxes
+                                        8), // Adjust the spacing between boxes
                                     if (i + 1 < userProfile['hobby']!.length)
                                       buildPinkBox(
                                           '#${userProfile['hobby'][i + 1]}'),
@@ -273,8 +274,8 @@ class _MyPage extends State<MyPage> {
                           child: Column(
                             children: [
                               for (int i = 0;
-                                  i < (userProfile['character']?.length ?? 0);
-                                  i += 2)
+                              i < (userProfile['character']?.length ?? 0);
+                              i += 2)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -283,7 +284,7 @@ class _MyPage extends State<MyPage> {
                                         '#${userProfile['character'][i]}'),
                                     SizedBox(
                                         width:
-                                            8), // Adjust the spacing between boxes
+                                        8), // Adjust the spacing between boxes
                                     if (i + 1 <
                                         userProfile['character']!.length)
                                       buildPinkBox(
@@ -434,14 +435,14 @@ class _MyPage extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: titles
                     .map((title) => Text(
-                          title,
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Color(0XFFF66464),
-                          ),
-                        ))
+                  title,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464),
+                  ),
+                ))
                     .toList(),
               ),
             ),
@@ -452,16 +453,16 @@ class _MyPage extends State<MyPage> {
                   .entries
                   .map(
                     (entry) => Text(
-                      entry.value,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15,
-                        color: Color(0XFFF66464),
-                      ),
-                    ),
-                  )
+                  entry.value,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464),
+                  ),
+                ),
+              )
                   .toList(),
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),

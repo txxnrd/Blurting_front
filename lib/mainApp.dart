@@ -21,6 +21,48 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
+
+  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDVUMTg6NTU6MzUuNDg3WiIsImlhdCI6MTcwMTc3MDEzNSwiZXhwIjoxNzAxNzczNzM1fQ.D3ssWiSjH5kkMc--POST9flI3gHn0qIjy561e4kb0jo';
+
+  IO.Socket socket = IO
+      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+    'transports': ['websocket'],
+    'auth': {'authorization': 'Bearer $token'},
+    // 'reconnectionAttempts': 0,
+  });
+  Future <void> fetchPoint(String token) async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
+
+    final url = Uri.parse(API.userpoint);
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+          });
+        }
+        print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
+      }
+    } else {
+      print(response.statusCode);
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+    }
+
+  }
+
   late List<Widget> _pages;
 
   @override
@@ -120,38 +162,7 @@ class _MainApp extends State<MainApp> {
     );
   }
 
-  Future<void> fetchPoint(String token) async {
-    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
 
-    final url = Uri.parse(API.userpoint);
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      try {
-        Map<String, dynamic> responseData = jsonDecode(response.body);
-
-        if (mounted) {
-          setState(() {
-            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
-          });
-        }
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
-    } else {
-      print(response.statusCode);
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
-    }
-
-  }
 }
 
 class TabItem extends StatelessWidget {
