@@ -44,6 +44,7 @@ class ChatListItem extends StatefulWidget {
       required this.roomId,
       required this.socket});
 
+
   @override
   _chatListItemState createState() => _chatListItemState();
 }
@@ -74,12 +75,12 @@ class _chatListItemState extends State<ChatListItem> {
                               children: [
                                 Container(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.9,
+                                  MediaQuery.of(context).size.width * 0.9,
                                   height: 100,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color:
-                                          mainColor.lightGray.withOpacity(0.8)),
+                                      mainColor.lightGray.withOpacity(0.8)),
                                   alignment: Alignment.topCenter,
                                   child: Container(
                                     margin: EdgeInsets.all(10),
@@ -108,7 +109,7 @@ class _chatListItemState extends State<ChatListItem> {
                                 GestureDetector(
                                   child: Container(
                                     width:
-                                        MediaQuery.of(context).size.width * 0.9,
+                                    MediaQuery.of(context).size.width * 0.9,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: mainColor.MainColor),
@@ -206,7 +207,7 @@ class _chatListItemState extends State<ChatListItem> {
               const end = Offset.zero;
               const curve = Curves.easeInOut;
               var tween =
-                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               var offsetAnimation = animation.drive(tween);
               return SlideTransition(position: offsetAnimation, child: child);
             },
@@ -257,7 +258,7 @@ class _chatListItemState extends State<ChatListItem> {
                               children: <Widget>[
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(
@@ -279,7 +280,7 @@ class _chatListItemState extends State<ChatListItem> {
                                         decoration: BoxDecoration(
                                             color: mainColor.MainColor,
                                             borderRadius:
-                                                BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                       ),
                                   ],
                                 ),
@@ -611,7 +612,7 @@ class _chattingList extends State<ChattingList> {
                   roomId: chatData['roomId'] as String? ?? '',
                   userName: chatData['nickname'] as String? ?? '',
                   latest_chat:
-                      chatData['latest_chat'] as String? ?? '지금 귓속말을 보내 보세요!',
+                  chatData['latest_chat'] as String? ?? '지금 귓속말을 보내 보세요!',
                   latest_time: latestTime,
                   image: chatData['sex'] == "F"
                       ? 'assets/woman.png'

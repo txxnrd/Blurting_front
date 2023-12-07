@@ -26,6 +26,7 @@ class Whisper extends StatefulWidget {
       required this.roomId})
       : super(key: key);
 
+
   @override
   _Whisper createState() => _Whisper();
 }
@@ -34,12 +35,15 @@ class _Whisper extends State<Whisper> {
   TextEditingController controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool isBlock = false;
-  late IO.Socket socket;
+
   final PageController mainPageController = PageController(initialPage: 0);
   List<String> imagePaths = [];
   Map<String, dynamic> userProfile = {};
   final String userName = '';
   final String roomId = '';
+
+  late IO.Socket socket;
+
 
   List<Widget> chatMessages = [];
 

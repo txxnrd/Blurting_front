@@ -247,8 +247,8 @@ class _MyPage extends State<MyPage> {
                           child: Column(
                             children: [
                               for (int i = 0;
-                                  i < (userProfile['hobby']?.length ?? 0);
-                                  i += 2)
+                              i < (userProfile['hobby']?.length ?? 0);
+                              i += 2)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -256,7 +256,7 @@ class _MyPage extends State<MyPage> {
                                     buildPinkBox('#${userProfile['hobby'][i]}'),
                                     SizedBox(
                                         width:
-                                            8), // Adjust the spacing between boxes
+                                        8), // Adjust the spacing between boxes
                                     if (i + 1 < userProfile['hobby']!.length)
                                       buildPinkBox(
                                           '#${userProfile['hobby'][i + 1]}'),
@@ -274,8 +274,8 @@ class _MyPage extends State<MyPage> {
                           child: Column(
                             children: [
                               for (int i = 0;
-                                  i < (userProfile['character']?.length ?? 0);
-                                  i += 2)
+                              i < (userProfile['character']?.length ?? 0);
+                              i += 2)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -284,7 +284,7 @@ class _MyPage extends State<MyPage> {
                                         '#${userProfile['character'][i]}'),
                                     SizedBox(
                                         width:
-                                            8), // Adjust the spacing between boxes
+                                        8), // Adjust the spacing between boxes
                                     if (i + 1 <
                                         userProfile['character']!.length)
                                       buildPinkBox(
@@ -435,14 +435,14 @@ class _MyPage extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: titles
                     .map((title) => Text(
-                          title,
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Color(0XFFF66464),
-                          ),
-                        ))
+                  title,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464),
+                  ),
+                ))
                     .toList(),
               ),
             ),
@@ -453,16 +453,16 @@ class _MyPage extends State<MyPage> {
                   .entries
                   .map(
                     (entry) => Text(
-                      entry.value,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15,
-                        color: Color(0XFFF66464),
-                      ),
-                    ),
-                  )
+                  entry.value,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464),
+                  ),
+                ),
+              )
                   .toList(),
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
