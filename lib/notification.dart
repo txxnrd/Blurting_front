@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'package:blurting/pages/blurtingTab/blurting.dart';
+import 'package:blurting/pages/whisperTab/whisper.dart';
+import 'package:blurting/settings/setting.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'main.dart';
@@ -13,9 +17,15 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   description: "제발 되라 ㅠㅠ,",
 );
 
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message");
+}
+
 Future<void> initFcm() async {
   await Firebase.initializeApp();
+
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   var initializationSettingsAndroid = const AndroidInitializationSettings('@drawable/ic_stat_icon_noti');
   var initializationSettingsIOS = const DarwinInitializationSettings();
@@ -40,8 +50,7 @@ Future<void> initFcm() async {
           const NotificationDetails(android: AndroidNotificationDetails('blurting_project','Blurting',importance: Importance.max)),
           payload: json.encode(message?.data),
         );
-
-
+        print(message?.data);
         print("yes");
       // }
     } catch (e) {
@@ -52,4 +61,23 @@ Future<void> initFcm() async {
     }
   });
 
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    print("onMessageOpenedApp: $message");
+    if(message?.data['type'] == "whisper")
+    {
+      print('이거 실행됏음.');
+      await Future.delayed(Duration(milliseconds: 100));
+
+      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Whisper(userName: "userName", token: "token", roomId: "roomId")), ); }
+    else{
+      print('이거 실행됏음.');
+      await Future.delayed(Duration(milliseconds: 100));
+      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Blurting(token: "token") ));
+
+  }
+  
+  });
+
 }
+
+

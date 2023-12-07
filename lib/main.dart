@@ -11,6 +11,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
 void main() async {
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       home: isLoggedIn ? MainApp() : LoginPage(),
     );
