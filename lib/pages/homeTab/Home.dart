@@ -56,7 +56,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
   Map<String, dynamic>? apiResponse;
-  late Duration remainingTime;
+  late Duration remainingTime = Duration.zero;
   late List<CardItem> cardItems = [];
 
   @override

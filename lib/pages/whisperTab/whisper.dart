@@ -45,19 +45,34 @@ class _Whisper extends State<Whisper> {
 
   bool isValid = false;
 
-  void _showWhisperModal(BuildContext context) {
+  void _showProfileModal(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          content: ProfileCard(
-            mainPageController: mainPageController,
-            token: widget.token,
-            imagePaths: imagePaths,
-            roomId: roomId,
-            userName: userName,
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: [
+              // Background with semi-transparent black color
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                ),
+              ),
+              // Your ProfileCard
+              ProfileCard(
+                mainPageController: mainPageController,
+                token: widget.token,
+                imagePaths: imagePaths,
+                roomId: widget.roomId,
+                userName: userName,
+              ),
+              // You can customize AlertDialog properties here
+            ],
           ),
-          // You can customize AlertDialog properties here
         );
       },
     );
@@ -204,7 +219,7 @@ class _Whisper extends State<Whisper> {
             GestureDetector(
               onTap: () {
                 // Show the profile card as a bottom sheet
-                _showWhisperModal(context);
+                _showProfileModal(context);
               },
               child: Container(
                 width: 70,

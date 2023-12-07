@@ -53,34 +53,38 @@ class _ProfileCard extends State<ProfileCard> {
   void initState() {
     super.initState();
     fetchUserProfile();
-    for (String imagePath in imagePaths) {
-      precacheImage(NetworkImage(imagePath), context);
-    }
+    // for (String imagePath in imagePaths) {
+    //   precacheImage(NetworkImage(imagePath), context);
+    // }
   }
 
   Future<void> fetchUserProfile() async {
-    var url = Uri.parse('${API.chatProfile}${widget.roomId}');
-
     // String accessToken = await getToken();
 
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${widget.token}',
-      },
-    );
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-    print('Response Headers: ${response.headers}');
-    if (response.statusCode == 200) {
-      Map<String, dynamic> data = json.decode(response.body);
-      setState(() {
-        userProfile = data;
-        imagePaths = List<String>.from(userProfile['images']);
-      });
-    } else {
-      print('Failed to load user profile. Status code: ${response.statusCode}');
+    try {
+      var url = Uri.parse('${API.chatProfile}${widget.roomId}');
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${widget.token}',
+        },
+      );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      print('Response Headers: ${response.headers}');
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        setState(() {
+          userProfile = data;
+          imagePaths = List<String>.from(userProfile['images']);
+        });
+      } else {
+        print(
+            'Failed to load user profile. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching user profile: $e');
     }
   }
 
@@ -88,35 +92,64 @@ class _ProfileCard extends State<ProfileCard> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 150),
         alignment: Alignment.center,
         width: 259,
-        height: 346,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          border: Border.all(color: Color(0xFFFF7D7D), width: 3),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              alignment: Alignment.center,
+              width: 259,
+              height: 350, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                border: Border.all(color: Color(0xFFFF7D7D), width: 2),
+              ),
+              child: PageView(controller: mainPageController, children: [
+                _buildPage(0),
+                _buildPage(1),
+                _buildPage(2),
+                _buildInfoPage(titles: [
+                  '지역:',
+                  '종교:',
+                  '전공:',
+                  '키:',
+                  '흡연정도:',
+                  '음주정도:',
+                ], values: [
+                  userProfile['region'].toString() ?? 'Unknown',
+                  userProfile['religion'].toString() ?? 'Unknown',
+                  userProfile['major'].toString() ?? 'Unknown',
+                  userProfile['height'].toString() ?? 'Unknown',
+                  getCigaretteString(userProfile['cigarette']) ?? 'Unknown',
+                  getDrinkString(userProfile['drink']) ?? 'Unknown',
+                ]),
+              ]),
+            ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: SmoothPageIndicator(
+                controller: mainPageController,
+                count: 4,
+                effect: ScrollingDotsEffect(
+                  dotColor: Color(0xFFFFD2D2),
+                  activeDotColor: Color(0xFFF66464),
+                  activeStrokeWidth: 10,
+                  activeDotScale: 1.7,
+                  maxVisibleDots: 5,
+                  radius: 8,
+                  spacing: 10,
+                  dotHeight: 5,
+                  dotWidth: 5,
+                ),
+              ),
+            ),
+          ],
         ),
-        child: PageView(controller: mainPageController, children: [
-          _buildPage(0),
-          _buildPage(1),
-          _buildPage(2),
-          _buildInfoPage(titles: [
-            '지역:',
-            '종교:',
-            '전공:',
-            '키:',
-            '흡연정도:',
-            '음주정도:',
-          ], values: [
-            userProfile['region'].toString() ?? 'Unknown',
-            userProfile['religion'].toString() ?? 'Unknown',
-            userProfile['major'].toString() ?? 'Unknown',
-            userProfile['height'].toString() ?? 'Unknown',
-            getCigaretteString(userProfile['cigarette']) ?? 'Unknown',
-            getDrinkString(userProfile['drink']) ?? 'Unknown',
-          ]),
-        ]),
       ),
     );
   }
@@ -146,14 +179,34 @@ class _ProfileCard extends State<ProfileCard> {
         Padding(
           padding: EdgeInsets.fromLTRB(0, 13, 0, 0),
         ),
-        Text(
-          'Photo ${index + 1}',
-          style: TextStyle(
-            fontFamily: 'Heedo',
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-            color: Color(0XFFF66464),
-          ),
+        Row(
+          children: [
+            SizedBox(
+              width: 95,
+            ),
+            Text(
+              'photo ${index + 1}',
+              style: TextStyle(
+                fontFamily: 'Heedo',
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: Color(0XFFF66464),
+              ),
+            ),
+            SizedBox(
+              width: 40,
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                iconSize: 20,
+                icon: Image.asset('assets/images/block.png'),
+                onPressed: () {
+                  print('신고 버튼 눌림');
+                },
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 14,
@@ -161,7 +214,7 @@ class _ProfileCard extends State<ProfileCard> {
         Container(
           color: Colors.white,
           width: 175,
-          height: 190,
+          height: 197,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image.network(
@@ -175,8 +228,14 @@ class _ProfileCard extends State<ProfileCard> {
   }
 
   Widget _buildNicknameMbtiRow() {
-    return SizedBox(
-      height: 10,
+    if (userProfile.isEmpty ||
+        userProfile['nickname'] == null ||
+        userProfile['mbti'] == null) {
+      // You might want to display a loading indicator or handle this case differently
+      return CircularProgressIndicator();
+    }
+    print('UserProfile: $userProfile');
+    return SingleChildScrollView(
       child: Row(
         children: [
           SizedBox(width: 40),
