@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:math';
 
 Future<Map<String, dynamic>> fetchData(String token) async {
   final response = await http.get(
@@ -55,8 +56,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
   Map<String, dynamic>? apiResponse;
-  late Duration remainingTime;
-  late List<CardItem> cardItems;
+  late Duration remainingTime = Duration.zero;
+  late List<CardItem> cardItems = [];
 
   @override
   void initState() {
@@ -96,7 +97,7 @@ class _HomeState extends State<Home> {
         updateRemainingTime();
       } // 다음 업데이트 예약
       else {
-        print("지금 블러팅 탭에 접속하여, 새로운 질문을 확인하세요!");
+        print("0초남음");
       }
     });
   }
@@ -123,171 +124,189 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = List.generate(
-      cardItems.length,
-      (index) => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          image: DecorationImage(
-            image: AssetImage('./assets/images/homecard.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
-            height: 280,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Row(
+    final pages = (apiResponse != null &&
+            apiResponse!['answers'] != null &&
+            apiResponse!['answers'].isNotEmpty)
+        ? List.generate(
+            cardItems.length,
+            (index) => Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: AssetImage('./assets/images/homecard.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  height: 280,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (cardItems[index].userSex == 'M')
-                        ClipOval(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            color: Color(0xFFFF7D7D),
-                            child: Image.asset(
-                              './assets/man.png',
-                              width: 24,
-                              height: 24,
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Row(
+                          children: [
+                            if (cardItems[index].userSex == 'M')
+                              ClipOval(
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  color: Color(0xFFFF7D7D),
+                                  child: Image.asset(
+                                    './assets/man.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ),
+                              ),
+                            if (cardItems[index].userSex == 'F')
+                              ClipOval(
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  color: Color(0xFFFF7D7D),
+                                  child: Image.asset(
+                                    './assets/woman.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ),
+                              ),
+                            SizedBox(width: 8),
+                            Text(
+                              'User Name: ${cardItems[index].userName}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Heebo',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      if (cardItems[index].userSex == 'F')
-                        ClipOval(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            color: Color(0xFFFF7D7D),
-                            child: Image.asset(
-                              './assets/woman.png',
-                              width: 24,
-                              height: 24,
-                            ),
-                          ),
-                        ),
-                      SizedBox(width: 8),
+                      ),
+                      SizedBox(height: 13),
                       Text(
-                        'User Name: ${cardItems[index].userName}',
+                        'Question: ${cardItems[index].question}',
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Heebo',
-                          fontSize: 15,
+                          fontSize: 17,
                           fontWeight: FontWeight.w700,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
+                      SizedBox(height: 11),
+                      Expanded(
+                        child: Container(
+                          child: SingleChildScrollView(
+                            child: Text(
+                              'Answer: ${cardItems[index].answer}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Heebo',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 11),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: Colors.white,
+                              height: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                color: Colors.white,
+                                size: 15,
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Text(
+                                '${cardItems[index].postedAt}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          // SizedBox(width: 70),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // 좋아요 버튼을 눌렀을 때의 로직
+                                  if (!cardItems[index].ilike) {
+                                    handleLike(index);
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.thumb_up,
+                                  color: cardItems[index].ilike
+                                      ? Color(0xFFFF7D7D)
+                                      : Colors.grey,
+                                  size: 15,
+                                ),
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                '${cardItems[index].likes}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      )
                     ],
                   ),
                 ),
-                SizedBox(height: 13),
-                Text(
-                  'Question: ${cardItems[index].question}',
+              ),
+            ),
+          )
+        : [
+            Container(
+              child: Center(
+                child: Text(
+                  'MVP 답변 준비중이에요!',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black87,
                     fontFamily: 'Heebo',
-                    fontSize: 17,
+                    fontSize: 18.0,
                     fontWeight: FontWeight.w700,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
                 ),
-                SizedBox(height: 11),
-                Expanded(
-                  child: Container(
-                    child: SingleChildScrollView(
-                      child: Text(
-                        'Answer: ${cardItems[index].answer}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Heebo',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 11),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: Colors.white,
-                        height: 10,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                        SizedBox(
-                          width: 7,
-                        ),
-                        Text(
-                          '${cardItems[index].postedAt}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Heebo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // SizedBox(width: 70),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // 좋아요 버튼을 눌렀을 때의 로직
-                            if (!cardItems[index].ilike) {
-                              handleLike(index);
-                            }
-                          },
-                          child: Icon(
-                            Icons.thumb_up,
-                            color: cardItems[index].ilike
-                                ? Color(0xFFFF7D7D)
-                                : Colors.grey,
-                            size: 15,
-                          ),
-                        ),
-                        SizedBox(width: 7),
-                        Text(
-                          '${cardItems[index].likes}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Heebo',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                )
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          ];
 
     return WillPopScope(
       onWillPop: () async {
@@ -351,6 +370,7 @@ class _HomeState extends State<Home> {
                   height: 240,
                   child: PageView.builder(
                     controller: controller,
+                    itemCount: min(cardItems.length, 3),
                     itemBuilder: (_, index) {
                       return pages[index % pages.length];
                     },
