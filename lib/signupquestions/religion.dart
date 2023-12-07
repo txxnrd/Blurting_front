@@ -1,17 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/sexualpreference.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/sexualpreference.dart';
+import 'package:blurting/config/app_config.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../colors/colors.dart'; // sex.dart를 임포트
 
 class ReligionPage extends StatefulWidget {
   final String selectedGender;
 
-  ReligionPage({required this.selectedGender});
+  ReligionPage({super.key, required this.selectedGender});
   @override
   _ReligionPageState createState() => _ReligionPageState();
 }
-enum Religion { none,buddhism,christian,catholicism, etc}
 
-class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderStateMixin{
+enum Religion { none, buddhism, christian, catholicism, etc }
+
+class _ReligionPageState extends State<ReligionPage>
+    with SingleTickerProviderStateMixin {
   Religion? _selectedReligion;
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
@@ -19,34 +27,185 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => SexualPreferencePage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            SexualPreferencePage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
+  }
 
+    bool IsValid = false;
+
+  @override
+  void IsSelected() {
+    IsValid = true;
+  }
+  Future<void> _sendBackRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signupback);
+
+    String savedToken = await getToken();
+    print(savedToken);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        Navigator.of(context).pop();
+
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
   }
   @override
   void initState() {
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),  // 애니메이션의 지속 시간
+      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 0.3,  // 시작 게이지 값
-      end: 0.4,    // 종료 게이지 값
+      begin: 3/15, // 시작 게이지 값
+      end: 4/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
       setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
     });
   }
+  Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+    // 값이 없을 경우 'No Token'을 반환합니다.
+    String token = prefs.getString('signupToken') ?? 'No Token';
+    return token;
+  }
 
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('signupToken', token);
+    // 저장된 값을 확인하기 위해 바로 불러옵니다.
+    String savedToken = prefs.getString('signupToken') ?? 'No Token';
+    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
+  }
 
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+    print(_selectedReligion);
+    var religion ='';
+    if(_selectedReligion==Religion.none)
+      {
+        religion = '무교' ;
+      }
+    else if(_selectedReligion==Religion.christian)
+    {
+      religion = '불교' ;
+    }
+    else if(_selectedReligion==Religion.catholicism)
+    {
+      religion = '기독교' ;
+    }
+    else if(_selectedReligion==Religion.buddhism)
+    {
+      religion = '천주교' ;
+    }
+    else{
+      religion='기타';
+    }
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"religion":religion }), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if(data['signupToken']!=null)
+      {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      }
+      else{
+        _showVerificationFailedSnackBar();
+      }
+
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('인증 실패'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: '닫기',
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -55,6 +214,8 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -64,15 +225,10 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
-          },
+            _sendBackRequest();
+            },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -96,19 +252,24 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
                 // 완료된 부분 배경색 설정 (파란색)
                 Container(
                   height: 10,
-                  width: MediaQuery.of(context).size.width * _progressAnimation!.value,
+                  width: MediaQuery.of(context).size.width *
+                      _progressAnimation!.value,
                   decoration: BoxDecoration(
                     color: Color(0xFF303030), // 파란색
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
                 Positioned(
-                  left: MediaQuery.of(context).size.width * _progressAnimation!.value - 15,
+                  left: MediaQuery.of(context).size.width *
+                          _progressAnimation!.value -
+                      15,
                   bottom: -10,
                   child: Image.asset(
-                    gender == Gender.male ? 'assets/man.png'
-                        : gender == Gender.female ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                    gender == Gender.male
+                        ? 'assets/man.png'
+                        : gender == Gender.female
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
@@ -121,7 +282,11 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
             ),
             Text(
               '종교가 있으신가요?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
             SizedBox(width: 20), // 두 버튼 사이의 간격 조정
@@ -130,212 +295,252 @@ class _ReligionPageState extends State<ReligionPage> with SingleTickerProviderSt
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.none ? Color(0xFF868686) : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedReligion == Religion.none,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedReligion = Religion.none;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                    ),
-
-                    onPressed: () {
-                      setState(() {
-                        _selectedReligion = Religion.none;
-                      });
-                    },
-                    child: Text(
-                      '무교',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedReligion = Religion.none;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '무교',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-
-
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.buddhism ? Color(0xFF868686) : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedReligion == Religion.buddhism,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedReligion = Religion.buddhism;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                    ),
-
-                    onPressed: () {
-                      setState(() {
-                        _selectedReligion = Religion.buddhism;
-                      });
-                    },
-                    child: Text(
-                      '불교',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedReligion = Religion.buddhism;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '불교',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 17,),
+            SizedBox(
+              height: 17,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.christian ? Color(0xFF868686) : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedReligion == Religion.christian,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedReligion = Religion.christian;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                    ),
-
-                    onPressed: () {
-                      setState(() {
-                        _selectedReligion = Religion.christian;
-                      });
-                    },
-                    child: Text(
-                      '기독교',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedReligion = Religion.christian;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '기독교',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.catholicism ? Color(0xFF868686) : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedReligion == Religion.catholicism,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedReligion = Religion.catholicism;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                    ),
-
-                    onPressed: () {
-                      setState(() {
-                        _selectedReligion = Religion.catholicism;
-                      });
-                    },
-                    child: Text(
-                      '천주교',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedReligion = Religion.catholicism;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '천주교',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 17,),
+            SizedBox(
+              height: 17,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF868686), width: 2,),
-                      primary: Color(0xFF303030),
-                      backgroundColor: _selectedReligion == Religion.etc ? Color(0xFF868686) : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),  // 원하는 모서리 둥글기 값
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Checkbox(
+                        value: _selectedReligion == Religion.etc,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _selectedReligion = Religion.etc;
+                            IsSelected();
+                          });
+                        },
+                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
-                    ),
-
-                    onPressed: () {
-                      setState(() {
-                        _selectedReligion = Religion.etc;
-                      });
-                    },
-                    child: Text(
-                      '이외종교',
-                      style: TextStyle(
-                        color: Color(0xFF303030),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedReligion = Religion.etc;
+                            IsSelected();
+                          });
+                        },
+                        child: Text(
+                          '기타',
+                          style: TextStyle(
+                            color: Color(0xFF303030),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-
 
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
-                  width: 159, // 원하는 너비 값
+                  width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-
                 ),
               ],
             ),
 
-            SizedBox(height: 178),
-            Container(
-              width: 350,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFF66464),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () {
-                  print("다음 버튼 클릭됨");
-                  _increaseProgressAndNavigate();
-                },
+            SizedBox(height: 191),
 
-
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _sendPostRequest();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
     );
   }
 }
@@ -360,8 +565,3 @@ class FaceIconPainter extends CustomPainter {
     return true;
   }
 }
-
-
-
-
-
