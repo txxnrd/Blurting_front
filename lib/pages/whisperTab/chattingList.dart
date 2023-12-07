@@ -3,6 +3,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
+import 'package:provider/provider.dart';
 import 'dart:ui';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
@@ -31,7 +32,6 @@ class ChatListItem extends StatefulWidget {
   final String roomId;
   final String token;
   final bool read;
-
   final IO.Socket socket;
 
   ChatListItem(
@@ -40,9 +40,9 @@ class ChatListItem extends StatefulWidget {
       required this.latest_chat,
       required this.latest_time,
       required this.image,
-      required this.socket,
       required this.read,
-      required this.roomId});
+      required this.roomId,
+      required this.socket});
 
   @override
   _chatListItemState createState() => _chatListItemState();
@@ -199,7 +199,6 @@ class _chatListItemState extends State<ChatListItem> {
             pageBuilder: (context, animation, secondaryAnimation) => Whisper(
                 token: widget.token,
                 userName: widget.userName,
-                socket: widget.socket,
                 roomId: widget.roomId),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -326,10 +325,9 @@ class _chatListItemState extends State<ChatListItem> {
 }
 
 class ChattingList extends StatefulWidget {
-  final IO.Socket socket;
   final String token;
 
-  ChattingList({required this.socket, Key? key, required this.token})
+  ChattingList({Key? key, required this.token})
       : super(key: key);
 
   @override
@@ -338,16 +336,18 @@ class ChattingList extends StatefulWidget {
 
 class _chattingList extends State<ChattingList> {
   List<Widget> chatLists = [];
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
+    socket = Provider.of<SocketProvider>(context, listen: false).socket;
 
     Future.delayed(Duration.zero, () {
       fetchList(widget.token);
     });
 
-    widget.socket.on('invite_chat', (data) {
+    socket.on('invite_chat', (data) {
       print('새로운 채팅: $data');
       Widget newChat = ChatListItem(
         token: widget.token,
@@ -356,11 +356,11 @@ class _chattingList extends State<ChattingList> {
         latest_chat: '지금 귓속말을 보내 보세요!',
         latest_time: DateTime(1, 11, 30, 0, 0, 0, 0),
         image: data['sex'] == 'M' ? 'assets/man.png' : 'assets/woman.png',
-        socket: widget.socket,
+        socket: socket,
         read: true,
       );
 
-      widget.socket.emit('join_chat', data);
+      socket.emit('join_chat', data);
       if (mounted) {
         setState(() {
           chatLists.insert(0, newChat);
@@ -368,7 +368,7 @@ class _chattingList extends State<ChattingList> {
       }
     });
 
-    widget.socket.on('new_chat', (data) {
+    socket.on('new_chat', (data) {
       int index = 0;
 
       print('채팅 리스트 새 메시지 도착$data');
@@ -424,7 +424,7 @@ class _chattingList extends State<ChattingList> {
       }
     });
 
-    widget.socket.on('out_room', (data) {
+    socket.on('out_room', (data) {
       for (int i = 0; i < chatLists.length; i++) {
         Widget widget = chatLists[i];
         if (widget is ChatListItem) {
@@ -451,7 +451,7 @@ class _chattingList extends State<ChattingList> {
       }
     });
 
-    widget.socket.on('leave_room', (data) {
+    socket.on('leave_room', (data) {
       // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
       // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
       print(data);
@@ -616,7 +616,7 @@ class _chattingList extends State<ChattingList> {
                   image: chatData['sex'] == "F"
                       ? 'assets/woman.png'
                       : 'assets/man.png',
-                  socket: widget.socket,
+                  socket: socket,
                   read: read,
                 ),
               );

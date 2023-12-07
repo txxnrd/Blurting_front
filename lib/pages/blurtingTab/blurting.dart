@@ -1,18 +1,20 @@
 import 'dart:convert';
 
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/pages/blurtingTab/matchingAni.dart';
 import 'package:blurting/pages/blurtingTab/dayAni.dart';
 import 'package:http/http.dart' as http;
 
+/** */
 DateTime createdAt = DateTime.now();
-
 
 String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
 
@@ -60,36 +62,24 @@ DateTime _parseDateTime(String? dateTimeString) {
 }
 
 class Blurting extends StatefulWidget {
-  final IO.Socket socket;
   final String token;
 
-  Blurting({required this.socket, Key? key, required this.token})
+  Blurting({Key? key, required this.token})
       : super(key: key);
 
   @override
   _Blurting createState() => _Blurting();
 }
 
-String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
-
 class _Blurting extends State<Blurting> {
-  DateTime _parseDateTime(String? dateTimeString) {
-    if (dateTimeString == null) {
-      return DateTime(1, 11, 30, 0, 0, 0, 0); // 혹은 다른 기본 값으로 대체
-    }
-
-    try {
-      return DateTime.parse(dateTimeString);
-    } catch (e) {
-      print('Error parsing DateTime: $e');
-      return DateTime.now(); // 혹은 다른 기본 값으로 대체
-    }
-  }
+  final PageController pageController = PageController(initialPage: 0);
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
-
+    socket =
+        Provider.of<SocketProvider>(context, listen: false).socket;
 
     Future.delayed(Duration.zero, () async {
       await isMatched(widget.token);
@@ -110,7 +100,6 @@ class _Blurting extends State<Blurting> {
           currentPage = newPage;
         });
       }
-
     });
   }
 
@@ -119,9 +108,7 @@ class _Blurting extends State<Blurting> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-
         preferredSize: Size.fromHeight(140),
-
         child: AppBar(
           scrolledUnderElevation: 0.0,
           automaticallyImplyLeading: false,
@@ -138,7 +125,6 @@ class _Blurting extends State<Blurting> {
           elevation: 0,
         ),
       ),
-
       extendBodyBehindAppBar: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -361,19 +347,18 @@ class _Blurting extends State<Blurting> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => DayAni(
-                                socket: widget.socket,
                                 token: widget.token,
                                 day: day,
                               )));
                 } else {
                   // 날이 바뀌고 처음 들어간 게 아님
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Matching(token: widget.token)));
+                          builder: (context) => GroupChat(
+                                token: widget.token,
+                              )));
                 }
-
               } else if (isState == 'Start') {
                 // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
                 Navigator.push(
@@ -514,6 +499,7 @@ class _Blurting extends State<Blurting> {
   }
 
   Future<void> isMatched(String token) async {
+    // 방이 있는지 없는지 확인
     final url = Uri.parse(API.matching);
 
     final response = await http.get(url, headers: {
@@ -548,7 +534,7 @@ class _Blurting extends State<Blurting> {
   }
   
   Future<void> fetchLatestComments(String token) async {
-    // day 정보 (dayAni 띄울지 말지 결정)
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
 
     final url = Uri.parse(API.latest);
     final response = await http.get(
@@ -565,24 +551,53 @@ class _Blurting extends State<Blurting> {
 
         if (mounted) {
           setState(() {
-
             // createdAt = DateTime.now().add(Duration(hours: -47));
-
             createdAt = _parseDateTime(responseData['createdAt']);
-            print('createdAt : ${createdAt}');
+            // print('createdAt : ${createdAt}');
 
             Duration timeDifference =
                 DateTime.now().add(Duration(hours: 9)).difference(createdAt);
 
             print(timeDifference);
+            setState(() {
+              // 시작하자마자 day1 고르기
+              isValidDay[0] = true;
+              currentDay = 0;
+            });
 
             if (timeDifference >= Duration(hours: 24)) {
               day = 'Day2';
-            }
-            if (timeDifference >= Duration(hours: 48)) {
-              day = 'Day3';
+              pageController.page == 1;
+              print('하루 지남');
+              if (mounted) {
+                setState(() {
+                  isValidDay[1] = true;
+                  currentDay = 1;
+                });
+              }
+
+              if (iSended[0] == false) {
+                print('day2가 되엇는데도 day1 화살표 아직 안 보냄');
+                sendArrow(token, -1, 0);
+              }
             }
 
+            if (timeDifference >= Duration(hours: 48)) {
+              day = 'Day3';
+              pageController.page == 2;
+              print('이틀 지남');
+              if (mounted) {
+                setState(() {
+                  isValidDay[2] = true;
+                  currentDay = 2;
+                });
+              }
+
+              if (iSended[1] == false) {
+                print('day3이 되엇는데도 day2 화살표 아직 안 보냄');
+                sendArrow(token, -1, 1);
+              }
+            }
           });
         }
         // print('Response body: ${response.body}');
@@ -744,21 +759,20 @@ class _Blurting extends State<Blurting> {
           setState(() {
             iSended[day] = true;
             print(iSended);
-
           });
         }
 
         print('Response body: ${response.body}');
       } catch (e) {
+        print('SendArrow 에러');
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
     } else {
       print(response.statusCode);
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+      throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
-
 
   void clickProfile(bool status, int userId_) {
     setState(() {
@@ -893,4 +907,3 @@ class _profileState extends State<profile> {
     );
   }
 }
-

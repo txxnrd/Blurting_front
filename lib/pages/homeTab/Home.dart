@@ -308,11 +308,8 @@ class _HomeState extends State<Home> {
             ),
           ];
 
-    return WillPopScope(
-      onWillPop: () async {
-        // false를 반환하여 뒤로 가기를 막습니다.
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

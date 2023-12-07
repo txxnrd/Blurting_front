@@ -1,21 +1,13 @@
 import 'package:blurting/signupquestions/token.dart';
-import 'package:blurting/settings/setting.dart';
-import 'package:blurting/signupquestions/hobby.dart';
-import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/StartPage/startpage.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:blurting/Utils/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:blurting/signupquestions/phonenumber.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -53,6 +45,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => SocketProvider())
         // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
