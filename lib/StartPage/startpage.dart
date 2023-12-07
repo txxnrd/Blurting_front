@@ -113,10 +113,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return
-      WillPopScope(onWillPop: () async {
-      // false를 반환하여 뒤로 가기를 막습니다.
-      return false;
-    },
+      PopScope(canPop: false,
     child:
       Scaffold(
       key: _scaffoldKey, // Scaffold에 GlobalKey 할당

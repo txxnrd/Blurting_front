@@ -94,12 +94,10 @@ Future<void> _sendDeleteRequest() async {
         getnewaccesstoken(context);
         _sendDeleteRequest();
         count+=1;
-        if(count==100)
-          exit(1);
+        if(count==100) exit(1);
       }
     }
   }
-
 
   Future<void> _testfcm() async {
     print('_sendPostRequest called');
@@ -137,9 +135,6 @@ Future<void> _sendDeleteRequest() async {
             Navigator.pop(context);
           },
         ),
-        actions: <Widget>[
-
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
