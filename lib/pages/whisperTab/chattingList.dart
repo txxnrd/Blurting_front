@@ -36,13 +36,14 @@ class ChatListItem extends StatefulWidget {
 
   ChatListItem(
       {required this.token,
-        required this.userName,
-        required this.latest_chat,
-        required this.latest_time,
-        required this.image,
-        required this.read,
-        required this.roomId,
-        required this.socket});
+      required this.userName,
+      required this.latest_chat,
+      required this.latest_time,
+      required this.image,
+      required this.read,
+      required this.roomId,
+      required this.socket});
+
 
   @override
   _chatListItemState createState() => _chatListItemState();

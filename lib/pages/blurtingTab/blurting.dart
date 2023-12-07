@@ -78,7 +78,10 @@ class _Blurting extends State<Blurting> {
   @override
   void initState() {
     super.initState();
-    socket = Provider.of<SocketProvider>(context, listen: false).socket;
+
+    socket =
+        Provider.of<SocketProvider>(context, listen: false).socket;
+
 
     Future.delayed(Duration.zero, () async {
       await isMatched(widget.token);
@@ -346,17 +349,18 @@ class _Blurting extends State<Blurting> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => DayAni(
-                            token: widget.token,
-                            day: day,
-                          )));
+                                token: widget.token,
+                                day: day,
+                              )));
                 } else {
                   // 날이 바뀌고 처음 들어간 게 아님
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => GroupChat(
-                            token: widget.token,
-                          )));
+                                token: widget.token,
+                              )));
+
                 }
               } else if (isState == 'Start') {
                 // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화

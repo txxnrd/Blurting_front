@@ -6,6 +6,7 @@ import 'package:blurting/Utils/time.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
@@ -14,18 +15,17 @@ import 'package:blurting/pages/whisperTab/profileCard.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class Whisper extends StatefulWidget {
-  final IO.Socket socket;
   final String userName;
   final String roomId;
   final String token;
 
-  Whisper({
-    Key? key,
-    required this.userName,
-    required this.token,
-    required this.socket,
-    required this.roomId,
-  }) : super(key: key);
+  Whisper(
+      {Key? key,
+      required this.userName,
+      required this.token,
+      required this.roomId})
+      : super(key: key);
+
 
   @override
   _Whisper createState() => _Whisper();
@@ -35,11 +35,15 @@ class _Whisper extends State<Whisper> {
   TextEditingController controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool isBlock = false;
+
   final PageController mainPageController = PageController(initialPage: 0);
   List<String> imagePaths = [];
   Map<String, dynamic> userProfile = {};
   final String userName = '';
   final String roomId = '';
+
+  late IO.Socket socket;
+
 
   List<Widget> chatMessages = [];
 
@@ -97,23 +101,24 @@ class _Whisper extends State<Whisper> {
 
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
 
-    widget.socket.emit('in_room', data);
+    socket.emit('in_room', data);
     print('나감');
   }
 
   @override
   void initState() {
     super.initState();
+    socket = Provider.of<SocketProvider>(context, listen: false).socket;
 
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
 
-    widget.socket.emit('in_room', data);
+    socket.emit('in_room', data);
 
     // Future.delayed(Duration.zero, () {
       fetchChats(widget.token);
     // });
 
-    widget.socket.on('new_chat', (data) {
+    socket.on('new_chat', (data) {
       int userId = data['userId'];
       String chat = data['chat'];
       bool read = data['read']; // (읽음 표시)
@@ -152,7 +157,7 @@ class _Whisper extends State<Whisper> {
       }
     });
 
-    widget.socket.on('read_all', (data) {
+    socket.on('read_all', (data) {
       for (int i = 0; i < chatMessages.length; i++) {
         Widget widget = chatMessages[i];
         if (widget is MyChat) {
@@ -174,7 +179,7 @@ class _Whisper extends State<Whisper> {
       }
     });
 
-    widget.socket.on('report', (data) {
+    socket.on('report', (data) {
       if (mounted) {
         setState(() {
           isBlock = true;
@@ -191,7 +196,7 @@ class _Whisper extends State<Whisper> {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
 
-    widget.socket.on('leave_room', (data) {
+    socket.on('leave_room', (data) {
       // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
       // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
       // 귓속말 내에서 내가 나갔을 때, 이전으로 돌아가기 (채팅 리스트로)
@@ -354,7 +359,7 @@ class _Whisper extends State<Whisper> {
                                                   ),
                                                 ),
                                                 onTap: () {
-                                                  widget.socket.emit('leave_room',
+                                                  socket.emit('leave_room',
                                                     widget.roomId);
                                                 print('채팅 나가는 중...');
                                                 Navigator.pop(context);
@@ -475,7 +480,7 @@ class _Whisper extends State<Whisper> {
 
     // 소켓 서버에 데이터 전송
     if (message.isNotEmpty) {
-      widget.socket.emit('send_chat', data);
+      socket.emit('send_chat', data);
       print("소켓 서버에 귓속말 전송 ($data)");
     }
 
