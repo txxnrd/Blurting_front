@@ -68,9 +68,9 @@ class _Whisper extends State<Whisper> {
 
     widget.socket.emit('in_room', data);
 
-    Future.delayed(Duration.zero, () {
+    // Future.delayed(Duration.zero, () {
       fetchChats(widget.token);
-    });
+    // });
 
     widget.socket.on('new_chat', (data) {
       int userId = data['userId'];
@@ -132,10 +132,20 @@ class _Whisper extends State<Whisper> {
         }
       }
     });
+
+    widget.socket.on('report', (data) {
+      if (mounted) {
+        setState(() {
+          isBlock = true;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('이게 뭐노: ${isBlock}');
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
@@ -233,14 +243,14 @@ class _Whisper extends State<Whisper> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.8,
+                                                    0.9,
                                                 height: 100,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10),
                                                     color: mainColor.lightGray
-                                                        .withOpacity(0.5)),
+                                                        .withOpacity(0.8)),
                                                 alignment: Alignment.topCenter,
                                                 child: Container(
                                                   margin: EdgeInsets.all(10),
@@ -275,7 +285,7 @@ class _Whisper extends State<Whisper> {
                                                   width: MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.8,
+                                                      0.9,
                                                   decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -312,7 +322,7 @@ class _Whisper extends State<Whisper> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.8,
+                                                0.9,
                                             height: 50,
                                             decoration: BoxDecoration(
                                                 borderRadius:
@@ -461,7 +471,13 @@ class _Whisper extends State<Whisper> {
         }
 
         Map<String, dynamic> responseData = jsonDecode(response.body);
-        isBlock = !responseData['connected'];
+        if (mounted) {
+          setState(() {
+            isBlock = !responseData['connected'];
+          });
+        }
+        print('차단 여부: ${isBlock}');
+
         List<dynamic> chatList = responseData['chats'];
         DateTime hasRead = _parseDateTime(responseData['hasRead']);
 
@@ -546,7 +562,7 @@ class DateWidget extends StatelessWidget {
           child: Text(
             date,
             style: TextStyle(
-                fontFamily: "Heebo", fontSize: 10, color: mainColor.lightGray),
+                fontFamily: "Heebo", fontSize: 10, color: mainColor.Gray),
           ),
         ),
       ),
