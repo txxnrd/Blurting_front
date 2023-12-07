@@ -1,18 +1,20 @@
 import 'dart:convert';
 
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/pages/blurtingTab/matchingAni.dart';
 import 'package:blurting/pages/blurtingTab/dayAni.dart';
 import 'package:http/http.dart' as http;
 
+/** */
 DateTime createdAt = DateTime.now();
-
 
 String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
 
@@ -60,36 +62,23 @@ DateTime _parseDateTime(String? dateTimeString) {
 }
 
 class Blurting extends StatefulWidget {
-  final IO.Socket socket;
   final String token;
 
-  Blurting({required this.socket, Key? key, required this.token})
+  Blurting({Key? key, required this.token})
       : super(key: key);
 
   @override
   _Blurting createState() => _Blurting();
 }
 
-String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
-
 class _Blurting extends State<Blurting> {
-  DateTime _parseDateTime(String? dateTimeString) {
-    if (dateTimeString == null) {
-      return DateTime(1, 11, 30, 0, 0, 0, 0); // 혹은 다른 기본 값으로 대체
-    }
-
-    try {
-      return DateTime.parse(dateTimeString);
-    } catch (e) {
-      print('Error parsing DateTime: $e');
-      return DateTime.now(); // 혹은 다른 기본 값으로 대체
-    }
-  }
+  final PageController pageController = PageController(initialPage: 0);
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
-
+    socket = Provider.of<SocketProvider>(context, listen: false).socket;
 
     Future.delayed(Duration.zero, () async {
       await isMatched(widget.token);
@@ -110,7 +99,6 @@ class _Blurting extends State<Blurting> {
           currentPage = newPage;
         });
       }
-
     });
   }
 
@@ -119,9 +107,7 @@ class _Blurting extends State<Blurting> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-
         preferredSize: Size.fromHeight(140),
-
         child: AppBar(
           scrolledUnderElevation: 0.0,
           automaticallyImplyLeading: false,
@@ -138,7 +124,6 @@ class _Blurting extends State<Blurting> {
           elevation: 0,
         ),
       ),
-
       extendBodyBehindAppBar: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -179,9 +164,9 @@ class _Blurting extends State<Blurting> {
                     ),
                     InkWell(
                       onTap: () {
-                          setState(() {
-                            isMine = true;
-                          });
+                        setState(() {
+                          isMine = true;
+                        });
                         if (isState == 'Continue') {
                           pageController.jumpToPage(currentDay);
                         }
@@ -218,39 +203,39 @@ class _Blurting extends State<Blurting> {
                       height: MediaQuery.of(context).size.width * 0.7,
                       child: isState != 'Continue'
                           ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '진행 중인 블러팅이 없어요.',
-                                    style: TextStyle(
-                                        color: mainColor.Gray,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Heebo'),
-                                  ),
-                                  Text(
-                                    '새로운 블러팅을 시작해 주세요!',
-                                    style: TextStyle(
-                                        color: mainColor.Gray,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Heebo'),
-                                  ),
-                                ],
-                              ),
-                            )
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '진행 중인 블러팅이 없어요.',
+                              style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  fontFamily: 'Heebo'),
+                            ),
+                            Text(
+                              '새로운 블러팅을 시작해 주세요!',
+                              style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  fontFamily: 'Heebo'),
+                            ),
+                          ],
+                        ),
+                      )
                           : !isMine
-                              ? PageView(controller: pageController, children: [
-                                  _arrowPage(0),
-                                  _arrowPage(1),
-                                  _arrowPage(2),
-                                ])
-                              : PageView(controller: pageController, children: [
-                                  _myArrowPage(0),
-                                  _myArrowPage(1),
-                                  _myArrowPage(2),
-                                ]),
+                          ? PageView(controller: pageController, children: [
+                        _arrowPage(0),
+                        _arrowPage(1),
+                        _arrowPage(2),
+                      ])
+                          : PageView(controller: pageController, children: [
+                        _myArrowPage(0),
+                        _myArrowPage(1),
+                        _myArrowPage(2),
+                      ]),
                     ),
                     if (isState == 'Continue' && !isMine)
                       Container(
@@ -258,19 +243,19 @@ class _Blurting extends State<Blurting> {
                           width: 32,
                           child: InkWell(
                               onTap: (isTap[currentPage] == true &&
-                                      iSended[currentPage] == false)
+                                  iSended[currentPage] == false)
                                   ? () {
-                                      // 하나라도 true일 떄 (하나라도 선택되었을 때)
-                                      print('선택 완료');
-                                      sendArrow(
-                                          widget.token, userId, currentDay);
-                                      print(userId);
-                                    }
+                                // 하나라도 true일 떄 (하나라도 선택되었을 때)
+                                print('선택 완료');
+                                sendArrow(
+                                    widget.token, userId, currentDay);
+                                print(userId);
+                              }
                                   : null,
                               child: Image.asset(
                                 'assets/images/blurtingArrow.png',
                                 color: isTap[currentPage] == true ||
-                                        iSended[currentPage] == true
+                                    iSended[currentPage] == true
                                     ? mainColor.MainColor
                                     : mainColor.Gray.withOpacity(0.2),
                               )))
@@ -278,26 +263,26 @@ class _Blurting extends State<Blurting> {
                 ),
               ),
               if (isState == 'Continue')
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: SmoothPageIndicator(
-                  controller: pageController,
-                  count: 3,
-                  effect: ScrollingDotsEffect(
-                    dotColor: Color(0xFFFFD2D2),
-                    activeDotColor: Color(0xFFF66464),
-                    activeStrokeWidth: 10,
-                    activeDotScale: 1.7,
-                    maxVisibleDots: 5,
-                    radius: 8,
-                    spacing: 10,
-                    dotHeight: 7,
-                    dotWidth: 7,
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: SmoothPageIndicator(
+                    controller: pageController,
+                    count: 3,
+                    effect: ScrollingDotsEffect(
+                      dotColor: Color(0xFFFFD2D2),
+                      activeDotColor: Color(0xFFF66464),
+                      activeStrokeWidth: 10,
+                      activeDotScale: 1.7,
+                      maxVisibleDots: 5,
+                      radius: 8,
+                      spacing: 10,
+                      dotHeight: 7,
+                      dotWidth: 7,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           Container(
@@ -346,34 +331,33 @@ class _Blurting extends State<Blurting> {
             child: staticButton(text: isState),
             onTap: () async {
               DateTime lastTime =
-                  Provider.of<GroupChatProvider>(context, listen: false)
-                      .lastTime
-                      .add(Duration(hours: 9));
+              Provider.of<GroupChatProvider>(context, listen: false)
+                  .lastTime
+                  .add(Duration(hours: 9));
 
               if (isState == 'Continue') {
                 if (lastTime.isBefore(createdAt.add(Duration(hours: 24))) ||
                     lastTime.isBefore(createdAt.add(Duration(
                         hours:
-                            48)))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
-                {
+                        48)))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                    {
                   // ignore: use_build_context_synchronously
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => DayAni(
-                                socket: widget.socket,
-                                token: widget.token,
-                                day: day,
-                              )));
+                            token: widget.token,
+                            day: day,
+                          )));
                 } else {
                   // 날이 바뀌고 처음 들어간 게 아님
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Matching(token: widget.token)));
+                          builder: (context) => GroupChat(
+                            token: widget.token,
+                          )));
                 }
-
               } else if (isState == 'Start') {
                 // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
                 Navigator.push(
@@ -514,6 +498,7 @@ class _Blurting extends State<Blurting> {
   }
 
   Future<void> isMatched(String token) async {
+    // 방이 있는지 없는지 확인
     final url = Uri.parse(API.matching);
 
     final response = await http.get(url, headers: {
@@ -546,9 +531,9 @@ class _Blurting extends State<Blurting> {
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
-  
+
   Future<void> fetchLatestComments(String token) async {
-    // day 정보 (dayAni 띄울지 말지 결정)
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
 
     final url = Uri.parse(API.latest);
     final response = await http.get(
@@ -565,24 +550,53 @@ class _Blurting extends State<Blurting> {
 
         if (mounted) {
           setState(() {
-
             // createdAt = DateTime.now().add(Duration(hours: -47));
-
             createdAt = _parseDateTime(responseData['createdAt']);
-            print('createdAt : ${createdAt}');
+            // print('createdAt : ${createdAt}');
 
             Duration timeDifference =
-                DateTime.now().add(Duration(hours: 9)).difference(createdAt);
+            DateTime.now().add(Duration(hours: 9)).difference(createdAt);
 
             print(timeDifference);
+            setState(() {
+              // 시작하자마자 day1 고르기
+              isValidDay[0] = true;
+              currentDay = 0;
+            });
 
             if (timeDifference >= Duration(hours: 24)) {
               day = 'Day2';
-            }
-            if (timeDifference >= Duration(hours: 48)) {
-              day = 'Day3';
+              pageController.page == 1;
+              print('하루 지남');
+              if (mounted) {
+                setState(() {
+                  isValidDay[1] = true;
+                  currentDay = 1;
+                });
+              }
+
+              if (iSended[0] == false) {
+                print('day2가 되엇는데도 day1 화살표 아직 안 보냄');
+                sendArrow(token, -1, 0);
+              }
             }
 
+            if (timeDifference >= Duration(hours: 48)) {
+              day = 'Day3';
+              pageController.page == 2;
+              print('이틀 지남');
+              if (mounted) {
+                setState(() {
+                  isValidDay[2] = true;
+                  currentDay = 2;
+                });
+              }
+
+              if (iSended[1] == false) {
+                print('day3이 되엇는데도 day2 화살표 아직 안 보냄');
+                sendArrow(token, -1, 1);
+              }
+            }
           });
         }
         // print('Response body: ${response.body}');
@@ -619,32 +633,32 @@ class _Blurting extends State<Blurting> {
           if (mounted) {
             setState(() {
               // if (profileData['userSex'] == 'M') {
-                // 내 성별, 성지향성에 따라 상이하게 설정
-                if (profileData['userId'] != UserProvider.UserId) {
-                  heteroProfileList[0].add(profile(
+              // 내 성별, 성지향성에 따라 상이하게 설정
+              if (profileData['userId'] != UserProvider.UserId) {
+                heteroProfileList[0].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 0,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                heteroProfileList[1].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 1,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                heteroProfileList[2].add(
+                  profile(
                       userName: profileData['userNickname'],
                       userSex: profileData['userSex'],
-                      day: 0,
+                      day: 2,
                       selected: false,
                       userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  heteroProfileList[1].add(profile(
-                      userName: profileData['userNickname'],
-                      userSex: profileData['userSex'],
-                      day: 1,
-                      selected: false,
-                      userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  heteroProfileList[2].add(
-                    profile(
-                        userName: profileData['userNickname'],
-                        userSex: profileData['userSex'],
-                        day: 2,
-                        selected: false,
-                        userId: profileData['userId'],
-                        clickProfile: clickProfile),
-                  );
-                }
+                      clickProfile: clickProfile),
+                );
+              }
               // }
             });
           }
@@ -744,21 +758,20 @@ class _Blurting extends State<Blurting> {
           setState(() {
             iSended[day] = true;
             print(iSended);
-
           });
         }
 
         print('Response body: ${response.body}');
       } catch (e) {
+        print('SendArrow 에러');
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
     } else {
       print(response.statusCode);
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+      throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
-
 
   void clickProfile(bool status, int userId_) {
     setState(() {
@@ -777,35 +790,35 @@ class recievedProfile extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Column(
-        children: [
-          Container(
-            width: 55,
-            height: 55,
-            decoration: BoxDecoration(
-                color: mainColor.lightPink,
-                borderRadius: BorderRadius.circular(50)),
-            child: Image.asset(
-              userSex == 'M'
-                  ? 'assets/man.png' : 'assets/woman.png',
-            ),
+      children: [
+        Container(
+          width: 55,
+          height: 55,
+          decoration: BoxDecoration(
+              color: mainColor.lightPink,
+              borderRadius: BorderRadius.circular(50)),
+          child: Image.asset(
+            userSex == 'M'
+                ? 'assets/man.png' : 'assets/woman.png',
           ),
-          Container(
-            margin: EdgeInsets.only(top: 7),
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-            decoration: BoxDecoration(
-                color: mainColor.lightPink,
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              userName,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Heebo',
-                  color: Colors.black),
-            ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 7),
+          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+          decoration: BoxDecoration(
+              color: mainColor.lightPink,
+              borderRadius: BorderRadius.circular(50)),
+          child: Text(
+            userName,
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Heebo',
+                color: Colors.black),
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 }
 
@@ -820,12 +833,12 @@ class profile extends StatefulWidget {
 
   profile(
       {super.key,
-      required this.day,
-      required this.selected,
-      required this.userId,
-      required this.userName,
-      required this.userSex,
-      required this.clickProfile});
+        required this.day,
+        required this.selected,
+        required this.userId,
+        required this.userName,
+        required this.userSex,
+        required this.clickProfile});
 
   @override
   State<profile> createState() => _profileState();
@@ -866,8 +879,8 @@ class _profileState extends State<profile> {
               widget.userSex == 'M'
                   ? 'assets/man.png'
                   : widget.userSex == 'none'
-                      ? 'assets/none.png'
-                      : 'assets/woman.png',
+                  ? 'assets/none.png'
+                  : 'assets/woman.png',
             ),
           ),
           Container(
@@ -893,4 +906,3 @@ class _profileState extends State<profile> {
     );
   }
 }
-

@@ -14,8 +14,7 @@ Future<void> initFcm() async {
   var initializationSettingsIOS = const DarwinInitializationSettings();
   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
@@ -33,7 +32,7 @@ Future<void> initFcm() async {
           const NotificationDetails(android: AndroidNotificationDetails('blurting_project', 'Blurting')),
           payload: json.encode(message?.data),
         );
-        print("yse");
+        print("yes");
       }
     } catch (e) {
       // 오류 처리 로직

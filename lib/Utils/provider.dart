@@ -1,18 +1,42 @@
+import 'package:blurting/config/app_config.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class mainColor {
+  // ignore: non_constant_identifier_names
   static Color MainColor = Color.fromRGBO(246, 100, 100, 1);
+  // ignore: non_constant_identifier_names
   static Color Gray = Color.fromRGBO(134, 134, 134, 1);
   static Color lightGray = Color.fromRGBO(217, 217, 217, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
+}
+
+class SocketProvider with ChangeNotifier {
+  static String token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDdUMDI6MTM6MTYuNjU4WiIsImlhdCI6MTcwMTg4Mjc5NiwiZXhwIjoxNzAxODg2Mzk2fQ.v9m-mLkVcttqhAYkSy6MbgykNpaZNfTlKesGvAv8VvA';
+
+  // 소켓 연결
+  IO.Socket _socket = IO
+      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+    'transports': ['websocket'],
+    'auth': {'authorization': 'Bearer $token'},
+    // 'reconnectionAttempts': 0,
+  });
+
+  IO.Socket get socket => _socket;
+
+  set socket(IO.Socket value) {
+    _socket = value;
+    notifyListeners();
+  }
 }
 
 class GroupChatProvider with ChangeNotifier {
   bool _pointValid = false;
   bool _isPocus = false;
   DateTime _lastTime =
-      DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
+  DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
 
   bool get pointValid => _pointValid;
   bool get isPocus => _isPocus;

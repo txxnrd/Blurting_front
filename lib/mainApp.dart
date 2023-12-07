@@ -21,21 +21,16 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-
-  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDVUMTg6NTU6MzUuNDg3WiIsImlhdCI6MTcwMTc3MDEzNSwiZXhwIjoxNzAxNzczNzM1fQ.D3ssWiSjH5kkMc--POST9flI3gHn0qIjy561e4kb0jo';
-
-  IO.Socket socket = IO
-      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-    'transports': ['websocket'],
-    'auth': {'authorization': 'Bearer $token'},
-    // 'reconnectionAttempts': 0,
-  });
-
   late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+
+    String token = SocketProvider.token;
+    IO.Socket socket =
+        Provider.of<SocketProvider>(context, listen: false).socket;
+
     fetchPoint(token);
 
     socket.on('connect', (_) {
@@ -48,8 +43,8 @@ class _MainApp extends State<MainApp> {
 
     _pages = [
       Home(token: token),
-      Blurting(socket: socket, token: token),
-      ChattingList(socket: socket, token: token),
+      Blurting(token: token),
+      ChattingList(token: token),
       MyPage(token: token),
     ];
   }
@@ -166,9 +161,9 @@ class TabItem extends StatelessWidget {
 
   TabItem(
       {super.key,
-      required this.currentIndex,
-      required this.image,
-      required this.name});
+        required this.currentIndex,
+        required this.image,
+        required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +175,9 @@ class TabItem extends StatelessWidget {
           child: _currentIndex == currentIndex
               ? Image.asset(image)
               : Image.asset(
-                  image,
-                  color: Color.fromRGBO(217, 217, 217, 1),
-                ),
+            image,
+            color: Color.fromRGBO(217, 217, 217, 1),
+          ),
         ),
         Text(
           name,
