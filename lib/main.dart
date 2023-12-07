@@ -27,9 +27,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 
 void main() async {
-
-
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
 
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
@@ -41,14 +39,14 @@ void main() async {
       isLoggedIn = false;
     }
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
-    }
-  });
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await initFcm();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Permission.notification.isDenied.then((value) {
+  //   if (value) {
+  //     Permission.notification.request();
+  //   }
+  // });
+  // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // await initFcm();
 
   runApp(
     MultiProvider(
@@ -63,7 +61,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final bool isLoggedIn;
 
   MyApp({required this.isLoggedIn});
@@ -76,6 +73,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -128,7 +128,6 @@ class _GroupChat extends State<GroupChat> {
 
   @override
   Widget build(BuildContext context) {
-
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
@@ -254,6 +253,7 @@ class _GroupChat extends State<GroupChat> {
                             children: <Widget>[
                               for (var answer in answerList[currentIndex])
                                 answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
+
                             ],
                           ),
                         ),
@@ -412,7 +412,7 @@ class _GroupChat extends State<GroupChat> {
                         read: true,
                         isBlurting: true,
                         likedNum: answerData['likes']));
-                    isBlock[currentIndex] = false; // true가 맞음
+                    isBlock[currentIndex] = true; // true가 맞음
                   } else {
                     answerList[currentIndex].add(AnswerItem(
                         key: ObjectKey(answerData['id']),
@@ -462,7 +462,6 @@ class _GroupChat extends State<GroupChat> {
 
     if (response.statusCode == 200) {
       try {
-
         Map<String, dynamic> responseData = jsonDecode(response.body);
         if (mounted) {
           setState(() {
@@ -474,7 +473,6 @@ class _GroupChat extends State<GroupChat> {
           });
 
           for (final answerData in responseData['answers']) {
-
             if (answerData['room'] != null) {
               isAlready = true;
             } else {
@@ -489,7 +487,7 @@ class _GroupChat extends State<GroupChat> {
                     read: true,
                     isBlurting: true,
                     likedNum: 0));
-                isBlock[currentIndex] = false; // true가 맞음
+                isBlock[currentIndex] = true; // true가 맞음
               } else {
                 answerList[currentIndex].add(AnswerItem(
                     key: ObjectKey(answerData['id']),
@@ -508,7 +506,6 @@ class _GroupChat extends State<GroupChat> {
             });
           }
         }
-
 
         print('Response body: ${response.body}');
       } catch (e) {
@@ -554,7 +551,7 @@ class _GroupChat extends State<GroupChat> {
       // 성공적으로 응답
       if (mounted) {
         setState(() {
-          isBlock[currentIndex] = false; // true가 맞음
+          isBlock[currentIndex] = true; // true가 맞음
           answerList[currentIndex].add(newAnswer);
           print(response.body);
         });

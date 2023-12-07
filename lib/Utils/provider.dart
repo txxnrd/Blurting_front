@@ -3,14 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class mainColor {
   static Color MainColor = Color.fromRGBO(246, 100, 100, 1);
-  static Color lightGray = Color.fromRGBO(170, 170, 170, 1);
+  static Color Gray = Color.fromRGBO(134, 134, 134, 1);
+  static Color lightGray = Color.fromRGBO(217, 217, 217, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
 }
 
 class GroupChatProvider with ChangeNotifier {
   bool _pointValid = false;
   bool _isPocus = false;
-  DateTime _lastTime = DateTime(2000, 11, 24, 15, 30);      // 처음에는 아주 예전으로 초기화해서... 없다고 침
+  DateTime _lastTime =
+      DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
 
   bool get pointValid => _pointValid;
   bool get isPocus => _isPocus;
@@ -26,7 +28,7 @@ class GroupChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  set lastTime(DateTime value){
+  set lastTime(DateTime value) {
     _lastTime = value;
     notifyListeners();
   }
@@ -42,7 +44,6 @@ class WhisperProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
 
 Future<void> saveuserId(int userId) async {
   final prefs = await SharedPreferences.getInstance();
@@ -61,9 +62,12 @@ Future<int> getuserId() async {
   return userId;
 }
 
+
 class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
   static int UserId = 262;
+
   int _point = 0;
+  String token = '';
 
   int get point => _point;
 

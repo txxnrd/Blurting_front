@@ -22,6 +22,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   late TabController _tabController;
   List<Map<String, dynamic>> earningHistoryList = [];
   List<Map<String, dynamic>> usageHistoryList = [];
+  bool isFetchingData = false; //무한 http 호출 방지
 
   Future<List<Map<String, dynamic>>> fetchPointAdd() async {
     if (!mounted) return [];
@@ -31,6 +32,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     // var savedToken =
     //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
     // print(savedToken);
+    // String accessToken = await getToken();
 
     try {
       var response = await http.get(
@@ -57,6 +59,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             earningHistoryList = data;
           // });
         // }
+
         print('added Points loaded successfully.');
         return data;
       } else {
@@ -76,7 +79,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     var url = Uri.parse(API.pointsubtract);
     // var savedToken = getToken();
     // var savedToken =
-        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
+    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
     // print(savedToken);
 
     try {
@@ -97,12 +100,14 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         // Extract data from the response and update the state
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
+
         // if (mounted) {
           // setState(() {
             earningHistoryList = [];
             usageHistoryList = data;
           // });
         // }
+
         print('subtracted Points loaded successfully.');
         return data;
       } else {
@@ -192,14 +197,19 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   }
 
   Future<void> fetchDataForCurrentTab() async {
-    if (mounted) {
+    if (!isFetchingData && mounted) {
       try {
+        setState(() {
+          isFetchingData = true;
+        });
+
         List<Map<String, dynamic>> data = [];
         if (_tabController.index == 0) {
           data = await fetchPointAdd();
         } else if (_tabController.index == 1) {
           data = await fetchPointSubtract();
         }
+
         if (mounted) {
           setState(() {
             if (_tabController.index == 0) {
@@ -211,6 +221,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         }
       } catch (error) {
         print('Error in fetchDataForCurrentTab: $error');
+      } finally {
+        isFetchingData = false; //한번 fetch하고나선 다시 false로 유지
       }
     }
   }
@@ -218,11 +230,17 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.index = 1;
-    _tabController.addListener(() {
-      fetchDataForCurrentTab();
-    });
+    _tabController = TabController(length: 2, vsync: this)
+      ..addListener(() {
+        if (_tabController.indexIsChanging) {
+          print(
+              "tab is animating. from active (getting the index) to inactive(getting the index) ");
+        } else {
+          //tab is finished animating you get the current index
+          //here you can get your index or run some method once.
+          print(_tabController.index);
+        }
+      });
   }
 
   @override
@@ -341,27 +359,23 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        date, // Show only date
-                        style: TextStyle(
-                          fontFamily: "Pretendard",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17,
-                          color: Colors.grey,
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Text(
+                          date, // Show only date
+                          style: TextStyle(
+                            fontFamily: "Heebo",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 10,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.right,
                         ),
-                        textAlign: TextAlign.right,
                       ),
                       for (var entry in dateEntries)
                         ListTile(
-                          title: Text(
-                            entry['history'] ?? 'Unknown',
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.black,
-                            ),
-                          ),
+                          title:
+                              formatHistoryText(entry['history'] ?? 'Unknown'),
                           trailing: Text(
                             entry['time'] ?? 'Unknown',
                             style: TextStyle(
@@ -401,26 +415,22 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        date, // Show only date
-                        style: TextStyle(
-                          fontFamily: "Pretendard",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17,
-                          color: Colors.grey,
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Text(
+                          date, // Show only date
+                          style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 10,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                       for (var entry in dateEntries)
                         ListTile(
-                          title: Text(
-                            entry['history'] ?? 'Unknown',
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.black,
-                            ),
-                          ),
+                          title:
+                              formatHistoryText(entry['history'] ?? 'Unknown'),
                           trailing: Text(
                             entry['time'] ?? 'Unknown',
                             style: TextStyle(
@@ -441,4 +451,32 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       ),
     );
   }
+}
+
+// Function to format history text with pink square bullet
+Widget formatHistoryText(String history) {
+  return RichText(
+    text: TextSpan(
+      children: [
+        WidgetSpan(
+          child: Padding(
+              padding: EdgeInsets.only(right: 10.0), // Adjust spacing as needed
+              child: Container(
+                height: 15,
+                width: 2,
+                color: Color(0xFFFF7D7D),
+              )),
+        ),
+        TextSpan(
+          text: history,
+          style: TextStyle(
+            fontFamily: "Pretendard",
+            fontWeight: FontWeight.w500,
+            fontSize: 13,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    ),
+  );
 }
