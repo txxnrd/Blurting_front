@@ -18,11 +18,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
-// const AndroidNotificationChannel channel = AndroidNotificationChannel(
-//   'blurting_project', // id
-//   'Blurting', // title
-//   importance: Importance.max,
-// );
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'blurting_project', // id
+  'Blurting', // title
+  importance: Importance.max,
+
+);
+
 
 void main() async {
 
@@ -32,7 +34,12 @@ void main() async {
 
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
   print("첫번째에 token이 무엇인지: $token");
-  bool isLoggedIn = token != null && token != "";
+  bool isLoggedIn = true;
+
+  if(token=="No Token")
+    {
+      isLoggedIn = false;
+    }
 
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.notification.isDenied.then((value) {
