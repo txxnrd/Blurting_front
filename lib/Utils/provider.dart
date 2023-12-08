@@ -1,4 +1,6 @@
 import 'package:blurting/config/app_config.dart';
+import 'package:blurting/signupquestions/token.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,26 +12,6 @@ class mainColor {
   static Color Gray = Color.fromRGBO(134, 134, 134, 1);
   static Color lightGray = Color.fromRGBO(217, 217, 217, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
-}
-
-class SocketProvider with ChangeNotifier {
-  static String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDdUMDI6MTM6MTYuNjU4WiIsImlhdCI6MTcwMTg4Mjc5NiwiZXhwIjoxNzAxODg2Mzk2fQ.v9m-mLkVcttqhAYkSy6MbgykNpaZNfTlKesGvAv8VvA';
-
-  // 소켓 연결
-  IO.Socket _socket = IO
-      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-    'transports': ['websocket'],
-    'auth': {'authorization': 'Bearer $token'},
-    // 'reconnectionAttempts': 0,
-  });
-
-  IO.Socket get socket => _socket;
-
-  set socket(IO.Socket value) {
-    _socket = value;
-    notifyListeners();
-  }
 }
 
 class GroupChatProvider with ChangeNotifier {
@@ -83,20 +65,25 @@ Future<int> getuserId() async {
   // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
   // 값이 없을 경우 'No Token'을 반환합니다.
   int userId = prefs.getInt('userId') ?? -1;
+  print(userId);
   return userId;
 }
 
-
 class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
-  static int UserId = 262;
-
+  
+  int _userId = 0;
   int _point = 0;
-  String token = '';
 
   int get point => _point;
+  int get userId => _userId;
 
   set point(int value) {
     _point = value;
+    notifyListeners();
+  }
+
+  set userId(int value){
+    _userId = value;
     notifyListeners();
   }
 }

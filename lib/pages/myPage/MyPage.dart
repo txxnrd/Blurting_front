@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import 'package:blurting/Utils/utilWidget.dart';
@@ -44,8 +46,7 @@ String getDrinkString(int? drink) {
 }
 
 class MyPage extends StatefulWidget {
-  final String token;
-  const MyPage({super.key, required this.token});
+  const MyPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -69,6 +70,7 @@ class _MyPage extends State<MyPage> {
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
+    String savedToken = await getToken();
 
     // String accessToken = await getToken();
     // String refreshToken = await getRefreshToken();
@@ -90,7 +92,7 @@ class _MyPage extends State<MyPage> {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${widget.token}',
+        'Authorization': 'Bearer $savedToken',
       },
     );
 
@@ -118,8 +120,11 @@ class _MyPage extends State<MyPage> {
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-        getnewaccesstoken(context);
-        goToMyPageEdit(context);
+        getnewaccesstoken(context, () async {
+          // callback0의 내용
+          print('Callback0 called');
+        }, goToMyPageEdit, context, null, null);
+        // goToMyPageEdit(context);
 
         count += 1;
         if (count == 10) exit(1);
@@ -135,7 +140,8 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
-    // var savedToken = getToken();
+    String savedToken = await getToken();
+        // var savedToken = getToken();
     // var savedToken =
     //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
     // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
@@ -145,7 +151,7 @@ class _MyPage extends State<MyPage> {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${widget.token}',
+        'Authorization': 'Bearer $savedToken',
       },
     );
     print('Response Status Code: ${response.statusCode}');
@@ -157,6 +163,15 @@ class _MyPage extends State<MyPage> {
         userProfile = data;
         imagePaths = List<String>.from(userProfile['images']);
       });
+    }
+    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      getnewaccesstoken(context, fetchUserProfile);
+      // fetchUserProfile();
+
+      count += 1;
+      if (count == 10) exit(1);
     } else {
       print('Failed to load user profile. Status code: ${response.statusCode}');
     }
@@ -184,7 +199,7 @@ class _MyPage extends State<MyPage> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             actions: [
-              pointAppbar(token: widget.token),
+              pointAppbar(),
               IconButton(
                 icon: Image.asset('assets/images/setting.png'),
                 color: Color.fromRGBO(48, 48, 48, 1),

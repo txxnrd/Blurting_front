@@ -3,6 +3,7 @@ import 'package:blurting/StartPage/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -10,11 +11,16 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'blurting_project', // id
+  'Blurting', // title
+  importance: Importance.max,
+
+);
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
 
@@ -36,7 +42,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => SocketProvider())
+        // ChangeNotifierProvider(create: (context) => TokenProvider())
         // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
       ],
       child: MyApp(isLoggedIn: isLoggedIn),

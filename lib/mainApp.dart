@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/homeTab/Home.dart';
@@ -10,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
+
+int count = 0;
 
 class MainApp extends StatefulWidget {
   MainApp({super.key});
@@ -22,74 +26,19 @@ int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
 
-
-  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDVUMTg6NTU6MzUuNDg3WiIsImlhdCI6MTcwMTc3MDEzNSwiZXhwIjoxNzAxNzczNzM1fQ.D3ssWiSjH5kkMc--POST9flI3gHn0qIjy561e4kb0jo';
-
-  IO.Socket socket = IO
-      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-    'transports': ['websocket'],
-    'auth': {'authorization': 'Bearer $token'},
-    // 'reconnectionAttempts': 0,
-  });
-  Future <void> fetchPoint(String token) async {
-    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
-
-    final url = Uri.parse(API.userpoint);
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      try {
-        Map<String, dynamic> responseData = jsonDecode(response.body);
-
-        if (mounted) {
-          setState(() {
-            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
-          });
-        }
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
-    } else {
-      print(response.statusCode);
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
-    }
-
-  }
-
-
   late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
 
-    String token = SocketProvider.token;
-    IO.Socket socket =
-        Provider.of<SocketProvider>(context, listen: false).socket;
-
-    fetchPoint(token);
-
-    socket.on('connect', (_) {
-      print('소켓 연결됨');
-    });
-
-    socket.on('disconnect', (_) {
-      print('소켓 연결 끊김');
-    });
+    fetchPoint();
 
     _pages = [
-      Home(token: token),
-      Blurting(token: token),
-      ChattingList(token: token),
-      MyPage(token: token),
+      Home(),
+      Blurting(),
+      ChattingList(),
+      MyPage(),
     ];
   }
 
@@ -164,7 +113,50 @@ class _MainApp extends State<MainApp> {
     );
   }
 
+  Future<void> fetchPoint() async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
 
+    final url = Uri.parse(API.userpoint);
+    String savedToken = await getToken();
+    int userId = await getuserId();
+    Provider.of<UserProvider>(context, listen: false).userId = userId;
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+          });
+        }
+        print('Response body: ${response.body}');
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        print('Response body: ${response.body}');
+      }
+    }
+    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      getnewaccesstoken(context, fetchPoint);
+      // fetchPoint();
+
+      // count += 1;
+      // if (count == 10) exit(1);
+    } else {
+      print(response.statusCode);
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+    }
+  }
 }
 
 class TabItem extends StatelessWidget {

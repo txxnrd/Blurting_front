@@ -32,9 +32,6 @@ class API {
       "${ServerEndpoints.serverEndpoint}/user/update";
   static const String userprofile =
       "${ServerEndpoints.serverEndpoint}/user/profile";
-  static const String pointadd = "${ServerEndpoints.serverEndpoint}/point/add";
-  static const String pointsubtract =
-      "${ServerEndpoints.serverEndpoint}/point/sub";
   static const String notification =
       "${ServerEndpoints.serverEndpoint}/user/notification";
   static const String testfcm =
@@ -68,4 +65,6 @@ class API {
   static const String pointchat = "${ServerEndpoints.serverEndpoint}/point/chat";
   static const String pointcheck = "${ServerEndpoints.serverEndpoint}/point/check";
   static const String userpoint = "${ServerEndpoints.serverEndpoint}/user";
+  static const String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
+  static const String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";
 }

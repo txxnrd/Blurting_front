@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import '../../config/app_config.dart';
@@ -26,14 +27,12 @@ import 'package:intl/date_symbol_data_local.dart';
 
 class ProfileCard extends StatefulWidget {
   final PageController mainPageController;
-  final String token;
   final List<String> imagePaths;
   final String userName;
   final String roomId;
 
   ProfileCard(
       {required this.mainPageController,
-      required this.token,
       required this.imagePaths,
       required this.roomId,
       required this.userName});
@@ -52,6 +51,7 @@ class _ProfileCard extends State<ProfileCard> {
   @override
   void initState() {
     super.initState();
+    
     fetchUserProfile();
     // for (String imagePath in imagePaths) {
     //   precacheImage(NetworkImage(imagePath), context);
@@ -59,7 +59,7 @@ class _ProfileCard extends State<ProfileCard> {
   }
 
   Future<void> fetchUserProfile() async {
-    // String accessToken = await getToken();
+    String savedToken = await getToken();
 
     try {
       var url = Uri.parse('${API.chatProfile}${widget.roomId}');
@@ -67,7 +67,7 @@ class _ProfileCard extends State<ProfileCard> {
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${widget.token}',
+          'Authorization': 'Bearer $savedToken',
         },
       );
       print('Response Status Code: ${response.statusCode}');
@@ -79,6 +79,15 @@ class _ProfileCard extends State<ProfileCard> {
           userProfile = data;
           imagePaths = List<String>.from(userProfile['images']);
         });
+      }
+      else if (response.statusCode == 401) {
+        //refresh token으로 새로운 accesstoken 불러오는 코드.
+        //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+        getnewaccesstoken(context, fetchUserProfile);
+        // fetchUserProfile();
+
+        count += 1;
+        if (count == 10) exit(1);
       } else {
         print(
             'Failed to load user profile. Status code: ${response.statusCode}');

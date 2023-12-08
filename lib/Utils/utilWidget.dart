@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:blurting/config/app_config.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -237,9 +238,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
 }
 
 class pointAppbar extends StatelessWidget {
-  final String token;
 
-  pointAppbar({super.key, required this.token});
+  pointAppbar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +249,7 @@ class pointAppbar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PointHistoryPage(token: token)),
+                builder: (context) => PointHistoryPage()),
           );
         },
         child: Container(
@@ -309,6 +309,7 @@ class OtherChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
         subtitle: Container(
       margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
@@ -407,6 +408,7 @@ class _MyChatState extends State<MyChat> {
 
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
       subtitle: // 답변 내용
           Container(
@@ -527,8 +529,6 @@ class _MyChatState extends State<MyChat> {
   }
 }
 
-
-
 // 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatefulWidget {
   final IO.Socket socket;
@@ -538,7 +538,6 @@ class AnswerItem extends StatefulWidget {
   final int userId;
   final bool iLike;
   final int likedNum;
-  final String token;
   final bool isAlready;
   final String image;
   final String mbti;
@@ -552,7 +551,6 @@ class AnswerItem extends StatefulWidget {
       required this.userId,
       required this.iLike,
       required this.likedNum,
-      required this.token,
       required this.isAlready,
       required this.image,
       required this.mbti,
@@ -849,7 +847,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                 GestureDetector(
                                   onTap: (!isAlready)
                                       ? () async {
-                                          await checkPoint(widget.token);
+                                          await checkPoint();
                                           setState(() {
                                             if (!isAlready && enoughPoint) {
                                               isTap(true);
@@ -960,9 +958,9 @@ class _AnswerItemState extends State<AnswerItem> {
                                         ),
                                       ),
                                       onTap: () {
-                                        if (!isValid) {
+                                        // if (!isValid) {
                                           Navigator.of(context).pop();
-                                        }
+                                        // }
                                       },
                                     ),
                                   ),
@@ -990,7 +988,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                     ),
                                     onTap: () {
                                       if (isValid) {
-                                        startWhisper(widget.token);
+                                        print('귓속말 망가지지마');
+                                        startWhisper();
                                         Navigator.of(context).pop();
                                       } else {
                                         Navigator.of(context).pop();
@@ -1180,7 +1179,7 @@ class _AnswerItemState extends State<AnswerItem> {
                       children: [
                         GestureDetector(
                           onDoubleTap: () {
-                            changeLike(widget.token, widget.answerId);
+                            changeLike(widget.answerId);
                           },
                           child: Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
@@ -1222,7 +1221,7 @@ class _AnswerItemState extends State<AnswerItem> {
                           right: (likedNum == 0) ? 10 : 0,
                           child: GestureDetector(
                             onTap: () {
-                              changeLike(widget.token, widget.answerId);
+                              changeLike(widget.answerId);
                             },
                             child: Container(
                               width: (likedNum == 0) ? 15 : 25,
@@ -1272,14 +1271,15 @@ class _AnswerItemState extends State<AnswerItem> {
     );
   }
 
-  Future<void> changeLike(String token, int answerId) async {
+  Future<void> changeLike(int answerId) async {
     print('좋아요 누름');
 
     // answerId 보내
     final url = Uri.parse('${API.like}$answerId');
+    String savedToken = await getToken();
 
     final response = await http.put(url, headers: {
-      'authorization': 'Bearer $token',
+      'authorization': 'Bearer $savedToken',
       'Content-Type': 'application/json',
     });
 
@@ -1305,13 +1305,14 @@ class _AnswerItemState extends State<AnswerItem> {
     }
   }
 
-  Future<void> checkPoint(String token) async {
+  Future<void> checkPoint() async {
     print('포인트 확인');
 
     final url = Uri.parse(API.pointcheck);
+    String savedToken = await getToken();
 
     final response = await http.get(url, headers: {
-      'authorization': 'Bearer $token',
+      'authorization': 'Bearer $savedToken',
       'Content-Type': 'application/json',
     });
 
@@ -1338,14 +1339,15 @@ class _AnswerItemState extends State<AnswerItem> {
     }
   }
 
-  Future<void> startWhisper(String token) async {
+  Future<void> startWhisper() async {
     print('귓속말 걸기');
 
     final url = Uri.parse(API.pointchat);
-
+    String savedToken = await getToken();
+    
     final response = await http.post(url,
         headers: {
-          'authorization': 'Bearer $token',
+          'authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
         },
         body: json.encode({'userId': widget.userId}));

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
@@ -18,6 +20,7 @@ int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
 String _question = '';
 String day = 'Day1';
+int count = 0;
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -54,11 +57,9 @@ class QuestionItem extends StatelessWidget {
 }
 
 class GroupChat extends StatefulWidget {
-  final String token;
   static bool pointValid = false;
 
-  GroupChat({Key? key, required this.token})
-      : super(key: key);
+  GroupChat({super.key});
 
   @override
   _GroupChat createState() => _GroupChat();
@@ -74,28 +75,37 @@ class _GroupChat extends State<GroupChat> {
   @override
   void initState() {
     super.initState();
-    socket = Provider.of<SocketProvider>(context, listen: false).socket;
-    Future.delayed(Duration.zero, () {
-      fetchLatestComments(widget.token); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
-    });
+    
+    Future<void> initializeSocket() async {
+      await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
 
-    socket.on('create_room', (data) {
-      print(data);
-      print('${data['nickname']}, ${data['roomId']}');
+      socket.on('create_room', (data) {
+        print(data);
+        print('${data['nickname']}, ${data['roomId']}');
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Whisper(
-                token: widget.token,
-                userName: data['nickname'] as String? ?? '',
-                roomId: data['roomId'] as String? ?? '')),
-      ).then((value) {
-        setState(() {
-          fetchIndexComments(widget.token, currentIndex);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Whisper(
+                  userName: data['nickname'] as String? ?? '',
+                  roomId: data['roomId'] as String? ?? '')),
+        ).then((value) {
+          setState(() {
+            fetchIndexComments(currentIndex);
+          });
         });
       });
-    });
+
+      socket.on('connect', (_) {
+        print('소켓 연결됨');
+      });
+
+      socket.on('disconnect', (_) {
+        print('소켓 연결 끊김');
+      });
+    }
+
+    initializeSocket();
 
     loadTime();
 
@@ -105,7 +115,7 @@ class _GroupChat extends State<GroupChat> {
   @override
   void dispose() {
     super.dispose();
-
+    socket.disconnect();
     saveTime();
   }
 
@@ -193,9 +203,7 @@ class _GroupChat extends State<GroupChat> {
             ),
             Positioned(
                 right: 0,
-                child: pointAppbar(
-                  token: widget.token,
-                )),
+                child: pointAppbar()),
           ],
         ),
         bottom: PreferredSize(
@@ -321,7 +329,7 @@ class _GroupChat extends State<GroupChat> {
         onTap: (_questionNumber >= index)
             ? () {
                 currentIndex = index;
-                fetchIndexComments(widget.token, currentIndex);
+                fetchIndexComments(currentIndex);
               }
             : null,
         child: AnimatedDefaultTextStyle(
@@ -353,7 +361,7 @@ class _GroupChat extends State<GroupChat> {
 
   bool isAlready = false;
 
-  Future<void> fetchLatestComments(String token) async {
+  Future<void> fetchLatestComments() async {
     // 딱 누르자마자 뜨는 거...
     // 최신 QnA
     // 이 방이 만들어진 시간에서 24시간 계산, day 띄워 주기
@@ -361,15 +369,27 @@ class _GroupChat extends State<GroupChat> {
     DateTime createdAt;
 
     final url = Uri.parse(API.latest);
+    String savedToken = await getToken();
+        
     final response = await http.get(
       url,
       headers: {
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $savedToken',
         'Content-Type': 'application/json',
       },
     );
 
     if (response.statusCode == 200) {
+
+      socket = IO.io(
+          '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+        'transports': ['websocket'],
+        'auth': {
+          'authorization':
+              'Bearer $savedToken'
+        },
+      });
+
       try {
         Map<String, dynamic> responseData = jsonDecode(response.body);
 
@@ -405,7 +425,7 @@ class _GroupChat extends State<GroupChat> {
               }
               if (mounted) {
                 setState(() {
-                  if (answerData['userId'] == UserProvider.UserId) {
+                  if (answerData['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
                     answerList[currentIndex].add(MyChat(
                         message: answerData['answer'],
                         createdAt: '',
@@ -419,14 +439,13 @@ class _GroupChat extends State<GroupChat> {
                         message: answerData['answer'],
                         iLike: answerData['ilike'],
                         likedNum: answerData['likes'],
-                        socket: socket,
                         userId: answerData['userId'],
                         userName: answerData['userNickname'],
-                        token: widget.token,
                         isAlready: isAlready,
                         image: answerData['userSex'],
                         mbti: answerData['mbti'],
-                        answerId: answerData['id']));
+                        answerId: answerData['id'],
+                        socket: socket));
                   }
                 });
               }
@@ -439,23 +458,34 @@ class _GroupChat extends State<GroupChat> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
+    }
+    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      getnewaccesstoken(context, fetchLatestComments);
+      // fetchLatestComments();
+
+      count += 1;
+      if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
   }
 
-  Future<void> fetchIndexComments(String token, int no) async {
+  Future<void> fetchIndexComments(int no) async {
     answerList[currentIndex].clear();
 
     // 선택된 QnA
     // 선택된 QnA로 화면 새로 그리기
 
     final url = Uri.parse('${API.answerNo}$no');
+    String savedToken = await getToken();
+
     final response = await http.get(
       url,
       headers: {
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $savedToken',
         'Content-Type': 'application/json',
       },
     );
@@ -480,7 +510,7 @@ class _GroupChat extends State<GroupChat> {
             }
 
             setState(() {
-              if (answerData['userId'] == UserProvider.UserId) {
+              if (answerData['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
                 answerList[currentIndex].add(MyChat(
                     message: answerData['answer'],
                     createdAt: '',
@@ -494,14 +524,13 @@ class _GroupChat extends State<GroupChat> {
                     message: answerData['answer'],
                     iLike: answerData['ilike'],
                     likedNum: answerData['likes'],
-                    socket: socket,
                     userId: answerData['userId'],
                     userName: answerData['userNickname'],
-                    token: widget.token,
                     isAlready: isAlready,
                     image: answerData['userSex'],
                     mbti: answerData['mbti'],
-                    answerId: answerData['id']));
+                    answerId: answerData['id'],
+                    socket: socket,));
               }
             });
           }
@@ -512,7 +541,23 @@ class _GroupChat extends State<GroupChat> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    } else {
+    }    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      getnewaccesstoken(
+        context,
+        () async {
+        },
+        fetchIndexComments,
+        no,
+        null, null
+      );
+      // fetchIndexComments(no);
+
+      count += 1;
+      if (count == 10) exit(1);
+    }
+    else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
@@ -528,12 +573,12 @@ class _GroupChat extends State<GroupChat> {
       likedNum: 0,
     );
 
-    String token = widget.token;
     final url = Uri.parse(API.answer);
+    String savedToken = await getToken();
 
     var response = await http.post(url,
         headers: {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
         },
         body: json.encode({'questionId': currentQuestionId, 'answer': answer}));
@@ -556,7 +601,17 @@ class _GroupChat extends State<GroupChat> {
           print(response.body);
         });
       }
-    } else {
+    }    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      getnewaccesstoken(context, () async {
+      }, null, null, SendAnswer, [answer, questionId]);
+      // SendAnswer(answer, questionId);
+
+      count += 1;
+      if (count == 10) exit(1);
+    }
+    else {
       print('요청 실패');
       print(response.statusCode);
     }
