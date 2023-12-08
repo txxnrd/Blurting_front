@@ -26,6 +26,7 @@ class Whisper extends StatefulWidget {
       required this.roomId})
       : super(key: key);
 
+
   @override
   _Whisper createState() => _Whisper();
 }
@@ -40,11 +41,12 @@ class _Whisper extends State<Whisper> {
   final String userName = '';
   final String roomId = '';
 
+  late IO.Socket socket;
+
+
   List<Widget> chatMessages = [];
 
   bool isValid = false;
-
-  late IO.Socket socket;
 
   @override
   void initState() {

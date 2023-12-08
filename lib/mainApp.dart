@@ -25,6 +25,7 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
+
   late List<Widget> _pages;
 
   @override
@@ -165,9 +166,9 @@ class TabItem extends StatelessWidget {
 
   TabItem(
       {super.key,
-      required this.currentIndex,
-      required this.image,
-      required this.name});
+        required this.currentIndex,
+        required this.image,
+        required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -179,9 +180,9 @@ class TabItem extends StatelessWidget {
           child: _currentIndex == currentIndex
               ? Image.asset(image)
               : Image.asset(
-                  image,
-                  color: Color.fromRGBO(217, 217, 217, 1),
-                ),
+            image,
+            color: Color.fromRGBO(217, 217, 217, 1),
+          ),
         ),
         Text(
           name,

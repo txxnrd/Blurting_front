@@ -18,6 +18,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   importance: Importance.max,
 
 );
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,12 +26,7 @@ void main() async {
 
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
   print("첫번째에 token이 무엇인지: $token");
-  bool isLoggedIn = true;
-
-  if(token=="No Token")
-    {
-      isLoggedIn = false;
-    }
+  bool isLoggedIn = token != null && token != "";
 
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.notification.isDenied.then((value) {
@@ -55,6 +51,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   final bool isLoggedIn;
 
   MyApp({required this.isLoggedIn});
@@ -62,8 +59,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       home: isLoggedIn ? MainApp() : LoginPage(),
     );
   }
 }
+

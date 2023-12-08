@@ -14,43 +14,11 @@ class mainColor {
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
 }
 
-// class SocketProvider with ChangeNotifier {
-//   // static String token =
-//   //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDdUMDI6MTM6MTYuNjU4WiIsImlhdCI6MTcwMTg4Mjc5NiwiZXhwIjoxNzAxODg2Mzk2fQ.v9m-mLkVcttqhAYkSy6MbgykNpaZNfTlKesGvAv8VvA';
-//   String savedToken = await getToken();
-
-//   // 소켓 연결
-//   IO.Socket _socket = IO
-//       .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-//     'transports': ['websocket'],
-//     'auth': {'authorization': 'Bearer ${Provider.of<TokenProvider>(context, listen: false).token}'},
-//     // 'reconnectionAttempts': 0,
-//   });
-
-//   IO.Socket get socket => _socket;
-
-//   set socket(IO.Socket value) {
-//     _socket = value;
-//     notifyListeners();
-//   }
-// }
-
-// class TokenProvider with ChangeNotifier {
-//   String _token = '';
-
-//   String get token => _token;
-
-//   set token(String value) {
-//     _token = value;
-//     notifyListeners();
-//   }
-// }
-
 class GroupChatProvider with ChangeNotifier {
   bool _pointValid = false;
   bool _isPocus = false;
   DateTime _lastTime =
-      DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
+  DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
 
   bool get pointValid => _pointValid;
   bool get isPocus => _isPocus;
