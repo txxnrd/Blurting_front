@@ -1,28 +1,16 @@
+import 'dart:io';
+
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
-
-Future<Map<String, dynamic>> fetchData(String token) async {
-  final response = await http.get(
-      Uri.parse(
-          'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
-      headers: {
-        'authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      });
-
-  if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-    print('Server Response: $data'); // Add this line to print server response
-    return data;
-  } else {
-    throw Exception('Failed to load data');
-  }
-}
+int count = 0;
 
 class CardItem {
   final String userName;
@@ -45,9 +33,7 @@ class CardItem {
 }
 
 class Home extends StatefulWidget {
-  final String token;
-
-  const Home({Key? key, required this.token}) : super(key: key);
+  const Home({super.key});
 
   @override
   _HomeState createState() => _HomeState();
@@ -62,29 +48,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     cardItems = [];
-    fetchData(widget.token).then((data) {
-      setState(() {
-        apiResponse = data;
-
-        List<dynamic> answers = data['answers'];
-
-        cardItems = answers.map((answer) {
-          return CardItem(
-            userName: answer['userNickname'],
-            question: answer['question'],
-            answer: answer['answer'],
-            postedAt: answer['postedAt'],
-            userSex: answer['userSex'],
-            likes: answer['likes'],
-            ilike: answer['ilike'],
-          );
-        }).toList();
-
-        int milliseconds = data['seconds'];
-        remainingTime = Duration(milliseconds: milliseconds);
-      });
-    });
+    fetchData();
     updateRemainingTime();
   }
 
@@ -340,7 +306,7 @@ class _HomeState extends State<Home> {
             ],
           ),
           actions: <Widget>[
-            pointAppbar(token: widget.token),
+            pointAppbar(),
             SizedBox(width: 10),
           ],
         ),
@@ -436,6 +402,56 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  Future<void> fetchData() async {
+    String savedToken = await getToken();
+
+  final response = await http.get(
+      Uri.parse(
+          'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
+      headers: {
+        'authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      });
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print('Server Response: $data'); // Add this line to print server response
+      if (mounted) {
+        setState(() {
+          apiResponse = data;
+
+          List<dynamic> answers = data['answers'];
+
+          cardItems = answers.map((answer) {
+            return CardItem(
+              userName: answer['userNickname'],
+              question: answer['question'],
+              answer: answer['answer'],
+              postedAt: answer['postedAt'],
+              userSex: answer['userSex'],
+              likes: answer['likes'],
+              ilike: answer['ilike'],
+            );
+          }).toList();
+
+          int milliseconds = data['seconds'];
+          remainingTime = Duration(milliseconds: milliseconds);
+        });
+      }
+    }
+    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      getnewaccesstoken(context, fetchData);
+      // fetchData();
+
+      count += 1;
+      if (count == 10) exit(1);
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 }
 

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
@@ -17,12 +19,10 @@ import 'package:intl/date_symbol_data_local.dart';
 class Whisper extends StatefulWidget {
   final String userName;
   final String roomId;
-  final String token;
 
   Whisper(
       {Key? key,
       required this.userName,
-      required this.token,
       required this.roomId})
       : super(key: key);
 
@@ -34,7 +34,6 @@ class _Whisper extends State<Whisper> {
   TextEditingController controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool isBlock = false;
-  late IO.Socket socket;
   final PageController mainPageController = PageController(initialPage: 0);
   List<String> imagePaths = [];
   Map<String, dynamic> userProfile = {};
@@ -44,6 +43,129 @@ class _Whisper extends State<Whisper> {
   List<Widget> chatMessages = [];
 
   bool isValid = false;
+
+  late IO.Socket socket;
+
+  @override
+  void initState() {
+    super.initState();
+    // socket = Provider.of<SocketProvider>(context, listen: false).socket;
+
+    Future<void> initializeSocket() async {
+      await fetchChats();
+
+      Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
+
+      socket.emit('in_room', data);
+
+      socket.on('new_chat', (data) {
+        int userId = data['userId'];
+        String chat = data['chat'];
+        bool read = data['read']; // (읽음 표시)
+        Widget newAnswer;
+
+        String formattedDate = dateFormatFull
+            .format(_parseDateTime(data['createdAt'] as String? ?? ''));
+
+        if (userId == Provider.of<UserProvider>(context, listen: false).userId) {
+          // userProvider
+          newAnswer = MyChat(
+            message: chat,
+            createdAt: dateFormatAA
+                .format(_parseDateTime(data['createdAt'] as String? ?? '')),
+            read: read,
+            isBlurting: false,
+            likedNum: 0,
+          );
+          sendingMessageList.clear();
+          print('내 메시지 전송 완료: $chat');
+        } else {
+          newAnswer = OtherChat(
+              message: chat,
+              createdAt: dateFormatAA
+                  .format(_parseDateTime(data['createdAt'] as String? ?? '')));
+          print('상대방 메시지 도착: $chat');
+        }
+        if (mounted) {
+          setState(() {
+            if (chatMessages.isEmpty) {
+              chatMessages.add(Center(child: DateWidget(date: formattedDate)));
+            }
+
+            chatMessages.add(newAnswer); // 새로운 메시지 추가
+          });
+        }
+      });
+
+      socket.on('read_all', (data) {
+        for (int i = 0; i < chatMessages.length; i++) {
+          Widget widget = chatMessages[i];
+          if (widget is MyChat) {
+            if (mounted) {
+              setState(() {
+                chatMessages.removeAt(i);
+                chatMessages.insert(
+                    i,
+                    MyChat(
+                      message: widget.message,
+                      createdAt: widget.createdAt,
+                      read: true,
+                      isBlurting: false,
+                      likedNum: 0,
+                    ));
+              });
+            }
+          }
+        }
+      });
+
+      socket.on('report', (data) {
+        if (mounted) {
+          setState(() {
+            isBlock = true;
+          });
+        }
+      });
+
+      socket.on('leave_room', (data) {
+        // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
+        // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
+        // 귓속말 내에서 내가 나갔을 때, 이전으로 돌아가기 (채팅 리스트로)
+        // 상대방이 방금 나간 roomId가 지금 내가 보고 있는 roomId라면
+        if (data['roomId'] == widget.roomId) {
+          if (mounted) {
+            setState(() {
+              isBlock = true;
+            });
+          }
+          // if (data['userId'] == UserProvider.UserId) {
+          //   print(context);
+          // } else {}
+        }
+      });
+      
+      socket.on('connect', (_) {
+        print('소켓 연결됨');
+      });
+
+      socket.on('disconnect', (_) {
+        print('소켓 연결 끊김');
+      });
+    };
+
+    initializeSocket();
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
+
+    Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
+
+    socket.emit('in_room', data);
+    print('나감');
+    socket.disconnect();
+  }
 
   void _showProfileModal(BuildContext context) {
     showDialog(
@@ -65,7 +187,6 @@ class _Whisper extends State<Whisper> {
               // Your ProfileCard
               ProfileCard(
                 mainPageController: mainPageController,
-                token: widget.token,
                 imagePaths: imagePaths,
                 roomId: widget.roomId,
                 userName: userName,
@@ -92,121 +213,10 @@ class _Whisper extends State<Whisper> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-
-    Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
-
-    socket.emit('in_room', data);
-    print('나감');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    socket = Provider.of<SocketProvider>(context, listen: false).socket;
-
-    Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
-
-    socket.emit('in_room', data);
-
-    // Future.delayed(Duration.zero, () {
-      fetchChats(widget.token);
-    // });
-
-    socket.on('new_chat', (data) {
-      int userId = data['userId'];
-      String chat = data['chat'];
-      bool read = data['read']; // (읽음 표시)
-      Widget newAnswer;
-
-      String formattedDate = dateFormatFull
-          .format(_parseDateTime(data['createdAt'] as String? ?? ''));
-
-      if (userId == UserProvider.UserId) {
-        // userProvider
-        newAnswer = MyChat(
-          message: chat,
-          createdAt: dateFormatAA
-              .format(_parseDateTime(data['createdAt'] as String? ?? '')),
-          read: read,
-          isBlurting: false,
-          likedNum: 0,
-        );
-        sendingMessageList.clear();
-        print('내 메시지 전송 완료: $chat');
-      } else {
-        newAnswer = OtherChat(
-            message: chat,
-            createdAt: dateFormatAA
-                .format(_parseDateTime(data['createdAt'] as String? ?? '')));
-        print('상대방 메시지 도착: $chat');
-      }
-      if (mounted) {
-        setState(() {
-          if (chatMessages.isEmpty) {
-            chatMessages.add(Center(child: DateWidget(date: formattedDate)));
-          }
-
-          chatMessages.add(newAnswer); // 새로운 메시지 추가
-        });
-      }
-    });
-
-    socket.on('read_all', (data) {
-      for (int i = 0; i < chatMessages.length; i++) {
-        Widget widget = chatMessages[i];
-        if (widget is MyChat) {
-          if (mounted) {
-            setState(() {
-              chatMessages.removeAt(i);
-              chatMessages.insert(
-                  i,
-                  MyChat(
-                    message: widget.message,
-                    createdAt: widget.createdAt,
-                    read: true,
-                    isBlurting: false,
-                    likedNum: 0,
-                  ));
-            });
-          }
-        }
-      }
-    });
-
-    socket.on('report', (data) {
-      if (mounted) {
-        setState(() {
-          isBlock = true;
-        });
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    print('이게 뭐노: ${isBlock}');
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    });
-
-    socket.on('leave_room', (data) {
-      // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
-      // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
-      // 귓속말 내에서 내가 나갔을 때, 이전으로 돌아가기 (채팅 리스트로)
-      // 상대방이 방금 나간 roomId가 지금 내가 보고 있는 roomId라면
-      if (data['roomId'] == widget.roomId) {
-        if (mounted) {
-          setState(() {
-            isBlock = true;
-          });
-        }
-          // if (data['userId'] == UserProvider.UserId) {
-          //   print(context);
-          // } else {}
-      }
     });
 
     return Scaffold(
@@ -255,7 +265,7 @@ class _Whisper extends State<Whisper> {
           ],
         ),
         actions: <Widget>[
-          pointAppbar(token: widget.token),
+          pointAppbar(),
           Container(
             margin: EdgeInsets.only(right: 10),
             child: IconButton(
@@ -490,19 +500,29 @@ class _Whisper extends State<Whisper> {
     print("귓속말 전송 중...");
   }
 
-  Future<void> fetchChats(String token) async {
+  Future<void> fetchChats() async {
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     final url =
         Uri.parse('${API.chatList}${widget.roomId}');
-
+    String savedToken = await getToken();
+    
     final response = await http.get(url, headers: {
-      'authorization': 'Bearer $token',
+      'authorization': 'Bearer $savedToken',
       'Content-Type': 'application/json',
     });
 
     if (response.statusCode == 200) {
       print('요청 성공');
+
+      socket = IO.io(
+          '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+        'transports': ['websocket'],
+        'auth': {
+          'authorization':
+              'Bearer $savedToken'
+        },
+      });
 
       try {
         DateTime _parseDateTime(String? dateTimeString) {
@@ -529,17 +549,20 @@ class _Whisper extends State<Whisper> {
         List<dynamic> chatList = responseData['chats'];
         DateTime hasRead = _parseDateTime(responseData['hasRead']);
 
+        print(hasRead);
+
         for (int i = 0; i < chatList.length; i++) {
           final Map<String, dynamic> chatData = chatList[i];
           DateTime createdAt = _parseDateTime(chatData['createdAt']);
 
           bool read = createdAt.isBefore(hasRead);
+          print('읽었니: ${read}');
 
           Widget fetchChatList;
           if (mounted) {
             setState(() {
               // 만약에 지금 보고 있는 애의 날짜가 이전에 본 애의 날짜랑 같다면 냅두고, 다르다면 날짜 위젯을 chatMessages에 추가
-              if (chatData['userId'] == UserProvider.UserId) {
+              if (chatData['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
                 fetchChatList = MyChat(
                   message: chatData['chat'] as String? ?? '',
                   createdAt: dateFormatAA.format(
@@ -584,6 +607,15 @@ class _Whisper extends State<Whisper> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
+    }
+    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      getnewaccesstoken(context, fetchChats);
+      // fetchChats();
+
+      count += 1;
+      if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');

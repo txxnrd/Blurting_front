@@ -215,7 +215,7 @@ class _EmailPageState extends State<EmailPage>
       {
         var token = data['accessToken'];
         var refreshtoken = data['refreshToken'];
-        var userId=data['userId'];
+        var userId = data['userId'];
         print(token);
         await saveToken(token);
         await saveRefreshToken(refreshtoken);

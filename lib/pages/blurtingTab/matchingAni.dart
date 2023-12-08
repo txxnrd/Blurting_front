@@ -1,14 +1,15 @@
+import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Matching extends StatefulWidget {
 
-  final String token;
 
-  Matching({required this.token});
+  Matching({super.key});
 
   @override
   State<Matching> createState() => _MatchingState();
@@ -30,7 +31,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    register(widget.token);
+    register();
     
     controller = AnimationController(
       duration: Duration(seconds: 1),
@@ -227,12 +228,13 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> register(String token) async {
+  Future<void> register() async {
     final url =
         Uri.parse(API.register);
+    String savedToken = await getToken();
 
     final response = await http.post(url, headers: {
-      'authorization': 'Bearer $token',
+      'authorization': 'Bearer $savedToken',
       'Content-Type': 'application/json',
     });
 
