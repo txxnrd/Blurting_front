@@ -792,6 +792,7 @@ class _Blurting extends State<Blurting> {
                 userName: iReceivedItem['username'], userSex: iReceivedItem['userSex']));
           }
         }
+        print(iSended);
 
         int i = iSendedList.length;
         print(i);
@@ -800,6 +801,7 @@ class _Blurting extends State<Blurting> {
           iSended[j] = true;
         }
 
+          print('얼마나 보냇냐');
         print(iSended);
 
         print('Response body: ${response.body}');

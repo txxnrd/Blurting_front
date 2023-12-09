@@ -250,7 +250,7 @@ class _SearchPage extends State<SearchPage> {
   Future<void> searchByLocationName() async {
     String searchText = _searchController.text;
 
-    final String apiUrl ='${API.geobyname}?name=${Uri.encodeComponent(searchText)}';
+    final String apiUrl ='${API.geobyname}';
     final response = await http.get(Uri.parse(apiUrl));
     print('검색어: $searchText');
     if (response.statusCode == 200) {
