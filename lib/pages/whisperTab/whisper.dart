@@ -26,7 +26,6 @@ class Whisper extends StatefulWidget {
       required this.roomId})
       : super(key: key);
 
-
   @override
   _Whisper createState() => _Whisper();
 }
@@ -51,7 +50,6 @@ class _Whisper extends State<Whisper> {
   @override
   void initState() {
     super.initState();
-    // socket = Provider.of<SocketProvider>(context, listen: false).socket;
 
     Future<void> initializeSocket() async {
       await fetchChats();
@@ -61,6 +59,8 @@ class _Whisper extends State<Whisper> {
       socket.emit('in_room', data);
 
       socket.on('new_chat', (data) {
+        print('메시지 소켓 도착');
+
         int userId = data['userId'];
         String chat = data['chat'];
         bool read = data['read']; // (읽음 표시)

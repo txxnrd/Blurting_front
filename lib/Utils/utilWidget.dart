@@ -408,6 +408,7 @@ class _MyChatState extends State<MyChat> {
 
   @override
   Widget build(BuildContext context) {
+    print('읽음 받음 확인: ${widget.read}');
 
     return ListTile(
       subtitle: // 답변 내용
@@ -906,135 +907,7 @@ class _AnswerItemState extends State<AnswerItem> {
                 ),
               ),
               Positioned(
-                bottom: 20,
-                child: AnimatedOpacity(
-                  opacity: isValid ? 1.0 : 0.0,
-                  duration: Duration(milliseconds: 500),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        // margin: EdgeInsets.only(top: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: 5),
-                              child: Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.lightGray
-                                            .withOpacity(0.8)),
-                                    alignment: Alignment.topCenter,
-                                    child: GestureDetector(
-                                      child: Container(
-                                        margin: EdgeInsets.all(10),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              '귓속말을 걸면 10p가 차감됩니다.',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 10,
-                                                  fontFamily: "Heebo"),
-                                            ),
-                                            Text(
-                                              '계속 진행하시겠습니까?',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 10,
-                                                  fontFamily: "Heebo"),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        // if (!isValid) {
-                                          Navigator.of(context).pop();
-                                        // }
-                                      },
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: mainColor.MainColor),
-                                      height: 50,
-                                      // color: mainColor.MainColor,
-                                      child: Center(
-                                        child: Text(
-                                          '귓속말 걸기',
-                                          style: TextStyle(
-                                              fontFamily: 'Heebo',
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      if (isValid) {
-                                        print('귓속말 망가지지마');
-                                        startWhisper();
-                                        Navigator.of(context).pop();
-                                      } else {
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                margin: EdgeInsets.only(top: 5),
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray),
-                                // color: mainColor.MainColor,
-                                child: Center(
-                                  child: Text(
-                                    '취소',
-                                    style: TextStyle(
-                                        fontFamily: 'Heebo',
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  // Navigator.of(context).pop();
-                                  isTap(false);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 50,
+                bottom: 80,
                 child: AnimatedOpacity(
                   opacity: enoughPoint ? 0.0 : 1.0,
                   duration: Duration(milliseconds: 500),
@@ -1105,6 +978,134 @@ class _AnswerItemState extends State<AnswerItem> {
                                   ),
                                 ],
                               ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 20,
+                child: AnimatedOpacity(
+                  opacity: isValid ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 500),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        // margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.lightGray
+                                            .withOpacity(0.8)),
+                                    alignment: Alignment.topCenter,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '귓속말을 걸면 10p가 차감됩니다.',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                            Text(
+                                              '계속 진행하시겠습니까?',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        // if (!isValid) {
+                                        print('귓속말 망가지지마');
+                                          // Navigator.of(context).pop();
+                                        // }
+                                      },
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      // color: mainColor.MainColor,
+                                      child: Center(
+                                        child: Text(
+                                          '귓속말 걸기',
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      if (isValid) {
+                                        startWhisper();
+                                        Navigator.of(context).pop();
+                                      } else {
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                margin: EdgeInsets.only(top: 5),
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.lightGray),
+                                // color: mainColor.MainColor,
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  // Navigator.of(context).pop();
+                                  isTap(false);
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -1285,7 +1286,6 @@ class _AnswerItemState extends State<AnswerItem> {
 
     if (mounted) {
       setState(() {
-        // 좋아요를 눌렀으면 바로바로 갱신이 되어야 하는디...
         if (iLike) {
           likedNum--;
         } else {
@@ -1350,12 +1350,14 @@ class _AnswerItemState extends State<AnswerItem> {
           'authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
         },
-        body: json.encode({'userId': widget.userId}));
+        body: json.encode({'id': widget.userId}));
 
     dynamic responseData = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
       print('요청 성공');
+
+      print(responseData);
 
       if (responseData != false) {      // 귓속말을 걸 수 있으면
         widget.socket.emit('create_room', widget.userId);

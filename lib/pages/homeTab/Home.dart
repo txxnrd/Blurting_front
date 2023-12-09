@@ -48,6 +48,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    print('홈으로 옴');
 
     cardItems = [];
     fetchData();
