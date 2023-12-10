@@ -4,8 +4,6 @@ import 'package:blurting/pages/homeTab/Home.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
 
-int count = 0;
-
 class MainApp extends StatefulWidget {
   MainApp({super.key});
 

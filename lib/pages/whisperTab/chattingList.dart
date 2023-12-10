@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 
-int count = 0;
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -653,10 +652,6 @@ class _chattingList extends State<ChattingList> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchList);
-      // fetchList();
-
-      count += 1;
-      if (count == 10) exit(1);
     }
      else {
       print(response.statusCode);

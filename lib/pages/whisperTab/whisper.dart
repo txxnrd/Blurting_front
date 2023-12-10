@@ -244,10 +244,10 @@ class _Whisper extends State<Whisper> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: () {
+              onTap: (!isBlock) ? () {
                 // Show the profile card as a bottom sheet
                 _showProfileModal(context);
-              },
+              } : null,
               child: Container(
                 width: 70,
                 height: 70,
@@ -613,10 +613,6 @@ class _Whisper extends State<Whisper> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchChats);
-      // fetchChats();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');

@@ -1205,9 +1205,9 @@ class _AnswerItemState extends State<AnswerItem> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
             child: GestureDetector(
-              onTap: () {
-                _showProfileModal(context, widget.isAlready); // jsonData 매개변수
-              },
+              onTap: (widget.userId != 0) ? () {
+                _showProfileModal(context, widget.isAlready);
+              } : null,
               child: Container(
                 width: 55,
                 height: 55,
@@ -1229,7 +1229,7 @@ class _AnswerItemState extends State<AnswerItem> {
                   widget.userName,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Color.fromRGBO(48, 48, 48, 1),
+                    color: widget.userId == 0 ? mainColor.Gray : Color.fromRGBO(48, 48, 48, 1),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -1309,7 +1309,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                     Container(
                                       margin: EdgeInsets.only(left: 3, top: 1),
                                       child: Text(
-                                        '${likedNum}',
+                                        '$likedNum',
                                         style: TextStyle(
                                             color: iLike
                                                 ? mainColor.MainColor

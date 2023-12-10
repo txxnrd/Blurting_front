@@ -19,7 +19,6 @@ int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
 String _question = '';
 String day = 'Day1';
-int count = 0;
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -436,7 +435,7 @@ class _GroupChat extends State<GroupChat> {
                         userName: answerData['userNickname'],
                         isAlready: isAlready,
                         image: answerData['userSex'],
-                        mbti: answerData['mbti'],
+                        mbti: answerData['mbti'] ?? '',
                         answerId: answerData['id'],
                         socket: socket));
                   }
@@ -456,10 +455,6 @@ class _GroupChat extends State<GroupChat> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
-      // fetchLatestComments();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
@@ -521,7 +516,7 @@ class _GroupChat extends State<GroupChat> {
                     userName: answerData['userNickname'],
                     isAlready: isAlready,
                     image: answerData['userSex'],
-                    mbti: answerData['mbti'],
+                    mbti: answerData['mbti'] ?? '',
                     answerId: answerData['id'],
                     socket: socket,));
               }
@@ -545,10 +540,6 @@ class _GroupChat extends State<GroupChat> {
         no,
         null, null
       );
-      // fetchIndexComments(no);
-
-      count += 1;
-      if (count == 10) exit(1);
     }
     else {
       print(response.statusCode);
@@ -599,10 +590,6 @@ class _GroupChat extends State<GroupChat> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, () async {
       }, null, null, SendAnswer, [answer, questionId]);
-      // SendAnswer(answer, questionId);
-
-      count += 1;
-      if (count == 10) exit(1);
     }
     else {
       print('요청 실패');

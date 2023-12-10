@@ -13,8 +13,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
-int count = 0;
-
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
     return DateTime(1, 11, 30, 0, 0, 0, 0); // 혹은 다른 기본 값으로 대체
@@ -446,10 +444,6 @@ class _HomeState extends State<Home> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       print('home 정보 불러오기 401');
       await getnewaccesstoken(context, fetchData);
-      // fetchData();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       throw Exception('Failed to load data');
     }
@@ -494,10 +488,6 @@ class _HomeState extends State<Home> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchPoint);
-      // fetchPoint();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');

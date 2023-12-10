@@ -9,7 +9,6 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/pages/blurtingTab/matchingAni.dart';
 import 'package:blurting/pages/blurtingTab/dayAni.dart';
@@ -426,7 +425,7 @@ class _Blurting extends State<Blurting> {
                     fontFamily: 'Heebo'),
               ),
             if (!iSended[currentPage])
-              if (ProfileList[currentPage].length <= 3)
+              if (ProfileList[currentPage].length <= 4)
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: Row(
@@ -438,7 +437,7 @@ class _Blurting extends State<Blurting> {
                   ),
                 ),
             if (!iSended[currentPage])
-              if (ProfileList[currentPage].length > 3)
+              if (ProfileList[currentPage].length > 4)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -576,10 +575,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, isMatched);
-      // isMatched();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
@@ -664,10 +659,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
-      // fetchLatestComments();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
@@ -746,10 +737,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchGroupInfo);
-      // fetchGroupInfo();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupInfo : 블러팅 정보를 로드하는 데 실패했습니다');
@@ -815,10 +802,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, MyArrow);
-      // MyArrow();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('myArrow: 화살표 정보를 로드하는 데 실패했습니다');
@@ -860,10 +843,6 @@ class _Blurting extends State<Blurting> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, () async {}, null, null, null, null, sendArrow,
           [userId, day]);
-      // sendArrow(userId, day);
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
@@ -952,6 +931,7 @@ class _profileState extends State<profile> {
         } else {
           if (canSendArrow) {
             print('눌림');
+            print(widget.userId);
             setState(() {
               widget.thisSelected = !widget.thisSelected;
             });
