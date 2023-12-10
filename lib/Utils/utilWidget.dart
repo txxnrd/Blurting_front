@@ -345,34 +345,16 @@ class OtherChat extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (read)
-                Container(
-                  margin: EdgeInsets.only(top: 20, left: 5),
-                  child: Text(
-                    '읽지 않음',
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontSize: 10,
-                      color: mainColor.Gray,
-                    ),
-                  ),
-                ),
-              Container(
-                margin: EdgeInsets.only(top: 5, left: 5),
-                child: Text(
-                  createdAt,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontSize: 10,
-                    color: mainColor.lightGray,
-                  ),
-                ),
+          Container(
+            margin: EdgeInsets.only(top: 5, left: 5),
+            child: Text(
+              createdAt,
+              style: TextStyle(
+                fontFamily: "Pretendard",
+                fontSize: 10,
+                color: mainColor.Gray,
               ),
-            ],
+            ),
           ),
         ],
       ),
@@ -401,14 +383,15 @@ class MyChat extends StatefulWidget {
 }
 
 class _MyChatState extends State<MyChat> {
+  
   @override
   void initState() {
     super.initState();
+    print('읽음 받음 확인: ${widget.read}');
   }
 
   @override
   Widget build(BuildContext context) {
-    print('읽음 받음 확인: ${widget.read}');
 
     return ListTile(
       subtitle: // 답변 내용
