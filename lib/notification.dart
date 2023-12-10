@@ -66,12 +66,11 @@ Future<void> initFcm() async {
     print("onMessageOpenedApp: $message");
     if(message?.data['type'] == "whisper")
     {
-      print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
 
       navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => ChattingList()), ); }
     else{
-      print('이거 실행됏음.');
+
       await Future.delayed(Duration(milliseconds: 100));
       navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Blurting() ));
 
