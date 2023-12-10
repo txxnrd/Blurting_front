@@ -69,11 +69,11 @@ Future<void> initFcm() async {
       print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
 
-      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => ChattingList()), ); }
+      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => ChattingList())); }
     else{
       print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
-      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Blurting() ));
+      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Blurting()));
 
   }
   

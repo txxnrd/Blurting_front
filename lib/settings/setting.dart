@@ -47,9 +47,7 @@ class _SettingPageState extends State<SettingPage>{
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-  int count =10;
-
-
+  int count = 10;
 
 Future<void> _sendDeleteRequest() async {
     print('_sendPostRequest called');
@@ -91,7 +89,7 @@ Future<void> _sendDeleteRequest() async {
       {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-        getnewaccesstoken(context, _sendDeleteRequest);
+        await getnewaccesstoken(context, _sendDeleteRequest);
         // _sendDeleteRequest();
         count+=1;
         if(count==100) exit(1);

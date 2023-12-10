@@ -575,7 +575,7 @@ class _Blurting extends State<Blurting> {
     else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, isMatched);
+      await getnewaccesstoken(context, isMatched);
       // isMatched();
 
       // count += 1;
@@ -663,7 +663,7 @@ class _Blurting extends State<Blurting> {
     else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, fetchLatestComments);
+      await getnewaccesstoken(context, fetchLatestComments);
       // fetchLatestComments();
 
       // count += 1;
@@ -745,7 +745,7 @@ class _Blurting extends State<Blurting> {
     else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, fetchGroupInfo);
+      await getnewaccesstoken(context, fetchGroupInfo);
       // fetchGroupInfo();
 
       // count += 1;
@@ -814,7 +814,7 @@ class _Blurting extends State<Blurting> {
     else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, MyArrow);
+      await getnewaccesstoken(context, MyArrow);
       // MyArrow();
 
       // count += 1;
@@ -858,7 +858,7 @@ class _Blurting extends State<Blurting> {
     else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, () async {}, null, null, null, null, sendArrow,
+      await getnewaccesstoken(context, () async {}, null, null, null, null, sendArrow,
           [userId, day]);
       // sendArrow(userId, day);
 

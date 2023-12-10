@@ -1,19 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/StartPage/startpage.dart';
-import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 
 import '../../config/app_config.dart';
 import '../../settings/setting.dart';
-import 'MyPageEdit.dart';
 
 String getCigaretteString(int? cigarette) {
   switch (cigarette) {
@@ -120,7 +115,7 @@ class _MyPage extends State<MyPage> {
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-        getnewaccesstoken(context, () async {
+        await getnewaccesstoken(context, () async {
           // callback0의 내용
           print('Callback0 called');
         }, goToMyPageEdit, context, null, null);
@@ -167,7 +162,7 @@ class _MyPage extends State<MyPage> {
     else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, fetchUserProfile);
+      await getnewaccesstoken(context, fetchUserProfile);
       // fetchUserProfile();
 
       count += 1;
