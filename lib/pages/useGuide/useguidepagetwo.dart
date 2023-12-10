@@ -31,6 +31,10 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo> with TickerProviderSt
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
 
+
+  //얘를 호출해서 페이지 넘김
+
+  //이유: 넘길 때 부드럽게 넘기는 애니메이션 적용하려여
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
@@ -46,7 +50,7 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo> with TickerProviderSt
     });
   }
 
-
+//여기에서 밑에 애니메이션 어느정도 진행됐는지 저장함. 1/7,2/7,3/7로 지정해주면 될듯
   @override
   void initState() {
     super.initState();
@@ -148,29 +152,7 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo> with TickerProviderSt
                         child: Image.asset("assets/images/Blurting_welcome.png"),
                       ),
                       SizedBox(height: 100,),
-                      Stack(
-                        clipBehavior: Clip.none, // 이 부분 추가
-                        children: [
 
-                          Container(
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFD9D9D9), // 하늘색
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                          ),
-
-                          Container(
-                            height: 10,
-                            width: MediaQuery.of(context).size.width *
-                                (_progressAnimation?.value ?? 0.3),
-                            decoration: BoxDecoration(
-                              color: Color(DefinedColor.darkpink),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
@@ -178,6 +160,33 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo> with TickerProviderSt
             ),
           ),
         ),
+//애니메이션 위치 폰마다 똑같이 위치 지정해주려고 플로팅 액션 버튼으로 해서 밑에서부터 올라오게 지정 해놨음
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 80),// 좌우 마진을 20.0으로 설정
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 10,
+                decoration: BoxDecoration(
+                  color: Color(0xFFD9D9D9), // 회색
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+              ),
+              Container(
+                height: 10,
+                width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 32, // 좌우 패딩을 고려하여 너비 조정
+                decoration: BoxDecoration(
+                  color: Color(DefinedColor.darkpink), // 다크핑크 색상을 사용자 지정 색상으로 가정
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+
       ),
     );
   }

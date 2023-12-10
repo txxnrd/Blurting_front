@@ -143,39 +143,32 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
                       ),
 
                       SizedBox(height:40),
-                      Row(
+                      Column(
                           children: <Widget>[
-                            Container(
-                              width: 240.7,
-                              height: 246,
-                              child: Image.asset("assets/images/Blurting_welcome.png"),
-                            ),
-                            ]
-                      ),
-                      SizedBox(height: 100,),
-                      Stack(
-                        clipBehavior: Clip.none, // 이 부분 추가
-                        children: [
+                            Stack(
+                              clipBehavior: Clip.none, // 이 부분 추가
+                              children: <Widget>[
+                                Container(
+                                  width: 293.7,
+                                  height: 86,
+                                  child: Image.asset("assets/images/useguidepagethreemessage.png"),
+                                ),
+                                Positioned(
+                                  left: 24, // 원하는 위치로 조정하세요.
+                                  top: 50, // 원하는 위치로 조정하세요.
+                                  child: Image.asset(
+                                    "assets/images/pointer.png",
+                                    width: 36.7,
+                                    height: 47,
+                                  ),
+                                ),
+                              ],
+                            )
 
-                          Container(
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFD9D9D9), // 하늘색
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                          ),
-
-                          Container(
-                            height: 10,
-                            width: MediaQuery.of(context).size.width *
-                                (_progressAnimation?.value ?? 0.3),
-                            decoration: BoxDecoration(
-                              color: Color(DefinedColor.darkpink),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                          ),
-                        ],
+                          ]
                       ),
+                      SizedBox(height: 200,),
+
                     ],
                   ),
                 ),
@@ -183,6 +176,31 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
             ),
           ),
         ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 80),// 좌우 마진을 16.0으로 설정
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 10,
+                decoration: BoxDecoration(
+                  color: Color(0xFFD9D9D9), // 회색
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+              ),
+              Container(
+                height: 10,
+                width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 32, // 좌우 패딩을 고려하여 너비 조정
+                decoration: BoxDecoration(
+                  color: Color(DefinedColor.darkpink), // 다크핑크 색상을 사용자 지정 색상으로 가정
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
   }
