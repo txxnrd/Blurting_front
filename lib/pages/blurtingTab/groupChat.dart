@@ -455,7 +455,7 @@ class _GroupChat extends State<GroupChat> {
     else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, fetchLatestComments);
+      await getnewaccesstoken(context, fetchLatestComments);
       // fetchLatestComments();
 
       count += 1;
@@ -597,7 +597,7 @@ class _GroupChat extends State<GroupChat> {
     }    else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, () async {
+      await getnewaccesstoken(context, () async {
       }, null, null, SendAnswer, [answer, questionId]);
       // SendAnswer(answer, questionId);
 

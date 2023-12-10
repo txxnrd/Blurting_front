@@ -404,6 +404,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> fetchData() async {
+    print('home data 불러오기 시작');
     String savedToken = await getToken();
 
   final response = await http.get(
@@ -444,7 +445,7 @@ class _HomeState extends State<Home> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       print('home 정보 불러오기 401');
-      getnewaccesstoken(context, fetchData);
+      await getnewaccesstoken(context, fetchData);
       // fetchData();
 
       count += 1;
@@ -492,7 +493,7 @@ class _HomeState extends State<Home> {
       print('point 불러오기 401');
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, fetchPoint);
+      await getnewaccesstoken(context, fetchPoint);
       // fetchPoint();
 
       // count += 1;

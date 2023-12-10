@@ -551,6 +551,7 @@ class AnswerItem extends StatefulWidget {
 
 class _AnswerItemState extends State<AnswerItem> {
   bool enoughPoint = true;
+  bool reportedUser = false;
   bool isValid = false;
   bool iLike = false;
   int likedNum = 0;
@@ -746,6 +747,7 @@ class _AnswerItemState extends State<AnswerItem> {
 // 프로필 클릭 시 모달 띄우는 함수
   void _showProfileModal(BuildContext context, bool isAlready) {
     enoughPoint = true;
+    reportedUser = false;
     isValid = false;
 
     showDialog(
@@ -863,7 +865,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                           duration: Duration(milliseconds: 500),
                                           top: 2.5,
                                           right:
-                                              isValid || isAlready ? 32.5 : 2.5,
+                                              isValid || isAlready ? 2.5 : 32.5,
                                           child: Container(
                                             width: 25,
                                             height: 25,
@@ -975,6 +977,78 @@ class _AnswerItemState extends State<AnswerItem> {
                 ),
               ),
               Positioned(
+                bottom: 100,
+                child: AnimatedOpacity(
+                  opacity: reportedUser ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 500),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: mainColor.lightGray.withOpacity(0.5)),
+                              child: Stack(
+                                alignment: Alignment.centerLeft,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(left: 20),
+                                    child: Image.asset(
+                                      'assets/images/alert.png',
+                                      width: 30,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '앗! 귓속말을 걸 수 없어요!',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w800,
+                                                  fontSize: 15,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                            Text(
+                                              '신고한 회원에게는 귓속말을 걸 수 없어요!',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 10,
+                                                  fontFamily: "Heebo"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        if (reportedUser) {
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
                 bottom: 20,
                 child: AnimatedOpacity(
                   opacity: isValid ? 1.0 : 0.0,
@@ -1027,10 +1101,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                         ),
                                       ),
                                       onTap: () {
-                                        // if (!isValid) {
-                                        print('귓속말 망가지지마');
-                                          // Navigator.of(context).pop();
-                                        // }
+                                          Navigator.of(context).pop();
                                       },
                                     ),
                                   ),
@@ -1044,7 +1115,6 @@ class _AnswerItemState extends State<AnswerItem> {
                                               BorderRadius.circular(10),
                                           color: mainColor.MainColor),
                                       height: 50,
-                                      // color: mainColor.MainColor,
                                       child: Center(
                                         child: Text(
                                           '귓속말 걸기',
@@ -1056,10 +1126,16 @@ class _AnswerItemState extends State<AnswerItem> {
                                         ),
                                       ),
                                     ),
-                                    onTap: () {
+                                    onTap: () async {
                                       if (isValid) {
-                                        startWhisper();
-                                        Navigator.of(context).pop();
+                                        await startWhisper();
+                                        if (!reportedUser) {            // 신고한 유저가 아닌 경우에만
+                                          Navigator.of(context).pop();
+                                        } else {                        // 신고한 유저라면
+                                          setState(() {
+                                            isTap(false);
+                                          });
+                                        }
                                       } else {
                                         Navigator.of(context).pop();
                                       }
@@ -1111,7 +1187,6 @@ class _AnswerItemState extends State<AnswerItem> {
 
   @override
   void initState() {
-    // 맨 처음에 호출될 때에만... 즉, blurting방으로 처음 들어왔을 때에만! -> 다 각자 다른 걸로 쓰면 안 되나?
     super.initState();
     iLike = widget.iLike;
     likedNum = widget.likedNum;
@@ -1354,6 +1429,11 @@ class _AnswerItemState extends State<AnswerItem> {
         Provider.of<UserProvider>(context, listen: false).point =
             responseData['point'];
         print('귓속말 포인트 차감: $responseData');
+      }
+      else {        // 신고한 회원 또는 탈퇴한 회원
+        setState(() {
+          reportedUser = true;
+        });
       }
     } else {
       print(response.statusCode);

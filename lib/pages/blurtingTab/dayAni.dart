@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'package:blurting/Utils/provider.dart';
-import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 

@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Matching extends StatefulWidget {
 
@@ -25,6 +24,8 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
   double girlWidth = 500.0;
   double boyWidth = 240.0;
   Color textColor = Color.fromRGBO(255, 125, 125, 1);
+  double girlOpacity = 1.0;
+  double boyOpacity = 0.7;
   int seconds = 0; // 초를 저장할 변수 추가
 
   @override
@@ -65,6 +66,28 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
               : textColor == Color.fromRGBO(255, 210, 210, 1)
                   ? mainColor.MainColor
                   : Color.fromRGBO(255, 125, 125, 1);
+          girlOpacity = girlOpacity == 1.0
+              ? 0.9
+              : girlOpacity == 0.9
+                  ? 0.2
+                  : girlOpacity == 0.2
+                      ? 0.5
+                      : girlOpacity == 0.5
+                          ? 0.6
+                          : girlOpacity == 0.6
+                              ? 0.8
+                              : 1.0;
+          boyOpacity = boyOpacity == 0.7
+              ? 0.8
+              : boyOpacity == 0.8
+                  ? 1.0
+                  : boyOpacity == 1.0
+                      ? 0.9
+                      : boyOpacity == 0.9
+                          ? 0.6
+                          : boyOpacity == 0.6
+                              ? 0.3
+                              : 0.7;
           bottomValue = bottomValue == -130.0
               ? 110
               : bottomValue == 110
@@ -79,12 +102,12 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
           leftValue = leftValue == -230.0
               ? -4
               : leftValue == -4
-                  ? 260
-                  : leftValue == 260
-                      ? 330
-                      : leftValue == 330
-                          ? 340
-                          : leftValue == 340
+                  ? 230
+                  : leftValue == 230
+                      ? 260
+                      : leftValue == 260
+                          ? 270
+                          : leftValue == 270
                               ? -180
                               : -230.0;
           girlWidth = girlWidth == 500
@@ -124,12 +147,12 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
           rightValue = rightValue == -130.0
               ? -4
               : rightValue == -4
-                  ? 260
-                  : rightValue == 260
-                      ? 330
-                      : rightValue == 330
-                          ? 340
-                          : rightValue == 340
+                  ? 180
+                  : rightValue == 180
+                      ? 200
+                      : rightValue == 200
+                          ? 210
+                          : rightValue == 210
                               ? -140
                               : -130.0;          
         });
@@ -169,7 +192,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
               width: girlWidth,
               child: AnimatedOpacity(
                   duration: Duration(milliseconds: 1500),
-                  opacity: (seconds != 0 && seconds % 2 == 0) ? 0.5 : 1.0,
+                  opacity: girlOpacity,
                   child: Image.asset('assets/animation/girl.png')),
             ),
           ),
@@ -186,7 +209,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
               child: AnimatedOpacity(
                   duration: Duration(milliseconds: 1500),
             curve: Curves.easeInOut,
-                  opacity: (seconds != 0 && seconds % 5 == 0) ? 0.5 : 1.0,
+                  opacity: boyOpacity,
                   child: Image.asset('assets/animation/boy.png')),
             ),
           ),

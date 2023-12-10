@@ -68,11 +68,11 @@ Future<void> initFcm() async {
     {
       await Future.delayed(Duration(milliseconds: 100));
 
-      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => ChattingList()), ); }
+      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => ChattingList())); }
     else{
 
       await Future.delayed(Duration(milliseconds: 100));
-      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Blurting() ));
+      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Blurting()));
 
   }
   
