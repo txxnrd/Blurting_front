@@ -14,16 +14,17 @@ import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/profileCard.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 class Whisper extends StatefulWidget {
   final String userName;
   final String roomId;
+  final IO.Socket socket;
 
   Whisper(
       {Key? key,
       required this.userName,
-      required this.roomId})
+      required this.roomId,
+      required this.socket})
       : super(key: key);
 
   @override
@@ -40,9 +41,6 @@ class _Whisper extends State<Whisper> {
   final String userName = '';
   final String roomId = '';
 
-  late IO.Socket socket;
-
-
   List<Widget> chatMessages = [];
 
   bool isValid = false;
@@ -51,15 +49,16 @@ class _Whisper extends State<Whisper> {
   void initState() {
     super.initState();
 
-    Future<void> initializeSocket() async {
-      await fetchChats();
+    // Future<void> initializeSocket() async {
+      // await
+       fetchChats();
 
       Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
 
-      socket.emit('in_room', data);
+      widget.socket.emit('in_room', data);
 
-      socket.on('new_chat', (data) {
-        print('메시지 소켓 도착');
+      widget.socket.on('new_chat', (data) {
+        print('메시지 소켓 도착$data');
 
         int userId = data['userId'];
         String chat = data['chat'];
@@ -99,7 +98,7 @@ class _Whisper extends State<Whisper> {
         }
       });
 
-      socket.on('read_all', (data) {
+      widget.socket.on('read_all', (data) {
         print('다 읽음');
         for (int i = 0; i < chatMessages.length; i++) {
           Widget widget = chatMessages[i];
@@ -122,7 +121,7 @@ class _Whisper extends State<Whisper> {
         }
       });
 
-      socket.on('report', (data) {
+      widget.socket.on('report', (data) {
         if (mounted) {
           setState(() {
             isBlock = true;
@@ -130,7 +129,7 @@ class _Whisper extends State<Whisper> {
         }
       });
 
-      socket.on('leave_room', (data) {
+      widget.socket.on('leave_room', (data) {
         // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
         // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
         // 귓속말 내에서 내가 나갔을 때, 이전으로 돌아가기 (채팅 리스트로)
@@ -147,16 +146,16 @@ class _Whisper extends State<Whisper> {
         }
       });
       
-      socket.on('connect', (_) {
+      widget.socket.on('connect', (_) {
         print('소켓 연결됨');
       });
 
-      socket.on('disconnect', (_) {
+      widget.socket.on('disconnect', (_) {
         print('소켓 연결 끊김');
       });
-    };
+    // };
 
-    initializeSocket();
+    // initializeSocket();
   }
   
   @override
@@ -165,9 +164,9 @@ class _Whisper extends State<Whisper> {
 
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
 
-    socket.emit('in_room', data);
+    widget.socket.emit('in_room', data);
     print('나감');
-    socket.disconnect();
+    // widget.socket.disconnect();
   }
 
   void _showProfileModal(BuildContext context) {
@@ -369,7 +368,7 @@ class _Whisper extends State<Whisper> {
                                                   ),
                                                 ),
                                                 onTap: () {
-                                                  socket.emit('leave_room',
+                                                  widget.socket.emit('leave_room',
                                                     widget.roomId);
                                                 print('채팅 나가는 중...');
                                                 Navigator.pop(context);
@@ -479,7 +478,6 @@ class _Whisper extends State<Whisper> {
 
   void sendChat(String message, int i) {
     Map<String, dynamic> data = {
-      // 'userId': 57,    // 내 아이디라고 함 일단
       'roomId': widget.roomId,
       'chat': message,
     };
@@ -495,7 +493,7 @@ class _Whisper extends State<Whisper> {
 
     // 소켓 서버에 데이터 전송
     if (message.isNotEmpty) {
-      socket.emit('send_chat', data);
+      widget.socket.emit('send_chat', data);
       print("소켓 서버에 귓속말 전송 ($data)");
     }
 
@@ -523,15 +521,6 @@ class _Whisper extends State<Whisper> {
 
     if (response.statusCode == 200) {
       print('요청 성공');
-
-      socket = IO.io(
-          '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-        'transports': ['websocket'],
-        'auth': {
-          'authorization':
-              'Bearer $savedToken'
-        },
-      });
 
       try {
         DateTime _parseDateTime(String? dateTimeString) {
@@ -565,7 +554,6 @@ class _Whisper extends State<Whisper> {
           DateTime createdAt = _parseDateTime(chatData['createdAt']);
 
           bool read = createdAt.isBefore(hasRead);
-          print('읽었니: ${read}');
 
           Widget fetchChatList;
           if (mounted) {

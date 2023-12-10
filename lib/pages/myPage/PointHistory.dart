@@ -263,7 +263,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       appBar: AppBar(
         toolbarHeight: 80,
         title: Text(
-          '포인트 History',
+          '포인트 내역',
           style: TextStyle(
             fontFamily: 'Heebo',
             fontSize: 20,
@@ -304,7 +304,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                     style: TextStyle(
                         fontFamily: "Pretendard",
                         fontWeight: FontWeight.w500,
-                        fontSize: 17,
+                        fontSize: 15,
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
@@ -331,7 +331,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                     style: TextStyle(
                         fontFamily: "Pretendard",
                         fontWeight: FontWeight.w500,
-                        fontSize: 17,
+                        fontSize: 15,
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   ),

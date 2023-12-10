@@ -198,6 +198,7 @@ class _chatListItemState extends State<ChatListItem> {
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => Whisper(
+                socket: widget.socket,
                 userName: widget.userName,
                 roomId: widget.roomId),
             transitionsBuilder:
@@ -338,7 +339,6 @@ class _chattingList extends State<ChattingList> {
   @override
   void initState() {
     super.initState();
-    // socket = Provider.of<SocketProvider>(context, listen: false).socket;
 
     Future<void> initializeSocket() async {
       await fetchList();
@@ -367,6 +367,7 @@ class _chattingList extends State<ChattingList> {
         int index = 0;
 
         print('채팅 리스트 새 메시지 도착$data');
+
         for (int i = 0; i < chatLists.length; i++) {
           Widget widget = chatLists[i];
 
