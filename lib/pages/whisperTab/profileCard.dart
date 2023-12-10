@@ -30,12 +30,16 @@ class ProfileCard extends StatefulWidget {
   final List<String> imagePaths;
   final String userName;
   final String roomId;
+  final IO.Socket socket;
+  final int userId;
 
   ProfileCard(
       {required this.mainPageController,
       required this.imagePaths,
       required this.roomId,
-      required this.userName});
+      required this.userName,
+      required this.socket,
+      required this.userId});
 
   @override
   State<StatefulWidget> createState() {
@@ -51,7 +55,7 @@ class _ProfileCard extends State<ProfileCard> {
   @override
   void initState() {
     super.initState();
-    
+
     fetchUserProfile();
     // for (String imagePath in imagePaths) {
     //   precacheImage(NetworkImage(imagePath), context);
@@ -95,6 +99,193 @@ class _ProfileCard extends State<ProfileCard> {
     } catch (e) {
       print('Error fetching user profile: $e');
     }
+  }
+
+  Future<void> sendReport(IO.Socket socket, String reason) async {
+    print(reason);
+    Map<String, dynamic> data = {
+      'reportingId': widget.userId,
+      'reason': reason
+    };
+    widget.socket.emit('report', data);
+
+    print('신고 내용 서버에 전송 완료 $data');
+  }
+
+  // 신고하시겠습니까? 모달 띄우는 함수
+  void _ClickWarningButton(BuildContext context, int userId) {
+    bool isCheckSexuality = false;
+    bool isCheckedAbuse = false;
+    bool isCheckedEtc = false;
+    List<bool> checkReason = [false, false, false];
+    String reason = '';
+
+    print(checkReason);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          print(checkReason);
+          Colors.white;
+          return AlertDialog(
+            surfaceTintColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(7)),
+            ),
+            title: Center(
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Text(
+                  '신고하기',
+                  style: TextStyle(
+                    color: Colors.black,
+                      fontFamily: "Heebo",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckSexuality,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckSexuality = value!;
+                              checkReason[0] = !checkReason[0];
+                              reason = '음란성/선정성';
+                            }
+                          });
+                        }),
+                    Text(
+                      '음란성/선정성',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckedAbuse,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckedAbuse = value!;
+                              checkReason[1] = !checkReason[1];
+                              reason = '욕설/인신공격';
+                            }
+                          });
+                        }),
+                    Text(
+                      '욕설/인신공격',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckedEtc,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckedEtc = value!;
+                              checkReason[2] = !checkReason[2];
+                              reason = '기타';
+                            }
+                          });
+                        }),
+                    Text(
+                      '기타',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Container(
+                margin: EdgeInsets.only(top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: (checkReason.any((element) => element == true)) ? () {
+                        Navigator.of(context).pop(); // 모달 닫기
+                        print('신고 접수');
+                        sendReport(widget.socket, reason);
+                        setState(() {});
+                      } : null,
+                      child: Container(
+                        width: 210,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: (checkReason.any((element) => element == true)) ? mainColor.MainColor : mainColor.lightGray,
+                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '신고하기',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Heebo",
+                                fontSize: 20,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),  
+              ],
+            ),
+          );
+        });
+      },
+    );
   }
 
   @override
@@ -211,6 +402,7 @@ class _ProfileCard extends State<ProfileCard> {
                 iconSize: 20,
                 icon: Image.asset('assets/images/block.png'),
                 onPressed: () {
+                  _ClickWarningButton(context, widget.userId);
                   print('신고 버튼 눌림');
                 },
               ),
