@@ -60,8 +60,7 @@ Future<void> getnewaccesstoken<T>(
   var url = Uri.parse(API.refresh);
   
   String refreshToken = await getRefreshToken();
-
-  print('object');
+  print(refreshToken);
 
   var response = await http.post(
     url,
