@@ -345,16 +345,22 @@ class OtherChat extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 5, left: 5),
-            child: Text(
-              createdAt,
-              style: TextStyle(
-                fontFamily: "Pretendard",
-                fontSize: 10,
-                color: mainColor.Gray,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 5, left: 5),
+                child: Text(
+                  createdAt,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontSize: 10,
+                    color: mainColor.Gray,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -387,7 +393,6 @@ class _MyChatState extends State<MyChat> {
   @override
   void initState() {
     super.initState();
-    print('읽음 받음 확인: ${widget.read}');
   }
 
   @override

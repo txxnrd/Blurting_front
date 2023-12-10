@@ -1,17 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/homeTab/Home.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
-import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/config/app_config.dart';
-import 'package:http/http.dart' as http;
 
 int count = 0;
 

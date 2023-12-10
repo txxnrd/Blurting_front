@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
+import 'package:blurting/pages/whisperTab/chattingList.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'package:blurting/settings/setting.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -68,7 +69,7 @@ Future<void> initFcm() async {
       print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
 
-      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Whisper(userName: "userName", roomId: "roomId")), ); }
+      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => ChattingList()), ); }
     else{
       print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
@@ -79,5 +80,3 @@ Future<void> initFcm() async {
   });
 
 }
-
-
