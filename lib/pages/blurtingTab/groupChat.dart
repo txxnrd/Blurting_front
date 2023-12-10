@@ -8,7 +8,6 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
@@ -87,6 +86,7 @@ class _GroupChat extends State<GroupChat> {
           context,
           MaterialPageRoute(
               builder: (context) => Whisper(
+                  socket: socket,
                   userName: data['nickname'] as String? ?? '',
                   roomId: data['roomId'] as String? ?? '')),
         ).then((value) {
@@ -175,7 +175,7 @@ class _GroupChat extends State<GroupChat> {
                           day,
                           style: TextStyle(
                               fontFamily: "Heebo",
-                              fontSize: 40,
+                              fontSize: 32,
                               fontWeight: FontWeight.w700,
                               color: mainColor.MainColor),
                         ),
@@ -341,7 +341,7 @@ class _GroupChat extends State<GroupChat> {
             color: currentIndex == index
                 ? mainColor.MainColor
                 : _questionNumber >= index
-                    ? Color.fromRGBO(255, 125, 125, 1)
+                    ? mainColor.MainColor.withOpacity(0.5)
                     : mainColor.lightGray,
           ),
           child: Text(
