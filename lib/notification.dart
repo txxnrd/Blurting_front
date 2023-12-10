@@ -66,6 +66,7 @@ Future<void> initFcm() async {
     if(message?.data['type'] == "whisper")
     {
       await Future.delayed(Duration(milliseconds: 100));
+
       navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Whisper(userName: "userName", roomId: "roomId")), ); }
     else{
 

@@ -11,7 +11,6 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:intl/intl.dart';
 
 int count = 0;
 
@@ -45,7 +44,6 @@ class ChatListItem extends StatefulWidget {
       required this.read,
       required this.roomId,
       required this.socket});
-
 
   @override
   _chatListItemState createState() => _chatListItemState();
@@ -345,7 +343,6 @@ class _chattingList extends State<ChattingList> {
     Future<void> initializeSocket() async {
       await fetchList();
 
-      // 아 소켓이... 초기화가 안 되엇구나... 쩝...
       socket.on('invite_chat', (data) {
         print('새로운 채팅: $data');
         Widget newChat = ChatListItem(

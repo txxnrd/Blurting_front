@@ -256,7 +256,7 @@ class _GroupChat extends State<GroupChat> {
                     child: Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(left: 20, top: 10),
+                          padding: EdgeInsets.only(left: 5),
                           child: Column(
                             children: <Widget>[
                               for (var answer in answerList[currentIndex])
@@ -343,13 +343,6 @@ class _GroupChat extends State<GroupChat> {
                 : _questionNumber >= index
                     ? Color.fromRGBO(255, 125, 125, 1)
                     : mainColor.lightGray,
-            shadows: const [
-              Shadow(
-                offset: Offset(1.0, 2.0),
-                blurRadius: 2.0,
-                color: Color.fromARGB(255, 189, 176, 176),
-              ),
-            ],
           ),
           child: Text(
             '${index}',

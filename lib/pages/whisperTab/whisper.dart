@@ -26,7 +26,6 @@ class Whisper extends StatefulWidget {
       required this.roomId})
       : super(key: key);
 
-
   @override
   _Whisper createState() => _Whisper();
 }
@@ -51,7 +50,6 @@ class _Whisper extends State<Whisper> {
   @override
   void initState() {
     super.initState();
-    // socket = Provider.of<SocketProvider>(context, listen: false).socket;
 
     Future<void> initializeSocket() async {
       await fetchChats();
@@ -61,6 +59,8 @@ class _Whisper extends State<Whisper> {
       socket.emit('in_room', data);
 
       socket.on('new_chat', (data) {
+        print('메시지 소켓 도착');
+
         int userId = data['userId'];
         String chat = data['chat'];
         bool read = data['read']; // (읽음 표시)
@@ -100,6 +100,7 @@ class _Whisper extends State<Whisper> {
       });
 
       socket.on('read_all', (data) {
+        print('다 읽음');
         for (int i = 0; i < chatMessages.length; i++) {
           Widget widget = chatMessages[i];
           if (widget is MyChat) {
@@ -222,6 +223,7 @@ class _Whisper extends State<Whisper> {
     });
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         toolbarHeight: 150,
@@ -433,37 +435,42 @@ class _Whisper extends State<Whisper> {
         ),
       ),
       extendBodyBehindAppBar: true,
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage('assets/images/body_background.png'),
-          ),
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-                child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Container(
-                margin: EdgeInsets.only(top: 180),
-                child: Column(
-                  children: <Widget>[
-                    for (var chatItem in chatMessages) chatItem,
-                    for (var chatItem in sendingMessageList) chatItem,
-                  ],
-                ),
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/body_background.png'),
               ),
-            )),
-            CustomInputField(
-              controller: controller,
-              sendFunction: sendChat,
-              isBlock: isBlock,
-              hintText: "귓속말이 끊긴 상대입니다",
-              questionId: 0,
             ),
-          ],
-        ),
+          ),
+          Column(
+            children: <Widget>[
+              Expanded(
+                  child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Container(
+                  margin: EdgeInsets.only(top: 180),
+                  child: Column(
+                    children: <Widget>[
+                      for (var chatItem in chatMessages) chatItem,
+                      for (var chatItem in sendingMessageList) chatItem,
+                    ],
+                  ),
+                ),
+              )),
+              CustomInputField(
+                controller: controller,
+                sendFunction: sendChat,
+                isBlock: isBlock,
+                hintText: "귓속말이 끊긴 상대입니다",
+                questionId: 0,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

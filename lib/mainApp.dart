@@ -31,8 +31,7 @@ class _MainApp extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-
-    fetchPoint();
+    print('mainApp으로');
 
     _pages = [
       Home(),
@@ -111,51 +110,6 @@ class _MainApp extends State<MainApp> {
         ),
       ),
     );
-  }
-
-  Future<void> fetchPoint() async {
-    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
-
-    final url = Uri.parse(API.userpoint);
-    String savedToken = await getToken();
-    int userId = await getuserId();
-    Provider.of<UserProvider>(context, listen: false).userId = userId;
-
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $savedToken',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      try {
-        Map<String, dynamic> responseData = jsonDecode(response.body);
-
-        if (mounted) {
-          setState(() {
-            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
-          });
-        }
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
-    }
-    else if (response.statusCode == 401) {
-      //refresh token으로 새로운 accesstoken 불러오는 코드.
-      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      getnewaccesstoken(context, fetchPoint);
-      // fetchPoint();
-
-      // count += 1;
-      // if (count == 10) exit(1);
-    } else {
-      print(response.statusCode);
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
-    }
   }
 }
 
