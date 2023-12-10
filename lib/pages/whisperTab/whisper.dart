@@ -40,6 +40,7 @@ class _Whisper extends State<Whisper> {
   Map<String, dynamic> userProfile = {};
   final String userName = '';
   final String roomId = '';
+  late int otherId = 0;
 
   List<Widget> chatMessages = [];
 
@@ -188,6 +189,8 @@ class _Whisper extends State<Whisper> {
               ),
               // Your ProfileCard
               ProfileCard(
+                socket: widget.socket,
+                userId: otherId,
                 mainPageController: mainPageController,
                 imagePaths: imagePaths,
                 roomId: widget.roomId,
@@ -546,6 +549,7 @@ class _Whisper extends State<Whisper> {
 
         List<dynamic> chatList = responseData['chats'];
         DateTime hasRead = _parseDateTime(responseData['hasRead']);
+        otherId = responseData['otherId'];
 
         print(hasRead);
 
