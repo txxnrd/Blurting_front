@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/pages/blurtingTab/matchingAni.dart';
@@ -12,7 +16,6 @@ import 'package:blurting/pages/blurtingTab/dayAni.dart';
 import 'package:http/http.dart' as http;
 
 DateTime createdAt = DateTime.now();
-
 
 String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
 
@@ -70,8 +73,6 @@ class Blurting extends StatefulWidget {
   _Blurting createState() => _Blurting();
 }
 
-String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
-
 class _Blurting extends State<Blurting> {
   DateTime _parseDateTime(String? dateTimeString) {
     if (dateTimeString == null) {
@@ -86,10 +87,11 @@ class _Blurting extends State<Blurting> {
     }
   }
 
+  final PageController pageController = PageController(initialPage: 0);
+
   @override
   void initState() {
     super.initState();
-
 
     Future.delayed(Duration.zero, () async {
       await isMatched(widget.token);
@@ -110,7 +112,6 @@ class _Blurting extends State<Blurting> {
           currentPage = newPage;
         });
       }
-
     });
   }
 
@@ -119,9 +120,7 @@ class _Blurting extends State<Blurting> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-
         preferredSize: Size.fromHeight(140),
-
         child: AppBar(
           scrolledUnderElevation: 0.0,
           automaticallyImplyLeading: false,
@@ -138,7 +137,6 @@ class _Blurting extends State<Blurting> {
           elevation: 0,
         ),
       ),
-
       extendBodyBehindAppBar: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -179,9 +177,9 @@ class _Blurting extends State<Blurting> {
                     ),
                     InkWell(
                       onTap: () {
-                          setState(() {
-                            isMine = true;
-                          });
+                        setState(() {
+                          isMine = true;
+                        });
                         if (isState == 'Continue') {
                           pageController.jumpToPage(currentDay);
                         }
@@ -278,26 +276,26 @@ class _Blurting extends State<Blurting> {
                 ),
               ),
               if (isState == 'Continue')
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: SmoothPageIndicator(
-                  controller: pageController,
-                  count: 3,
-                  effect: ScrollingDotsEffect(
-                    dotColor: Color(0xFFFFD2D2),
-                    activeDotColor: Color(0xFFF66464),
-                    activeStrokeWidth: 10,
-                    activeDotScale: 1.7,
-                    maxVisibleDots: 5,
-                    radius: 8,
-                    spacing: 10,
-                    dotHeight: 7,
-                    dotWidth: 7,
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: SmoothPageIndicator(
+                    controller: pageController,
+                    count: 3,
+                    effect: ScrollingDotsEffect(
+                      dotColor: Color(0xFFFFD2D2),
+                      activeDotColor: Color(0xFFF66464),
+                      activeStrokeWidth: 10,
+                      activeDotScale: 1.7,
+                      maxVisibleDots: 5,
+                      radius: 8,
+                      spacing: 10,
+                      dotHeight: 7,
+                      dotWidth: 7,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           Container(
@@ -373,7 +371,6 @@ class _Blurting extends State<Blurting> {
                       MaterialPageRoute(
                           builder: (context) => Matching(token: widget.token)));
                 }
-
               } else if (isState == 'Start') {
                 // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
                 Navigator.push(
@@ -489,8 +486,7 @@ class _Blurting extends State<Blurting> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    for (var profileItem in iReceived[index])
-                      profileItem
+                    for (var profileItem in iReceived[index]) profileItem
                   ],
                 ),
               ),
@@ -546,7 +542,7 @@ class _Blurting extends State<Blurting> {
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
-  
+
   Future<void> fetchLatestComments(String token) async {
     // day 정보 (dayAni 띄울지 말지 결정)
 
@@ -565,7 +561,6 @@ class _Blurting extends State<Blurting> {
 
         if (mounted) {
           setState(() {
-
             // createdAt = DateTime.now().add(Duration(hours: -47));
 
             createdAt = _parseDateTime(responseData['createdAt']);
@@ -582,7 +577,6 @@ class _Blurting extends State<Blurting> {
             if (timeDifference >= Duration(hours: 48)) {
               day = 'Day3';
             }
-
           });
         }
         // print('Response body: ${response.body}');
@@ -619,32 +613,32 @@ class _Blurting extends State<Blurting> {
           if (mounted) {
             setState(() {
               // if (profileData['userSex'] == 'M') {
-                // 내 성별, 성지향성에 따라 상이하게 설정
-                if (profileData['userId'] != UserProvider.UserId) {
-                  heteroProfileList[0].add(profile(
+              // 내 성별, 성지향성에 따라 상이하게 설정
+              if (profileData['userId'] != UserProvider.UserId) {
+                heteroProfileList[0].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 0,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                heteroProfileList[1].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 1,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                heteroProfileList[2].add(
+                  profile(
                       userName: profileData['userNickname'],
                       userSex: profileData['userSex'],
-                      day: 0,
+                      day: 2,
                       selected: false,
                       userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  heteroProfileList[1].add(profile(
-                      userName: profileData['userNickname'],
-                      userSex: profileData['userSex'],
-                      day: 1,
-                      selected: false,
-                      userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  heteroProfileList[2].add(
-                    profile(
-                        userName: profileData['userNickname'],
-                        userSex: profileData['userSex'],
-                        day: 2,
-                        selected: false,
-                        userId: profileData['userId'],
-                        clickProfile: clickProfile),
-                  );
-                }
+                      clickProfile: clickProfile),
+                );
+              }
               // }
             });
           }
@@ -700,7 +694,8 @@ class _Blurting extends State<Blurting> {
             int day = (iReceivedItem['day'] - 1);
             print(day);
             iReceived[day].add(recievedProfile(
-                userName: iReceivedItem['username'], userSex: iReceivedItem['userSex']));
+                userName: iReceivedItem['username'],
+                userSex: iReceivedItem['userSex']));
           }
         }
 
@@ -744,7 +739,6 @@ class _Blurting extends State<Blurting> {
           setState(() {
             iSended[day] = true;
             print(iSended);
-
           });
         }
 
@@ -759,7 +753,6 @@ class _Blurting extends State<Blurting> {
     }
   }
 
-
   void clickProfile(bool status, int userId_) {
     setState(() {
       isTap[currentPage] = status;
@@ -768,44 +761,43 @@ class _Blurting extends State<Blurting> {
   }
 }
 
-class recievedProfile extends StatelessWidget{
+class recievedProfile extends StatelessWidget {
   final String userName;
   final String userSex;
 
   recievedProfile({super.key, required this.userName, required this.userSex});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
-        children: [
-          Container(
-            width: 55,
-            height: 55,
-            decoration: BoxDecoration(
-                color: mainColor.lightPink,
-                borderRadius: BorderRadius.circular(50)),
-            child: Image.asset(
-              userSex == 'M'
-                  ? 'assets/man.png' : 'assets/woman.png',
-            ),
+      children: [
+        Container(
+          width: 55,
+          height: 55,
+          decoration: BoxDecoration(
+              color: mainColor.lightPink,
+              borderRadius: BorderRadius.circular(50)),
+          child: Image.asset(
+            userSex == 'M' ? 'assets/man.png' : 'assets/woman.png',
           ),
-          Container(
-            margin: EdgeInsets.only(top: 7),
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-            decoration: BoxDecoration(
-                color: mainColor.lightPink,
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              userName,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Heebo',
-                  color: Colors.black),
-            ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 7),
+          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+          decoration: BoxDecoration(
+              color: mainColor.lightPink,
+              borderRadius: BorderRadius.circular(50)),
+          child: Text(
+            userName,
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Heebo',
+                color: Colors.black),
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 }
 
@@ -893,4 +885,3 @@ class _profileState extends State<profile> {
     );
   }
 }
-

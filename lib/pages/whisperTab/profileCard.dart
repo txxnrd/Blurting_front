@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
+
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -30,13 +32,16 @@ class ProfileCard extends StatefulWidget {
   final List<String> imagePaths;
   final String userName;
   final String roomId;
+  final int blurValue;
 
-  ProfileCard(
-      {required this.mainPageController,
-      required this.token,
-      required this.imagePaths,
-      required this.roomId,
-      required this.userName});
+  ProfileCard({
+    required this.mainPageController,
+    required this.token,
+    required this.imagePaths,
+    required this.roomId,
+    required this.userName,
+    required this.blurValue,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -53,9 +58,9 @@ class _ProfileCard extends State<ProfileCard> {
   void initState() {
     super.initState();
     fetchUserProfile();
-    // for (String imagePath in imagePaths) {
-    //   precacheImage(NetworkImage(imagePath), context);
-    // }
+    for (String imagePath in imagePaths) {
+      precacheImage(NetworkImage(imagePath), context);
+    }
   }
 
   Future<void> fetchUserProfile() async {
@@ -174,57 +179,72 @@ class _ProfileCard extends State<ProfileCard> {
         child: Text('No Image'),
       );
     }
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 13, 0, 0),
-        ),
-        Row(
-          children: [
-            SizedBox(
-              width: 95,
+    double calculateBlurSigma(int blurValue) {
+      // Normalize the blur value to be between 0.0 and 1.0
+      double normalizedBlur = (4 - blurValue) / 4.0;
+      print('blur % = ${normalizedBlur * 100}%');
+      // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
+      return normalizedBlur * 5;
+    }
+
+    return Column(children: [
+      Padding(
+        padding: EdgeInsets.fromLTRB(0, 13, 0, 0),
+      ),
+      Row(
+        children: [
+          SizedBox(
+            width: 95,
+          ),
+          Text(
+            'photo ${index + 1}',
+            style: TextStyle(
+              fontFamily: 'Heedo',
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+              color: Color(0XFFF66464),
             ),
-            Text(
-              'photo ${index + 1}',
-              style: TextStyle(
-                fontFamily: 'Heedo',
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                color: Color(0XFFF66464),
-              ),
+          ),
+          SizedBox(
+            width: 40,
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              iconSize: 20,
+              icon: Image.asset('assets/images/block.png'),
+              onPressed: () {
+                print('신고 버튼 눌림');
+              },
             ),
-            SizedBox(
-              width: 40,
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                iconSize: 20,
-                icon: Image.asset('assets/images/block.png'),
-                onPressed: () {
-                  print('신고 버튼 눌림');
-                },
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 14,
-        ),
+          ),
+        ],
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Stack(alignment: Alignment.topCenter, children: [
         Container(
-          color: Colors.white,
+          color: Colors.white.withOpacity(0.8),
           width: 175,
           height: 197,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-              imagePaths[index],
-              fit: BoxFit.cover,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                sigmaX: calculateBlurSigma(userProfile['blur']),
+                sigmaY: calculateBlurSigma(userProfile['blur']),
+              ),
+              child: Image.network(
+                imagePaths[index],
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
-      ],
-    );
+        ProgressBar(blurValue: userProfile['blur']),
+      ]),
+    ]);
   }
 
   Widget _buildNicknameMbtiRow() {
@@ -388,6 +408,34 @@ class _ProfileCard extends State<ProfileCard> {
           color: Colors.white,
         ),
         textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
+class ProgressBar extends StatelessWidget {
+  final int blurValue;
+
+  ProgressBar({Key? key, required this.blurValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double maxBlur = 4.0;
+    double currentBlur =
+        blurValue / maxBlur; // assuming blurValue is between 0 and 100
+    print('progrss: $currentBlur');
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      width: 50,
+      height: 5,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: LinearProgressIndicator(
+          minHeight: 20,
+          backgroundColor: Colors.black.withOpacity(0.5),
+          value: currentBlur,
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFF66464)),
+        ),
       ),
     );
   }

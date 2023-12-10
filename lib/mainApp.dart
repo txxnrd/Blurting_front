@@ -21,8 +21,8 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-
-  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYyLCJzaWduZWRBdCI6IjIwMjMtMTItMDVUMTg6NTU6MzUuNDg3WiIsImlhdCI6MTcwMTc3MDEzNSwiZXhwIjoxNzAxNzczNzM1fQ.D3ssWiSjH5kkMc--POST9flI3gHn0qIjy561e4kb0jo';
+  static String token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTItMTBUMTM6MzE6NTguMjA3WiIsImlhdCI6MTcwMjE4MjcxOCwiZXhwIjoxNzAyMTg2MzE4fQ.LjLUi2sBDxTh-ZNOn699pcr6wVbgJ4l2Khr9BHwzzL0';
 
   IO.Socket socket = IO
       .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
@@ -143,7 +143,8 @@ class _MainApp extends State<MainApp> {
 
         if (mounted) {
           setState(() {
-            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+            Provider.of<UserProvider>(context, listen: false).point =
+                responseData['point'];
           });
         }
         print('Response body: ${response.body}');
@@ -155,7 +156,6 @@ class _MainApp extends State<MainApp> {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
-
   }
 }
 
