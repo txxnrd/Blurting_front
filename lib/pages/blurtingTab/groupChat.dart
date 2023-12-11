@@ -42,14 +42,28 @@ class QuestionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'Q$questionNumber. $question',
-      style: TextStyle(
-        fontFamily: 'Pretendard',
-        fontSize: 15,
-        color: Color.fromRGBO(134, 134, 134, 1),
-        fontWeight: FontWeight.w500,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Q$questionNumber. ',
+          style: TextStyle(
+            fontFamily: 'Heebo',
+            fontSize: 15,
+            color: Color.fromRGBO(134, 134, 134, 1),
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(
+          question,
+          style: TextStyle(
+            fontFamily: 'Heebo',
+            fontSize: 15,
+            color: Color.fromRGBO(134, 134, 134, 1),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -108,7 +122,6 @@ class _GroupChat extends State<GroupChat> {
 
     loadTime();
 
-    print(lastTime);
   }
 
   @override
@@ -121,7 +134,8 @@ class _GroupChat extends State<GroupChat> {
   // 데이터를 로컬에 저장하는 함수
   saveTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('timeInSeconds', DateTime.now().toString());
+    await prefs.setString('timeInSeconds', DateTime.now().add(Duration(hours: 9)).toString());
+    print('나가는 시간: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
   }
 
   // 저장된 데이터를 로컬에서 불러오는 함수
@@ -130,7 +144,9 @@ class _GroupChat extends State<GroupChat> {
     setState(() {
       lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
     });
-    Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
+    print('마지막으로 들어온 시간: $lastTime');
+
+    // Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
   }
 
   List<List<Widget>> answerList = List.generate(10, (index) => <Widget>[]);

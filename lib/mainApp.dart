@@ -51,12 +51,12 @@ class _MainApp extends State<MainApp> {
             selectedLabelStyle: TextStyle(
               color: Color.fromRGBO(48, 48, 48, 0.8),
               fontSize: 10,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Heebo',
             ),
             unselectedLabelStyle: TextStyle(
               color: Color.fromRGBO(48, 48, 48, 0.8),
               fontSize: 10,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Heebo',
             ),
             type: BottomNavigationBarType.fixed,
             currentIndex: _currentIndex,
