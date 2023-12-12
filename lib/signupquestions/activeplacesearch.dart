@@ -249,7 +249,6 @@ class _SearchPage extends State<SearchPage> {
 
   Future<void> searchByLocationName() async {
     String searchText = _searchController.text;
-
     final String apiUrl ='${API.geobyname}';
     final response = await http.get(Uri.parse(apiUrl));
     print('검색어: $searchText');
