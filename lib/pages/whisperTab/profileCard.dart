@@ -181,10 +181,14 @@ class _ProfileCard extends State<ProfileCard> {
     }
     double calculateBlurSigma(int blurValue) {
       // Normalize the blur value to be between 0.0 and 1.0
-      double normalizedBlur = (4 - blurValue) / 4.0;
-      print('blur % = ${normalizedBlur * 100}%');
-      // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
-      return normalizedBlur * 5;
+      if (blurValue == 4) {
+        return 0.0;
+      } else {
+        double normalizedBlur = (4 - blurValue) / 4.0;
+        print('blur % = ${normalizedBlur * 100}%');
+        // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
+        return normalizedBlur * 5;
+      }
     }
 
     return Column(children: [

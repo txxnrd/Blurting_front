@@ -41,8 +41,11 @@ class _Whisper extends State<Whisper> {
   final String userName = '';
   final String roomId = '';
   final int blurValue = 0;
+  final int blurChange = 0;
+  String appbarphoto = '';
 
   List<Widget> chatMessages = [];
+  Map<String, dynamic>? responseData;
 
   bool isValid = false;
 
@@ -95,6 +98,7 @@ class _Whisper extends State<Whisper> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
 
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
@@ -110,9 +114,21 @@ class _Whisper extends State<Whisper> {
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
 
     widget.socket.emit('in_room', data);
+    FutureBuilder(
+      future: fetchChats(widget.token),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          int blurChange = responseData?['blurChange'] ?? 0;
+          checkBlurChange(blurChange, context);
+        }
 
+        return Container();
+      },
+    );
     // Future.delayed(Duration.zero, () {
-    fetchChats(widget.token);
+    if (widget.token != null) {
+      fetchChats(widget.token);
+    }
     // });
 
     widget.socket.on('new_chat', (data) {
@@ -188,10 +204,11 @@ class _Whisper extends State<Whisper> {
   @override
   Widget build(BuildContext context) {
     print('이게 뭐노: ${isBlock}');
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    });
+    if (_scrollController.hasClients) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      });
+    }
 
     widget.socket.on('leave_room', (data) {
       // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
@@ -209,6 +226,16 @@ class _Whisper extends State<Whisper> {
         // } else {}
       }
     });
+    double calculateBlurSigma(int blurValue) {
+      // Normalize the blur value to be between 0.0 and 1.0
+      if (blurValue == 4) {
+        return 0.0;
+      } else {
+        double normalizedBlur = (4 - blurValue) / 4.0;
+        print('blur % = ${normalizedBlur * 100}%');
+        return normalizedBlur * 5;
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -240,6 +267,27 @@ class _Whisper extends State<Whisper> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   color: Colors.white,
+                  border: responseData?['blurChange'] != null
+                      ? Border.all(
+                          color: Color(0XFFF66464), // Apply pink border color
+                          width: 2.0,
+                        )
+                      : null,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(
+                      sigmaX: calculateBlurSigma(blurValue),
+                      sigmaY: calculateBlurSigma(blurValue),
+                    ),
+                    child: Image.network(
+                      appbarphoto, // 해당 부분은 응답에서 이미지 URL을 가져와야 합니다.
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -499,6 +547,7 @@ class _Whisper extends State<Whisper> {
 
     if (response.statusCode == 200) {
       print('요청 성공');
+      responseData = jsonDecode(response.body);
 
       try {
         DateTime _parseDateTime(String? dateTimeString) {
@@ -514,16 +563,16 @@ class _Whisper extends State<Whisper> {
           }
         }
 
-        Map<String, dynamic> responseData = jsonDecode(response.body);
         if (mounted) {
           setState(() {
-            isBlock = !responseData['connected'];
+            isBlock = !responseData!['connected'];
+            appbarphoto = responseData?['otherImage'] ?? '';
           });
         }
         print('차단 여부: ${isBlock}');
 
-        List<dynamic> chatList = responseData['chats'];
-        DateTime hasRead = _parseDateTime(responseData['hasRead']);
+        List<dynamic> chatList = responseData!['chats'];
+        DateTime hasRead = _parseDateTime(responseData!['hasRead']);
 
         for (int i = 0; i < chatList.length; i++) {
           final Map<String, dynamic> chatData = chatList[i];
@@ -610,6 +659,32 @@ class DateWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+void checkBlurChange(int blurChange, BuildContext context) {
+  // 이 부분에서 blurChange 값을 가져오고, 조건에 따라 showDialog 호출
+
+  // Show dialog when blurChange is 2, 3, or 4
+  if (blurChange != null) {
+    print("blurchange: $blurChange");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+              '$blurChange단계 블러가 풀렸습니다!'), // 주의: blurchange가 아닌 blurChange로 수정
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
