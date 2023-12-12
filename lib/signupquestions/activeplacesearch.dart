@@ -42,7 +42,6 @@ class _SearchPage extends State<SearchPage> {
       debugShowCheckedModeBanner: false,
       title: 'MemoApp', // 앱의 아이콘 이름
       home: Scaffold(
-
         backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 80,
@@ -69,7 +68,7 @@ class _SearchPage extends State<SearchPage> {
         ),
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: (){
+          onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
           },
           child: Column(
@@ -190,7 +189,6 @@ class _SearchPage extends State<SearchPage> {
 
   // 검색 버튼 클릭 시 서버 요청 후 검색 결과 업데이트
   Future<void> searchCurrentLocation() async {
-
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -218,11 +216,11 @@ class _SearchPage extends State<SearchPage> {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      print("위도,경도"+ "${position.longitude}"+","+"${position.latitude}");
-      double new_longtitude =position.longitude;
+      print("위도,경도" + "${position.longitude}" + "," + "${position.latitude}");
+      double new_longtitude = position.longitude;
 
       final String apiUrl =
-      '${API.geobygeo}?geo=POINT(${new_longtitude} ${position.latitude})}';
+          '${API.geobygeo}?geo=POINT(${new_longtitude} ${position.latitude})}';
       print(apiUrl);
       final response = await http.get(Uri.parse(apiUrl));
 
@@ -250,7 +248,7 @@ class _SearchPage extends State<SearchPage> {
   Future<void> searchByLocationName() async {
     String searchText = _searchController.text;
 
-    final String apiUrl ='${API.geobyname}';
+    final String apiUrl = '${API.geobyname}?name=$searchText';
     final response = await http.get(Uri.parse(apiUrl));
     print('검색어: $searchText');
     if (response.statusCode == 200) {

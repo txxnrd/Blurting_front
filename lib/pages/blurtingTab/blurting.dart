@@ -67,7 +67,6 @@ DateTime _parseDateTime(String? dateTimeString) {
 }
 
 class Blurting extends StatefulWidget {
-
   Blurting({super.key});
 
   @override
@@ -218,39 +217,39 @@ class _Blurting extends State<Blurting> {
                           : MediaQuery.of(context).size.width * 0.7,
                       child: isState != 'Continue'
                           ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '진행 중인 블러팅이 없어요.',
-                              style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Heebo'),
-                            ),
-                            Text(
-                              '새로운 블러팅을 시작해 주세요!',
-                              style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Heebo'),
-                            ),
-                          ],
-                        ),
-                      )
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '진행 중인 블러팅이 없어요.',
+                                    style: TextStyle(
+                                        color: mainColor.Gray,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        fontFamily: 'Heebo'),
+                                  ),
+                                  Text(
+                                    '새로운 블러팅을 시작해 주세요!',
+                                    style: TextStyle(
+                                        color: mainColor.Gray,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        fontFamily: 'Heebo'),
+                                  ),
+                                ],
+                              ),
+                            )
                           : !isMine
-                          ? PageView(controller: pageController, children: [
-                        _arrowPage(0),
-                        _arrowPage(1),
-                        _arrowPage(2),
-                      ])
-                          : PageView(controller: pageController, children: [
-                        _myArrowPage(0),
-                        _myArrowPage(1),
-                        _myArrowPage(2),
-                      ]),
+                              ? PageView(controller: pageController, children: [
+                                  _arrowPage(0),
+                                  _arrowPage(1),
+                                  _arrowPage(2),
+                                ])
+                              : PageView(controller: pageController, children: [
+                                  _myArrowPage(0),
+                                  _myArrowPage(1),
+                                  _myArrowPage(2),
+                                ]),
                     ),
                     if (isState == 'Continue' && !isMine)
                       Container(
@@ -258,7 +257,7 @@ class _Blurting extends State<Blurting> {
                           width: 32,
                           child: InkWell(
                               onTap: (isTap[currentPage] == true &&
-                                  iSended[currentPage] == false)
+                                      iSended[currentPage] == false)
                                   ? () {
                                       // 하나라도 true일 떄 (하나라도 선택되었을 때)
                                       print('선택 완료');
@@ -269,7 +268,7 @@ class _Blurting extends State<Blurting> {
                               child: Image.asset(
                                 'assets/images/blurtingArrow.png',
                                 color: isTap[currentPage] == true ||
-                                    iSended[currentPage] == true
+                                        iSended[currentPage] == true
                                     ? mainColor.MainColor
                                     : mainColor.Gray.withOpacity(0.2),
                               )))
@@ -438,8 +437,7 @@ class _Blurting extends State<Blurting> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      for (var profileItem in ProfileList[index])
-                        profileItem
+                      for (var profileItem in ProfileList[index]) profileItem
                     ],
                   ),
                 ),
@@ -523,8 +521,7 @@ class _Blurting extends State<Blurting> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    for (var profileItem in iReceived[index])
-                      profileItem
+                    for (var profileItem in iReceived[index]) profileItem
                   ],
                 ),
               ),
@@ -577,8 +574,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, isMatched);
@@ -587,7 +583,7 @@ class _Blurting extends State<Blurting> {
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
-  
+
   Future<void> fetchLatestComments() async {
     // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
     String savedToken = await getToken();
@@ -612,7 +608,7 @@ class _Blurting extends State<Blurting> {
             // print('createdAt : ${createdAt}');
 
             Duration timeDifference =
-            DateTime.now().add(Duration(hours: 9)).difference(createdAt);
+                DateTime.now().add(Duration(hours: 9)).difference(createdAt);
 
             print(timeDifference);
             setState(() {
@@ -640,6 +636,7 @@ class _Blurting extends State<Blurting> {
 
             if (timeDifference >= Duration(hours: 48)) {
               day = 'Day3';
+
               pageController.page == 2;
               print('이틀 지남');
               if (mounted) {
@@ -661,8 +658,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
@@ -677,7 +673,7 @@ class _Blurting extends State<Blurting> {
 
     final url = Uri.parse(API.blurtingInfo);
     String savedToken = await getToken();
-    
+
     final response = await http.get(
       url,
       headers: {
@@ -696,31 +692,32 @@ class _Blurting extends State<Blurting> {
         for (final profileData in responseData) {
           if (mounted) {
             setState(() {
-                if (profileData['userId'] != Provider.of<UserProvider>(context, listen: false).userId) {
-                  ProfileList[0].add(profile(
+              if (profileData['userId'] !=
+                  Provider.of<UserProvider>(context, listen: false).userId) {
+                ProfileList[0].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 2,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                ProfileList[1].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 1,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                ProfileList[2].add(
+                  profile(
                       userName: profileData['userNickname'],
                       userSex: profileData['userSex'],
                       day: 0,
                       selected: false,
                       userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  ProfileList[1].add(profile(
-                      userName: profileData['userNickname'],
-                      userSex: profileData['userSex'],
-                      day: 1,
-                      selected: false,
-                      userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  ProfileList[2].add(
-                    profile(
-                        userName: profileData['userNickname'],
-                        userSex: profileData['userSex'],
-                        day: 2,
-                        selected: false,
-                        userId: profileData['userId'],
-                        clickProfile: clickProfile),
-                  );
-                }
+                      clickProfile: clickProfile),
+                );
+              }
               // }
             });
           }
@@ -739,8 +736,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchGroupInfo);
@@ -755,7 +751,7 @@ class _Blurting extends State<Blurting> {
 
     final url = Uri.parse(API.myArrow);
     String savedToken = await getToken();
-    
+
     final response = await http.get(
       url,
       headers: {
@@ -783,7 +779,8 @@ class _Blurting extends State<Blurting> {
             int day = (iReceivedItem['day'] - 1);
             print(day);
             iReceived[day].add(recievedProfile(
-                userName: iReceivedItem['username'], userSex: iReceivedItem['userSex']));
+                userName: iReceivedItem['username'],
+                userSex: iReceivedItem['userSex']));
           }
         }
         print('내가 보낸 화살 맨 처음에: $iSended');
@@ -794,8 +791,7 @@ class _Blurting extends State<Blurting> {
           if (j >= 3) break;
           iSended[j] = true;
         }
-
-        print('얼마나 보냇냐... http 요청 처리하고 난 뒤');
+        
         print(iSended);
 
         print('Response body: ${response.body}');
@@ -804,8 +800,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, MyArrow);
@@ -844,8 +839,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, () async {}, null, null, null, null, sendArrow,
@@ -864,14 +858,14 @@ class _Blurting extends State<Blurting> {
   }
 }
 
-class recievedProfile extends StatelessWidget{
+class recievedProfile extends StatelessWidget {
   final String userName;
   final String userSex;
 
   recievedProfile({super.key, required this.userName, required this.userSex});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -881,8 +875,7 @@ class recievedProfile extends StatelessWidget{
               color: mainColor.lightPink,
               borderRadius: BorderRadius.circular(50)),
           child: Image.asset(
-            userSex == 'M'
-                ? 'assets/man.png' : 'assets/woman.png',
+            userSex == 'M' ? 'assets/man.png' : 'assets/woman.png',
           ),
         ),
         Container(
@@ -916,12 +909,12 @@ class profile extends StatefulWidget {
 
   profile(
       {super.key,
-        required this.day,
-        required this.selected,
-        required this.userId,
-        required this.userName,
-        required this.userSex,
-        required this.clickProfile});
+      required this.day,
+      required this.selected,
+      required this.userId,
+      required this.userName,
+      required this.userSex,
+      required this.clickProfile});
 
   @override
   State<profile> createState() => _profileState();
@@ -967,8 +960,8 @@ class _profileState extends State<profile> {
               widget.userSex == 'M'
                   ? 'assets/man.png'
                   : widget.userSex == 'none'
-                  ? 'assets/none.png'
-                  : 'assets/woman.png',
+                      ? 'assets/none.png'
+                      : 'assets/woman.png',
             ),
           ),
           Container(
