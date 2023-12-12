@@ -16,7 +16,6 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'blurting_project', // id
   'Blurting', // title
   importance: Importance.max,
-
 );
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -51,7 +50,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final bool isLoggedIn;
 
   MyApp({required this.isLoggedIn});
@@ -59,9 +57,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(1.0)),
+          child: child!),
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? MainApp(currentIndex: 0,) : LoginPage(),
+      home: isLoggedIn
+          ? MainApp(
+              currentIndex: 0,
+            )
+          : LoginPage(),
     );
   }
 }

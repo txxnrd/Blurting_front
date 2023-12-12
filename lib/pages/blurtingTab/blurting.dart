@@ -697,7 +697,7 @@ class _Blurting extends State<Blurting> {
                 ProfileList[0].add(profile(
                     userName: profileData['userNickname'],
                     userSex: profileData['userSex'],
-                    day: 2,
+                    day: 0,
                     selected: false,
                     userId: profileData['userId'],
                     clickProfile: clickProfile));
@@ -712,7 +712,7 @@ class _Blurting extends State<Blurting> {
                   profile(
                       userName: profileData['userNickname'],
                       userSex: profileData['userSex'],
-                      day: 0,
+                      day: 2,
                       selected: false,
                       userId: profileData['userId'],
                       clickProfile: clickProfile),
