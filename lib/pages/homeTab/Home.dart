@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/Utils/utilWidget.dart';
@@ -12,8 +10,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
-
-int count = 0;
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -60,12 +56,12 @@ class _HomeState extends State<Home> {
   Map<String, dynamic>? apiResponse;
   late Duration remainingTime = Duration.zero;
   late List<CardItem> cardItems = [];
+  String _mvpName = '...';
 
   @override
   void initState() {
     super.initState();
     print('홈으로 옴');
-
     cardItems = [];
 
     initializePages(); // Call a separate function to handle async initialization
@@ -112,185 +108,192 @@ class _HomeState extends State<Home> {
     });
   }
 
+    void mvpName(int index) {
+    setState(() {
+      _mvpName = cardItems[index].userName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final pages = (apiResponse != null &&
-        apiResponse!['answers'] != null &&
-        apiResponse!['answers'].isNotEmpty)
-        ? List.generate(
-      cardItems.length,
-          (index) => Container(
-        margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage('./assets/images/homecard.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: SizedBox(
-            height: 280,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Row(
+            apiResponse!['answers'] != null &&
+            apiResponse!['answers'].isNotEmpty)
+        ? List.generate(cardItems.length, (index) {
+            // mvpName(index);
+            return Container(
+              margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image: AssetImage('./assets/images/homecard.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SizedBox(
+                  height: 280,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (cardItems[index].userSex == 'M')
-                        ClipOval(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            color: mainColor.MainColor.withOpacity(0.5),
-                            child: Image.asset(
-                              './assets/man.png',
-                              width: 30,
-                              height: 30,
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Row(
+                          children: [
+                            if (cardItems[index].userSex == 'M')
+                              ClipOval(
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  color: mainColor.MainColor.withOpacity(0.5),
+                                  child: Image.asset(
+                                    './assets/man.png',
+                                    width: 30,
+                                    height: 30,
+                                  ),
+                                ),
+                              ),
+                            if (cardItems[index].userSex == 'F')
+                              ClipOval(
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  color: mainColor.MainColor.withOpacity(0.5),
+                                  child: Image.asset(
+                                    './assets/woman.png',
+                                    width: 30,
+                                    height: 30,
+                                  ),
+                                ),
+                              ),
+                            SizedBox(width: 8),
+                            Text(
+                              cardItems[index].userName,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Heebo',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      if (cardItems[index].userSex == 'F')
-                        ClipOval(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            color: mainColor.MainColor.withOpacity(0.5),
-                            child: Image.asset(
-                              './assets/woman.png',
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                        ),
-                      SizedBox(width: 8),
+                      ),
+                      SizedBox(height: 5),
                       Text(
-                        cardItems[index].userName,
+                        'Q. ${cardItems[index].question}',
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Heebo',
-                          fontSize: 15,
+                          fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
+                      SizedBox(height: 11),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            'A. ${cardItems[index].answer}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Heebo',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 11),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: Colors.white,
+                              height: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                      // SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                color: Colors.white,
+                                size: 15,
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Text(
+                                dateFormatHome.format(
+                                    _parseDateTime(cardItems[index].postedAt)),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // 좋아요 버튼을 눌렀을 때의 로직
+                                  if (!cardItems[index].ilike) {
+                                    handleLike(index);
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.thumb_up,
+                                  color: cardItems[index].ilike
+                                      ? Color(0xFFFF7D7D)
+                                      : Colors.white,
+                                  size: 15,
+                                ),
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                '${cardItems[index].likes}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      )
                     ],
                   ),
                 ),
-                SizedBox(height: 5),
-                Text(
-                  'Q. ${cardItems[index].question}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Heebo',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-                SizedBox(height: 11),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Text(
-                      'A. ${cardItems[index].answer}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 11),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: Colors.white,
-                        height: 10,
-                      ),
-                    ),
-                  ],
-                ),
-                // SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                        SizedBox(
-                          width: 7,
-                        ),
-                        Text(
-                          dateFormatHome.format(_parseDateTime(cardItems[index].postedAt)),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Heebo',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // 좋아요 버튼을 눌렀을 때의 로직
-                            if (!cardItems[index].ilike) {
-                              handleLike(index);
-                            }
-                          },
-                          child: Icon(
-                            Icons.thumb_up,
-                            color: cardItems[index].ilike
-                                ? Color(0xFFFF7D7D)
-                                : Colors.white,
-                            size: 15,
-                          ),
-                        ),
-                        SizedBox(width: 7),
-                        Text(
-                          '${cardItems[index].likes}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Heebo',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    )
+              ),
+            );
+          })
         : [
-      Center(
-        child: Text(
-          'MVP 답변 준비중이에요!',
-          style: TextStyle(
-            color: Colors.black87,
-            fontFamily: 'Heebo',
-            fontSize: 18.0,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
-    ];
+            Center(
+              child: Text(
+                'MVP 답변 준비중이에요!',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontFamily: 'Heebo',
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -327,20 +330,40 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 9),
-            child: Text(
-              '오늘의 MVP',
-              style: TextStyle(
-                color: Color(0XFF303030),
-                fontFamily: 'Heebo',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  '오늘의 MVP',
+                  style: TextStyle(
+                    color: Color(0XFF303030),
+                    fontFamily: 'Heebo',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
-            ),
+              Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: mainColor.MainColor, width: 1)),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: Text(
+                      _mvpName,
+                      style: TextStyle(
+                          color: mainColor.MainColor,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Heebo',
+                          fontSize: 12),
+                    ),
+                  ))
+            ],
           ),
           SizedBox(
             // color: Colors.amber,
@@ -354,23 +377,23 @@ class _HomeState extends State<Home> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 11),
+            // margin: EdgeInsets.only(top: 11),
             child: Center(
               child: SmoothPageIndicator(
                 controller: controller,
                 count: pages.length,
                 effect: const WormEffect(
-                    dotHeight: 10,
-                    dotWidth: 30,
+                    dotHeight: 7,
+                    dotWidth: 27,
                     type: WormType.thinUnderground,
-                    dotColor: Color(0xFFD9D9D9),
-                    activeDotColor: Color(0xFFFF7D7D)),
+                    dotColor: Color.fromRGBO(217, 217, 217, 1),
+                    activeDotColor: Color.fromRGBO(246, 100, 100, 0.5)),
               ),
             ),
           ),
           // Today's Blurting
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 11, 0, 0),
+            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             child: Text(
               'Now Blurting',
               style: TextStyle(
@@ -381,12 +404,12 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+          // Container(
+            // margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
+            // child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              // children: <Widget>[
                 YourBlurtingWidget(
                     icon: 'arrow', apiResponse: apiResponse),
                 YourBlurtingWidget(
@@ -395,9 +418,9 @@ class _HomeState extends State<Home> {
                     icon: 'chat', apiResponse: apiResponse),
                 YourBlurtingWidget(
                     icon: 'like', apiResponse: apiResponse),
-              ],
-            ),
-          ),
+              // ],
+            // ),
+          // ),
         ],
       ),
     );
@@ -407,13 +430,13 @@ class _HomeState extends State<Home> {
     print('home data 불러오기 시작');
     String savedToken = await getToken();
 
-  final response = await http.get(
-      Uri.parse(
-          'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
-      headers: {
-        'authorization': 'Bearer $savedToken',
-        'Content-Type': 'application/json',
-      });
+    final response = await http.get(
+        Uri.parse(
+            'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
+        headers: {
+          'authorization': 'Bearer $savedToken',
+          'Content-Type': 'application/json',
+        });
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -446,10 +469,6 @@ class _HomeState extends State<Home> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       print('home 정보 불러오기 401');
       await getnewaccesstoken(context, fetchData);
-      // fetchData();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       throw Exception('Failed to load data');
     }
@@ -494,10 +513,6 @@ class _HomeState extends State<Home> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchPoint);
-      // fetchPoint();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
@@ -531,53 +546,50 @@ class YourBlurtingWidget extends StatelessWidget {
       }
     }
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 26),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child:
-                  Image.asset('./assets/images/$icon.png', width: 35, height: 35),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: Text(
-                getCountText(),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontFamily: 'heebo',
-                  fontWeight: FontWeight.w700,
-                ),
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child:
+                Image.asset('./assets/images/$icon.png', width: 35, height: 35),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Text(
+              getCountText(),
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black,
+                fontFamily: 'heebo',
+                fontWeight: FontWeight.w700,
               ),
             ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 31),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color.fromRGBO(255, 210, 210, 0.3),
-            ),
-            width: 58,
-            height: 28,
-            child: Center(
-              child: Text(
-                '$dynamicCount', // Use dynamic count here
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w700,
-                ),
+          ),
+        ],
+      ),
+      Padding(
+        padding: const EdgeInsets.only(right: 31),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color.fromRGBO(255, 210, 210, 0.3),
+          ),
+          width: 58,
+          height: 28,
+          child: Center(
+            child: Text(
+              '$dynamicCount', // Use dynamic count here
+              style: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
         ),
-      ]),
-    );
+      ),
+    ]);
   }
 
   String getCountText() {

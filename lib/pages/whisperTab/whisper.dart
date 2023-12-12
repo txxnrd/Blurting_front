@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
@@ -12,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/profileCard.dart';
 
 class Whisper extends StatefulWidget {
@@ -250,10 +248,10 @@ class _Whisper extends State<Whisper> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: () {
+              onTap: (!isBlock) ? () {
                 // Show the profile card as a bottom sheet
                 _showProfileModal(context);
-              },
+              } : null,
               child: Container(
                 width: 70,
                 height: 70,
@@ -636,10 +634,6 @@ class _Whisper extends State<Whisper> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchChats);
-      // fetchChats();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');

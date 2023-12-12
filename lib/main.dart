@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? MainApp() : LoginPage(),
+      home: isLoggedIn ? MainApp(currentIndex: 0,) : LoginPage(),
     );
   }
 }
