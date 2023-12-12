@@ -1,5 +1,7 @@
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'dart:io';
 import '../../config/app_config.dart';
@@ -8,10 +10,9 @@ import 'package:intl/intl.dart';
 import 'package:blurting/signupquestions/token.dart';
 
 class PointHistoryPage extends StatefulWidget {
-  final String token;
 
   // Constructor to receive the user token
-  PointHistoryPage({required this.token});
+  PointHistoryPage({super.key});
 
   @override
   _PointHistoryPageState createState() => _PointHistoryPageState();
@@ -27,7 +28,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   Future<List<Map<String, dynamic>>> fetchPointAdd() async {
     if (!mounted) return [];
     print('fetchPointAdd called');
-    var url = Uri.parse(API.pointadd);
     // var savedToken = getToken();
     // var savedToken =
     //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
@@ -35,13 +35,21 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     // String accessToken = await getToken();
 
     try {
-      var response = await http.get(
-        Uri.parse('$url?amount=100'), // Query parameter added to the URL
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${widget.token}',
-        },
-      );
+      // var response = await http.get(
+      //   Uri.parse('$url?amount=100'), // Query parameter added to the URL
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //     'Authorization': 'Bearer ${token}',
+      //   },
+      // );
+
+      final url = Uri.parse(API.pointAdd);
+      String savedToken = await getToken();
+
+      final response = await http.get(url, headers: {
+        'authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      });
 
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -76,20 +84,20 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   Future<List<Map<String, dynamic>>> fetchPointSubtract() async {
     if (!mounted) return [];
     print('fetchPointSubtract called');
-    var url = Uri.parse(API.pointsubtract);
+
     // var savedToken = getToken();
     // var savedToken =
     // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
     // print(savedToken);
 
     try {
-      var response = await http.get(
-        Uri.parse('$url?amount=100'), // Query parameter added to the URL
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${widget.token}',
-        },
-      );
+      final url = Uri.parse(API.pointSub);
+      String savedToken = await getToken();
+
+      final response = await http.get(url, headers: {
+        'authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      });
 
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -255,7 +263,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       appBar: AppBar(
         toolbarHeight: 80,
         title: Text(
-          '포인트 History',
+          '포인트 내역',
           style: TextStyle(
             fontFamily: 'Heebo',
             fontSize: 20,
@@ -296,7 +304,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                     style: TextStyle(
                         fontFamily: "Pretendard",
                         fontWeight: FontWeight.w500,
-                        fontSize: 17,
+                        fontSize: 15,
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
@@ -323,7 +331,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                     style: TextStyle(
                         fontFamily: "Pretendard",
                         fontWeight: FontWeight.w500,
-                        fontSize: 17,
+                        fontSize: 15,
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   ),

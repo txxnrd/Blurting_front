@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:flutter/material.dart';
 
 class DayAni extends StatefulWidget {
-  final IO.Socket socket;
-  final String token;
   final String day;
 
-  DayAni({required this.socket, Key? key, required this.token, required this.day})
+  DayAni({Key? key, required this.day})
       : super(key: key);
 
   @override
@@ -17,12 +14,14 @@ class DayAni extends StatefulWidget {
 
 class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
   late AnimationController controller;
+  // late IO.Socket socket;
 
   int seconds = 0; // 초를 저장할 변수 추가
 
   @override
   void initState() {
     super.initState();
+    // socket = Provider.of<SocketProvider>(context, listen: false).socket;
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1),
@@ -33,7 +32,7 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              GroupChat(socket: widget.socket, token: widget.token),
+              GroupChat(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = 0.0;
             const end = 1.0;

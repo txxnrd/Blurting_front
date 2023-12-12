@@ -8,6 +8,7 @@ import 'dart:ui';
 
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import '../../config/app_config.dart';
@@ -28,20 +29,22 @@ import 'package:intl/date_symbol_data_local.dart';
 
 class ProfileCard extends StatefulWidget {
   final PageController mainPageController;
-  final String token;
   final List<String> imagePaths;
   final String userName;
   final String roomId;
-  final int blurValue;
 
-  ProfileCard({
-    required this.mainPageController,
-    required this.token,
-    required this.imagePaths,
-    required this.roomId,
-    required this.userName,
-    required this.blurValue,
-  });
+  final IO.Socket socket;
+  final int userId;
+
+  ProfileCard(
+      {required this.mainPageController,
+      required this.imagePaths,
+      required this.roomId,
+      required this.userName,
+      required this.socket,
+      required this.userId,
+      required this.blurValue,});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -57,6 +60,7 @@ class _ProfileCard extends State<ProfileCard> {
   @override
   void initState() {
     super.initState();
+
     fetchUserProfile();
     for (String imagePath in imagePaths) {
       precacheImage(NetworkImage(imagePath), context);
@@ -64,7 +68,7 @@ class _ProfileCard extends State<ProfileCard> {
   }
 
   Future<void> fetchUserProfile() async {
-    // String accessToken = await getToken();
+    String savedToken = await getToken();
 
     try {
       var url = Uri.parse('${API.chatProfile}${widget.roomId}');
@@ -72,7 +76,7 @@ class _ProfileCard extends State<ProfileCard> {
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${widget.token}',
+          'Authorization': 'Bearer $savedToken',
         },
       );
       print('Response Status Code: ${response.statusCode}');
@@ -84,6 +88,15 @@ class _ProfileCard extends State<ProfileCard> {
           userProfile = data;
           imagePaths = List<String>.from(userProfile['images']);
         });
+      }
+      else if (response.statusCode == 401) {
+        //refresh token으로 새로운 accesstoken 불러오는 코드.
+        //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+        await getnewaccesstoken(context, fetchUserProfile);
+        // fetchUserProfile();
+
+        count += 1;
+        if (count == 10) exit(1);
       } else {
         print(
             'Failed to load user profile. Status code: ${response.statusCode}');
@@ -91,6 +104,193 @@ class _ProfileCard extends State<ProfileCard> {
     } catch (e) {
       print('Error fetching user profile: $e');
     }
+  }
+
+  Future<void> sendReport(IO.Socket socket, String reason) async {
+    print(reason);
+    Map<String, dynamic> data = {
+      'reportingId': widget.userId,
+      'reason': reason
+    };
+    widget.socket.emit('report', data);
+
+    print('신고 내용 서버에 전송 완료 $data');
+  }
+
+  // 신고하시겠습니까? 모달 띄우는 함수
+  void _ClickWarningButton(BuildContext context, int userId) {
+    bool isCheckSexuality = false;
+    bool isCheckedAbuse = false;
+    bool isCheckedEtc = false;
+    List<bool> checkReason = [false, false, false];
+    String reason = '';
+
+    print(checkReason);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          print(checkReason);
+          Colors.white;
+          return AlertDialog(
+            surfaceTintColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(7)),
+            ),
+            title: Center(
+              child: Container(
+                margin: EdgeInsets.all(5),
+                child: Text(
+                  '신고하기',
+                  style: TextStyle(
+                    color: Colors.black,
+                      fontFamily: "Heebo",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckSexuality,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckSexuality = value!;
+                              checkReason[0] = !checkReason[0];
+                              reason = '음란성/선정성';
+                            }
+                          });
+                        }),
+                    Text(
+                      '음란성/선정성',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckedAbuse,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckedAbuse = value!;
+                              checkReason[1] = !checkReason[1];
+                              reason = '욕설/인신공격';
+                            }
+                          });
+                        }),
+                    Text(
+                      '욕설/인신공격',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                            }
+                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
+                        value: isCheckedEtc,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == false || !checkReason.contains(true)) {
+                              isCheckedEtc = value!;
+                              checkReason[2] = !checkReason[2];
+                              reason = '기타';
+                            }
+                          });
+                        }),
+                    Text(
+                      '기타',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    )
+                  ],
+                ),
+                Container(
+                margin: EdgeInsets.only(top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: (checkReason.any((element) => element == true)) ? () {
+                        Navigator.of(context).pop(); // 모달 닫기
+                        print('신고 접수');
+                        sendReport(widget.socket, reason);
+                        setState(() {});
+                      } : null,
+                      child: Container(
+                        width: 210,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: (checkReason.any((element) => element == true)) ? mainColor.MainColor : mainColor.lightGray,
+                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '신고하기',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Heebo",
+                                fontSize: 20,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),  
+              ],
+            ),
+          );
+        });
+      },
+    );
   }
 
   @override
@@ -208,18 +408,18 @@ class _ProfileCard extends State<ProfileCard> {
               fontWeight: FontWeight.w400,
               color: Color(0XFFF66464),
             ),
-          ),
-          SizedBox(
-            width: 40,
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              iconSize: 20,
-              icon: Image.asset('assets/images/block.png'),
-              onPressed: () {
-                print('신고 버튼 눌림');
-              },
+
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                iconSize: 20,
+                icon: Image.asset('assets/images/block.png'),
+                onPressed: () {
+                  _ClickWarningButton(context, widget.userId);
+                  print('신고 버튼 눌림');
+                },
+              ),
+
             ),
           ),
         ],

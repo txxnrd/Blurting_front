@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blurting/StartPage/startpage.dart';
+import 'package:blurting/pages/useGuide/useguidepageone.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +51,8 @@ class _SettingPageState extends State<SettingPage> {
 
   int count = 10;
 
-  Future<void> _sendDeleteRequest() async {
+Future<void> _sendDeleteRequest() async {
+
     print('_sendPostRequest called');
     var url = Uri.parse(API.user);
     String savedToken = await getToken();
@@ -87,10 +89,12 @@ class _SettingPageState extends State<SettingPage> {
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-        getnewaccesstoken(context);
-        _sendDeleteRequest();
-        count += 1;
-        if (count == 100) exit(1);
+
+        await getnewaccesstoken(context, _sendDeleteRequest);
+        // _sendDeleteRequest();
+        count+=1;
+        if(count==100) exit(1);
+
       }
     }
   }
@@ -108,8 +112,8 @@ class _SettingPageState extends State<SettingPage> {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json
-          .encode({"title": "테스트 성공", "text": "이 정도는 껌이지", "type": "whisper"}),
+
+      body:json.encode({"title":"나는 이제 시험 공부하러","text":"총총총","type":"whisper"}),
     );
     print(response.body);
   }
@@ -134,7 +138,8 @@ class _SettingPageState extends State<SettingPage> {
             Navigator.pop(context);
           },
         ),
-        actions: <Widget>[],
+
+
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -400,6 +405,24 @@ class _SettingPageState extends State<SettingPage> {
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                             color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+          SizedBox(height: 10,),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=> UseGuidePageOne()),
+                      );
+                    },
+                    child:  Container(
+                      width:100, height: 22,
+                      child:
+                      Text(
+                        '사용설명서로 이동',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
                       ),
                     ),
                   ),
