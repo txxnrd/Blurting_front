@@ -117,7 +117,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                               fontFamily: 'Pretendard',
                             )),
                       ),
-                      SizedBox(height: 112),
+                      SizedBox(height: 80),
                       Container(
                         width: 240.7,
                         height: 246,
