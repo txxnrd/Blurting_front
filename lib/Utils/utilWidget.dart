@@ -320,7 +320,7 @@ class OtherChat extends StatelessWidget {
           ClipPath(
             clipper: LeftTailClipper(),
             child: Container(
-              width: 250,
+              width: 200,
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -415,7 +415,7 @@ class _MyChatState extends State<MyChat> {
                       child: ClipPath(
                         clipper: RightTailClipper(),
                         child: Container(
-                          width: 250,
+                          width: 200,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),

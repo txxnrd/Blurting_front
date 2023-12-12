@@ -41,7 +41,7 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
     Timer(Duration(seconds: 6), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MainApp()),
+        MaterialPageRoute(builder: (context) => MainApp(currentIndex: 0,)),
       );
     });
   }
@@ -104,7 +104,7 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainApp()),
+                          MaterialPageRoute(builder: (context) => MainApp(currentIndex: 0,)),
                         );
                         print('시작하기 버튼 클릭됨');
                       },

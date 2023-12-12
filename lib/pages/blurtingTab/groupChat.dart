@@ -197,7 +197,7 @@ class _GroupChat extends State<GroupChat> {
                       ],
                     )),
                 Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
+                    width: MediaQuery.of(context).size.width * 0.6,
                     height: 25,
                     margin: EdgeInsets.only(top: 10),
                     child: Row(
@@ -340,7 +340,7 @@ class _GroupChat extends State<GroupChat> {
     // 누르면
     return Container(
       margin: EdgeInsets.zero,
-      child: GestureDetector(
+      child: InkWell(
         onTap: (_questionNumber >= index)
             ? () {
                 currentIndex = index;
@@ -360,7 +360,7 @@ class _GroupChat extends State<GroupChat> {
                     : mainColor.Gray,
           ),
           child: Text(
-            '${index}',
+            '$index',
           ),
         ),
       ),

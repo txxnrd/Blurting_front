@@ -357,7 +357,7 @@ class _ProfileCard extends State<ProfileCard> {
     );
   }
 
-  double calculateBlurSigma(int blurValue) {
+  static double calculateBlurSigma(int blurValue) {
     // Normalize the blur value to be between 0.0 and 1.0
     if (blurValue == 4) {
       return 0.0;

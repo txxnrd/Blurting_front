@@ -460,7 +460,9 @@ class _HomeState extends State<Home> {
           }).toList();
 
           int milliseconds = data['seconds'];
+          print(milliseconds);
           remainingTime = Duration(milliseconds: milliseconds);
+          print(remainingTime);
         });
       }
     }
