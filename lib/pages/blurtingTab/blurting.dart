@@ -79,6 +79,8 @@ class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
   // late IO.Socket socket;
 
+  final PageController pageController = PageController(initialPage: 0);
+
   @override
   void initState() {
     super.initState();
@@ -370,8 +372,10 @@ class _Blurting extends State<Blurting> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
+
                           builder: (context) => GroupChat(
                               )));
+
 
                 }
               } else if (isState == 'Start') {
@@ -517,8 +521,7 @@ class _Blurting extends State<Blurting> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    for (var profileItem in iReceived[index])
-                      profileItem
+                    for (var profileItem in iReceived[index]) profileItem
                   ],
                 ),
               ),
@@ -585,6 +588,7 @@ class _Blurting extends State<Blurting> {
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
+
   
   Future<void> fetchLatestComments() async {
     // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
@@ -638,6 +642,7 @@ class _Blurting extends State<Blurting> {
 
             if (timeDifference >= Duration(hours: 48)) {
               day = 'Day3';
+
               pageController.page == 2;
               print('이틀 지남');
               if (mounted) {
@@ -651,6 +656,7 @@ class _Blurting extends State<Blurting> {
                 print('day3이 되엇는데도 day2 화살표 아직 안 보냄');
                 sendArrow(-1, 1);
               }
+
             }
           });
         }
@@ -698,8 +704,10 @@ class _Blurting extends State<Blurting> {
         for (final profileData in responseData) {
           if (mounted) {
             setState(() {
+
                 if (profileData['userId'] != Provider.of<UserProvider>(context, listen: false).userId) {
                   ProfileList[0].add(profile(
+
                       userName: profileData['userNickname'],
                       userSex: profileData['userSex'],
                       day: 2,
@@ -789,7 +797,8 @@ class _Blurting extends State<Blurting> {
             int day = (iReceivedItem['day'] - 1);
             print(day);
             iReceived[day].add(recievedProfile(
-                userName: iReceivedItem['username'], userSex: iReceivedItem['userSex']));
+                userName: iReceivedItem['username'],
+                userSex: iReceivedItem['userSex']));
           }
         }
         print(iSended);
@@ -878,14 +887,14 @@ class _Blurting extends State<Blurting> {
   }
 }
 
-class recievedProfile extends StatelessWidget{
+class recievedProfile extends StatelessWidget {
   final String userName;
   final String userSex;
 
   recievedProfile({super.key, required this.userName, required this.userSex});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -895,8 +904,10 @@ class recievedProfile extends StatelessWidget{
               color: mainColor.lightPink,
               borderRadius: BorderRadius.circular(50)),
           child: Image.asset(
+
             userSex == 'M'
                 ? 'assets/man.png' : 'assets/woman.png',
+
           ),
         ),
         Container(
@@ -1002,4 +1013,5 @@ class _profileState extends State<profile> {
       ),
     );
   }
+
 }

@@ -79,7 +79,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-
     - image/girl.png
     - image/profile_swipe_now.png
     - image/profile_swipe_next.png
@@ -134,7 +133,15 @@ flutter:
     - assets/images/alert.png
     - assets/images/blurtingArrow.png
     - assets/none.png
-
+    - assets/images/Blurting_welcome.png
+    - assets/images/pointer.png
+    - assets/images/useguidepagethreemessage.png
+    - assets/images/profilecard.png
+    - assets/images/useguidefive.png
+    - assets/images/useguidesix.png
+    - assets/images/useguideseven.png
+    - assets/images/blurbefore.png
+    - assets/images/blurafter.png
 
   fonts:
     - family: Pretendard
