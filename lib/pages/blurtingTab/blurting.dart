@@ -29,9 +29,7 @@ List<List<Widget>> ProfileList = List.generate(
     3, (index) => <Widget>[]); // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
 // List<List<Widget>> myArrow = [];    // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
 
-
-  List<List<Widget>> dividedProfileList = List.generate(
-    2, (index) => <Widget>[]);
+List<List<Widget>> dividedProfileList = List.generate(2, (index) => <Widget>[]);
 
 bool isMine = false; // 내가 받은 화살표인지 화살 보내기인지
 
@@ -68,7 +66,6 @@ DateTime _parseDateTime(String? dateTimeString) {
 }
 
 class Blurting extends StatefulWidget {
-
   Blurting({super.key});
 
   @override
@@ -78,8 +75,6 @@ class Blurting extends StatefulWidget {
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
   // late IO.Socket socket;
-
-  final PageController pageController = PageController(initialPage: 0);
 
   @override
   void initState() {
@@ -222,39 +217,39 @@ class _Blurting extends State<Blurting> {
                           : MediaQuery.of(context).size.width * 0.7,
                       child: isState != 'Continue'
                           ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '진행 중인 블러팅이 없어요.',
-                              style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Heebo'),
-                            ),
-                            Text(
-                              '새로운 블러팅을 시작해 주세요!',
-                              style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Heebo'),
-                            ),
-                          ],
-                        ),
-                      )
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '진행 중인 블러팅이 없어요.',
+                                    style: TextStyle(
+                                        color: mainColor.Gray,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        fontFamily: 'Heebo'),
+                                  ),
+                                  Text(
+                                    '새로운 블러팅을 시작해 주세요!',
+                                    style: TextStyle(
+                                        color: mainColor.Gray,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        fontFamily: 'Heebo'),
+                                  ),
+                                ],
+                              ),
+                            )
                           : !isMine
-                          ? PageView(controller: pageController, children: [
-                        _arrowPage(0),
-                        _arrowPage(1),
-                        _arrowPage(2),
-                      ])
-                          : PageView(controller: pageController, children: [
-                        _myArrowPage(0),
-                        _myArrowPage(1),
-                        _myArrowPage(2),
-                      ]),
+                              ? PageView(controller: pageController, children: [
+                                  _arrowPage(0),
+                                  _arrowPage(1),
+                                  _arrowPage(2),
+                                ])
+                              : PageView(controller: pageController, children: [
+                                  _myArrowPage(0),
+                                  _myArrowPage(1),
+                                  _myArrowPage(2),
+                                ]),
                     ),
                     if (isState == 'Continue' && !isMine)
                       Container(
@@ -262,7 +257,7 @@ class _Blurting extends State<Blurting> {
                           width: 32,
                           child: InkWell(
                               onTap: (isTap[currentPage] == true &&
-                                  iSended[currentPage] == false)
+                                      iSended[currentPage] == false)
                                   ? () {
                                       // 하나라도 true일 떄 (하나라도 선택되었을 때)
                                       print('선택 완료');
@@ -273,7 +268,7 @@ class _Blurting extends State<Blurting> {
                               child: Image.asset(
                                 'assets/images/blurtingArrow.png',
                                 color: isTap[currentPage] == true ||
-                                    iSended[currentPage] == true
+                                        iSended[currentPage] == true
                                     ? mainColor.MainColor
                                     : mainColor.Gray.withOpacity(0.2),
                               )))
@@ -349,16 +344,16 @@ class _Blurting extends State<Blurting> {
             child: staticButton(text: isState),
             onTap: () async {
               DateTime lastTime =
-              Provider.of<GroupChatProvider>(context, listen: false)
-                  .lastTime
-                  .add(Duration(hours: 9));
+                  Provider.of<GroupChatProvider>(context, listen: false)
+                      .lastTime
+                      .add(Duration(hours: 9));
 
               if (isState == 'Continue') {
                 if (lastTime.isBefore(createdAt.add(Duration(hours: 24))) ||
                     lastTime.isBefore(createdAt.add(Duration(
                         hours:
-                        48)))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
-                    {
+                            48)))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                {
                   // ignore: use_build_context_synchronously
                   Navigator.push(
                       context,
@@ -366,24 +361,15 @@ class _Blurting extends State<Blurting> {
                           builder: (context) => DayAni(
                                 day: day,
                               )));
-
                 } else {
                   // 날이 바뀌고 처음 들어간 게 아님
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-
-                          builder: (context) => GroupChat(
-                              )));
-
-
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => GroupChat()));
                 }
               } else if (isState == 'Start') {
                 // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Matching()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Matching()));
               }
             },
           )
@@ -436,8 +422,7 @@ class _Blurting extends State<Blurting> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      for (var profileItem in ProfileList[index])
-                        profileItem
+                      for (var profileItem in ProfileList[index]) profileItem
                     ],
                   ),
                 ),
@@ -574,8 +559,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, isMatched);
@@ -589,7 +573,6 @@ class _Blurting extends State<Blurting> {
     }
   }
 
-  
   Future<void> fetchLatestComments() async {
     // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
     String savedToken = await getToken();
@@ -614,7 +597,7 @@ class _Blurting extends State<Blurting> {
             // print('createdAt : ${createdAt}');
 
             Duration timeDifference =
-            DateTime.now().add(Duration(hours: 9)).difference(createdAt);
+                DateTime.now().add(Duration(hours: 9)).difference(createdAt);
 
             print(timeDifference);
             setState(() {
@@ -656,7 +639,6 @@ class _Blurting extends State<Blurting> {
                 print('day3이 되엇는데도 day2 화살표 아직 안 보냄');
                 sendArrow(-1, 1);
               }
-
             }
           });
         }
@@ -665,8 +647,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
@@ -685,7 +666,7 @@ class _Blurting extends State<Blurting> {
 
     final url = Uri.parse(API.blurtingInfo);
     String savedToken = await getToken();
-    
+
     final response = await http.get(
       url,
       headers: {
@@ -704,33 +685,32 @@ class _Blurting extends State<Blurting> {
         for (final profileData in responseData) {
           if (mounted) {
             setState(() {
-
-                if (profileData['userId'] != Provider.of<UserProvider>(context, listen: false).userId) {
-                  ProfileList[0].add(profile(
-
+              if (profileData['userId'] !=
+                  Provider.of<UserProvider>(context, listen: false).userId) {
+                ProfileList[0].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 2,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                ProfileList[1].add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 1,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+                ProfileList[2].add(
+                  profile(
                       userName: profileData['userNickname'],
                       userSex: profileData['userSex'],
                       day: 2,
                       selected: false,
                       userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  ProfileList[1].add(profile(
-                      userName: profileData['userNickname'],
-                      userSex: profileData['userSex'],
-                      day: 1,
-                      selected: false,
-                      userId: profileData['userId'],
-                      clickProfile: clickProfile));
-                  ProfileList[2].add(
-                    profile(
-                        userName: profileData['userNickname'],
-                        userSex: profileData['userSex'],
-                        day: 2,
-                        selected: false,
-                        userId: profileData['userId'],
-                        clickProfile: clickProfile),
-                  );
-                }
+                      clickProfile: clickProfile),
+                );
+              }
               // }
             });
           }
@@ -749,8 +729,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchGroupInfo);
@@ -769,7 +748,7 @@ class _Blurting extends State<Blurting> {
 
     final url = Uri.parse(API.myArrow);
     String savedToken = await getToken();
-    
+
     final response = await http.get(
       url,
       headers: {
@@ -810,7 +789,7 @@ class _Blurting extends State<Blurting> {
           iSended[j] = true;
         }
 
-          print('얼마나 보냇냐');
+        print('얼마나 보냇냐');
         print(iSended);
 
         print('Response body: ${response.body}');
@@ -819,8 +798,7 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, MyArrow);
@@ -863,12 +841,11 @@ class _Blurting extends State<Blurting> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      await getnewaccesstoken(context, () async {}, null, null, null, null, sendArrow,
-          [userId, day]);
+      await getnewaccesstoken(context, () async {}, null, null, null, null,
+          sendArrow, [userId, day]);
       // sendArrow(userId, day);
 
       // count += 1;
@@ -904,10 +881,7 @@ class recievedProfile extends StatelessWidget {
               color: mainColor.lightPink,
               borderRadius: BorderRadius.circular(50)),
           child: Image.asset(
-
-            userSex == 'M'
-                ? 'assets/man.png' : 'assets/woman.png',
-
+            userSex == 'M' ? 'assets/man.png' : 'assets/woman.png',
           ),
         ),
         Container(
@@ -941,12 +915,12 @@ class profile extends StatefulWidget {
 
   profile(
       {super.key,
-        required this.day,
-        required this.selected,
-        required this.userId,
-        required this.userName,
-        required this.userSex,
-        required this.clickProfile});
+      required this.day,
+      required this.selected,
+      required this.userId,
+      required this.userName,
+      required this.userSex,
+      required this.clickProfile});
 
   @override
   State<profile> createState() => _profileState();
@@ -987,8 +961,8 @@ class _profileState extends State<profile> {
               widget.userSex == 'M'
                   ? 'assets/man.png'
                   : widget.userSex == 'none'
-                  ? 'assets/none.png'
-                  : 'assets/woman.png',
+                      ? 'assets/none.png'
+                      : 'assets/woman.png',
             ),
           ),
           Container(
@@ -1013,5 +987,4 @@ class _profileState extends State<profile> {
       ),
     );
   }
-
 }
