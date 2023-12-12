@@ -94,6 +94,15 @@ class _EmailPageState extends State<EmailPage>
 
     });
   }
+
+  String Email ='';
+  @override
+  void InputEmail(String value) {
+    setState(() {
+      Email = value;
+    });
+  }
+
   void _showVerificationSuccessedSnackBar({String message = '이메일 전송 완료'}) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -149,7 +158,6 @@ class _EmailPageState extends State<EmailPage>
   }
 
   Future<void> _sendPostRequest() async {
-
     certification = true;
     print('_sendPostRequest called');
     var url = Uri.parse(API.signupemail);
@@ -191,6 +199,7 @@ class _EmailPageState extends State<EmailPage>
       _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니다.');
     }
   }
+
   Future<void> _sendVerificationRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
@@ -220,9 +229,7 @@ class _EmailPageState extends State<EmailPage>
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
         await saveuserId(userId);
-
         var url = Uri.parse(API.notification);
-
         String savedToken = await getToken();
         print(savedToken);
         var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
@@ -243,7 +250,6 @@ class _EmailPageState extends State<EmailPage>
         _increaseProgressAndNavigate();
         Future.delayed(Duration(seconds: 2), _increaseProgressAndNavigate);
 
-
       }
       else{
         _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
@@ -258,13 +264,7 @@ class _EmailPageState extends State<EmailPage>
 
     }
   }
-  String Email ='';
-  @override
-  void InputEmail(String value) {
-    setState(() {
-      Email = value;
-    });
-  }
+
   bool certification = false;
 
   @override

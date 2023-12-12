@@ -32,19 +32,20 @@ class ProfileCard extends StatefulWidget {
   final List<String> imagePaths;
   final String userName;
   final String roomId;
+  final int blurValue;
 
   final IO.Socket socket;
   final int userId;
 
-  ProfileCard(
-      {required this.mainPageController,
-      required this.imagePaths,
-      required this.roomId,
-      required this.userName,
-      required this.socket,
-      required this.userId,
-      required this.blurValue,});
-
+  ProfileCard({
+    required this.mainPageController,
+    required this.imagePaths,
+    required this.roomId,
+    required this.userName,
+    required this.socket,
+    required this.userId,
+    required this.blurValue,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -88,8 +89,7 @@ class _ProfileCard extends State<ProfileCard> {
           userProfile = data;
           imagePaths = List<String>.from(userProfile['images']);
         });
-      }
-      else if (response.statusCode == 401) {
+      } else if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         await getnewaccesstoken(context, fetchUserProfile);
@@ -144,7 +144,7 @@ class _ProfileCard extends State<ProfileCard> {
                 child: Text(
                   '신고하기',
                   style: TextStyle(
-                    color: Colors.black,
+                      color: Colors.black,
                       fontFamily: "Heebo",
                       fontSize: 20,
                       fontWeight: FontWeight.w400),
@@ -251,40 +251,46 @@ class _ProfileCard extends State<ProfileCard> {
                   ],
                 ),
                 Container(
-                margin: EdgeInsets.only(top: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: (checkReason.any((element) => element == true)) ? () {
-                        Navigator.of(context).pop(); // 모달 닫기
-                        print('신고 접수');
-                        sendReport(widget.socket, reason);
-                        setState(() {});
-                      } : null,
-                      child: Container(
-                        width: 210,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: (checkReason.any((element) => element == true)) ? mainColor.MainColor : mainColor.lightGray,
-                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '신고하기',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Heebo",
-                                fontSize: 20,
-                                color: Colors.white),
+                  margin: EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed:
+                            (checkReason.any((element) => element == true))
+                                ? () {
+                                    Navigator.of(context).pop(); // 모달 닫기
+                                    print('신고 접수');
+                                    sendReport(widget.socket, reason);
+                                    setState(() {});
+                                  }
+                                : null,
+                        child: Container(
+                          width: 210,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color:
+                                (checkReason.any((element) => element == true))
+                                    ? mainColor.MainColor
+                                    : mainColor.lightGray,
+                            borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '신고하기',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Heebo",
+                                  fontSize: 20,
+                                  color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),  
               ],
             ),
           );
@@ -370,6 +376,18 @@ class _ProfileCard extends State<ProfileCard> {
     );
   }
 
+  double calculateBlurSigma(int blurValue) {
+    // Normalize the blur value to be between 0.0 and 1.0
+    if (blurValue == 4) {
+      return 0.0;
+    } else {
+      double normalizedBlur = (4 - blurValue) / 4.0;
+      print('blur % = ${normalizedBlur * 100}%');
+      // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
+      return normalizedBlur * 5;
+    }
+  }
+
   Widget _buildPhotoPage(int index) {
     // Similar to your _buildPhotoPage method
     if (imagePaths.isEmpty || index >= imagePaths.length) {
@@ -378,17 +396,6 @@ class _ProfileCard extends State<ProfileCard> {
         // You can customize this container to display a placeholder or handle the error.
         child: Text('No Image'),
       );
-    }
-    double calculateBlurSigma(int blurValue) {
-      // Normalize the blur value to be between 0.0 and 1.0
-      if (blurValue == 4) {
-        return 0.0;
-      } else {
-        double normalizedBlur = (4 - blurValue) / 4.0;
-        print('blur % = ${normalizedBlur * 100}%');
-        // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
-        return normalizedBlur * 5;
-      }
     }
 
     return Column(children: [
@@ -408,18 +415,16 @@ class _ProfileCard extends State<ProfileCard> {
               fontWeight: FontWeight.w400,
               color: Color(0XFFF66464),
             ),
-
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                iconSize: 20,
-                icon: Image.asset('assets/images/block.png'),
-                onPressed: () {
-                  _ClickWarningButton(context, widget.userId);
-                  print('신고 버튼 눌림');
-                },
-              ),
-
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              iconSize: 20,
+              icon: Image.asset('assets/images/block.png'),
+              onPressed: () {
+                _ClickWarningButton(context, widget.userId);
+                print('신고 버튼 눌림');
+              },
             ),
           ),
         ],

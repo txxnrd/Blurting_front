@@ -51,8 +51,7 @@ class _SettingPageState extends State<SettingPage> {
 
   int count = 10;
 
-Future<void> _sendDeleteRequest() async {
-
+  Future<void> _sendDeleteRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.user);
     String savedToken = await getToken();
@@ -92,9 +91,8 @@ Future<void> _sendDeleteRequest() async {
 
         await getnewaccesstoken(context, _sendDeleteRequest);
         // _sendDeleteRequest();
-        count+=1;
-        if(count==100) exit(1);
-
+        count += 1;
+        if (count == 100) exit(1);
       }
     }
   }
@@ -112,8 +110,8 @@ Future<void> _sendDeleteRequest() async {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-
-      body:json.encode({"title":"나는 이제 시험 공부하러","text":"총총총","type":"whisper"}),
+      body: json
+          .encode({"title": "나는 이제 시험 공부하러", "text": "총총총", "type": "whisper"}),
     );
     print(response.body);
   }
@@ -138,8 +136,6 @@ Future<void> _sendDeleteRequest() async {
             Navigator.pop(context);
           },
         ),
-
-
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -390,11 +386,11 @@ Future<void> _sendDeleteRequest() async {
 
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UseGuidePageOne()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => UseGuidePageOne()),
+                      // );
                     },
                     child: Container(
                       width: 100,
@@ -408,21 +404,26 @@ Future<void> _sendDeleteRequest() async {
                       ),
                     ),
                   ),
-          SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
 
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context)=> UseGuidePageOne()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context)=> UseGuidePageOne()),
+                      // );
                     },
-                    child:  Container(
-                      width:100, height: 22,
-                      child:
-                      Text(
+                    child: Container(
+                      width: 100,
+                      height: 22,
+                      child: Text(
                         '사용설명서로 이동',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
                       ),
                     ),
                   ),
