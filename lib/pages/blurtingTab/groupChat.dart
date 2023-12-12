@@ -50,7 +50,7 @@ class QuestionItem extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Heebo',
             fontSize: 15,
-            color: Color.fromRGBO(134, 134, 134, 1),
+            color: mainColor.Gray,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -59,7 +59,7 @@ class QuestionItem extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Heebo',
             fontSize: 15,
-            color: Color.fromRGBO(134, 134, 134, 1),
+            color: mainColor.Gray,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -357,7 +357,7 @@ class _GroupChat extends State<GroupChat> {
                 ? mainColor.MainColor
                 : _questionNumber >= index
                     ? mainColor.MainColor.withOpacity(0.5)
-                    : mainColor.lightGray,
+                    : mainColor.Gray,
           ),
           child: Text(
             '${index}',

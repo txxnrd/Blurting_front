@@ -5,7 +5,10 @@ import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
 
 class MainApp extends StatefulWidget {
-  MainApp({super.key});
+  
+  final int currentIndex;
+
+  MainApp({super.key, required this.currentIndex});
 
   @override
   _MainApp createState() => _MainApp();
@@ -20,6 +23,8 @@ class _MainApp extends State<MainApp> {
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.currentIndex;
+
     print('mainApp으로');
 
     _pages = [
@@ -33,7 +38,7 @@ class _MainApp extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
+      extendBody: _currentIndex == 2 ? true : false,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: const [

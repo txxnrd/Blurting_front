@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blurting/mainApp.dart';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
@@ -15,7 +16,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'blurting_project', // id
   'Blurting', // title
   importance: Importance.max,
-  description: "제발 되라 ㅠㅠ,",
+  description: "제발 돼라 ㅠㅠ,",
 );
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -64,19 +65,21 @@ Future<void> initFcm() async {
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     print("onMessageOpenedApp: $message");
-    if(message?.data['type'] == "whisper")
-    {
+    if (message?.data['type'] == "whisper") {
       print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
 
-      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => ChattingList())); }
-    else{
+      navigatorKey.currentState?.push(MaterialPageRoute(
+          builder: (context) => MainApp(
+                currentIndex: 2,
+              )));
+    } else {
       print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
-      navigatorKey.currentState?.push( MaterialPageRoute(builder: (context) => Blurting()));
-
-  }
-  
+      navigatorKey.currentState?.push(MaterialPageRoute(
+          builder: (context) => MainApp(
+                currentIndex: 1,
+              )));
+    }
   });
-
 }

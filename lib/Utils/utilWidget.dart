@@ -331,12 +331,12 @@ class OtherChat extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
+                        left: 10, right: 10, top: 5, bottom: 5),
                     child: Text(
                       message,
                       style: TextStyle(
                         fontFamily: "Pretendard",
-                        fontSize: 10,
+                        fontSize: 12,
                         color: Colors.black,
                       ),
                     ),
@@ -426,12 +426,12 @@ class _MyChatState extends State<MyChat> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: 20, right: 20, top: 10, bottom: 10),
+                                    left: 10, right: 10, top: 5, bottom: 5),
                                 child: Text(
                                   widget.message,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -1261,15 +1261,15 @@ class _AnswerItemState extends State<AnswerItem> {
                                   children: <Widget>[
                                     Container(
                                       margin: EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          top: 10,
-                                          bottom: 10),
+                                          left: 10,
+                                          right: 10,
+                                          top: 5,
+                                          bottom: 5),
                                       child: Text(
                                         widget.message,
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
-                                          fontSize: 10,
+                                          fontSize: 12,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -1454,7 +1454,7 @@ class staticButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: mainColor.MainColor,
       ),
-      margin: EdgeInsets.only(bottom: 100),
+      // margin: EdgeInsets.only(bottom: 100),
       width: MediaQuery.of(context).size.width * 0.9,
       height: 48,
       child: Column(

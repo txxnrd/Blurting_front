@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
@@ -27,11 +28,8 @@ List<bool> isTap = [
 
 List<List<Widget>> ProfileList = List.generate(
     3, (index) => <Widget>[]); // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
-// List<List<Widget>> myArrow = [];    // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
 
-
-  List<List<Widget>> dividedProfileList = List.generate(
-    2, (index) => <Widget>[]);
+List<List<Widget>> dividedProfileList = List.generate(2, (index) => <Widget>[]);
 
 bool isMine = false; // 내가 받은 화살표인지 화살 보내기인지
 
@@ -40,6 +38,7 @@ List<bool> isValidDay = [
   false,
   false
 ]; // day1, day2, day3 (상대를 선택할 수 있는 날짜)
+
 List<bool> iSended = [
   false,
   false,
@@ -77,7 +76,6 @@ class Blurting extends StatefulWidget {
 
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
-  // late IO.Socket socket;
 
   @override
   void initState() {
@@ -310,7 +308,7 @@ class _Blurting extends State<Blurting> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Blurting Info',
+                    'blurting info',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w700,
@@ -352,16 +350,28 @@ class _Blurting extends State<Blurting> {
 
               print('현재 저장되어 있는 마지막으로 들어간 시간: $lastTime');
 
+              DateTime day1Time = createdAt;     // 하루가 지난 시간
               DateTime day2Time = createdAt.add(Duration(hours: 24));     // 하루가 지난 시간
               DateTime day3Time = createdAt.add(Duration(hours: 48));     // 이틀이 지난 시간
 
+              print(day1Time);
               print(day2Time);
               print(day3Time);
 
+              print(day);
+
               if (isState == 'Continue') {
-                if (lastTime.isBefore(day2Time) ||
-                    lastTime.isBefore(day3Time)) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
+                    day == 'Day2' && (lastTime.isAfter(day2Time)) ||
+                    day == 'Day3' && (lastTime.isAfter(day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
                 {
+                  print('날이 바뀌고 처음 들어간 게 아님');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupChat(
+                              )));
+                } else {
                   print('날 바뀌고 처음');
                   Navigator.push(
                       context,
@@ -369,14 +379,6 @@ class _Blurting extends State<Blurting> {
                           builder: (context) => DayAni(
                                 day: day,
                               )));
-                } else {
-                  print('날이 바뀌고 처음 들어간 게 아님');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GroupChat(
-                              )));
-
                 }
               } else if (isState == 'Start') {
                 // 아직 방이 만들어지지 않음
@@ -698,7 +700,7 @@ class _Blurting extends State<Blurting> {
                   ProfileList[0].add(profile(
                       userName: profileData['userNickname'],
                       userSex: profileData['userSex'],
-                      day: 2,
+                      day: 0,
                       selected: false,
                       userId: profileData['userId'],
                       clickProfile: clickProfile));
@@ -784,7 +786,7 @@ class _Blurting extends State<Blurting> {
                 userName: iReceivedItem['username'], userSex: iReceivedItem['userSex']));
           }
         }
-        print(iSended);
+        print('내가 보낸 화살 맨 처음에: $iSended');
 
         int i = iSendedList.length;
         print(i);
@@ -793,7 +795,7 @@ class _Blurting extends State<Blurting> {
           iSended[j] = true;
         }
 
-          print('얼마나 보냇냐');
+        print('얼마나 보냇냐... http 요청 처리하고 난 뒤');
         print(iSended);
 
         print('Response body: ${response.body}');
@@ -926,9 +928,13 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
+
   @override
   Widget build(BuildContext context) {
     bool canSendArrow = isValidDay[widget.day];
+    print('고를 수 있는 날: $isValidDay');
+    print('$canSendArrow');
+    print(widget.day);
 
     return GestureDetector(
       onTap: () {

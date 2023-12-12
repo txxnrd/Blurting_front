@@ -26,7 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Timer(Duration(seconds: 6), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MainApp()),
+        MaterialPageRoute(builder: (context) => MainApp(currentIndex: 0,)),
       );
     });
   }

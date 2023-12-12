@@ -447,10 +447,9 @@ class _chattingList extends State<ChattingList> {
       socket.on('leave_room', (data) {
         // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
         // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
-        print(data);
-        print(data['userId']);
-        print(Provider.of<UserProvider>(context, listen: false).userId);
+        print('leave_room 소켓 받음');
         if (data['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
+          print('내가 나감');
           for (int i = 0; i < chatLists.length; i++) {
             Widget widget = chatLists[i];
             if (widget is ChatListItem) {
@@ -488,6 +487,8 @@ class _chattingList extends State<ChattingList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(244),
         child: AppBar(
