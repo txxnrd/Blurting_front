@@ -1,8 +1,14 @@
+import 'package:blurting/config/app_config.dart';
+import 'package:blurting/signupquestions/token.dart';
+import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class mainColor {
+  // ignore: non_constant_identifier_names
   static Color MainColor = Color.fromRGBO(246, 100, 100, 1);
+  // ignore: non_constant_identifier_names
   static Color Gray = Color.fromRGBO(134, 134, 134, 1);
   static Color lightGray = Color.fromRGBO(217, 217, 217, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
@@ -12,7 +18,7 @@ class GroupChatProvider with ChangeNotifier {
   bool _pointValid = false;
   bool _isPocus = false;
   DateTime _lastTime =
-      DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
+  DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
 
   bool get pointValid => _pointValid;
   bool get isPocus => _isPocus;
@@ -59,20 +65,25 @@ Future<int> getuserId() async {
   // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
   // 값이 없을 경우 'No Token'을 반환합니다.
   int userId = prefs.getInt('userId') ?? -1;
+  print(userId);
   return userId;
 }
 
-
 class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
-  static int UserId = 262;
-
+  
+  int _userId = 0;
   int _point = 0;
-  String token = '';
 
   int get point => _point;
+  int get userId => _userId;
 
   set point(int value) {
     _point = value;
+    notifyListeners();
+  }
+
+  set userId(int value){
+    _userId = value;
     notifyListeners();
   }
 }

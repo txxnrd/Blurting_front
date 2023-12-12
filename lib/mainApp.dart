@@ -1,15 +1,10 @@
-import 'dart:convert';
-
-import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/homeTab/Home.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
-import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/config/app_config.dart';
-import 'package:http/http.dart' as http;
+
+int count = 0;
 
 class MainApp extends StatefulWidget {
   MainApp({super.key});
@@ -21,36 +16,19 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTItMTJUMTA6NDk6MTguNTM1WiIsImlhdCI6MTcwMjM0NTc1OCwiZXhwIjoxNzAyMzQ5MzU4fQ.TDTzIb8GcI_TnQEtZ3FPhjtGz-cjpMLbVAE5bCBHuyI';
-
-  IO.Socket socket = IO
-      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-    'transports': ['websocket'],
-    'auth': {'authorization': 'Bearer $token'},
-    // 'reconnectionAttempts': 0,
-  });
 
   late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
-    fetchPoint(token);
-
-    socket.on('connect', (_) {
-      print('소켓 연결됨');
-    });
-
-    socket.on('disconnect', (_) {
-      print('소켓 연결 끊김');
-    });
+    print('mainApp으로');
 
     _pages = [
-      Home(token: token),
-      Blurting(socket: socket, token: token),
-      ChattingList(socket: socket, token: token),
-      MyPage(token: token),
+      Home(),
+      Blurting(),
+      ChattingList(),
+      MyPage(),
     ];
   }
 
@@ -125,38 +103,6 @@ class _MainApp extends State<MainApp> {
     );
   }
 
-  Future<void> fetchPoint(String token) async {
-    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
-
-    final url = Uri.parse(API.userpoint);
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      try {
-        Map<String, dynamic> responseData = jsonDecode(response.body);
-
-        if (mounted) {
-          setState(() {
-            Provider.of<UserProvider>(context, listen: false).point =
-                responseData['point'];
-          });
-        }
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
-    } else {
-      print(response.statusCode);
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
-    }
-  }
 }
 
 class TabItem extends StatelessWidget {
@@ -166,9 +112,9 @@ class TabItem extends StatelessWidget {
 
   TabItem(
       {super.key,
-      required this.currentIndex,
-      required this.image,
-      required this.name});
+        required this.currentIndex,
+        required this.image,
+        required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +126,9 @@ class TabItem extends StatelessWidget {
           child: _currentIndex == currentIndex
               ? Image.asset(image)
               : Image.asset(
-                  image,
-                  color: Color.fromRGBO(217, 217, 217, 1),
-                ),
+            image,
+            color: Color.fromRGBO(217, 217, 217, 1),
+          ),
         ),
         Text(
           name,

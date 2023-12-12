@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:blurting/signupquestions/sex.dart';
@@ -148,6 +149,10 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       {
         var token = data['accessToken'];
         var refreshtoken = data['refreshToken'];
+        var userId = data['id'];
+
+        print(userId);
+        await saveuserId(userId);
 
         print(token);
         await saveToken(token);

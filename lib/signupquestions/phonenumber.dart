@@ -36,14 +36,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       if (_duration.inSeconds == 0) {
         timer.cancel();
       } else {
-        setState(() {
-          _duration -= Duration(seconds: 1);
-        });
+        if (mounted) {
+          setState(() {
+            _duration -= Duration(seconds: 1);
+          });
+        }
       }
     });
   }
-
-
 
   late FocusNode myFocusNode;
 
