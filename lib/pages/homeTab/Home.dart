@@ -184,7 +184,7 @@ class _HomeState extends State<Home> {
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Heebo',
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),
                         overflow: TextOverflow.ellipsis,
