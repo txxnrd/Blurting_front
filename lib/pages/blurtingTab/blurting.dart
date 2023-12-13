@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
@@ -8,8 +9,8 @@ import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/pages/blurtingTab/matchingAni.dart';
 import 'package:blurting/pages/blurtingTab/dayAni.dart';
@@ -27,7 +28,6 @@ List<bool> isTap = [
 
 List<List<Widget>> ProfileList = List.generate(
     3, (index) => <Widget>[]); // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
-// List<List<Widget>> myArrow = [];    // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
 
 List<List<Widget>> dividedProfileList = List.generate(2, (index) => <Widget>[]);
 
@@ -38,6 +38,7 @@ List<bool> isValidDay = [
   false,
   false
 ]; // day1, day2, day3 (상대를 선택할 수 있는 날짜)
+
 List<bool> iSended = [
   false,
   false,
@@ -74,7 +75,6 @@ class Blurting extends StatefulWidget {
 
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
-  // late IO.Socket socket;
 
   @override
   void initState() {
@@ -307,7 +307,7 @@ class _Blurting extends State<Blurting> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Blurting Info',
+                    'blurting info',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w700,
@@ -343,33 +343,48 @@ class _Blurting extends State<Blurting> {
           GestureDetector(
             child: staticButton(text: isState),
             onTap: () async {
-              DateTime lastTime =
-                  Provider.of<GroupChatProvider>(context, listen: false)
-                      .lastTime
-                      .add(Duration(hours: 9));
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
+              DateTime lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
+
+              print('현재 저장되어 있는 마지막으로 들어간 시간: $lastTime');
+
+              DateTime day1Time = createdAt;     // 하루가 지난 시간
+              DateTime day2Time = createdAt.add(Duration(hours: 24));     // 하루가 지난 시간
+              DateTime day3Time = createdAt.add(Duration(hours: 48));     // 이틀이 지난 시간
+
+              print(day1Time);
+              print(day2Time);
+              print(day3Time);
+
+              print(day);
 
               if (isState == 'Continue') {
-                if (lastTime.isBefore(createdAt.add(Duration(hours: 24))) ||
-                    lastTime.isBefore(createdAt.add(Duration(
-                        hours:
-                            48)))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
+                    day == 'Day2' && (lastTime.isAfter(day2Time)) ||
+                    day == 'Day3' && (lastTime.isAfter(day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
                 {
-                  // ignore: use_build_context_synchronously
+                  print('날이 바뀌고 처음 들어간 게 아님');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupChat(
+                              )));
+                } else {
+                  print('날 바뀌고 처음');
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => DayAni(
                                 day: day,
                               )));
-                } else {
-                  // 날이 바뀌고 처음 들어간 게 아님
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => GroupChat()));
                 }
               } else if (isState == 'Start') {
-                // 아직 방이 만들어지지 않음 -> 들어간 시간 초기화
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Matching()));
+                // 아직 방이 만들어지지 않음
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Matching()));
               }
             },
           )
@@ -416,7 +431,7 @@ class _Blurting extends State<Blurting> {
                     fontFamily: 'Heebo'),
               ),
             if (!iSended[currentPage])
-              if (ProfileList[currentPage].length <= 3)
+              if (ProfileList[currentPage].length <= 4)
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: Row(
@@ -427,7 +442,7 @@ class _Blurting extends State<Blurting> {
                   ),
                 ),
             if (!iSended[currentPage])
-              if (ProfileList[currentPage].length > 3)
+              if (ProfileList[currentPage].length > 4)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -563,10 +578,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, isMatched);
-      // isMatched();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
@@ -651,10 +662,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
-      // fetchLatestComments();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
@@ -690,7 +697,7 @@ class _Blurting extends State<Blurting> {
                 ProfileList[0].add(profile(
                     userName: profileData['userNickname'],
                     userSex: profileData['userSex'],
-                    day: 2,
+                    day: 0,
                     selected: false,
                     userId: profileData['userId'],
                     clickProfile: clickProfile));
@@ -733,10 +740,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchGroupInfo);
-      // fetchGroupInfo();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupInfo : 블러팅 정보를 로드하는 데 실패했습니다');
@@ -780,7 +783,7 @@ class _Blurting extends State<Blurting> {
                 userSex: iReceivedItem['userSex']));
           }
         }
-        print(iSended);
+        print('내가 보낸 화살 맨 처음에: $iSended');
 
         int i = iSendedList.length;
         print(i);
@@ -788,8 +791,7 @@ class _Blurting extends State<Blurting> {
           if (j >= 3) break;
           iSended[j] = true;
         }
-
-        print('얼마나 보냇냐');
+        
         print(iSended);
 
         print('Response body: ${response.body}');
@@ -802,10 +804,6 @@ class _Blurting extends State<Blurting> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, MyArrow);
-      // MyArrow();
-
-      // count += 1;
-      // if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('myArrow: 화살표 정보를 로드하는 데 실패했습니다');
@@ -844,12 +842,8 @@ class _Blurting extends State<Blurting> {
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      await getnewaccesstoken(context, () async {}, null, null, null, null,
-          sendArrow, [userId, day]);
-      // sendArrow(userId, day);
-
-      // count += 1;
-      // if (count == 10) exit(1);
+      await getnewaccesstoken(context, () async {}, null, null, null, null, sendArrow,
+          [userId, day]);
     } else {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
@@ -927,9 +921,13 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
+
   @override
   Widget build(BuildContext context) {
     bool canSendArrow = isValidDay[widget.day];
+    print('고를 수 있는 날: $isValidDay');
+    print('$canSendArrow');
+    print(widget.day);
 
     return GestureDetector(
       onTap: () {
@@ -937,6 +935,7 @@ class _profileState extends State<profile> {
         } else {
           if (canSendArrow) {
             print('눌림');
+            print(widget.userId);
             setState(() {
               widget.thisSelected = !widget.thisSelected;
             });

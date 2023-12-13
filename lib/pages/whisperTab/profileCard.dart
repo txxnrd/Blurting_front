@@ -1,5 +1,3 @@
-// profile_card_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'dart:convert';
@@ -8,24 +6,11 @@ import 'dart:ui';
 
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import '../../config/app_config.dart';
-import 'package:blurting/pages/whisperTab/whisper.dart';
-import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/Utils/time.dart';
-import 'package:flutter/material.dart';
-import 'package:blurting/Utils/utilWidget.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/config/app_config.dart';
-import 'package:http/http.dart' as http;
-import 'package:blurting/pages/myPage/MyPage.dart';
-import 'package:blurting/pages/whisperTab/profileCard.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 class ProfileCard extends StatefulWidget {
   final PageController mainPageController;
@@ -93,10 +78,6 @@ class _ProfileCard extends State<ProfileCard> {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         await getnewaccesstoken(context, fetchUserProfile);
-        // fetchUserProfile();
-
-        count += 1;
-        if (count == 10) exit(1);
       } else {
         print(
             'Failed to load user profile. Status code: ${response.statusCode}');
@@ -376,7 +357,7 @@ class _ProfileCard extends State<ProfileCard> {
     );
   }
 
-  double calculateBlurSigma(int blurValue) {
+  static double calculateBlurSigma(int blurValue) {
     // Normalize the blur value to be between 0.0 and 1.0
     if (blurValue == 4) {
       return 0.0;

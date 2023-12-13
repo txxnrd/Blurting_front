@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
@@ -12,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/profileCard.dart';
 
 class Whisper extends StatefulWidget {
@@ -264,10 +262,10 @@ class _Whisper extends State<Whisper> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: () {
+              onTap: (!isBlock) ? () {
                 // Show the profile card as a bottom sheet
                 _showProfileModal(context);
-              },
+              } : null,
               child: Container(
                 width: 70,
                 height: 70,
@@ -650,16 +648,23 @@ class _Whisper extends State<Whisper> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchChats);
-      // fetchChats();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');
     }
   }
-}
+  
+  static double calculateBlurSigma(int blurValue) {
+    // Normalize the blur value to be between 0.0 and 1.0
+    if (blurValue == 4) {
+      return 0.0;
+    } else {
+      double normalizedBlur = (4 - blurValue) / 4.0;
+      print('blur % = ${normalizedBlur * 100}%');
+      // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
+      return normalizedBlur * 5;
+    }
+  }}
 
 class DateWidget extends StatelessWidget {
   final String date;
