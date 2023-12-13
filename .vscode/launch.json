@@ -6,13 +6,6 @@
   "configurations": [
     {
       "name": "Blurting_front",
-      "type": "dart",
-      "request": "launch",
-      "program": "lib/MyPage.dart"
-    },
-
-    {
-      "name": "Blurting_front",
       "request": "launch",
       "type": "dart"
     },

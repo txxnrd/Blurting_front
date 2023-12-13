@@ -60,6 +60,8 @@ class _Whisper extends State<Whisper> {
     // await
     fetchChats();
 
+    precacheImage(NetworkImage(appbarphoto), context);
+
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
 
     widget.socket.emit('in_room', data);
@@ -221,6 +223,18 @@ class _Whisper extends State<Whisper> {
     } catch (e) {
       print('Error parsing DateTime: $e');
       return DateTime.now(); // 혹은 다른 기본 값으로 대체
+    }
+  }
+
+  double calculateBlurSigma(int blurValue) {
+    // Normalize the blur value to be between 0.0 and 1.0
+    if (blurValue == 4) {
+      return 0.0;
+    } else {
+      double normalizedBlur = (4 - blurValue) / 4.0;
+      print('blur % = ${normalizedBlur * 100}%');
+      // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
+      return normalizedBlur * 5;
     }
   }
 
