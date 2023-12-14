@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
@@ -42,7 +41,7 @@ class QuestionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
@@ -54,13 +53,18 @@ class QuestionItem extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        Text(
-          question,
-          style: TextStyle(
-            fontFamily: 'Heebo',
-            fontSize: 15,
-            color: mainColor.Gray,
-            fontWeight: FontWeight.w500,
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.98,
+          child: Text(
+            question,
+            style: TextStyle(
+              fontFamily: 'Heebo',
+              fontSize: 15,
+              color: mainColor.Gray,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.fade,
+            textAlign: TextAlign.center,
           ),
         ),
       ],
@@ -78,6 +82,8 @@ class GroupChat extends StatefulWidget {
 }
 
 class _GroupChat extends State<GroupChat> {
+  PageController _pageController = PageController();
+
   TextEditingController _controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
   List<bool> isBlock = List<bool>.filled(10, false);
@@ -89,7 +95,10 @@ class _GroupChat extends State<GroupChat> {
     super.initState();
     
     Future<void> initializeSocket() async {
+      // 맨 처음 들어왔을 땐 마지막...
       await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
+
+      print(_questionNumber);
 
       socket.on('create_room', (data) {
         print(data);
@@ -119,6 +128,7 @@ class _GroupChat extends State<GroupChat> {
     }
 
     initializeSocket();
+    _pageController = PageController(initialPage: _questionNumber - 1);
 
     loadTime();
 
@@ -127,15 +137,8 @@ class _GroupChat extends State<GroupChat> {
   @override
   void dispose() {
     super.dispose();
+    _pageController.dispose();
     socket.disconnect();
-    saveTime();
-  }
-
-  // 데이터를 로컬에 저장하는 함수
-  saveTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('timeInSeconds', DateTime.now().add(Duration(hours: 9)).toString());
-    print('나가는 시간: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
   }
 
   // 저장된 데이터를 로컬에서 불러오는 함수
@@ -153,9 +156,9 @@ class _GroupChat extends State<GroupChat> {
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    });
+    // SchedulerBinding.instance!.addPostFrameCallback((_) {
+    //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    // });
 
     return Scaffold(
       appBar: AppBar(
@@ -227,7 +230,7 @@ class _GroupChat extends State<GroupChat> {
             alignment: Alignment.center,
             children: [
               Container(
-                height: 70,
+                height: 80,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -260,79 +263,101 @@ class _GroupChat extends State<GroupChat> {
               ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(top: 240), // 시작 위치에 여백 추가
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Column(
-                            children: <Widget>[
-                              for (var answer in answerList[currentIndex])
-                                answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
-
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              if (Provider.of<GroupChatProvider>(context).isPocus)
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 500),
-                  margin: EdgeInsets.all(10),
-                  width: 73,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Provider.of<GroupChatProvider>(context).pointValid
-                        ? mainColor.MainColor
-                        : Colors.white,
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                          margin: EdgeInsets.only(left: 5, right: 3),
-                          child: Image.asset(
-                            'assets/images/check.png',
-                            color: Provider.of<GroupChatProvider>(context)
-                                    .pointValid
-                                ? Colors.white
-                                : mainColor.lightGray,
-                          )),
-                      Text(
-                        '100자 이상',
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: "Heebo",
-                            color: Provider.of<GroupChatProvider>(context)
-                                    .pointValid
-                                ? Colors.white
-                                : mainColor.lightGray),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              CustomInputField(
-                controller: _controller,
-                sendFunction: SendAnswer,
-                isBlock: isBlock[currentIndex],
-                hintText: "이미 답변이 완료된 질문입니다.",
-                questionId: 1,
-              ),
-            ],
+          Container(
+            margin: EdgeInsets.only(top: 250), // 시작 위치에 여백 추가
+            child: PageView.builder(
+              controller: _pageController,
+                  // PageController(initialPage: _questionNumber - 1),
+              itemCount: _questionNumber, // 전체 페이지 수
+              itemBuilder: (BuildContext context, int index) {
+                return questionPage(index + 1);
+              },
+              onPageChanged: (index) {
+                setState(() {
+                  currentIndex = index + 1;
+                  fetchIndexComments(currentIndex);
+                });
+              },
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget questionPage(int index) {
+    ScrollController pageScrollController =
+        ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      pageScrollController
+          .jumpTo(pageScrollController.position.maxScrollExtent);
+    });
+
+    return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            controller: pageScrollController,
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Column(
+                    children: <Widget>[
+                      for (var answer in answerList[index])
+                        answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (Provider.of<GroupChatProvider>(context).isPocus)
+          AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
+            width: 73,
+            height: 20,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Provider.of<GroupChatProvider>(context).pointValid
+                  ? mainColor.MainColor
+                  : Colors.white,
+            ),
+            child: Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 5, right: 3),
+                    child: Image.asset(
+                      'assets/images/check.png',
+                      color: Provider.of<GroupChatProvider>(context).pointValid
+                          ? Colors.white
+                          : mainColor.lightGray,
+                    )),
+                Text(
+                  '100자 이상',
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontFamily: "Heebo",
+                      color: Provider.of<GroupChatProvider>(context).pointValid
+                          ? Colors.white
+                          : mainColor.lightGray),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        CustomInputField(
+          controller: _controller,
+          sendFunction: SendAnswer,
+          isBlock: isBlock[currentIndex],
+          hintText: "이미 답변이 완료된 질문입니다.",
+          questionId: 1,
+        ),
+      ],
     );
   }
 
@@ -343,8 +368,11 @@ class _GroupChat extends State<GroupChat> {
       child: InkWell(
         onTap: (_questionNumber >= index)
             ? () {
-                currentIndex = index;
-                fetchIndexComments(currentIndex);
+                _pageController.animateToPage(
+                  index - 1,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
               }
             : null,
         child: AnimatedDefaultTextStyle(
@@ -406,6 +434,7 @@ class _GroupChat extends State<GroupChat> {
         if (mounted) {
           setState(() {
             _questionNumber = responseData['questionNo'];
+
             _question = responseData['question'];
             currentIndex = _questionNumber;
             currentQuestionId = responseData['questionId'];
