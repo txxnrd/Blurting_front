@@ -59,6 +59,8 @@ class _Whisper extends State<Whisper> {
     await fetchChats();
     image = Image.network(appbarphoto);
 
+    precacheImage(NetworkImage(appbarphoto), context);
+
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
 
     widget.socket.emit('in_room', data);
@@ -249,10 +251,12 @@ class _Whisper extends State<Whisper> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: (!isBlock) ? () {
-                // Show the profile card as a bottom sheet
-                _showProfileModal(context);
-              } : null,
+              onTap: (!isBlock)
+                  ? () {
+                      // Show the profile card as a bottom sheet
+                      _showProfileModal(context);
+                    }
+                  : null,
               child: Container(
                 width: 60,
                 height: 60,
@@ -638,7 +642,7 @@ class _Whisper extends State<Whisper> {
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');
     }
   }
-  
+
   static double calculateBlurSigma(int blurValue) {
     // Normalize the blur value to be between 0.0 and 1.0
     if (blurValue == 4) {
@@ -649,7 +653,8 @@ class _Whisper extends State<Whisper> {
       // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
       return normalizedBlur * 5;
     }
-  }}
+  }
+}
 
 class DateWidget extends StatelessWidget {
   final String date;
