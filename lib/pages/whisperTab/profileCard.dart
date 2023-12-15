@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:blurting/signupquestions/token.dart';

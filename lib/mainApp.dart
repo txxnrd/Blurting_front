@@ -125,7 +125,7 @@ class TabItem extends StatelessWidget {
       children: [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 5),
-          height: 25,
+          height: 20,
           child: _currentIndex == currentIndex
               ? Image.asset(image)
               : Image.asset(
