@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/activeplace.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/personality.dart'; // sex.dart를 임포트
@@ -74,21 +74,7 @@ bool IsValid = false;
         setState(() {});
       });
   }
-  Future<String> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-    // 값이 없을 경우 'No Token'을 반환합니다.
-    String token = prefs.getString('signupToken') ?? 'No Token';
-    return token;
-  }
 
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('signupToken', token);
-    // 저장된 값을 확인하기 위해 바로 불러옵니다.
-    String savedToken = prefs.getString('signupToken') ?? 'No Token';
-    print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
-  }
 
   void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
     final snackBar = SnackBar(
@@ -275,7 +261,7 @@ bool IsValid = false;
             ),
             SizedBox(height: 30),
             Container(
-              width: 44,
+              width: 60,
               height: 12,
               child: Text(
                 '에너지방향',
@@ -297,12 +283,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedEorI == EorI.e
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -318,7 +304,10 @@ bool IsValid = false;
                     child: Text(
                       'E',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color:
+                        _selectedEorI == EorI.e
+                            ? Colors.white
+                            :  Color(0xFF303030),
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -332,12 +321,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedEorI == EorI.i
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -353,7 +342,9 @@ bool IsValid = false;
                     child: Text(
                       'I',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color:  _selectedEorI == EorI.i
+                            ? Colors.white
+                            : Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -418,12 +409,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedSorN == SorN.s
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -439,7 +430,9 @@ bool IsValid = false;
                     child: Text(
                       'S',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color: _selectedSorN == SorN.s
+                            ? Colors.white
+                            : Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -453,12 +446,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedSorN == SorN.n
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -474,7 +467,8 @@ bool IsValid = false;
                     child: Text(
                       'N',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color:  _selectedSorN == SorN.n
+                            ? Colors.white: Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -537,12 +531,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedTorF == TorF.t
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -558,7 +552,9 @@ bool IsValid = false;
                     child: Text(
                       'T',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color:_selectedTorF == TorF.t
+                            ? Colors.white
+                            : Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -572,12 +568,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedTorF == TorF.f
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -593,7 +589,9 @@ bool IsValid = false;
                     child: Text(
                       'F',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color: _selectedTorF == TorF.f
+                            ? Colors.white
+                            : Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -656,12 +654,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedJorP == JorP.j
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -677,7 +675,9 @@ bool IsValid = false;
                     child: Text(
                       'J',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color:_selectedJorP == JorP.j
+                            ? Colors.white
+                            : Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -691,12 +691,12 @@ bool IsValid = false;
                   child: TextButton(
                     style: TextButton.styleFrom(
                       side: BorderSide(
-                        color: Color(0xFF868686),
+                        color: Color(DefinedColor.lightgrey),
                         width: 2,
                       ),
                       primary: Color(0xFF303030),
                       backgroundColor: _selectedJorP == JorP.p
-                          ? Color(0xFF868686)
+                          ? Color(DefinedColor.lightgrey)
                           : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -712,7 +712,9 @@ bool IsValid = false;
                     child: Text(
                       'P',
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color:_selectedJorP == JorP.p
+                            ? Colors.white
+                            : Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,

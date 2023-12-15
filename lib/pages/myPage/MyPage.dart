@@ -1,8 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/startpage.dart';
-import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
@@ -10,7 +9,6 @@ import 'package:blurting/Utils/utilWidget.dart';
 
 import '../../config/app_config.dart';
 import '../../settings/setting.dart';
-import 'MyPageEdit.dart';
 
 String getCigaretteString(int? cigarette) {
   switch (cigarette) {
@@ -42,10 +40,6 @@ String getDrinkString(int? drink) {
   }
 }
 
-void main() {
-  runApp(MyPage());
-}
-
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
@@ -63,23 +57,35 @@ class _MyPage extends State<MyPage> {
   Map<String, dynamic> userProfile = {};
 
   Future<void> goToMyPageEdit(BuildContext context) async {
-    print("설정 버튼 눌러짐");
-    var token = getToken();
-    print(token);
+    print("수정 버튼 눌러짐");
+    // var token = getToken();
+    // print(token);
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
+    String savedToken = await getToken();
 
-    String accessToken = await getToken();
-    String refreshToken = await getRefreshToken();
-    print("access Token" + accessToken);
-    print("access Token" + refreshToken);
+    // String accessToken = await getToken();
+    // String refreshToken = await getRefreshToken();
+    // print("access Token$accessToken");
+    // print("refresh Token$refreshToken");
+// =======
+//     // String accessToken = await getToken();
+//     // String refreshToken = await getRefreshToken();
+//     String accessToken =
+//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+//     String refreshToken =
+//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
+
+//     print("access Token" + accessToken);
+//     print("access Token" + refreshToken);
+// >>>>>>> main
 
     var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $savedToken',
       },
     );
 
@@ -107,20 +113,13 @@ class _MyPage extends State<MyPage> {
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-        getnewaccesstoken(context);
-        goToMyPageEdit(context);
+        await getnewaccesstoken(context, () async {
+          // callback0의 내용
+          print('Callback0 called');
+        }, goToMyPageEdit, context, null, null);
       }
     }
   }
-
-  // 이미지 경로 리스트
-  // final List<String> imagePaths = [
-  //   'assets/woman.png',
-  //   'assets/man.png',
-  //   'assets/signupface.png',
-  // ];
-
-  // int currentPage = 0;
 
   @override
   void initState() {
@@ -130,13 +129,13 @@ class _MyPage extends State<MyPage> {
 
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
+    String savedToken = await getToken();
+        // var savedToken = getToken();
+    // var savedToken =
+    //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
+    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
 
-    // var savedToken = getToken();
-    var savedToken =
-        // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA0LCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTU6NTU6NDQuNTY0WiIsImlhdCI6MTcwMDQ2MzM0NCwiZXhwIjoxNzAwNDY2OTQ0fQ.QkU73nwFbVlcYPtcz6V_iUxjG9uwNlJnMxha_gNjPaE';
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAwLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTg6MjM6MTYuODY4WiIsImlhdCI6MTcwMDQ3MjE5NiwiZXhwIjoxNzAwNDc1Nzk2fQ.dupIHGs5jWIql0-kwQJj21Hue-fXNqCLToB6FkUJ5hU';
-    print(savedToken);
-
+    // print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -144,17 +143,20 @@ class _MyPage extends State<MyPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-
     print('Response Status Code: ${response.statusCode}');
     print('Response Body: ${response.body}');
     print('Response Headers: ${response.headers}');
-
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       setState(() {
         userProfile = data;
         imagePaths = List<String>.from(userProfile['images']);
       });
+    }
+    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchUserProfile);
     } else {
       print('Failed to load user profile. Status code: ${response.statusCode}');
     }
@@ -163,162 +165,189 @@ class _MyPage extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 244,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: <Widget>[
-          pointAppbar(point: 120),
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-                print("설정 버튼 눌러짐");
-                var token = getToken();
-                print(token);
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SettingPage()),
-                );
-              },
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(244),
+          child: AppBar(
+            toolbarHeight: 80,
+            scrolledUnderElevation: 0.0,
+            automaticallyImplyLeading: false,
+            flexibleSpace: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 80),
+                    padding: EdgeInsets.all(13),
+                    child: ellipseText(text: 'My Profile')),
+              ],
             ),
-          ),
-        ],
-        title: Container(
-          margin: EdgeInsets.only(top: 70),
-          height: 80,
-          child: Container(
-            padding: EdgeInsets.all(13),
-            child: ellipseText(text: 'My Profile'),
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size(10, 10),
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              Container(
-                height: 70,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              pointAppbar(),
+              IconButton(
+                icon: Image.asset('assets/images/setting.png'),
+                color: Color.fromRGBO(48, 48, 48, 1),
+                onPressed: () {
+                  print("설정 버튼 눌러짐");
+                  var token = getToken();
+                  print(token);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SettingPage()),
+                  );
+                },
               ),
+              SizedBox(width: 10),
             ],
           ),
         ),
-      ),
-      extendBodyBehindAppBar: true,
-      body: Container(
-        padding: EdgeInsets.only(top: 150), // 시작 위치에 여백 추가
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(top: 20),
+        extendBodyBehindAppBar: true,
+        body: Container(
+          padding: EdgeInsets.only(top: 150), // 시작 위치에 여백 추가
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Center(
+                child: Container(
+                  margin: EdgeInsets.only(top: 20),
+                  alignment: Alignment.center,
+                  width: 259,
+                  height: 346, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: Border.all(color: Color(0xFFFF7D7D), width: 3),
+                  ),
+                  child: PageView(controller: mainPageController, children: [
+                    Column(
+                      children: [
+                        _buildPhotoPage(0),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 40,
+                            ),
+                            buildPinkBox(
+                                '#${userProfile['nickname']}' ?? 'Unknown'),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            buildPinkBox('#${userProfile['mbti']}' ?? 'Unknown')
+                          ],
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        _buildPhotoPage(1),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (int i = 0;
+                              i < (userProfile['hobby']?.length ?? 0);
+                              i += 2)
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(width: 40), // 들여쓰기 시작
+                                    buildPinkBox('#${userProfile['hobby'][i]}'),
+                                    SizedBox(
+                                        width:
+                                        8), // Adjust the spacing between boxes
+                                    if (i + 1 < userProfile['hobby']!.length)
+                                      buildPinkBox(
+                                          '#${userProfile['hobby'][i + 1]}'),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        _buildPhotoPage(2),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (int i = 0;
+                              i < (userProfile['character']?.length ?? 0);
+                              i += 2)
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(width: 40), // 들여쓰기 시작
+                                    buildPinkBox(
+                                        '#${userProfile['character'][i]}'),
+                                    SizedBox(
+                                        width:
+                                        8), // Adjust the spacing between boxes
+                                    if (i + 1 <
+                                        userProfile['character']!.length)
+                                      buildPinkBox(
+                                          '#${userProfile['character'][i + 1]}'),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        _buildInfoPage(titles: [
+                          '지역:',
+                          '종교:',
+                          '전공:',
+                          '키:',
+                          '흡연정도:',
+                          '음주정도:',
+                        ], values: [
+                          userProfile['region'].toString() ?? 'Unknown',
+                          userProfile['religion'].toString() ?? 'Unknown',
+                          userProfile['major'].toString() ?? 'Unknown',
+                          userProfile['height'].toString() ?? 'Unknown',
+                          getCigaretteString(userProfile['cigarette']) ??
+                              'Unknown',
+                          getDrinkString(userProfile['drink']) ?? 'Unknown',
+                        ]),
+                      ],
+                    ),
+                  ]),
+                ),
+              ),
+              Container(
+                width: double.infinity,
                 alignment: Alignment.center,
-                width: 300,
-                height: 400, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                child: SmoothPageIndicator(
+                  controller: mainPageController,
+                  count: 4,
+                  effect: ScrollingDotsEffect(
+                    dotColor: Color(0xFFFFD2D2),
+                    activeDotColor: Color(0xFFF66464),
+                    activeStrokeWidth: 10,
+                    activeDotScale: 1.7,
+                    maxVisibleDots: 5,
+                    radius: 8,
+                    spacing: 10,
+                    dotHeight: 5,
+                    dotWidth: 5,
                   ),
-                  border: Border.all(color: Color(0xFFFF7D7D), width: 3),
-                ),
-                child: PageView(controller: mainPageController, children: [
-                  // _buildPhotoPage(1),
-                  // _buildPhotoPage(2),
-                  Column(
-                    children: [
-                      _buildPhotoPage(0),
-                      for (String character in userProfile['character'] ?? [])
-                        buildPinkBox('#$character'),
-                      for (String hobby in userProfile['hobby'] ?? [])
-                        buildPinkBox('#$hobby'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      _buildInfoPage(titles: [
-                        '지역:',
-                        '종교:',
-                        '전공:',
-                        '키:',
-                        '흡연정도:',
-                        '음주정도:',
-                      ], values: [
-                        userProfile['region'].toString() ?? 'Unknown',
-                        userProfile['religion'].toString() ?? 'Unknown',
-                        userProfile['major'].toString() ?? 'Unknown',
-                        userProfile['height'].toString() ?? 'Unknown',
-                        getCigaretteString(userProfile['cigarette']) ??
-                            'Unknown',
-                        getDrinkString(userProfile['drink']) ?? 'Unknown',
-                      ]),
-                      Center(
-                        child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Container(
-                              width: 350,
-                              height: 48,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF66464),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Edit',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      fontFamily: 'pretendard',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                onPressed: () {
-                                  print("edit 버튼 클릭됨");
-                                  goToMyPageEdit(context);
-                                },
-                              ),
-                            )),
-                      )
-                    ],
-                  ),
-                ]),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: SmoothPageIndicator(
-                controller: mainPageController,
-                count: 2,
-                effect: ScrollingDotsEffect(
-                  dotColor: Color(0xFFFFD2D2),
-                  activeDotColor: Color(0xFFF66464),
-                  activeStrokeWidth: 10,
-                  activeDotScale: 1.7,
-                  maxVisibleDots: 5,
-                  radius: 8,
-                  spacing: 10,
-                  dotHeight: 5,
-                  dotWidth: 5,
                 ),
               ),
-            ),
-            GestureDetector(
-              child: staticButton(text: 'Edit'),
-              onTap: () {
-                goToMyPageEdit(context);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+              GestureDetector(
+                child: staticButton(text: 'Edit'),
+                onTap: () {
+                  goToMyPageEdit(context);
+                  print('edit 버튼 클릭됨');
+                },
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget _buildPhotoPage(int index) {
@@ -333,10 +362,10 @@ class _MyPage extends State<MyPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 13, 0, 0),
         ),
         Text(
-          'Photo',
+          'Photo ${index + 1}',
           style: TextStyle(
             fontFamily: 'Heedo',
             fontSize: 20,
@@ -345,13 +374,14 @@ class _MyPage extends State<MyPage> {
           ),
         ),
         SizedBox(
-          height: 20,
+          height: 14,
         ),
         Container(
           color: Colors.white,
-          width: 200,
-          height: 200,
-          child: ClipOval(
+          width: 175,
+          height: 190,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
             child: Image.network(
               imagePaths[index],
               fit: BoxFit.cover,
@@ -405,14 +435,14 @@ class _MyPage extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: titles
                     .map((title) => Text(
-                          title,
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Color(0XFFF66464),
-                          ),
-                        ))
+                  title,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464),
+                  ),
+                ))
                     .toList(),
               ),
             ),
@@ -423,35 +453,19 @@ class _MyPage extends State<MyPage> {
                   .entries
                   .map(
                     (entry) => Text(
-                      entry.value,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15,
-                        color: Color(0XFFF66464),
-                      ),
-                    ),
-                  )
+                  entry.value,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Color(0XFFF66464),
+                  ),
+                ),
+              )
                   .toList(),
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-            Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: SmoothPageIndicator(
-                    controller: mainPageController,
-                    count: 5,
-                    effect: ScrollingDotsEffect(
-                      activeDotColor: Color(0xFFF66464),
-                      activeStrokeWidth: 10,
-                      activeDotScale: 1.7,
-                      maxVisibleDots: 5,
-                      radius: 8,
-                      spacing: 10,
-                      dotHeight: 5,
-                      dotWidth: 5,
-                    ))),
           ],
         ),
         SizedBox(
@@ -477,6 +491,7 @@ class _MyPage extends State<MyPage> {
           fontSize: 15,
           color: Colors.white,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }

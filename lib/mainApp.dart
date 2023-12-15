@@ -3,11 +3,12 @@ import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/homeTab/Home.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:blurting/config/app_config.dart';
 
 class MainApp extends StatefulWidget {
-  MainApp({Key? key}) : super(key: key);
+  
+  final int currentIndex;
+
+  MainApp({super.key, required this.currentIndex});
 
   @override
   _MainApp createState() => _MainApp();
@@ -16,32 +17,20 @@ class MainApp extends StatefulWidget {
 int _currentIndex = 0;
 
 class _MainApp extends State<MainApp> {
-  static String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjBUMTc6MDg6NDguNzcwWiIsImlhdCI6MTcwMDQ2NzcyOCwiZXhwIjoxNzAwNDcxMzI4fQ.Qd9uRgY33SXG5aHR0vJ0ke5ssQNjUv0GeBt60hqXcbQ';
-  IO.Socket socket = IO
-      .io('${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-    'transports': ['websocket'],
-    'auth': {'authorization': 'Bearer $token'},
-    // 'reconnectionAttempts': 0,
-  });
 
   late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.currentIndex;
 
-    socket.on('connect', (_) {
-      print('소켓 연결됨');
-    });
-
-    socket.on('disconnect', (_) {
-      print('소켓 연결 끊김');
-    });
+    print('mainApp으로');
 
     _pages = [
       Home(),
-      Blurting(socket: socket, token: token),
-      ChattingList(socket: socket, token: token),
+      Blurting(),
+      ChattingList(),
       MyPage(),
     ];
   }
@@ -49,18 +38,15 @@ class _MainApp extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
+      extendBody: _currentIndex == 2 ? true : false,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: const [
           BoxShadow(
             color: Color.fromARGB(255, 212, 212, 212), // 그림자 색상
-            blurRadius: 20, // 그림자의 흐림 정도
-            spreadRadius: 4, // 그림자의 확산 정도
-            offset: Offset(0, 1), // 그림자의 위치 (가로, 세로)
+            blurRadius: 10, // 그림자의 흐림 정도
           ),
         ]),
-        height: 120,
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30.0),
@@ -70,12 +56,12 @@ class _MainApp extends State<MainApp> {
             selectedLabelStyle: TextStyle(
               color: Color.fromRGBO(48, 48, 48, 0.8),
               fontSize: 10,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Heebo',
             ),
             unselectedLabelStyle: TextStyle(
               color: Color.fromRGBO(48, 48, 48, 0.8),
               fontSize: 10,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Heebo',
             ),
             type: BottomNavigationBarType.fixed,
             currentIndex: _currentIndex,
@@ -119,6 +105,7 @@ class _MainApp extends State<MainApp> {
       ),
     );
   }
+
 }
 
 class TabItem extends StatelessWidget {
@@ -127,21 +114,24 @@ class TabItem extends StatelessWidget {
   final String name;
 
   TabItem(
-      {super.key, required this.currentIndex, required this.image, required this.name});
+      {super.key,
+        required this.currentIndex,
+        required this.image,
+        required this.name});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 0, bottom: 5),
+          margin: EdgeInsets.only(top: 20, bottom: 5),
           height: 25,
           child: _currentIndex == currentIndex
               ? Image.asset(image)
               : Image.asset(
-                  image,
-                  color: Color.fromRGBO(217, 217, 217, 1),
-                ),
+            image,
+            color: Color.fromRGBO(217, 217, 217, 1),
+          ),
         ),
         Text(
           name,

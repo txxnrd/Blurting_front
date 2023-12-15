@@ -1,16 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/time.dart';
+import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
+import 'package:provider/provider.dart';
 import 'dart:ui';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:intl/intl.dart';
 
-DateFormat dateFormat = DateFormat('aa hh:mm', 'ko');
-DateFormat dateFormatDate = DateFormat('MM월 dd일'); // 필요한 포맷으로 수정
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -25,44 +26,29 @@ DateTime _parseDateTime(String? dateTimeString) {
   }
 }
 
-class ChattingList extends StatefulWidget {
-  final IO.Socket socket;
-  final String token;
-
-  ChattingList({required this.socket, Key? key, required this.token})
-      : super(key: key);
-
-  @override
-  _chattingList createState() => _chattingList();
-}
-
 class ChatListItem extends StatefulWidget {
   final String userName;
   final String latest_chat;
   final DateTime latest_time;
   final String image;
   final String roomId;
-  final String token;
   final bool read;
-
   final IO.Socket socket;
 
   ChatListItem(
-      {required this.token,
-      required this.userName,
+      {required this.userName,
       required this.latest_chat,
       required this.latest_time,
       required this.image,
-      required this.socket,
       required this.read,
-      required this.roomId});
+      required this.roomId,
+      required this.socket});
 
   @override
   _chatListItemState createState() => _chatListItemState();
 }
 
 class _chatListItemState extends State<ChatListItem> {
-  
   void _leaveRoom(BuildContext context) {
     showDialog(
       context: context,
@@ -88,12 +74,12 @@ class _chatListItemState extends State<ChatListItem> {
                               children: [
                                 Container(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.8,
+                                  MediaQuery.of(context).size.width * 0.9,
                                   height: 100,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color:
-                                          mainColor.lightGray.withOpacity(0.5)),
+                                      mainColor.lightGray.withOpacity(0.8)),
                                   alignment: Alignment.topCenter,
                                   child: Container(
                                     margin: EdgeInsets.all(10),
@@ -122,7 +108,7 @@ class _chatListItemState extends State<ChatListItem> {
                                 GestureDetector(
                                   child: Container(
                                     width:
-                                        MediaQuery.of(context).size.width * 0.8,
+                                    MediaQuery.of(context).size.width * 0.9,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: mainColor.MainColor),
@@ -140,7 +126,8 @@ class _chatListItemState extends State<ChatListItem> {
                                     ),
                                   ),
                                   onTap: () {
-                                    widget.socket.emit('leave_room', widget.roomId);
+                                    widget.socket
+                                        .emit('leave_room', widget.roomId);
                                     print('채팅 나가는 중...');
                                     Navigator.pop(context);
                                   },
@@ -150,7 +137,7 @@ class _chatListItemState extends State<ChatListItem> {
                           ),
                           GestureDetector(
                             child: Container(
-                              width: MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               height: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -168,9 +155,11 @@ class _chatListItemState extends State<ChatListItem> {
                               ),
                             ),
                             onTap: () {
-                              setState(() {
-                                Navigator.of(context).pop();
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  Navigator.of(context).pop();
+                                });
+                              }
                             },
                           ),
                         ],
@@ -188,11 +177,11 @@ class _chatListItemState extends State<ChatListItem> {
 
   @override
   Widget build(BuildContext context) {
-    String latest_time = dateFormat.format(widget.latest_time);
+    String latest_time = dateFormatAA.format(widget.latest_time);
 
-    if (dateFormatDate.format(widget.latest_time) !=
-        dateFormatDate.format(DateTime.now())) {
-      latest_time = dateFormatDate.format(widget.latest_time);
+    if (dateFormatMM.format(widget.latest_time) !=
+        dateFormatMM.format(DateTime.now())) {
+      latest_time = dateFormatMM.format(widget.latest_time);
     }
 
     if (widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)) {
@@ -208,9 +197,8 @@ class _chatListItemState extends State<ChatListItem> {
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => Whisper(
-                token: widget.token,
-                userName: widget.userName,
                 socket: widget.socket,
+                userName: widget.userName,
                 roomId: widget.roomId),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -218,7 +206,7 @@ class _chatListItemState extends State<ChatListItem> {
               const end = Offset.zero;
               const curve = Curves.easeInOut;
               var tween =
-                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               var offsetAnimation = animation.drive(tween);
               return SlideTransition(position: offsetAnimation, child: child);
             },
@@ -226,7 +214,7 @@ class _chatListItemState extends State<ChatListItem> {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 30),
+        margin: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -260,70 +248,69 @@ class _chatListItemState extends State<ChatListItem> {
                       child: Image.asset(widget.image),
                     ),
                     Expanded(
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 20, top: 6, bottom: 6),
-                                    child: Text(
-                                      widget.userName,
-                                      style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontSize: 15,
-                                        color: Color.fromRGBO(48, 48, 48, 1),
-                                        fontWeight: FontWeight.w700,
+                      child: Container(
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20, top: 6),
+                                      child: Text(
+                                        widget.userName,
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 15,
+                                          color: Color.fromRGBO(48, 48, 48, 1),
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  if (!widget.read)
-                                    Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          color: mainColor.MainColor,
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
+                                    if (!widget.read)
+                                      Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                            color: mainColor.MainColor,
+                                            borderRadius:
+                                            BorderRadius.circular(50)),
+                                      ),
+                                  ],
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 20, right: 20,),
+                                  child: Text(
+                                    widget.latest_chat,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontSize: 15,
+                                      color: Color.fromRGBO(48, 48, 48, 1),
                                     ),
-                                ],
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                  left: 20,
-                                  right: 20,
-                                ),
-                                child: Text(
-                                  widget.latest_chat,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontFamily: "Pretendard",
-                                    fontSize: 15,
-                                    color: Color.fromRGBO(48, 48, 48, 1),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(right: 20),
-                            child: Text(
-                              latest_time,
-                              style: TextStyle(
-                                fontFamily: "Pretendard",
-                                fontSize: 10,
-                                color: Color.fromRGBO(134, 134, 134, 1),
+                              ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(right: 5),
+                              child: Text(
+                                latest_time,
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 10,
+                                  color: Color.fromRGBO(134, 134, 134, 1),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -337,213 +324,234 @@ class _chatListItemState extends State<ChatListItem> {
   }
 }
 
+class ChattingList extends StatefulWidget {
+  const ChattingList({super.key});
+
+  @override
+  _chattingList createState() => _chattingList();
+}
+
 class _chattingList extends State<ChattingList> {
   List<Widget> chatLists = [];
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () {
-      fetchList(widget.token);
-    });
+    Future<void> initializeSocket() async {
+      await fetchList();
 
-    widget.socket.on('invite_chat', (data) {
-      print('새로운 채팅: $data');
-      Widget newChat = ChatListItem(
-        token: widget.token,
-        roomId: data['roomId'],
-        userName: data['nickname'],
-        latest_chat: '지금 귓속말을 보내 보세요!',
-        latest_time: DateTime(1, 11, 30, 0, 0, 0, 0),
-        image: data['sex'] == 'M' ? 'assets/man.png' : 'assets/woman.png',
-        socket: widget.socket,
-        read: true,
-      );
+      socket.on('invite_chat', (data) {
+        print('새로운 채팅: $data');
+        Widget newChat = ChatListItem(
+          roomId: data['roomId'],
+          userName: data['nickname'],
+          latest_chat: '지금 귓속말을 보내 보세요!',
+          latest_time: DateTime(1, 11, 30, 0, 0, 0, 0),
+          image: data['sex'] == 'M' ? 'assets/man.png' : 'assets/woman.png',
+          socket: socket,
+          read: true,
+        );
 
-      widget.socket.emit('join_chat', data);
-      if (mounted) {
-        setState(() {
-          chatLists.insert(0, newChat);
-        });
-      }
-    });
-
-    widget.socket.on('new_chat', (data) {
-      int index = 0;
-
-      print('채팅 리스트 새 메시지 도착$data');
-      for (int i = 0; i < chatLists.length; i++) {
-        Widget widget = chatLists[i];
-
-        if (widget is ChatListItem) {
-          if (widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)) {
-            index++;
-          }
+        socket.emit('join_chat', data);
+        if (mounted) {
+          setState(() {
+            chatLists.insert(0, newChat);
+          });
         }
-      }
+      });
 
-      for (int i = 0; i < chatLists.length; i++) {
-        Widget widget = chatLists[i];
-        if (widget is ChatListItem) {
-          DateTime latestTime = _parseDateTime(data['createdAt']);
-          bool read;
+      socket.on('new_chat', (data) {
+        int index = 0;
 
-          if (data['userId'] == UserProvider.UserId) {
-            read = true;
-          } else {
-            read = data['read'];
-          }
+        print('채팅 리스트 새 메시지 도착$data');
 
-          String roomId = widget.roomId;
+        for (int i = 0; i < chatLists.length; i++) {
+          Widget widget = chatLists[i];
 
-          if (roomId == data['roomId']) {
-            if (mounted) {
-              setState(() {
-                final userName = widget.userName;
-                chatLists.removeAt(i);
-                chatLists.insert(
-                    widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)
-                        ? index - 1
-                        : index,
-                    ChatListItem(
-                      token: widget.token,
-                      roomId: data['roomId'] as String? ?? '',
-                      userName: userName,
-                      latest_chat: data['chat'] as String? ?? '',
-                      latest_time: latestTime,
-                      image: data['sex'] == "F"
-                          ? 'assets/woman.png'
-                          : 'assets/man.png',
-                      socket: widget.socket,
-                      read: read,
-                    ));
-              });
-            }
-            return;
-          }
-        }
-      }
-    });
-
-    widget.socket.on('out_room', (data) {
-      for (int i = 0; i < chatLists.length; i++) {
-        Widget widget = chatLists[i];
-        if (widget is ChatListItem) {
-          if (data == widget.roomId) {
-            if (mounted) {
-              setState(() {
-                chatLists.removeAt(i);
-                chatLists.insert(
-                    i,
-                    ChatListItem(
-                      token: widget.token,
-                      roomId: widget.roomId,
-                      userName: widget.userName,
-                      latest_chat: widget.latest_chat,
-                      latest_time: widget.latest_time,
-                      image: widget.image,
-                      socket: widget.socket,
-                      read: true,
-                    ));
-              });
+          if (widget is ChatListItem) {
+            if (widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)) {
+              index++;
             }
           }
         }
-      }
-    });
 
-    widget.socket.on('leave_room', (data) {     // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
-                                                // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
-      print(data);
-      if (data['userId'] == UserProvider.UserId) {
         for (int i = 0; i < chatLists.length; i++) {
           Widget widget = chatLists[i];
           if (widget is ChatListItem) {
-            if (data['roomId'] == widget.roomId) {
+            DateTime latestTime = _parseDateTime(data['createdAt']);
+            bool read;
+
+            if (data['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
+              read = true;
+            } else {
+              read = data['read'];
+            }
+
+            String roomId = widget.roomId;
+
+            if (roomId == data['roomId']) {
+              if (mounted) {
+                setState(() {
+                  final userName = widget.userName;
+                  final image = widget.image;
+                  chatLists.removeAt(i);
+                  chatLists.insert(
+                      widget.latest_time == DateTime(1, 11, 30, 0, 0, 0, 0)
+                          ? index - 1
+                          : index,
+                      ChatListItem(
+                        roomId: data['roomId'] as String? ?? '',
+                        userName: userName,
+                        latest_chat: data['chat'] as String? ?? '',
+                        latest_time: latestTime,
+                        image: image,
+                        socket: socket,
+                        read: read,
+                      ));
+                });
+              }
+              return;
+            }
+          }
+        }
+      });
+
+      socket.on('out_room', (data) {
+        for (int i = 0; i < chatLists.length; i++) {
+          Widget widget = chatLists[i];
+          if (widget is ChatListItem) {
+            if (data == widget.roomId) {
               if (mounted) {
                 setState(() {
                   chatLists.removeAt(i);
+                  chatLists.insert(
+                      i,
+                      ChatListItem(
+                        roomId: widget.roomId,
+                        userName: widget.userName,
+                        latest_chat: widget.latest_chat,
+                        latest_time: widget.latest_time,
+                        image: widget.image,
+                        socket: widget.socket,
+                        read: true,
+                      ));
                 });
               }
             }
-            return;
           }
         }
-      }
-    });
+      });
+
+      socket.on('leave_room', (data) {
+        // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
+        // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
+        print('leave_room 소켓 받음');
+        if (data['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
+          print('내가 나감');
+          for (int i = 0; i < chatLists.length; i++) {
+            Widget widget = chatLists[i];
+            if (widget is ChatListItem) {
+              if (data['roomId'] == widget.roomId) {
+                if (mounted) {
+                  setState(() {
+                    chatLists.removeAt(i);
+                  });
+                }
+              }
+              return;
+            }
+          }
+        }
+      });
+
+      socket.on('connect', (_) {
+        print('소켓 연결됨');
+      });
+
+      socket.on('disconnect', (_) {
+        print('소켓 연결 끊김');
+      });
+    }
+
+    initializeSocket();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    socket.disconnect();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        automaticallyImplyLeading: false,
-        toolbarHeight: 244,
-        flexibleSpace: Stack(
-          children: [
-            ClipRRect(
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(color: Colors.transparent))),
-          ],
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: <Widget>[
-          pointAppbar(point: 120),
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-              },
-            ),
-          ),
-        ],
-        title: Container(
-          margin: EdgeInsets.only(top: 70),
-          height: 80,
-          child: Container(
-              padding: EdgeInsets.all(13), child: ellipseText(text: 'Connect')),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size(10, 10),
-          child: Stack(
-            alignment: Alignment.centerLeft,
+      extendBody: true,
+
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(244),
+        child: AppBar(
+          toolbarHeight: 80,
+          scrolledUnderElevation: 0.0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Stack(
+            alignment: Alignment.topRight,
             children: [
+              ClipRRect(
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(color: Colors.transparent))),
               Container(
-                height: 70,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
-                      Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
-                    ],
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    topLeft: Radius.circular(30),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 20, top: 20),
-                child: Text(
-                  '최근 메시지',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 15,
-                    color: Color.fromRGBO(134, 134, 134, 1),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+                  margin: EdgeInsets.only(top: 80),
+                  padding: EdgeInsets.all(13),
+                  child: ellipseText(text: 'Connect')),
             ],
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            pointAppbar(),
+            SizedBox(width: 10),
+          ],
+          bottom: PreferredSize(
+            preferredSize: Size(10, 10),
+            child: Container(
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Container(
+                    height: 70,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+                          Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+                        ],
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20, top: 20),
+                    child: Text(
+                      '최근 메시지',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 15,
+                        color: mainColor.Gray,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -561,7 +569,7 @@ class _chattingList extends State<ChattingList> {
             ),
           ),
           SingleChildScrollView(
-            padding: EdgeInsets.only(top: 260, bottom: 100), // 시작 위치에 여백 추가
+            padding: EdgeInsets.only(top: 260, bottom: 80), // 시작 위치에 여백 추가
 
             child: Column(
               children: [
@@ -582,25 +590,35 @@ class _chattingList extends State<ChattingList> {
     );
   }
 
-  Future<void> fetchList(String token) async {
-    final url = Uri.parse('${ServerEndpoints.serverEndpoint}/chat/rooms');
+  Future<void> fetchList() async {
+    final url = Uri.parse(API.roomList);
+    String savedToken = await getToken();
 
     final response = await http.get(url, headers: {
-      'authorization': 'Bearer $token',
+      'authorization': 'Bearer $savedToken',
       'Content-Type': 'application/json',
     });
 
     if (response.statusCode == 200) {
       print('요청 성공');
 
+      socket = IO.io(
+          '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+        'transports': ['websocket'],
+        'auth': {
+          'authorization':
+              'Bearer $savedToken'
+        },
+      });
+
       try {
         List<dynamic> responseData = jsonDecode(response.body);
 
         for (final chatData in responseData) {
           DateTime latestTime = _parseDateTime(chatData['latest_time']);
-          DateTime hasRead = _parseDateTime(chatData['has_read']);
+          DateTime hasRead = _parseDateTime(chatData['hasRead']);
 
-          bool read = hasRead.isBefore(latestTime);
+          bool read = hasRead.isAfter(latestTime);
 
           if (latestTime == hasRead) {
             read = true;
@@ -610,16 +628,15 @@ class _chattingList extends State<ChattingList> {
             setState(() {
               chatLists.add(
                 ChatListItem(
-                  token: widget.token,
                   roomId: chatData['roomId'] as String? ?? '',
                   userName: chatData['nickname'] as String? ?? '',
                   latest_chat:
-                      chatData['latest_chat'] as String? ?? '지금 귓속말을 보내 보세요!',
+                  chatData['latest_chat'] as String? ?? '지금 귓속말을 보내 보세요!',
                   latest_time: latestTime,
                   image: chatData['sex'] == "F"
                       ? 'assets/woman.png'
                       : 'assets/man.png',
-                  socket: widget.socket,
+                  socket: socket,
                   read: read,
                 ),
               );
@@ -631,7 +648,13 @@ class _chattingList extends State<ChattingList> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    } else {
+    }
+    else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchList);
+    }
+     else {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
