@@ -42,6 +42,7 @@ class _Whisper extends State<Whisper> {
   final int blurValue = 0;
   final int blurChange = 0;
   String appbarphoto = '';
+  late Image image;
 
   late int otherId = 0;
 
@@ -54,9 +55,9 @@ class _Whisper extends State<Whisper> {
   void initState() {
     super.initState();
 
-    // Future<void> initializeSocket() async {
-    // await
-    fetchChats();
+    Future<void> initializeSocket() async {
+    await fetchChats();
+    image = Image.network(appbarphoto);
 
     precacheImage(NetworkImage(appbarphoto), context);
 
@@ -160,9 +161,9 @@ class _Whisper extends State<Whisper> {
     widget.socket.on('disconnect', (_) {
       print('소켓 연결 끊김');
     });
-    // };
+    };
 
-    // initializeSocket();
+    initializeSocket();
   }
 
   @override
@@ -257,8 +258,8 @@ class _Whisper extends State<Whisper> {
                     }
                   : null,
               child: Container(
-                width: 70,
-                height: 70,
+                width: 60,
+                height: 60,
                 margin: EdgeInsets.all(0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
@@ -278,9 +279,7 @@ class _Whisper extends State<Whisper> {
                       sigmaY: calculateBlurSigma(blurValue),
                     ),
                     child: Image.network(
-                      appbarphoto, // 해당 부분은 응답에서 이미지 URL을 가져와야 합니다.
-                      width: 60,
-                      height: 60,
+                      appbarphoto,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -288,6 +287,7 @@ class _Whisper extends State<Whisper> {
               ),
             ),
             Container(
+              width: 80,
               margin: EdgeInsets.all(10),
               child: Text(
                 widget.userName,
@@ -295,6 +295,7 @@ class _Whisper extends State<Whisper> {
                     color: Colors.black,
                     fontWeight: FontWeight.w700,
                     fontSize: 15),
+                overflow: TextOverflow.ellipsis,
               ),
             )
           ],
@@ -333,9 +334,7 @@ class _Whisper extends State<Whisper> {
                                           alignment: Alignment.bottomCenter,
                                           children: [
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
+                                              width: MediaQuery.of(context).size.width *
                                                   0.9,
                                               height: 100,
                                               decoration: BoxDecoration(

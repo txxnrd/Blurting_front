@@ -347,8 +347,6 @@ class _Blurting extends State<Blurting> {
 
               DateTime lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
 
-              print('현재 저장되어 있는 마지막으로 들어간 시간: $lastTime');
-
               DateTime day1Time = createdAt;     // 하루가 지난 시간
               DateTime day2Time = createdAt.add(Duration(hours: 24));     // 하루가 지난 시간
               DateTime day3Time = createdAt.add(Duration(hours: 48));     // 이틀이 지난 시간
@@ -386,6 +384,10 @@ class _Blurting extends State<Blurting> {
                     MaterialPageRoute(
                         builder: (context) => Matching()));
               }
+
+              // 데이터를 로컬에 저장하는 함수
+              await prefs.setString('timeInSeconds',  DateTime.now().add(Duration(hours: 9)).toString());
+              print('마지막으로 들어간 시간 저장: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
             },
           )
         ],
