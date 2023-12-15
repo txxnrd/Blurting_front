@@ -121,161 +121,164 @@ class _HomeState extends State<Home> {
             apiResponse!['answers'].isNotEmpty)
         ? List.generate(cardItems.length, (index) {
             // mvpName(index);
-            return Container(
-              margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage('./assets/images/homecard.png'),
-                  fit: BoxFit.cover,
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 5, 5, 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: AssetImage('./assets/images/homecard.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: SizedBox(
-                  height: 280,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Row(
-                          children: [
-                            if (cardItems[index].userSex == 'M')
-                              ClipOval(
-                                child: Container(
-                                  padding: EdgeInsets.all(5),
-                                  color: mainColor.MainColor.withOpacity(0.5),
-                                  child: Image.asset(
-                                    './assets/man.png',
-                                    width: 30,
-                                    height: 30,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: SizedBox(
+                    height: 280,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Row(
+                            children: [
+                              if (cardItems[index].userSex == 'M')
+                                ClipOval(
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    color: mainColor.MainColor.withOpacity(0.5),
+                                    child: Image.asset(
+                                      './assets/man.png',
+                                      width: 30,
+                                      height: 30,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            if (cardItems[index].userSex == 'F')
-                              ClipOval(
-                                child: Container(
-                                  padding: EdgeInsets.all(5),
-                                  color: mainColor.MainColor.withOpacity(0.5),
-                                  child: Image.asset(
-                                    './assets/woman.png',
-                                    width: 30,
-                                    height: 30,
+                              if (cardItems[index].userSex == 'F')
+                                ClipOval(
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    color: mainColor.MainColor.withOpacity(0.5),
+                                    child: Image.asset(
+                                      './assets/woman.png',
+                                      width: 30,
+                                      height: 30,
+                                    ),
                                   ),
                                 ),
+                              SizedBox(width: 8),
+                              Text(
+                                cardItems[index].userName,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            SizedBox(width: 8),
-                            Text(
-                              cardItems[index].userName,
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Q. ${cardItems[index].question}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Heebo',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                        SizedBox(height: 11),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Text(
+                              'A. ${cardItems[index].answer}',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Heebo',
                                 fontSize: 15,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 11),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: Colors.white,
+                                height: 10,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'Q. ${cardItems[index].question}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                      SizedBox(height: 11),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Text(
-                            'A. ${cardItems[index].answer}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Heebo',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 11),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Colors.white,
-                              height: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                      // SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_today,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              SizedBox(
-                                width: 7,
-                              ),
-                              Text(
-                                dateFormatHome.format(
-                                    _parseDateTime(cardItems[index].postedAt)),
-                                style: TextStyle(
+                        // SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
                                   color: Colors.white,
-                                  fontFamily: 'Heebo',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // 좋아요 버튼을 눌렀을 때의 로직
-                                  if (!cardItems[index].ilike) {
-                                    handleLike(index);
-                                  }
-                                },
-                                child: Icon(
-                                  Icons.thumb_up,
-                                  color: cardItems[index].ilike
-                                      ? Color(0xFFFF7D7D)
-                                      : Colors.white,
                                   size: 15,
                                 ),
-                              ),
-                              SizedBox(width: 7),
-                              Text(
-                                '${cardItems[index].likes}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Heebo',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
+                                SizedBox(
+                                  width: 7,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      )
-                    ],
+                                Text(
+                                  dateFormatHome.format(_parseDateTime(
+                                      cardItems[index].postedAt)),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Heebo',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    // 좋아요 버튼을 눌렀을 때의 로직
+                                    if (!cardItems[index].ilike) {
+                                      handleLike(index);
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.thumb_up,
+                                    color: cardItems[index].ilike
+                                        ? Color(0xFFFF7D7D)
+                                        : Colors.white,
+                                    size: 15,
+                                  ),
+                                ),
+                                SizedBox(width: 7),
+                                Text(
+                                  '${cardItems[index].likes}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Heebo',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -348,12 +351,12 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: mainColor.MainColor, width: 1)),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: Text(
                       _mvpName,
                       style: TextStyle(
