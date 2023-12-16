@@ -42,6 +42,7 @@ class _Whisper extends State<Whisper> {
   final int blurValue = 0;
   final int blurChange = 0;
   String appbarphoto = '';
+  late Image image;
 
   late int otherId = 0;
 
@@ -54,9 +55,11 @@ class _Whisper extends State<Whisper> {
   void initState() {
     super.initState();
 
-    // Future<void> initializeSocket() async {
-    // await
-    fetchChats();
+    Future<void> initializeSocket() async {
+    await fetchChats();
+    image = Image.network(appbarphoto);
+
+    precacheImage(NetworkImage(appbarphoto), context);
 
     Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
 
@@ -158,9 +161,9 @@ class _Whisper extends State<Whisper> {
     widget.socket.on('disconnect', (_) {
       print('소켓 연결 끊김');
     });
-    // };
+    };
 
-    // initializeSocket();
+    initializeSocket();
   }
 
   @override
@@ -248,13 +251,15 @@ class _Whisper extends State<Whisper> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: (!isBlock) ? () {
-                // Show the profile card as a bottom sheet
-                _showProfileModal(context);
-              } : null,
+              onTap: (!isBlock)
+                  ? () {
+                      // Show the profile card as a bottom sheet
+                      _showProfileModal(context);
+                    }
+                  : null,
               child: Container(
-                width: 70,
-                height: 70,
+                width: 60,
+                height: 60,
                 margin: EdgeInsets.all(0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
@@ -274,9 +279,7 @@ class _Whisper extends State<Whisper> {
                       sigmaY: calculateBlurSigma(blurValue),
                     ),
                     child: Image.network(
-                      appbarphoto, // 해당 부분은 응답에서 이미지 URL을 가져와야 합니다.
-                      width: 60,
-                      height: 60,
+                      appbarphoto,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -284,6 +287,7 @@ class _Whisper extends State<Whisper> {
               ),
             ),
             Container(
+              width: 80,
               margin: EdgeInsets.all(10),
               child: Text(
                 widget.userName,
@@ -291,6 +295,7 @@ class _Whisper extends State<Whisper> {
                     color: Colors.black,
                     fontWeight: FontWeight.w700,
                     fontSize: 15),
+                overflow: TextOverflow.ellipsis,
               ),
             )
           ],
@@ -329,9 +334,7 @@ class _Whisper extends State<Whisper> {
                                           alignment: Alignment.bottomCenter,
                                           children: [
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
+                                              width: MediaQuery.of(context).size.width *
                                                   0.9,
                                               height: 100,
                                               decoration: BoxDecoration(
@@ -639,7 +642,7 @@ class _Whisper extends State<Whisper> {
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');
     }
   }
-  
+
   static double calculateBlurSigma(int blurValue) {
     // Normalize the blur value to be between 0.0 and 1.0
     if (blurValue == 4) {
@@ -650,7 +653,8 @@ class _Whisper extends State<Whisper> {
       // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
       return normalizedBlur * 5;
     }
-  }}
+  }
+}
 
 class DateWidget extends StatelessWidget {
   final String date;

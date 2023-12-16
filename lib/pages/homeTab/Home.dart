@@ -52,7 +52,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final controller = PageController(viewportFraction: 0.8, keepPage: true);
+  final controller = PageController(viewportFraction: 0.9, keepPage: true);
   Map<String, dynamic>? apiResponse;
   late Duration remainingTime = Duration.zero;
   late List<CardItem> cardItems = [];
@@ -61,6 +61,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     print('홈으로 옴');
     cardItems = [];
 
@@ -111,16 +112,17 @@ class _HomeState extends State<Home> {
     void mvpName(int index) {
     setState(() {
       _mvpName = cardItems[index].userName;
+      print(_mvpName);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
     final pages = (apiResponse != null &&
             apiResponse!['answers'] != null &&
             apiResponse!['answers'].isNotEmpty)
         ? List.generate(cardItems.length, (index) {
-            // mvpName(index);
             return Container(
               margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
               decoration: BoxDecoration(
@@ -369,6 +371,7 @@ class _HomeState extends State<Home> {
             // color: Colors.amber,
             height: 240,
             child: PageView.builder(
+              onPageChanged: (index) => {mvpName(index)},
               controller: controller,
               itemCount: min(cardItems.length, 3),
               itemBuilder: (_, index) {
@@ -376,19 +379,16 @@ class _HomeState extends State<Home> {
               },
             ),
           ),
-          Container(
-            // margin: EdgeInsets.only(top: 11),
-            child: Center(
-              child: SmoothPageIndicator(
-                controller: controller,
-                count: pages.length,
-                effect: const WormEffect(
-                    dotHeight: 7,
-                    dotWidth: 27,
-                    type: WormType.thinUnderground,
-                    dotColor: Color.fromRGBO(217, 217, 217, 1),
-                    activeDotColor: Color.fromRGBO(246, 100, 100, 0.5)),
-              ),
+          Center(
+            child: SmoothPageIndicator(
+              controller: controller,
+              count: pages.length,
+              effect: const WormEffect(
+                  dotHeight: 7,
+                  dotWidth: 27,
+                  type: WormType.thinUnderground,
+                  dotColor: Color.fromRGBO(217, 217, 217, 1),
+                  activeDotColor: Color.fromRGBO(246, 100, 100, 0.5)),
             ),
           ),
           // Today's Blurting
@@ -404,12 +404,6 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          // Container(
-            // margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
-            // child: Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              // children: <Widget>[
                 YourBlurtingWidget(
                     icon: 'arrow', apiResponse: apiResponse),
                 YourBlurtingWidget(
@@ -418,9 +412,6 @@ class _HomeState extends State<Home> {
                     icon: 'chat', apiResponse: apiResponse),
                 YourBlurtingWidget(
                     icon: 'like', apiResponse: apiResponse),
-              // ],
-            // ),
-          // ),
         ],
       ),
     );
@@ -458,6 +449,8 @@ class _HomeState extends State<Home> {
               ilike: answer['ilike'],
             );
           }).toList();
+
+          mvpName(0);
 
           int milliseconds = data['seconds'];
           print(milliseconds);
