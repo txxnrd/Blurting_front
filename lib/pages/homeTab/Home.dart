@@ -109,7 +109,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-    void mvpName(int index) {
+  void mvpName(int index) {
     setState(() {
       _mvpName = cardItems[index].userName;
       print(_mvpName);
@@ -118,10 +118,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     final pages = (apiResponse != null &&
             apiResponse!['answers'] != null &&
-            apiResponse!['answers'].isNotEmpty)
+            (apiResponse!['answers'] as List).isNotEmpty)
         ? List.generate(cardItems.length, (index) {
             return Container(
               margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
@@ -181,16 +180,20 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       SizedBox(height: 5),
-                      Text(
-                        'Q. ${cardItems[index].question}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            'Q. ${cardItems[index].question}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Heebo',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
                       ),
                       SizedBox(height: 11),
                       Expanded(
@@ -350,7 +353,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: mainColor.MainColor, width: 1)),
@@ -404,14 +407,10 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-                YourBlurtingWidget(
-                    icon: 'arrow', apiResponse: apiResponse),
-                YourBlurtingWidget(
-                    icon: 'match', apiResponse: apiResponse),
-                YourBlurtingWidget(
-                    icon: 'chat', apiResponse: apiResponse),
-                YourBlurtingWidget(
-                    icon: 'like', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'arrow', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'match', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'chat', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'like', apiResponse: apiResponse),
         ],
       ),
     );
@@ -458,8 +457,7 @@ class _HomeState extends State<Home> {
           print(remainingTime);
         });
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       print('home 정보 불러오기 401');
@@ -471,7 +469,7 @@ class _HomeState extends State<Home> {
     print('home data 불러오기 complete');
   }
 
-    Future<void> fetchPoint() async {
+  Future<void> fetchPoint() async {
     // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
     print('point 불러오기 시작');
 
@@ -494,7 +492,8 @@ class _HomeState extends State<Home> {
 
         if (mounted) {
           setState(() {
-            Provider.of<UserProvider>(context, listen: false).point = responseData['point'];
+            Provider.of<UserProvider>(context, listen: false).point =
+                responseData['point'];
           });
         }
         print('Response body: ${response.body}');
@@ -502,8 +501,7 @@ class _HomeState extends State<Home> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       print('point 불러오기 401');
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -519,7 +517,8 @@ class YourBlurtingWidget extends StatelessWidget {
   final String icon;
   final Map<String, dynamic>? apiResponse;
 
-  YourBlurtingWidget({super.key, required this.icon, required this.apiResponse});
+  YourBlurtingWidget(
+      {super.key, required this.icon, required this.apiResponse});
 
   @override
   Widget build(BuildContext context) {
