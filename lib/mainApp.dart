@@ -41,18 +41,23 @@ class _MainApp extends State<MainApp> {
       extendBody: _currentIndex == 2 ? true : false,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: const [
-          BoxShadow(
-            color: Color.fromARGB(255, 212, 212, 212), // 그림자 색상
-            blurRadius: 10, // 그림자의 흐림 정도
-          ),
-        ]),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              spreadRadius: 0,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
         child: ClipRRect(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
           ),
           child: BottomNavigationBar(
+            backgroundColor: Colors.white,
             selectedLabelStyle: TextStyle(
               color: Color.fromRGBO(48, 48, 48, 0.8),
               fontSize: 10,
@@ -125,7 +130,7 @@ class TabItem extends StatelessWidget {
       children: [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 5),
-          height: 25,
+          height: 20,
           child: _currentIndex == currentIndex
               ? Image.asset(image)
               : Image.asset(

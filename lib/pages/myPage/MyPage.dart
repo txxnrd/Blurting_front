@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -197,7 +198,6 @@ class _MyPage extends State<MyPage> {
                   );
                 },
               ),
-              SizedBox(width: 10),
             ],
           ),
         ),
@@ -214,10 +214,17 @@ class _MyPage extends State<MyPage> {
                   width: 259,
                   height: 346, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    border: Border.all(color: Color(0xFFFF7D7D), width: 3),
-                  ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      border: Border.all(color: Color(0xFFFF7D7D), width: 2),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.05),
+                          blurRadius: 5.0,
+                          spreadRadius: 0.0,
+                          offset: Offset(0, 4),
+                        )
+                      ]),
                   child: PageView(controller: mainPageController, children: [
                     Column(
                       children: [
@@ -235,7 +242,7 @@ class _MyPage extends State<MyPage> {
                             SizedBox(
                               width: 6,
                             ),
-                            buildPinkBox('#${userProfile['mbti']}' ?? 'Unknown')
+                            buildPinkBox('#${userProfile['mbti'].toString().toUpperCase()}' ?? 'Unknown')
                           ],
                         )
                       ],
@@ -326,20 +333,20 @@ class _MyPage extends State<MyPage> {
                   controller: mainPageController,
                   count: 4,
                   effect: ScrollingDotsEffect(
-                    dotColor: Color(0xFFFFD2D2),
-                    activeDotColor: Color(0xFFF66464),
+                    dotColor: mainColor.lightPink,
+                    activeDotColor: mainColor.MainColor,
                     activeStrokeWidth: 10,
-                    activeDotScale: 1.7,
+                    activeDotScale: 1.0,
                     maxVisibleDots: 5,
                     radius: 8,
-                    spacing: 10,
-                    dotHeight: 5,
-                    dotWidth: 5,
+                    spacing: 3,
+                    dotHeight: 10,
+                    dotWidth: 10,
                   ),
                 ),
               ),
-              GestureDetector(
-                child: staticButton(text: 'Edit'),
+              InkWell(
+                child: staticButton(text: '수정'),
                 onTap: () {
                   goToMyPageEdit(context);
                   print('edit 버튼 클릭됨');
@@ -365,12 +372,12 @@ class _MyPage extends State<MyPage> {
           padding: EdgeInsets.fromLTRB(0, 13, 0, 0),
         ),
         Text(
-          'Photo ${index + 1}',
+          'photo${index + 1}.',
           style: TextStyle(
             fontFamily: 'Heedo',
             fontSize: 20,
             fontWeight: FontWeight.w400,
-            color: Color(0XFFF66464),
+            color: mainColor.MainColor,
           ),
         ),
         SizedBox(
@@ -381,7 +388,7 @@ class _MyPage extends State<MyPage> {
           width: 175,
           height: 190,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
             child: Image.network(
               imagePaths[index],
               fit: BoxFit.cover,
@@ -400,9 +407,9 @@ class _MyPage extends State<MyPage> {
       children: <Widget>[
         Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
         Text(
-          'Basic info',
+          'basic info.',
           style: TextStyle(
-              fontFamily: 'Heedo',
+              fontFamily: 'Heebo',
               fontSize: 20,
               fontWeight: FontWeight.w400,
               color: Color(0XFFF66464)),
@@ -413,17 +420,17 @@ class _MyPage extends State<MyPage> {
             SizedBox(width: 25),
             Text(userProfile['nickname'] ?? 'Unknown',
                 style: TextStyle(
-                    fontFamily: "Pretendard",
+                    fontFamily: "Heebo",
                     fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    color: Color(0XFFF66464))),
+                    fontSize: 32,
+                    color: mainColor.MainColor)),
             SizedBox(width: 7),
             Text(userProfile['mbti'] ?? 'Unknown',
                 style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
-                    color: Color(0XFFF66464))),
+                    fontFamily: "Heebo",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: mainColor.MainColor)),
           ],
         ),
         Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
@@ -437,33 +444,36 @@ class _MyPage extends State<MyPage> {
                     .map((title) => Text(
                   title,
                   style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
-                    color: Color(0XFFF66464),
+                    fontFamily: "Heebo",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: mainColor.MainColor,
                   ),
                 ))
                     .toList(),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: values
-                  .asMap()
-                  .entries
-                  .map(
-                    (entry) => Text(
-                  entry.value,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
-                    color: Color(0XFFF66464),
+            Container(
+              margin: EdgeInsets.only(top: 10, bottom: 5, right: 24, left: 29),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: values
+                    .asMap()
+                    .entries
+                    .map(
+                      (entry) => Text(
+                    entry.value,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontFamily: "Heebo",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: mainColor.MainColor,
+                    ),
                   ),
-                ),
-              )
-                  .toList(),
+                )
+                    .toList(),
+              ),
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
           ],
@@ -479,14 +489,14 @@ class _MyPage extends State<MyPage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(11),
-        color: Color(0xFFFFD2D2),
+        color: mainColor.lightPink,
       ),
       padding: EdgeInsets.symmetric(horizontal: 10),
       margin: EdgeInsets.only(top: 10),
       child: Text(
         text,
         style: TextStyle(
-          fontFamily: "Pretendard",
+          fontFamily: "Heebo",
           fontWeight: FontWeight.w500,
           fontSize: 15,
           color: Colors.white,

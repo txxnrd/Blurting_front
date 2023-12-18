@@ -303,7 +303,6 @@ class _Whisper extends State<Whisper> {
         actions: <Widget>[
           pointAppbar(),
           Container(
-            margin: EdgeInsets.only(right: 10),
             child: IconButton(
               icon: Image.asset('assets/images/leaveRoom.png'),
               color: Color.fromRGBO(48, 48, 48, 1),
