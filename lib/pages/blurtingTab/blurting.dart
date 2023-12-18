@@ -6,6 +6,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
+import 'package:blurting/settings/setting.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -119,23 +120,39 @@ class _Blurting extends State<Blurting> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(140),
-        child: AppBar(
-          scrolledUnderElevation: 0.0,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              Container(
-                  margin: EdgeInsets.only(top: 80),
-                  padding: EdgeInsets.all(13),
-                  child: ellipseText(text: 'Blurting')),
+          preferredSize: Size.fromHeight(140),
+          child: AppBar(
+            toolbarHeight: 80,
+            scrolledUnderElevation: 0.0,
+            automaticallyImplyLeading: false,
+            flexibleSpace: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 80),
+                    padding: EdgeInsets.all(13),
+                    child: ellipseText(text: 'Blurting')),
+              ],
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              pointAppbar(),
+              IconButton(
+                icon: Image.asset('assets/images/setting.png'),
+                color: Color.fromRGBO(48, 48, 48, 1),
+                onPressed: () {
+                  print("설정 버튼 눌러짐");
+                  var token = getToken();
+                  print(token);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SettingPage()),
+                  );
+                },
+              ),
             ],
           ),
-          backgroundColor: Colors.white,
-          elevation: 0,
         ),
-      ),
       extendBodyBehindAppBar: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -284,15 +301,15 @@ class _Blurting extends State<Blurting> {
                     controller: pageController,
                     count: 3,
                     effect: ScrollingDotsEffect(
-                      dotColor: Color(0xFFFFD2D2),
-                      activeDotColor: Color(0xFFF66464),
+                      dotColor: mainColor.lightPink,
+                      activeDotColor: mainColor.MainColor,
                       activeStrokeWidth: 10,
-                      activeDotScale: 1.7,
+                      activeDotScale: 1.0,
                       maxVisibleDots: 5,
                       radius: 8,
-                      spacing: 10,
-                      dotHeight: 7,
-                      dotWidth: 7,
+                      spacing: 3,
+                      dotHeight: 10,
+                      dotWidth: 10,
                     ),
                   ),
                 ),
@@ -340,7 +357,7 @@ class _Blurting extends State<Blurting> {
               ),
             ),
           ),
-          GestureDetector(
+          InkWell(
             child: staticButton(text: isState),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();

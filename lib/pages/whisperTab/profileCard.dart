@@ -327,15 +327,15 @@ class _ProfileCard extends State<ProfileCard> {
                 controller: mainPageController,
                 count: 4,
                 effect: ScrollingDotsEffect(
-                  dotColor: Color(0xFFFFD2D2),
-                  activeDotColor: Color(0xFFF66464),
+                  dotColor: mainColor.lightPink,
+                  activeDotColor: mainColor.MainColor,
                   activeStrokeWidth: 10,
-                  activeDotScale: 1.7,
+                  activeDotScale: 1.0,
                   maxVisibleDots: 5,
                   radius: 8,
-                  spacing: 10,
-                  dotHeight: 5,
-                  dotWidth: 5,
+                  spacing: 3,
+                  dotHeight: 10,
+                  dotWidth: 10,
                 ),
               ),
             ),
@@ -418,7 +418,7 @@ class _ProfileCard extends State<ProfileCard> {
           width: 175,
           height: 197,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
                 sigmaX: calculateBlurSigma(userProfile['blur']),

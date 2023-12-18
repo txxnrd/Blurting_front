@@ -74,7 +74,7 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                     SizedBox(
                       height: 20,
                     ),
-                    GestureDetector(
+                    InkWell(
                       child: staticButton(text: '시작하기'),
                       onTap: () {
                         Navigator.push(

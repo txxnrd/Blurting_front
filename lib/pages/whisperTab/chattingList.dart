@@ -76,7 +76,7 @@ class _chatListItemState extends State<ChatListItem> {
                                   MediaQuery.of(context).size.width * 0.9,
                                   height: 100,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(30),
                                       color:
                                       mainColor.lightGray.withOpacity(0.8)),
                                   alignment: Alignment.topCenter,
