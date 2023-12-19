@@ -123,7 +123,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                         width: 240.7,
                         height: 246,
                         child:
-                            Image.asset("assets/images/Blurting_welcome.png"),
+                        Image.asset("assets/images/Blurting_welcome.png"),
                       )
                     ],
                   ),

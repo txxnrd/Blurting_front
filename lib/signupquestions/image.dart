@@ -465,7 +465,7 @@ class ImagePageState extends State<ImagePage>
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
@@ -484,10 +484,10 @@ class ImagePageState extends State<ImagePage>
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(8.0),
                       child: _image2 == null
                           ? Center(
                           child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
@@ -502,10 +502,10 @@ class ImagePageState extends State<ImagePage>
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(8.0),
                       child: _image3 == null
                           ? Center(
                           child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))

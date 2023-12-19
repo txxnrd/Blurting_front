@@ -322,7 +322,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                   controller: _controller,
                   keyboardType: TextInputType.number,
                   maxLength: 13,
-                  decoration: InputDecoration(
+                  decoration: InputDecoration( isDense:true,
                     hintText: '010-1234-5678',
                     counterText: '',  // 이 부분을 추가
                     hintStyle: TextStyle(
@@ -367,7 +367,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                     ),
                     controller: _controller_certification,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    decoration: InputDecoration( isDense:true,
                       counterText: "",
                       hintText: '인증번호를 입력해 주세요',
                       hintStyle: TextStyle(

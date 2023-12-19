@@ -46,9 +46,12 @@ class _SettingPageState extends State<SettingPage> {
         },
       ),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+
+
+
 
   int count = 10;
 
@@ -261,6 +264,8 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
+                      _showVerificationFailedSnackBar("로그아웃 완료");
+                      clearAllData();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),

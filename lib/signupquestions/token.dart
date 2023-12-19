@@ -105,3 +105,11 @@ Future<void> getnewaccesstoken<T>(
     print('Request failed with status: ${response.statusCode}.');
   }
 }
+
+// 함수: 저장된 모든 데이터를 지우는 함수
+Future<void> clearAllData() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear(); // 모든 저장된 데이터를 지웁니다.
+  print('All data cleared'); // 콘솔에 'All data cleared' 메시지를 출력하여 확인
+}
+
