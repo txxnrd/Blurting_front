@@ -187,7 +187,12 @@ class _MyPage extends State<MyPage> {
             actions: [
               pointAppbar(),
               IconButton(
-                icon: Image.asset('assets/images/setting.png'),
+                icon:
+                Container(
+                  width: 26,
+                  height: 26,
+                  child:
+                    Image.asset('assets/images/setting.png')),
                 color: Color.fromRGBO(48, 48, 48, 1),
                 onPressed: () {
                   print("설정 버튼 눌러짐");
