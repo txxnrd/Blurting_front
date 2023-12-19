@@ -50,7 +50,7 @@ class _EmailPageState extends State<EmailPage>
     );
     _progressAnimation = Tween<double>(
       begin: 14/15, // 시작 너비 (30%)
-      end: 15/15, // 종료 너비 (40%)
+      end: 14.4/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -156,48 +156,52 @@ class _EmailPageState extends State<EmailPage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-
+  int trial=0;
   Future<void> _sendPostRequest() async {
-    certification = true;
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupemail);
+    if (trial == 0) {
+      trial++;
+      certification = true;
+      print('_sendPostRequest called');
+      var url = Uri.parse(API.signupemail);
 
-    String savedToken = await getToken();
-    print(savedToken);
+      String savedToken = await getToken();
+      print(savedToken);
 
-    var response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-      body: json.encode({"email":Email+'@'+widget.domain}), // JSON 형태로 인코딩
-    );
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+        body: json.encode(
+            {"email": Email + '@' + widget.domain}), // JSON 형태로 인코딩
+      );
 
-    print(json.encode({"email":Email+'@'+widget.domain}));
-    if (response.statusCode == 200 ||response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+      print(json.encode({"email": Email + '@' + widget.domain}));
+      trial=0;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+        print('Server returned OK');
+        print('Response body: ${response.body}');
 
-      var data = json.decode(response.body);
+        var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        _showVerificationSuccessedSnackBar();
+        if (data['signupToken'] != null) {
+          var token = data['signupToken'];
+          print(token);
+          await saveToken(token);
+          _showVerificationSuccessedSnackBar();
+        }
+        else {
+          _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니디.');
+        }
+      } else {
+        // 오류가 발생한 경우 처리
+        print('Request failed with status: ${response.statusCode}.');
+        _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니다.');
       }
-      else{
-        _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니디.');
-      }
-
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-      _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니다.');
     }
+
   }
 
   Future<void> _sendVerificationRequest() async {
@@ -362,7 +366,7 @@ class _EmailPageState extends State<EmailPage>
                     height:48,
                     child:
                     TextField(
-                      decoration: InputDecoration(
+                      decoration: InputDecoration( isDense:true,
                         hintText: '이메일 입력',
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(DefinedColor.lightgrey)),
@@ -387,9 +391,11 @@ class _EmailPageState extends State<EmailPage>
                   SizedBox(width: 4),
                   Expanded(
                     child: Container(
+
                       padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
                       alignment: Alignment.centerLeft,
                       height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                      width:150,
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(DefinedColor.lightgrey)),
                         borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.

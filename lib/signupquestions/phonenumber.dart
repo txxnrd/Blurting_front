@@ -198,7 +198,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       ),
       behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -257,8 +256,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     });
 
     _progressAnimation = Tween<double>(
-      begin: 0, // 시작 게이지 값
-      end: 1 / 15, // 종료 게이지 값
+      begin: 0.3/15, // 시작 게이지 값
+      end: 1/15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -286,13 +285,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           },
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Image.asset('assets/images/setting.png'),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              // 설정 버튼을 눌렀을 때의 동작
-            },
-          ),
         ],
       ),
 
@@ -365,6 +357,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   keyboardType: TextInputType.number,
                   maxLength: 13,
                   decoration: InputDecoration(
+                    isDense:true,
                     hintText: '010-1234-5678',
                     counterText: '', // 이 부분을 추가
                     hintStyle: TextStyle(
@@ -409,7 +402,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     ),
                     controller: _controller_certification,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    decoration: InputDecoration( isDense:true,
                       counterText: "",
                       hintText: '인증번호를 입력해 주세요',
                       hintStyle: TextStyle(

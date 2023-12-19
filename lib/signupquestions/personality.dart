@@ -160,18 +160,22 @@ class _PersonalityPageState extends State<PersonalityPage>
     } else
       IsValid = false;
   }
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+  void _showVerificationFailedSnackBar(value) {
+    print("snackbar 실행");
     final snackBar = SnackBar(
-      content: Text(message),
+      content: Text(value),
+      // backgroundColor: ,
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+      duration: const Duration(seconds: 1),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -179,8 +183,11 @@ class _PersonalityPageState extends State<PersonalityPage>
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
     updateSelectedCharacteristics();
-
     print(selectedCharacteristics);
+    if(selectedCharacteristics.length>4){
+      _showVerificationFailedSnackBar("성격 선택은 4개까지 가능합니다.");
+      return;
+    }
     String savedToken = await getToken();
     print(savedToken);
 
@@ -207,13 +214,13 @@ class _PersonalityPageState extends State<PersonalityPage>
         _increaseProgressAndNavigate();
       }
       else{
-        _showVerificationFailedSnackBar();
+
       }
 
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-      _showVerificationFailedSnackBar();
+
     }
   }
   Future<void> _sendBackRequest() async {
@@ -242,10 +249,6 @@ class _PersonalityPageState extends State<PersonalityPage>
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
-      }
-      else{
-        _showVerificationFailedSnackBar();
       }
 
     } else {
@@ -336,25 +339,21 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             SizedBox(height: 30),
 
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 customPersonalityCheckBox('개성있는', 0, width),
                 customPersonalityCheckBox('책임감있는', 1, width),
-
               ],
             ),
             SizedBox(
               height: 10,
             ),
             Row(
-
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 customPersonalityCheckBox('열정적인', 2, width),
                 customPersonalityCheckBox('귀여운', 3, width),
-
               ],
             ),
             SizedBox(
@@ -390,7 +389,6 @@ class _PersonalityPageState extends State<PersonalityPage>
               children: [
                 customPersonalityCheckBox('차분한', 8, width),
                 customPersonalityCheckBox('지적인', 9, width),
-
               ],
             ),
             SizedBox(
@@ -413,8 +411,34 @@ class _PersonalityPageState extends State<PersonalityPage>
                 customPersonalityCheckBox('내향적인', 13, width),
               ],
             ),
-
-            SizedBox(height: 20),
+            SizedBox(height: 26),
+            Container(
+              width: 180,
+              height: 12,
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                    color: Color(0xFF303030),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '*성격을 최대 ',
+                    ),
+                    TextSpan(
+                      text: '4개',
+                      style:
+                      TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                    ),
+                    TextSpan(
+                      text: ' 까지 선택해주세요.',
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
           ],
         ),

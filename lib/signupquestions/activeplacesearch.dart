@@ -47,24 +47,7 @@ class _SearchPage extends State<SearchPage> {
           toolbarHeight: 80,
           backgroundColor: Colors.white, // 배경색을 투명하게 설정합니다.
           elevation: 0, // 그림자 효과를 제거합니다.
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Color.fromRGBO(48, 48, 48, 1),
-            ),
-            onPressed: () {
-              Navigator.pop(context); // 뒤로가기 버튼을 눌렀을 때의 동작
-            },
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
-              },
-            ),
-          ],
+
         ),
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -77,7 +60,7 @@ class _SearchPage extends State<SearchPage> {
                 padding: const EdgeInsets.all(20.0),
                 child: TextField(
                     controller: _searchController,
-                    decoration: InputDecoration(
+                    decoration: InputDecoration( isDense:true,
                         hintText: '구명으로 검색 (ex. 강남구)',
                         contentPadding: EdgeInsets.all(10.0),
                         border: OutlineInputBorder(
@@ -220,7 +203,7 @@ class _SearchPage extends State<SearchPage> {
       double new_longtitude = position.longitude;
 
       final String apiUrl =
-          '${API.geobygeo}?geo=POINT(${new_longtitude} ${position.latitude})}';
+          '${API.geobygeo}?geo=point(${position.longitude} ${position.latitude})}';
       print(apiUrl);
       final response = await http.get(Uri.parse(apiUrl));
 

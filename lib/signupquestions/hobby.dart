@@ -160,21 +160,24 @@ class HobbyPageState extends State<HobbyPage>
   }
 
 
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+  void _showVerificationFailedSnackBar(value) {
+    print("snackbar 실행");
     final snackBar = SnackBar(
-      content: Text(message),
+      content: Text(value),
+      // backgroundColor: ,
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+      duration: const Duration(seconds: 1),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
 
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
@@ -183,7 +186,10 @@ class HobbyPageState extends State<HobbyPage>
     String savedToken = await getToken();
     print(savedToken);
     updateSelectedCharacteristics();
-
+    if(selectedCharacteristics.length>4){
+      _showVerificationFailedSnackBar("취미 선택은 4개까지 가능합니다.");
+      return;
+    }
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -207,12 +213,9 @@ class HobbyPageState extends State<HobbyPage>
         _increaseProgressAndNavigate();
       }
       else{
-        _showVerificationFailedSnackBar();
       }
 
     } else {
-      print('faileddasds');
-      _showVerificationFailedSnackBar();
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -246,7 +249,7 @@ class HobbyPageState extends State<HobbyPage>
 
       }
       else{
-        _showVerificationFailedSnackBar();
+
       }
 
     } else {
@@ -400,7 +403,33 @@ class HobbyPageState extends State<HobbyPage>
               ],
             ),
             SizedBox(height: 10),
-
+            Container(
+              width: 180,
+              height: 12,
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                    color: Color(0xFF303030),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '*취미는 최대 ',
+                    ),
+                    TextSpan(
+                      text: '4개',
+                      style:
+                      TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                    ),
+                    TextSpan(
+                      text: ' 까지 선택해주세요.',
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -103,13 +103,12 @@ class _HeightPageState extends State<HeightPage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-  int height= 100;
-
+  int? height;
   @override
   void InputHeightNumber(int value) {
     setState(() {
-      height = value;
-      if(140<=height && height<=240)
+       height = value;
+      if(140<=height! && height!<=240)
         {
           IsValid=true;
         }
@@ -121,7 +120,7 @@ class _HeightPageState extends State<HeightPage>
 
     String savedToken = await getToken();
     print(savedToken);
-
+  print(height);
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -153,26 +152,6 @@ class _HeightPageState extends State<HeightPage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('인증 실패'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('닫기'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
   void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -184,7 +163,6 @@ class _HeightPageState extends State<HeightPage>
         },
       ),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
   @override
@@ -285,7 +263,7 @@ class _HeightPageState extends State<HeightPage>
                       height: 48,
                       child: TextField(
                         keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
+                        decoration: InputDecoration( isDense:true,
                           hintText: '',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(

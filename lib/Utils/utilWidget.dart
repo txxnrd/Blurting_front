@@ -25,7 +25,6 @@ class LeftTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-
     path.moveTo(0, 5);
     path.lineTo(size.width - 30, 5);
     path.quadraticBezierTo(size.width, 5, size.width, 30); // 우측 상단 둥글게
@@ -61,7 +60,6 @@ class RightTailClipper extends CustomClipper<Path> {
     path.lineTo(size.width - 30, size.height);
     path.quadraticBezierTo(
         size.width, size.height, size.width, size.height - 20);
-
     return path;
   }
 
@@ -155,7 +153,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
-      height: 80,
+      padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -164,6 +162,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width - 20,
               child: TextField(
+                minLines: 1, maxLines: 3,
                 enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
                 focusNode: _focusNode,
                 onTapOutside: (event) => _focusNode.unfocus(),
@@ -184,6 +183,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 controller: widget.controller,
                 cursorColor: mainColor.MainColor,
                 decoration: InputDecoration(
+                  isDense:true,
+                  contentPadding: widget.isBlock ? EdgeInsets.only(top: 15, left: 10) : EdgeInsets.only(left: 10),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.transparent,
@@ -243,8 +244,8 @@ class pointAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: () {
+    return InkWell(
+        onTap: () {
           print('포인트 내역 버튼 눌러짐');
           Navigator.push(
             context,
@@ -1195,7 +1196,6 @@ class _AnswerItemState extends State<AnswerItem> {
   // 답변 위젯
   @override
   Widget build(BuildContext context) {
-    // setState...
 
     return ListTile(
       subtitle: // 답변 내용
@@ -1209,13 +1209,15 @@ class _AnswerItemState extends State<AnswerItem> {
                 _showProfileModal(context, widget.isAlready);
               } : null,
               child: Container(
-                width: 55,
-                height: 55,
+                padding: EdgeInsets.all(5),
+                width: 45,
+                height: 45,
                 decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(50)),
                 child: Image.asset(
                   widget.image == 'F' ? 'assets/woman.png' : 'assets/man.png',
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
@@ -1454,7 +1456,7 @@ class staticButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: mainColor.MainColor,
       ),
-      // margin: EdgeInsets.only(bottom: 100),
+      margin: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width * 0.9,
       height: 48,
       child: Column(
@@ -1498,11 +1500,11 @@ class ellipseText extends StatelessWidget {
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
-                width: 10,
-                height: 10,
+                width: 7,
+                height: 7,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    border: Border.all(color: mainColor.MainColor, width: 3)),
+                    border: Border.all(color: mainColor.MainColor, width: 2)),
               )
             ],
           ),

@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:blurting/signupquestions/token.dart';
 
 class PointHistoryPage extends StatefulWidget {
-
   // Constructor to receive the user token
   PointHistoryPage({super.key});
 
@@ -24,6 +23,14 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   List<Map<String, dynamic>> earningHistoryList = [];
   List<Map<String, dynamic>> usageHistoryList = [];
   bool isFetchingData = false; //무한 http 호출 방지
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabChange);
+    _fetchDataForCurrentTab();
+  }
 
   Future<List<Map<String, dynamic>>> fetchPointAdd() async {
     if (!mounted) return [];
@@ -62,10 +69,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
         // if (mounted) {
-          // setState(() {
-            usageHistoryList = [];
-            earningHistoryList = data;
-          // });
+        // setState(() {
+        usageHistoryList = [];
+        earningHistoryList = data;
+        // });
         // }
 
         print('added Points loaded successfully.');
@@ -110,10 +117,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
         // if (mounted) {
-          // setState(() {
-            earningHistoryList = [];
-            usageHistoryList = data;
-          // });
+        // setState(() {
+        earningHistoryList = data;
+        usageHistoryList = data;
+        // });
         // }
 
         print('subtracted Points loaded successfully.');
@@ -204,51 +211,34 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     return groupedData;
   }
 
-  Future<void> fetchDataForCurrentTab() async {
-    if (!isFetchingData && mounted) {
-      try {
-        setState(() {
-          isFetchingData = true;
-        });
-
-        List<Map<String, dynamic>> data = [];
-        if (_tabController.index == 0) {
-          data = await fetchPointAdd();
-        } else if (_tabController.index == 1) {
-          data = await fetchPointSubtract();
-        }
-
-        if (mounted) {
-          setState(() {
-            if (_tabController.index == 0) {
-              earningHistoryList = data;
-            } else if (_tabController.index == 1) {
-              usageHistoryList = data;
-            }
-          });
-        }
-      } catch (error) {
-        print('Error in fetchDataForCurrentTab: $error');
-      } finally {
-        isFetchingData = false; //한번 fetch하고나선 다시 false로 유지
-      }
+  void _handleTabChange() {
+    if (_tabController.indexIsChanging) {
+      // Handle tab change (if needed)
+    } else {
+      // Tab has finished animating, get the current index
+      print(_tabController.index);
+      _fetchDataForCurrentTab();
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this)
-      ..addListener(() {
-        if (_tabController.indexIsChanging) {
-          print(
-              "tab is animating. from active (getting the index) to inactive(getting the index) ");
-        } else {
-          //tab is finished animating you get the current index
-          //here you can get your index or run some method once.
-          print(_tabController.index);
-        }
-      });
+  Future<void> _fetchDataForCurrentTab() async {
+    try {
+      List<Map<String, dynamic>> data = [];
+
+      if (_tabController.index == 0) {
+        data = await fetchPointAdd();
+        setState(() {
+          earningHistoryList = data;
+        });
+      } else if (_tabController.index == 1) {
+        data = await fetchPointSubtract();
+        setState(() {
+          usageHistoryList = data;
+        });
+      }
+    } catch (error) {
+      print('Error in fetchDataForCurrentTab: $error');
+    }
   }
 
   @override
@@ -281,182 +271,126 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           },
         ),
         centerTitle: true,
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
+      ),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 120,
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {
                     _tabController.index = 0;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11),
-                    color: _tabController.index == 0
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _tabController.index == 0
                         ? Color(0xFFF66464)
                         : Color(0xFF9E9E9E),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
                     '지급내역',
                     style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Colors.white),
-                    textAlign: TextAlign.center,
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Tab(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
+              SizedBox(
+                width: 120,
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {
                     _tabController.index = 1;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11),
-                    color: _tabController.index == 1
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _tabController.index == 1
                         ? Color(0xFFF66464)
                         : Color(0xFF9E9E9E),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
                     '사용내역',
                     style: TextStyle(
-                        fontFamily: "Pretendard",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Colors.white),
-                    textAlign: TextAlign.center,
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-          indicatorColor: Colors.transparent,
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // 1. 지급내역
-          FutureBuilder(
-            future: _tabController.index == 0 ? fetchPointAdd() : null,
-            builder: (context, snapshot) {
-              if (earningHistoryList.isEmpty) {
-                return Center(child: Text('No data available'));
-              }
-
-              // Group data by date
-              Map<String, List<Map<String, dynamic>>> groupedData =
-                  groupDataByDate(earningHistoryList);
-
-              return ListView.builder(
-                padding: EdgeInsets.all(16),
-                itemCount: groupedData.length,
-                itemBuilder: (context, index) {
-                  String date = groupedData.keys.elementAt(index);
-                  List<Map<String, dynamic>> dateEntries = groupedData[date]!;
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Text(
-                          date, // Show only date
-                          style: TextStyle(
-                            fontFamily: "Heebo",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                      for (var entry in dateEntries)
-                        ListTile(
-                          title:
-                              formatHistoryText(entry['history'] ?? 'Unknown'),
-                          trailing: Text(
-                            entry['time'] ?? 'Unknown',
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              );
-            },
+            ],
           ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                // 1. 지급내역
+                _buildHistoryList(earningHistoryList),
 
-          // 2. 사용내역
-          FutureBuilder(
-            future: _tabController.index == 1 ? fetchPointSubtract() : null,
-            builder: (context, snapshot) {
-              if (usageHistoryList.isEmpty) {
-                return Center(child: Text('No data available'));
-              }
-
-              // Group data by date
-              Map<String, List<Map<String, dynamic>>> groupedData =
-                  groupDataByDate(usageHistoryList);
-
-              return ListView.builder(
-                padding: EdgeInsets.all(16),
-                itemCount: groupedData.length,
-                itemBuilder: (context, index) {
-                  String date = groupedData.keys.elementAt(index);
-                  List<Map<String, dynamic>> dateEntries = groupedData[date]!;
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Text(
-                          date, // Show only date
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      for (var entry in dateEntries)
-                        ListTile(
-                          title:
-                              formatHistoryText(entry['history'] ?? 'Unknown'),
-                          trailing: Text(
-                            entry['time'] ?? 'Unknown',
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              );
-            },
+                // 2. 사용내역
+                _buildHistoryList(usageHistoryList),
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildHistoryList(List<Map<String, dynamic>> historyList) {
+    // if (historyList.isEmpty) {
+    //   return Center(child: Text('No data available'));
+    // }
+
+    // Group data by date
+    Map<String, List<Map<String, dynamic>>> groupedData =
+        groupDataByDate(historyList);
+
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      itemCount: groupedData.length,
+      itemBuilder: (context, index) {
+        String date = groupedData.keys.elementAt(index);
+        List<Map<String, dynamic>> dateEntries = groupedData[date]!;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Text(
+                date, // Show only date
+                style: TextStyle(
+                  fontFamily: "Heebo",
+                  fontWeight: FontWeight.w500,
+                  fontSize: 10,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.right,
+              ),
+            ),
+            for (var entry in dateEntries)
+              ListTile(
+                title: formatHistoryText(entry['history'] ?? 'Unknown'),
+                trailing: Text(
+                  entry['time'] ?? 'Unknown',
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 11,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

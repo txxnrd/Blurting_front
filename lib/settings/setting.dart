@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
+import 'package:blurting/pages/yakguan/yakguan_1.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,9 +46,12 @@ class _SettingPageState extends State<SettingPage> {
         },
       ),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+
+
+
 
   int count = 10;
 
@@ -260,6 +264,8 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
+                      _showVerificationFailedSnackBar("로그아웃 완료");
+                      clearAllData();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -407,16 +413,16 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context)=> UseGuidePageOne()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => YakguanOne()),
+                      );
                     },
                     child: Container(
                       width: 100,
                       height: 22,
                       child: Text(
-                        '사용설명서로 이동',
+                        '약관 보기',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
