@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:blurting/mainApp.dart';
+import 'package:blurting/pages/useGuide/useguidepageone.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -23,10 +24,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 6), () {
+    Timer(Duration(seconds: 2), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MainApp(currentIndex: 0,)),
+        MaterialPageRoute(builder: (context) => UseGuidePageOne()),
       );
     });
   }

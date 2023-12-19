@@ -146,7 +146,7 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage>
               child: TextField(
                 keyboardType: TextInputType.number,
                 maxLength: 6,
-                decoration: InputDecoration(
+                decoration: InputDecoration( isDense:true,
                   counterText: "",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(

@@ -187,7 +187,12 @@ class _MyPage extends State<MyPage> {
             actions: [
               pointAppbar(),
               IconButton(
-                icon: Image.asset('assets/images/setting.png'),
+                icon:
+                Container(
+                  width: 26,
+                  height: 26,
+                  child:
+                    Image.asset('assets/images/setting.png')),
                 color: Color.fromRGBO(48, 48, 48, 1),
                 onPressed: () {
                   print("설정 버튼 눌러짐");
@@ -339,7 +344,7 @@ class _MyPage extends State<MyPage> {
                     activeDotScale: 1.0,
                     maxVisibleDots: 5,
                     radius: 8,
-                    spacing: 3,
+                    spacing: 5,
                     dotHeight: 10,
                     dotWidth: 10,
                   ),
@@ -422,7 +427,7 @@ class _MyPage extends State<MyPage> {
                 style: TextStyle(
                     fontFamily: "Heebo",
                     fontWeight: FontWeight.w700,
-                    fontSize: 32,
+                    fontSize: 30,
                     color: mainColor.MainColor)),
             SizedBox(width: 7),
             Text(userProfile['mbti'] ?? 'Unknown',

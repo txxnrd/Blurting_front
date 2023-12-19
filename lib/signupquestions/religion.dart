@@ -203,7 +203,6 @@ class _ReligionPageState extends State<ReligionPage>
         },
       ),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
   @override

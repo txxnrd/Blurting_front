@@ -48,12 +48,12 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
         setState(() {});
       });
 
-    _imageTimer = Timer.periodic(Duration(milliseconds: 300), (timer) {
+    _imageTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
       setState(() {
         _isImageBefore = false;
         _isImageMiddle = true;
       });
-      Timer(Duration(milliseconds: 300), () {
+      Timer(Duration(milliseconds: 500), () {
         setState(() {
           _isImageMiddle = false;
           _isImageAfter = true;

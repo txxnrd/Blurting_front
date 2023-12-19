@@ -36,7 +36,6 @@ class ImagePageState extends State<ImagePage>
 
   Future<void> _pickImage1() async {
     count+=1;
-
     var picker = ImagePicker();
     String savedToken = await getToken();
     var image1 = await picker.pickImage(source: ImageSource.gallery);
@@ -52,7 +51,6 @@ class ImagePageState extends State<ImagePage>
       FormData formData = FormData.fromMap({
         'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
       });
-
       try {
         var response = await dio.post(
           url.toString(),
@@ -282,7 +280,6 @@ class ImagePageState extends State<ImagePage>
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
       }
       else{
         _showVerificationFailedSnackBar();
@@ -332,7 +329,10 @@ class ImagePageState extends State<ImagePage>
 
 
   Future<void> _sendPostRequest() async {
-
+    if (_image1Url == null || _image2Url == null || _image3Url == null) {
+      _showImageUploadingSnackBar();
+      return; // 하나라도 null이면 함수를 종료합니다.
+    }
     print('_sendPostRequest called');
     String savedToken = await getToken();
     print(savedToken);
@@ -465,7 +465,7 @@ class ImagePageState extends State<ImagePage>
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
@@ -484,10 +484,10 @@ class ImagePageState extends State<ImagePage>
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(8.0),
                       child: _image2 == null
                           ? Center(
                           child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
@@ -502,10 +502,10 @@ class ImagePageState extends State<ImagePage>
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xFF868686)),
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(8.0),
                       child: _image3 == null
                           ? Center(
                           child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))

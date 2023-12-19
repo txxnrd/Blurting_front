@@ -249,7 +249,7 @@ class _UniversityPageState extends State<UniversityPage>
                   return TextField(
                     controller: textEditingController,
                     focusNode: focusNode,
-                    decoration: InputDecoration(
+                    decoration: InputDecoration( isDense:true,
                       hintText: '당신의 대학교를 입력하세요',
                       border: OutlineInputBorder(
                         borderSide: BorderSide(

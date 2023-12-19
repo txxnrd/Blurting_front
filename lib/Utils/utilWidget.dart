@@ -25,7 +25,6 @@ class LeftTailClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-
     path.moveTo(0, 5);
     path.lineTo(size.width - 30, 5);
     path.quadraticBezierTo(size.width, 5, size.width, 30); // 우측 상단 둥글게
@@ -61,7 +60,6 @@ class RightTailClipper extends CustomClipper<Path> {
     path.lineTo(size.width - 30, size.height);
     path.quadraticBezierTo(
         size.width, size.height, size.width, size.height - 20);
-
     return path;
   }
 
@@ -185,7 +183,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 controller: widget.controller,
                 cursorColor: mainColor.MainColor,
                 decoration: InputDecoration(
-                  isDense: true,
+                  isDense:true,
                   contentPadding: widget.isBlock ? EdgeInsets.only(top: 15, left: 10) : EdgeInsets.only(left: 10),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(

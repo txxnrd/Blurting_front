@@ -392,7 +392,7 @@ class _ProfileCard extends State<ProfileCard> {
           Text(
             'photo${index + 1}.',
             style: TextStyle(
-              fontFamily: 'Heedo',
+              fontFamily: 'Heebo',
               fontSize: 20,
               fontWeight: FontWeight.w400,
               color: Color(0XFFF66464),
@@ -510,7 +510,7 @@ class _ProfileCard extends State<ProfileCard> {
         Text(
           'basic info.',
           style: TextStyle(
-              fontFamily: 'Heedo',
+              fontFamily: 'Heebo',
               fontSize: 20,
               fontWeight: FontWeight.w400,
               color: Color(0XFFF66464)),

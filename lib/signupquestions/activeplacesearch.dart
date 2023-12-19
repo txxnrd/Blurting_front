@@ -47,24 +47,8 @@ class _SearchPage extends State<SearchPage> {
           toolbarHeight: 80,
           backgroundColor: Colors.white, // 배경색을 투명하게 설정합니다.
           elevation: 0, // 그림자 효과를 제거합니다.
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Color.fromRGBO(48, 48, 48, 1),
-            ),
-            onPressed: () {
-              Navigator.pop(context); // 뒤로가기 버튼을 눌렀을 때의 동작
-            },
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Image.asset('assets/images/setting.png'),
-              color: Color.fromRGBO(48, 48, 48, 1),
-              onPressed: () {
-                // 설정 버튼을 눌렀을 때의 동작
-              },
-            ),
-          ],
+
+          actions: <Widget>[],
         ),
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -217,7 +201,7 @@ class _SearchPage extends State<SearchPage> {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       print("위도,경도" + "${position.longitude}" + "," + "${position.latitude}");
-      double new_longtitude = position.longitude;
+      // double new_longtitude = position.longitude;
 
       final String apiUrl =
           '${API.geobygeo}?geo=point%28${position.longitude}%20${position.latitude}%29}';
