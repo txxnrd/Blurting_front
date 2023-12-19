@@ -17,12 +17,9 @@ class mainColor {
 class GroupChatProvider with ChangeNotifier {
   bool _pointValid = false;
   bool _isPocus = false;
-  DateTime _lastTime =
-  DateTime(2000, 11, 24, 15, 30); // 처음에는 아주 예전으로 초기화해서... 없다고 침
 
   bool get pointValid => _pointValid;
   bool get isPocus => _isPocus;
-  DateTime get lastTime => _lastTime;
 
   set pointValid(bool value) {
     _pointValid = value;
@@ -31,11 +28,6 @@ class GroupChatProvider with ChangeNotifier {
 
   set isPocus(bool value) {
     _isPocus = value;
-    notifyListeners();
-  }
-
-  set lastTime(DateTime value) {
-    _lastTime = value;
     notifyListeners();
   }
 }

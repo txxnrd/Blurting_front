@@ -320,7 +320,7 @@ class OtherChat extends StatelessWidget {
           ClipPath(
             clipper: LeftTailClipper(),
             child: Container(
-              width: 250,
+              width: 200,
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -331,12 +331,12 @@ class OtherChat extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
+                        left: 10, right: 10, top: 5, bottom: 5),
                     child: Text(
                       message,
                       style: TextStyle(
                         fontFamily: "Pretendard",
-                        fontSize: 10,
+                        fontSize: 12,
                         color: Colors.black,
                       ),
                     ),
@@ -415,7 +415,7 @@ class _MyChatState extends State<MyChat> {
                       child: ClipPath(
                         clipper: RightTailClipper(),
                         child: Container(
-                          width: 250,
+                          width: 200,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -426,12 +426,12 @@ class _MyChatState extends State<MyChat> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: 20, right: 20, top: 10, bottom: 10),
+                                    left: 10, right: 10, top: 5, bottom: 5),
                                 child: Text(
                                   widget.message,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -1205,9 +1205,9 @@ class _AnswerItemState extends State<AnswerItem> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
             child: GestureDetector(
-              onTap: () {
-                _showProfileModal(context, widget.isAlready); // jsonData 매개변수
-              },
+              onTap: (widget.userId != 0) ? () {
+                _showProfileModal(context, widget.isAlready);
+              } : null,
               child: Container(
                 width: 55,
                 height: 55,
@@ -1229,7 +1229,7 @@ class _AnswerItemState extends State<AnswerItem> {
                   widget.userName,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Color.fromRGBO(48, 48, 48, 1),
+                    color: widget.userId == 0 ? mainColor.Gray : Color.fromRGBO(48, 48, 48, 1),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -1261,15 +1261,15 @@ class _AnswerItemState extends State<AnswerItem> {
                                   children: <Widget>[
                                     Container(
                                       margin: EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          top: 10,
-                                          bottom: 10),
+                                          left: 10,
+                                          right: 10,
+                                          top: 5,
+                                          bottom: 5),
                                       child: Text(
                                         widget.message,
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
-                                          fontSize: 10,
+                                          fontSize: 12,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -1309,7 +1309,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                     Container(
                                       margin: EdgeInsets.only(left: 3, top: 1),
                                       child: Text(
-                                        '${likedNum}',
+                                        '$likedNum',
                                         style: TextStyle(
                                             color: iLike
                                                 ? mainColor.MainColor
@@ -1454,7 +1454,7 @@ class staticButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: mainColor.MainColor,
       ),
-      margin: EdgeInsets.only(bottom: 100),
+      // margin: EdgeInsets.only(bottom: 100),
       width: MediaQuery.of(context).size.width * 0.9,
       height: 48,
       child: Column(

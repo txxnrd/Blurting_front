@@ -49,8 +49,6 @@ class MyPage extends StatefulWidget {
   }
 }
 
-int count = 0;
-
 class _MyPage extends State<MyPage> {
   var switchValue = false;
   String modify = 'Edit';
@@ -119,10 +117,6 @@ class _MyPage extends State<MyPage> {
           // callback0의 내용
           print('Callback0 called');
         }, goToMyPageEdit, context, null, null);
-        // goToMyPageEdit(context);
-
-        count += 1;
-        if (count == 10) exit(1);
       }
     }
   }
@@ -163,10 +157,6 @@ class _MyPage extends State<MyPage> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchUserProfile);
-      // fetchUserProfile();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       print('Failed to load user profile. Status code: ${response.statusCode}');
     }

@@ -4,10 +4,11 @@ import 'package:blurting/pages/homeTab/Home.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'package:blurting/pages/whisperTab/chattingList.dart';
 
-int count = 0;
-
 class MainApp extends StatefulWidget {
-  MainApp({super.key});
+  
+  final int currentIndex;
+
+  MainApp({super.key, required this.currentIndex});
 
   @override
   _MainApp createState() => _MainApp();
@@ -22,6 +23,8 @@ class _MainApp extends State<MainApp> {
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.currentIndex;
+
     print('mainApp으로');
 
     _pages = [
@@ -35,7 +38,7 @@ class _MainApp extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
+      extendBody: _currentIndex == 2 ? true : false,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: const [
@@ -53,12 +56,12 @@ class _MainApp extends State<MainApp> {
             selectedLabelStyle: TextStyle(
               color: Color.fromRGBO(48, 48, 48, 0.8),
               fontSize: 10,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Heebo',
             ),
             unselectedLabelStyle: TextStyle(
               color: Color.fromRGBO(48, 48, 48, 0.8),
               fontSize: 10,
-              fontFamily: 'Pretendard',
+              fontFamily: 'Heebo',
             ),
             type: BottomNavigationBarType.fixed,
             currentIndex: _currentIndex,

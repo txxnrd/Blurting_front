@@ -19,7 +19,6 @@ int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
 String _question = '';
 String day = 'Day1';
-int count = 0;
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -43,14 +42,28 @@ class QuestionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'Q$questionNumber. $question',
-      style: TextStyle(
-        fontFamily: 'Pretendard',
-        fontSize: 15,
-        color: Color.fromRGBO(134, 134, 134, 1),
-        fontWeight: FontWeight.w500,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Q$questionNumber. ',
+          style: TextStyle(
+            fontFamily: 'Heebo',
+            fontSize: 15,
+            color: mainColor.Gray,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(
+          question,
+          style: TextStyle(
+            fontFamily: 'Heebo',
+            fontSize: 15,
+            color: mainColor.Gray,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -109,7 +122,6 @@ class _GroupChat extends State<GroupChat> {
 
     loadTime();
 
-    print(lastTime);
   }
 
   @override
@@ -122,7 +134,8 @@ class _GroupChat extends State<GroupChat> {
   // 데이터를 로컬에 저장하는 함수
   saveTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('timeInSeconds', DateTime.now().toString());
+    await prefs.setString('timeInSeconds', DateTime.now().add(Duration(hours: 9)).toString());
+    print('나가는 시간: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
   }
 
   // 저장된 데이터를 로컬에서 불러오는 함수
@@ -131,7 +144,9 @@ class _GroupChat extends State<GroupChat> {
     setState(() {
       lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
     });
-    Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
+    print('마지막으로 들어온 시간: $lastTime');
+
+    // Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
   }
 
   List<List<Widget>> answerList = List.generate(10, (index) => <Widget>[]);
@@ -182,7 +197,7 @@ class _GroupChat extends State<GroupChat> {
                       ],
                     )),
                 Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
+                    width: MediaQuery.of(context).size.width * 0.6,
                     height: 25,
                     margin: EdgeInsets.only(top: 10),
                     child: Row(
@@ -325,7 +340,7 @@ class _GroupChat extends State<GroupChat> {
     // 누르면
     return Container(
       margin: EdgeInsets.zero,
-      child: GestureDetector(
+      child: InkWell(
         onTap: (_questionNumber >= index)
             ? () {
                 currentIndex = index;
@@ -342,10 +357,10 @@ class _GroupChat extends State<GroupChat> {
                 ? mainColor.MainColor
                 : _questionNumber >= index
                     ? mainColor.MainColor.withOpacity(0.5)
-                    : mainColor.lightGray,
+                    : mainColor.Gray,
           ),
           child: Text(
-            '${index}',
+            '$index',
           ),
         ),
       ),
@@ -436,7 +451,7 @@ class _GroupChat extends State<GroupChat> {
                         userName: answerData['userNickname'],
                         isAlready: isAlready,
                         image: answerData['userSex'],
-                        mbti: answerData['mbti'],
+                        mbti: answerData['mbti'] ?? '',
                         answerId: answerData['id'],
                         socket: socket));
                   }
@@ -456,10 +471,6 @@ class _GroupChat extends State<GroupChat> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
-      // fetchLatestComments();
-
-      count += 1;
-      if (count == 10) exit(1);
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
@@ -521,7 +532,7 @@ class _GroupChat extends State<GroupChat> {
                     userName: answerData['userNickname'],
                     isAlready: isAlready,
                     image: answerData['userSex'],
-                    mbti: answerData['mbti'],
+                    mbti: answerData['mbti'] ?? '',
                     answerId: answerData['id'],
                     socket: socket,));
               }
@@ -545,10 +556,6 @@ class _GroupChat extends State<GroupChat> {
         no,
         null, null
       );
-      // fetchIndexComments(no);
-
-      count += 1;
-      if (count == 10) exit(1);
     }
     else {
       print(response.statusCode);
@@ -599,10 +606,6 @@ class _GroupChat extends State<GroupChat> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, () async {
       }, null, null, SendAnswer, [answer, questionId]);
-      // SendAnswer(answer, questionId);
-
-      count += 1;
-      if (count == 10) exit(1);
     }
     else {
       print('요청 실패');
