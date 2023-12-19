@@ -1,3 +1,4 @@
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurtingTab/blurting.dart';
 import 'package:blurting/pages/homeTab/Home.dart';
@@ -110,7 +111,6 @@ class _MainApp extends State<MainApp> {
       ),
     );
   }
-
 }
 
 class TabItem extends StatelessWidget {
@@ -135,13 +135,13 @@ class TabItem extends StatelessWidget {
               ? Image.asset(image)
               : Image.asset(
             image,
-            color: Color.fromRGBO(217, 217, 217, 1),
+            color: mainColor.lightGray,
           ),
         ),
         Text(
           name,
           style: TextStyle(
-            color: Color.fromRGBO(48, 48, 48, 0.8),
+            color: mainColor.Gray,
             fontSize: 10,
             fontFamily: 'Pretendard',
           ),

@@ -32,6 +32,7 @@ class CardItem {
   final String userSex;
   int likes; // 추가: 좋아요 수
   bool ilike; //내가 좋아요 눌렀는지 여부
+  int answerId;
 
   CardItem({
     required this.userName,
@@ -41,6 +42,7 @@ class CardItem {
     required this.userSex,
     required this.likes,
     required this.ilike,
+    required this.answerId
   });
 }
 
@@ -101,19 +103,7 @@ class _HomeState extends State<Home> {
     return '$hours시간 $minutes분 $remainingSeconds초';
   }
 
-  void handleLike(int index) {
-    setState(() {
-      if (!cardItems[index].ilike) {
-        // If not liked, increase likes count and set ilike to true
-        cardItems[index].likes++;
-        cardItems[index].ilike = true;
-      } else {
-        print('이미 좋아요 누름');
-      }
-    });
-  }
-
-    void mvpName(int index) {
+  void mvpName(int index) {
     setState(() {
       _mvpName = cardItems[index].userName;
       print(_mvpName);
@@ -252,9 +242,7 @@ class _HomeState extends State<Home> {
                               GestureDetector(
                                 onTap: () {
                                   // 좋아요 버튼을 눌렀을 때의 로직
-                                  if (!cardItems[index].ilike) {
-                                    handleLike(index);
-                                  }
+                                    changeLike(cardItems[index].answerId, index);
                                 },
                                 child: Icon(
                                   Icons.thumb_up,
@@ -463,6 +451,7 @@ class _HomeState extends State<Home> {
                 userSex: answer['userSex'],
                 likes: answer['likes'],
                 ilike: answer['ilike'],
+                answerId: answer['id']
               );
             }).toList();
 
@@ -530,6 +519,40 @@ class _HomeState extends State<Home> {
     } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+    }
+  }
+
+  Future<void> changeLike(int answerId, int index) async {
+    print('좋아요 누름');
+
+    // answerId 보내
+    final url = Uri.parse(API.homeLike);
+    String savedToken = await getToken();
+
+    final response = await http.put(url,
+        headers: {
+          'authorization': 'Bearer $savedToken',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'answerId': answerId}));
+
+    if (response.statusCode == 200) {
+      print('요청 성공');
+      print(response.body);
+
+      if (mounted) {
+        setState(() {
+          if (!cardItems[index].ilike) {
+            // If not liked, increase likes count and set ilike to true
+            cardItems[index].likes++;
+          } else {
+            cardItems[index].likes--;
+          }
+          cardItems[index].ilike = !cardItems[index].ilike;
+        });
+      }
+    } else {
+      print(response.statusCode);
     }
   }
 }

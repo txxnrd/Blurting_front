@@ -221,7 +221,7 @@ class _Blurting extends State<Blurting> {
                       height: ProfileList[currentPage].length > 4
                           ? MediaQuery.of(context).size.width * 0.8
                           : MediaQuery.of(context).size.width * 0.7,
-                      child: isState != 'Continue'
+                      child: isState == 'Start'
                           ? Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -245,17 +245,45 @@ class _Blurting extends State<Blurting> {
                                 ],
                               ),
                             )
-                          : !isMine
-                              ? PageView(controller: pageController, children: [
-                                  _arrowPage(0),
-                                  _arrowPage(1),
-                                  _arrowPage(2),
-                                ])
-                              : PageView(controller: pageController, children: [
-                                  _myArrowPage(0),
-                                  _myArrowPage(1),
-                                  _myArrowPage(2),
-                                ]),
+                          : isState == 'Matching...'
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '블러팅 방이 매칭 중이에요.',
+                                        style: TextStyle(
+                                            color: mainColor.Gray,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            fontFamily: 'Heebo'),
+                                      ),
+                                      Text(
+                                        '잠시만 기다려 주세요!',
+                                        style: TextStyle(
+                                            color: mainColor.Gray,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            fontFamily: 'Heebo'),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : !isMine
+                                  ? PageView(
+                                      controller: pageController,
+                                      children: [
+                                          _arrowPage(0),
+                                          _arrowPage(1),
+                                          _arrowPage(2),
+                                        ])
+                                  : PageView(
+                                      controller: pageController,
+                                      children: [
+                                          _myArrowPage(0),
+                                          _myArrowPage(1),
+                                          _myArrowPage(2),
+                                        ]),
                     ),
                     if (isState == 'Continue' && !isMine)
                       Container(
@@ -566,7 +594,7 @@ class _Blurting extends State<Blurting> {
       print('요청 성공');
 
       try {
-        bool responseData = jsonDecode(response.body);
+        bool responseData = jsonDecode(response.body);        // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
         if (mounted) {
           setState(() {
             if (responseData) {
