@@ -118,10 +118,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     final pages = (apiResponse != null &&
             apiResponse!['answers'] != null &&
-            apiResponse!['answers'].isNotEmpty)
+            (apiResponse!['answers'] as List).isNotEmpty)
         ? List.generate(cardItems.length, (index) {
             return Container(
               margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
@@ -181,6 +180,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       SizedBox(height: 5),
+
                       Text(
                         'Q. ${cardItems[index].question}',
                         style: TextStyle(
@@ -197,16 +197,19 @@ class _HomeState extends State<Home> {
                         child: SingleChildScrollView(
                           child: Text(
                             'A. ${cardItems[index].answer}',
+
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'Heebo',
                               fontSize: 15,
+
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                       ),
                       SizedBox(height: 11),
+
                       Row(
                         children: [
                           Expanded(
@@ -350,6 +353,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
+
                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -404,14 +408,11 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-                YourBlurtingWidget(
-                    icon: 'arrow', apiResponse: apiResponse),
-                YourBlurtingWidget(
-                    icon: 'match', apiResponse: apiResponse),
-                YourBlurtingWidget(
-                    icon: 'chat', apiResponse: apiResponse),
-                YourBlurtingWidget(
-                    icon: 'like', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'arrow', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'match', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'chat', apiResponse: apiResponse),
+          YourBlurtingWidget(icon: 'like', apiResponse: apiResponse),
+
         ],
       ),
     );

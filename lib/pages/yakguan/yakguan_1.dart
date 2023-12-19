@@ -1,11 +1,16 @@
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/pages/useGuide/useguidepagetwo.dart';
+import 'package:blurting/pages/yakguan/yakguanfive.dart';
+import 'package:blurting/pages/yakguan/yakguanfour.dart';
+import 'package:blurting/pages/yakguan/yakguanthree.dart';
+import 'package:blurting/pages/yakguan/yakguantwo.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/colors/colors.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,81 +55,49 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
     false,
     false,
     false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
   ];
-  List<String> selectedCharacteristics = [];
 
-  List<String> characteristic = [
-    "애니",
-    "그림그리기",
-    "술",
-    "영화/드라마",
-    "여행",
-    "요리",
-    "자기계발",
-    "독서",
-    "게임",
-    "노래듣기",
-    "봉사활동",
-    "운동",
-    "노래부르기",
-    "산책"
-  ];
-  void updateSelectedCharacteristics() {
-    // 임시 리스트를 생성하여 선택된 특성들을 저장합니다.
-    List<String> tempSelectedCharacteristics = [];
-
-    for (int i = 0; i < isValidList.length; i++) {
-      if (isValidList[i]) {
-        // isValidList[i]가 true이면, 해당 인덱스의 characteristic을 추가합니다.
-        tempSelectedCharacteristics.add(characteristic[i]);
-      }
-    }
-
-    // 상태를 업데이트합니다.
-    setState(() {
-      selectedCharacteristics = tempSelectedCharacteristics;
-    });
-  }
-
-  Widget customHobbyCheckbox(String hobbyText, int index, width) {
+  Widget customCheckbox(String hobbyText, int index) {
     return Container(
-      width: width * 0.44,
-      height: 48,
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Checkbox(
-            value: isValidList[index],
-            onChanged: (bool? newValue) {
-              setState(() {
-                IsSelected(index);
-              });
-            },
-            activeColor: Color(DefinedColor.darkpink),
-          ),
           GestureDetector(
             onTap: () {
               setState(() {
                 IsSelected(index);
+                if (index == 4 && isValidList[index]) {
+                  for (int i = 0; i < 4; i++) {
+                    isValidList[i] = true;
+                  }
+                }
               });
             },
+            child: Checkbox(
+              side: BorderSide(color: Colors.transparent),
+              fillColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                  }
+                  return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                },
+              ),
+              value: isValidList[index],
+              onChanged: (bool? newValue) {
+                setState(() {
+                  IsSelected(index);
+                });
+              },
+            ),
+          ),
+          Flexible(
             child: Text(
               hobbyText,
               style: TextStyle(
-                color: Color(0xFF303030),
+                color: Color(0xFF868686),
                 fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w500,
-                fontSize: 18.6,
+                fontWeight: index == 4 ? FontWeight.w700 : FontWeight.w400,
+                fontSize: 16,
               ),
             ),
           ),
@@ -136,11 +109,27 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
   bool IsValid = false;
   @override
   void IsSelected(int index) {
-    isValidList[index] = !isValidList[index];
-    if (isValidList.any((isValid) => isValid)) {
-      IsValid = true;
-    } else
-      IsValid = false;
+    if (index == 4) {
+      // Clicked on "아래 항목에 전부 동의합니다." checkbox
+      isValidList[index] = !isValidList[index];
+      if (isValidList[index]) {
+        // If checked, set all items below to true
+        for (int i = 0; i < 4; i++) {
+          isValidList[i] = true;
+        }
+      } else {
+        // If unchecked, set all items below to false
+        for (int i = 0; i < 4; i++) {
+          isValidList[i] = false;
+        }
+      }
+    } else {
+      // Clicked on other checkboxes
+      isValidList[index] = !isValidList[index];
+    }
+
+    // Check if at least one checkbox is selected
+    IsValid = isValidList.any((isValid) => isValid);
   }
 
   @override
@@ -150,35 +139,160 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('이용약관'),
+        title: Text(''),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Center(
+              child: Text(
+                '이용약관',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF868686),
+                    fontFamily: 'Pretendard'),
+              ),
+            ),
             SizedBox(
               height: 25,
             ),
             Text(
-              '블러팅 서비스 사용을 위해 다음 권한의 허용이 필요합니다.',
+              '  블러팅 서비스 사용을 위해 다음 권한의\n  허용이 필요합니다.',
               style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF303030),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF868686),
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-            customHobbyCheckbox('(필수) 개인정부 수집 및 이용에 동의합니다.', 0, width),
-            customHobbyCheckbox('(필수) 개인정보 보유 및 이용기간에 동의합니다.', 1, width),
-            SizedBox(height: 10),
+            customCheckbox('아래 항목에 전부 동의합니다.', 4),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  customCheckbox('(필수)개인정부 수집 및 이용에 동의합니다.', 0),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => YakguanTwo()),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 210, 0),
+                        child: Text(
+                          '더보기',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard'),
+                        ),
+                      )),
+                  SizedBox(height: 12),
+                  customCheckbox('(필수)개인정보 보유 및 이용기간에 동의합니다.', 1),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => YakguanThree()),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 210, 0),
+                        child: Text(
+                          '더보기',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard'),
+                        ),
+                      )),
+                  customCheckbox('(필수)동의 거부 관리에 동의합니다.', 2),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => YakguanFour()),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 210, 0),
+                        child: Text(
+                          '더보기',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard'),
+                        ),
+                      )),
+                  customCheckbox('(필수)개인정보의 제3자 제공에 동의합니다.', 3),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => YakguanFive()),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 210, 0),
+                        child: Text(
+                          '더보기',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF868686),
+                              fontFamily: 'Pretendard'),
+                        ),
+                      )),
+                ],
+              ),
+            ),
+            SizedBox(height: 210),
+            GestureDetector(
+              child: staticButton(text: '확인'),
+              onTap: () {
+                if (IsValid) {
+                  print('확인 버튼 클릭됨');
+                  Navigator.pop(context);
+                }
+              },
+            ),
           ],
         ),
       ),

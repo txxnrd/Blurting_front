@@ -39,9 +39,9 @@ class _Whisper extends State<Whisper> {
   final String userName = '';
   final String roomId = '';
 
-  final int blurValue = 0;
-  final int blurChange = 0;
-  String appbarphoto = '';
+  int blurValue = 0;
+  int blurChange = 0;
+  late String appbarphoto = '';
   late Image image;
 
   late int otherId = 0;
@@ -56,112 +56,120 @@ class _Whisper extends State<Whisper> {
     super.initState();
 
     Future<void> initializeSocket() async {
-    await fetchChats();
-    image = Image.network(appbarphoto);
-
-    precacheImage(NetworkImage(appbarphoto), context);
-
-    Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
-
-    widget.socket.emit('in_room', data);
-
-    widget.socket.on('new_chat', (data) {
-      print('메시지 소켓 도착$data');
-
-      int userId = data['userId'];
-      String chat = data['chat'];
-      bool read = data['read']; // (읽음 표시)
-      Widget newAnswer;
-
-      String formattedDate = dateFormatFull
-          .format(_parseDateTime(data['createdAt'] as String? ?? ''));
-
-      if (userId == Provider.of<UserProvider>(context, listen: false).userId) {
-        // userProvider
-        newAnswer = MyChat(
-          message: chat,
-          createdAt: dateFormatAA
-              .format(_parseDateTime(data['createdAt'] as String? ?? '')),
-          read: read,
-          isBlurting: false,
-          likedNum: 0,
-        );
-        sendingMessageList.clear();
-        print('내 메시지 전송 완료: $chat');
+      await fetchChats();
+      if (appbarphoto.isNotEmpty) {
+        image = Image.network(appbarphoto);
       } else {
-        newAnswer = OtherChat(
+        // Handle the case where the URL is empty
+        print('Image URL is empty.');
+      }
+
+      // precacheImage(NetworkImage(appbarphoto), context);
+
+      Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
+
+      widget.socket.emit('in_room', data);
+
+      widget.socket.on('new_chat', (data) {
+        print('메시지 소켓 도착$data');
+
+        int userId = data['userId'];
+        String chat = data['chat'];
+        bool read = data['read']; // (읽음 표시)
+        Widget newAnswer;
+
+        String formattedDate = dateFormatFull
+            .format(_parseDateTime(data['createdAt'] as String? ?? ''));
+
+        if (userId ==
+            Provider.of<UserProvider>(context, listen: false).userId) {
+          // userProvider
+          newAnswer = MyChat(
             message: chat,
             createdAt: dateFormatAA
-                .format(_parseDateTime(data['createdAt'] as String? ?? '')));
-        print('상대방 메시지 도착: $chat');
-      }
-      if (mounted) {
-        setState(() {
-          if (chatMessages.isEmpty) {
-            chatMessages.add(Center(child: DateWidget(date: formattedDate)));
-          }
+                .format(_parseDateTime(data['createdAt'] as String? ?? '')),
+            read: read,
+            isBlurting: false,
+            likedNum: 0,
+          );
+          sendingMessageList.clear();
+          print('내 메시지 전송 완료: $chat');
+        } else {
+          newAnswer = OtherChat(
+              message: chat,
+              createdAt: dateFormatAA
+                  .format(_parseDateTime(data['createdAt'] as String? ?? '')));
+          print('상대방 메시지 도착: $chat');
+        }
+        if (mounted) {
+          setState(() {
+            if (chatMessages.isEmpty) {
+              chatMessages.add(Center(child: DateWidget(date: formattedDate)));
+            }
 
-          chatMessages.add(newAnswer); // 새로운 메시지 추가
-        });
-      }
-    });
+            chatMessages.add(newAnswer); // 새로운 메시지 추가
+          });
+        }
+      });
 
-    widget.socket.on('read_all', (data) {
-      print('다 읽음');
-      for (int i = 0; i < chatMessages.length; i++) {
-        Widget widget = chatMessages[i];
-        if (widget is MyChat) {
-          if (mounted) {
-            setState(() {
-              chatMessages.removeAt(i);
-              chatMessages.insert(
-                  i,
-                  MyChat(
-                    message: widget.message,
-                    createdAt: widget.createdAt,
-                    read: true,
-                    isBlurting: false,
-                    likedNum: 0,
-                  ));
-            });
+      widget.socket.on('read_all', (data) {
+        print('다 읽음');
+        for (int i = 0; i < chatMessages.length; i++) {
+          Widget widget = chatMessages[i];
+          if (widget is MyChat) {
+            if (mounted) {
+              setState(() {
+                chatMessages.removeAt(i);
+                chatMessages.insert(
+                    i,
+                    MyChat(
+                      message: widget.message,
+                      createdAt: widget.createdAt,
+                      read: true,
+                      isBlurting: false,
+                      likedNum: 0,
+                    ));
+              });
+            }
           }
         }
-      }
-    });
+      });
 
-    widget.socket.on('report', (data) {
-      if (mounted) {
-        setState(() {
-          isBlock = true;
-        });
-      }
-    });
-
-    widget.socket.on('leave_room', (data) {
-      // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
-      // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
-      // 귓속말 내에서 내가 나갔을 때, 이전으로 돌아가기 (채팅 리스트로)
-      // 상대방이 방금 나간 roomId가 지금 내가 보고 있는 roomId라면
-      if (data['roomId'] == widget.roomId) {
+      widget.socket.on('report', (data) {
         if (mounted) {
           setState(() {
             isBlock = true;
           });
         }
-        // if (data['userId'] == UserProvider.UserId) {
-        //   print(context);
-        // } else {}
-      }
-    });
+      });
 
-    widget.socket.on('connect', (_) {
-      print('소켓 연결됨');
-    });
+      widget.socket.on('leave_room', (data) {
+        // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
+        // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
+        // 귓속말 내에서 내가 나갔을 때, 이전으로 돌아가기 (채팅 리스트로)
+        // 상대방이 방금 나간 roomId가 지금 내가 보고 있는 roomId라면
+        if (data['roomId'] == widget.roomId) {
+          if (mounted) {
+            setState(() {
+              isBlock = true;
+            });
+          }
+          // if (data['userId'] == UserProvider.UserId) {
+          //   print(context);
+          // } else {}
+        }
+      });
 
-    widget.socket.on('disconnect', (_) {
-      print('소켓 연결 끊김');
-    });
-    };
+      widget.socket.on('connect', (_) {
+        print('소켓 연결됨');
+      });
+
+      widget.socket.on('disconnect', (_) {
+        print('소켓 연결 끊김');
+      });
+    }
+
+    ;
 
     initializeSocket();
   }
@@ -170,10 +178,12 @@ class _Whisper extends State<Whisper> {
   void dispose() {
     super.dispose();
 
-    Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
+    if (mounted) {
+      Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
 
-    widget.socket.emit('in_room', data);
-    print('나감');
+      widget.socket.emit('in_room', data);
+      print('나감');
+    }
     // widget.socket.disconnect();
   }
 
@@ -204,7 +214,6 @@ class _Whisper extends State<Whisper> {
                 userName: userName,
                 blurValue: blurValue,
               ),
-              // You can customize AlertDialog properties here
             ],
           ),
         );
@@ -253,7 +262,6 @@ class _Whisper extends State<Whisper> {
             GestureDetector(
               onTap: (!isBlock)
                   ? () {
-                      // Show the profile card as a bottom sheet
                       _showProfileModal(context);
                     }
                   : null,
@@ -267,7 +275,7 @@ class _Whisper extends State<Whisper> {
                   border: responseData?['blurChange'] != null
                       ? Border.all(
                           color: Color(0XFFF66464), // Apply pink border color
-                          width: 2.0,
+                          width: 1.0,
                         )
                       : null,
                 ),
@@ -286,17 +294,53 @@ class _Whisper extends State<Whisper> {
                 ),
               ),
             ),
-            Container(
-              width: 80,
-              margin: EdgeInsets.all(10),
-              child: Text(
-                widget.userName,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15),
-                overflow: TextOverflow.ellipsis,
-              ),
+            Stack(
+              children: [
+                Container(
+                  width: 120,
+                  margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  child: Text(
+                    widget.userName,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        fontFamily: "Heebo"),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (responseData?['blurChange'] != null)
+                  Positioned(
+                    top: 0,
+                    left: 3,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                          size: 10,
+                        ),
+                        Container(
+                          width: 110,
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(
+                                0.5), // Adjust the background color as needed
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            '  $blurValue단계 블러가 풀렸어요!',
+                            style: TextStyle(
+                                color: Color(0XFF868686),
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "Heebo"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
             )
           ],
         ),
@@ -333,7 +377,9 @@ class _Whisper extends State<Whisper> {
                                           alignment: Alignment.bottomCenter,
                                           children: [
                                             Container(
-                                              width: MediaQuery.of(context).size.width *
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
                                                   0.9,
                                               height: 100,
                                               decoration: BoxDecoration(
@@ -565,7 +611,6 @@ class _Whisper extends State<Whisper> {
         if (mounted) {
           setState(() {
             isBlock = !responseData!['connected'];
-            appbarphoto = responseData?['otherImage'] ?? '';
           });
         }
         print('차단 여부: ${isBlock}');
@@ -573,6 +618,9 @@ class _Whisper extends State<Whisper> {
         List<dynamic> chatList = responseData!['chats'];
         DateTime hasRead = _parseDateTime(responseData!['hasRead']);
         otherId = responseData!['otherId'];
+        appbarphoto = responseData?['otherImage'] ?? '';
+        print('Image URL: $appbarphoto');
+        blurValue = responseData?['blur'] ?? 1;
 
         print(hasRead);
 
@@ -678,32 +726,6 @@ class DateWidget extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-void checkBlurChange(int blurChange, BuildContext context) {
-  // 이 부분에서 blurChange 값을 가져오고, 조건에 따라 showDialog 호출
-
-  // Show dialog when blurChange is 2, 3, or 4
-  if (blurChange != null) {
-    print("blurchange: $blurChange");
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-              '$blurChange단계 블러가 풀렸습니다!'), // 주의: blurchange가 아닌 blurChange로 수정
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
