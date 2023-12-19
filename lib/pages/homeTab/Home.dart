@@ -57,6 +57,10 @@ class _HomeState extends State<Home> {
   late Duration remainingTime = Duration.zero;
   late List<CardItem> cardItems = [];
   String _mvpName = '...';
+  int arrow = 0;
+  int matchedArrows = 0;
+  int chats = 0;
+  int likes = 0;
 
   @override
   void initState() {
@@ -118,10 +122,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = (apiResponse != null &&
-            apiResponse!['answers'] != null &&
-            (apiResponse!['answers'] as List).isNotEmpty)
-        ? List.generate(cardItems.length, (index) {
+    final pages = List.generate(cardItems.length, (index) {
             return Container(
               margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
               decoration: BoxDecoration(
@@ -285,20 +286,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             );
-          })
-        : [
-            Center(
-              child: Text(
-                'MVP 답변 준비중이에요!',
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontFamily: 'Heebo',
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ];
+          });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -331,7 +319,7 @@ class _HomeState extends State<Home> {
         ),
         actions: <Widget>[
           pointAppbar(),
-            SizedBox(width: 10),
+          SizedBox(width: 10),
         ],
       ),
       body: Column(
@@ -372,17 +360,31 @@ class _HomeState extends State<Home> {
             ],
           ),
           SizedBox(
-            // color: Colors.amber,
             height: 240,
-            child: PageView.builder(
-              onPageChanged: (index) => {mvpName(index)},
-              controller: controller,
-              itemCount: min(cardItems.length, 3),
-              itemBuilder: (_, index) {
-                return pages[index % pages.length];
-              },
-            ),
+            child: 
+            apiResponse != null && apiResponse!['answers'].isNotEmpty ? 
+            PageView.builder(
+                    onPageChanged: (index) => {mvpName(index)},
+                    controller: controller,
+                    itemCount: min(cardItems.length, 3),
+                    itemBuilder: (_, index) {
+                      return pages[index % pages.length];
+                    },
+                  )
+                : Center(
+                    child: Text(
+                      'MVP 답변 준비중이에요!',
+                      style: TextStyle(
+                        color: mainColor.Gray,
+                        fontFamily: 'Heebo',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
           ),
+
+          if(apiResponse != null && apiResponse!['answers'].isNotEmpty)
           Center(
             child: SmoothPageIndicator(
               controller: controller,
@@ -408,11 +410,10 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          YourBlurtingWidget(icon: 'arrow', apiResponse: apiResponse),
-          YourBlurtingWidget(icon: 'match', apiResponse: apiResponse),
-          YourBlurtingWidget(icon: 'chat', apiResponse: apiResponse),
-          YourBlurtingWidget(icon: 'like', apiResponse: apiResponse),
-
+          NowBlurting('arrow', '현재 블러팅에서 날아다니는 화살', arrow),
+          NowBlurting('match', '블러팅에서 매치된 화살의 개수', matchedArrows),
+          NowBlurting('chat', '블러팅에서 오고가는 귓속말', chats),
+          NowBlurting('like', '지금까지 당신의 답변을 좋아한 사람', likes),
         ],
       ),
     );
@@ -433,31 +434,48 @@ class _HomeState extends State<Home> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       print('Server Response: $data'); // Add this line to print server response
-      if (mounted) {
-        setState(() {
-          apiResponse = data;
 
-          List<dynamic> answers = data['answers'];
+      try {
+        if (mounted) {
+          setState(() {
+            apiResponse = data;
+            print('왜 null이니');
+            print(apiResponse);
 
-          cardItems = answers.map((answer) {
-            return CardItem(
-              userName: answer['userNickname'],
-              question: answer['question'],
-              answer: answer['answer'],
-              postedAt: answer['postedAt'],
-              userSex: answer['userSex'],
-              likes: answer['likes'],
-              ilike: answer['ilike'],
-            );
-          }).toList();
+            arrow = data['arrows'];
+            matchedArrows = data['matchedArrows'];
+            chats = data['chats'];
+            likes = data['likes'];
 
-          mvpName(0);
+            print(arrow);
+            print(matchedArrows);
+            print(chats);
+            print(likes);
 
-          int milliseconds = data['seconds'];
-          print(milliseconds);
-          remainingTime = Duration(milliseconds: milliseconds);
-          print(remainingTime);
-        });
+            List<dynamic> answers = data['answers'];
+
+            cardItems = answers.map((answer) {
+              return CardItem(
+                userName: answer['userNickname'],
+                question: answer['question'],
+                answer: answer['answer'],
+                postedAt: answer['postedAt'],
+                userSex: answer['userSex'],
+                likes: answer['likes'],
+                ilike: answer['ilike'],
+              );
+            }).toList();
+
+            if (answers.isNotEmpty){mvpName(0);}
+
+            int milliseconds = data['seconds'];
+            print(milliseconds);
+            remainingTime = Duration(milliseconds: milliseconds);
+            print(remainingTime);
+          });
+        }
+      } catch (e) {
+        print('뭔가 문제 잇음');
       }
     }
     else if (response.statusCode == 401) {
@@ -516,90 +534,49 @@ class _HomeState extends State<Home> {
   }
 }
 
-class YourBlurtingWidget extends StatelessWidget {
-  final String icon;
-  final Map<String, dynamic>? apiResponse;
-
-  YourBlurtingWidget({super.key, required this.icon, required this.apiResponse});
-
-  @override
-  Widget build(BuildContext context) {
-    int dynamicCount = 0;
-    if (apiResponse != null) {
-      switch (icon) {
-        case 'arrow':
-          dynamicCount = apiResponse!['arrows'];
-          break;
-        case 'match':
-          dynamicCount = apiResponse!['matchedArrows'];
-          break;
-        case 'chat':
-          dynamicCount = apiResponse!['chats'];
-          break;
-        case 'like':
-          dynamicCount = apiResponse!['likes'];
-          break;
-      }
-    }
-
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child:
-                Image.asset('./assets/images/$icon.png', width: 35, height: 35),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Text(
-              getCountText(),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.black,
-                fontFamily: 'heebo',
-                fontWeight: FontWeight.w700,
-              ),
+Widget NowBlurting (String icon, String getCountText, int dynamicCount) {
+  return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child:
+              Image.asset('./assets/images/$icon.png', width: 35, height: 35),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 12),
+          child: Text(
+            getCountText,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.black,
+              fontFamily: 'heebo',
+              fontWeight: FontWeight.w700,
             ),
           ),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.only(right: 31),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color.fromRGBO(255, 210, 210, 0.3),
-          ),
-          width: 58,
-          height: 28,
-          child: Center(
-            child: Text(
-              '$dynamicCount', // Use dynamic count here
-              style: TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.w700,
-              ),
+        ),
+      ],
+    ),
+    Padding(
+      padding: const EdgeInsets.only(right: 31),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromRGBO(255, 210, 210, 0.3),
+        ),
+        width: 58,
+        height: 28,
+        child: Center(
+          child: Text(
+            '$dynamicCount', // Use dynamic count here
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
       ),
-    ]);
-  }
-
-  String getCountText() {
-    switch (icon) {
-      case 'arrow':
-        return '현재 블러팅에서 날아다니는 화살';
-      case 'match':
-        return '블러팅에서 매치된 화살표의 개수';
-      case 'chat':
-        return '블러팅에서 오고가는 귓속말 채팅방';
-      case 'like':
-        return '지금까지 당신의 답변을 좋아한 사람';
-      default:
-        return '';
-    }
-  }
+    ),
+  ]);
 }

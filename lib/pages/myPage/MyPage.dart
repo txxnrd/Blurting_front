@@ -339,7 +339,7 @@ class _MyPage extends State<MyPage> {
                     activeDotScale: 1.0,
                     maxVisibleDots: 5,
                     radius: 8,
-                    spacing: 3,
+                    spacing: 5,
                     dotHeight: 10,
                     dotWidth: 10,
                   ),
@@ -422,7 +422,7 @@ class _MyPage extends State<MyPage> {
                 style: TextStyle(
                     fontFamily: "Heebo",
                     fontWeight: FontWeight.w700,
-                    fontSize: 32,
+                    fontSize: 30,
                     color: mainColor.MainColor)),
             SizedBox(width: 7),
             Text(userProfile['mbti'] ?? 'Unknown',
