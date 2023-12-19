@@ -50,7 +50,7 @@ class _EmailPageState extends State<EmailPage>
     );
     _progressAnimation = Tween<double>(
       begin: 14/15, // 시작 너비 (30%)
-      end: 14.4/15, // 종료 너비 (40%)
+      end: 14.2/15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -391,7 +391,6 @@ class _EmailPageState extends State<EmailPage>
                   SizedBox(width: 4),
                   Expanded(
                     child: Container(
-
                       padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
                       alignment: Alignment.centerLeft,
                       height: 48, // TextField의 높이와 일치하도록 설정합니다.
