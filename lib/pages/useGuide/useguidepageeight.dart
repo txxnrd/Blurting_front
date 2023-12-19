@@ -1,6 +1,8 @@
+import 'package:blurting/pages/useGuide/done.dart';
 import 'package:blurting/pages/useGuide/useguidepageeight_2.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/colors/colors.dart';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -24,23 +26,10 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-
-  Future<void> _increaseProgressAndNavigate() async {
-    await _animationController!.forward();
-    Navigator.of(context)
-        .push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            UseGuidePageEight_2(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    )
-        .then((_) {
-      // 첫 번째 화면으로 돌아왔을 때 실행될 로직
-    });
-  }
+  bool _isImageBefore = true;
+  bool _isImageMiddle = false;
+  bool _isImageAfter = false;
+  late Timer _imageTimer;
 
   @override
   void initState() {
@@ -58,6 +47,37 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
       ..addListener(() {
         setState(() {});
       });
+
+    _imageTimer = Timer.periodic(Duration(milliseconds: 300), (timer) {
+      setState(() {
+        _isImageBefore = false;
+        _isImageMiddle = true;
+      });
+      Timer(Duration(milliseconds: 300), () {
+        setState(() {
+          _isImageMiddle = false;
+          _isImageAfter = true;
+        });
+      });
+    });
+  }
+
+  Future<void> _increaseProgressAndNavigate() async {
+    await _animationController!.forward();
+
+    Navigator.of(context)
+        .push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            UseGuidePagedone(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    )
+        .then((_) {
+      // 첫 번째 화면으로 돌아왔을 때 실행될 로직
+    });
   }
 
   @override
@@ -144,8 +164,13 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                             Container(
                               width: 259,
                               height: 328,
-                              child:
-                                  Image.asset("assets/images/blurbefore.png"),
+                              child: Image.asset(
+                                _isImageBefore
+                                    ? "assets/images/blurbefore.png"
+                                    : _isImageMiddle
+                                        ? "assets/images/blurmiddle.png"
+                                        : "assets/images/blurafter.png",
+                              ),
                             ),
                             // Positioned(
                             //   left: 50, // 원하는 위치로 조정하세요.

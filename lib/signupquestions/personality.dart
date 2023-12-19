@@ -60,8 +60,8 @@ class _PersonalityPageState extends State<PersonalityPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 10/15, // 시작 너비 (30%)
-      end: 11/15, // 종료 너비 (40%)
+      begin: 10 / 15, // 시작 너비 (30%)
+      end: 11 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -70,7 +70,6 @@ class _PersonalityPageState extends State<PersonalityPage>
   }
 
   bool IsValid = false;
-
 
   List<bool> isValidList = [
     false,
@@ -93,7 +92,20 @@ class _PersonalityPageState extends State<PersonalityPage>
   List<String> selectedCharacteristics = [];
 
   List<String> characteristic = [
-  "개성적인", "책임감있는", "열정적인", "귀여운", "상냥한","감성적인","낙천적인", "유머있는", "차분한", "지적인", "섬세한", "무뚝뚝한", "외향적인", "내향적인"
+    "개성적인",
+    "책임감있는",
+    "열정적인",
+    "귀여운",
+    "상냥한",
+    "감성적인",
+    "낙천적인",
+    "유머있는",
+    "차분한",
+    "지적인",
+    "섬세한",
+    "무뚝뚝한",
+    "외향적인",
+    "내향적인"
   ];
 
   void updateSelectedCharacteristics() {
@@ -113,15 +125,23 @@ class _PersonalityPageState extends State<PersonalityPage>
     });
   }
 
-
   Widget customPersonalityCheckBox(String hobbyText, int index, width) {
     return Container(
-      width: width*0.42,
+      width: width * 0.42,
       height: 48,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Checkbox(
+            side: BorderSide(color: Colors.transparent),
+            fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                }
+                return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+              },
+            ),
             value: isValidList[index],
             onChanged: (bool? newValue) {
               setState(() {
@@ -136,8 +156,6 @@ class _PersonalityPageState extends State<PersonalityPage>
                 IsSelected(index);
               });
             },
-
-
             child: Text(
               hobbyText,
               style: TextStyle(
@@ -152,6 +170,7 @@ class _PersonalityPageState extends State<PersonalityPage>
       ),
     );
   }
+
   @override
   void IsSelected(int index) {
     isValidList[index] = !isValidList[index];
@@ -160,6 +179,7 @@ class _PersonalityPageState extends State<PersonalityPage>
     } else
       IsValid = false;
   }
+
   void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -190,32 +210,30 @@ class _PersonalityPageState extends State<PersonalityPage>
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"character":selectedCharacteristics }), // JSON 형태로 인코딩
+      body: json.encode({"character": selectedCharacteristics}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
-      }
-      else{
+      } else {
         _showVerificationFailedSnackBar();
       }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
       _showVerificationFailedSnackBar();
     }
   }
+
   Future<void> _sendBackRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signupback);
@@ -230,29 +248,26 @@ class _PersonalityPageState extends State<PersonalityPage>
       },
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
-      }
-      else{
+      } else {
         _showVerificationFailedSnackBar();
       }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -273,9 +288,8 @@ class _PersonalityPageState extends State<PersonalityPage>
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             _sendBackRequest();
-            },
+          },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -335,26 +349,21 @@ class _PersonalityPageState extends State<PersonalityPage>
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 customPersonalityCheckBox('개성있는', 0, width),
                 customPersonalityCheckBox('책임감있는', 1, width),
-
               ],
             ),
             SizedBox(
               height: 10,
             ),
             Row(
-
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
                 customPersonalityCheckBox('열정적인', 2, width),
                 customPersonalityCheckBox('귀여운', 3, width),
-
               ],
             ),
             SizedBox(
@@ -362,11 +371,9 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
                 customPersonalityCheckBox('상냥한', 4, width),
                 customPersonalityCheckBox('감성적인', 5, width),
-
               ],
             ),
             SizedBox(
@@ -374,11 +381,9 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
                 customPersonalityCheckBox('낙천적인', 6, width),
                 customPersonalityCheckBox('유머있는', 7, width),
-
               ],
             ),
             SizedBox(
@@ -386,11 +391,9 @@ class _PersonalityPageState extends State<PersonalityPage>
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
                 customPersonalityCheckBox('차분한', 8, width),
                 customPersonalityCheckBox('지적인', 9, width),
-
               ],
             ),
             SizedBox(
@@ -413,16 +416,14 @@ class _PersonalityPageState extends State<PersonalityPage>
                 customPersonalityCheckBox('내향적인', 13, width),
               ],
             ),
-
             SizedBox(height: 20),
-
           ],
         ),
       ),
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -434,8 +435,8 @@ class _PersonalityPageState extends State<PersonalityPage>
           ),
           onPressed: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
           child: Text(
             '다음',
@@ -448,8 +449,8 @@ class _PersonalityPageState extends State<PersonalityPage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

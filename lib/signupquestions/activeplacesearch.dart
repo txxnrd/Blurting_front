@@ -220,7 +220,7 @@ class _SearchPage extends State<SearchPage> {
       double new_longtitude = position.longitude;
 
       final String apiUrl =
-          '${API.geobygeo}?geo=point(${position.longitude} ${position.latitude})}';
+          '${API.geobygeo}?geo=point%28${position.longitude}%20${position.latitude}%29}';
       print(apiUrl);
       final response = await http.get(Uri.parse(apiUrl));
 
