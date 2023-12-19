@@ -246,8 +246,8 @@ class pointAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: () {
+    return InkWell(
+        onTap: () {
           print('포인트 내역 버튼 눌러짐');
           Navigator.push(
             context,
@@ -1502,11 +1502,11 @@ class ellipseText extends StatelessWidget {
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(5, 20, 0, 0),
-                width: 10,
-                height: 10,
+                width: 7,
+                height: 7,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    border: Border.all(color: mainColor.MainColor, width: 3)),
+                    border: Border.all(color: mainColor.MainColor, width: 2)),
               )
             ],
           ),
