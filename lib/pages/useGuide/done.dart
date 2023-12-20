@@ -16,7 +16,10 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
     Timer(Duration(seconds: 6), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MainApp(currentIndex: 0,)),
+        MaterialPageRoute(
+            builder: (context) => MainApp(
+                  currentIndex: 0,
+                )),
       );
     });
   }
@@ -72,14 +75,17 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                       child: Image.asset("assets/images/Blurting_welcome.png"),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
                     InkWell(
                       child: staticButton(text: '시작하기'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainApp(currentIndex: 0,)),
+                          MaterialPageRoute(
+                              builder: (context) => MainApp(
+                                    currentIndex: 0,
+                                  )),
                         );
                         print('시작하기 버튼 클릭됨');
                       },

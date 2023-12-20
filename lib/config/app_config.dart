@@ -44,6 +44,7 @@ class API {
       "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";
   /*HOME */
   static const String homeLike = "${ServerEndpoints.serverEndpoint}/home/like";
+  static const String alarm = "${ServerEndpoints.serverEndpoint}/fcm";
   /*BLURTING */
   static const String matching = "${ServerEndpoints.serverEndpoint}/blurting";
   static const String latest =
@@ -54,18 +55,23 @@ class API {
   static const String register =
       "${ServerEndpoints.serverEndpoint}/blurting/register";
   static const String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
-  static const String blurtingInfo = "${ServerEndpoints.serverEndpoint}/blurting/group-info";
+  static const String blurtingInfo =
+      "${ServerEndpoints.serverEndpoint}/blurting/group-info";
   /*ARROW */
-  static const String sendArrow = "${ServerEndpoints.serverEndpoint}/blurting/arrow/";
-  static const String myArrow = "${ServerEndpoints.serverEndpoint}/blurting/arrow";
+  static const String sendArrow =
+      "${ServerEndpoints.serverEndpoint}/blurting/arrow/";
+  static const String myArrow =
+      "${ServerEndpoints.serverEndpoint}/blurting/arrow";
   /*WHISPER */
   static const String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
   static const String chatList = "${ServerEndpoints.serverEndpoint}/chat/";
   static const String chatProfile =
       "${ServerEndpoints.serverEndpoint}/chat/profile/";
   /*POINT */
-  static const String pointchat = "${ServerEndpoints.serverEndpoint}/point/chat";
-  static const String pointcheck = "${ServerEndpoints.serverEndpoint}/point/check";
+  static const String pointchat =
+      "${ServerEndpoints.serverEndpoint}/point/chat";
+  static const String pointcheck =
+      "${ServerEndpoints.serverEndpoint}/point/check";
   static const String userpoint = "${ServerEndpoints.serverEndpoint}/user";
   static const String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
   static const String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";

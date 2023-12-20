@@ -8,11 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/colors.dart';
 import '../config/app_config.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/mbti.dart';
 
-import 'majorlist.dart';  // sex.dart를 임포트
-
+import 'majorlist.dart'; // sex.dart를 임포트
 
 class MajorPage extends StatefulWidget {
   final String selectedGender;
@@ -21,6 +20,7 @@ class MajorPage extends StatefulWidget {
   @override
   _MajorPageState createState() => _MajorPageState();
 }
+
 enum Major {
   humanities, // 인문계열
   social, // 사회계열
@@ -37,7 +37,7 @@ class _MajorPageState extends State<MajorPage>
   double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  String? selectedMajor=majors[0];
+  String? selectedMajor = majors[0];
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -51,11 +51,13 @@ class _MajorPageState extends State<MajorPage>
       ),
     );
   }
+
   bool IsValid = false;
   @override
   void IsSelected() {
     IsValid = true;
   }
+
   @override
   void initState() {
     super.initState();
@@ -66,8 +68,8 @@ class _MajorPageState extends State<MajorPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 8/15, // 시작 너비 (30%)
-      end: 9/15, // 종료 너비 (40%)
+      begin: 8 / 15, // 시작 너비 (30%)
+      end: 9 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -85,8 +87,8 @@ class _MajorPageState extends State<MajorPage>
     }
     double width = MediaQuery.of(context).size.width;
 
-
-    void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+    void _showVerificationFailedSnackBar(
+        {String message = '인증 번호를 다시 확인 해주세요'}) {
       final snackBar = SnackBar(
         content: Text(message),
         action: SnackBarAction(
@@ -100,6 +102,7 @@ class _MajorPageState extends State<MajorPage>
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+
     Future<void> _sendBackRequest() async {
       print('_sendPostRequest called');
       var url = Uri.parse(API.signupback);
@@ -114,24 +117,20 @@ class _MajorPageState extends State<MajorPage>
         },
       );
       print(response.body);
-      if (response.statusCode == 200 ||response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         // 서버로부터 응답이 성공적으로 돌아온 경우 처리
         print('Server returned OK');
         print('Response body: ${response.body}');
         var data = json.decode(response.body);
 
-        if(data['signupToken']!=null)
-        {
+        if (data['signupToken'] != null) {
           var token = data['signupToken'];
           print(token);
           await saveToken(token);
           Navigator.of(context).pop();
-
-        }
-        else{
+        } else {
           _showVerificationFailedSnackBar();
         }
-
       } else {
         // 오류가 발생한 경우 처리
         print('Request failed with status: ${response.statusCode}.');
@@ -142,32 +141,21 @@ class _MajorPageState extends State<MajorPage>
       print('_sendPostRequest called');
       var url = Uri.parse(API.signup);
       print(_selectedMajor);
-      var major ='';
-      if(_selectedMajor==Major.humanities)
-      {
-        major = '인문계열' ;
-      }
-      else if(_selectedMajor==Major.social)
-      {
-        major = '사회계열' ;
-      }
-      else if(_selectedMajor==Major.education)
-      {
-        major = '교육계열' ;
-      }
-      else if(_selectedMajor==Major.engineering)
-      {
-        major = '공학계열' ;
-      }else if(_selectedMajor==Major.naturalScience)
-      {
-        major = '자연계열' ;
-      }
-      else if(_selectedMajor==Major.medical)
-      {
-        major = '의학계열' ;
-      }
-      else{
-        major='예체능계열';
+      var major = '';
+      if (_selectedMajor == Major.humanities) {
+        major = '인문계열';
+      } else if (_selectedMajor == Major.social) {
+        major = '사회계열';
+      } else if (_selectedMajor == Major.education) {
+        major = '교육계열';
+      } else if (_selectedMajor == Major.engineering) {
+        major = '공학계열';
+      } else if (_selectedMajor == Major.naturalScience) {
+        major = '자연계열';
+      } else if (_selectedMajor == Major.medical) {
+        major = '의학계열';
+      } else {
+        major = '예체능계열';
       }
 
       String savedToken = await getToken();
@@ -179,31 +167,29 @@ class _MajorPageState extends State<MajorPage>
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $savedToken',
         },
-        body: json.encode({"major":major }), // JSON 형태로 인코딩
+        body: json.encode({"major": major}), // JSON 형태로 인코딩
       );
       print(response.body);
-      if (response.statusCode == 200 ||response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         // 서버로부터 응답이 성공적으로 돌아온 경우 처리
         print('Server returned OK');
         print('Response body: ${response.body}');
         var data = json.decode(response.body);
 
-        if(data['signupToken']!=null)
-        {
+        if (data['signupToken'] != null) {
           var token = data['signupToken'];
           print(token);
           await saveToken(token);
           _increaseProgressAndNavigate();
-        }
-        else{
+        } else {
           _showVerificationFailedSnackBar();
         }
-
       } else {
         // 오류가 발생한 경우 처리
         print('Request failed with status: ${response.statusCode}.');
       }
     }
+
     void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
       showDialog(
         context: context,
@@ -236,9 +222,8 @@ class _MajorPageState extends State<MajorPage>
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             _sendBackRequest();
-            },
+          },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -308,6 +293,15 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedMajor == Major.humanities,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -315,7 +309,8 @@ class _MajorPageState extends State<MajorPage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -351,7 +346,8 @@ class _MajorPageState extends State<MajorPage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -392,7 +388,8 @@ class _MajorPageState extends State<MajorPage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -428,7 +425,8 @@ class _MajorPageState extends State<MajorPage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -452,7 +450,6 @@ class _MajorPageState extends State<MajorPage>
                 ),
               ],
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
@@ -470,7 +467,8 @@ class _MajorPageState extends State<MajorPage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -506,7 +504,8 @@ class _MajorPageState extends State<MajorPage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -530,8 +529,6 @@ class _MajorPageState extends State<MajorPage>
                 ),
               ],
             ),
-
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
@@ -549,7 +546,8 @@ class _MajorPageState extends State<MajorPage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -571,7 +569,6 @@ class _MajorPageState extends State<MajorPage>
                     ],
                   ),
                 ),
-
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
@@ -600,16 +597,16 @@ class _MajorPageState extends State<MajorPage>
                 ),
               ],
             ),
-
-            SizedBox(height: 150,),
-
+            SizedBox(
+              height: 150,
+            ),
           ],
         ),
       ),
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -621,8 +618,8 @@ class _MajorPageState extends State<MajorPage>
           ),
           onPressed: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
           child: Text(
             '다음',
@@ -635,8 +632,8 @@ class _MajorPageState extends State<MajorPage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

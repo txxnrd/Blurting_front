@@ -49,10 +49,6 @@ class _SettingPageState extends State<SettingPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-
-
-
-
   int count = 10;
 
   Future<void> _sendDeleteRequest() async {
@@ -389,11 +385,11 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => UseGuidePageOne()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UseGuidePageOne()),
+                      );
                     },
                     child: Container(
                       width: 100,
