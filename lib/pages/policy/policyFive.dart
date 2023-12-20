@@ -16,17 +16,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: YakguanTwo(),
+      home: PolicyFive(),
     );
   }
 }
 
-class YakguanTwo extends StatefulWidget {
+class PolicyFive extends StatefulWidget {
   @override
-  _YakguanTwoState createState() => _YakguanTwoState();
+  _PolicyFiveState createState() => _PolicyFiveState();
 }
 
-class _YakguanTwoState extends State<YakguanTwo> with TickerProviderStateMixin {
+class _PolicyFiveState extends State<PolicyFive> with TickerProviderStateMixin {
   @override
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class _YakguanTwoState extends State<YakguanTwo> with TickerProviderStateMixin {
               height: 25,
             ),
             Text(
-              '제1 조(개인정보 수집 및 이용 목적)',
+              '제5 조(개인정보의 제3자 제공)',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -78,7 +78,7 @@ class _YakguanTwoState extends State<YakguanTwo> with TickerProviderStateMixin {
               height: 10,
             ),
             Text(
-              '이용자가 제공한 모든 정보는 다음의 목적을 위해 활용하며, 목적 이외의 용도로는 사용되지 않습니다.\n- 본인 확인 및 프로필 작성',
+              '회사는 개인정보 보호법에 근거하여 다음과 같은 내용 으로 개인정보를 제 3 자에게 제공하고자 합니다.',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
@@ -86,21 +86,10 @@ class _YakguanTwoState extends State<YakguanTwo> with TickerProviderStateMixin {
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(
-              height: 25,
+              height: 8,
             ),
             Text(
-              '제2 조(개인정보 수집 및 이용 항목)\n회사는 개인정보 수집 목적을 위하여 다음과 같은 정보를 수집합니다.',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF868686),
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              '이용자가 제공한 모든 정보는 다음의 목적을 위해 활용하며, 목적 이외의 용도로는 사용되지 않습니다.\n- 전화번호, 이메일, 성별, 나이, 생년월일 및 활동지역,사진',
+              '1. 개인정보를 제공받는 제3자: 서비스이용자\n2. 개인정보 제공목적: 본인확인\n3 . 개인정보 제공항목: 사진 , 활동지역\n4. 개인정보 보유 및 이용기간: 개인정보 제공 목적달성일까지\n5. 개인정보 제공 거부시 불이익: 서비스 이용제한',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,

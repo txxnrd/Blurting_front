@@ -16,17 +16,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: YakguanThree(),
+      home: PolicyThree(),
     );
   }
 }
 
-class YakguanThree extends StatefulWidget {
+class PolicyThree extends StatefulWidget {
   @override
-  _YakguanThreeState createState() => _YakguanThreeState();
+  _PolicyThreeState createState() => _PolicyThreeState();
 }
 
-class _YakguanThreeState extends State<YakguanThree>
+class _PolicyThreeState extends State<PolicyThree>
     with TickerProviderStateMixin {
   @override
   @override
