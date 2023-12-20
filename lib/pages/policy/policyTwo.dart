@@ -16,18 +16,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: YakguanFour(),
+      home: PolicyTwo(),
     );
   }
 }
 
-class YakguanFour extends StatefulWidget {
+class PolicyTwo extends StatefulWidget {
   @override
-  _YakguanFourState createState() => _YakguanFourState();
+  _PolicyTwoState createState() => _PolicyTwoState();
 }
 
-class _YakguanFourState extends State<YakguanFour>
-    with TickerProviderStateMixin {
+class _PolicyTwoState extends State<PolicyTwo> with TickerProviderStateMixin {
   @override
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _YakguanFourState extends State<YakguanFour>
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(33, 0, 33, 0),
+        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -68,7 +67,7 @@ class _YakguanFourState extends State<YakguanFour>
               height: 25,
             ),
             Text(
-              '제4 조(동의 거부 관리)',
+              '제1 조(개인정보 수집 및 이용 목적)',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -79,7 +78,29 @@ class _YakguanFourState extends State<YakguanFour>
               height: 10,
             ),
             Text(
-              '귀하는 본 안내에 따른 개인정보 수집•이용에 대하여 동의를 거부할 권리가 있습니다. 다만, 귀하가 개인정보 동의를 거부하시는 경우에 서비스 사용의 불이익이 발생할 수 있음을 알려 드립니다. 본인은 위의 동의서 내용을 충분히 숙지 하였으며, 위와 같이 개인정보를 수집•이용하는데 동의합니다.',
+              '이용자가 제공한 모든 정보는 다음의 목적을 위해 활용하며, 목적 이외의 용도로는 사용되지 않습니다.\n- 본인 확인 및 프로필 작성',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF868686),
+                  fontFamily: 'Pretendard'),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Text(
+              '제2 조(개인정보 수집 및 이용 항목)\n회사는 개인정보 수집 목적을 위하여 다음과 같은 정보를 수집합니다.',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF868686),
+                  fontFamily: 'Pretendard'),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '이용자가 제공한 모든 정보는 다음의 목적을 위해 활용하며, 목적 이외의 용도로는 사용되지 않습니다.\n- 전화번호, 이메일, 성별, 나이, 생년월일 및 활동지역,사진',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,

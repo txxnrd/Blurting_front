@@ -16,18 +16,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: YakguanFive(),
+      home: PolicyFour(),
     );
   }
 }
 
-class YakguanFive extends StatefulWidget {
+class PolicyFour extends StatefulWidget {
   @override
-  _YakguanFiveState createState() => _YakguanFiveState();
+  _PolicyFourState createState() => _PolicyFourState();
 }
 
-class _YakguanFiveState extends State<YakguanFive>
-    with TickerProviderStateMixin {
+class _PolicyFourState extends State<PolicyFour> with TickerProviderStateMixin {
   @override
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _YakguanFiveState extends State<YakguanFive>
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+        padding: const EdgeInsets.fromLTRB(33, 0, 33, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -68,7 +67,7 @@ class _YakguanFiveState extends State<YakguanFive>
               height: 25,
             ),
             Text(
-              '제5 조(개인정보의 제3자 제공)',
+              '제4 조(동의 거부 관리)',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -79,18 +78,7 @@ class _YakguanFiveState extends State<YakguanFive>
               height: 10,
             ),
             Text(
-              '회사는 개인정보 보호법에 근거하여 다음과 같은 내용 으로 개인정보를 제 3 자에게 제공하고자 합니다.',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF868686),
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              '1. 개인정보를 제공받는 제3자: 서비스이용자\n2. 개인정보 제공목적: 본인확인\n3 . 개인정보 제공항목: 사진 , 활동지역\n4. 개인정보 보유 및 이용기간: 개인정보 제공 목적달성일까지\n5. 개인정보 제공 거부시 불이익: 서비스 이용제한',
+              '귀하는 본 안내에 따른 개인정보 수집•이용에 대하여 동의를 거부할 권리가 있습니다. 다만, 귀하가 개인정보 동의를 거부하시는 경우에 서비스 사용의 불이익이 발생할 수 있음을 알려 드립니다. 본인은 위의 동의서 내용을 충분히 숙지 하였으며, 위와 같이 개인정보를 수집•이용하는데 동의합니다.',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,

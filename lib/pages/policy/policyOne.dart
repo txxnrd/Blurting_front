@@ -1,9 +1,9 @@
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/pages/useGuide/useguidepagetwo.dart';
-import 'package:blurting/pages/yakguan/yakguanfive.dart';
-import 'package:blurting/pages/yakguan/yakguanfour.dart';
-import 'package:blurting/pages/yakguan/yakguanthree.dart';
-import 'package:blurting/pages/yakguan/yakguantwo.dart';
+import 'package:blurting/pages/policy/policyFive.dart';
+import 'package:blurting/pages/policy/policyFour.dart';
+import 'package:blurting/pages/policy/policyThree.dart';
+import 'package:blurting/pages/policy/policyTwo.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:flutter/material.dart';
@@ -20,34 +20,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: YakguanOne(),
+      home: PolicyOne(),
     );
   }
 }
 
-class YakguanOne extends StatefulWidget {
+class PolicyOne extends StatefulWidget {
   @override
-  _YakguanOneState createState() => _YakguanOneState();
+  _PolicyOneState createState() => _PolicyOneState();
 }
 
-class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
+class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  bool isHobby1Selected = false;
-  bool isHobby2Selected = false;
-  bool isHobby3Selected = false;
-  bool isHobby4Selected = false;
-  bool isHobby5Selected = false;
-  bool isHobby6Selected = false;
-  bool isHobby7Selected = false;
-  bool isHobby8Selected = false;
-  bool isHobby9Selected = false;
-  bool isHobby10Selected = false;
-  bool isHobby11Selected = false;
-  bool isHobby12Selected = false;
-  bool isHobby13Selected = false;
-  bool isHobby14Selected = false;
-  bool isHobby15Selected = false;
 
   List<bool> isValidList = [
     false,
@@ -112,24 +97,20 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
     if (index == 4) {
       // Clicked on "아래 항목에 전부 동의합니다." checkbox
       isValidList[index] = !isValidList[index];
+      // If checked, set all items below to true
       if (isValidList[index]) {
-        // If checked, set all items below to true
         for (int i = 0; i < 4; i++) {
           isValidList[i] = true;
-        }
-      } else {
-        // If unchecked, set all items below to false
-        for (int i = 0; i < 4; i++) {
-          isValidList[i] = false;
         }
       }
     } else {
       // Clicked on other checkboxes
       isValidList[index] = !isValidList[index];
+      // Check if all items below are selected, if yes, set "아래 항목에 전부 동의합니다." checkbox to true
     }
 
-    // Check if at least one checkbox is selected
-    IsValid = isValidList.any((isValid) => isValid);
+    // Check if all items (0, 1, 2, 3) are selected
+    IsValid = isValidList.sublist(0, 4).every((element) => element);
   }
 
   @override
@@ -186,7 +167,7 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => YakguanTwo()),
+                          MaterialPageRoute(builder: (context) => PolicyTwo()),
                         );
                       },
                       child: Padding(
@@ -213,7 +194,7 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => YakguanThree()),
+                              builder: (context) => PolicyThree()),
                         );
                       },
                       child: Padding(
@@ -238,8 +219,7 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => YakguanFour()),
+                          MaterialPageRoute(builder: (context) => PolicyFour()),
                         );
                       },
                       child: Padding(
@@ -264,8 +244,7 @@ class _YakguanOneState extends State<YakguanOne> with TickerProviderStateMixin {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => YakguanFive()),
+                          MaterialPageRoute(builder: (context) => PolicyFive()),
                         );
                       },
                       child: Padding(

@@ -594,13 +594,16 @@ class _Blurting extends State<Blurting> {
       print('요청 성공');
 
       try {
-        bool responseData = jsonDecode(response.body);        // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
+        int responseData = jsonDecode(response.body);        // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
         if (mounted) {
           setState(() {
-            if (responseData) {
+            if (responseData == 1) {
               isState = 'Continue';
-            } else {
+            } else if(responseData == 0) {
               isState = 'Start';
+            }
+            else {
+              isState = 'Matching...';
             }
           });
         }
