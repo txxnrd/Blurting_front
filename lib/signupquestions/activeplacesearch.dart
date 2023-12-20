@@ -48,8 +48,7 @@ class _SearchPage extends State<SearchPage> {
           backgroundColor: Colors.white, // 배경색을 투명하게 설정합니다.
           elevation: 0, // 그림자 효과를 제거합니다.
 
-          actions: <Widget>[
-          ],
+          actions: <Widget>[],
         ),
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -84,7 +83,7 @@ class _SearchPage extends State<SearchPage> {
                           icon: Icon(Icons.search),
                           onPressed: () {
                             searchByLocation =
-                            false; //위치로 검색 모드가 아니라 이름검색 모드임을 알려주는 것
+                                false; //위치로 검색 모드가 아니라 이름검색 모드임을 알려주는 것
                             searchByLocationName();
                           },
                         )),
@@ -129,7 +128,7 @@ class _SearchPage extends State<SearchPage> {
               ),
               Expanded(
                 child: ListView.builder(
-                  // items 변수에 저장되어 있는 모든 값 출력
+                    // items 변수에 저장되어 있는 모든 값 출력
                     itemCount: filteredItems.length,
                     itemBuilder: (BuildContext currentcontext, int index) {
                       // // 검색 기능, 검색어가 있을 경우
@@ -148,7 +147,7 @@ class _SearchPage extends State<SearchPage> {
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.elliptical(10, 10))),
+                                BorderRadius.all(Radius.elliptical(10, 10))),
                         child: ListTile(
                             title: Text(
                               filteredItems[index],
@@ -160,8 +159,8 @@ class _SearchPage extends State<SearchPage> {
                               ),
                             ),
                             onTap: () => {
-                              cardClickEvent(context, index),
-                            }),
+                                  cardClickEvent(context, index),
+                                }),
                       );
                     }),
               ),
@@ -202,7 +201,7 @@ class _SearchPage extends State<SearchPage> {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       print("위도,경도" + "${position.longitude}" + "," + "${position.latitude}");
-      double new_longtitude = position.longitude;
+      // double new_longtitude = position.longitude;
 
       final String apiUrl =
           '${API.geobygeo}?geo=point%28${position.longitude}%20${position.latitude}%29}';
@@ -215,7 +214,7 @@ class _SearchPage extends State<SearchPage> {
 
         // 서버 응답을 사용하여 검색 결과 업데이트
         List<String> serverResponse =
-        (json.decode(response.body) as List<dynamic>).cast<String>();
+            (json.decode(response.body) as List<dynamic>).cast<String>();
         setState(() {
           itemsByLocation = serverResponse;
           filterItems();
@@ -239,7 +238,7 @@ class _SearchPage extends State<SearchPage> {
     if (response.statusCode == 200) {
       print('서버 응답: ${response.body}');
       List<String> serverResponse =
-      (json.decode(response.body) as List<dynamic>).cast<String>();
+          (json.decode(response.body) as List<dynamic>).cast<String>();
       setState(() {
         itemsByName = serverResponse;
         filterItems();

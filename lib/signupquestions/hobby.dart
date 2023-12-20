@@ -9,6 +9,7 @@ import '../colors/colors.dart';
 import '../config/app_config.dart';
 import 'image.dart'; // sex.dart를 임포트
 import 'package:http/http.dart' as http;
+
 class HobbyPage extends StatefulWidget {
   final String selectedGender;
 
@@ -57,7 +58,20 @@ class HobbyPageState extends State<HobbyPage>
   List<String> selectedCharacteristics = [];
 
   List<String> characteristic = [
-    "애니", "그림그리기", "술", "영화/드라마", "여행", "요리", "자기계발", "독서", "게임", "노래듣기", "봉사활동", "운동","노래부르기","산책"
+    "애니",
+    "그림그리기",
+    "술",
+    "영화/드라마",
+    "여행",
+    "요리",
+    "자기계발",
+    "독서",
+    "게임",
+    "노래듣기",
+    "봉사활동",
+    "운동",
+    "노래부르기",
+    "산책"
   ];
   void updateSelectedCharacteristics() {
     // 임시 리스트를 생성하여 선택된 특성들을 저장합니다.
@@ -75,14 +89,24 @@ class HobbyPageState extends State<HobbyPage>
       selectedCharacteristics = tempSelectedCharacteristics;
     });
   }
+
   Widget customHobbyCheckbox(String hobbyText, int index, width) {
     return Container(
-      width: width*0.44,
+      width: width * 0.44,
       height: 48,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Checkbox(
+            side: BorderSide(color: Colors.transparent),
+            fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                }
+                return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+              },
+            ),
             value: isValidList[index],
             onChanged: (bool? newValue) {
               setState(() {
@@ -104,7 +128,6 @@ class HobbyPageState extends State<HobbyPage>
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
                 fontSize: 18.6,
-
               ),
             ),
           ),
@@ -112,7 +135,6 @@ class HobbyPageState extends State<HobbyPage>
       ),
     );
   }
-
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -128,8 +150,6 @@ class HobbyPageState extends State<HobbyPage>
   }
 
   bool IsValid = false;
-
-
 
   @override
   void IsSelected(int index) {
@@ -150,15 +170,14 @@ class HobbyPageState extends State<HobbyPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 11/15, // 시작 너비 (30%)
-      end: 12/15, // 종료 너비 (40%)
+      begin: 11 / 15, // 시작 너비 (30%)
+      end: 12 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
   }
-
 
   void _showVerificationFailedSnackBar(value) {
     print("snackbar 실행");
@@ -186,7 +205,7 @@ class HobbyPageState extends State<HobbyPage>
     String savedToken = await getToken();
     print(savedToken);
     updateSelectedCharacteristics();
-    if(selectedCharacteristics.length>4){
+    if (selectedCharacteristics.length > 4) {
       _showVerificationFailedSnackBar("취미 선택은 4개까지 가능합니다.");
       return;
     }
@@ -196,30 +215,27 @@ class HobbyPageState extends State<HobbyPage>
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"hobby": selectedCharacteristics }), // JSON 형태로 인코딩
+      body: json.encode({"hobby": selectedCharacteristics}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
-      }
-      else{
-      }
-
+      } else {}
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
   Future<void> _sendBackRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signupback);
@@ -234,29 +250,24 @@ class HobbyPageState extends State<HobbyPage>
       },
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
-      }
-      else{
-
-      }
-
+      } else {}
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -279,7 +290,6 @@ class HobbyPageState extends State<HobbyPage>
             _sendBackRequest();
           },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -312,15 +322,15 @@ class HobbyPageState extends State<HobbyPage>
                 ),
                 Positioned(
                   left: MediaQuery.of(context).size.width *
-                      (_progressAnimation?.value ?? 0.3) -
+                          (_progressAnimation?.value ?? 0.3) -
                       15,
                   bottom: -10,
                   child: Image.asset(
                     gender == Gender.male
                         ? 'assets/man.png'
                         : gender == Gender.female
-                        ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
@@ -332,7 +342,11 @@ class HobbyPageState extends State<HobbyPage>
             ),
             Text(
               '당신의 취미는 무엇인가요?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(0xFF303030),fontFamily: 'Pretendard'),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF303030),
+                  fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
             Row(
@@ -342,9 +356,7 @@ class HobbyPageState extends State<HobbyPage>
                 customHobbyCheckbox('🎨그림그리기', 1, width),
               ],
             ),
-            SizedBox(
-                height: 10
-            ),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
@@ -421,7 +433,7 @@ class HobbyPageState extends State<HobbyPage>
                     TextSpan(
                       text: '4개',
                       style:
-                      TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                          TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
                     ),
                     TextSpan(
                       text: ' 까지 선택해주세요.',
@@ -436,7 +448,7 @@ class HobbyPageState extends State<HobbyPage>
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -448,8 +460,8 @@ class HobbyPageState extends State<HobbyPage>
           ),
           onPressed: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
           child: Text(
             '다음',
@@ -462,12 +474,11 @@ class HobbyPageState extends State<HobbyPage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
-
 
 class FaceIconPainter extends CustomPainter {
   final double progress;
