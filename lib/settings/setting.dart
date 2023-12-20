@@ -49,10 +49,6 @@ class _SettingPageState extends State<SettingPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-
-
-
-
   int count = 10;
 
   Future<void> _sendDeleteRequest() async {
@@ -318,6 +314,7 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
+
                   // SizedBox(
                   //   height: 20,
                   // ),
@@ -381,6 +378,7 @@ class _SettingPageState extends State<SettingPage> {
                   //     ),
                   //   ),
                   // ),
+
                   SizedBox(
                     height: 10,
                   ),
