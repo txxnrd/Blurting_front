@@ -411,7 +411,7 @@ class _Blurting extends State<Blurting> {
                                 day: day,
                               )));
                 }
-              } else if (isState == 'Start') {
+              } else if (isState == 'Start' || isState == 'Matching...' ) {
                 // 아직 방이 만들어지지 않음
                 Navigator.push(
                     context,
@@ -643,13 +643,14 @@ class _Blurting extends State<Blurting> {
         if (mounted) {
           setState(() {
             // createdAt = DateTime.now().add(Duration(hours: -47));
-            createdAt = _parseDateTime(responseData['createdAt']);
+            createdAt = _parseDateTime(responseData['createdAt']).add(Duration(hours: -9));
             // print('createdAt : ${createdAt}');
 
             Duration timeDifference =
-                DateTime.now().add(Duration(hours: 9)).difference(createdAt);
+                DateTime.now().difference(createdAt);
 
             print(timeDifference);
+
             setState(() {
               // 시작하자마자 day1 고르기
               isValidDay[0] = true;
