@@ -42,6 +42,8 @@ class API {
       "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";
   static const String geobygeo =
       "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";
+  /*HOME */
+  static const String homeLike = "${ServerEndpoints.serverEndpoint}/home/like";
   /*BLURTING */
   static const String matching = "${ServerEndpoints.serverEndpoint}/blurting";
   static const String latest =
