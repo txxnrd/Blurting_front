@@ -138,6 +138,9 @@
       <excludeFolder url="file://$MODULE_DIR$/macos/Flutter/ephemeral" />
       <excludeFolder url="file://$MODULE_DIR$/macos/Pods" />
       <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral" />
+      <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
