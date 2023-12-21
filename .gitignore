@@ -46,3 +46,11 @@ app.*.map.json
 .flutter-plugins
 .flutter-plugins-dependencies
 android/local.properties
+
+# Flutter & Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android local properties
+android/local.properties
