@@ -1,5 +1,5 @@
 import 'package:blurting/mainApp.dart';
-import 'package:blurting/pages/useGuide/useguidepagetwo.dart';
+import 'package:blurting/pages/useGuide/done.dart';
 import 'package:blurting/pages/policy/policyFive.dart';
 import 'package:blurting/pages/policy/policyFour.dart';
 import 'package:blurting/pages/policy/policyThree.dart';
@@ -11,6 +11,7 @@ import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/Utils/utilWidget.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -41,6 +42,9 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
     false,
     false,
   ];
+  Future<void> _increaseProgressAndNavigate() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => UseGuidePagedone()));}
+
 
   Widget customCheckbox(String hobbyText, int index) {
     return Container(
@@ -48,11 +52,12 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
         children: <Widget>[
           GestureDetector(
             onTap: () {
+              print("detected");
               setState(() {
                 IsSelected(index);
-                if (index == 4 && isValidList[index]) {
+                if (index == 4) {
                   for (int i = 0; i < 4; i++) {
-                    isValidList[i] = true;
+                    isValidList[i] = isValidList[4];
                   }
                 }
               });
@@ -96,12 +101,11 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
   void IsSelected(int index) {
     if (index == 4) {
       // Clicked on "아래 항목에 전부 동의합니다." checkbox
-      isValidList[index] = !isValidList[index];
+      isValidList[4] = !isValidList[4];
       // If checked, set all items below to true
-      if (isValidList[index]) {
+
         for (int i = 0; i < 4; i++) {
-          isValidList[i] = true;
-        }
+          isValidList[i] = isValidList[4];
       }
     } else {
       // Clicked on other checkboxes
@@ -262,20 +266,41 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            SizedBox(height: 210),
-            GestureDetector(
-              child: staticButton(text: '확인'),
-              onTap: () {
-                if (IsValid) {
-                  print('확인 버튼 클릭됨');
-                  Navigator.pop(context);
-                }
-              },
-            ),
+
           ],
         ),
       ),
-      // 버튼의 위치
+      floatingActionButton: Container(
+        width: 350.0, // 너비 조정
+        height: 80.0, // 높이 조정
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFFF66464),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 0,
+            padding: EdgeInsets.all(0),
+          ),
+          onPressed: (IsValid)
+              ? () {
+            _increaseProgressAndNavigate();
+          }
+              : null,
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pretendard',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
