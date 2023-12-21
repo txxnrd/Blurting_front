@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/pages/myPage/MyPage.dart';
 import 'dart:convert';
 import 'dart:ui';
+import 'package:extended_image/extended_image.dart' hide MultipartFile;
 
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
