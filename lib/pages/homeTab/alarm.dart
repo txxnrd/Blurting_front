@@ -1,9 +1,6 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/Utils/utilWidget.dart';
-import 'package:provider/provider.dart';
 import 'dart:convert';
-import 'dart:io';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -25,27 +22,19 @@ class _AlarmPageState extends State<AlarmPage> {
   @override
   void initState() {
     super.initState();
-    fetchAlarm();
+
+    Future<void> initializePage() async {
+      await fetchAlarm();
+    }
+
+    initializePage();
   }
 
   Future<List<Map<String, dynamic>>> fetchAlarm() async {
     if (!mounted) return [];
     print('fetchalarm called');
-    // var savedToken = getToken();
-    // var savedToken =
-    //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI4LCJzaWduZWRBdCI6IjIwMjMtMTEtMjdUMTE6MTI6NTQuNDY3WiIsImlhdCI6MTcwMTA1MTE3NCwiZXhwIjoxNzAxMDU0Nzc0fQ.orbg6gM1TuZfjOSxjm8avCuvqJBUyv5ia8XDMlrKxiY';
-    // print(savedToken);
-    // String accessToken = await getToken();
 
     try {
-      // var response = await http.get(
-      //   Uri.parse('$url?amount=100'), // Query parameter added to the URL
-      //   headers: <String, String>{
-      //     'Content-Type': 'application/json; charset=UTF-8',
-      //     'Authorization': 'Bearer ${token}',
-      //   },
-      // );
-
       final url = Uri.parse(API.alarm);
       String savedToken = await getToken();
 
@@ -64,15 +53,16 @@ class _AlarmPageState extends State<AlarmPage> {
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
-        // if (mounted) {
-        // setState(() {
-
         AlarmHistoryList = data;
-        // });
-        // }
 
         print('alarm loaded successfully.');
+        print(AlarmHistoryList);
         return data;
+      } else if (response.statusCode == 401) {
+        //refresh token으로 새로운 accesstoken 불러오는 코드.
+        //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+        await getnewaccesstoken(context, fetchAlarm);
+        return [];
       } else {
         print(
             'Failed to load added points. Status code: ${response.statusCode}');
@@ -113,6 +103,8 @@ class _AlarmPageState extends State<AlarmPage> {
 
 // Function to extract date and time from the date-time string
   List<String> splitDateTime(String dateTimeString) {
+    print('ㅎㅇ');
+
     try {
       // Ensure that the dateTimeString is not empty
       if (dateTimeString.isNotEmpty) {
@@ -192,10 +184,7 @@ class _AlarmPageState extends State<AlarmPage> {
         body: Column(children: [
           Expanded(
             child:
-                // 1. 지급내역
                 _buildHistoryList(AlarmHistoryList),
-
-            // 2. 사용내역
           ),
         ]));
   }
@@ -234,14 +223,14 @@ class _AlarmPageState extends State<AlarmPage> {
             ),
             for (var entry in dateEntries)
               ListTile(
-                title: formatHistoryText(entry['history'] ?? 'Unknown'),
+                title: formatHistoryText(entry['message'] ?? 'Unknown'),
                 trailing: Text(
                   entry['time'] ?? 'Unknown',
                   style: TextStyle(
                     fontFamily: "Pretendard",
                     fontWeight: FontWeight.w500,
                     fontSize: 11,
-                    color: Colors.grey,
+                    color: mainColor.Gray,
                   ),
                 ),
               ),
@@ -263,7 +252,7 @@ Widget formatHistoryText(String history) {
               child: Container(
                 height: 15,
                 width: 2,
-                color: Color(0xFFFF7D7D),
+                color: mainColor.MainColor,
               )),
         ),
         TextSpan(

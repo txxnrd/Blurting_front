@@ -986,6 +986,7 @@ class _profileState extends State<profile> {
       child: Column(
         children: [
           Container(
+                padding: EdgeInsets.all(5),
             width: 55,
             height: 55,
             decoration: BoxDecoration(
@@ -997,6 +998,8 @@ class _profileState extends State<profile> {
                     ? Border.all(color: mainColor.MainColor, width: 1)
                     : null),
             child: Image.asset(
+                  fit: BoxFit.fill,
+
               widget.userSex == 'M'
                   ? 'assets/man.png'
                   : widget.userSex == 'none'
