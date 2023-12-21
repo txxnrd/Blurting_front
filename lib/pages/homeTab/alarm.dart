@@ -192,10 +192,7 @@ class _AlarmPageState extends State<AlarmPage> {
         body: Column(children: [
           Expanded(
             child:
-                // 1. 지급내역
                 _buildHistoryList(AlarmHistoryList),
-
-            // 2. 사용내역
           ),
         ]));
   }

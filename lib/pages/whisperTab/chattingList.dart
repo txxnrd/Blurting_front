@@ -76,7 +76,7 @@ class _chatListItemState extends State<ChatListItem> {
                                   MediaQuery.of(context).size.width * 0.9,
                                   height: 100,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
+                                      borderRadius: BorderRadius.circular(10),
                                       color:
                                       mainColor.lightGray.withOpacity(0.8)),
                                   alignment: Alignment.topCenter,
@@ -238,13 +238,14 @@ class _chatListItemState extends State<ChatListItem> {
                 child: Row(
                   children: [
                     Container(
+                      padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
                         color: Color.fromRGBO(255, 210, 210, 1),
                       ),
                       width: 60,
                       height: 60,
-                      child: Image.asset(widget.image),
+                      child: Image.asset(widget.image, fit: BoxFit.fill,),
                     ),
                     Expanded(
                       child: Container(

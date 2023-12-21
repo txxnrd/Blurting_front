@@ -867,20 +867,9 @@ class _MyPageEditState extends State<MyPageEdit> {
             _showWarning(context);
           },
         ),
-        actions: <Widget>[
+        actions: [
           pointAppbar(),
-          IconButton(
-            icon: Image.asset('assets/images/setting.png'),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              print("설정 버튼 눌러짐");
-              var token = getToken();
-              print(token);
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SettingPage()),
-              );
-            },
-          ),
+            SizedBox(width: 10),
         ],
       ),
       body: SingleChildScrollView(
