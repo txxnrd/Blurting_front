@@ -339,6 +339,15 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedMajor == Major.social,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -381,6 +390,15 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedMajor == Major.education,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -418,6 +436,15 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedMajor == Major.engineering,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -460,6 +487,15 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedMajor == Major.naturalScience,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -497,6 +533,15 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedMajor == Major.medical,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -539,6 +584,15 @@ class _MajorPageState extends State<MajorPage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedMajor == Major.artsPhysical,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -609,7 +663,7 @@ class _MajorPageState extends State<MajorPage>
         padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
+            backgroundColor: Color(0xFFF66464),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),

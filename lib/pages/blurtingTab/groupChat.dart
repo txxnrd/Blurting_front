@@ -59,7 +59,7 @@ class QuestionItem extends StatelessWidget {
             question,
             style: TextStyle(
               fontFamily: 'Heebo',
-              fontSize: 15,
+              fontSize: 13,
               color: mainColor.Gray,
               fontWeight: FontWeight.w500,
             ),

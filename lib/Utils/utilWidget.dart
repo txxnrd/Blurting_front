@@ -153,7 +153,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
-      padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
+      padding: EdgeInsets.fromLTRB(0, 7, 0, 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
