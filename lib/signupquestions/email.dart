@@ -257,7 +257,6 @@ class _EmailPageState extends State<EmailPage>
       }
       else{
         _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
-        print("_showVerificationFailedSnackBar();");
       }
 
     } else {
@@ -265,6 +264,9 @@ class _EmailPageState extends State<EmailPage>
       print('Request failed with status: ${response.statusCode}.');
       print('Response body: ${response.body}');
       _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
+      if(response.statusCode == 409)
+      _showVerificationFailedSnackBar('이미 가입한 메일입니다.');
+
 
     }
   }
