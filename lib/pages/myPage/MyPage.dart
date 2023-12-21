@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-
+import 'package:extended_image/extended_image.dart' hide MultipartFile;
 import '../../config/app_config.dart';
 import '../../settings/setting.dart';
 
@@ -394,9 +394,10 @@ class _MyPage extends State<MyPage> {
           height: 190,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(
+            child: ExtendedImage.network(
               imagePaths[index],
               fit: BoxFit.cover,
+              cache: true,
             ),
           ),
         ),

@@ -8,12 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import '../colors/colors.dart';
 import '../signupquestions/token.dart';
 import 'notice.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'notificationandsound.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
 
@@ -313,6 +313,26 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      launchUrl(
+                        Uri.parse('https://www.instagram.com/blurting.official/'),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          '개발자에게 문의하기',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color(DefinedColor.gray)),
+                        ),
+                      ],
+                    ),
+                  ),
+
 
                   // SizedBox(
                   //   height: 20,
