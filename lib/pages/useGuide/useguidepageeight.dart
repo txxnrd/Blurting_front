@@ -1,9 +1,8 @@
-import 'package:blurting/pages/useGuide/done.dart';
-import 'package:blurting/pages/useGuide/useguidepageeight_2.dart';
+ import 'package:blurting/pages/useGuide/done.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/colors/colors.dart';
 import 'dart:async';
-
+ import 'package:blurting/pages/policy/policyOne.dart';
 void main() {
   runApp(MyApp());
 }
@@ -69,7 +68,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
         .push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            UseGuidePagedone(),
+            PolicyOne(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -172,15 +171,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                                         : "assets/images/blurafter.png",
                               ),
                             ),
-                            // Positioned(
-                            //   left: 50, // 원하는 위치로 조정하세요.
-                            //   top: 50, // 원하는 위치로 조정하세요.
-                            //   child: Image.asset(
-                            //     "assets/images/pointer.png",
-                            //     width: 36.7,
-                            //     height: 47,
-                            //   ),
-                            // ),
+
                           ],
                         )
                       ]),

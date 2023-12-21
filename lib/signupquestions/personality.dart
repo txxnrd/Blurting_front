@@ -125,10 +125,10 @@ class _PersonalityPageState extends State<PersonalityPage>
     });
   }
 
-  Widget customPersonalityCheckBox(String hobbyText, int index, width) {
+  Widget customPersonalityCheckBox(String hobbyText, int index, width,height) {
     return Container(
       width: width * 0.42,
-      height: 48,
+      height: height*0.06,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -279,6 +279,7 @@ class _PersonalityPageState extends State<PersonalityPage>
       gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -354,8 +355,8 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
-                customPersonalityCheckBox('개성있는', 0, width),
-                customPersonalityCheckBox('책임감있는', 1, width),
+                customPersonalityCheckBox('개성있는', 0, width,height),
+                customPersonalityCheckBox('책임감있는', 1, width,height),
               ],
             ),
             SizedBox(
@@ -364,8 +365,8 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
               children: [
-                customPersonalityCheckBox('열정적인', 2, width),
-                customPersonalityCheckBox('귀여운', 3, width),
+                customPersonalityCheckBox('열정적인', 2, width,height),
+                customPersonalityCheckBox('귀여운', 3, width,height),
               ],
             ),
             SizedBox(
@@ -374,8 +375,8 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customPersonalityCheckBox('상냥한', 4, width),
-                customPersonalityCheckBox('감성적인', 5, width),
+                customPersonalityCheckBox('상냥한', 4, width,height),
+                customPersonalityCheckBox('감성적인', 5, width,height),
               ],
             ),
             SizedBox(
@@ -384,8 +385,8 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customPersonalityCheckBox('낙천적인', 6, width),
-                customPersonalityCheckBox('유머있는', 7, width),
+                customPersonalityCheckBox('낙천적인', 6, width,height),
+                customPersonalityCheckBox('유머있는', 7, width,height),
               ],
             ),
             SizedBox(
@@ -394,8 +395,8 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customPersonalityCheckBox('차분한', 8, width),
-                customPersonalityCheckBox('지적인', 9, width),
+                customPersonalityCheckBox('차분한', 8, width,height),
+                customPersonalityCheckBox('지적인', 9, width,height),
               ],
             ),
             SizedBox(
@@ -404,8 +405,8 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customPersonalityCheckBox('섬세한', 10, width),
-                customPersonalityCheckBox('무뚝뚝한', 11, width),
+                customPersonalityCheckBox('섬세한', 10, width,height),
+                customPersonalityCheckBox('무뚝뚝한', 11, width,height),
               ],
             ),
             SizedBox(
@@ -414,8 +415,8 @@ class _PersonalityPageState extends State<PersonalityPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                customPersonalityCheckBox('외향적인', 12, width),
-                customPersonalityCheckBox('내향적인', 13, width),
+                customPersonalityCheckBox('외향적인', 12, width,height),
+                customPersonalityCheckBox('내향적인', 13, width,height),
               ],
             ),
             SizedBox(height: 26),

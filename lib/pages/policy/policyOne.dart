@@ -60,7 +60,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
             child: Checkbox(
               side: BorderSide(color: Colors.transparent),
               fillColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                   if (states.contains(MaterialState.selected)) {
                     return Color(0xFFF66464); // 선택되었을 때의 배경 색상
                   }

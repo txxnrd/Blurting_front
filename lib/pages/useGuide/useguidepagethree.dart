@@ -191,7 +191,7 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
             ),
           ),
         ),
-        floatingActionButton: Padding(
+              floatingActionButton: Padding(
 
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 80),// 좌우 마진을 16.0으로 설정
 

@@ -136,8 +136,6 @@ class _HeightPageState extends State<HeightPage>
       _showVerificationFailedSnackBar("유효한 키 정보를 입력해주세요");
       return;
     }
-
-
       if (response.statusCode == 200 ||response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
