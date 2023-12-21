@@ -142,6 +142,8 @@ flutter:
     - assets/images/useguideseven.png
     - assets/images/blurbefore.png
     - assets/images/blurafter.png
+    - assets/images/blurmiddle.png
+    - assets/images/useguidetwo.png
 
   fonts:
     - family: Pretendard

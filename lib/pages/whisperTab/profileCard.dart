@@ -283,13 +283,15 @@ class _ProfileCard extends State<ProfileCard> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 150),
+        // margin: EdgeInsets.only(top: 150),
         alignment: Alignment.center,
         width: 259,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 20),
+              // margin: EdgeInsets.only(top: 50),
               alignment: Alignment.center,
               width: 259,
               height: 350, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
@@ -333,7 +335,7 @@ class _ProfileCard extends State<ProfileCard> {
                   activeDotScale: 1.0,
                   maxVisibleDots: 5,
                   radius: 8,
-                  spacing: 3,
+                  spacing: 5,
                   dotHeight: 10,
                   dotWidth: 10,
                 ),
@@ -388,7 +390,7 @@ class _ProfileCard extends State<ProfileCard> {
             width: 95,
           ),
           Text(
-            'photo ${index + 1}',
+            'photo${index + 1}.',
             style: TextStyle(
               fontFamily: 'Heebo',
               fontSize: 20,
@@ -450,7 +452,8 @@ class _ProfileCard extends State<ProfileCard> {
           SizedBox(width: 40),
           buildPinkBox('#${userProfile['nickname']}' ?? 'Unknown'),
           SizedBox(width: 6),
-          buildPinkBox('#${userProfile['mbti']}' ?? 'Unknown'),
+          buildPinkBox(
+              '#${userProfile['mbti'].toString().toUpperCase()}' ?? 'Unknown'),
         ],
       ),
     );
@@ -505,7 +508,7 @@ class _ProfileCard extends State<ProfileCard> {
       children: <Widget>[
         Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
         Text(
-          'Basic info',
+          'basic info.',
           style: TextStyle(
               fontFamily: 'Heebo',
               fontSize: 20,
@@ -520,14 +523,14 @@ class _ProfileCard extends State<ProfileCard> {
                 style: TextStyle(
                     fontFamily: "Pretendard",
                     fontWeight: FontWeight.w700,
-                    fontSize: 24,
+                    fontSize: 30,
                     color: Color(0XFFF66464))),
             SizedBox(width: 7),
             Text(userProfile['mbti'] ?? 'Unknown',
                 style: TextStyle(
                     fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
                     color: Color(0XFFF66464))),
           ],
         ),
