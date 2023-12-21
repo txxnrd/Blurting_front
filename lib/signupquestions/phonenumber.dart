@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/signupquestions/sex.dart';
-
+import 'package:blurting/Utils/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/colors/colors.dart';
@@ -140,6 +140,23 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       _showVerificationFailedSnackBar(errormessage);
     }
   }
+  void _showVerificationFailedSnackBar(value) {
+    print("snackbar 실행");
+    final snackBar = SnackBar(
+      content: Text(value),
+      // backgroundColor: ,
+      action: SnackBarAction(
+        label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
+        onPressed: () {
+          // SnackBar 닫기 액션
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   Future<void> _sendVerificationRequest(String phoneNumber) async {
     var url = Uri.parse(API.checkphone);
@@ -183,23 +200,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     }
   }
 
-  void _showVerificationFailedSnackBar(value) {
-    print("snackbar 실행");
-    final snackBar = SnackBar(
-      content: Text(value),
-      // backgroundColor: ,
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   @override
   void NowCertification() {
