@@ -55,7 +55,7 @@ class _Whisper extends State<Whisper> {
   int blurValue = 0;
   int blurChange = 0;
   late String appbarphoto = '';
-  late Image image;
+  late ExtendedImage image;
 
   late int otherId = 0;
 
@@ -71,7 +71,13 @@ class _Whisper extends State<Whisper> {
     Future<void> initializeSocket() async {
       await fetchChats();
       if (appbarphoto.isNotEmpty) {
-        image = Image.network(appbarphoto);
+        image =
+            // Image.network(appbarphoto);
+            ExtendedImage.network(
+          appbarphoto,
+          fit: BoxFit.cover,
+          cache: true,
+        );
       } else {
         print('Image URL is empty.');
       }

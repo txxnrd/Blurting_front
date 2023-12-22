@@ -11,6 +11,9 @@ import 'package:blurting/signupquestions/token.dart';
 
 // StatefulWidget으로 변경합니다.
 class NotificationandSound extends StatefulWidget {
+  final bool fcmstate; // 생성자를 통해 받을 변수를 final로 선언
+  NotificationandSound({Key? key, required this.fcmstate}) : super(key: key);
+
   @override
   _NotificationandSoundState createState() => _NotificationandSoundState();
 }
@@ -19,6 +22,32 @@ class _NotificationandSoundState extends State<NotificationandSound> {
   bool _personalInfo = false;
   bool _loginAndSecurity = false;
   bool _notificationSettings = false;
+
+  Future<void> _checkfcm() async {
+    String savedToken = await getToken();
+
+    var url = Uri.parse(API.fcmcheck);
+    bool fcmstate = false;
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print(response.body);
+      if (response.body == "true") {
+        fcmstate = true;
+      }
+      setState(() {
+        _notificationSettings = fcmstate;
+      });
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      print('Response body: ${response.body}');
+    }
+  }
 
   Future<void> _sendEnableNotificationRequest() async {
     String savedToken = await getToken();
@@ -63,6 +92,12 @@ class _NotificationandSoundState extends State<NotificationandSound> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _notificationSettings = widget.fcmstate; // 여기서 fcmstate 값을 대입
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +112,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
         ),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -122,6 +157,8 @@ class _NotificationandSoundState extends State<NotificationandSound> {
 
 void main() {
   runApp(MaterialApp(
-    home: NotificationandSound(),
+    home: NotificationandSound(
+      fcmstate: true,
+    ),
   ));
 }
