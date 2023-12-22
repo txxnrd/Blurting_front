@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
+import 'package:blurting/settings/info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -88,6 +89,7 @@ class _SettingPageState extends State<SettingPage> {
       }
     }
   }
+
   //
   Future<void> _testfcm() async {
     print('_sendPostRequest called');
@@ -112,6 +114,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(
           '설정',
@@ -197,15 +200,24 @@ class _SettingPageState extends State<SettingPage> {
                   SizedBox(
                     height: 18,
                   ),
-                  Container(
-                    width: 120,
-                    height: 22,
-                    child: Text(
-                      '계정/정보 관리',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color(DefinedColor.gray)),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => InfoPage()),
+                      );
+                    },
+                    child: Container(
+                      width: 120,
+                      height: 22,
+                      child: Text(
+                        '계정/정보 관리',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
                     ),
                   ),
 
@@ -315,7 +327,8 @@ class _SettingPageState extends State<SettingPage> {
                   InkWell(
                     onTap: () async {
                       launchUrl(
-                        Uri.parse('https://www.instagram.com/blurting.official/'),
+                        Uri.parse(
+                            'https://www.instagram.com/blurting.official/'),
                       );
                     },
                     child: Row(
@@ -323,12 +336,14 @@ class _SettingPageState extends State<SettingPage> {
                       children: <Widget>[
                         Text(
                           '개발자에게 문의하기',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color(DefinedColor.gray)),
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color(DefinedColor.gray)),
                         ),
                       ],
                     ),
                   ),
-
 
                   // SizedBox(
                   //   height: 20,
