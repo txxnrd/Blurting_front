@@ -11,6 +11,9 @@ import 'package:blurting/signupquestions/token.dart';
 
 // StatefulWidget으로 변경합니다.
 class NotificationandSound extends StatefulWidget {
+  final bool fcmstate; // 생성자를 통해 받을 변수를 final로 선언
+  NotificationandSound({Key? key, required this.fcmstate}) : super(key: key);
+
   @override
   _NotificationandSoundState createState() => _NotificationandSoundState();
 }
@@ -91,7 +94,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
   @override
   void initState() {
     super.initState();
-    _checkfcm();
+    _notificationSettings = widget.fcmstate; // 여기서 fcmstate 값을 대입
   }
 
   @override
@@ -154,6 +157,8 @@ class _NotificationandSoundState extends State<NotificationandSound> {
 
 void main() {
   runApp(MaterialApp(
-    home: NotificationandSound(),
+    home: NotificationandSound(
+      fcmstate: true,
+    ),
   ));
 }
