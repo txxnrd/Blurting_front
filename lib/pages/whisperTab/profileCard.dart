@@ -3,7 +3,6 @@ import 'package:blurting/pages/myPage/MyPage.dart';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
-
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -427,9 +426,10 @@ class _ProfileCard extends State<ProfileCard> {
                 sigmaX: calculateBlurSigma(userProfile['blur']),
                 sigmaY: calculateBlurSigma(userProfile['blur']),
               ),
-              child: Image.network(
+              child: ExtendedImage.network(
                 imagePaths[index],
                 fit: BoxFit.cover,
+                cache: true,
               ),
             ),
           ),

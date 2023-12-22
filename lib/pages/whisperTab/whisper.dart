@@ -12,6 +12,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/pages/whisperTab/profileCard.dart';
+import 'package:extended_image/extended_image.dart' hide MultipartFile;
 
 class Whisper extends StatefulWidget {
   final String userName;
@@ -298,9 +299,10 @@ class _Whisper extends State<Whisper> {
                       sigmaX: calculateBlurSigma(blurValue),
                       sigmaY: calculateBlurSigma(blurValue),
                     ),
-                    child: Image.network(
+                    child: ExtendedImage.network(
                       appbarphoto,
                       fit: BoxFit.cover,
+                      cache: true,
                     ),
                   ),
                 ),

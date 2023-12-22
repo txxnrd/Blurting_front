@@ -95,7 +95,6 @@ class _HeightPageState extends State<HeightPage>
 
       }
       else{
-        _showVerificationFailedSnackBar();
       }
 
     } else {
@@ -107,11 +106,14 @@ class _HeightPageState extends State<HeightPage>
   @override
   void InputHeightNumber(int value) {
     setState(() {
-       height = value;
+      height = value;
       if(140<=height! && height!<=240)
-        {
-          IsValid=true;
-        }
+      {
+        IsValid=true;
+      }
+      else{
+
+      }
     });
   }
   Future<void> _sendPostRequest() async {
@@ -120,7 +122,7 @@ class _HeightPageState extends State<HeightPage>
 
     String savedToken = await getToken();
     print(savedToken);
-  print(height);
+    print(height);
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -130,7 +132,11 @@ class _HeightPageState extends State<HeightPage>
       body: json.encode({"height": height}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if(140>height! || height!>240) {
+      _showVerificationFailedSnackBar("유효한 키 정보를 입력해주세요");
+      return;
+    }
+      if (response.statusCode == 200 ||response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
@@ -144,7 +150,6 @@ class _HeightPageState extends State<HeightPage>
         _increaseProgressAndNavigate();
       }
       else{
-        _showVerificationFailedSnackBar();
       }
 
     } else {
@@ -152,16 +157,20 @@ class _HeightPageState extends State<HeightPage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
+  void _showVerificationFailedSnackBar(value) {
+    print("snackbar 실행");
     final snackBar = SnackBar(
-      content: Text(message),
+      content: Text(value),
+      // backgroundColor: ,
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -226,15 +235,15 @@ class _HeightPageState extends State<HeightPage>
                   ),
                   Positioned(
                     left: MediaQuery.of(context).size.width *
-                            (_progressAnimation?.value ?? 0.3) -
+                        (_progressAnimation?.value ?? 0.3) -
                         15,
                     bottom: -10,
                     child: Image.asset(
                       gender == Gender.male
                           ? 'assets/man.png'
                           : gender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
+                          ? 'assets/woman.png'
+                          : 'assets/signupface.png', // 기본 이미지
                       width: 30,
                       height: 30,
                     ),
@@ -256,7 +265,7 @@ class _HeightPageState extends State<HeightPage>
               Center(
                 child: Row(
                   mainAxisAlignment:
-                      MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
+                  MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
                   children: [
                     Container(
                       width: 125,
@@ -297,8 +306,8 @@ class _HeightPageState extends State<HeightPage>
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF303030),
-                        fontFamily: 'Pretendard'
-                    ),)
+                          fontFamily: 'Pretendard'
+                      ),)
                   ],
                 ),
               ),

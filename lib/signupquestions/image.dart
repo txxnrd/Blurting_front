@@ -23,7 +23,7 @@ class ImagePageState extends State<ImagePage>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  File? _image1= null;
+  File? _image1 = null;
   File? _image2= null;
   File? _image3= null;
   bool IsValid =false;
@@ -68,18 +68,12 @@ class ImagePageState extends State<ImagePage>
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
           if (response.statusCode == 200 || response.statusCode == 201) {
-            // ... 기존 코드 ...
             if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
               _image1Url = urlList[0]['url'];
               print('Image 1 URL: $_image1Url');
             }
           }
-
-          // URL을 저장하거나 처리하는 로직을 추가
-          // print(savedUrls);
         }  else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
@@ -177,10 +171,7 @@ class ImagePageState extends State<ImagePage>
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          setState(() {
-            IsValid = true;
-          });
-
+          // _showImageUploadingSnackBar();
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
@@ -190,6 +181,9 @@ class ImagePageState extends State<ImagePage>
             _image3Url = urlList[0]['url'];
             print('Image 3 URL: $_image3Url');
           }
+          setState(() {
+            IsValid = true;
+          });
 
           // URL을 저장하거나 처리하는 로직을 추가
           // print(savedUrls);
@@ -313,6 +307,7 @@ class ImagePageState extends State<ImagePage>
         },
       ),
       behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+      duration: Duration(milliseconds: 500),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
