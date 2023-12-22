@@ -140,9 +140,11 @@ flutter:
     - assets/images/useguidefive.png
     - assets/images/useguidesix.png
     - assets/images/useguideseven.png
-    - assets/images/blurbefore.png
+    - assets/images/blur1.png
+    - assets/images/blur2.png
+    - assets/images/blur3.png
+    - assets/images/blur4.png
     - assets/images/blurafter.png
-    - assets/images/blurmiddle.png
     - assets/images/useguidetwo.png
 
   fonts:

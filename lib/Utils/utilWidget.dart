@@ -519,6 +519,129 @@ class _MyChatState extends State<MyChat> {
   }
 }
 
+class QustionState extends StatefulWidget {
+  final String message;
+  final String createdAt;
+  final bool read;
+  final bool isBlurting;
+  final int likedNum;
+
+  QustionState(
+      {super.key,
+      required this.message,
+      required this.createdAt,
+      required this.read,
+      required this.isBlurting,
+      required this.likedNum});
+
+  @override
+  State<QustionState> createState() => _QustionState();
+}
+
+class _QustionState extends State<QustionState> {
+  
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return ListTile(
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Stack(
+                  children: [
+                    ClipPath(
+                      // clipper: RightTailClipper(),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.white
+                                  .withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+                              Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+                            ],
+                          ),
+                          border: Border.all(width: 1, color: Colors.white),
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 10, right: 10, top: 5, bottom: 5),
+                              child: Text(
+                                widget.message,
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Positioned(
+                    //   bottom: 0,
+                    //   left: (widget.likedNum == 0) ? 40 : 30,
+                    //   child: Container(
+                    //     width: (widget.likedNum == 0) ? 15 : 25,
+                    //     height: 15,
+                    //     decoration: BoxDecoration(
+                    //       color: Color.fromRGBO(255, 210, 210, 1),
+                    //       borderRadius: BorderRadius.circular(50),
+                    //     ),
+                    //     child: Row(
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         if (widget.likedNum != 0)
+                    //           Container(
+                    //             margin: EdgeInsets.only(right: 3, top: 1),
+                    //             child: Text(
+                    //               '${widget.likedNum}',
+                    //               style: TextStyle(
+                    //                   color: Colors.white,
+                    //                   fontSize: 10,
+                    //                   fontFamily: 'Heebo'),
+                    //             ),
+                    //           ),
+                    //         Image(
+                    //           image: AssetImage('assets/images/heart.png'),
+                    //           color: Colors.white,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 // 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatefulWidget {
   final IO.Socket socket;

@@ -42,10 +42,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
           return FadeTransition(opacity: animation, child: child);
         },
       ),
-    )
-        .then((_) {
-      // 첫 번째 화면으로 돌아왔을 때 실행될 로직
-    });
+    );
   }
 
   @override
@@ -70,10 +67,6 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context)=> UseGuidePageTwo()),
-        // );
         _increaseProgressAndNavigate();
       },
       child: Scaffold(
@@ -90,43 +83,37 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 60,
-                      ),
-                      Container(
-                        child: Text("블러팅에",
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: Color(DefinedColor.darkpink),
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(
-                        height: 0,
-                      ),
-                      Container(
-                        child: Text("오신걸 환영합니다!",
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: Color(DefinedColor.darkpink),
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 112),
-                      Container(
-                        width: 240.7,
-                        height: 246,
-                        child:
-                        Image.asset("assets/images/Blurting_welcome.png"),
-                      )
-                    ],
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 60,
+                    ),
+                    Text("블러팅에",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w700,
+                          color: Color(DefinedColor.darkpink),
+                          fontFamily: 'Pretendard',
+                        )),
+                    SizedBox(
+                      height: 0,
+                    ),
+                    Text("오신걸 환영합니다!",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w700,
+                          color: Color(DefinedColor.darkpink),
+                          fontFamily: 'Pretendard',
+                        )),
+                    SizedBox(height: 112),
+                    SizedBox(
+                      width: 240.7,
+                      height: 246,
+                      child:
+                      Image.asset("assets/images/Blurting_welcome.png"),
+                    )
+                  ],
                 ),
               ],
             ),
