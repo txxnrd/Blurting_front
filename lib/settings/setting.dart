@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
+import 'package:blurting/settings/info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -88,30 +89,32 @@ class _SettingPageState extends State<SettingPage> {
       }
     }
   }
+
   //
-  // Future<void> _testfcm() async {
-  //   print('_sendPostRequest called');
-  //   var url = Uri.parse(API.testfcm);
-  //   String savedToken = await getToken();
-  //   print(savedToken);
-  //   print(json.encode({"title": "테스트 성공", "text": "이 정도는 껌이지"}));
-  //
-  //   var response = await http.post(
-  //     url,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Authorization': 'Bearer $savedToken',
-  //     },
-  //     body: json
-  //         .encode({"title": "나는 이제 시험 공부하러", "text": "총총총", "type": "whisper"}),
-  //   );
-  //   print(response.body);
-  // }
+  Future<void> _testfcm() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.testfcm);
+    String savedToken = await getToken();
+    print(savedToken);
+    print(json.encode({"title": "테스트 성공", "text": "이 정도는 껌이지"}));
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json
+          .encode({"title": "나는 이제 시험 공부하러", "text": "총총총", "type": "whisper"}),
+    );
+    print(response.body);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(
           '설정',
@@ -197,15 +200,24 @@ class _SettingPageState extends State<SettingPage> {
                   SizedBox(
                     height: 18,
                   ),
-                  Container(
-                    width: 120,
-                    height: 22,
-                    child: Text(
-                      '계정/정보 관리',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color(DefinedColor.gray)),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => InfoPage()),
+                      );
+                    },
+                    child: Container(
+                      width: 120,
+                      height: 22,
+                      child: Text(
+                        '계정/정보 관리',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
                     ),
                   ),
 
@@ -315,7 +327,8 @@ class _SettingPageState extends State<SettingPage> {
                   InkWell(
                     onTap: () async {
                       launchUrl(
-                        Uri.parse('https://www.instagram.com/blurting.official/'),
+                        Uri.parse(
+                            'https://www.instagram.com/blurting.official/'),
                       );
                     },
                     child: Row(
@@ -323,12 +336,14 @@ class _SettingPageState extends State<SettingPage> {
                       children: <Widget>[
                         Text(
                           '개발자에게 문의하기',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color(DefinedColor.gray)),
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color(DefinedColor.gray)),
                         ),
                       ],
                     ),
                   ),
-
 
                   // SizedBox(
                   //   height: 20,
@@ -374,25 +389,25 @@ class _SettingPageState extends State<SettingPage> {
                   //     ),
                   //   ),
                   // ),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  // InkWell(
-                  //   onTap: () {
-                  //     _testfcm();
-                  //   },
-                  //   child: Container(
-                  //     width: 100,
-                  //     height: 22,
-                  //     child: Text(
-                  //       '알림 테스트하기',
-                  //       style: TextStyle(
-                  //           fontSize: 15,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: Color(DefinedColor.gray)),
-                  //     ),
-                  //   ),
-                  // ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _testfcm();
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 22,
+                      child: Text(
+                        '알림 테스트하기',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
 
                   SizedBox(
                     height: 10,
