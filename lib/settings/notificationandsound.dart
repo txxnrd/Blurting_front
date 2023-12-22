@@ -8,22 +8,25 @@ import 'package:blurting/mainApp.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart';
+
 // StatefulWidget으로 변경합니다.
 class NotificationandSound extends StatefulWidget {
   @override
   _NotificationandSoundState createState() => _NotificationandSoundState();
 }
-class _NotificationandSoundState extends State<NotificationandSound>{
+
+class _NotificationandSoundState extends State<NotificationandSound> {
   bool _personalInfo = false;
   bool _loginAndSecurity = false;
   bool _notificationSettings = false;
 
-  Future <void> _sendEnableNotificationRequest() async {
+  Future<void> _sendEnableNotificationRequest() async {
     String savedToken = await getToken();
     print("알림 켜기 시도");
     var url = Uri.parse(API.notification);
     var fcmToken = await FirebaseMessaging.instance.getToken(
-        vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+        vapidKey:
+            "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -34,18 +37,17 @@ class _NotificationandSoundState extends State<NotificationandSound>{
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       print(response.body);
-    }
-    else {
+    } else {
       print('Request failed with status: ${response.statusCode}.');
       print('Response body: ${response.body}');
     }
   }
 
-  Future <void> _sendDisableNotificationRequest() async {
+  Future<void> _sendDisableNotificationRequest() async {
     String savedToken = await getToken();
     print("알림 끄기 시도");
     var url = Uri.parse(API.disable);
-    var response = await http.post(
+    var response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -54,23 +56,25 @@ class _NotificationandSoundState extends State<NotificationandSound>{
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       print(response.body);
-    }
-    else {
+    } else {
       print('Request failed with status: ${response.statusCode}.');
       print('Response body: ${response.body}');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text('알림 및 소리',
+        title: Text(
+          '알림 및 소리',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: Color(DefinedColor.gray),
-          ),),
+          ),
+        ),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -78,9 +82,7 @@ class _NotificationandSoundState extends State<NotificationandSound>{
             Navigator.pop(context);
           },
         ),
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -100,8 +102,7 @@ class _NotificationandSoundState extends State<NotificationandSound>{
                       if (value) {
                         // 스위치가 true(켜짐)로 변경될 때 실행할 로직
                         _sendEnableNotificationRequest();
-                      }
-                      else {
+                      } else {
                         // 스위치가 false(꺼짐)로 변경될 때 실행할 로직
                         _sendDisableNotificationRequest();
                       }
@@ -112,7 +113,6 @@ class _NotificationandSoundState extends State<NotificationandSound>{
                 ],
               ),
             ),
-
           ],
         ),
       ),
