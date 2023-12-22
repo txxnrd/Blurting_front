@@ -23,9 +23,9 @@ class ImagePageState extends State<ImagePage>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  File? _image1;
-  File? _image2;
-  File? _image3;
+  File? _image1= null;
+  File? _image2= null;
+  File? _image3= null;
   bool IsValid =false;
   List<MultipartFile> multipartImageList = [];
   List<String> savedUrls = [];
@@ -33,12 +33,14 @@ class ImagePageState extends State<ImagePage>
   String? _image2Url;
   String? _image3Url;
   int count =0;
+  double? image_maxheight=700;
+  double? image_maxwidth = 700;
+  int imageQuality = 90;
 
   Future<void> _pickImage1() async {
-    count+=1;
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image1 = await picker.pickImage(source: ImageSource.gallery);
+    var image1 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:imageQuality );
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -62,10 +64,6 @@ class ImagePageState extends State<ImagePage>
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
-          if(count>=3) {
-            IsValid = true;
-          }
-
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
           print('Server returned OK');
           print('Response body: ${response.data}');
@@ -96,10 +94,9 @@ class ImagePageState extends State<ImagePage>
   }
 
   Future<void> _pickImage2() async {
-    count+=1;
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image2 = await picker.pickImage(source: ImageSource.gallery);
+    var image2 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -124,9 +121,6 @@ class ImagePageState extends State<ImagePage>
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
-          if(count>=3) {
-            IsValid = true;
-          }
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
           print('Server returned OK');
           print('Response body: ${response.data}');
@@ -153,17 +147,12 @@ class ImagePageState extends State<ImagePage>
 
   }
   Future<void> _pickImage3() async {
-
-    count+=1;
     var picker = ImagePicker();
+
     String savedToken = await getToken();
-    var image3 = await picker.pickImage(source: ImageSource.gallery);
+    var image3 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
-    if(count>=3) {
-      IsValid = true;
-      _showImageUploadingSnackBar();
-    }
     // 새로운 이미지를 선택한 경우에만 처리
     if (image3 != null) {
       File selectedImage = File(image3.path); // 선택된 이미지 파일
@@ -185,8 +174,12 @@ class ImagePageState extends State<ImagePage>
             },
           ),
         );
+
         if (response.statusCode == 200 || response.statusCode == 201) {
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          setState(() {
+            IsValid = true;
+          });
 
           print('Server returned OK');
           print('Response body: ${response.data}');
@@ -320,7 +313,6 @@ class ImagePageState extends State<ImagePage>
         },
       ),
       behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -329,10 +321,6 @@ class ImagePageState extends State<ImagePage>
 
 
   Future<void> _sendPostRequest() async {
-    if (_image1Url == null || _image2Url == null || _image3Url == null) {
-      _showImageUploadingSnackBar();
-      return; // 하나라도 null이면 함수를 종료합니다.
-    }
     print('_sendPostRequest called');
     String savedToken = await getToken();
     print(savedToken);

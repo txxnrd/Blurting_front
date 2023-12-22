@@ -3,7 +3,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/settings/setting.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' ;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +11,8 @@ import '../../config/app_config.dart';
 import '../../signupquestions/activeplacesearch.dart';
 import '../../signupquestions/token.dart';
 import 'dart:io';
+import 'package:extended_image/extended_image.dart' hide MultipartFile;
+
 
 class MyPageEdit extends StatefulWidget {
   final dynamic data;
@@ -154,12 +156,20 @@ class _MyPageEditState extends State<MyPageEdit> {
 
   TextEditingController _textController = TextEditingController();
 
+
+
+  String? _image1Url;
+  String? _image2Url;
+  String? _image3Url;
+  int count = 0;
+  double? image_maxheight=700;
+  double? image_maxwidth = 700;
+  int imageQuality = 90;
+
   Future<void> _pickImage1() async {
-    count += 1;
-    if (count >= 3) IsValid = true;
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image1 = await picker.pickImage(source: ImageSource.gallery);
+    var image1 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:imageQuality );
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -170,10 +180,8 @@ class _MyPageEditState extends State<MyPageEdit> {
         _image1 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
       });
-
       try {
         var response = await dio.post(
           url.toString(),
@@ -190,22 +198,23 @@ class _MyPageEditState extends State<MyPageEdit> {
           print('Response body: ${response.data}');
           var urlList = response.data;
           print(urlList);
-
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
           if (response.statusCode == 200 || response.statusCode == 201) {
-            if (urlList.isNotEmpty &&
-                urlList[0] is Map &&
-                urlList[0].containsKey('url')) {
-              _image1Url = urlList[0]['url'];
+            // ... 기존 코드 ...
+            if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+              setState(() {
+                _image1Url = urlList[0]['url'];
+              });
               print('Image 1 URL: $_image1Url');
             }
           }
-          setState(() {
-            _image1Url = urlList[0]['url'];
-          });
-        } else {
+
+          // URL을 저장하거나 처리하는 로직을 추가
+          // print(savedUrls);
+        }  else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
+
         }
       } catch (e, stacktrace) {
         print('Error: $e');
@@ -215,16 +224,10 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
-  String? _image1Url;
-  String? _image2Url;
-  String? _image3Url;
-  int count = 0;
   Future<void> _pickImage2() async {
-    count += 1;
-    if (count >= 3) IsValid = true;
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image2 = await picker.pickImage(source: ImageSource.gallery);
+    var image2 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -234,10 +237,8 @@ class _MyPageEditState extends State<MyPageEdit> {
       setState(() {
         _image2 = selectedImage;
       });
-
       FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image2.jpg'),
       });
 
       try {
@@ -257,34 +258,31 @@ class _MyPageEditState extends State<MyPageEdit> {
           var urlList = response.data;
           print(urlList);
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            _image2Url = urlList[0]['url'];
+          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            setState(() {
+              _image2Url = urlList[0]['url'];
+            });
             print('Image 2 URL: $_image2Url');
           }
-          setState(() {
-            _image2Url = urlList[0]['url'];
-          });
           // URL을 저장하거나 처리하는 로직을 추가
         } else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
+
         }
       } catch (e, stacktrace) {
         print('Error: $e');
         print('Stacktrace: $stacktrace');
         // _showVerificationFailedSnackBar();
       }
-    }
-  }
 
+    }
+
+  }
   Future<void> _pickImage3() async {
-    count += 1;
-    if (count >= 3) IsValid = true;
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image3 = await picker.pickImage(source: ImageSource.gallery);
+    var image3 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -295,8 +293,7 @@ class _MyPageEditState extends State<MyPageEdit> {
         _image3 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
+        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image3.jpg'),
       });
 
       try {
@@ -309,6 +306,7 @@ class _MyPageEditState extends State<MyPageEdit> {
             },
           ),
         );
+
         if (response.statusCode == 200 || response.statusCode == 201) {
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
           print('Server returned OK');
@@ -316,15 +314,12 @@ class _MyPageEditState extends State<MyPageEdit> {
           var urlList = response.data;
           print(urlList);
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            _image3Url = urlList[0]['url'];
+          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            setState(() {
+              _image3Url = urlList[0]['url'];
+            });
             print('Image 3 URL: $_image3Url');
           }
-          setState(() {
-            _image3Url = urlList[0]['url'];
-          });
           // URL을 저장하거나 처리하는 로직을 추가
           // print(savedUrls);
         } else {
@@ -338,7 +333,6 @@ class _MyPageEditState extends State<MyPageEdit> {
       }
     }
   }
-
   ///체크하면 아까 ValidList가 수정이됨
   @override
   void IsHobbySelected(int index) {
@@ -867,9 +861,9 @@ class _MyPageEditState extends State<MyPageEdit> {
             _showWarning(context);
           },
         ),
-        actions: [
-          pointAppbar(),
-            SizedBox(width: 10),
+
+        actions: <Widget>[
+
         ],
       ),
       body: SingleChildScrollView(
@@ -1148,7 +1142,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                    margin: EdgeInsets.only(top: 10, bottom: 5, left: 10),
                     child: Text(
                       '키',
                       style: TextStyle(
@@ -1156,6 +1150,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: Colors.black,
+
                       ),
                     ),
                   ),
@@ -1166,6 +1161,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                       child: TextField(
                           controller: _textController,
                           decoration: InputDecoration(
+                            isDense:true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(color: mainColor.lightGray, width: 2),
@@ -1800,13 +1796,15 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(
-                              _image1Url!,
-                              fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
-                            ), // 선택된 이미지 표시
+                              child:ExtendedImage.network(
+                                _image1Url!,
+                                fit:BoxFit.cover,
+                                cache:true,
+                              )// 선택된 이미지 표시
                           ),
                         ),
                       ),
+
                       InkWell(
                         onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
                         child: Container(
@@ -1819,10 +1817,11 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(
-                              _image2Url!,
-                              fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
-                            ),
+                              child:ExtendedImage.network(
+                                _image2Url!,
+                                fit:BoxFit.cover,
+                                cache:true,
+                              )
                           ),
                         ),
                       ),
@@ -1838,10 +1837,11 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(
+                            child:ExtendedImage.network(
                               _image3Url!,
-                              fit: BoxFit.cover, // 이미지가 부모 컨테이너를 꽉 채우도록 설정
-                            ),
+                              fit:BoxFit.cover,
+                              cache:true,
+                            )
                           ),
                         ),
                       ),

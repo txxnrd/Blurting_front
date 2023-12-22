@@ -94,6 +94,14 @@ dio
 2.15
 file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.4.0/
 file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.4.0/lib/
+extended_image
+2.18
+file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/extended_image-8.2.0/
+file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/extended_image-8.2.0/lib/
+extended_image_library
+2.19
+file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/extended_image_library-4.0.1/
+file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/extended_image_library-4.0.1/lib/
 fake_async
 2.12
 file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.1/
@@ -214,6 +222,10 @@ http
 3.2
 file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.2/
 file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.2/lib/
+http_client_helper
+2.12
+file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http_client_helper-3.0.0/
+file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http_client_helper-3.0.0/lib/
 http_parser
 2.12
 file:///C:/Users/4_da_/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2/
