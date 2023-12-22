@@ -31,6 +31,34 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
+  Future<void> _checkfcm() async {
+    String savedToken = await getToken();
+
+    var url = Uri.parse(API.fcmcheck);
+    bool fcmstate = false;
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print(response.body);
+      if (response.body == "true") {
+        fcmstate = true;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NotificationandSound(fcmstate: fcmstate)),
+      );
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      print('Response body: ${response.body}');
+    }
+  }
+
   void _showVerificationFailedSnackBar(value) {
     final snackBar = SnackBar(
       content: Text(value),
@@ -165,11 +193,12 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NotificationandSound()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => NotificationandSound()),
+                      // );
+                      _checkfcm();
                     },
                     child: Container(
                       width: 80,
@@ -437,7 +466,8 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UseGuidePageOne()),
+                        MaterialPageRoute(
+                            builder: (context) => UseGuidePageOne()),
                       );
                     },
                     child: Container(
