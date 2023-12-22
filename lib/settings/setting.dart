@@ -432,6 +432,26 @@ class _SettingPageState extends State<SettingPage> {
                   //     ),
                   //   ),
                   // ),
+                  //
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UseGuidePageOne()),
+                      );
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 22,
+                      child: Text(
+                        '사용설명서로 이동',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -70,7 +70,7 @@ class _UseGuidePageSevenState extends State<UseGuidePageSeven>
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: SizedBox(),
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){Navigator.pop(context);}),
           backgroundColor: Colors.white, //appBar 투명색
           elevation: 0.0,
         ),
@@ -147,21 +147,9 @@ class _UseGuidePageSevenState extends State<UseGuidePageSeven>
                               child: Image.asset(
                                   "assets/images/useguideseven.png"),
                             ),
-                            // Positioned(
-                            //   left: 50, // 원하는 위치로 조정하세요.
-                            //   top: 50, // 원하는 위치로 조정하세요.
-                            //   child: Image.asset(
-                            //     "assets/images/pointer.png",
-                            //     width: 36.7,
-                            //     height: 47,
-                            //   ),
-                            // ),
                           ],
                         )
                       ]),
-                      SizedBox(
-                        height: 200,
-                      ),
                     ],
                   ),
                 ),
