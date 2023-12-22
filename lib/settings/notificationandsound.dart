@@ -20,6 +20,32 @@ class _NotificationandSoundState extends State<NotificationandSound> {
   bool _loginAndSecurity = false;
   bool _notificationSettings = false;
 
+  Future<void> _checkfcm() async {
+    String savedToken = await getToken();
+
+    var url = Uri.parse(API.fcmcheck);
+    bool fcmstate = false;
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print(response.body);
+      if (response.body == "true") {
+        fcmstate = true;
+      }
+      setState(() {
+        _notificationSettings = fcmstate;
+      });
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      print('Response body: ${response.body}');
+    }
+  }
+
   Future<void> _sendEnableNotificationRequest() async {
     String savedToken = await getToken();
     print("알림 켜기 시도");
@@ -63,6 +89,12 @@ class _NotificationandSoundState extends State<NotificationandSound> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _checkfcm();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +109,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
         ),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
