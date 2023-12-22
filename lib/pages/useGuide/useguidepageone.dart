@@ -73,7 +73,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: SizedBox(),
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){Navigator.pop(context);}),
           backgroundColor: Colors.white, //appBar 투명색
           elevation: 0.0,
         ),
