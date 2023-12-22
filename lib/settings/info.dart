@@ -12,6 +12,7 @@ import '../signupquestions/token.dart';
 import 'notice.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'notificationandsound.dart';
+import 'package:blurting/Utils/provider.dart';
 
 // StatefulWidget으로 변경합니다.
 class InfoPage extends StatefulWidget {
@@ -102,10 +103,22 @@ class _InfoPageState extends State<InfoPage> {
         child: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    width: 170,
+                    height: 22,
+                    child: Text(
+                      '이메일',
+                      style: TextStyle(
+                          color: mainColor.Gray,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    ),
+                  ),
                   Container(
                     width: 170,
                     height: 22,
@@ -114,7 +127,34 @@ class _InfoPageState extends State<InfoPage> {
                       style: TextStyle(
                           color: mainColor.Gray,
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 17,
+                  ),
+                  Container(
+                    width: 170,
+                    height: 22,
+                    child: Text(
+                      '전화번호',
+                      style: TextStyle(
+                          color: mainColor.Gray,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          fontFamily: 'Heebo'),
+                    ),
+                  ),
+                  Container(
+                    width: 170,
+                    height: 22,
+                    child: Text(
+                      phoneNumber,
+                      style: TextStyle(
+                          color: mainColor.Gray,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
                           fontFamily: 'Heebo'),
                     ),
                   ),
