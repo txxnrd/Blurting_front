@@ -165,7 +165,7 @@ class _MyPage extends State<MyPage> {
               IconButton(
                 icon: Icon(
                   Icons.settings,
-                  color: mainColor.lightGray,
+                  color: mainColor.Gray,
                 ),
                 onPressed: () {
                   Navigator.push(

@@ -308,7 +308,7 @@ class _HomeState extends State<Home> {
           IconButton(
             icon: Icon(
               Icons.notifications_rounded,
-              color: mainColor.lightGray,
+              color: mainColor.Gray,
             ),
             onPressed: () {
               Navigator.push(

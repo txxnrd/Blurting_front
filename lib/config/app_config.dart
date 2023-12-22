@@ -76,5 +76,6 @@ class API {
   static const String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
   static const String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";
   static const String disable = "${ServerEndpoints.serverEndpoint}/fcm/disable";
-
+  static const String userinfo =
+      "${ServerEndpoints.serverEndpoint}/user/account";
 }
