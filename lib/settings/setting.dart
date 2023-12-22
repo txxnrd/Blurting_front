@@ -89,24 +89,24 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
   //
-  // Future<void> _testfcm() async {
-  //   print('_sendPostRequest called');
-  //   var url = Uri.parse(API.testfcm);
-  //   String savedToken = await getToken();
-  //   print(savedToken);
-  //   print(json.encode({"title": "테스트 성공", "text": "이 정도는 껌이지"}));
-  //
-  //   var response = await http.post(
-  //     url,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Authorization': 'Bearer $savedToken',
-  //     },
-  //     body: json
-  //         .encode({"title": "나는 이제 시험 공부하러", "text": "총총총", "type": "whisper"}),
-  //   );
-  //   print(response.body);
-  // }
+  Future<void> _testfcm() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.testfcm);
+    String savedToken = await getToken();
+    print(savedToken);
+    print(json.encode({"title": "테스트 성공", "text": "이 정도는 껌이지"}));
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json
+          .encode({"title": "나는 이제 시험 공부하러", "text": "총총총", "type": "whisper"}),
+    );
+    print(response.body);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -374,25 +374,25 @@ class _SettingPageState extends State<SettingPage> {
                   //     ),
                   //   ),
                   // ),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  // InkWell(
-                  //   onTap: () {
-                  //     _testfcm();
-                  //   },
-                  //   child: Container(
-                  //     width: 100,
-                  //     height: 22,
-                  //     child: Text(
-                  //       '알림 테스트하기',
-                  //       style: TextStyle(
-                  //           fontSize: 15,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: Color(DefinedColor.gray)),
-                  //     ),
-                  //   ),
-                  // ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _testfcm();
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 22,
+                      child: Text(
+                        '알림 테스트하기',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
 
                   SizedBox(
                     height: 10,

@@ -306,7 +306,10 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           pointAppbar(),
           IconButton(
-            icon: Icon(Icons.notifications_rounded),
+            icon: Icon(
+              Icons.notifications_rounded,
+              color: mainColor.lightGray,
+            ),
             onPressed: () {
               Navigator.push(
                 context,

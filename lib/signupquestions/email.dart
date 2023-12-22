@@ -11,7 +11,6 @@ import 'package:blurting/signupquestions/religion.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
-
 import '../config/app_config.dart';
 
 class EmailPage extends StatefulWidget {

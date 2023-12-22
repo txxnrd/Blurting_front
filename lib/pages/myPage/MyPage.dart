@@ -65,23 +65,6 @@ class _MyPage extends State<MyPage> {
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
     String savedToken = await getToken();
-
-    // String accessToken = await getToken();
-    // String refreshToken = await getRefreshToken();
-    // print("access Token$accessToken");
-    // print("refresh Token$refreshToken");
-// =======
-//     // String accessToken = await getToken();
-//     // String refreshToken = await getRefreshToken();
-//     String accessToken =
-//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-//     String refreshToken =
-//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkwWiIsImlhdCI6MTcwMDcwNDEyMn0.uQK-xiDOC7qyCXF6OtMZqVv5LO1hGWhGdcKCkjAChIQ';
-
-//     print("access Token" + accessToken);
-//     print("access Token" + refreshToken);
-// >>>>>>> main
-
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -131,12 +114,6 @@ class _MyPage extends State<MyPage> {
   Future<void> fetchUserProfile() async {
     var url = Uri.parse(API.userprofile);
     String savedToken = await getToken();
-        // var savedToken = getToken();
-    // var savedToken =
-    //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY2LCJzaWduZWRBdCI6IjIwMjMtMTEtMjNUMTA6NDg6NDIuMTkxWiIsImlhdCI6MTcwMDcwNDEyMiwiZXhwIjoxNzAwNzA3NzIyfQ.fIIgBIpukmL4ZnCvJYkflnjvEgtJG6IvfzNz40Mj56o';
-    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJzaWduZWRBdCI6IjIwMjMtMTEtMjRUMDA6MjM6MDkuNDc4WiIsImlhdCI6MTcwMDc1Mjk4OSwiZXhwIjoxNzAwNzU2NTg5fQ.FwwmiT9lxnVfvsDgd1m-OcHsmjj5BwOVVRGbAl3hgt8';
-
-    // print(savedToken);
     var response = await http.get(
       url,
       headers: <String, String>{
@@ -153,8 +130,7 @@ class _MyPage extends State<MyPage> {
         userProfile = data;
         imagePaths = List<String>.from(userProfile['images']);
       });
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchUserProfile);
@@ -187,7 +163,10 @@ class _MyPage extends State<MyPage> {
             actions: [
               pointAppbar(),
               IconButton(
-                icon: Icon(Icons.settings),
+                icon: Icon(
+                  Icons.settings,
+                  color: mainColor.lightGray,
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -239,7 +218,9 @@ class _MyPage extends State<MyPage> {
                             SizedBox(
                               width: 6,
                             ),
-                            buildPinkBox('#${userProfile['mbti'].toString().toUpperCase()}' ?? 'Unknown')
+                            buildPinkBox(
+                                '#${userProfile['mbti'].toString().toUpperCase()}' ??
+                                    'Unknown')
                           ],
                         )
                       ],
@@ -251,8 +232,8 @@ class _MyPage extends State<MyPage> {
                           child: Column(
                             children: [
                               for (int i = 0;
-                              i < (userProfile['hobby']?.length ?? 0);
-                              i += 2)
+                                  i < (userProfile['hobby']?.length ?? 0);
+                                  i += 2)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -260,7 +241,7 @@ class _MyPage extends State<MyPage> {
                                     buildPinkBox('#${userProfile['hobby'][i]}'),
                                     SizedBox(
                                         width:
-                                        8), // Adjust the spacing between boxes
+                                            8), // Adjust the spacing between boxes
                                     if (i + 1 < userProfile['hobby']!.length)
                                       buildPinkBox(
                                           '#${userProfile['hobby'][i + 1]}'),
@@ -278,8 +259,8 @@ class _MyPage extends State<MyPage> {
                           child: Column(
                             children: [
                               for (int i = 0;
-                              i < (userProfile['character']?.length ?? 0);
-                              i += 2)
+                                  i < (userProfile['character']?.length ?? 0);
+                                  i += 2)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -288,7 +269,7 @@ class _MyPage extends State<MyPage> {
                                         '#${userProfile['character'][i]}'),
                                     SizedBox(
                                         width:
-                                        8), // Adjust the spacing between boxes
+                                            8), // Adjust the spacing between boxes
                                     if (i + 1 <
                                         userProfile['character']!.length)
                                       buildPinkBox(
@@ -440,14 +421,14 @@ class _MyPage extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: titles
                     .map((title) => Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: "Heebo",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: mainColor.MainColor,
-                  ),
-                ))
+                          title,
+                          style: TextStyle(
+                            fontFamily: "Heebo",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: mainColor.MainColor,
+                          ),
+                        ))
                     .toList(),
               ),
             ),
@@ -460,16 +441,16 @@ class _MyPage extends State<MyPage> {
                     .entries
                     .map(
                       (entry) => Text(
-                    entry.value,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontFamily: "Heebo",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: mainColor.MainColor,
-                    ),
-                  ),
-                )
+                        entry.value,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontFamily: "Heebo",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          color: mainColor.MainColor,
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
             ),

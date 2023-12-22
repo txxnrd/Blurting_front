@@ -72,20 +72,20 @@ class _NoticePageState extends State<NoticePage>{
                   Uri.parse('https://txxnrd.github.io/'),
                 );
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    '🍭빼빼로데이 이벤트',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color(DefinedColor.gray)),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios, // 작은 화살표 아이콘
-                    size: 16.0, // 아이콘 크기 조정
-                    color: Color(DefinedColor.gray), // 아이콘 색상 조정
-                  ),
-                ],
-              ),
+              // child: Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: <Widget>[
+              //     Text(
+              //       '🍭빼빼로데이 이벤트',
+              //       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color(DefinedColor.gray)),
+              //     ),
+              //     Icon(
+              //       Icons.arrow_forward_ios, // 작은 화살표 아이콘
+              //       size: 16.0, // 아이콘 크기 조정
+              //       color: Color(DefinedColor.gray), // 아이콘 색상 조정
+              //     ),
+              //   ],
+              // ),
             ),
             // Column(
             //   mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 끝에 정렬
