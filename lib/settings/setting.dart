@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
 import 'package:blurting/settings/info.dart';
+import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -208,6 +209,49 @@ class _SettingPageState extends State<SettingPage> {
                     child: Container(
                       child: Text(
                         '계정/정보 관리',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+
+                                    SizedBox(
+                    height: 18,
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  WelcomeScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = 0.0;
+                            const end = 1.0;
+                            var curve = Curves.easeOut;
+
+                            var tween = Tween(begin: begin, end: end).chain(
+                              CurveTween(curve: curve),
+                            );
+
+                            var opacityAnimation = tween.animate(animation);
+
+                            return FadeTransition(
+                              opacity: opacityAnimation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Text(
+                        '이메일 인증 완 페이지',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
