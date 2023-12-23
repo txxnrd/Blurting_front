@@ -1,4 +1,4 @@
-package com.example.blurting_front
+package com.Blurting.blurting
 
 import io.flutter.embedding.android.FlutterActivity
 

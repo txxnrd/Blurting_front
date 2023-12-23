@@ -6,6 +6,7 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/height.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:blurting/Utils/provider.dart';
 
 import '../config/app_config.dart'; // sex.dart를 임포트
 
@@ -40,41 +41,7 @@ class _SmokePageState extends State<SmokePage>
       ),
     );
   }
-  Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupback);
 
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if(data['signupToken']!=null)
-      {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-      }
-      else{
-        _showVerificationFailedSnackBar();
-      }
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
   @override
   void initState() {
     super.initState();
@@ -85,8 +52,8 @@ class _SmokePageState extends State<SmokePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 6/15,
-      end: 7/15,
+      begin: 6 / 15,
+      end: 7 / 15,
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -94,25 +61,18 @@ class _SmokePageState extends State<SmokePage>
       });
   }
 
-
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
-    var cigarette=0;
-    if(_selectedSmokePreference==SmokePreference.none
-    ){
-      cigarette=0;
-    }
-    else if(_selectedSmokePreference==SmokePreference.none
-    ){
-      cigarette=1;
-    }
-    else if(_selectedSmokePreference==SmokePreference.none
-    ){
-      cigarette=2;
-    }
-    else{
-      cigarette=3;
+    var cigarette = 0;
+    if (_selectedSmokePreference == SmokePreference.none) {
+      cigarette = 0;
+    } else if (_selectedSmokePreference == SmokePreference.none) {
+      cigarette = 1;
+    } else if (_selectedSmokePreference == SmokePreference.none) {
+      cigarette = 2;
+    } else {
+      cigarette = 3;
     }
     String savedToken = await getToken();
     print(savedToken);
@@ -126,64 +86,24 @@ class _SmokePageState extends State<SmokePage>
       body: json.encode({"cigarette": cigarette}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
       }
-      else{
-        _showVerificationFailedSnackBar();
-      }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
 
-
-  void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('인증 실패'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('닫기'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: '닫기',
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -203,10 +123,9 @@ class _SmokePageState extends State<SmokePage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _sendBackRequest();
-            },
+            sendBackRequest(context);
+          },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -290,21 +209,26 @@ class _SmokePageState extends State<SmokePage>
                   children: labels
                       .map((label) => Container(
                             margin: EdgeInsets.only(left: 10, right: 20),
-                            child: Text(label, style: TextStyle(fontSize: 12, fontFamily: 'Pretendard', color: Color.fromRGBO(48, 48, 48, 1)),),
+                            child: Text(
+                              label,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Pretendard',
+                                  color: Color.fromRGBO(48, 48, 48, 1)),
+                            ),
                           ))
                       .toList(),
                 ),
               ],
             ),
             SizedBox(height: 306),
-
           ],
         ),
       ),
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -314,11 +238,9 @@ class _SmokePageState extends State<SmokePage>
             elevation: 0,
             padding: EdgeInsets.all(0),
           ),
-          onPressed:
-              () {
+          onPressed: () {
             _sendPostRequest();
           },
-
           child: Text(
             '다음',
             style: TextStyle(
@@ -330,8 +252,8 @@ class _SmokePageState extends State<SmokePage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
