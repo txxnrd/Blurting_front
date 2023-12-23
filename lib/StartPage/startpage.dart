@@ -134,13 +134,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return
-      PopScope(canPop: false,
-    child:
       Scaffold(
       key: _scaffoldKey, // Scaffold에 GlobalKey 할당
       resizeToAvoidBottomInset: false,
-
       backgroundColor: mainColor.MainColor,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(leading: null, backgroundColor: Colors.transparent,),
       body: Form(
           key: _formKey,
           child: Stack(
@@ -221,13 +220,13 @@ class _LoginPageState extends State<LoginPage> {
                                         const begin = 0.0;
                                         const end = 1.0;
                                         var curve = Curves.easeOut;
-
+      
                                         var tween = Tween(begin: begin, end: end).chain(
                                           CurveTween(curve: curve),
                                         );
-
+      
                                         var opacityAnimation = tween.animate(animation);
-
+      
                                         return FadeTransition(
                                           opacity: opacityAnimation,
                                           child: child,
@@ -260,7 +259,6 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }
