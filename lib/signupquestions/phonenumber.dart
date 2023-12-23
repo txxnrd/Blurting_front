@@ -47,7 +47,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
   late FocusNode myFocusNode;
 
-
   final _controller = TextEditingController();
   final _controller_certification = TextEditingController();
 
@@ -117,7 +116,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
@@ -137,25 +135,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       print('Request failed with status: ${response.statusCode}.');
       var data = json.decode(response.body);
       errormessage = data['message'];
-      _showVerificationFailedSnackBar(errormessage);
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, errormessage);
     }
-  }
-  void _showVerificationFailedSnackBar(value) {
-    print("snackbar 실행");
-    final snackBar = SnackBar(
-      content: Text(value),
-      // backgroundColor: ,
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Future<void> _sendVerificationRequest(String phoneNumber) async {
@@ -191,7 +173,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       } else {
         var data = json.decode(response.body);
         errormessage = data['message'];
-        _showVerificationFailedSnackBar(errormessage);
+        // ignore: use_build_context_synchronously
+        showSnackBar(context, errormessage);
       }
     } else {
       // 오류가 발생한 경우 처리
@@ -200,7 +183,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     }
   }
 
-
   @override
   void NowCertification() {
     setState(() {
@@ -208,8 +190,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       IsValid = false;
     });
   }
-
-
 
   requestPermission() async {
     var status = await Permission.contacts.status;
@@ -256,8 +236,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     });
 
     _progressAnimation = Tween<double>(
-      begin: 0.3/15, // 시작 게이지 값
-      end: 1/15, // 종료 게이지 값
+      begin: 0.3 / 15, // 시작 게이지 값
+      end: 1 / 15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -284,8 +264,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
             Navigator.pop(context);
           },
         ),
-        actions: <Widget>[
-        ],
+        actions: <Widget>[],
       ),
 
       body: GestureDetector(
@@ -357,7 +336,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   keyboardType: TextInputType.number,
                   maxLength: 13,
                   decoration: InputDecoration(
-                    isDense:true,
+                    isDense: true,
                     hintText: '010-1234-5678',
                     counterText: '', // 이 부분을 추가
                     hintStyle: TextStyle(
@@ -402,7 +381,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     ),
                     controller: _controller_certification,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration( isDense:true,
+                    decoration: InputDecoration(
+                      isDense: true,
                       counterText: "",
                       hintText: '인증번호를 입력해 주세요',
                       hintStyle: TextStyle(

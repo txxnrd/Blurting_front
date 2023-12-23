@@ -36,8 +36,6 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage>
 
     _controller.addListener(() {
       String text = _controller.text;
-
-      // Checking if the text has been added or removed.
       if (_previousText == null ||
           (text.length > (_previousText?.length ?? 0))) {
         if (text.length == 3 || text.length == 8) {
@@ -54,7 +52,6 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage>
               TextSelection.fromPosition(TextPosition(offset: text.length));
         }
       }
-
       _previousText = _controller.text;
     });
 
@@ -85,7 +82,6 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage>
             Navigator.pop(context);
           },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -146,7 +142,8 @@ class _PhoneCertificationPageState extends State<PhoneCertificationPage>
               child: TextField(
                 keyboardType: TextInputType.number,
                 maxLength: 6,
-                decoration: InputDecoration( isDense:true,
+                decoration: InputDecoration(
+                  isDense: true,
                   counterText: "",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
