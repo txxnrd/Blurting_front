@@ -188,7 +188,7 @@ class _MyPage extends State<MyPage> {
                   margin: EdgeInsets.only(top: 20),
                   alignment: Alignment.center,
                   width: 259,
-                  height: 346, // 얘는 나중에 내용 길이에 따라 동적으로 받아와야할수도
+                  height: 346,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -283,22 +283,49 @@ class _MyPage extends State<MyPage> {
                     ),
                     Column(
                       children: [
-                        _buildInfoPage(titles: [
-                          '지역:',
-                          '종교:',
-                          '전공:',
-                          '키:',
-                          '흡연정도:',
-                          '음주정도:',
-                        ], values: [
-                          userProfile['region'].toString() ?? 'Unknown',
-                          userProfile['religion'].toString() ?? 'Unknown',
-                          userProfile['major'].toString() ?? 'Unknown',
-                          userProfile['height'].toString() ?? 'Unknown',
-                          getCigaretteString(userProfile['cigarette']) ??
-                              'Unknown',
-                          getDrinkString(userProfile['drink']) ?? 'Unknown',
-                        ]),
+                        Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                        Text(
+                          'basic info.',
+                          style: TextStyle(
+                              fontFamily: 'Heebo',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0XFFF66464)),
+                        ),
+                        Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
+                        Row(
+                          children: [
+                            SizedBox(width: 25),
+                            Text(userProfile['nickname'] ?? 'Unknown',
+                                style: TextStyle(
+                                    fontFamily: "Heebo",
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 30,
+                                    color: mainColor.MainColor)),
+                            SizedBox(width: 7),
+                            Text(userProfile['mbti'] ?? 'Unknown',
+                                style: TextStyle(
+                                    fontFamily: "Heebo",
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                    color: mainColor.MainColor)),
+                          ],
+                        ),
+                        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                        _buildInfoRow('지역:',
+                            userProfile['region'].toString() ?? 'Unknown'),
+                        _buildInfoRow('종교:',
+                            userProfile['religion'].toString() ?? 'Unknown'),
+                        _buildInfoRow('전공:',
+                            userProfile['major'].toString() ?? 'Unknown'),
+                        _buildInfoRow('키:',
+                            userProfile['height'].toString() ?? 'Unknown'),
+                        _buildInfoRow(
+                            '흡연정도:',
+                            getCigaretteString(userProfile['cigarette']) ??
+                                'Unknown'),
+                        _buildInfoRow('음주정도:',
+                            getDrinkString(userProfile['drink']) ?? 'Unknown'),
                       ],
                     ),
                   ]),
@@ -378,88 +405,47 @@ class _MyPage extends State<MyPage> {
     );
   }
 
-  Widget _buildInfoPage({
-    required List<String> titles,
-    required List<String> values,
-  }) {
-    return Column(
-      children: <Widget>[
-        Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-        Text(
-          'basic info.',
-          style: TextStyle(
-              fontFamily: 'Heebo',
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-              color: Color(0XFFF66464)),
-        ),
-        Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
-        Row(
-          children: [
-            SizedBox(width: 25),
-            Text(userProfile['nickname'] ?? 'Unknown',
-                style: TextStyle(
-                    fontFamily: "Heebo",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 30,
-                    color: mainColor.MainColor)),
-            SizedBox(width: 7),
-            Text(userProfile['mbti'] ?? 'Unknown',
-                style: TextStyle(
-                    fontFamily: "Heebo",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                    color: mainColor.MainColor)),
-          ],
-        ),
-        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-        Row(
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 5, right: 24, left: 29),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: titles
-                    .map((title) => Text(
-                          title,
-                          style: TextStyle(
-                            fontFamily: "Heebo",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: mainColor.MainColor,
-                          ),
-                        ))
-                    .toList(),
-              ),
+  Widget _buildInfoRow(String title, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(width: 25),
+
+        Container(
+          width: 80,
+          height: 25,
+          child: Text(
+            title,
+            style: TextStyle(
+              fontFamily: "Heebo",
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              color: mainColor.MainColor,
             ),
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 5, right: 24, left: 29),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: values
-                    .asMap()
-                    .entries
-                    .map(
-                      (entry) => Text(
-                        entry.value,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontFamily: "Heebo",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: mainColor.MainColor,
-                        ),
-                      ),
-                    )
-                    .toList(),
+          ),
+        ),
+
+        // Adjust the spacing between title and value
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 5),
+            child: Text(
+              value,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontFamily: "Heebo",
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: mainColor.MainColor,
               ),
+              softWrap: true,
+              overflow: TextOverflow.visible,
+              maxLines: 2,
             ),
-            Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-          ],
+          ),
         ),
-        SizedBox(
-          height: 34,
-        ),
+
+        SizedBox(width: 20), // Adjust the spacing between rows
       ],
     );
   }
