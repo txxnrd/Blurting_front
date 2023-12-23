@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
 
@@ -7,18 +5,14 @@ import 'package:blurting/settings/info.dart';
 import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
-import 'package:geolocator/geolocator.dart';
 import '../colors/colors.dart';
 import '../signupquestions/token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
-import 'package:blurting/pages/useGuide/useguidepageone.dart';
 
 // StatefulWidget으로 변경합니다.
 class SettingPage extends StatefulWidget {
@@ -117,7 +111,6 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-
   String email = "";
   String phoneNumber = "";
 
@@ -159,7 +152,6 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-
   Future<void> _testfcm() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.testfcm);
@@ -183,6 +175,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.transparent,
         title: Text(
           '설정',
@@ -194,12 +187,10 @@ class _SettingPageState extends State<SettingPage> {
         ),
         elevation: 0,
         leading: IconButton(
-
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pop(context);
             }),
-
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -240,7 +231,6 @@ class _SettingPageState extends State<SettingPage> {
                       _checkfcm();
                     },
                     child: Container(
-
                       child: Text(
                         '알림 및 소리',
                         style: TextStyle(
@@ -262,20 +252,6 @@ class _SettingPageState extends State<SettingPage> {
                           color: Color(DefinedColor.gray)),
                     ),
                   ),
-                  SizedBox(
-                    height: 18,
-                  ),
-                  Container(
-                    width: 120,
-                    height: 22,
-                    child: Text(
-                      '계정/정보 관리',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
 
                   SizedBox(
                     height: 18,
@@ -283,7 +259,6 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-
                       _getuserinfo();
                     },
                     child: Container(
@@ -297,7 +272,7 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                   ),
 
-                                    SizedBox(
+                  SizedBox(
                     height: 18,
                   ),
 
@@ -329,32 +304,12 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                       );
                     },
-                    child: Container(
-                      child: Text(
-                        '이메일 인증 완 페이지',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 14,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _sendIsnowloginRequest();
-                    },
-                    child: Container(
-
-                      child: Text(
-                        '로그인 여부 확인하기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
+                    child: Text(
+                      '이메일 인증 완 페이지',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(DefinedColor.gray)),
                     ),
                   ),
 
@@ -381,6 +336,22 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
+
+                  InkWell(
+                    onTap: () {
+                      _sendDeleteRequest();
+                    },
+                    child: Container(
+                      child: Text(
+                        '계정 삭제하기',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+
                   SizedBox(
                     height: 34,
                   ),
@@ -413,52 +384,6 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      var fcmToken = await FirebaseMessaging.instance.getToken(
-                          vapidKey:
-                              "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-                      print("------------");
-                      print(fcmToken);
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 22,
-                      child: Text(
-                        'fcm 토큰 확인하기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      String Token = await getToken();
-                      print("------------");
-                      print(Token);
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 22,
-                      child: Text(
-                        '현재 토큰 확인하기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
-                  ),
-
-
 
                   InkWell(
                     onTap: () {
@@ -480,7 +405,8 @@ class _SettingPageState extends State<SettingPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
-                      );                    },
+                      );
+                    },
                     child: Container(
                       child: Text(
                         '로그인 페이지로... 로그아웃은 ㄴㄴ',
@@ -489,6 +415,30 @@ class _SettingPageState extends State<SettingPage> {
                             fontWeight: FontWeight.w500,
                             color: Color(DefinedColor.gray)),
                       ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      launchUrl(
+                        Uri.parse(
+                            'https://www.instagram.com/blurting.official/'),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          '개발자에게 문의하기',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color(DefinedColor.gray)),
+                        ),
+                      ],
                     ),
                   ),
 
@@ -567,53 +517,6 @@ class _SettingPageState extends State<SettingPage> {
                       );
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
-                      child: Text(
-                        '사용설명서로 이동',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  //
-                  // InkWell(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => YakguanOne()),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     width: 100,
-                  //     height: 22,
-                  //     child: Text(
-                  //       '약관 보기',
-                  //       style: TextStyle(
-                  //           fontSize: 15,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: Color(DefinedColor.gray)),
-                  //     ),
-                  //   ),
-                  // ),
-                  //
-
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-
-                        MaterialPageRoute(
-                            builder: (context) => UseGuidePageOne()),
-                      );
-                    },
-                    child: Container(
                       child: Text(
                         '사용설명서로 이동',
                         style: TextStyle(
@@ -631,10 +534,4 @@ class _SettingPageState extends State<SettingPage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: SettingPage(),
-  ));
 }
