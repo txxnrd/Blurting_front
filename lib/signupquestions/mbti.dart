@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/religion.dart';
@@ -18,12 +19,16 @@ class MBTIPage extends StatefulWidget {
   _MBTIPageState createState() => _MBTIPageState();
 }
 
-enum EorI {e,i}
-enum SorN {s,n}
-enum TorF {t,f}
-enum JorP {j,p}
+enum EorI { e, i }
 
-class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin {
+enum SorN { s, n }
+
+enum TorF { t, f }
+
+enum JorP { j, p }
+
+class _MBTIPageState extends State<MBTIPage>
+    with SingleTickerProviderStateMixin {
   EorI? _selectedEorI;
   SorN? _selectedSorN;
   TorF? _selectedTorF;
@@ -45,8 +50,8 @@ class _MBTIPageState extends State<MBTIPage> with SingleTickerProviderStateMixin
     );
   }
 
-List<bool> isValidList = [false, false, false, false];
-bool IsValid = false;
+  List<bool> isValidList = [false, false, false, false];
+  bool IsValid = false;
 
   @override
   void IsSelected(int index) {
@@ -66,8 +71,8 @@ bool IsValid = false;
     );
 
     _progressAnimation = Tween<double>(
-      begin: 9/15, // 시작 너비 (30%)
-      end: 10/15, // 종료 너비 (40%)
+      begin: 9 / 15, // 시작 너비 (30%)
+      end: 10 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -75,36 +80,22 @@ bool IsValid = false;
       });
   }
 
-
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: '닫기',
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
   String getMBTIType() {
     String eOrI = _selectedEorI == EorI.i ? 'i' : 'e';
     String sOrN = _selectedSorN == SorN.s ? 's' : 'n';
     String tOrF = _selectedTorF == TorF.t ? 't' : 'f';
     String jOrP = _selectedJorP == JorP.j ? 'j' : 'p';
-
     return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
   }
 
   Future<void> _sendPostRequest() async {
+    bool hasFalse = isValidList.any((isValid) => !isValid);
+    if (hasFalse) {
+      showSnackBar(context, "모든 항목을 선택 해주세요");
+    }
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
-    var mbti =getMBTIType();
-
-
+    var mbti = getMBTIType();
 
     String savedToken = await getToken();
     print(savedToken);
@@ -115,69 +106,27 @@ bool IsValid = false;
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"mbti":mbti }), // JSON 형태로 인코딩
+      body: json.encode({"mbti": mbti}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
       }
-      else{
-        _showVerificationFailedSnackBar();
-      }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
 
-  Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupback);
-
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if(data['signupToken']!=null)
-      {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-
-      }
-      else{
-        _showVerificationFailedSnackBar();
-      }
-
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -197,10 +146,9 @@ bool IsValid = false;
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _sendBackRequest();
-            },
+            sendBackRequest(context);
+          },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -304,10 +252,9 @@ bool IsValid = false;
                     child: Text(
                       'E',
                       style: TextStyle(
-                        color:
-                        _selectedEorI == EorI.e
+                        color: _selectedEorI == EorI.e
                             ? Colors.white
-                            :  Color(0xFF303030),
+                            : Color(0xFF303030),
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -342,7 +289,7 @@ bool IsValid = false;
                     child: Text(
                       'I',
                       style: TextStyle(
-                        color:  _selectedEorI == EorI.i
+                        color: _selectedEorI == EorI.i
                             ? Colors.white
                             : Colors.black,
                         fontFamily: 'Pretendard',
@@ -467,8 +414,9 @@ bool IsValid = false;
                     child: Text(
                       'N',
                       style: TextStyle(
-                        color:  _selectedSorN == SorN.n
-                            ? Colors.white: Colors.black,
+                        color: _selectedSorN == SorN.n
+                            ? Colors.white
+                            : Colors.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -552,7 +500,7 @@ bool IsValid = false;
                     child: Text(
                       'T',
                       style: TextStyle(
-                        color:_selectedTorF == TorF.t
+                        color: _selectedTorF == TorF.t
                             ? Colors.white
                             : Colors.black,
                         fontFamily: 'Pretendard',
@@ -583,7 +531,7 @@ bool IsValid = false;
                     onPressed: () {
                       setState(() {
                         IsSelected(2);
-                        _selectedTorF = TorF.f ;
+                        _selectedTorF = TorF.f;
                       });
                     },
                     child: Text(
@@ -675,7 +623,7 @@ bool IsValid = false;
                     child: Text(
                       'J',
                       style: TextStyle(
-                        color:_selectedJorP == JorP.j
+                        color: _selectedJorP == JorP.j
                             ? Colors.white
                             : Colors.black,
                         fontFamily: 'Pretendard',
@@ -706,13 +654,13 @@ bool IsValid = false;
                     onPressed: () {
                       setState(() {
                         IsSelected(3);
-                        _selectedJorP = JorP.p ;
+                        _selectedJorP = JorP.p;
                       });
                     },
                     child: Text(
                       'P',
                       style: TextStyle(
-                        color:_selectedJorP == JorP.p
+                        color: _selectedJorP == JorP.p
                             ? Colors.white
                             : Colors.black,
                         fontFamily: 'Pretendard',
@@ -752,14 +700,13 @@ bool IsValid = false;
               ],
             ),
             SizedBox(height: 58),
-
           ],
         ),
       ),
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -771,8 +718,8 @@ bool IsValid = false;
           ),
           onPressed: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
           child: Text(
             '다음',
@@ -785,8 +732,8 @@ bool IsValid = false;
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

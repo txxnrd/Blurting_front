@@ -3,7 +3,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/settings/setting.dart';
-import 'package:dio/dio.dart' ;
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +12,6 @@ import '../../signupquestions/activeplacesearch.dart';
 import '../../signupquestions/token.dart';
 import 'dart:io';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
-
 
 class MyPageEdit extends StatefulWidget {
   final dynamic data;
@@ -28,11 +27,46 @@ class MyPageEdit extends StatefulWidget {
 List<bool> _selectedreligion = [true, false, false, false, false];
 
 List<Widget> religion = <Widget>[
-  Text('무교', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo', color: _selectedreligion[0] == true ? mainColor.MainColor : mainColor.Gray)),
-  Text('불교', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo', color: _selectedreligion[1] == true ? mainColor.MainColor : mainColor.Gray)),
-  Text('기독교', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo', color: _selectedreligion[2] == true ? mainColor.MainColor : mainColor.Gray)),
-  Text('천주교', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo', color: _selectedreligion[3] == true ? mainColor.MainColor : mainColor.Gray)),
-  Text('기타', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo', color: _selectedreligion[4] == true ? mainColor.MainColor : mainColor.Gray)),
+  Text('무교',
+      style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Heebo',
+          color: _selectedreligion[0] == true
+              ? mainColor.MainColor
+              : mainColor.Gray)),
+  Text('불교',
+      style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Heebo',
+          color: _selectedreligion[1] == true
+              ? mainColor.MainColor
+              : mainColor.Gray)),
+  Text('기독교',
+      style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Heebo',
+          color: _selectedreligion[2] == true
+              ? mainColor.MainColor
+              : mainColor.Gray)),
+  Text('천주교',
+      style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Heebo',
+          color: _selectedreligion[3] == true
+              ? mainColor.MainColor
+              : mainColor.Gray)),
+  Text('기타',
+      style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Heebo',
+          color: _selectedreligion[4] == true
+              ? mainColor.MainColor
+              : mainColor.Gray)),
 ];
 
 int religionIndex = 0;
@@ -40,25 +74,47 @@ int alcoholIndex = 0;
 int smokeIndex = 0;
 
 List<Widget> sexualpreference = <Widget>[
-  Text('이성애자', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('동성애자', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('양성애자', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('이성애자',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('동성애자',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('양성애자',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
 ];
 // List<bool> _selectedsexualpreference = <bool>[false, false, false];
 
 List<Widget> alcohol = <Widget>[
-  Text('안 마심', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('가끔', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('자주', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('매일', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
+  Text('안 마심',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('가끔',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('자주',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('매일',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
 ];
 List<bool> _selectedalcohol = <bool>[false, false, false, false];
 
 const List<Widget> smoke = <Widget>[
-  Text('안 피움', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('가끔', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('자주', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('매일', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
+  Text('안 피움',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('가끔',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('자주',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
+  Text('매일',
+      style: TextStyle(
+          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
 ];
 List<bool> _selectedsmoke = <bool>[false, false, false, false];
 
@@ -156,20 +212,22 @@ class _MyPageEditState extends State<MyPageEdit> {
 
   TextEditingController _textController = TextEditingController();
 
-
-
   String? _image1Url;
   String? _image2Url;
   String? _image3Url;
   int count = 0;
-  double? image_maxheight=700;
+  double? image_maxheight = 700;
   double? image_maxwidth = 700;
   int imageQuality = 90;
 
   Future<void> _pickImage1() async {
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image1 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:imageQuality );
+    var image1 = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: imageQuality);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -180,7 +238,8 @@ class _MyPageEditState extends State<MyPageEdit> {
         _image1 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image1.jpg'),
       });
       try {
         var response = await dio.post(
@@ -201,7 +260,9 @@ class _MyPageEditState extends State<MyPageEdit> {
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
           if (response.statusCode == 200 || response.statusCode == 201) {
             // ... 기존 코드 ...
-            if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            if (urlList.isNotEmpty &&
+                urlList[0] is Map &&
+                urlList[0].containsKey('url')) {
               setState(() {
                 _image1Url = urlList[0]['url'];
               });
@@ -211,10 +272,9 @@ class _MyPageEditState extends State<MyPageEdit> {
 
           // URL을 저장하거나 처리하는 로직을 추가
           // print(savedUrls);
-        }  else {
+        } else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
-
         }
       } catch (e, stacktrace) {
         print('Error: $e');
@@ -227,7 +287,11 @@ class _MyPageEditState extends State<MyPageEdit> {
   Future<void> _pickImage2() async {
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image2 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
+    var image2 = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 60);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -238,7 +302,8 @@ class _MyPageEditState extends State<MyPageEdit> {
         _image2 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image2.jpg'),
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image2.jpg'),
       });
 
       try {
@@ -258,7 +323,9 @@ class _MyPageEditState extends State<MyPageEdit> {
           var urlList = response.data;
           print(urlList);
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
             setState(() {
               _image2Url = urlList[0]['url'];
             });
@@ -268,21 +335,23 @@ class _MyPageEditState extends State<MyPageEdit> {
         } else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
-
         }
       } catch (e, stacktrace) {
         print('Error: $e');
         print('Stacktrace: $stacktrace');
         // _showVerificationFailedSnackBar();
       }
-
     }
-
   }
+
   Future<void> _pickImage3() async {
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image3 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
+    var image3 = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 60);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -293,7 +362,8 @@ class _MyPageEditState extends State<MyPageEdit> {
         _image3 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image3.jpg'),
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image3.jpg'),
       });
 
       try {
@@ -314,7 +384,9 @@ class _MyPageEditState extends State<MyPageEdit> {
           var urlList = response.data;
           print(urlList);
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
             setState(() {
               _image3Url = urlList[0]['url'];
             });
@@ -333,6 +405,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       }
     }
   }
+
   ///체크하면 아까 ValidList가 수정이됨
   @override
   void IsHobbySelected(int index) {
@@ -494,7 +567,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     String sOrN = _selectedSorN == SorN.s ? 's' : 'n';
     String tOrF = _selectedTorF == TorF.t ? 't' : 'f';
     String jOrP = _selectedJorP == JorP.j ? 'j' : 'p';
-
     return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
   }
 
@@ -511,10 +583,18 @@ class _MyPageEditState extends State<MyPageEdit> {
         selectedCharacteristics.add(characteristic[i]);
       }
     }
+    if (selectedCharacteristics.length > 4) {
+      showSnackBar(context, "성격 선택은 4개까지 가능합니다.");
+      return;
+    }
     for (int i = 0; i < hobby.length; i++) {
       if (isValidHobbyList[i] == true) {
         selectedHobby.add(hobby[i]);
       }
+    }
+    if (selectedHobby.length > 4) {
+      showSnackBar(context, "취미 선택은 4개까지 가능합니다.");
+      return;
     }
 
     for (int i = 0; i < _selectedalcohol.length; i++) {
@@ -530,10 +610,9 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     for (int i = 0; i < _selectedreligion.length; i++) {
       if (_selectedreligion[i]) {
-        // Data is a Text widget, we cast it and get its data.
         String religionText = (religion[i] as Text).data!;
         selectedReligionString = religionText;
-        break; // If only one selection is possible, break the loop once found
+        break;
       }
     }
 
@@ -605,8 +684,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  
-    void _showWarning(BuildContext context){
+  void _showWarning(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -632,12 +710,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 children: [
                                   Container(
                                     width:
-                                    MediaQuery.of(context).size.width * 0.9,
+                                        MediaQuery.of(context).size.width * 0.9,
                                     height: 100,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color:
-                                        mainColor.lightGray.withOpacity(0.8)),
+                                        color: mainColor.lightGray
+                                            .withOpacity(0.8)),
                                     alignment: Alignment.topCenter,
                                     child: Container(
                                       margin: EdgeInsets.all(10),
@@ -665,10 +743,11 @@ class _MyPageEditState extends State<MyPageEdit> {
                                   ),
                                   GestureDetector(
                                     child: Container(
-                                      width:
-                                      MediaQuery.of(context).size.width * 0.9,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           color: mainColor.MainColor),
                                       height: 50,
                                       // color: mainColor.MainColor,
@@ -726,9 +805,9 @@ class _MyPageEditState extends State<MyPageEdit> {
                 )
               ],
             ),
-        );
-          });
-    }
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -770,7 +849,7 @@ class _MyPageEditState extends State<MyPageEdit> {
             child: Text(
               religion,
             ),
-              )),
+          )),
         ),
       );
     }
@@ -861,10 +940,7 @@ class _MyPageEditState extends State<MyPageEdit> {
             _showWarning(context);
           },
         ),
-
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -906,8 +982,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                       alignment: Alignment.centerLeft,
                       height: 48, // TextField의 높이와 일치하도록 설정합니다.
                       decoration: BoxDecoration(
-                        border: Border.all(color: mainColor.lightGray, width: 2),
-                        borderRadius: BorderRadius.circular(10), // TextField의 테두리와 일치하도록 설정합니다.
+                        border:
+                            Border.all(color: mainColor.lightGray, width: 2),
+                        borderRadius: BorderRadius.circular(
+                            10), // TextField의 테두리와 일치하도록 설정합니다.
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -942,8 +1020,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                       alignment: Alignment.centerLeft,
                       height: 48, // TextField의 높이와 일치하도록 설정합니다.
                       decoration: BoxDecoration(
-                        border: Border.all(color: mainColor.lightGray, width: 2),
-                        borderRadius: BorderRadius.circular(10), // TextField의 테두리와 일치하도록 설정합니다.
+                        border:
+                            Border.all(color: mainColor.lightGray, width: 2),
+                        borderRadius: BorderRadius.circular(
+                            10), // TextField의 테두리와 일치하도록 설정합니다.
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -978,7 +1058,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                         color: mainColor.MainColor,
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     padding: EdgeInsets.fromLTRB(9, 2, 9, 2),
                                     child: Text(
                                       '수정',
@@ -1020,7 +1101,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: mainColor.lightGray)),
                         AnimatedPositioned(
-                            duration: Duration(milliseconds: 500),
+                          duration: Duration(milliseconds: 500),
                           left: screenWidth / 5 * religionIndex,
                           child: Container(
                               width: screenWidth / 5,
@@ -1150,7 +1231,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: Colors.black,
-
                       ),
                     ),
                   ),
@@ -1161,14 +1241,16 @@ class _MyPageEditState extends State<MyPageEdit> {
                       child: TextField(
                           controller: _textController,
                           decoration: InputDecoration(
-                            isDense:true,
+                            isDense: true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: mainColor.lightGray, width: 2),
+                              borderSide: BorderSide(
+                                  color: mainColor.lightGray, width: 2),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: mainColor.MainColor, width: 2),
+                              borderSide: BorderSide(
+                                  color: mainColor.MainColor, width: 2),
                             ),
                           ),
                           onChanged: (value) {
@@ -1194,7 +1276,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-              
                       Container(
                         width: 60,
                         height: 12,
@@ -1215,7 +1296,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                   width: 2,
                                 ),
@@ -1249,7 +1331,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                   width: 2,
                                 ),
@@ -1329,7 +1412,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                   width: 2,
                                 ),
@@ -1363,7 +1447,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                   width: 2,
                                 ),
@@ -1441,7 +1526,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                   width: 2,
                                 ),
@@ -1475,7 +1561,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                   width: 2,
                                 ),
@@ -1553,7 +1640,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                 ),
                                 backgroundColor: _selectedJorP == JorP.j
@@ -1586,7 +1674,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             height: 48, // 원하는 높이 값
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030), side: BorderSide(
+                                foregroundColor: Color(0xFF303030),
+                                side: BorderSide(
                                   color: mainColor.lightGray,
                                   width: 2,
                                 ),
@@ -1795,16 +1884,15 @@ class _MyPageEditState extends State<MyPageEdit> {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                              child:ExtendedImage.network(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: ExtendedImage.network(
                                 _image1Url!,
-                                fit:BoxFit.cover,
-                                cache:true,
-                              )// 선택된 이미지 표시
-                          ),
+                                fit: BoxFit.cover,
+                                cache: true,
+                              ) // 선택된 이미지 표시
+                              ),
                         ),
                       ),
-
                       InkWell(
                         onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
                         child: Container(
@@ -1816,13 +1904,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                              child:ExtendedImage.network(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: ExtendedImage.network(
                                 _image2Url!,
-                                fit:BoxFit.cover,
-                                cache:true,
-                              )
-                          ),
+                                fit: BoxFit.cover,
+                                cache: true,
+                              )),
                         ),
                       ),
                       InkWell(
@@ -1836,13 +1923,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child:ExtendedImage.network(
-                              _image3Url!,
-                              fit:BoxFit.cover,
-                              cache:true,
-                            )
-                          ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: ExtendedImage.network(
+                                _image3Url!,
+                                fit: BoxFit.cover,
+                                cache: true,
+                              )),
                         ),
                       ),
                     ],

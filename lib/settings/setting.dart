@@ -22,16 +22,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  Future<void> _sendIsnowloginRequest() async {
-    print('now login set');
-    String savedToken = await getToken();
-    if (savedToken != null) {
-      _showVerificationFailedSnackBar('로그인 됨');
-    } else {
-      _showVerificationFailedSnackBar('로그인 안 됨');
-    }
-  }
-
   Future<void> _checkfcm() async {
     String savedToken = await getToken();
 
@@ -117,13 +107,52 @@ class _SettingPageState extends State<SettingPage> {
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-
         await getnewaccesstoken(context, _sendDeleteRequest);
       }
     }
   }
 
-  //
+  String email = "";
+  String phoneNumber = "";
+
+  Future<void> _getuserinfo() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.userinfo);
+    String savedToken = await getToken();
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||
+        response.statusCode == 201 ||
+        response.statusCode == 204) {
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+
+      var data = json.decode(response.body);
+      phoneNumber = data['phoneNumber'];
+      email = data['email'];
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                InfoPage(email: email, phoneNumber: phoneNumber)),
+      );
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+      if (response.statusCode == 401) {
+        //refresh token으로 새로운 accesstoken 불러오는 코드.
+        //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+        await getnewaccesstoken(context, _getuserinfo);
+      }
+    }
+  }
+
   Future<void> _testfcm() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.testfcm);
@@ -230,10 +259,7 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => InfoPage()),
-                      );
+                      _getuserinfo();
                     },
                     child: Container(
                       child: Text(
