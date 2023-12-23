@@ -11,6 +11,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'package:blurting/Utils/provider.dart';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -113,6 +114,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final pages = List.generate(cardItems.length, (index) {
+      final answercontroller = ScrollController();
       return Container(
         margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
         decoration: BoxDecoration(
@@ -172,33 +174,73 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(height: 5),
 
-                Text(
-                  'Q. ${cardItems[index].question}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Heebo',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                SingleChildScrollView(
+                  child: Text(
+                    'Q. ${cardItems[index].question}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Heebo',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
                 ),
                 SizedBox(height: 11),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Text(
-                      'A. ${cardItems[index].answer}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        controller: answercontroller,
+                        child: Text(
+                          'A. ${cardItems[index].answer}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Heebo',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.fade,
+                        ),
                       ),
-                    ),
+                      // Positioned(
+                      //   top: 40,
+                      //   left: 150,
+                      //   child: Center(
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: SizedBox(
+                      //         width: 15,
+                      //         height: 15,
+                      //         child: FloatingActionButton(
+                      //           elevation: 0,
+                      //           onPressed: () {
+                      //             print(
+                      //                 "답변 스크롤되고있나?: ${answercontroller.position.maxScrollExtent}");
+                      //             answercontroller.animateTo(
+                      //                 answercontroller.position.maxScrollExtent,
+                      //                 duration: Duration(milliseconds: 500),
+                      //                 curve: Curves.ease);
+                      //           },
+                      //           backgroundColor: mainColor.Gray,
+                      //           child: Icon(
+                      //             Icons.keyboard_arrow_down_rounded,
+                      //             size: 12,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 11),
 
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: [
                     Expanded(
