@@ -236,6 +236,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        scrolledUnderElevation: 0.0,
         toolbarHeight: 80,
         title: Text(
           '포인트 내역',

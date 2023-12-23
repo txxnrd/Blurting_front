@@ -423,8 +423,12 @@ class _ProfileCard extends State<ProfileCard> {
             borderRadius: BorderRadius.circular(10),
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
-                sigmaX: calculateBlurSigma(userProfile['blur']),
-                sigmaY: calculateBlurSigma(userProfile['blur']),
+                sigmaX: userProfile['blur'] != null
+                    ? calculateBlurSigma(userProfile['blur'])
+                    : 0.0,
+                sigmaY: userProfile['blur'] != null
+                    ? calculateBlurSigma(userProfile['blur'])
+                    : 0.0,
               ),
               child: ExtendedImage.network(
                 imagePaths[index],
@@ -434,7 +438,7 @@ class _ProfileCard extends State<ProfileCard> {
             ),
           ),
         ),
-        ProgressBar(blurValue: userProfile['blur']),
+        ProgressBar(blurValue: userProfile['blur'] ?? 0),
       ]),
     ]);
   }

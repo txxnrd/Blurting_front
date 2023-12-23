@@ -343,7 +343,7 @@ class _Whisper extends State<Whisper> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            '  $blurValue단계 블러가 풀렸어요!',
+                            '  $blurChange단계 블러가 풀렸어요!',
                             style: TextStyle(
                                 color: Color(0XFF868686),
                                 fontSize: 10,
@@ -634,7 +634,14 @@ class _Whisper extends State<Whisper> {
         otherId = responseData!['otherId'];
         appbarphoto = responseData?['otherImage'] ?? '';
         print('Image URL: $appbarphoto');
-        blurValue = responseData?['blur'] ?? 1;
+        if (responseData?['blur'] != null) {
+          blurValue = responseData!['blur'];
+        } else {
+          blurValue = 1;
+        }
+        if (responseData?['blurChange'] != null) {
+          blurChange = responseData!['blur'];
+        }
 
         print(hasRead);
 

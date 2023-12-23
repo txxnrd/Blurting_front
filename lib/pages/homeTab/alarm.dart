@@ -16,6 +16,8 @@ class AlarmPage extends StatefulWidget {
 
 class _AlarmPageState extends State<AlarmPage> {
   List<Map<String, dynamic>> AlarmHistoryList = [];
+  Map<String, List<Map<String, dynamic>>> groupedData = {};
+  late ScrollController _scrollController;
 
   bool isFetchingData = false; //무한 http 호출 방지
 
@@ -28,6 +30,7 @@ class _AlarmPageState extends State<AlarmPage> {
     }
 
     initializePage();
+    _scrollController = ScrollController();
   }
 
   Future<List<Map<String, dynamic>>> fetchAlarm() async {
@@ -57,6 +60,9 @@ class _AlarmPageState extends State<AlarmPage> {
 
         print('alarm loaded successfully.');
         print(AlarmHistoryList);
+        setState(() {
+          groupedData = groupDataByDate(AlarmHistoryList);
+        });
         return data;
       } else if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
@@ -74,70 +80,14 @@ class _AlarmPageState extends State<AlarmPage> {
     }
   }
 
-  String extractTimeFromDate(String dateTimeString) {
-    try {
-      if (dateTimeString.isNotEmpty) {
-        // Split the time string
-        List<String> timeParts = dateTimeString.split(':');
-
-        // Ensure that there are at least three parts (hours, minutes, seconds)
-        if (timeParts.length >= 3) {
-          int hours = int.parse(timeParts[0]);
-          int minutes = int.parse(timeParts[1]);
-          // Split seconds and milliseconds
-          List<String> secondsAndMilliseconds = timeParts[2].split('.');
-          int seconds = int.parse(secondsAndMilliseconds[0]);
-
-          DateTime dateTime = DateTime(1, 1, 1, hours, minutes, seconds);
-
-          return DateFormat.Hms().format(dateTime);
-        }
-      }
-    } catch (e) {
-      // Handle the exception or log the error
-      print("Error parsing date-time: $e");
-    }
-
-    return 'Unknown time';
-  }
-
-// Function to extract date and time from the date-time string
-  List<String> splitDateTime(String dateTimeString) {
-    print('ㅎㅇ');
-
-    try {
-      // Ensure that the dateTimeString is not empty
-      if (dateTimeString.isNotEmpty) {
-        // Split the date-time string
-        List<String> dateTimeParts = dateTimeString.split('T');
-
-        // Ensure that there are two parts (date and time)
-        if (dateTimeParts.length == 2) {
-          String date = dateTimeParts[0];
-          String time = extractTimeFromDate(dateTimeParts[1]);
-
-          return [date, time];
-        }
-      }
-    } catch (e) {
-      // Handle the exception or log the error
-      print("Error parsing date-time: $e");
-    }
-
-    // Return a default value or handle the error as needed
-    return ['Unknown date', 'Unknown time'];
-  }
-
 // Function to group the data by date
   Map<String, List<Map<String, dynamic>>> groupDataByDate(
       List<Map<String, dynamic>> data) {
     Map<String, List<Map<String, dynamic>>> groupedData = {};
 
     for (var entry in data) {
-      String dateTimeString = entry['date'].toString();
-      List<String> dateAndTime = splitDateTime(dateTimeString);
-      String formattedDate = dateAndTime[0];
-      String formattedTime = dateAndTime[1];
+      String formattedDate = entry['date'].toString();
+      String formattedTime = entry['time'].toString();
 
       if (groupedData.containsKey(formattedDate)) {
         groupedData[formattedDate]!.add({...entry, 'time': formattedTime});
@@ -154,12 +104,16 @@ class _AlarmPageState extends State<AlarmPage> {
   @override
   void dispose() {
     super.dispose();
+    _scrollController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          scrolledUnderElevation: 0.0,
           toolbarHeight: 80,
           title: Text(
             '알림',
@@ -183,8 +137,7 @@ class _AlarmPageState extends State<AlarmPage> {
         ),
         body: Column(children: [
           Expanded(
-            child:
-                _buildHistoryList(AlarmHistoryList),
+            child: _buildHistoryList(AlarmHistoryList),
           ),
         ]));
   }
@@ -199,42 +152,46 @@ class _AlarmPageState extends State<AlarmPage> {
         groupDataByDate(AlarmHistoryList);
 
     return ListView.builder(
+      controller: _scrollController,
       padding: EdgeInsets.all(16),
       itemCount: groupedData.length,
       itemBuilder: (context, index) {
         String date = groupedData.keys.elementAt(index);
         List<Map<String, dynamic>> dateEntries = groupedData[date]!;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Text(
-                date, // Show only date
-                style: TextStyle(
-                  fontFamily: "Heebo",
-                  fontWeight: FontWeight.w500,
-                  fontSize: 10,
-                  color: Colors.grey,
-                ),
-                textAlign: TextAlign.right,
-              ),
-            ),
-            for (var entry in dateEntries)
-              ListTile(
-                title: formatHistoryText(entry['message'] ?? 'Unknown'),
-                trailing: Text(
-                  entry['time'] ?? 'Unknown',
+        return Scrollbar(
+          controller: _scrollController,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Text(
+                  date, // Show only date
                   style: TextStyle(
-                    fontFamily: "Pretendard",
+                    fontFamily: "Heebo",
                     fontWeight: FontWeight.w500,
-                    fontSize: 11,
-                    color: mainColor.Gray,
+                    fontSize: 10,
+                    color: Colors.grey,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+              for (var entry in dateEntries)
+                ListTile(
+                  title: formatHistoryText(entry['message'] ?? 'Unknown'),
+                  trailing: Text(
+                    entry['time'] ?? 'Unknown',
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11,
+                      color: mainColor.Gray,
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         );
       },
     );
