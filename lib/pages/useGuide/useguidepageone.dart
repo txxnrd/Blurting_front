@@ -69,53 +69,56 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
       onTap: () {
         _increaseProgressAndNavigate();
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: SizedBox(),
-          backgroundColor: Colors.white, //appBar 투명색
-          elevation: 0.0,
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 60,
-                    ),
-                    Text("블러팅에",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.darkpink),
-                          fontFamily: 'Pretendard',
-                        )),
-                    SizedBox(
-                      height: 0,
-                    ),
-                    Text("오신걸 환영합니다!",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.darkpink),
-                          fontFamily: 'Pretendard',
-                        )),
-                    SizedBox(height: 112),
-                    SizedBox(
-                      width: 240.7,
-                      height: 246,
-                      child:
-                      Image.asset("assets/images/Blurting_welcome.png"),
-                    )
-                  ],
-                ),
-              ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            leading: SizedBox(width: 10),
+            backgroundColor: Colors.white, //appBar 투명색
+            elevation: 0.0,
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Text("블러팅에",
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                            color: Color(DefinedColor.darkpink),
+                            fontFamily: 'Pretendard',
+                          )),
+                      SizedBox(
+                        height: 0,
+                      ),
+                      Text("오신걸 환영합니다!",
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                            color: Color(DefinedColor.darkpink),
+                            fontFamily: 'Pretendard',
+                          )),
+                      SizedBox(height: 112),
+                      SizedBox(
+                        width: 240.7,
+                        height: 246,
+                        child:
+                        Image.asset("assets/images/Blurting_welcome.png"),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

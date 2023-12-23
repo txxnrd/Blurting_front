@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 class DayAni extends StatefulWidget {
   final String day;
 
-  DayAni({Key? key, required this.day})
-      : super(key: key);
+  DayAni({Key? key, required this.day}) : super(key: key);
 
   @override
   State<DayAni> createState() => _DayAniState();
@@ -31,8 +30,7 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              GroupChat(),
+          pageBuilder: (context, animation, secondaryAnimation) => GroupChat(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = 0.0;
             const end = 1.0;
@@ -110,7 +108,8 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 48,
-                        fontWeight: FontWeight.w700)),
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Pretendard')),
               ),
             ),
           ],

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
 import 'package:blurting/settings/info.dart';
+import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -50,15 +51,19 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   void _showVerificationFailedSnackBar(value) {
+    print("snackbar 실행");
     final snackBar = SnackBar(
       content: Text(value),
+      backgroundColor: Colors.black.withOpacity(0.7),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -183,11 +188,10 @@ class _SettingPageState extends State<SettingPage> {
         ),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -198,8 +202,6 @@ class _SettingPageState extends State<SettingPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 59,
-                    height: 22,
                     child: Text(
                       '알림 설정',
                       style: TextStyle(
@@ -230,8 +232,6 @@ class _SettingPageState extends State<SettingPage> {
                       _checkfcm();
                     },
                     child: Container(
-                      width: 80,
-                      height: 22,
                       child: Text(
                         '알림 및 소리',
                         style: TextStyle(
@@ -245,8 +245,6 @@ class _SettingPageState extends State<SettingPage> {
                     height: 34,
                   ),
                   Container(
-                    width: 80,
-                    height: 22,
                     child: Text(
                       '사용자 설정',
                       style: TextStyle(
@@ -264,10 +262,51 @@ class _SettingPageState extends State<SettingPage> {
                       _getuserinfo();
                     },
                     child: Container(
-                      width: 120,
-                      height: 22,
                       child: Text(
                         '계정/정보 관리',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+
+                                    SizedBox(
+                    height: 18,
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  WelcomeScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = 0.0;
+                            const end = 1.0;
+                            var curve = Curves.easeOut;
+
+                            var tween = Tween(begin: begin, end: end).chain(
+                              CurveTween(curve: curve),
+                            );
+
+                            var opacityAnimation = tween.animate(animation);
+
+                            return FadeTransition(
+                              opacity: opacityAnimation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Text(
+                        '이메일 인증 완 페이지',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -285,8 +324,6 @@ class _SettingPageState extends State<SettingPage> {
                       _sendDeleteRequest();
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '계정 삭제하기',
                         style: TextStyle(
@@ -328,8 +365,6 @@ class _SettingPageState extends State<SettingPage> {
                       );
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '로그아웃 하기',
                         style: TextStyle(
@@ -339,13 +374,10 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 34,
                   ),
                   Container(
-                    width: 80,
-                    height: 22,
                     child: Text(
                       '기타',
                       style: TextStyle(
@@ -365,8 +397,6 @@ class _SettingPageState extends State<SettingPage> {
                       );
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '공지사항',
                         style: TextStyle(
@@ -397,6 +427,39 @@ class _SettingPageState extends State<SettingPage> {
                               color: Color(DefinedColor.gray)),
                         ),
                       ],
+                    ),
+                  ),
+
+
+                  InkWell(
+                    onTap: () {
+                      _showVerificationFailedSnackBar("머가 예쁠까");
+                    },
+                    child: Container(
+                      child: Text(
+                        '스낵바 띄우기',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );                    },
+                    child: Container(
+                      child: Text(
+                        '로그인 페이지로... 로그아웃은 ㄴㄴ',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
                     ),
                   ),
 
@@ -452,8 +515,6 @@ class _SettingPageState extends State<SettingPage> {
                       _testfcm();
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '알림 테스트하기',
                         style: TextStyle(
@@ -497,8 +558,6 @@ class _SettingPageState extends State<SettingPage> {
                       );
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '사용설명서로 이동',
                         style: TextStyle(
