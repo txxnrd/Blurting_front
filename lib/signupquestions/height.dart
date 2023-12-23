@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/colors/colors.dart';
-
 import 'package:flutter/material.dart';
-
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/major.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/token.dart'; // token.dart를 임포트
+import 'package:blurting/signupquestions/major.dart'; // major.dart를 임포트
 
 final labels = ['안 핌', '가끔', '자주', '매일'];
 
@@ -57,8 +55,8 @@ class _HeightPageState extends State<HeightPage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 7/15, // 시작 너비 (30%)
-      end: 8/15, // 종료 너비 (40%)
+      begin: 7 / 15, // 시작 너비 (30%)
+      end: 8 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -80,42 +78,35 @@ class _HeightPageState extends State<HeightPage>
       },
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
-      }
-      else{
-      }
-
+      } else {}
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
   int? height;
   @override
   void InputHeightNumber(int value) {
     setState(() {
       height = value;
-      if(140<=height! && height!<=240)
-      {
-        IsValid=true;
-      }
-      else{
-
-      }
+      if (140 <= height! && height! <= 240) {
+        IsValid = true;
+      } else {}
     });
   }
+
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
@@ -132,48 +123,28 @@ class _HeightPageState extends State<HeightPage>
       body: json.encode({"height": height}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if(140>height! || height!>240) {
-      _showVerificationFailedSnackBar("유효한 키 정보를 입력해주세요");
+    if (140 > height! || height! > 240) {
+      showSnackBar(context, "유효한 키 정보를 입력해주세요");
       return;
     }
-      if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
-      }
-      else{
-      }
-
+      } else {}
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-  void _showVerificationFailedSnackBar(value) {
-    print("snackbar 실행");
-    final snackBar = SnackBar(
-      content: Text(value),
-      // backgroundColor: ,
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -197,11 +168,10 @@ class _HeightPageState extends State<HeightPage>
             _sendBackRequest();
           },
         ),
-
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Padding(
@@ -235,15 +205,15 @@ class _HeightPageState extends State<HeightPage>
                   ),
                   Positioned(
                     left: MediaQuery.of(context).size.width *
-                        (_progressAnimation?.value ?? 0.3) -
+                            (_progressAnimation?.value ?? 0.3) -
                         15,
                     bottom: -10,
                     child: Image.asset(
                       gender == Gender.male
                           ? 'assets/man.png'
                           : gender == Gender.female
-                          ? 'assets/woman.png'
-                          : 'assets/signupface.png', // 기본 이미지
+                              ? 'assets/woman.png'
+                              : 'assets/signupface.png', // 기본 이미지
                       width: 30,
                       height: 30,
                     ),
@@ -265,14 +235,15 @@ class _HeightPageState extends State<HeightPage>
               Center(
                 child: Row(
                   mainAxisAlignment:
-                  MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
+                      MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
                   children: [
                     Container(
                       width: 125,
                       height: 48,
                       child: TextField(
                         keyboardType: TextInputType.number,
-                        decoration: InputDecoration( isDense:true,
+                        decoration: InputDecoration(
+                          isDense: true,
                           hintText: '',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -306,13 +277,12 @@ class _HeightPageState extends State<HeightPage>
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF303030),
-                          fontFamily: 'Pretendard'
-                      ),)
+                          fontFamily: 'Pretendard'),
+                    )
                   ],
                 ),
               ),
               SizedBox(height: 321),
-
             ],
           ),
         ),
@@ -320,7 +290,7 @@ class _HeightPageState extends State<HeightPage>
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -332,8 +302,8 @@ class _HeightPageState extends State<HeightPage>
           ),
           onPressed: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
           child: Text(
             '다음',
@@ -346,8 +316,8 @@ class _HeightPageState extends State<HeightPage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

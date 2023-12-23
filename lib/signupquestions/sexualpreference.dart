@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/signupquestions/Alcohol.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +55,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 4/15, // 시작 게이지 값
-      end: 5/15, // 종료 게이지 값
+      begin: 4 / 15, // 시작 게이지 값
+      end: 5 / 15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -64,23 +64,17 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     });
   }
 
-
-
-
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
 
-    var sexOrient ="";
-    if(_selectedSexPreference == SexualPreference.different)
-      {
-        sexOrient = "hetero";
-      }
-    else if(_selectedSexPreference == SexualPreference.same){
+    var sexOrient = "";
+    if (_selectedSexPreference == SexualPreference.different) {
+      sexOrient = "hetero";
+    } else if (_selectedSexPreference == SexualPreference.same) {
       sexOrient = "homo";
-    }
-    else{
-      sexOrient="bi";
+    } else {
+      sexOrient = "bi";
     }
     String savedToken = await getToken();
     print(savedToken);
@@ -93,79 +87,24 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
       body: json.encode({"sexOrient": sexOrient}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
       }
-      else{
-        _showVerificationFailedSnackBar();
-      }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-  Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupback);
 
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if(data['signupToken']!=null)
-      {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-
-      }
-      else{
-        _showVerificationFailedSnackBar();
-      }
-
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: '닫기',
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -185,10 +124,9 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _sendBackRequest();
-            },
+            sendBackRequest(context);
+          },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -261,14 +199,16 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
-                        value: _selectedSexPreference == SexualPreference.different,
+                        value: _selectedSexPreference ==
+                            SexualPreference.different,
                         onChanged: (bool? newValue) {
                           setState(() {
                             _selectedSexPreference = SexualPreference.different;
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -291,7 +231,6 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                   ),
                 ),
 
-
                 SizedBox(width: 23), // 두 버튼 사이의 간격 조정
 
                 Container(
@@ -308,7 +247,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -352,7 +292,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                             IsSelected();
                           });
                         },
-                        activeColor: Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
+                        activeColor:
+                            Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
                       ),
                       GestureDetector(
                         onTap: () {
@@ -380,11 +321,10 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                 Container(
                   width: width * 0.42, // 원하는 너비 값
                   height: 48, // 원하는 높이 값
-
                 ),
               ],
             ),
-            
+
             // 두 버튼 사이의 간격 조정
             SizedBox(height: 25),
             Container(
@@ -417,14 +357,13 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
             SizedBox(
               height: 21,
             ),
-
           ],
         ),
       ),
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -436,8 +375,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
           ),
           onPressed: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
           child: Text(
             '다음',
@@ -450,8 +389,8 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:blurting/pages/useGuide/useguidepageone.dart';
-import 'package:blurting/pages/policy/policyOne.dart';
+
+import 'package:blurting/settings/info.dart';
+import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,26 +27,48 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  Future<void> _sendIsnowloginRequest() async {
-    print('now login set');
+  Future<void> _checkfcm() async {
     String savedToken = await getToken();
-    if (savedToken != null) {
-      _showVerificationFailedSnackBar('로그인 됨');
+
+    var url = Uri.parse(API.fcmcheck);
+    bool fcmstate = false;
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print(response.body);
+      if (response.body == "true") {
+        fcmstate = true;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NotificationandSound(fcmstate: fcmstate)),
+      );
     } else {
-      _showVerificationFailedSnackBar('로그인 안 됨');
+      print('Request failed with status: ${response.statusCode}.');
+      print('Response body: ${response.body}');
     }
   }
 
   void _showVerificationFailedSnackBar(value) {
+    print("snackbar 실행");
     final snackBar = SnackBar(
       content: Text(value),
+      backgroundColor: Colors.black.withOpacity(0.7),
       action: SnackBarAction(
         label: '닫기',
+        textColor: Color(DefinedColor.darkpink),
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
+      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -88,11 +112,53 @@ class _SettingPageState extends State<SettingPage> {
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-
         await getnewaccesstoken(context, _sendDeleteRequest);
       }
     }
   }
+
+
+  String email = "";
+  String phoneNumber = "";
+
+  Future<void> _getuserinfo() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.userinfo);
+    String savedToken = await getToken();
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200 ||
+        response.statusCode == 201 ||
+        response.statusCode == 204) {
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+
+      var data = json.decode(response.body);
+      phoneNumber = data['phoneNumber'];
+      email = data['email'];
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                InfoPage(email: email, phoneNumber: phoneNumber)),
+      );
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+      if (response.statusCode == 401) {
+        //refresh token으로 새로운 accesstoken 불러오는 코드.
+        //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+        await getnewaccesstoken(context, _getuserinfo);
+      }
+    }
+  }
+
 
   Future<void> _testfcm() async {
     print('_sendPostRequest called');
@@ -128,11 +194,12 @@ class _SettingPageState extends State<SettingPage> {
         ),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -143,8 +210,6 @@ class _SettingPageState extends State<SettingPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 59,
-                    height: 22,
                     child: Text(
                       '알림 설정',
                       style: TextStyle(
@@ -167,15 +232,15 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NotificationandSound()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => NotificationandSound()),
+                      // );
+                      _checkfcm();
                     },
                     child: Container(
-                      width: 77,
-                      height: 22,
+
                       child: Text(
                         '알림 및 소리',
                         style: TextStyle(
@@ -189,8 +254,6 @@ class _SettingPageState extends State<SettingPage> {
                     height: 34,
                   ),
                   Container(
-                    width: 80,
-                    height: 22,
                     child: Text(
                       '사용자 설정',
                       style: TextStyle(
@@ -220,13 +283,55 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-                      _sendDeleteRequest();
+
+                      _getuserinfo();
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
-                        '계정 삭제하기',
+                        '계정/정보 관리',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+
+                                    SizedBox(
+                    height: 18,
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  WelcomeScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = 0.0;
+                            const end = 1.0;
+                            var curve = Curves.easeOut;
+
+                            var tween = Tween(begin: begin, end: end).chain(
+                              CurveTween(curve: curve),
+                            );
+
+                            var opacityAnimation = tween.animate(animation);
+
+                            return FadeTransition(
+                              opacity: opacityAnimation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Text(
+                        '이메일 인증 완 페이지',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -242,8 +347,7 @@ class _SettingPageState extends State<SettingPage> {
                       _sendIsnowloginRequest();
                     },
                     child: Container(
-                      width: 150,
-                      height: 22,
+
                       child: Text(
                         '로그인 여부 확인하기',
                         style: TextStyle(
@@ -268,8 +372,6 @@ class _SettingPageState extends State<SettingPage> {
                       );
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '로그아웃 하기',
                         style: TextStyle(
@@ -279,13 +381,10 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 34,
                   ),
                   Container(
-                    width: 80,
-                    height: 22,
                     child: Text(
                       '기타',
                       style: TextStyle(
@@ -305,8 +404,6 @@ class _SettingPageState extends State<SettingPage> {
                       );
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '공지사항',
                         style: TextStyle(
@@ -360,6 +457,86 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
+
+
+
+                  InkWell(
+                    onTap: () {
+                      _showVerificationFailedSnackBar("머가 예쁠까");
+                    },
+                    child: Container(
+                      child: Text(
+                        '스낵바 띄우기',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );                    },
+                    child: Container(
+                      child: Text(
+                        '로그인 페이지로... 로그아웃은 ㄴㄴ',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(DefinedColor.gray)),
+                      ),
+                    ),
+                  ),
+
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // InkWell(
+                  //   onTap: () async {
+                  //     var fcmToken = await FirebaseMessaging.instance.getToken(
+                  //         vapidKey:
+                  //             "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+                  //     print("------------");
+                  //     print(fcmToken);
+                  //   },
+                  //   child: Container(
+                  //     width: 100,
+                  //     height: 22,
+                  //     child: Text(
+                  //       'fcm 토큰 확인하기',
+                  //       style: TextStyle(
+                  //           fontSize: 15,
+                  //           fontWeight: FontWeight.w500,
+                  //           color: Color(DefinedColor.gray)),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // InkWell(
+                  //   onTap: () async {
+                  //     String Token = await getToken();
+                  //     print("------------");
+                  //     print(Token);
+                  //   },
+                  //   child: Container(
+                  //     width: 100,
+                  //     height: 22,
+                  //     child: Text(
+                  //       '현재 토큰 확인하기',
+                  //       style: TextStyle(
+                  //           fontSize: 15,
+                  //           fontWeight: FontWeight.w500,
+                  //           color: Color(DefinedColor.gray)),
+                  //     ),
+                  //   ),
+                  // ),
+
                   SizedBox(
                     height: 20,
                   ),
@@ -368,8 +545,6 @@ class _SettingPageState extends State<SettingPage> {
                       _testfcm();
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
                         '알림 테스트하기',
                         style: TextStyle(
@@ -407,18 +582,40 @@ class _SettingPageState extends State<SettingPage> {
                     height: 10,
                   ),
 
+                  //
+                  // InkWell(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => YakguanOne()),
+                  //     );
+                  //   },
+                  //   child: Container(
+                  //     width: 100,
+                  //     height: 22,
+                  //     child: Text(
+                  //       '약관 보기',
+                  //       style: TextStyle(
+                  //           fontSize: 15,
+                  //           fontWeight: FontWeight.w500,
+                  //           color: Color(DefinedColor.gray)),
+                  //     ),
+                  //   ),
+                  // ),
+                  //
+
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PolicyOne()),
+
+                        MaterialPageRoute(
+                            builder: (context) => UseGuidePageOne()),
                       );
                     },
                     child: Container(
-                      width: 100,
-                      height: 22,
                       child: Text(
-                        '약관 보기',
+                        '사용설명서로 이동',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,

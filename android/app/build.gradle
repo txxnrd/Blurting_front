@@ -28,7 +28,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
 
-    namespace "com.example.blurting"
+    namespace "com.Blurting.blurting"
     compileSdkVersion flutter.compileSdkVersion
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
@@ -48,7 +48,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.blurting"
+        applicationId "com.Blurting.blurting"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion

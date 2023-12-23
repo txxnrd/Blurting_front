@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:blurting/signupquestions/universitylist.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart';
-import 'package:blurting/signupquestions/religion.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import '../colors/colors.dart';
 import '../config/app_config.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
@@ -87,22 +85,6 @@ class _MajorPageState extends State<MajorPage>
     }
     double width = MediaQuery.of(context).size.width;
 
-    void _showVerificationFailedSnackBar(
-        {String message = '인증 번호를 다시 확인 해주세요'}) {
-      final snackBar = SnackBar(
-        content: Text(message),
-        action: SnackBarAction(
-          label: '닫기',
-          onPressed: () {
-            // SnackBar 닫기 액션
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-
     Future<void> _sendBackRequest() async {
       print('_sendPostRequest called');
       var url = Uri.parse(API.signupback);
@@ -128,8 +110,6 @@ class _MajorPageState extends State<MajorPage>
           print(token);
           await saveToken(token);
           Navigator.of(context).pop();
-        } else {
-          _showVerificationFailedSnackBar();
         }
       } else {
         // 오류가 발생한 경우 처리
@@ -181,9 +161,7 @@ class _MajorPageState extends State<MajorPage>
           print(token);
           await saveToken(token);
           _increaseProgressAndNavigate();
-        } else {
-          _showVerificationFailedSnackBar();
-        }
+        } else {}
       } else {
         // 오류가 발생한 경우 처리
         print('Request failed with status: ${response.statusCode}.');

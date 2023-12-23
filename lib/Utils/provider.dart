@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class mainColor {
   // ignore: non_constant_identifier_names
@@ -61,8 +63,9 @@ Future<int> getuserId() async {
   return userId;
 }
 
-class UserProvider with ChangeNotifier {            // userId, point 등 모든 정보 관리
-  
+class UserProvider with ChangeNotifier {
+  // userId, point 등 모든 정보 관리
+
   int _userId = 0;
   int _point = 0;
 
@@ -74,9 +77,60 @@ class UserProvider with ChangeNotifier {            // userId, point 등 모든 
     notifyListeners();
   }
 
-  set userId(int value){
+  set userId(int value) {
     _userId = value;
     notifyListeners();
   }
 }
 
+void showSnackBar(BuildContext context, String message) {
+  print("Snackbar 실행");
+  final snackBar = SnackBar(
+    content: Text(message),
+    action: SnackBarAction(
+      label: '닫기',
+      textColor: mainColor.lightPink,
+      onPressed: () {
+        // SnackBar 닫기 액션
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
+    ),
+    behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+    duration: const Duration(seconds: 1),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+Future<void> sendBackRequest(BuildContext context) async {
+  print('_sendPostRequest called');
+  var url = Uri.parse(API.signupback);
+
+  String savedToken = await getToken();
+  print(savedToken);
+  var response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $savedToken',
+    },
+  );
+  print(response.body);
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+    print('Server returned OK');
+    print('Response body: ${response.body}');
+    var data = json.decode(response.body);
+
+    if (data['signupToken'] != null) {
+      var token = data['signupToken'];
+      print(token);
+      await saveToken(token);
+      Navigator.of(context).pop();
+    } else {
+      showSnackBar(context, "뒤로가기에 실패하였습니다");
+    }
+  } else {
+    // 오류가 발생한 경우 처리
+    print('Request failed with status: ${response.statusCode}.');
+  }
+}

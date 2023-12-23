@@ -1,4 +1,7 @@
- import 'package:blurting/pages/useGuide/done.dart';
+ import 'dart:ui';
+
+import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/pages/useGuide/done.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/colors/colors.dart';
 import 'dart:async';
@@ -25,14 +28,55 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+
+
+ 
   bool _isImageBefore = true;
   bool _isImageMiddle = false;
   bool _isImageAfter = false;
   late Timer _imageTimer;
 
+  double opacity = 1.0;
+  double imageOpacity = 0.3;
+  int time = 0;
+  double blurValue = 100;
+  String blurImage = 'assets/images/blurafter.png';
+
+
+  late final AnimationController _blurController =
+      AnimationController(vsync: this, duration: Duration(seconds: 1));
+
+  late final Animation<double> _blurAnimation =
+      CurvedAnimation(parent: _blurController, curve: Curves.easeInOut);
+
   @override
   void initState() {
     super.initState();
+    time = 0;
+
+    void _startAnimation() {
+      Timer.periodic(Duration(seconds: 1), (timer) {
+        if (mounted) {
+          setState(() {
+            blurValue = blurValue == 100.0
+                ? 75.0
+                : blurValue == 75.0
+                    ? 50.0
+                    : blurValue == 50.0
+                        ? 25.0
+                        : blurValue == 25.0
+                            ? 0.0
+                            : blurValue == 0.0
+                                ? 0.0
+                                : 0.0; 
+                                         });
+          time++;
+        }
+      });
+    }
+
+    _startAnimation();
+
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
@@ -46,19 +90,12 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
       ..addListener(() {
         setState(() {});
       });
+  }
 
-    _imageTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
-      setState(() {
-        _isImageBefore = false;
-        _isImageMiddle = true;
-      });
-      Timer(Duration(milliseconds: 500), () {
-        setState(() {
-          _isImageMiddle = false;
-          _isImageAfter = true;
-        });
-      });
-    });
+  @override
+  void dispose(){
+    _blurController.dispose();
+    super.dispose();
   }
 
   Future<void> _increaseProgressAndNavigate() async {
@@ -77,112 +114,129 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
         .then((_) {
       // 첫 번째 화면으로 돌아왔을 때 실행될 로직
     });
+
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _increaseProgressAndNavigate();
+        if(time >= 6) {
+          _increaseProgressAndNavigate();
+        }
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: SizedBox(),
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){Navigator.pop(context);}),
           backgroundColor: Colors.white, //appBar 투명색
           elevation: 0.0,
         ),
         body: Padding(
           padding: EdgeInsets.fromLTRB(30.0, 0, 30, 0),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 60,
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Pretendard',
-                              color: Color(DefinedColor.darkpink),
+          child: Stack(
+            children: [
+              Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 60,
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Heebo',
+                                color: Color(DefinedColor.darkpink),
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '블러',
+                                ),
+                                TextSpan(
+                                  text: '는 총 5단계로 되어 있어, 상대방과',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ), // 원하는 색으로 변경하세요.
+                                ),
+                              ],
                             ),
-                            children: [
-                              TextSpan(
-                                text: '블러',
-                              ),
-                              TextSpan(
-                                text: '는 총 5단계로 되어있어 상대방과',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ), // 원하는 색으로 변경하세요.
-                              ),
-                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 0,
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text("귓속말에서 주고받은 채팅이 많을수록",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Color(DefinedColor.darkpink),
+                                fontFamily: 'Heebo',
+                              )),
+                        ),
+                        SizedBox(height: 0),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text("점점 풀려요!",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Color(DefinedColor.darkpink),
+                                fontFamily: 'Heebo',
+                              )),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        width: 175,
+                        height: 200,
+                        decoration: BoxDecoration(color: mainColor.Gray),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            blurImage,
+                            fit: BoxFit.fitHeight,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 0,
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("귓속말에서 대화하는 채팅이 많을수록",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.darkpink),
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 0),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("점점 풀려요!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.darkpink),
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 50),
-                      Column(children: <Widget>[
-                        Stack(
-                          clipBehavior: Clip.none, // 이 부분 추가
-                          children: <Widget>[
-                            Container(
-                              width: 259,
-                              height: 328,
-                              child: Image.asset(
-                                _isImageBefore
-                                    ? "assets/images/blurbefore.png"
-                                    : _isImageMiddle
-                                        ? "assets/images/blurmiddle.png"
-                                        : "assets/images/blurafter.png",
-                              ),
-                            ),
-
-                          ],
-                        )
-                      ]),
-                      SizedBox(
-                        height: 200,
-                      ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: 175,
+                      height: 200,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: AnimatedBuilder(
+                            animation: _blurAnimation,
+                            builder: (context, child) {
+                              return BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: blurValue, sigmaY: blurValue),
+                                  child: Container(color: Colors.transparent));
+                            }
+                          )),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: Padding(

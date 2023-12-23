@@ -248,14 +248,37 @@ class _EmailPageState extends State<EmailPage>
         );
         print(response);
 
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WelcomeScreen()));
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                WelcomeScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = 0.0;
+              const end = 1.0;
+              var curve = Curves.easeOut;
 
+              var tween = Tween(begin: begin, end: end).chain(
+                CurveTween(curve: curve),
+              );
+
+              var opacityAnimation = tween.animate(animation);
+
+              return FadeTransition(
+                opacity: opacityAnimation,
+                child: child,
+              );
+            },
+          ),
+        );
         _increaseProgressAndNavigate();
         Future.delayed(Duration(seconds: 2), _increaseProgressAndNavigate);
 
       }
       else{
-        _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
+        _showVerificationFailedSnackBar('인증이 완료되지 않았습니다.');
       }
 
     } else {

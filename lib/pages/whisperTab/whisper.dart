@@ -55,7 +55,7 @@ class _Whisper extends State<Whisper> {
   int blurValue = 0;
   int blurChange = 0;
   late String appbarphoto = '';
-  late Image image;
+  late ExtendedImage image;
 
   late int otherId = 0;
 
@@ -71,9 +71,14 @@ class _Whisper extends State<Whisper> {
     Future<void> initializeSocket() async {
       await fetchChats();
       if (appbarphoto.isNotEmpty) {
-        image = Image.network(appbarphoto);
+        image =
+            // Image.network(appbarphoto);
+            ExtendedImage.network(
+          appbarphoto,
+          fit: BoxFit.cover,
+          cache: true,
+        );
       } else {
-        // Handle the case where the URL is empty
         print('Image URL is empty.');
       }
 
@@ -82,6 +87,7 @@ class _Whisper extends State<Whisper> {
       Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': true};
 
       widget.socket.emit('in_room', data);
+      print('들어옴');
 
       widget.socket.on('new_chat', (data) {
         print('메시지 소켓 도착$data');
@@ -180,9 +186,7 @@ class _Whisper extends State<Whisper> {
       widget.socket.on('disconnect', (_) {
         print('소켓 연결 끊김');
       });
-    }
-
-    ;
+    };
 
     initializeSocket();
   }
@@ -190,6 +194,8 @@ class _Whisper extends State<Whisper> {
   @override
   void dispose() {
     super.dispose();
+    
+    widget.socket.off('new_chat');
 
     if (mounted) {
       Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
