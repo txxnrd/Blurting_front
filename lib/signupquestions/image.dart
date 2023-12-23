@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:blurting/colors/colors.dart';
-import 'package:http/http.dart' as http;
 import 'package:blurting/signupquestions/university.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart';
@@ -9,6 +6,7 @@ import 'package:dio/dio.dart';
 import '../config/app_config.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart'; // 추가
+import 'package:blurting/Utils/provider.dart';
 
 class ImagePage extends StatefulWidget {
   final String selectedGender;
@@ -24,23 +22,27 @@ class ImagePageState extends State<ImagePage>
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   File? _image1 = null;
-  File? _image2= null;
-  File? _image3= null;
-  bool IsValid =false;
+  File? _image2 = null;
+  File? _image3 = null;
+  bool IsValid = false;
   List<MultipartFile> multipartImageList = [];
   List<String> savedUrls = [];
   String? _image1Url;
   String? _image2Url;
   String? _image3Url;
-  int count =0;
-  double? image_maxheight=700;
+  int count = 0;
+  double? image_maxheight = 700;
   double? image_maxwidth = 700;
   int imageQuality = 90;
 
   Future<void> _pickImage1() async {
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image1 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:imageQuality );
+    var image1 = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: imageQuality);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -51,7 +53,8 @@ class ImagePageState extends State<ImagePage>
         _image1 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image1.jpg'),
       });
       try {
         var response = await dio.post(
@@ -69,20 +72,20 @@ class ImagePageState extends State<ImagePage>
           print('Response body: ${response.data}');
           var urlList = response.data;
           if (response.statusCode == 200 || response.statusCode == 201) {
-            if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+            if (urlList.isNotEmpty &&
+                urlList[0] is Map &&
+                urlList[0].containsKey('url')) {
               _image1Url = urlList[0]['url'];
               print('Image 1 URL: $_image1Url');
             }
           }
-        }  else {
+        } else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
-          _showVerificationFailedSnackBar();
         }
       } catch (e, stacktrace) {
         print('Error: $e');
         print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
       }
     }
   }
@@ -90,7 +93,11 @@ class ImagePageState extends State<ImagePage>
   Future<void> _pickImage2() async {
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image2 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
+    var image2 = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 60);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -101,7 +108,8 @@ class ImagePageState extends State<ImagePage>
         _image2 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image1.jpg'),
       });
 
       try {
@@ -121,7 +129,9 @@ class ImagePageState extends State<ImagePage>
           var urlList = response.data;
           print(urlList);
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
             _image2Url = urlList[0]['url'];
             print('Image 2 URL: $_image2Url');
           }
@@ -129,22 +139,23 @@ class ImagePageState extends State<ImagePage>
         } else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
-          _showVerificationFailedSnackBar();
         }
       } catch (e, stacktrace) {
         print('Error: $e');
         print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
       }
-
     }
-
   }
+
   Future<void> _pickImage3() async {
     var picker = ImagePicker();
 
     String savedToken = await getToken();
-    var image3 = await picker.pickImage(source: ImageSource.gallery,maxHeight: image_maxheight,maxWidth: image_maxwidth,imageQuality:60 );
+    var image3 = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 60);
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
     // 새로운 이미지를 선택한 경우에만 처리
@@ -155,7 +166,8 @@ class ImagePageState extends State<ImagePage>
         _image3 = selectedImage;
       });
       FormData formData = FormData.fromMap({
-        'files':  await MultipartFile.fromFile(selectedImage.path, filename: 'image1.jpg'),
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image1.jpg'),
       });
 
       try {
@@ -177,7 +189,9 @@ class ImagePageState extends State<ImagePage>
           var urlList = response.data;
           print(urlList);
 // urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty && urlList[0] is Map && urlList[0].containsKey('url')) {
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
             _image3Url = urlList[0]['url'];
             print('Image 3 URL: $_image3Url');
           }
@@ -190,19 +204,18 @@ class ImagePageState extends State<ImagePage>
         } else {
           // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
-          _showVerificationFailedSnackBar();
         }
       } catch (e, stacktrace) {
         print('Error: $e');
         print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
       }
     }
   }
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
-    Navigator.of(context).push(
+    Navigator.of(context)
+        .push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             UniversityPage(selectedGender: widget.selectedGender),
@@ -210,7 +223,8 @@ class ImagePageState extends State<ImagePage>
           return FadeTransition(opacity: animation, child: child);
         },
       ),
-    ).then((_) {
+    )
+        .then((_) {
       // 첫 번째 화면으로 돌아왔을 때 실행될 로직
       setState(() {
         multipartImageList.clear();
@@ -222,7 +236,6 @@ class ImagePageState extends State<ImagePage>
     });
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -233,87 +246,14 @@ class ImagePageState extends State<ImagePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 12/15, // 시작 너비 (30%)
-      end: 13/15, // 종료 너비 (40%)
+      begin: 12 / 15, // 시작 너비 (30%)
+      end: 13 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
       });
   }
-  Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupback);
-
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if(data['signupToken']!=null)
-      {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-      }
-      else{
-        _showVerificationFailedSnackBar();
-      }
-
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
-
-  void _showVerificationFailedSnackBar({String message = '인증 번호를 다시 확인 해주세요'}) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void _showImageUploadingSnackBar({String message = '이미지를 업로드 중입니다.'}) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-      duration: Duration(milliseconds: 500),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-
 
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
@@ -324,7 +264,9 @@ class ImagePageState extends State<ImagePage>
     try {
       var response = await dio.post(
         url2.toString(),
-        data: {"images" : [_image1Url,_image2Url,_image3Url]},
+        data: {
+          "images": [_image1Url, _image2Url, _image3Url]
+        },
         options: Options(
           headers: {
             'Authorization': 'Bearer $savedToken',
@@ -347,7 +289,6 @@ class ImagePageState extends State<ImagePage>
       } else {
         // 오류가 발생한 경우 처리
         print('Request failed with status: ${response.statusCode}.');
-        _showVerificationFailedSnackBar();
       }
     } catch (e, stacktrace) {
       print('Error: $e');
@@ -374,10 +315,9 @@ class ImagePageState extends State<ImagePage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _sendBackRequest();
+            sendBackRequest(context);
           },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -410,15 +350,15 @@ class ImagePageState extends State<ImagePage>
                 ),
                 Positioned(
                   left: MediaQuery.of(context).size.width *
-                      (_progressAnimation?.value ?? 0.3) -
+                          (_progressAnimation?.value ?? 0.3) -
                       15,
                   bottom: -10,
                   child: Image.asset(
                     gender == Gender.male
                         ? 'assets/man.png'
                         : gender == Gender.female
-                        ? 'assets/woman.png'
-                        : 'assets/signupface.png', // 기본 이미지
+                            ? 'assets/woman.png'
+                            : 'assets/signupface.png', // 기본 이미지
                     width: 30,
                     height: 30,
                   ),
@@ -438,7 +378,8 @@ class ImagePageState extends State<ImagePage>
             ),
             SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
               children: [
                 InkWell(
                   onTap: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
@@ -454,8 +395,10 @@ class ImagePageState extends State<ImagePage>
                       borderRadius: BorderRadius.circular(10.0),
                       child: _image1 == null
                           ? Center(
-                          child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image1!, fit: BoxFit.cover), // 선택된 이미지 표시
+                              child: Icon(Icons.add,
+                                  color: Color(0xFF868686), size: 40.0))
+                          : Image.file(_image1!,
+                              fit: BoxFit.cover), // 선택된 이미지 표시
                     ),
                   ),
                 ),
@@ -473,11 +416,14 @@ class ImagePageState extends State<ImagePage>
                       borderRadius: BorderRadius.circular(8.0),
                       child: _image2 == null
                           ? Center(
-                          child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image2!, fit: BoxFit.cover), // 선택된 이미지 표시
+                              child: Icon(Icons.add,
+                                  color: Color(0xFF868686), size: 40.0))
+                          : Image.file(_image2!,
+                              fit: BoxFit.cover), // 선택된 이미지 표시
                     ),
                   ),
-                ),InkWell(
+                ),
+                InkWell(
                   onTap: _pickImage3, // 버튼을 누를 때 _pickImage 함수 호출
                   child: Container(
                     width: 100,
@@ -491,12 +437,13 @@ class ImagePageState extends State<ImagePage>
                       borderRadius: BorderRadius.circular(8.0),
                       child: _image3 == null
                           ? Center(
-                          child: Icon(Icons.add, color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image3!, fit: BoxFit.cover), // 선택된 이미지 표시
+                              child: Icon(Icons.add,
+                                  color: Color(0xFF868686), size: 40.0))
+                          : Image.file(_image3!,
+                              fit: BoxFit.cover), // 선택된 이미지 표시
                     ),
                   ),
                 ),
-
               ],
             ),
             SizedBox(height: 26),
@@ -518,7 +465,7 @@ class ImagePageState extends State<ImagePage>
                     TextSpan(
                       text: '잘 보이는',
                       style:
-                      TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                          TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
                     ),
                     TextSpan(
                       text: ' 사진 3장을 등록해주세요.',
@@ -528,14 +475,13 @@ class ImagePageState extends State<ImagePage>
               ),
             ),
             SizedBox(height: 28),
-
           ],
         ),
       ),
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Color(0xFFF66464),
@@ -547,8 +493,8 @@ class ImagePageState extends State<ImagePage>
           ),
           onPressed: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
           child: Text(
             '다음',
@@ -561,8 +507,8 @@ class ImagePageState extends State<ImagePage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
