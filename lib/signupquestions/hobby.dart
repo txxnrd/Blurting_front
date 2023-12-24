@@ -20,6 +20,21 @@ class HobbyPageState extends State<HobbyPage>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  bool isHobby1Selected = false;
+  bool isHobby2Selected = false;
+  bool isHobby3Selected = false;
+  bool isHobby4Selected = false;
+  bool isHobby5Selected = false;
+  bool isHobby6Selected = false;
+  bool isHobby7Selected = false;
+  bool isHobby8Selected = false;
+  bool isHobby9Selected = false;
+  bool isHobby10Selected = false;
+  bool isHobby11Selected = false;
+  bool isHobby12Selected = false;
+  bool isHobby13Selected = false;
+  bool isHobby14Selected = false;
+  bool isHobby15Selected = false;
 
   List<bool> isValidList = [
     false,
@@ -76,7 +91,7 @@ class HobbyPageState extends State<HobbyPage>
   Widget customHobbyCheckbox(String hobbyText, int index, width, height) {
     return Container(
       width: width * 0.44,
-      height: height * 0.052,
+      height: height * 0.06,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -133,11 +148,12 @@ class HobbyPageState extends State<HobbyPage>
   }
 
   bool IsValid = false;
+
   @override
   void IsSelected(int index) {
     var true_length = isValidList.where((item) => item == true).length;
     print(true_length);
-    if (true_length >= 4) {
+    if (true_length >= 4 && isValidList[index] == false) {
       print("여기");
       showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
       return;

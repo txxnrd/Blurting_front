@@ -158,7 +158,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   void IsSelected(int index) {
     var true_length = isValidList.where((item) => item == true).length;
     print(true_length);
-    if (true_length >= 4) {
+    if (true_length >= 4 && isValidList[index] == false) {
       print("여기");
       showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
       return;
