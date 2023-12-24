@@ -202,7 +202,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간
       vsync: this,
     );
     Firebase.initializeApp().whenComplete(() {

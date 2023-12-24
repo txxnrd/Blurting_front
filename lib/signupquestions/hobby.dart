@@ -163,7 +163,7 @@ class HobbyPageState extends State<HobbyPage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
@@ -215,38 +215,6 @@ class HobbyPageState extends State<HobbyPage>
     }
   }
 
-  Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupback);
-
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if (data['signupToken'] != null) {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-      } else {}
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -267,7 +235,7 @@ class HobbyPageState extends State<HobbyPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _sendBackRequest();
+            sendBackRequest(context);
           },
         ),
       ),

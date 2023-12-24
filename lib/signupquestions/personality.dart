@@ -20,21 +20,6 @@ class _PersonalityPageState extends State<PersonalityPage>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  bool isPersonality1Selected = false;
-  bool isPersonality2Selected = false;
-  bool isPersonality3Selected = false;
-  bool isPersonality4Selected = false;
-  bool isPersonality5Selected = false;
-  bool isPersonality6Selected = false;
-  bool isPersonality7Selected = false;
-  bool isPersonality8Selected = false;
-  bool isPersonality9Selected = false;
-  bool isPersonality10Selected = false;
-  bool isPersonality11Selected = false;
-  bool isPersonality12Selected = false;
-  bool isPersonality13Selected = false;
-  bool isPersonality14Selected = false;
-  bool isPersonality15Selected = false;
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -53,7 +38,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
@@ -126,7 +111,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   Widget customPersonalityCheckBox(String hobbyText, int index, width, height) {
     return Container(
       width: width * 0.42,
-      height: height * 0.06,
+      height: height * 0.052,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -171,11 +156,20 @@ class _PersonalityPageState extends State<PersonalityPage>
 
   @override
   void IsSelected(int index) {
-    isValidList[index] = !isValidList[index];
-    if (isValidList.any((isValid) => isValid)) {
-      IsValid = true;
-    } else
-      IsValid = false;
+    var true_length = isValidList.where((item) => item == true).length;
+    print(true_length);
+    if (true_length >= 4) {
+      print("여기");
+      showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
+      return;
+    } else {
+      print("저기");
+      isValidList[index] = !isValidList[index];
+      if (isValidList.any((isValid) => isValid)) {
+        IsValid = true;
+      } else
+        IsValid = false;
+    }
   }
 
   Future<void> _sendPostRequest() async {
