@@ -50,7 +50,7 @@ class _ReligionPageState extends State<ReligionPage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간
       vsync: this,
     );
 
@@ -206,6 +206,15 @@ class _ReligionPageState extends State<ReligionPage>
                     children: <Widget>[
                       Checkbox(
                         value: _selectedReligion == Religion.none,
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         onChanged: (bool? newValue) {
                           setState(() {
                             _selectedReligion = Religion.none;
@@ -245,6 +254,15 @@ class _ReligionPageState extends State<ReligionPage>
                     children: <Widget>[
                       Checkbox(
                         value: _selectedReligion == Religion.buddhism,
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         onChanged: (bool? newValue) {
                           setState(() {
                             _selectedReligion = Religion.buddhism;
@@ -290,6 +308,15 @@ class _ReligionPageState extends State<ReligionPage>
                     children: <Widget>[
                       Checkbox(
                         value: _selectedReligion == Religion.christian,
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         onChanged: (bool? newValue) {
                           setState(() {
                             _selectedReligion = Religion.christian;
@@ -330,6 +357,15 @@ class _ReligionPageState extends State<ReligionPage>
                     children: <Widget>[
                       Checkbox(
                         value: _selectedReligion == Religion.catholicism,
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         onChanged: (bool? newValue) {
                           setState(() {
                             _selectedReligion = Religion.catholicism;
@@ -375,6 +411,15 @@ class _ReligionPageState extends State<ReligionPage>
                     children: <Widget>[
                       Checkbox(
                         value: _selectedReligion == Religion.etc,
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         onChanged: (bool? newValue) {
                           setState(() {
                             _selectedReligion = Religion.etc;

@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:blurting/signupquestions/universitylist.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
@@ -61,7 +60,7 @@ class _MajorPageState extends State<MajorPage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
@@ -84,38 +83,6 @@ class _MajorPageState extends State<MajorPage>
       gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
-
-    Future<void> _sendBackRequest() async {
-      print('_sendPostRequest called');
-      var url = Uri.parse(API.signupback);
-
-      String savedToken = await getToken();
-      print(savedToken);
-      var response = await http.get(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
-        },
-      );
-      print(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-        print('Server returned OK');
-        print('Response body: ${response.body}');
-        var data = json.decode(response.body);
-
-        if (data['signupToken'] != null) {
-          var token = data['signupToken'];
-          print(token);
-          await saveToken(token);
-          Navigator.of(context).pop();
-        }
-      } else {
-        // 오류가 발생한 경우 처리
-        print('Request failed with status: ${response.statusCode}.');
-      }
-    }
 
     Future<void> _sendPostRequest() async {
       print('_sendPostRequest called');
@@ -168,27 +135,6 @@ class _MajorPageState extends State<MajorPage>
       }
     }
 
-    void _showVerificationFailedDialog({String message = '인증 번호를 다시 확인 해주세요'}) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('인증 실패'),
-            content: Text(message),
-            actions: <Widget>[
-              TextButton(
-                child: Text('닫기'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -199,7 +145,7 @@ class _MajorPageState extends State<MajorPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _sendBackRequest();
+            sendBackRequest(context);
           },
         ),
       ),

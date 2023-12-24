@@ -20,21 +20,6 @@ class HobbyPageState extends State<HobbyPage>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  bool isHobby1Selected = false;
-  bool isHobby2Selected = false;
-  bool isHobby3Selected = false;
-  bool isHobby4Selected = false;
-  bool isHobby5Selected = false;
-  bool isHobby6Selected = false;
-  bool isHobby7Selected = false;
-  bool isHobby8Selected = false;
-  bool isHobby9Selected = false;
-  bool isHobby10Selected = false;
-  bool isHobby11Selected = false;
-  bool isHobby12Selected = false;
-  bool isHobby13Selected = false;
-  bool isHobby14Selected = false;
-  bool isHobby15Selected = false;
 
   List<bool> isValidList = [
     false,
@@ -91,7 +76,7 @@ class HobbyPageState extends State<HobbyPage>
   Widget customHobbyCheckbox(String hobbyText, int index, width, height) {
     return Container(
       width: width * 0.44,
-      height: height * 0.06,
+      height: height * 0.052,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -148,14 +133,22 @@ class HobbyPageState extends State<HobbyPage>
   }
 
   bool IsValid = false;
-
   @override
   void IsSelected(int index) {
-    isValidList[index] = !isValidList[index];
-    if (isValidList.any((isValid) => isValid)) {
-      IsValid = true;
-    } else
-      IsValid = false;
+    var true_length = isValidList.where((item) => item == true).length;
+    print(true_length);
+    if (true_length >= 4) {
+      print("여기");
+      showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
+      return;
+    } else {
+      print("저기");
+      isValidList[index] = !isValidList[index];
+      if (isValidList.any((isValid) => isValid)) {
+        IsValid = true;
+      } else
+        IsValid = false;
+    }
   }
 
   @override
@@ -163,7 +156,7 @@ class HobbyPageState extends State<HobbyPage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
@@ -215,38 +208,6 @@ class HobbyPageState extends State<HobbyPage>
     }
   }
 
-  Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupback);
-
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if (data['signupToken'] != null) {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-      } else {}
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -267,7 +228,7 @@ class HobbyPageState extends State<HobbyPage>
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            _sendBackRequest();
+            sendBackRequest(context);
           },
         ),
       ),

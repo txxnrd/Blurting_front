@@ -180,7 +180,7 @@ class ImagePageState extends State<ImagePage>
             },
           ),
         );
-
+        showSnackBar(context, "이미지 업로드 중입니다.");
         if (response.statusCode == 200 || response.statusCode == 201) {
           // 서버로부터 응답이 성공적으로 돌아온 경우 처리
           // _showImageUploadingSnackBar();
@@ -241,7 +241,7 @@ class ImagePageState extends State<ImagePage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 

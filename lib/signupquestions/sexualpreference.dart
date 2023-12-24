@@ -50,7 +50,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간
       vsync: this,
     );
 
@@ -199,6 +199,15 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedSexPreference ==
                             SexualPreference.different,
                         onChanged: (bool? newValue) {
@@ -240,6 +249,15 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedSexPreference == SexualPreference.same,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -285,6 +303,15 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Checkbox(
+                        side: BorderSide(color: Colors.transparent),
+                        fillColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                            }
+                            return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                          },
+                        ),
                         value: _selectedSexPreference == SexualPreference.both,
                         onChanged: (bool? newValue) {
                           setState(() {

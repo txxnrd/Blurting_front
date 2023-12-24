@@ -297,7 +297,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                 child: Container(color: Colors.white.withOpacity(0.3))),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 50),
+            margin: EdgeInsets.only(bottom: 70),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -370,11 +370,10 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                         onTapOutside: (event) => _focusNode0.unfocus(),
                         maxLength: 6,
                         style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                          color: Colors.white
-                        ),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: Colors.white),
                         controller: _controller_certification,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -492,7 +491,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       floatingActionButton: Container(
         width: 350.0, // 너비 조정
         height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
         child: FloatingActionButton(
           onPressed: IsValid
               ? () async {

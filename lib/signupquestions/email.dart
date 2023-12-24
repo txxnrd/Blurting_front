@@ -44,7 +44,7 @@ class _EmailPageState extends State<EmailPage>
     super.initState();
     WidgetsBinding.instance?.addObserver(this); // 생명주기 감지를 위한 옵저버 추가
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
     _progressAnimation = Tween<double>(

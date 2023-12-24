@@ -50,7 +50,7 @@ class _HeightPageState extends State<HeightPage>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
