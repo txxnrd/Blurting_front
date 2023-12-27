@@ -420,7 +420,7 @@ class _Blurting extends State<Blurting> {
               }
 
               // 데이터를 로컬에 저장하는 함수
-              await prefs.setString('timeInSeconds',  DateTime.now().add(Duration(hours: 9)).toString());
+              await prefs.setString('timeInSeconds',  DateTime.now().toString());
               print('마지막으로 들어간 시간 저장: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
             },
           )
@@ -643,8 +643,8 @@ class _Blurting extends State<Blurting> {
         if (mounted) {
           setState(() {
             // createdAt = DateTime.now().add(Duration(hours: -47));
-            createdAt = _parseDateTime(responseData['createdAt']).add(Duration(hours: -9));
-            // print('createdAt : ${createdAt}');
+            createdAt = _parseDateTime(responseData['createdAt']);
+            print('createdAt : $createdAt');
 
             Duration timeDifference =
                 DateTime.now().difference(createdAt);
@@ -996,7 +996,7 @@ class _profileState extends State<profile> {
                 borderRadius: BorderRadius.circular(50),
                 border: widget.thisSelected
                     ? Border.all(color: mainColor.MainColor, width: 1)
-                    : null),
+                    : Border.all(color: Colors.transparent, width: 1)),
             child: Image.asset(
                   fit: BoxFit.fill,
 
@@ -1015,7 +1015,7 @@ class _profileState extends State<profile> {
                 borderRadius: BorderRadius.circular(50),
                 border: widget.thisSelected
                     ? Border.all(color: mainColor.MainColor, width: 1)
-                    : null),
+                    : Border.all(color: Colors.transparent, width: 1)),
             child: Text(
               widget.userName,
               style: TextStyle(

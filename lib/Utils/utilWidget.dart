@@ -27,16 +27,16 @@ class LeftTailClipper extends CustomClipper<Path> {
     var path = Path();
     path.moveTo(0, 5);
     path.lineTo(size.width - 30, 5);
-    path.quadraticBezierTo(size.width, 5, size.width, 30); // 우측 상단 둥글게
-    path.lineTo(size.width, size.height - 30); // 우측 선
+    path.quadraticBezierTo(size.width, 5, size.width, 25); // 우측 상단 둥글게
+    path.lineTo(size.width, size.height - 25); // 우측 선
     path.quadraticBezierTo(
         // 우측 하단 둥글게
         size.width,
         size.height,
-        size.width - 30,
+        size.width - 25,
         size.height);
-    path.lineTo(30, size.height); // 하측 선 어디까지?!
-    path.quadraticBezierTo(0, size.height, 0, size.height - 30); // 좌측 하단 둥글게
+    path.lineTo(25, size.height); // 하측 선 어디까지?!
+    path.quadraticBezierTo(0, size.height, 0, size.height - 25); // 좌측 하단 둥글게
 
     return path;
   }
@@ -53,11 +53,11 @@ class RightTailClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     var path = Path();
     path.moveTo(size.width, 5);
-    path.lineTo(30, 5);
-    path.quadraticBezierTo(0, 5, 0, 30);
-    path.lineTo(0, size.height - 30);
-    path.quadraticBezierTo(0, size.height, 30, size.height);
-    path.lineTo(size.width - 30, size.height);
+    path.lineTo(25, 5);
+    path.quadraticBezierTo(0, 5, 0, 25);
+    path.lineTo(0, size.height - 25);
+    path.quadraticBezierTo(0, size.height, 25, size.height);
+    path.lineTo(size.width - 25, size.height);
     path.quadraticBezierTo(
         size.width, size.height, size.width, size.height - 20);
     return path;
@@ -500,9 +500,13 @@ class _MyChatState extends State<MyChat> {
                                         fontFamily: 'Heebo'),
                                   ),
                                 ),
-                              Image(
-                                image: AssetImage('assets/images/heart.png'),
-                                color: Colors.white,
+                              SizedBox(
+                                width: 8,
+                                height: 7,
+                                child: Image(
+                                  image: AssetImage('assets/images/heart.png'),
+                                  color: Colors.white,
+                                ),
                               ),
                             ],
                           ),
@@ -890,7 +894,6 @@ class _AnswerItemState extends State<AnswerItem> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       side: BorderSide(color: mainColor.MainColor, width: 1.0),
                     ),
-                    // title:
                     content: Column(
                       // 동적으로 눌린 유저의 정보 받아오기
                       mainAxisSize: MainAxisSize.min,
@@ -916,14 +919,17 @@ class _AnswerItemState extends State<AnswerItem> {
                               ),
                               Align(
                                 alignment: Alignment.topRight,
-                                child: GestureDetector(
-                                  child: Image.asset('assets/images/block.png'),
-                                  // icon: Image.asset('assets/images/block.png'),
-                                  onTap: () {
-                                    _ClickWarningButton(context,
-                                        widget.userId); // jsonData 줘야 함
-                                    print('신고 버튼 눌림');
-                                  },
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: GestureDetector(
+                                    child: Image.asset('assets/images/block.png', fit: BoxFit.fill,),
+                                    onTap: () {
+                                      _ClickWarningButton(context,
+                                          widget.userId); // jsonData 줘야 함
+                                      print('신고 버튼 눌림');
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
@@ -1423,12 +1429,16 @@ class _AnswerItemState extends State<AnswerItem> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image(
-                                    image:
-                                        AssetImage('assets/images/heart.png'),
-                                    color: iLike
-                                        ? mainColor.MainColor
-                                        : Colors.white,
+                                  SizedBox(
+                                    width: 8,
+                                    height: 7,
+                                    child: Image(
+                                      image:
+                                          AssetImage('assets/images/heart.png'),
+                                      color: iLike
+                                          ? mainColor.MainColor
+                                          : Colors.white,
+                                    ),
                                   ),
                                   if (likedNum != 0)
                                     Container(

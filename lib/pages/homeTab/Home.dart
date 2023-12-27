@@ -204,36 +204,36 @@ class _HomeState extends State<Home> {
                           overflow: TextOverflow.fade,
                         ),
                       ),
-                      // Positioned(
-                      //   top: 40,
-                      //   left: 150,
-                      //   child: Center(
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.all(8.0),
-                      //       child: SizedBox(
-                      //         width: 15,
-                      //         height: 15,
-                      //         child: FloatingActionButton(
-                      //           elevation: 0,
-                      //           onPressed: () {
-                      //             print(
-                      //                 "답변 스크롤되고있나?: ${answercontroller.position.maxScrollExtent}");
-                      //             answercontroller.animateTo(
-                      //                 answercontroller.position.maxScrollExtent,
-                      //                 duration: Duration(milliseconds: 500),
-                      //                 curve: Curves.ease);
-                      //           },
-                      //           backgroundColor: mainColor.Gray,
-                      //           child: Icon(
-                      //             Icons.keyboard_arrow_down_rounded,
-                      //             size: 12,
-                      //             color: Colors.white,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      Positioned(
+                        top: 40,
+                        left: 150,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: FloatingActionButton(
+                                elevation: 0,
+                                onPressed: () {
+                                  print(
+                                      "답변 스크롤되고있나?: ${answercontroller.position.maxScrollExtent}");
+                                  answercontroller.animateTo(
+                                      answercontroller.position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 500),
+                                      curve: Curves.ease);
+                                },
+                                backgroundColor: mainColor.Gray,
+                                child: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  size: 12,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

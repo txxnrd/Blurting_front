@@ -41,33 +41,36 @@ class QuestionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Q$questionNumber. ',
-          style: TextStyle(
-            fontFamily: 'Heebo',
-            fontSize: 15,
-            color: mainColor.Gray,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.98,
-          child: Text(
-            question,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Q$questionNumber. ',
             style: TextStyle(
               fontFamily: 'Heebo',
-              fontSize: 13,
+              fontSize: 12,
               color: mainColor.Gray,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
             ),
-            overflow: TextOverflow.fade,
-            textAlign: TextAlign.center,
           ),
-        ),
-      ],
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.98,
+            child: Text(
+              question,
+              style: TextStyle(
+                fontFamily: 'Heebo',
+                fontSize: 12,
+                color: mainColor.Gray,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -262,6 +265,11 @@ class _GroupChat extends State<GroupChat> {
                 image: AssetImage('assets/images/body_background.png'),
               ),
             ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
+            height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
+            color: Colors.white.withOpacity(0.4),
           ),
           Container(
             margin: EdgeInsets.only(top: 250), // 시작 위치에 여백 추가

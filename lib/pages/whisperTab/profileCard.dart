@@ -231,46 +231,40 @@ class _ProfileCard extends State<ProfileCard> {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed:
-                            (checkReason.any((element) => element == true))
-                                ? () {
-                                    Navigator.of(context).pop(); // 모달 닫기
-                                    print('신고 접수');
-                                    sendReport(widget.socket, reason);
-                                    setState(() {});
-                                  }
-                                : null,
-                        child: Container(
-                          width: 210,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color:
-                                (checkReason.any((element) => element == true))
-                                    ? mainColor.MainColor
-                                    : mainColor.lightGray,
-                            borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '신고하기',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Heebo",
-                                  fontSize: 20,
-                                  color: Colors.white),
-                            ),
+                margin: EdgeInsets.only(top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: (checkReason.any((element) => element == true)) ? () {
+                        Navigator.of(context).pop(); // 모달 닫기
+                        print('신고 접수');
+                        sendReport(widget.socket, reason);
+                        setState(() {});
+                      } : null,
+                      child: Container(
+                        width: 210,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: (checkReason.any((element) => element == true)) ? mainColor.MainColor : mainColor.lightGray,
+                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '신고하기',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Heebo",
+                                fontSize: 20,
+                                color: Colors.white),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),  
               ],
             ),
           );
@@ -384,29 +378,37 @@ class _ProfileCard extends State<ProfileCard> {
       Padding(
         padding: EdgeInsets.fromLTRB(0, 13, 0, 0),
       ),
-      Row(
+      Stack(
         children: [
-          SizedBox(
-            width: 95,
-          ),
-          Text(
-            'photo${index + 1}.',
-            style: TextStyle(
-              fontFamily: 'Heebo',
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-              color: Color(0XFFF66464),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              // padding: EdgeInsets.only(top: 10),
+              alignment: Alignment.center,
+              child: Text(
+                'photo${index + 1}.',
+                style: TextStyle(
+                  fontFamily: 'Heebo',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0XFFF66464),
+                ),
+              ),
             ),
           ),
           Align(
             alignment: Alignment.topRight,
-            child: IconButton(
-              iconSize: 20,
-              icon: Image.asset('assets/images/block.png'),
-              onPressed: () {
-                _ClickWarningButton(context, widget.userId);
-                print('신고 버튼 눌림');
-              },
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              width: 20,
+              height: 20,
+              child: GestureDetector(
+                child: Image.asset('assets/images/block.png', fit: BoxFit.fill),
+                onTap: () {
+                  _ClickWarningButton(context, widget.userId); // jsonData 줘야 함
+                  print('신고 버튼 눌림');
+                },
+              ),
             ),
           ),
         ],
