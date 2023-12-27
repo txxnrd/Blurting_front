@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
@@ -924,10 +925,11 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         toolbarHeight: 80,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -940,1014 +942,1024 @@ class _MyPageEditState extends State<MyPageEdit> {
             _showWarning(context);
           },
         ),
-        actions: <Widget>[],
+        flexibleSpace: Stack(
+          children: [
+            ClipRRect(
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(color: Colors.transparent))),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.only(left: 13),
-                child: ellipseText(text: 'Editing')),
-            Center(
-              child: Container(
-                width: 57,
-                child: Image.asset(
-                  'assets/woman.png',
-                  fit: BoxFit.fill,
+        child: Container(
+          margin: EdgeInsets.only(top: 100),
+          child: Column(
+            children: [
+              Container(
+                  padding: EdgeInsets.only(left: 13),
+                  child: ellipseText(text: 'Editing')),
+              Center(
+                child: Container(
+                  width: 57,
+                  child: Image.asset(
+                    'assets/woman.png',
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 5, left: 10),
-                    child: Text(
-                      '닉네임',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5, left: 10),
+                      child: Text(
+                        '닉네임',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      width: screenWidth,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
-                      alignment: Alignment.centerLeft,
-                      height: 48, // TextField의 높이와 일치하도록 설정합니다.
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(color: mainColor.lightGray, width: 2),
-                        borderRadius: BorderRadius.circular(
-                            10), // TextField의 테두리와 일치하도록 설정합니다.
-                      ),
-                      child: Align(
+                    Center(
+                      child: Container(
+                        width: screenWidth,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.data['nickname'],
-                          style: TextStyle(
-                            color: mainColor.Gray,
-                            fontSize: 16.0,
-                            // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                        height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: mainColor.lightGray, width: 2),
+                          borderRadius: BorderRadius.circular(
+                              10), // TextField의 테두리와 일치하도록 설정합니다.
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.data['nickname'],
+                            style: TextStyle(
+                              color: mainColor.Gray,
+                              fontSize: 16.0,
+                              // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      '활동 지역',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        '활동 지역',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      width: screenWidth,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
-                      alignment: Alignment.centerLeft,
-                      height: 48, // TextField의 높이와 일치하도록 설정합니다.
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(color: mainColor.lightGray, width: 2),
-                        borderRadius: BorderRadius.circular(
-                            10), // TextField의 테두리와 일치하도록 설정합니다.
-                      ),
-                      child: Align(
+                    Center(
+                      child: Container(
+                        width: screenWidth,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
                         alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              content == "" ? widget.data['region'] : content,
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontSize: 16.0,
-                                // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                        height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: mainColor.lightGray, width: 2),
+                          borderRadius: BorderRadius.circular(
+                              10), // TextField의 테두리와 일치하도록 설정합니다.
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                content == "" ? widget.data['region'] : content,
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontSize: 16.0,
+                                  // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SearchPage()),
+                                    );
+                                    setState(() {
+                                      // 'result'가 null이 아닐 경우에만 content 업데이트
+                                      if (result != null) {
+                                        content = result;
+                                      }
+                                    });
+                                  },
+                                  child: Ink(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: mainColor.MainColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      padding: EdgeInsets.fromLTRB(9, 2, 9, 2),
+                                      child: Text(
+                                        '수정',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 12,
+                                          fontFamily: 'Pretendard',
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        '종교',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                              width: screenWidth,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: mainColor.lightGray)),
+                          AnimatedPositioned(
+                            duration: Duration(milliseconds: 500),
+                            left: screenWidth / 5 * religionIndex,
+                            child: Container(
+                                width: screenWidth / 5,
+                                // width: screenWidth-4,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: mainColor.MainColor),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white)),
+                          ),
+                          SizedBox(
+                            width: screenWidth,
+                            child: Row(
+                              children: [
+                                toggleReligion(context, 0, '무교'),
+                                toggleReligion(context, 1, '불교'),
+                                toggleReligion(context, 2, '기독교'),
+                                toggleReligion(context, 3, '천주교'),
+                                toggleReligion(context, 4, '기타'),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        '음주 정도',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                              width: screenWidth,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: mainColor.lightGray)),
+                          AnimatedPositioned(
+                            duration: Duration(milliseconds: 500),
+                            left: screenWidth / 4 * alcoholIndex,
+                            child: Container(
+                                width: screenWidth / 4,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: mainColor.MainColor),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white)),
+                          ),
+                          SizedBox(
+                            width: screenWidth,
+                            child: Row(
+                              children: [
+                                toggleAlcohol(context, 0, '안 마심'),
+                                toggleAlcohol(context, 1, '가끔'),
+                                toggleAlcohol(context, 2, '자주'),
+                                toggleAlcohol(context, 3, '매일'),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        '흡연 정도',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                              width: screenWidth,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: mainColor.lightGray)),
+                          AnimatedPositioned(
+                            duration: Duration(milliseconds: 500),
+                            left: screenWidth / 4 * smokeIndex,
+                            child: Container(
+                                width: screenWidth / 4,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: mainColor.MainColor),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white)),
+                          ),
+                          SizedBox(
+                            width: screenWidth,
+                            child: Row(
+                              children: [
+                                toggleSmoke(context, 0, '안 피움'),
+                                toggleSmoke(context, 1, '가끔'),
+                                toggleSmoke(context, 2, '자주'),
+                                toggleSmoke(context, 3, '매일'),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 5, left: 10),
+                      child: Text(
+                        '키',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: SizedBox(
+                        height: 48,
+                        width: screenWidth,
+                        child: TextField(
+                            controller: _textController,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: mainColor.lightGray, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: mainColor.MainColor, width: 2),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                int intValue = int.parse(value);
+                                InputHeightNumber(intValue);
+                              });
+                            }),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        'MBTI',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: 60,
+                          height: 12,
+                          margin: EdgeInsets.only(bottom: 5, left: 10),
+                          child: Text(
+                            '에너지방향',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Pretendard'),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              width: width * 00.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                    width: 2,
+                                  ),
+                                  backgroundColor: _selectedEorI == EorI.e
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  IsSelected(0);
+                                  setState(() {
+                                    _selectedEorI = EorI.e;
+                                  });
+                                },
+                                child: Text(
+                                  'E',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                ),
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.all(10),
-                              child: InkWell(
-                                onTap: () async {
-                                  final result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SearchPage()),
-                                  );
+                              width: width * 00.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                    width: 2,
+                                  ),
+                                  backgroundColor: _selectedEorI == EorI.i
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  IsSelected(0);
                                   setState(() {
-                                    // 'result'가 null이 아닐 경우에만 content 업데이트
-                                    if (result != null) {
-                                      content = result;
-                                    }
+                                    _selectedEorI = EorI.i;
                                   });
                                 },
-                                child: Ink(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: mainColor.MainColor,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    padding: EdgeInsets.fromLTRB(9, 2, 9, 2),
-                                    child: Text(
-                                      '수정',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 12,
-                                        fontFamily: 'Pretendard',
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                child: Text(
+                                  'I',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      '종교',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Stack(
-                      children: [
-                        Container(
-                            width: screenWidth,
-                            height: 48,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: mainColor.lightGray)),
-                        AnimatedPositioned(
-                          duration: Duration(milliseconds: 500),
-                          left: screenWidth / 5 * religionIndex,
-                          child: Container(
-                              width: screenWidth / 5,
-                              // width: screenWidth-4,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2, color: mainColor.MainColor),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.all(0),
+                              child: Text(
+                                '외향형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(0),
+                              child: Text(
+                                '내항형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: screenWidth,
-                          child: Row(
-                            children: [
-                              toggleReligion(context, 0, '무교'),
-                              toggleReligion(context, 1, '불교'),
-                              toggleReligion(context, 2, '기독교'),
-                              toggleReligion(context, 3, '천주교'),
-                              toggleReligion(context, 4, '기타'),
-                            ],
+                        Container(
+                          width: 44,
+                          height: 12,
+                          margin: EdgeInsets.only(bottom: 5, left: 10),
+                          child: Text(
+                            '인식',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Pretendard'),
                           ),
-                        )
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              width: width * 00.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                    width: 2,
+                                  ),
+                                  backgroundColor: _selectedSorN == SorN.s
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  IsSelected(1);
+                                  setState(() {
+                                    _selectedSorN = SorN.s;
+                                  });
+                                },
+                                child: Text(
+                                  'S',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: width * 00.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                    width: 2,
+                                  ),
+                                  backgroundColor: _selectedSorN == SorN.n
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  IsSelected(1);
+                                  setState(() {
+                                    _selectedSorN = SorN.n;
+                                  });
+                                },
+                                child: Text(
+                                  'N',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                '감각형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                '직관형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 44,
+                          height: 12,
+                          margin: EdgeInsets.only(bottom: 5, left: 10),
+                          child: Text(
+                            '판단',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Pretendard'),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              width: width * 00.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                    width: 2,
+                                  ),
+                                  backgroundColor: _selectedTorF == TorF.t
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    IsSelected(2);
+                                    _selectedTorF = TorF.t;
+                                  });
+                                },
+                                child: Text(
+                                  'T',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: width * 00.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                    width: 2,
+                                  ),
+                                  backgroundColor: _selectedTorF == TorF.f
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    IsSelected(2);
+                                    _selectedTorF = TorF.f;
+                                  });
+                                },
+                                child: Text(
+                                  'F',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                '사고형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                '감각형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 44,
+                          height: 12,
+                          margin: EdgeInsets.only(bottom: 5, left: 10),
+                          child: Text(
+                            '계획성',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Pretendard'),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              width: width * 0.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                  ),
+                                  backgroundColor: _selectedJorP == JorP.j
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    IsSelected(3);
+                                    _selectedJorP = JorP.j;
+                                  });
+                                },
+                                child: Text(
+                                  'J',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: width * 0.4, // 원하는 너비 값
+                              height: 48, // 원하는 높이 값
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Color(0xFF303030),
+                                  side: BorderSide(
+                                    color: mainColor.lightGray,
+                                    width: 2,
+                                  ),
+                                  backgroundColor: _selectedJorP == JorP.p
+                                      ? mainColor.lightGray
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // 원하는 모서리 둥글기 값
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    IsSelected(3);
+                                    _selectedJorP = JorP.p;
+                                  });
+                                },
+                                child: Text(
+                                  'P',
+                                  style: TextStyle(
+                                    color: Color(0xFF303030),
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                '판단형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                '인식형',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      '음주 정도',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        '성격',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Stack(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                       children: [
-                        Container(
-                            width: screenWidth,
-                            height: 48,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: mainColor.lightGray)),
-                        AnimatedPositioned(
-                          duration: Duration(milliseconds: 500),
-                          left: screenWidth / 4 * alcoholIndex,
-                          child: Container(
-                              width: screenWidth / 4,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2, color: mainColor.MainColor),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white)),
-                        ),
-                        SizedBox(
-                          width: screenWidth,
-                          child: Row(
-                            children: [
-                              toggleAlcohol(context, 0, '안 마심'),
-                              toggleAlcohol(context, 1, '가끔'),
-                              toggleAlcohol(context, 2, '자주'),
-                              toggleAlcohol(context, 3, '매일'),
-                            ],
-                          ),
-                        )
+                        customHobbyCheckbox('개성있는', 0, width, false),
+                        customHobbyCheckbox('책임감있는', 1, width, false),
                       ],
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      '흡연 정도',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Stack(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                       children: [
-                        Container(
-                            width: screenWidth,
-                            height: 48,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: mainColor.lightGray)),
-                        AnimatedPositioned(
-                          duration: Duration(milliseconds: 500),
-                          left: screenWidth / 4 * smokeIndex,
-                          child: Container(
-                              width: screenWidth / 4,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2, color: mainColor.MainColor),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white)),
-                        ),
-                        SizedBox(
-                          width: screenWidth,
-                          child: Row(
-                            children: [
-                              toggleSmoke(context, 0, '안 피움'),
-                              toggleSmoke(context, 1, '가끔'),
-                              toggleSmoke(context, 2, '자주'),
-                              toggleSmoke(context, 3, '매일'),
-                            ],
-                          ),
-                        )
+                        customHobbyCheckbox('열정적인', 2, width, false),
+                        customHobbyCheckbox('귀여운', 3, width, false),
                       ],
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 5, left: 10),
-                    child: Text(
-                      '키',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('상냥한', 4, width, false),
+                        customHobbyCheckbox('감성적인', 5, width, false),
+                      ],
                     ),
-                  ),
-                  Center(
-                    child: SizedBox(
-                      height: 48,
-                      width: screenWidth,
-                      child: TextField(
-                          controller: _textController,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: mainColor.lightGray, width: 2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: mainColor.MainColor, width: 2),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              int intValue = int.parse(value);
-                              InputHeightNumber(intValue);
-                            });
-                          }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('낙천적인', 6, width, false),
+                        customHobbyCheckbox('유머있는', 7, width, false),
+                      ],
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      'MBTI',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('차분한', 8, width, false),
+                        customHobbyCheckbox('지적인', 9, width, false),
+                      ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: 60,
-                        height: 12,
-                        margin: EdgeInsets.only(bottom: 5, left: 10),
-                        child: Text(
-                          '에너지방향',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Pretendard'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('섬세한', 10, width, false),
+                        customHobbyCheckbox('무뚝뚝한', 11, width, false),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('외향적인', 12, width, false),
+                        customHobbyCheckbox('내향적인', 13, width, false),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        '취미',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            width: width * 00.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                  width: 2,
-                                ),
-                                backgroundColor: _selectedEorI == EorI.e
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                IsSelected(0);
-                                setState(() {
-                                  _selectedEorI = EorI.e;
-                                });
-                              },
-                              child: Text(
-                                'E',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: width * 00.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                  width: 2,
-                                ),
-                                backgroundColor: _selectedEorI == EorI.i
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                IsSelected(0);
-                                setState(() {
-                                  _selectedEorI = EorI.i;
-                                });
-                              },
-                              child: Text(
-                                'I',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.all(0),
-                            child: Text(
-                              '외향형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(0),
-                            child: Text(
-                              '내항형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        width: 44,
-                        height: 12,
-                        margin: EdgeInsets.only(bottom: 5, left: 10),
-                        child: Text(
-                          '인식',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Pretendard'),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
+                      children: [
+                        customHobbyCheckbox('🍢애니', 0, width, true),
+                        customHobbyCheckbox('🎨그림그리기', 1, width, true),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
+                      children: [
+                        customHobbyCheckbox('🍻술', 2, width, true),
+                        customHobbyCheckbox('🎞️영화/드라마', 3, width, true),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('✈️여행', 4, width, true),
+                        customHobbyCheckbox('🧑‍🍳요리', 5, width, true),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('🤓자기계발', 6, width, true),
+                        customHobbyCheckbox('📚독서', 7, width, true),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('🎮게임', 8, width, true),
+                        customHobbyCheckbox('🎧노래듣기', 9, width, true),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('🕊️봉사활동', 10, width, true),
+                        customHobbyCheckbox('🏃운동', 11, width, true),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        customHobbyCheckbox('🎤노래부르기', 12, width, true),
+                        customHobbyCheckbox('🚶‍산책', 13, width, true),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
+                      child: Text(
+                        '사진',
+                        style: TextStyle(
+                          fontFamily: 'Heebo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            width: width * 00.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                  width: 2,
-                                ),
-                                backgroundColor: _selectedSorN == SorN.s
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                IsSelected(1);
-                                setState(() {
-                                  _selectedSorN = SorN.s;
-                                });
-                              },
-                              child: Text(
-                                'S',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: width * 00.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                  width: 2,
-                                ),
-                                backgroundColor: _selectedSorN == SorN.n
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                IsSelected(1);
-                                setState(() {
-                                  _selectedSorN = SorN.n;
-                                });
-                              },
-                              child: Text(
-                                'N',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              '감각형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              '직관형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        width: 44,
-                        height: 12,
-                        margin: EdgeInsets.only(bottom: 5, left: 10),
-                        child: Text(
-                          '판단',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Pretendard'),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            width: width * 00.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                  width: 2,
-                                ),
-                                backgroundColor: _selectedTorF == TorF.t
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  IsSelected(2);
-                                  _selectedTorF = TorF.t;
-                                });
-                              },
-                              child: Text(
-                                'T',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: width * 00.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                  width: 2,
-                                ),
-                                backgroundColor: _selectedTorF == TorF.f
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  IsSelected(2);
-                                  _selectedTorF = TorF.f;
-                                });
-                              },
-                              child: Text(
-                                'F',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              '사고형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              '감각형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        width: 44,
-                        height: 12,
-                        margin: EdgeInsets.only(bottom: 5, left: 10),
-                        child: Text(
-                          '계획성',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Pretendard'),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            width: width * 0.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                ),
-                                backgroundColor: _selectedJorP == JorP.j
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  IsSelected(3);
-                                  _selectedJorP = JorP.j;
-                                });
-                              },
-                              child: Text(
-                                'J',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: width * 0.4, // 원하는 너비 값
-                            height: 48, // 원하는 높이 값
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Color(0xFF303030),
-                                side: BorderSide(
-                                  color: mainColor.lightGray,
-                                  width: 2,
-                                ),
-                                backgroundColor: _selectedJorP == JorP.p
-                                    ? mainColor.lightGray
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // 원하는 모서리 둥글기 값
-                                ),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  IsSelected(3);
-                                  _selectedJorP = JorP.p;
-                                });
-                              },
-                              child: Text(
-                                'P',
-                                style: TextStyle(
-                                  color: Color(0xFF303030),
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              '판단형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              '인식형',
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      '성격',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                    children: [
-                      customHobbyCheckbox('개성있는', 0, width, false),
-                      customHobbyCheckbox('책임감있는', 1, width, false),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                    children: [
-                      customHobbyCheckbox('열정적인', 2, width, false),
-                      customHobbyCheckbox('귀여운', 3, width, false),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('상냥한', 4, width, false),
-                      customHobbyCheckbox('감성적인', 5, width, false),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('낙천적인', 6, width, false),
-                      customHobbyCheckbox('유머있는', 7, width, false),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('차분한', 8, width, false),
-                      customHobbyCheckbox('지적인', 9, width, false),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('섬세한', 10, width, false),
-                      customHobbyCheckbox('무뚝뚝한', 11, width, false),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('외향적인', 12, width, false),
-                      customHobbyCheckbox('내향적인', 13, width, false),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      '취미',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                    children: [
-                      customHobbyCheckbox('🍢애니', 0, width, true),
-                      customHobbyCheckbox('🎨그림그리기', 1, width, true),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                    children: [
-                      customHobbyCheckbox('🍻술', 2, width, true),
-                      customHobbyCheckbox('🎞️영화/드라마', 3, width, true),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('✈️여행', 4, width, true),
-                      customHobbyCheckbox('🧑‍🍳요리', 5, width, true),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('🤓자기계발', 6, width, true),
-                      customHobbyCheckbox('📚독서', 7, width, true),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('🎮게임', 8, width, true),
-                      customHobbyCheckbox('🎧노래듣기', 9, width, true),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('🕊️봉사활동', 10, width, true),
-                      customHobbyCheckbox('🏃운동', 11, width, true),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customHobbyCheckbox('🎤노래부르기', 12, width, true),
-                      customHobbyCheckbox('🚶‍산책', 13, width, true),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                    child: Text(
-                      '사진',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
-                    children: [
-                      InkWell(
-                        onTap: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
-                        child: Container(
-                          width: 100,
-                          height: 125,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: mainColor.lightGray),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12.0),
+                    Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
+                      children: [
+                        InkWell(
+                          onTap: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
+                          child: Container(
+                            width: 100,
+                            height: 125,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: mainColor.lightGray),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: ExtendedImage.network(
+                                  _image1Url!,
+                                  fit: BoxFit.cover,
+                                  cache: true,
+                                ) // 선택된 이미지 표시
+                                ),
                           ),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: ExtendedImage.network(
-                                _image1Url!,
-                                fit: BoxFit.cover,
-                                cache: true,
-                              ) // 선택된 이미지 표시
-                              ),
+                        ),
+                        InkWell(
+                          onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
+                          child: Container(
+                            width: 100,
+                            height: 125,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: mainColor.lightGray),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: ExtendedImage.network(
+                                  _image2Url!,
+                                  fit: BoxFit.cover,
+                                  cache: true,
+                                )),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: _pickImage3, // 버튼을 누를 때 _pickImage 함수 호출
+                          child: Container(
+                            width: 100,
+                            height: 125,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: mainColor.lightGray),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: ExtendedImage.network(
+                                  _image3Url!,
+                                  fit: BoxFit.cover,
+                                  cache: true,
+                                )),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Center(
+                      child: Container(
+                        margin: EdgeInsets.only(top: 30, bottom: 20),
+                        child: InkWell(
+                          child: staticButton(text: '수정 완료'),
+                          onTap: () {
+                            _sendFixRequest();
+                          },
                         ),
                       ),
-                      InkWell(
-                        onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
-                        child: Container(
-                          width: 100,
-                          height: 125,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: mainColor.lightGray),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: ExtendedImage.network(
-                                _image2Url!,
-                                fit: BoxFit.cover,
-                                cache: true,
-                              )),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: _pickImage3, // 버튼을 누를 때 _pickImage 함수 호출
-                        child: Container(
-                          width: 100,
-                          height: 125,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: mainColor.lightGray),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: ExtendedImage.network(
-                                _image3Url!,
-                                fit: BoxFit.cover,
-                                cache: true,
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.only(top: 30, bottom: 20),
-                      child: InkWell(
-                        child: staticButton(text: '수정 완료'),
-                        onTap: () {
-                          _sendFixRequest();
-                        },
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

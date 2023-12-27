@@ -36,74 +36,77 @@ class _MainApp extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: _currentIndex == 2 ? true : false,
-      body: _pages[_currentIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10.0),
-            topRight: Radius.circular(10.0),
-          ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            selectedLabelStyle: TextStyle(
-              color: Color.fromRGBO(48, 48, 48, 0.8),
-              fontSize: 10,
-              fontFamily: 'Heebo',
-            ),
-            unselectedLabelStyle: TextStyle(
-              color: Color.fromRGBO(48, 48, 48, 0.8),
-              fontSize: 10,
-              fontFamily: 'Heebo',
-            ),
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _currentIndex,
-            onTap: (int index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: TabItem(
-                    currentIndex: 0,
-                    image: 'assets/images/home.png',
-                    name: '홈'),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: TabItem(
-                    currentIndex: 1,
-                    image: 'assets/images/QnA.png',
-                    name: '블러팅'),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: TabItem(
-                    currentIndex: 2,
-                    image: 'assets/images/whisper.png',
-                    name: '귓속말'),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: TabItem(
-                    currentIndex: 3,
-                    image: 'assets/images/mypage.png',
-                    name: '마이페이지'),
-                label: '',
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        extendBody: _currentIndex == 2 ? true : false,
+        body: _pages[_currentIndex],
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                spreadRadius: 0,
+                blurRadius: 4,
+                offset: Offset(0, 2),
               ),
             ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0),
+            ),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.white,
+              selectedLabelStyle: TextStyle(
+                color: Color.fromRGBO(48, 48, 48, 0.8),
+                fontSize: 10,
+                fontFamily: 'Heebo',
+              ),
+              unselectedLabelStyle: TextStyle(
+                color: Color.fromRGBO(48, 48, 48, 0.8),
+                fontSize: 10,
+                fontFamily: 'Heebo',
+              ),
+              type: BottomNavigationBarType.fixed,
+              currentIndex: _currentIndex,
+              onTap: (int index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: TabItem(
+                      currentIndex: 0,
+                      image: 'assets/images/home.png',
+                      name: '홈'),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: TabItem(
+                      currentIndex: 1,
+                      image: 'assets/images/QnA.png',
+                      name: '블러팅'),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: TabItem(
+                      currentIndex: 2,
+                      image: 'assets/images/whisper.png',
+                      name: '귓속말'),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: TabItem(
+                      currentIndex: 3,
+                      image: 'assets/images/mypage.png',
+                      name: '마이페이지'),
+                  label: '',
+                ),
+              ],
+            ),
           ),
         ),
       ),

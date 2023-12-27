@@ -232,7 +232,7 @@ class _chatListItemState extends State<ChatListItem> {
                 height: 85,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(30),
                   color: Colors.white,
                 ),
                 child: Row(
@@ -249,6 +249,7 @@ class _chatListItemState extends State<ChatListItem> {
                     ),
                     Expanded(
                       child: Container(
+                        margin: EdgeInsets.only(right: 15),
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -292,7 +293,7 @@ class _chatListItemState extends State<ChatListItem> {
                                     style: TextStyle(
                                       fontFamily: "Pretendard",
                                       fontSize: 15,
-                                      color: Color.fromRGBO(48, 48, 48, 1),
+                                      color: widget.read ? mainColor.Gray : Colors.black,
                                     ),
                                   ),
                                 ),
@@ -567,6 +568,11 @@ class _chattingList extends State<ChattingList> {
                 image: AssetImage('assets/images/body_background.png'),
               ),
             ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
+            height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
+            color: Colors.white.withOpacity(0.4),
           ),
           SingleChildScrollView(
             padding: EdgeInsets.only(top: 260, bottom: 80), // 시작 위치에 여백 추가

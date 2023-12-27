@@ -153,10 +153,10 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                               style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: 'Heebo',
+                                fontFamily: 'Pretendard',
                                 color: Color(DefinedColor.darkpink),
                               ),
-                              children: [
+                              children: const [
                                 TextSpan(
                                   text: '블러',
                                 ),
@@ -165,6 +165,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
+                                    fontFamily: 'Pretendard',
                                   ), // 원하는 색으로 변경하세요.
                                 ),
                               ],
@@ -181,7 +182,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                 color: Color(DefinedColor.darkpink),
-                                fontFamily: 'Heebo',
+                                fontFamily: 'Pretendard',
                               )),
                         ),
                         SizedBox(height: 0),
@@ -192,7 +193,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                 color: Color(DefinedColor.darkpink),
-                                fontFamily: 'Heebo',
+                                fontFamily: 'Pretendard',
                               )),
                         ),
                       ],

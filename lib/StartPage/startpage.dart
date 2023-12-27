@@ -134,129 +134,134 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return
-      Scaffold(
-      key: _scaffoldKey, // Scaffold에 GlobalKey 할당
-      resizeToAvoidBottomInset: false,
-      backgroundColor: mainColor.MainColor,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(leading: null, backgroundColor: Colors.transparent,),
-      body: Form(
-          key: _formKey,
-          child: Stack(
-            children: [
-              Positioned(
-                  bottom: 0,
-                  left: -150,
-                  child: SizedBox(
-                      width: 500,
-                      child: Image.asset('assets/blurtingStart.png',
-                          fit: BoxFit.fill))),
-              AnimatedOpacity(
-                duration: Duration(milliseconds: 1500),
-                opacity: opacity,
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                    child: Container(color: Colors.white.withOpacity(0.3))),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 50),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Text('Blurting',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 40,
-                                fontFamily: 'Heebo')),
-                      ),
-                      AnimatedOpacity(
-                        duration: Duration(milliseconds: 1500),
-                        opacity: opacity,
-                        child: InkWell(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: mainColor.MainColor,
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: 48,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '회원가입',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontFamily: 'Heebo',
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: (opacity == 1.0) ? () {
-                            _sendPostRequest();
-                          } : null,
-                        ),
-                      ),
-                      AnimatedOpacity(
-                        duration: Duration(milliseconds: 1500),
-                        opacity: opacity,
-                        child: InkWell(
-                          onTap: (opacity == 1.0)
-                              ? () {
-                                  Navigator.push(
-                                    context, PageRouteBuilder(
-                                      pageBuilder: (context, animation,secondaryAnimation) =>
-                                          AlreadyUserPage(),
-                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        const begin = 0.0;
-                                        const end = 1.0;
-                                        var curve = Curves.easeOut;
-      
-                                        var tween = Tween(begin: begin, end: end).chain(
-                                          CurveTween(curve: curve),
-                                        );
-      
-                                        var opacityAnimation = tween.animate(animation);
-      
-                                        return FadeTransition(
-                                          opacity: opacityAnimation,
-                                          child: child,
-                                        );
-                                      },
-                                    ),
-                                  );
-                                }
-                              : null,
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 50,
-                            height: 50,
-                            child: Text(
-                              '이미 회원이신가요?',
+      PopScope(
+        canPop: false,
+        child: Scaffold(
+        key: _scaffoldKey, // Scaffold에 GlobalKey 할당
+        resizeToAvoidBottomInset: false,
+        backgroundColor: mainColor.MainColor,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(leading: null, backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        ),
+        body: Form(
+            key: _formKey,
+            child: Stack(
+              children: [
+                Positioned(
+                    bottom: 0,
+                    left: -150,
+                    child: SizedBox(
+                        width: 500,
+                        child: Image.asset('assets/blurtingStart.png',
+                            fit: BoxFit.fill))),
+                AnimatedOpacity(
+                  duration: Duration(milliseconds: 1500),
+                  opacity: opacity,
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                      child: Container(color: Colors.white.withOpacity(0.3))),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 50),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: Text('Blurting',
                               style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                decorationColor: Color(DefinedColor.darkpink),
-                                fontSize: 15,
-                                color: Color(DefinedColor.darkpink),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 40,
+                                  fontFamily: 'Heebo')),
+                        ),
+                        AnimatedOpacity(
+                          duration: Duration(milliseconds: 1500),
+                          opacity: opacity,
+                          child: InkWell(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: mainColor.MainColor,
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 48,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '회원가입',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontFamily: 'Heebo',
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: (opacity == 1.0) ? () {
+                              _sendPostRequest();
+                            } : null,
+                          ),
+                        ),
+                        AnimatedOpacity(
+                          duration: Duration(milliseconds: 1500),
+                          opacity: opacity,
+                          child: InkWell(
+                            onTap: (opacity == 1.0)
+                                ? () {
+                                    Navigator.push(
+                                      context, PageRouteBuilder(
+                                        pageBuilder: (context, animation,secondaryAnimation) =>
+                                            AlreadyUserPage(),
+                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                          const begin = 0.0;
+                                          const end = 1.0;
+                                          var curve = Curves.easeOut;
+        
+                                          var tween = Tween(begin: begin, end: end).chain(
+                                            CurveTween(curve: curve),
+                                          );
+        
+                                          var opacityAnimation = tween.animate(animation);
+        
+                                          return FadeTransition(
+                                            opacity: opacityAnimation,
+                                            child: child,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  }
+                                : null,
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: 50,
+                              height: 50,
+                              child: Text(
+                                '이미 회원이신가요?',
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Color(DefinedColor.darkpink),
+                                  fontSize: 15,
+                                  color: Color(DefinedColor.darkpink),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
