@@ -7,6 +7,7 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
@@ -972,6 +973,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                           setState(() {
                                             if (!isAlready && enoughPoint) {
                                               isTap(true);
+                                              HapticFeedback.vibrate();
                                             }
                                           });
                                         }
