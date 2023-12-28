@@ -413,7 +413,7 @@ class ImagePageState extends State<ImagePage>
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(10.0),
                       child: _image2 == null
                           ? Center(
                               child: Icon(Icons.add,
@@ -434,7 +434,7 @@ class ImagePageState extends State<ImagePage>
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(10.0),
                       child: _image3 == null
                           ? Center(
                               child: Icon(Icons.add,

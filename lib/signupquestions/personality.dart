@@ -111,7 +111,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   Widget customPersonalityCheckBox(String hobbyText, int index, width, height) {
     return Container(
       width: width * 0.42,
-      height: height * 0.052,
+      height: height * 0.048,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -158,7 +158,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   void IsSelected(int index) {
     var true_length = isValidList.where((item) => item == true).length;
     print(true_length);
-    if (true_length >= 4) {
+    if (true_length >= 4 && isValidList[index] == false) {
       print("여기");
       showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
       return;
