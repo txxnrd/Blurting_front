@@ -111,7 +111,7 @@ class _PersonalityPageState extends State<PersonalityPage>
   Widget customPersonalityCheckBox(String hobbyText, int index, width, height) {
     return Container(
       width: width * 0.42,
-      height: height * 0.052,
+      height: height * 0.048,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

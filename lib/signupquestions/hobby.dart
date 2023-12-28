@@ -20,21 +20,6 @@ class HobbyPageState extends State<HobbyPage>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
-  bool isHobby1Selected = false;
-  bool isHobby2Selected = false;
-  bool isHobby3Selected = false;
-  bool isHobby4Selected = false;
-  bool isHobby5Selected = false;
-  bool isHobby6Selected = false;
-  bool isHobby7Selected = false;
-  bool isHobby8Selected = false;
-  bool isHobby9Selected = false;
-  bool isHobby10Selected = false;
-  bool isHobby11Selected = false;
-  bool isHobby12Selected = false;
-  bool isHobby13Selected = false;
-  bool isHobby14Selected = false;
-  bool isHobby15Selected = false;
 
   List<bool> isValidList = [
     false,
@@ -91,7 +76,7 @@ class HobbyPageState extends State<HobbyPage>
   Widget customHobbyCheckbox(String hobbyText, int index, width, height) {
     return Container(
       width: width * 0.44,
-      height: height * 0.06,
+      height: height * 0.048,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
