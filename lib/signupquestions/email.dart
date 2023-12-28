@@ -42,6 +42,9 @@ class _EmailPageState extends State<EmailPage>
   @override
   void initState() {
     super.initState();
+    setState(() {
+      trial = 0;
+    });
     WidgetsBinding.instance?.addObserver(this); // 생명주기 감지를 위한 옵저버 추가
     _animationController = AnimationController(
       duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
@@ -73,22 +76,6 @@ class _EmailPageState extends State<EmailPage>
     super.dispose();
   }
 
-  void _showVerificationFailedSnackBar(value) {
-    final snackBar = SnackBar(
-      content: Text(value),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   @override
   void NowCertification() {
     setState(() {
@@ -104,65 +91,66 @@ class _EmailPageState extends State<EmailPage>
     });
   }
 
-  void _showVerificationSuccessedSnackBar({String message = '이메일 전송 완료'}) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  int trial = 0;
+  Future<void> _handleBackPress() async {
+    print("trial: $trial");
+    if (trial > 0) {
+      print("old_token: $old_token");
+      await saveToken(old_token);
+      trial = 0;
+    }
+    Navigator.of(context).pop();
   }
 
-  int trial = 0;
+  String old_token = "";
+
   Future<void> _sendPostRequest() async {
     if (trial == 0) {
-      trial++;
-      certification = true;
-      print('_sendPostRequest called');
-      var url = Uri.parse(API.signupemail);
+      try {
+        trial += 1;
+        print("trial:$trial");
+        certification = true;
+        print('_sendPostRequest called');
+        var url = Uri.parse(API.signupemail);
 
-      String savedToken = await getToken();
-      print(savedToken);
+        old_token = await getToken();
+        print("old token" + old_token);
 
-      var response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
-        },
-        body:
-            json.encode({"email": Email + '@' + widget.domain}), // JSON 형태로 인코딩
-      );
+        var response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $old_token',
+          },
+          body: json.encode({"email": Email + '@' + widget.domain}),
+        );
 
-      print(json.encode({"email": Email + '@' + widget.domain}));
-      trial = 0;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-        print('Server returned OK');
-        print('Response body: ${response.body}');
+        print(json.encode({"email": Email + '@' + widget.domain}));
 
-        var data = json.decode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print('Server returned OK');
+          print('Response body: ${response.body}');
 
-        if (data['signupToken'] != null) {
-          var token = data['signupToken'];
-          print(token);
-          await saveToken(token);
-          _showVerificationSuccessedSnackBar();
+          var data = json.decode(response.body);
+          if (data['signupToken'] != null && trial > 0) {
+            var token = data['signupToken'];
+            print(token);
+            await saveToken(token);
+          } else {
+            showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
+          }
         } else {
-          _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니디.');
+          trial = 0;
+          print('Request failed with status: ${response.statusCode}.');
+          print('Response body: ${response.body}');
+          var data = json.decode(response.body);
+          var message = data['message'];
+          showSnackBar(context, message);
         }
-      } else {
-        // 오류가 발생한 경우 처리
-        print('Request failed with status: ${response.statusCode}.');
-        _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니다.');
+      } catch (e) {
+        trial = 0;
+        print('An error occurred: $e');
+        showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
       }
     }
   }
@@ -241,15 +229,14 @@ class _EmailPageState extends State<EmailPage>
         _increaseProgressAndNavigate();
         Future.delayed(Duration(seconds: 2), _increaseProgressAndNavigate);
       } else {
-        _showVerificationFailedSnackBar('인증이 완료되지 않았습니다.');
+        showSnackBar(context, '인증이 완료가 되지 않았습니다.');
       }
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
       print('Response body: ${response.body}');
-      _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
-      if (response.statusCode == 409)
-        _showVerificationFailedSnackBar('이미 가입한 메일입니다.');
+      showSnackBar(context, '인증이 완료가 되지 않았습니다.');
+      if (response.statusCode == 409) showSnackBar(context, '이미 가입한 이메일입니다.');
     }
   }
 
@@ -280,7 +267,7 @@ class _EmailPageState extends State<EmailPage>
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              Navigator.of(context).pop();
+              _handleBackPress();
             },
           ),
         ),
