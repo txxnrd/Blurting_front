@@ -13,15 +13,6 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 6), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MainApp(
-                  currentIndex: 0,
-                )),
-      );
-    });
   }
 
   @override

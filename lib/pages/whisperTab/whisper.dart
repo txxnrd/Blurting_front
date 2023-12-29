@@ -31,13 +31,10 @@ class Whisper extends StatefulWidget {
 }
 
 double calculateBlurSigma(int blurValue) {
-  // Normalize the blur value to be between 0.0 and 1.0
   if (blurValue == 4) {
     return 0.0;
   } else {
     double normalizedBlur = (4 - blurValue) / 4.0;
-    print('blur % = ${normalizedBlur * 100}%');
-    // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
     return normalizedBlur * 5;
   }
 }
@@ -192,7 +189,9 @@ class _Whisper extends State<Whisper> {
       widget.socket.on('disconnect', (_) {
         print('소켓 연결 끊김');
       });
-    };
+    }
+
+    ;
 
     initializeSocket();
 
@@ -215,7 +214,7 @@ class _Whisper extends State<Whisper> {
   @override
   void dispose() {
     super.dispose();
-    
+
     widget.socket.off('new_chat');
 
     if (mounted) {
@@ -275,7 +274,6 @@ class _Whisper extends State<Whisper> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -456,8 +454,7 @@ class _Whisper extends State<Whisper> {
                                                   0.9,
                                               decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          10),
+                                                      BorderRadius.circular(10),
                                                   color: mainColor.MainColor),
                                               height: 50,
                                               // color: mainColor.MainColor,
@@ -474,8 +471,8 @@ class _Whisper extends State<Whisper> {
                                               ),
                                             ),
                                             onTap: () {
-                                              widget.socket.emit('leave_room',
-                                                  widget.roomId);
+                                              widget.socket.emit(
+                                                  'leave_room', widget.roomId);
                                               print('채팅 나가는 중...');
                                               Navigator.pop(context);
                                               Navigator.pop(context);
@@ -486,10 +483,9 @@ class _Whisper extends State<Whisper> {
                                     ),
                                     GestureDetector(
                                       child: Container(
-                                        width: MediaQuery.of(context)
-                                                .size
-                                                .width *
-                                            0.9,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
                                         height: 50,
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -573,15 +569,16 @@ class _Whisper extends State<Whisper> {
                     ),
                   ),
                   AnimatedOpacity(
-                    opacity: isMaxScroll ? 0.0 : 1.0,
-                    duration: Duration(milliseconds: 500),
+                      opacity: isMaxScroll ? 0.0 : 1.0,
+                      duration: Duration(milliseconds: 500),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: Container(
                           margin: EdgeInsets.all(10),
                           child: FloatingActionButton(
                             backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
                             mini: true,
                             onPressed: () {
                               _scrollController.position.jumpTo(
@@ -756,18 +753,6 @@ class _Whisper extends State<Whisper> {
     } else {
       print(response.statusCode);
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');
-    }
-  }
-
-  static double calculateBlurSigma(int blurValue) {
-    // Normalize the blur value to be between 0.0 and 1.0
-    if (blurValue == 4) {
-      return 0.0;
-    } else {
-      double normalizedBlur = (4 - blurValue) / 4.0;
-      print('blur % = ${normalizedBlur * 100}%');
-      // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
-      return normalizedBlur * 5;
     }
   }
 }
