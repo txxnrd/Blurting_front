@@ -278,47 +278,6 @@ class _SettingPageState extends State<SettingPage> {
 
                   InkWell(
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  WelcomeScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            const begin = 0.0;
-                            const end = 1.0;
-                            var curve = Curves.easeOut;
-
-                            var tween = Tween(begin: begin, end: end).chain(
-                              CurveTween(curve: curve),
-                            );
-
-                            var opacityAnimation = tween.animate(animation);
-
-                            return FadeTransition(
-                              opacity: opacityAnimation,
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(
-                      '이메일 인증 완 페이지',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 18,
-                  ),
-
-                  InkWell(
-                    onTap: () {
                       _showVerificationFailedSnackBar("로그아웃 완료");
                       clearAllData();
                       Navigator.push(
@@ -336,7 +295,9 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-
+                  SizedBox(
+                    height: 18,
+                  ),
                   InkWell(
                     onTap: () {
                       _sendDeleteRequest();
@@ -385,39 +346,6 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                   ),
 
-                  InkWell(
-                    onTap: () {
-                      _showVerificationFailedSnackBar("머가 예쁠까");
-                    },
-                    child: Container(
-                      child: Text(
-                        '스낵바 띄우기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
-                  ),
-
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    child: Container(
-                      child: Text(
-                        '로그인 페이지로... 로그아웃은 ㄴㄴ',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
-                  ),
-
                   SizedBox(
                     height: 18,
                   ),
@@ -439,91 +367,6 @@ class _SettingPageState extends State<SettingPage> {
                               color: Color(DefinedColor.gray)),
                         ),
                       ],
-                    ),
-                  ),
-
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  // InkWell(
-                  //   onTap: () async {
-                  //     var fcmToken = await FirebaseMessaging.instance.getToken(
-                  //         vapidKey:
-                  //             "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-                  //     print("------------");
-                  //     print(fcmToken);
-                  //   },
-                  //   child: Container(
-                  //     width: 100,
-                  //     height: 22,
-                  //     child: Text(
-                  //       'fcm 토큰 확인하기',
-                  //       style: TextStyle(
-                  //           fontSize: 15,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: Color(DefinedColor.gray)),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  // InkWell(
-                  //   onTap: () async {
-                  //     String Token = await getToken();
-                  //     print("------------");
-                  //     print(Token);
-                  //   },
-                  //   child: Container(
-                  //     width: 100,
-                  //     height: 22,
-                  //     child: Text(
-                  //       '현재 토큰 확인하기',
-                  //       style: TextStyle(
-                  //           fontSize: 15,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: Color(DefinedColor.gray)),
-                  //     ),
-                  //   ),
-                  // ),
-
-                  SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _testfcm();
-                    },
-                    child: Container(
-                      child: Text(
-                        '알림 테스트하기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UseGuidePageOne()),
-                      );
-                    },
-                    child: Container(
-                      child: Text(
-                        '사용설명서로 이동',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
                     ),
                   ),
                 ],
