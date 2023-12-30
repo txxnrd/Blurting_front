@@ -233,7 +233,6 @@ class _Whisper extends State<Whisper> {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              // Background with semi-transparent black color
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -242,7 +241,6 @@ class _Whisper extends State<Whisper> {
                   color: Colors.black.withOpacity(0.5),
                 ),
               ),
-              // Your ProfileCard
               ProfileCard(
                 socket: widget.socket,
                 userId: otherId,
@@ -306,7 +304,7 @@ class _Whisper extends State<Whisper> {
                   color: Colors.white,
                   border: responseData?['blurChange'] != null
                       ? Border.all(
-                          color: Color(0XFFF66464), // Apply pink border color
+                          color: Color(0XFFF66464),
                           width: 1.0,
                         )
                       : null,
@@ -357,8 +355,7 @@ class _Whisper extends State<Whisper> {
                           width: 110,
                           padding: EdgeInsets.all(2),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(
-                                0.5), // Adjust the background color as needed
+                            color: Colors.white.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(

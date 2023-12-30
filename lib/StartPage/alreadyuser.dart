@@ -118,7 +118,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       print('Request failed with status: ${response.statusCode}.');
       var data = json.decode(response.body);
       errormessage = data['message'];
-      _showVerificationFailedSnackBar(errormessage);
+      showSnackBar(context, errormessage);
     }
   }
 
@@ -177,32 +177,18 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       } else {
         var data = json.decode(response.body);
         errormessage = data['message'];
-        _showVerificationFailedSnackBar(errormessage);
+        showSnackBar(context, errormessage);
       }
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
+      if (response.statusCode == 400) {
+        showSnackBar(context, "인증번호가 틀렸습니다.");
+      } else if (response.statusCode == 408) {
+        showSnackBar(context, "3분이 지났습니다.");
+      }
       print("error");
     }
-  }
-
-  void _showVerificationFailedSnackBar(value) {
-    print("snackbar 실행");
-    final snackBar = SnackBar(
-      content: Text(value),
-      // backgroundColor: ,
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -213,18 +199,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
     });
   }
 
-  Future<void> initContact() async {
-    await requestPermission();
-    String? contactNumber = await getDefaultContact();
-    if (contactNumber != null && contactNumber.isNotEmpty) {
-      setState(() {
-        _controller.text = contactNumber;
-        InputPhoneNumber(contactNumber); // 여기에 추가
-      });
-    }
-  }
-
-  requestPermission() async {
+  void requestPermission() async {
     var status = await Permission.contacts.status;
     if (!status.isGranted) {
       await Permission.contacts.request();
