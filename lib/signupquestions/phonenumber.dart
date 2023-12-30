@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/signupquestions/sex.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:blurting/colors/colors.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/services.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   const PhoneNumberPage({super.key});
@@ -486,38 +486,20 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
         ),
       ),
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
-        child: FloatingActionButton(
-          onPressed: IsValid
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+          child: staticButton(text: !certification ? '인증번호 요청' : '다음'),
+          onTap: IsValid
               ? () async {
                   if (!certification) {
                     // 인증번호를 요청할 때 이 부분이 실행됩니다.
-                    print('눌러짐');
                     await _sendPostRequest(_controller.text);
                   } else {
                     // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
-
                     _sendVerificationRequest(phonenumber);
                   }
                 }
               : null,
-          backgroundColor: Color(0xFFF66464), // 버튼의 배경색
-          elevation: 0.0,
-          hoverElevation: 50,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Text(
-            !certification ? '인증번호 요청' : '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 16.0, // 텍스트 크기 조정
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
       floatingActionButtonLocation:

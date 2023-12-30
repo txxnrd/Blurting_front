@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/welcomepage.dart';
@@ -393,19 +394,10 @@ class _EmailPageState extends State<EmailPage>
           ),
         ),
         floatingActionButton: Container(
-          width: width * 0.9, // 너비 조정
-          height: 80.0, // 높이 조정
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 34),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFFF66464),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 0,
-              padding: EdgeInsets.all(0),
-            ),
-            onPressed: () async {
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            child: staticButton(text: !certification ? '인증번호 요청' : '다음'),
+            onTap: () async {
               if (!certification) {
                 // 인증번호를 요청할 때 이 부분이 실행됩니다.
                 await _sendPostRequest();
@@ -415,15 +407,6 @@ class _EmailPageState extends State<EmailPage>
                 _sendVerificationRequest();
               }
             },
-            child: Text(
-              !certification ? '이메일로 인증하기' : '인증완료',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Pretendard',
-                fontSize: 20.0,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
           ),
         ),
         floatingActionButtonLocation:

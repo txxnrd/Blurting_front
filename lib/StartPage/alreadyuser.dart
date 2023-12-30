@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/mainApp.dart';
-import 'package:blurting/signupquestions/phonecertification.dart';
 import 'package:blurting/signupquestions/sex.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -185,7 +184,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       if (response.statusCode == 400) {
         showSnackBar(context, "인증번호가 틀렸습니다.");
       } else if (response.statusCode == 408) {
-        showSnackBar(context, "3분이 지났습니다.");
+        showSnackBar(context, "인증 제한 시간 3분이 지났습니다.");
       }
       print("error");
     }

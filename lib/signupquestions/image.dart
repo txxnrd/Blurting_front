@@ -7,6 +7,7 @@ import '../config/app_config.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart'; // 추가
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class ImagePage extends StatefulWidget {
   final String selectedGender;
@@ -371,32 +372,14 @@ class ImagePageState extends State<ImagePage>
         ),
       ),
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 0,
-            padding: EdgeInsets.all(0),
-          ),
-          onPressed: (IsValid)
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+          child: staticButton(text: '다음'),
+          onTap: (IsValid)
               ? () {
                   _sendPostRequest();
                 }
               : null,
-          child: Text(
-            '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
       floatingActionButtonLocation:
