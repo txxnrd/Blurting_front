@@ -1,82 +1,84 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class ServerEndpoints {
-  static const String serverEndpoint = "https://api.blurting.devkor.club";
+  static final String? serverEndpoint = dotenv.env['API_ADDRESS'];
   static const String socketServerEndpoint = "ws://13.124.149.234:3080";
 }
 
 class API {
   /*signup 과정에서 필요한 api */
-  static const String sendphone =
+  static final String sendphone =
       "${ServerEndpoints.serverEndpoint}/auth/signup/phonenumber";
-  static const String alreadyuser =
+  static final String alreadyuser =
       "${ServerEndpoints.serverEndpoint}/auth/already/signed";
-  static const String alreadyusercheck =
+  static final String alreadyusercheck =
       "${ServerEndpoints.serverEndpoint}/auth/alreay/signed/check";
-  static const String checkphone =
+  static final String checkphone =
       "${ServerEndpoints.serverEndpoint}/auth/check/phone";
-  static const String checkemail =
+  static final String checkemail =
       "${ServerEndpoints.serverEndpoint}/auth/check/email";
-  static const String signup = "${ServerEndpoints.serverEndpoint}/auth/signup";
-  static const String signupemail =
+  static final String signup = "${ServerEndpoints.serverEndpoint}/auth/signup";
+  static final String signupemail =
       "${ServerEndpoints.serverEndpoint}/auth/signup/email";
-  static const String signupback =
+  static final String signupback =
       "${ServerEndpoints.serverEndpoint}/auth/signup/back";
-  static const String refresh =
+  static final String refresh =
       "${ServerEndpoints.serverEndpoint}/auth/refresh";
-  static const String signupimage =
+  static final String signupimage =
       "${ServerEndpoints.serverEndpoint}/auth/signup/images";
-  static const String uploadimage = "${ServerEndpoints.serverEndpoint}/s3";
-  static const String startsignup =
+  static final String uploadimage = "${ServerEndpoints.serverEndpoint}/s3";
+  static final String startsignup =
       "${ServerEndpoints.serverEndpoint}/auth/signup/start";
-  static const String user = "${ServerEndpoints.serverEndpoint}/user";
-  static const String userupdate =
+  static final String user = "${ServerEndpoints.serverEndpoint}/user";
+  static final String userupdate =
       "${ServerEndpoints.serverEndpoint}/user/update";
-  static const String userprofile =
+  static final String userprofile =
       "${ServerEndpoints.serverEndpoint}/user/profile";
-  static const String notification =
+  static final String notification =
       "${ServerEndpoints.serverEndpoint}/user/notification";
-  static const String testfcm =
+  static final String testfcm =
       "${ServerEndpoints.serverEndpoint}/user/testfcm";
 
   /*현재 위치 불러오기*/
-  static const String geobyname =
+  static final String geobyname =
       "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-name";
-  static const String geobygeo =
+  static final String geobygeo =
       "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";
   /*HOME */
-  static const String homeLike = "${ServerEndpoints.serverEndpoint}/home/like";
-  static const String alarm = "${ServerEndpoints.serverEndpoint}/fcm";
+  static final String homeLike = "${ServerEndpoints.serverEndpoint}/home/like";
+  static final String alarm = "${ServerEndpoints.serverEndpoint}/fcm";
   /*BLURTING */
-  static const String matching = "${ServerEndpoints.serverEndpoint}/blurting";
-  static const String latest =
+  static final String matching = "${ServerEndpoints.serverEndpoint}/blurting";
+  static final String latest =
       "${ServerEndpoints.serverEndpoint}/blurting/latest";
-  static const String answerNo = "${ServerEndpoints.serverEndpoint}/blurting/";
-  static const String answer =
+  static final String answerNo = "${ServerEndpoints.serverEndpoint}/blurting/";
+  static final String answer =
       "${ServerEndpoints.serverEndpoint}/blurting/answer";
-  static const String register =
+  static final String register =
       "${ServerEndpoints.serverEndpoint}/blurting/register";
-  static const String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
-  static const String blurtingInfo =
+  static final String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
+  static final String blurtingInfo =
       "${ServerEndpoints.serverEndpoint}/blurting/group-info";
   /*ARROW */
-  static const String sendArrow =
+  static final String sendArrow =
       "${ServerEndpoints.serverEndpoint}/blurting/arrow/";
-  static const String myArrow =
+  static final String myArrow =
       "${ServerEndpoints.serverEndpoint}/blurting/arrow";
   /*WHISPER */
-  static const String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
-  static const String chatList = "${ServerEndpoints.serverEndpoint}/chat/";
-  static const String chatProfile =
+  static final String roomList = "${ServerEndpoints.serverEndpoint}/chat/rooms";
+  static final String chatList = "${ServerEndpoints.serverEndpoint}/chat/";
+  static final String chatProfile =
       "${ServerEndpoints.serverEndpoint}/chat/profile/";
   /*POINT */
-  static const String pointchat =
+  static final String pointchat =
       "${ServerEndpoints.serverEndpoint}/point/chat";
-  static const String pointcheck =
+  static final String pointcheck =
       "${ServerEndpoints.serverEndpoint}/point/check";
-  static const String userpoint = "${ServerEndpoints.serverEndpoint}/user";
-  static const String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
-  static const String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";
-  static const String disable = "${ServerEndpoints.serverEndpoint}/fcm/disable";
-  static const String fcmcheck = "${ServerEndpoints.serverEndpoint}/fcm/check";
-  static const String userinfo =
+  static final String userpoint = "${ServerEndpoints.serverEndpoint}/user";
+  static final String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
+  static final String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";
+  static final String disable = "${ServerEndpoints.serverEndpoint}/fcm/disable";
+  static final String fcmcheck = "${ServerEndpoints.serverEndpoint}/fcm/check";
+  static final String userinfo =
       "${ServerEndpoints.serverEndpoint}/user/account";
 }

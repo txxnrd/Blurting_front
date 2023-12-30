@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/StartPage/startpage.dart';
@@ -26,7 +26,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ko_KR', null);
-
+  await dotenv.load(fileName: ".env");
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
   print("첫번째에 token이 무엇인지: $token");
   // bool isLoggedIn = token != "No Token";
