@@ -7,6 +7,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/token.dart'; // token.dart를 임포트
 import 'package:blurting/signupquestions/major.dart'; // major.dart를 임포트
+import 'package:blurting/Utils/utilWidget.dart';
 
 final labels = ['안 핌', '가끔', '자주', '매일'];
 
@@ -288,32 +289,14 @@ class _HeightPageState extends State<HeightPage>
         ),
       ),
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 0,
-            padding: EdgeInsets.all(0),
-          ),
-          onPressed: (IsValid)
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+          child: staticButton(text: '다음'),
+          onTap: (IsValid)
               ? () {
                   _sendPostRequest();
                 }
               : null,
-          child: Text(
-            '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
       floatingActionButtonLocation:

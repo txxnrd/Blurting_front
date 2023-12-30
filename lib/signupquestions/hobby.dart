@@ -7,6 +7,7 @@ import '../colors/colors.dart';
 import '../config/app_config.dart';
 import 'image.dart'; // sex.dart를 임포트
 import 'package:http/http.dart' as http;
+import 'package:blurting/Utils/utilWidget.dart';
 
 class HobbyPage extends StatefulWidget {
   final String selectedGender;
@@ -76,7 +77,7 @@ class HobbyPageState extends State<HobbyPage>
   Widget customHobbyCheckbox(String hobbyText, int index, width, height) {
     return Container(
       width: width * 0.44,
-      height: height * 0.052,
+      height: height * 0.048,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -137,7 +138,7 @@ class HobbyPageState extends State<HobbyPage>
   void IsSelected(int index) {
     var true_length = isValidList.where((item) => item == true).length;
     print(true_length);
-    if (true_length >= 4) {
+    if (true_length >= 4 && isValidList[index] == false) {
       print("여기");
       showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
       return;
@@ -387,32 +388,14 @@ class HobbyPageState extends State<HobbyPage>
         ),
       ),
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 0,
-            padding: EdgeInsets.all(0),
-          ),
-          onPressed: (IsValid)
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+          child: staticButton(text: '다음'),
+          onTap: (IsValid)
               ? () {
                   _sendPostRequest();
                 }
               : null,
-          child: Text(
-            '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
       floatingActionButtonLocation:

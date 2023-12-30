@@ -7,6 +7,7 @@ import '../config/app_config.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart'; // 추가
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class ImagePage extends StatefulWidget {
   final String selectedGender;
@@ -35,81 +36,34 @@ class ImagePageState extends State<ImagePage>
   double? image_maxwidth = 700;
   int imageQuality = 90;
 
-  Future<void> _pickImage1() async {
+  Future<void> _pickAndUploadImage(int imageNumber) async {
+    count += 1;
+    IsValid = false;
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image1 = await picker.pickImage(
+    var image = await picker.pickImage(
         source: ImageSource.gallery,
         maxHeight: image_maxheight,
         maxWidth: image_maxwidth,
-        imageQuality: imageQuality);
+        imageQuality: 60); // imageQuality는 필요에 따라 조절
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image1 != null) {
-      File selectedImage = File(image1.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
+
+    if (image != null) {
+      File selectedImage = File(image.path);
       setState(() {
-        _image1 = selectedImage;
-      });
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
-      });
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          print('Server returned OK');
-          print('Response body: ${response.data}');
-          var urlList = response.data;
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            if (urlList.isNotEmpty &&
-                urlList[0] is Map &&
-                urlList[0].containsKey('url')) {
-              _image1Url = urlList[0]['url'];
-              print('Image 1 URL: $_image1Url');
-            }
-          }
-        } else {
-          // 오류가 발생한 경우 처리
-          print('Request failed with status: ${response.statusCode}.');
+        if (imageNumber == 1) {
+          _image1 = selectedImage;
+        } else if (imageNumber == 2) {
+          _image2 = selectedImage;
+        } else if (imageNumber == 3) {
+          _image3 = selectedImage;
         }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-      }
-    }
-  }
-
-  Future<void> _pickImage2() async {
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image2 = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 60);
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image2 != null) {
-      File selectedImage = File(image2.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image2 = selectedImage;
       });
+
       FormData formData = FormData.fromMap({
         'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
+            filename: 'image$imageNumber.jpg'),
       });
 
       try {
@@ -122,87 +76,28 @@ class ImagePageState extends State<ImagePage>
             },
           ),
         );
+
         if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
           if (urlList.isNotEmpty &&
               urlList[0] is Map &&
               urlList[0].containsKey('url')) {
-            _image2Url = urlList[0]['url'];
-            print('Image 2 URL: $_image2Url');
+            String imageUrl = urlList[0]['url'];
+            print('Image $imageNumber URL: $imageUrl');
+            setState(() {
+              if (imageNumber == 1) {
+                _image1Url = imageUrl;
+              } else if (imageNumber == 2) {
+                _image2Url = imageUrl;
+              } else if (imageNumber == 3) {
+                _image3Url = imageUrl;
+              }
+              if (count >= 3) IsValid = true;
+            });
           }
-          // URL을 저장하거나 처리하는 로직을 추가
         } else {
-          // 오류가 발생한 경우 처리
-          print('Request failed with status: ${response.statusCode}.');
-        }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-      }
-    }
-  }
-
-  Future<void> _pickImage3() async {
-    var picker = ImagePicker();
-
-    String savedToken = await getToken();
-    var image3 = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 60);
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image3 != null) {
-      File selectedImage = File(image3.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image3 = selectedImage;
-      });
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
-      });
-
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-        showSnackBar(context, "이미지 업로드 중입니다.");
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          // _showImageUploadingSnackBar();
-          print('Server returned OK');
-          print('Response body: ${response.data}');
-          var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            _image3Url = urlList[0]['url'];
-            print('Image 3 URL: $_image3Url');
-          }
-          setState(() {
-            IsValid = true;
-          });
-
-          // URL을 저장하거나 처리하는 로직을 추가
-          // print(savedUrls);
-        } else {
-          // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
         }
       } catch (e, stacktrace) {
@@ -227,11 +122,8 @@ class ImagePageState extends State<ImagePage>
         .then((_) {
       // 첫 번째 화면으로 돌아왔을 때 실행될 로직
       setState(() {
-        multipartImageList.clear();
-        _image1 = null;
-        _image2 = null;
-        _image3 = null;
-        IsValid = false; // 이 변수도 초기화하는 것으로 보임
+        IsValid = true; // 이 변수도 초기화하는 것으로 보임
+        count = 3;
       });
     });
   }
@@ -261,6 +153,7 @@ class ImagePageState extends State<ImagePage>
     print(savedToken);
     Dio dio = Dio();
     var url2 = Uri.parse(API.signupimage);
+    print([_image1Url, _image2Url, _image3Url]);
     try {
       var response = await dio.post(
         url2.toString(),
@@ -382,7 +275,7 @@ class ImagePageState extends State<ImagePage>
                   MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
               children: [
                 InkWell(
-                  onTap: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
+                  onTap: () => _pickAndUploadImage(1),
                   child: Container(
                     width: 100,
                     height: 125,
@@ -403,7 +296,7 @@ class ImagePageState extends State<ImagePage>
                   ),
                 ),
                 InkWell(
-                  onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
+                  onTap: () => _pickAndUploadImage(2),
                   child: Container(
                     width: 100,
                     height: 125,
@@ -413,7 +306,7 @@ class ImagePageState extends State<ImagePage>
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(10.0),
                       child: _image2 == null
                           ? Center(
                               child: Icon(Icons.add,
@@ -424,7 +317,7 @@ class ImagePageState extends State<ImagePage>
                   ),
                 ),
                 InkWell(
-                  onTap: _pickImage3, // 버튼을 누를 때 _pickImage 함수 호출
+                  onTap: () => _pickAndUploadImage(3),
                   child: Container(
                     width: 100,
                     height: 125,
@@ -434,7 +327,7 @@ class ImagePageState extends State<ImagePage>
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(10.0),
                       child: _image3 == null
                           ? Center(
                               child: Icon(Icons.add,
@@ -479,32 +372,14 @@ class ImagePageState extends State<ImagePage>
         ),
       ),
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 0,
-            padding: EdgeInsets.all(0),
-          ),
-          onPressed: (IsValid)
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+          child: staticButton(text: '다음'),
+          onTap: (IsValid)
               ? () {
                   _sendPostRequest();
                 }
               : null,
-          child: Text(
-            '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
       floatingActionButtonLocation:

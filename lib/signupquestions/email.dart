@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/signupquestions/welcomepage.dart';
@@ -23,7 +24,7 @@ class EmailPage extends StatefulWidget {
 }
 
 class _EmailPageState extends State<EmailPage>
-    with SingleTickerProviderStateMixin,WidgetsBindingObserver {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -42,14 +43,17 @@ class _EmailPageState extends State<EmailPage>
   @override
   void initState() {
     super.initState();
+    setState(() {
+      trial = 0;
+    });
     WidgetsBinding.instance?.addObserver(this); // 생명주기 감지를 위한 옵저버 추가
     _animationController = AnimationController(
       duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
     _progressAnimation = Tween<double>(
-      begin: 14/15, // 시작 너비 (30%)
-      end: 14.2/15, // 종료 너비 (40%)
+      begin: 14 / 15, // 시작 너비 (30%)
+      end: 14.2 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -71,30 +75,14 @@ class _EmailPageState extends State<EmailPage>
     WidgetsBinding.instance?.removeObserver(this); // 옵저버 제거
     super.dispose();
   }
-  void _showVerificationFailedSnackBar(value) {
-    final snackBar = SnackBar(
-      content: Text(value),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
   @override
   void NowCertification() {
     setState(() {
       certification = true;
-
     });
   }
 
-  String Email ='';
+  String Email = '';
   @override
   void InputEmail(String value) {
     setState(() {
@@ -102,105 +90,68 @@ class _EmailPageState extends State<EmailPage>
     });
   }
 
-  void _showVerificationSuccessedSnackBar({String message = '이메일 전송 완료'}) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-  Future<void> _sendBackRequest() async {
-    print('_sendBackRequest called');
-    var url = Uri.parse(API.signupback);
-
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if(data['signupToken']!=null)
-      {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-
-      }
-      else{
-        _showVerificationFailedSnackBar('뒤로 가기가 완료되지 않았습니다.');
-      }
-
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+  int trial = 0;
+  Future<void> _handleBackPress() async {
+    print("trial: $trial");
+    if (trial > 0) {
+      print("old_token: $old_token");
+      await saveToken(old_token);
+      trial = 0;
     }
+    Navigator.of(context).pop();
   }
-  int trial=0;
+
+  String old_token = "";
+
   Future<void> _sendPostRequest() async {
     if (trial == 0) {
-      trial++;
-      certification = true;
-      print('_sendPostRequest called');
-      var url = Uri.parse(API.signupemail);
+      try {
+        trial += 1;
+        print("trial:$trial");
+        certification = true;
+        print('_sendPostRequest called');
+        var url = Uri.parse(API.signupemail);
 
-      String savedToken = await getToken();
-      print(savedToken);
+        old_token = await getToken();
+        print("old token" + old_token);
 
-      var response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
-        },
-        body: json.encode(
-            {"email": Email + '@' + widget.domain}), // JSON 형태로 인코딩
-      );
+        var response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $old_token',
+          },
+          body: json.encode({"email": Email + '@' + widget.domain}),
+        );
 
-      print(json.encode({"email": Email + '@' + widget.domain}));
-      trial=0;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-        print('Server returned OK');
-        print('Response body: ${response.body}');
+        print(json.encode({"email": Email + '@' + widget.domain}));
 
-        var data = json.decode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print('Server returned OK');
+          print('Response body: ${response.body}');
 
-        if (data['signupToken'] != null) {
-          var token = data['signupToken'];
-          print(token);
-          await saveToken(token);
-          _showVerificationSuccessedSnackBar();
+          var data = json.decode(response.body);
+          if (data['signupToken'] != null && trial > 0) {
+            var token = data['signupToken'];
+            print(token);
+            await saveToken(token);
+          } else {
+            showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
+          }
+        } else {
+          trial = 0;
+          print('Request failed with status: ${response.statusCode}.');
+          print('Response body: ${response.body}');
+          var data = json.decode(response.body);
+          var message = data['message'];
+          showSnackBar(context, message);
         }
-        else {
-          _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니디.');
-        }
-      } else {
-        // 오류가 발생한 경우 처리
-        print('Request failed with status: ${response.statusCode}.');
-        _showVerificationFailedSnackBar('이메일 전송이 완료 되지 않았습니다.');
+      } catch (e) {
+        trial = 0;
+        print('An error occurred: $e');
+        showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
       }
     }
-
   }
 
   Future<void> _sendVerificationRequest() async {
@@ -218,13 +169,12 @@ class _EmailPageState extends State<EmailPage>
       },
     );
 
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK 200');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
-      if(data['accessToken']!=null)
-      {
+      if (data['accessToken'] != null) {
         var token = data['accessToken'];
         var refreshtoken = data['refreshToken'];
         var userId = data['userId'];
@@ -235,7 +185,9 @@ class _EmailPageState extends State<EmailPage>
         var url = Uri.parse(API.notification);
         String savedToken = await getToken();
         print(savedToken);
-        var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
+        var fcmToken = await FirebaseMessaging.instance.getToken(
+            vapidKey:
+                "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
         print("-------");
         print(fcmToken);
         var response = await http.post(
@@ -244,7 +196,7 @@ class _EmailPageState extends State<EmailPage>
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $savedToken',
           },
-          body: json.encode({"token":fcmToken }),
+          body: json.encode({"token": fcmToken}),
         );
         print(response);
 
@@ -275,21 +227,15 @@ class _EmailPageState extends State<EmailPage>
         );
         _increaseProgressAndNavigate();
         Future.delayed(Duration(seconds: 2), _increaseProgressAndNavigate);
-
+      } else {
+        showSnackBar(context, '인증이 완료가 되지 않았습니다.');
       }
-      else{
-        _showVerificationFailedSnackBar('인증이 완료되지 않았습니다.');
-      }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
       print('Response body: ${response.body}');
-      _showVerificationFailedSnackBar('인증이 완료가 되지 않았습니다.');
-      if(response.statusCode == 409)
-      _showVerificationFailedSnackBar('이미 가입한 메일입니다.');
-
-
+      showSnackBar(context, '인증이 완료가 되지 않았습니다.');
+      if (response.statusCode == 409) showSnackBar(context, '이미 가입한 이메일입니다.');
     }
   }
 
@@ -307,7 +253,7 @@ class _EmailPageState extends State<EmailPage>
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       child: Scaffold(
@@ -320,10 +266,9 @@ class _EmailPageState extends State<EmailPage>
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-        _sendBackRequest();
-      },
+              _handleBackPress();
+            },
           ),
-
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -386,17 +331,19 @@ class _EmailPageState extends State<EmailPage>
               Row(
                 children: [
                   Container(
-                    width:150,
-                    height:48,
-                    child:
-                    TextField(
-                      decoration: InputDecoration( isDense:true,
+                    width: 150,
+                    height: 48,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        isDense: true,
                         hintText: '이메일 입력',
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(DefinedColor.lightgrey)),
+                          borderSide:
+                              BorderSide(color: Color(DefinedColor.lightgrey)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(DefinedColor.lightgrey)),
+                          borderSide:
+                              BorderSide(color: Color(DefinedColor.lightgrey)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF66464)),
@@ -408,20 +355,23 @@ class _EmailPageState extends State<EmailPage>
                     ),
                   ),
                   SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
-                  Text('@',
-                  style: TextStyle(
-                    fontSize: 24
-                  ),),
+                  Text(
+                    '@',
+                    style: TextStyle(fontSize: 24),
+                  ),
                   SizedBox(width: 4),
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
                       alignment: Alignment.centerLeft,
                       height: 48, // TextField의 높이와 일치하도록 설정합니다.
-                      width:150,
+                      width: 150,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(DefinedColor.lightgrey)),
-                        borderRadius: BorderRadius.circular(4), // TextField의 테두리와 일치하도록 설정합니다.
+                        border:
+                            Border.all(color: Color(DefinedColor.lightgrey)),
+                        borderRadius: BorderRadius.circular(
+                            4), // TextField의 테두리와 일치하도록 설정합니다.
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -442,19 +392,10 @@ class _EmailPageState extends State<EmailPage>
           ),
         ),
         floatingActionButton: Container(
-          width: 350.0, // 너비 조정
-          height: 80.0, // 높이 조정
-          padding: EdgeInsets.fromLTRB(20, 0, 20,34),
-          child:ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFFF66464),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 0,
-              padding: EdgeInsets.all(0),
-            ),
-            onPressed: () async{
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            child: staticButton(text: !certification ? '인증번호 요청' : '다음'),
+            onTap: () async {
               if (!certification) {
                 // 인증번호를 요청할 때 이 부분이 실행됩니다.
                 await _sendPostRequest();
@@ -464,19 +405,10 @@ class _EmailPageState extends State<EmailPage>
                 _sendVerificationRequest();
               }
             },
-            child: Text(
-              !certification ? '이메일로 인증하기' : '인증완료',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Pretendard',
-                fontSize: 20.0,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
   }

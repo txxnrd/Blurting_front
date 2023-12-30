@@ -1,17 +1,15 @@
 import 'dart:convert';
 import 'package:blurting/colors/colors.dart';
 import 'package:flutter/material.dart';
-
+import 'package:blurting/Utils/utilWidget.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-import 'package:blurting/signupquestions/sex.dart';  // sex.dart를 임포트
-import 'package:blurting/signupquestions/token.dart';  // sex.dart를 임포트
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';
-import 'activeplacesearch.dart';  // sex.dart를 임포트
-
-
+import 'activeplacesearch.dart'; // sex.dart를 임포트
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
@@ -57,24 +55,20 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       },
     );
     print(response.body);
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         Navigator.of(context).pop();
-
-      }
-      else{
+      } else {
         _showVerificationFailedSnackBar();
       }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
@@ -97,8 +91,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     );
 
     _progressAnimation = Tween<double>(
-      begin: 2/15, // 시작 게이지 값
-      end: 3/15, // 종료 게이지 값
+      begin: 2 / 15, // 시작 게이지 값
+      end: 3 / 15, // 종료 게이지 값
     ).animate(_animationController!);
 
     _animationController?.addListener(() {
@@ -144,7 +138,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     setState(() {});
   }
 
-
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
@@ -157,27 +150,24 @@ class _ActivePlacePageState extends State<ActivePlacePage>
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"region": content }), // JSON 형태로 인코딩
+      body: json.encode({"region": content}), // JSON 형태로 인코딩
     );
     print(response.body);
 
-    if (response.statusCode == 200 ||response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');
       print('Response body: ${response.body}');
       var data = json.decode(response.body);
 
-      if(data['signupToken']!=null)
-      {
+      if (data['signupToken'] != null) {
         var token = data['signupToken'];
         print(token);
         await saveToken(token);
         _increaseProgressAndNavigate();
-      }
-      else{
+      } else {
         _showVerificationFailedSnackBar();
       }
-
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
@@ -187,10 +177,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     final snackBar = SnackBar(
       content: Text(message),
       action: SnackBarAction(
-        label: '닫기',
-        onPressed: () {
           // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
     );
@@ -208,7 +195,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -219,9 +205,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             _sendBackRequest();
-            },
+          },
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -269,7 +254,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                 )
               ],
             ),
-
             SizedBox(
               height: 50,
             ),
@@ -295,8 +279,9 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color:
-                        (content == '') ? Color(DefinedColor.lightgrey) : Color(DefinedColor.darkpink),// 초기 테두리 색상
+                        color: (content == '')
+                            ? Color(DefinedColor.lightgrey)
+                            : Color(DefinedColor.darkpink), // 초기 테두리 색상
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(10.0),
@@ -312,44 +297,23 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     ),
                   )),
             ),
-
-
             SizedBox(height: 331),
-
           ],
         ),
       ),
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20,34),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 0,
-            padding: EdgeInsets.all(0),
-          ),
-          onPressed: (IsValid)
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+          child: staticButton(text: '다음'),
+          onTap: (IsValid)
               ? () {
-            _sendPostRequest();
-          }
+                  _sendPostRequest();
+                }
               : null,
-          child: Text(
-            '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

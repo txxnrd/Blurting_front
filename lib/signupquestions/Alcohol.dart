@@ -6,6 +6,7 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/smoke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 import '../config/app_config.dart'; // sex.dart를 임포트
 
@@ -224,31 +225,12 @@ class _AlcoholPageState extends State<AlcoholPage>
         ),
       ),
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 0,
-            padding: EdgeInsets.all(0),
-          ),
-          onPressed: () {
-            _sendPostRequest();
-          },
-          child: Text(
-            '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+            child: staticButton(text: '다음'),
+            onTap: () {
+              _sendPostRequest();
+            }),
       ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.centerDocked, // 버튼의 위치

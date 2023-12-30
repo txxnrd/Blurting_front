@@ -36,8 +36,6 @@ double calculateBlurSigma(int blurValue) {
     return 0.0;
   } else {
     double normalizedBlur = (4 - blurValue) / 4.0;
-    print('blur % = ${normalizedBlur * 100}%');
-    // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
     return normalizedBlur * 5;
   }
 }
@@ -275,9 +273,8 @@ class _Whisper extends State<Whisper> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      // resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         toolbarHeight: 150,
@@ -309,7 +306,7 @@ class _Whisper extends State<Whisper> {
                   color: Colors.white,
                   border: responseData?['blurChange'] != null
                       ? Border.all(
-                          color: Color(0XFFF66464), // Apply pink border color
+                          color: Color(0XFFF66464),
                           width: 1.0,
                         )
                       : null,
@@ -360,8 +357,7 @@ class _Whisper extends State<Whisper> {
                           width: 110,
                           padding: EdgeInsets.all(2),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(
-                                0.5), // Adjust the background color as needed
+                            color: Colors.white.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
@@ -457,8 +453,7 @@ class _Whisper extends State<Whisper> {
                                                   0.9,
                                               decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          10),
+                                                      BorderRadius.circular(10),
                                                   color: mainColor.MainColor),
                                               height: 50,
                                               // color: mainColor.MainColor,
@@ -475,8 +470,8 @@ class _Whisper extends State<Whisper> {
                                               ),
                                             ),
                                             onTap: () {
-                                              widget.socket.emit('leave_room',
-                                                  widget.roomId);
+                                              widget.socket.emit(
+                                                  'leave_room', widget.roomId);
                                               print('채팅 나가는 중...');
                                               Navigator.pop(context);
                                               Navigator.pop(context);
@@ -487,10 +482,9 @@ class _Whisper extends State<Whisper> {
                                     ),
                                     GestureDetector(
                                       child: Container(
-                                        width: MediaQuery.of(context)
-                                                .size
-                                                .width *
-                                            0.9,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
                                         height: 50,
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -756,18 +750,6 @@ class _Whisper extends State<Whisper> {
     } else {
       print(response.statusCode);
       throw Exception('채팅 내역을 로드하는 데 실패했습니다');
-    }
-  }
-
-  static double calculateBlurSigma(int blurValue) {
-    // Normalize the blur value to be between 0.0 and 1.0
-    if (blurValue == 4) {
-      return 0.0;
-    } else {
-      double normalizedBlur = (4 - blurValue) / 4.0;
-      print('blur % = ${normalizedBlur * 100}%');
-      // Calculate sigma in a way that 1.0 corresponds to 25% visibility, 2.0 to 50%, 3.0 to 75%, and 4.0 to 100%
-      return normalizedBlur * 5;
     }
   }
 }
