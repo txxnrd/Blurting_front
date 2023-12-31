@@ -14,6 +14,7 @@ class mainColor {
   static Color Gray = Color.fromRGBO(134, 134, 134, 1);
   static Color lightGray = Color.fromRGBO(217, 217, 217, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
+  static Color black = Color.fromRGBO(48, 48, 48, 1);
 }
 
 class GroupChatProvider with ChangeNotifier {
@@ -56,8 +57,8 @@ Future<void> saveuserId(int userId) async {
 // 저장된 토큰을 불러오는 함수
 Future<int> getuserId() async {
   final prefs = await SharedPreferences.getInstance();
-  // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-  // 값이 없을 경우 'No Token'을 반환합니다.
+  // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져오기
+  // 값이 없을 경우 -1 을 반환
   int userId = prefs.getInt('userId') ?? -1;
   print(userId);
   return userId;

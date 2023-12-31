@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:blurting/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
@@ -223,7 +224,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
               height: 25,
             ),
             Stack(
-              clipBehavior: Clip.none, // 이 부분 추가
+              clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
               children: [
                 // 전체 배경색 설정 (하늘색)
                 Container(
@@ -233,13 +234,13 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
-                // 완료된 부분 배경색 설정 (파란색)
+                // 완료된 부분 배경색 설정
                 Container(
                   height: 10,
                   width: MediaQuery.of(context).size.width *
                       _progressAnimation!.value,
                   decoration: BoxDecoration(
-                    color: Color(0xFF303030), // 파란색
+                    color: mainColor.black, // 파란색
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -268,7 +269,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF303030),
+                  color: mainColor.black,
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 20),
@@ -295,7 +296,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                     child: Text(
                       (content == '') ? '구명으로 검색 (ex. 강남구)' : content,
                       style: TextStyle(
-                        color: Color(0xFF303030),
+                        color: mainColor.black,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 20,

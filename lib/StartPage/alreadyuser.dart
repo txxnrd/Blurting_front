@@ -392,7 +392,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                                 ),
                               ),
                               Container(
-                                width: 56, // 버튼의 너비를 설정합니다.
+                                width: 56, // 버튼의 너비를 설정
                                 child: ElevatedButton(
                                   onPressed: () {
                                     _sendPostRequest(phonenumber);
@@ -407,11 +407,11 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                                         Color(DefinedColor.darkpink),
                                     elevation: 0.0,
                                     padding:
-                                        EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                                        EdgeInsets.zero, // 버튼 내부 패딩을 제거
                                   ),
                                   child: FittedBox(
-                                    // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
-                                    fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                    // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절
+                                    fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장
                                     child: Text(
                                       '재전송',
                                       style: TextStyle(
@@ -439,9 +439,9 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                       padding: EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(top: 5.0, bottom: 10),
                       decoration: BoxDecoration(
-                        color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정합니다.
+                        color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정
                         borderRadius:
-                            BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정합니다.
+                            BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정
                       ),
                       child: Text(
                         Errormessage,

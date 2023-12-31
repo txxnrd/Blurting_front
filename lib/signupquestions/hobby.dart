@@ -58,17 +58,17 @@ class HobbyPageState extends State<HobbyPage>
     "산책"
   ];
   void updateSelectedCharacteristics() {
-    // 임시 리스트를 생성하여 선택된 특성들을 저장합니다.
+    // 임시 리스트를 생성하여 선택된 특성들을 저장
     List<String> tempSelectedCharacteristics = [];
 
     for (int i = 0; i < isValidList.length; i++) {
       if (isValidList[i]) {
-        // isValidList[i]가 true이면, 해당 인덱스의 characteristic을 추가합니다.
+        // isValidList[i]가 true이면, 해당 인덱스의 characteristic을 추가
         tempSelectedCharacteristics.add(characteristic[i]);
       }
     }
 
-    // 상태를 업데이트합니다.
+    // 상태를 업데이트
     setState(() {
       selectedCharacteristics = tempSelectedCharacteristics;
     });
@@ -108,7 +108,7 @@ class HobbyPageState extends State<HobbyPage>
             child: Text(
               hobbyText,
               style: TextStyle(
-                color: Color(0xFF303030),
+                color: mainColor.black,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
                 fontSize: 18.6,
@@ -243,7 +243,7 @@ class HobbyPageState extends State<HobbyPage>
               height: 25,
             ),
             Stack(
-              clipBehavior: Clip.none, // 이 부분 추가
+              clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
               children: [
                 // 전체 배경색 설정 (하늘색)
                 Container(
@@ -253,13 +253,13 @@ class HobbyPageState extends State<HobbyPage>
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
-                // 완료된 부분 배경색 설정 (파란색)
+                // 완료된 부분 배경색 설정
                 Container(
                   height: 10,
                   width: MediaQuery.of(context).size.width *
                       (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
-                    color: Color(0xFF303030),
+                    color: mainColor.black,
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -288,7 +288,7 @@ class HobbyPageState extends State<HobbyPage>
               style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF303030),
+                  color: mainColor.black,
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
@@ -367,7 +367,7 @@ class HobbyPageState extends State<HobbyPage>
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Pretendard',
-                    color: Color(0xFF303030),
+                    color: mainColor.black,
                   ),
                   children: [
                     TextSpan(

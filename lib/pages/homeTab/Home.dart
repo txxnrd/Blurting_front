@@ -372,7 +372,7 @@ class _HomeState extends State<Home> {
                 child: Text(
                   '오늘의 MVP',
                   style: TextStyle(
-                    color: Color(0XFF303030),
+                    color: mainColor.black,
                     fontFamily: 'Heebo',
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -440,7 +440,7 @@ class _HomeState extends State<Home> {
             child: Text(
               'Now Blurting',
               style: TextStyle(
-                color: Color(0XFF303030),
+                color: mainColor.black,
                 fontFamily: 'Heebo',
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700,

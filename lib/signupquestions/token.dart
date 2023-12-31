@@ -20,7 +20,7 @@ Future<void> saveToken(String token) async {
 Future<String> getToken() async {
   final prefs = await SharedPreferences.getInstance();
   // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-  // 값이 없을 경우 'No Token'을 반환합니다.
+  // 값이 없을 경우 'No Token'을 반환
   String token = prefs.getString('signupToken') ?? 'No Token';
   print(token);
   return token;
@@ -37,7 +37,7 @@ Future<void> saveRefreshToken(String refreshToken) async {
 Future<String> getRefreshToken() async {
   final prefs = await SharedPreferences.getInstance();
   // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
-  // 값이 없을 경우 'No Token'을 반환합니다.
+  // 값이 없을 경우 'No Token'을 반환
   String token = prefs.getString('refreshToken') ?? 'No Token';
   return token;
 }

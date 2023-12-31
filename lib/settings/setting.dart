@@ -14,7 +14,7 @@ import '../signupquestions/token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
 
-// StatefulWidget으로 변경합니다.
+
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
