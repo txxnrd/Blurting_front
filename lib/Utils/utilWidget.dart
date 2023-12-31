@@ -184,8 +184,10 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 controller: widget.controller,
                 cursorColor: mainColor.MainColor,
                 decoration: InputDecoration(
-                  isDense:true,
-                  contentPadding: widget.isBlock ? EdgeInsets.only(top: 15, left: 10) : EdgeInsets.only(left: 10),
+                  isDense: true,
+                  contentPadding: widget.isBlock
+                      ? EdgeInsets.only(top: 15, left: 10)
+                      : EdgeInsets.only(left: 10),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.transparent,
@@ -240,7 +242,6 @@ class _CustomInputFieldState extends State<CustomInputField> {
 }
 
 class pointAppbar extends StatelessWidget {
-
   pointAppbar({super.key});
 
   @override
@@ -250,8 +251,7 @@ class pointAppbar extends StatelessWidget {
           print('포인트 내역 버튼 눌러짐');
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => PointHistoryPage()),
+            MaterialPageRoute(builder: (context) => PointHistoryPage()),
           );
         },
         child: Container(
@@ -311,7 +311,6 @@ class OtherChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ListTile(
         subtitle: Container(
       margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
@@ -332,8 +331,8 @@ class OtherChat extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(
-                        left: 10, right: 10, top: 5, bottom: 5),
+                    margin:
+                        EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                     child: Text(
                       message,
                       style: TextStyle(
@@ -391,7 +390,6 @@ class MyChat extends StatefulWidget {
 }
 
 class _MyChatState extends State<MyChat> {
-  
   @override
   void initState() {
     super.initState();
@@ -399,7 +397,6 @@ class _MyChatState extends State<MyChat> {
 
   @override
   Widget build(BuildContext context) {
-
     return ListTile(
       subtitle: // 답변 내용
           Container(
@@ -544,7 +541,6 @@ class QustionState extends StatefulWidget {
 }
 
 class _QustionState extends State<QustionState> {
-  
   @override
   void initState() {
     super.initState();
@@ -552,7 +548,6 @@ class _QustionState extends State<QustionState> {
 
   @override
   Widget build(BuildContext context) {
-
     return ListTile(
       subtitle: // 답변 내용
           Container(
@@ -571,18 +566,17 @@ class _QustionState extends State<QustionState> {
                         width: MediaQuery.of(context).size.width * 0.8,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.white
-                                  .withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
-                              Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
-                            ],
-                          ),
-                          border: Border.all(width: 1, color: Colors.white),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white
+                                    .withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+                                Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+                              ],
+                            ),
+                            border: Border.all(width: 1, color: Colors.white),
+                            borderRadius: BorderRadius.circular(10)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -646,7 +640,6 @@ class _QustionState extends State<QustionState> {
   }
 }
 
-
 // 블러팅탭 상대방 답변 위젯 (말풍선 + 프로필까지)
 class AnswerItem extends StatefulWidget {
   final IO.Socket socket;
@@ -687,7 +680,10 @@ class _AnswerItemState extends State<AnswerItem> {
 
   Future<void> sendReport(IO.Socket socket, String reason) async {
     print(reason);
-    Map<String, dynamic> data = {'reportingId': widget.userId, 'reason': reason};
+    Map<String, dynamic> data = {
+      'reportingId': widget.userId,
+      'reason': reason
+    };
     widget.socket.emit('report', data);
 
     print('신고 내용 서버에 전송 완료 $data');
@@ -720,7 +716,7 @@ class _AnswerItemState extends State<AnswerItem> {
                 child: Text(
                   '신고하기',
                   style: TextStyle(
-                    color: Colors.black,
+                      color: Colors.black,
                       fontFamily: "Heebo",
                       fontSize: 20,
                       fontWeight: FontWeight.w400),
@@ -827,40 +823,46 @@ class _AnswerItemState extends State<AnswerItem> {
                   ],
                 ),
                 Container(
-                margin: EdgeInsets.only(top: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: (checkReason.any((element) => element == true)) ? () {
-                        Navigator.of(context).pop(); // 모달 닫기
-                        print('신고 접수');
-                        sendReport(widget.socket, reason);
-                        setState(() {});
-                      } : null,
-                      child: Container(
-                        width: 210,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: (checkReason.any((element) => element == true)) ? mainColor.MainColor : mainColor.lightGray,
-                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '신고하기',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Heebo",
-                                fontSize: 20,
-                                color: Colors.white),
+                  margin: EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed:
+                            (checkReason.any((element) => element == true))
+                                ? () {
+                                    Navigator.of(context).pop(); // 모달 닫기
+                                    print('신고 접수');
+                                    sendReport(widget.socket, reason);
+                                    setState(() {});
+                                  }
+                                : null,
+                        child: Container(
+                          width: 210,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color:
+                                (checkReason.any((element) => element == true))
+                                    ? mainColor.MainColor
+                                    : mainColor.lightGray,
+                            borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '신고하기',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Heebo",
+                                  fontSize: 20,
+                                  color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),  
               ],
             ),
           );
@@ -924,7 +926,10 @@ class _AnswerItemState extends State<AnswerItem> {
                                   width: 20,
                                   height: 20,
                                   child: GestureDetector(
-                                    child: Image.asset('assets/images/block.png', fit: BoxFit.fill,),
+                                    child: Image.asset(
+                                      'assets/images/block.png',
+                                      fit: BoxFit.fill,
+                                    ),
                                     onTap: () {
                                       _ClickWarningButton(context,
                                           widget.userId); // jsonData 줘야 함
@@ -1233,7 +1238,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                         ),
                                       ),
                                       onTap: () {
-                                          Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
                                       },
                                     ),
                                   ),
@@ -1261,9 +1266,11 @@ class _AnswerItemState extends State<AnswerItem> {
                                     onTap: () async {
                                       if (isValid) {
                                         await startWhisper();
-                                        if (!reportedUser) {            // 신고한 유저가 아닌 경우에만
+                                        if (!reportedUser) {
+                                          // 신고한 유저가 아닌 경우에만
                                           Navigator.of(context).pop();
-                                        } else {                        // 신고한 유저라면
+                                        } else {
+                                          // 신고한 유저라면
                                           setState(() {
                                             isTap(false);
                                           });
@@ -1327,7 +1334,6 @@ class _AnswerItemState extends State<AnswerItem> {
   // 답변 위젯
   @override
   Widget build(BuildContext context) {
-
     return ListTile(
       subtitle: // 답변 내용
           Row(
@@ -1336,9 +1342,11 @@ class _AnswerItemState extends State<AnswerItem> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
             child: GestureDetector(
-              onTap: (widget.userId != 0) ? () {
-                _showProfileModal(context, widget.isAlready);
-              } : null,
+              onTap: (widget.userId != 0)
+                  ? () {
+                      _showProfileModal(context, widget.isAlready);
+                    }
+                  : null,
               child: Container(
                 padding: EdgeInsets.all(5),
                 width: 45,
@@ -1362,7 +1370,9 @@ class _AnswerItemState extends State<AnswerItem> {
                   widget.userName,
                   style: TextStyle(
                     fontSize: 12,
-                    color: widget.userId == 0 ? mainColor.Gray : Color.fromRGBO(48, 48, 48, 1),
+                    color: widget.userId == 0
+                        ? mainColor.Gray
+                        : Color.fromRGBO(48, 48, 48, 1),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -1544,7 +1554,7 @@ class _AnswerItemState extends State<AnswerItem> {
 
     final url = Uri.parse(API.pointchat);
     String savedToken = await getToken();
-    
+
     final response = await http.post(url,
         headers: {
           'authorization': 'Bearer $savedToken',
@@ -1559,15 +1569,16 @@ class _AnswerItemState extends State<AnswerItem> {
 
       print(responseData);
 
-      if (responseData != false) {      // 귓속말을 걸 수 있으면
+      if (responseData != false) {
+        // 귓속말을 걸 수 있으면
         widget.socket.emit('create_room', widget.userId);
         print("${widget.userId}에게 귓속말 거는 중...");
 
         Provider.of<UserProvider>(context, listen: false).point =
             responseData['point'];
         print('귓속말 포인트 차감: $responseData');
-      }
-      else {        // 신고한 회원 또는 탈퇴한 회원
+      } else {
+        // 신고한 회원 또는 탈퇴한 회원
         setState(() {
           reportedUser = true;
         });
@@ -1590,6 +1601,40 @@ class staticButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: mainColor.MainColor,
+      ),
+      margin: EdgeInsets.only(bottom: 10),
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: 48,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'Heebo',
+                fontWeight: FontWeight.w400),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class signupButton extends StatelessWidget {
+  final String text;
+  final bool IsValid;
+
+  signupButton({required this.text, required this.IsValid});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: IsValid ? mainColor.MainColor : mainColor.lightGray,
       ),
       margin: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width * 0.9,

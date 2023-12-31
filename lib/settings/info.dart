@@ -6,7 +6,7 @@ import '../colors/colors.dart';
 import '../signupquestions/token.dart';
 import 'package:blurting/Utils/provider.dart';
 
-// StatefulWidget으로 변경합니다.
+
 class InfoPage extends StatefulWidget {
   final String email;
   final String phoneNumber;

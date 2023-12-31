@@ -1,32 +1,27 @@
 import 'dart:convert';
+
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/signupquestions/mbti/Utils.dart'; // sex.dart를 임포트
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:blurting/signupquestions/token.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/smoke.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/personality.dart'; // sex.dart를 임포트
+import 'package:http/http.dart' as http;
+import '../../colors/colors.dart';
+import '../../config/app_config.dart';
 
-import '../config/app_config.dart'; // sex.dart를 임포트
-
-final labels = ['안 마심', '가끔', '자주', '매일'];
-
-class AlcoholPage extends StatefulWidget {
+class MBTIPage extends StatefulWidget {
   final String selectedGender;
 
-  AlcoholPage({super.key, required this.selectedGender});
+  MBTIPage({super.key, required this.selectedGender});
   @override
-  _AlcoholPageState createState() => _AlcoholPageState();
+  _MBTIPageState createState() => _MBTIPageState();
 }
 
-enum AlcoholPreference { none, rarely, enjoy, everyday }
-
-class _AlcoholPageState extends State<AlcoholPage>
+class _MBTIPageState extends State<MBTIPage>
     with SingleTickerProviderStateMixin {
-  AlcoholPreference? _selectedAlcoholPreference;
-  double _alcoholSliderValue = 0; // 슬라이더의 초기값 설정
-
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
@@ -34,7 +29,7 @@ class _AlcoholPageState extends State<AlcoholPage>
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            SmokePage(selectedGender: widget.selectedGender),
+            PersonalityPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -45,16 +40,13 @@ class _AlcoholPageState extends State<AlcoholPage>
   @override
   void initState() {
     super.initState();
-    _selectedAlcoholPreference = AlcoholPreference.none;
-
     _animationController = AnimationController(
       duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
-
     _progressAnimation = Tween<double>(
-      begin: 5 / 15, // 시작 너비 (30%)
-      end: 6 / 15, // 종료 너비 (40%)
+      begin: 9 / 15, // 시작 너비 (30%)
+      end: 10 / 15, // 종료 너비 (40%)
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -63,30 +55,27 @@ class _AlcoholPageState extends State<AlcoholPage>
   }
 
   Future<void> _sendPostRequest() async {
+    print("실행됨");
+    bool hasFalse = isValidList.any((isValid) => !isValid);
+    if (hasFalse) {
+      showSnackBar(context, "모든 항목을 선택 해주세요");
+    }
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
-    var drink = 0;
-    if (_selectedAlcoholPreference == AlcoholPreference.none) {
-      drink = 0;
-    } else if (_selectedAlcoholPreference == AlcoholPreference.rarely) {
-      drink = 1;
-    } else if (_selectedAlcoholPreference == AlcoholPreference.enjoy) {
-      drink = 2;
-    } else {
-      drink = 3;
-    }
-    print(drink);
+    var mbti = getMBTIType();
+
     String savedToken = await getToken();
     print(savedToken);
-    print(json.encode({"drink": drink}));
+
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $savedToken',
       },
-      body: json.encode({"drink": drink}), // JSON 형태로 인코딩
+      body: json.encode({"mbti": mbti}), // JSON 형태로 인코딩
     );
+    print(json.encode({"mbti": mbti}));
     print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
@@ -106,6 +95,43 @@ class _AlcoholPageState extends State<AlcoholPage>
     }
   }
 
+  Widget MBTIbox(double width, int index) {
+    bool? isselected = selectedfunction(index);
+    return Container(
+      width: width * 0.42, //반응형으로
+      height: 48, // 높이는 고정
+      child: TextButton(
+        style: TextButton.styleFrom(
+          side: BorderSide(
+            color: mainColor.lightGray,
+            width: 2,
+          ),
+          foregroundColor: mainColor.black,
+          backgroundColor:
+              isselected ? mainColor.lightGray : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+          ),
+        ),
+        onPressed: () {
+          IsSelected(index ~/ 2);
+          setState(() {
+            setSelectedValues(index);
+          });
+        },
+        child: Text(
+          mbtiMap[index]!,
+          style: TextStyle(
+            color: isselected ? Colors.white : mainColor.black,
+            fontFamily: 'Heebo',
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -115,6 +141,7 @@ class _AlcoholPageState extends State<AlcoholPage>
       gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
+
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
@@ -136,17 +163,15 @@ class _AlcoholPageState extends State<AlcoholPage>
                 height: 25,
               ),
               Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                clipBehavior: Clip.none, // 화면 밑에 짤리는거 나오게 하기
                 children: [
-                  // 전체 배경색 설정 (하늘색)
                   Container(
                     height: 10,
                     decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // 하늘색
+                      color: Color(0xFFD9D9D9),
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-                  // 완료된 부분 배경색 설정 ()
                   Container(
                     height: 10,
                     width: MediaQuery.of(context).size.width *
@@ -177,60 +202,113 @@ class _AlcoholPageState extends State<AlcoholPage>
                 height: 50,
               ),
               Text(
-                '당신의 음주습관은 어떻게 되시나요?',
+                '당신의 MBTI는 무엇인가요?',
                 style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: mainColor.black,
-                    fontFamily: 'Pretendard'),
+                    fontFamily: 'Heebo'),
               ),
               SizedBox(height: 30),
-              Column(
-                children: [
-                  Slider(
-                    value: _alcoholSliderValue,
-                    onChanged: (double newValue) {
-                      setState(() {
-                        _alcoholSliderValue = newValue;
-                        _selectedAlcoholPreference =
-                            AlcoholPreference.values[newValue.toInt()];
-                      });
-                    },
-                    divisions: 3,
-                    min: 0,
-                    max: 3,
-                    activeColor: Color(0xFFF66464),
-                    inactiveColor: Color(0xFFD9D9D9),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: labels
-                        .map((label) => Container(
-                              margin: EdgeInsets.only(left: 10, right: 20),
-                              child: Text(
-                                label,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Pretendard',
-                                    color: Color.fromRGBO(48, 48, 48, 1)),
-                              ),
-                            ))
-                        .toList(),
-                  ),
+              MBTIallDescription("에너지방향"),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 0),
+                  MBTIbox(width, 1),
                 ],
               ),
-              SizedBox(height: 306),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('외향형'),
+                  MBTIDescription('내향형'),
+                ],
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              MBTIallDescription("인식"),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 2),
+                  MBTIbox(width, 3),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('감각형'),
+                  MBTIDescription('직관형'),
+                ],
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              MBTIallDescription("판단"),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 4),
+                  MBTIbox(width, 5),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('사고형'),
+                  MBTIDescription('감각형'),
+                ],
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              MBTIallDescription("계획성"),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 6),
+                  MBTIbox(width, 7),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('판단형'),
+                  MBTIDescription('인식형'),
+                ],
+              ),
+              SizedBox(height: 58),
             ],
           ),
         ),
         floatingActionButton: Container(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: InkWell(
-              splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-              child: signupButton(text: '다음', IsValid: true),
-              onTap: () {
-                _sendPostRequest();
-              }),
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(
+              text: '다음',
+              IsValid: IsValid,
+            ),
+            onTap: (IsValid)
+                ? () {
+                    _sendPostRequest();
+                  }
+                : null,
+          ),
         ),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.centerDocked, // 버튼의 위치

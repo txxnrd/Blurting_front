@@ -139,7 +139,7 @@ class _UseGuidePageSevenState extends State<UseGuidePageSeven>
                       SizedBox(height: 50),
                       Column(children: <Widget>[
                         Stack(
-                          clipBehavior: Clip.none, // 이 부분 추가
+                          clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
                           children: <Widget>[
                             Container(
                               width: 259,

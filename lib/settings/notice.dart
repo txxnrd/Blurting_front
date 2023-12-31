@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import '../colors/colors.dart';
 import 'notificationandsound.dart';
-// StatefulWidget으로 변경합니다.
+
 class NoticePage extends StatefulWidget {
   @override
   _NoticePageState createState() => _NoticePageState();

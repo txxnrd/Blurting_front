@@ -281,7 +281,7 @@ class _EmailPageState extends State<EmailPage>
                 height: 25,
               ),
               Stack(
-                clipBehavior: Clip.none, // 이 부분 추가
+                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
                 children: [
                   // 전체 배경색 설정 (하늘색)
                   Container(
@@ -291,13 +291,13 @@ class _EmailPageState extends State<EmailPage>
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-                  // 완료된 부분 배경색 설정 (파란색)
+                  // 완료된 부분 배경색 설정
                   Container(
                     height: 10,
                     width: MediaQuery.of(context).size.width *
                         (_progressAnimation?.value ?? 0.3),
                     decoration: BoxDecoration(
-                      color: Color(0xFF303030),
+                      color: mainColor.black,
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
@@ -326,7 +326,7 @@ class _EmailPageState extends State<EmailPage>
                 style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF303030),
+                    color: mainColor.black,
                     fontFamily: 'Pretendard'),
               ),
               SizedBox(height: 30),
@@ -365,15 +365,15 @@ class _EmailPageState extends State<EmailPage>
                   Expanded(
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
+                          EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
                       alignment: Alignment.centerLeft,
-                      height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                      height: 48, // TextField의 높이와 일치하도록 설정
                       width: 150,
                       decoration: BoxDecoration(
                         border:
                             Border.all(color: Color(DefinedColor.lightgrey)),
                         borderRadius: BorderRadius.circular(
-                            4), // TextField의 테두리와 일치하도록 설정합니다.
+                            4), // TextField의 테두리와 일치하도록 설정
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -396,7 +396,11 @@ class _EmailPageState extends State<EmailPage>
         floatingActionButton: Container(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: InkWell(
-            child: staticButton(text: !certification ? '인증번호 요청' : '다음'),
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(
+              text: !certification ? '인증번호 요청' : '다음',
+              IsValid: true,
+            ),
             onTap: () async {
               if (!certification) {
                 // 인증번호를 요청할 때 이 부분이 실행됩니다.

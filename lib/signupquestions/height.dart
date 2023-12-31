@@ -156,151 +156,152 @@ class _HeightPageState extends State<HeightPage>
     }
     double width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        sendBackRequest(context, false);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        title: Text(''),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            _sendBackRequest();
-          },
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(''),
+          elevation: 0,
         ),
-      ),
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 25,
-              ),
-              Stack(
-                clipBehavior: Clip.none, // 이 부분 추가
-                children: [
-                  // 전체 배경색 설정 (하늘색)
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // 하늘색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  // 완료된 부분 배경색 설정 (파란색)
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        (_progressAnimation?.value ?? 0.3),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF303030),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                            (_progressAnimation?.value ?? 0.3) -
-                        15,
-                    bottom: -10,
-                    child: Image.asset(
-                      gender == Gender.male
-                          ? 'assets/man.png'
-                          : gender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
-                      width: 30,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Text(
-                '당신의 키는 어떻게 되시나요?',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF303030),
-                    fontFamily: 'Pretendard'),
-              ),
-              SizedBox(height: 30),
-              Center(
-                child: Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 25,
+                ),
+                Stack(
+                  clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
                   children: [
+                    // 전체 배경색 설정 (하늘색)
                     Container(
-                      width: 125,
-                      height: 48,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          hintText: '',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(DefinedColor.lightgrey),
-                            ), // 초기 테두리 색상
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(DefinedColor.lightgrey),
-                            ), // 입력할 때 테두리 색상
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFF66464),
-                            ), // 선택/포커스 됐을 때 테두리 색상
-                          ),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != '') IsSelected();
-                            int intValue = int.parse(value);
-                            InputHeightNumber(intValue);
-                          });
-                        },
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFD9D9D9), // 하늘색
+                        borderRadius: BorderRadius.circular(4.0),
                       ),
                     ),
-                    SizedBox(width: 6), // Container와 Text 위젯 사이의 간격
-                    Text(
-                      'cm',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF303030),
-                          fontFamily: 'Pretendard'),
+                    // 완료된 부분 배경색 설정
+                    Container(
+                      height: 10,
+                      width: MediaQuery.of(context).size.width *
+                          (_progressAnimation?.value ?? 0.3),
+                      decoration: BoxDecoration(
+                        color: mainColor.black,
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                    ),
+                    Positioned(
+                      left: MediaQuery.of(context).size.width *
+                              (_progressAnimation?.value ?? 0.3) -
+                          15,
+                      bottom: -10,
+                      child: Image.asset(
+                        gender == Gender.male
+                            ? 'assets/man.png'
+                            : gender == Gender.female
+                                ? 'assets/woman.png'
+                                : 'assets/signupface.png', // 기본 이미지
+                        width: 30,
+                        height: 30,
+                      ),
                     )
                   ],
                 ),
-              ),
-              SizedBox(height: 321),
-            ],
+                SizedBox(
+                  height: 50,
+                ),
+                Text(
+                  '당신의 키는 어떻게 되시나요?',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: mainColor.black,
+                      fontFamily: 'Pretendard'),
+                ),
+                SizedBox(height: 30),
+                Center(
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // Row 내부의 위젯들을 중앙 정렬
+                    children: [
+                      Container(
+                        width: 125,
+                        height: 48,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText: '',
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(DefinedColor.lightgrey),
+                              ), // 초기 테두리 색상
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(DefinedColor.lightgrey),
+                              ), // 입력할 때 테두리 색상
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFF66464),
+                              ), // 선택/포커스 됐을 때 테두리 색상
+                            ),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value != '') IsSelected();
+                              int intValue = int.parse(value);
+                              InputHeightNumber(intValue);
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 6), // Container와 Text 위젯 사이의 간격
+                      Text(
+                        'cm',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: mainColor.black,
+                            fontFamily: 'Pretendard'),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 321),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-        child: InkWell(
-          child: staticButton(text: '다음'),
-          onTap: (IsValid)
-              ? () {
-                  _sendPostRequest();
-                }
-              : null,
+        floatingActionButton: Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(text: '다음', IsValid: IsValid),
+            onTap: (IsValid)
+                ? () {
+                    _sendPostRequest();
+                  }
+                : null,
+          ),
         ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
