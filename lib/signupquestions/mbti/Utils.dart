@@ -114,52 +114,29 @@ void setSelectedValues(int index) {
   }
 }
 
-class MBTIbox extends StatefulWidget {
-  final double width;
-  final int index;
-
-  MBTIbox({required this.width, required this.index});
-
-  @override
-  _MBTIboxState createState() => _MBTIboxState();
+Widget MBTIDescription(String text) {
+  return Container(
+    margin: EdgeInsets.all(0),
+    child: Text(
+      text,
+      style: TextStyle(
+        color: mainColor.Gray,
+        fontFamily: 'Heebo',
+        fontWeight: FontWeight.w500,
+        fontSize: 10,
+      ),
+    ),
+  );
 }
 
-class _MBTIboxState extends State<MBTIbox> {
-  @override
-  Widget build(BuildContext context) {
-    bool? isselected = selectedfunction(widget.index);
-    return Container(
-      width: widget.width * 0.42, //반응형으로
-      height: 48, // 높이는 고정
-      child: TextButton(
-        style: TextButton.styleFrom(
-          side: BorderSide(
-            color: mainColor.lightGray,
-            width: 2,
-          ),
-          foregroundColor: mainColor.black,
-          backgroundColor:
-              isselected! ? mainColor.lightGray : Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
-          ),
-        ),
-        onPressed: () {
-          IsSelected(widget.index ~/ 2);
-          setState(() {
-            setSelectedValues(widget.index);
-          });
-        },
-        child: Text(
-          mbtiMap[widget.index]!,
-          style: TextStyle(
-            color: isselected ? Colors.white : mainColor.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w500,
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
-  }
+Widget MBTIallDescription(String text) {
+  return Container(
+    width: 60,
+    height: 12,
+    child: Text(
+      '에너지방향',
+      style: TextStyle(
+          fontSize: 10, fontWeight: FontWeight.w600, fontFamily: 'Heebo'),
+    ),
+  );
 }

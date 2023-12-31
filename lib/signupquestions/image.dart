@@ -205,12 +205,7 @@ class ImagePageState extends State<ImagePage>
         backgroundColor: Colors.white,
         title: Text(''),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            sendBackRequest(context);
-          },
-        ),
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -374,6 +369,7 @@ class ImagePageState extends State<ImagePage>
       floatingActionButton: Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
         child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
           child: signupButton(text: '다음',IsValid:IsValid),
           onTap: (IsValid)
               ? () {

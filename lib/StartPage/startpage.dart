@@ -183,6 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                           duration: Duration(milliseconds: 1500),
                           opacity: opacity,
                           child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
@@ -214,6 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                           duration: Duration(milliseconds: 1500),
                           opacity: opacity,
                           child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
                             onTap: (opacity == 1.0)
                                 ? () {
                                     Navigator.push(

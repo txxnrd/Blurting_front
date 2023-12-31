@@ -374,6 +374,7 @@ class _GroupChat extends State<GroupChat> {
     return Container(
       margin: EdgeInsets.zero,
       child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
         onTap: (_questionNumber >= index)
             ? () {
                 _pageController.animateToPage(

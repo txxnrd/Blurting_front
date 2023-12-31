@@ -75,6 +75,7 @@ class _MBTIPageState extends State<MBTIPage>
       },
       body: json.encode({"mbti": mbti}), // JSON 형태로 인코딩
     );
+    print(json.encode({"mbti": mbti}));
     print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
@@ -94,6 +95,43 @@ class _MBTIPageState extends State<MBTIPage>
     }
   }
 
+  Widget MBTIbox(double width, int index) {
+    bool? isselected = selectedfunction(index);
+    return Container(
+      width: width * 0.42, //반응형으로
+      height: 48, // 높이는 고정
+      child: TextButton(
+        style: TextButton.styleFrom(
+          side: BorderSide(
+            color: mainColor.lightGray,
+            width: 2,
+          ),
+          foregroundColor: mainColor.black,
+          backgroundColor:
+              isselected ? mainColor.lightGray : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+          ),
+        ),
+        onPressed: () {
+          IsSelected(index ~/ 2);
+          setState(() {
+            setSelectedValues(index);
+          });
+        },
+        child: Text(
+          mbtiMap[index]!,
+          style: TextStyle(
+            color: isselected ? Colors.white : mainColor.black,
+            fontFamily: 'Heebo',
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -104,298 +142,177 @@ class _MBTIPageState extends State<MBTIPage>
     }
     double width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        sendBackRequest(context, false);
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        title: Text(''),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            sendBackRequest(context);
-          },
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(''),
+          elevation: 0,
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            Stack(
-              clipBehavior: Clip.none, // 화면 밑에 짤리는거 나오게 하기
-              children: [
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(4.0),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+              ),
+              Stack(
+                clipBehavior: Clip.none, // 화면 밑에 짤리는거 나오게 하기
+                children: [
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD9D9D9),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
                   ),
-                ),
-                Container(
-                  height: 10,
-                  width: MediaQuery.of(context).size.width *
-                      (_progressAnimation?.value ?? 0.3),
-                  decoration: BoxDecoration(
+                  Container(
+                    height: 10,
+                    width: MediaQuery.of(context).size.width *
+                        (_progressAnimation?.value ?? 0.3),
+                    decoration: BoxDecoration(
+                      color: mainColor.black,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  Positioned(
+                    left: MediaQuery.of(context).size.width *
+                            (_progressAnimation?.value ?? 0.3) -
+                        15,
+                    bottom: -10,
+                    child: Image.asset(
+                      gender == Gender.male
+                          ? 'assets/man.png'
+                          : gender == Gender.female
+                              ? 'assets/woman.png'
+                              : 'assets/signupface.png', // 기본 이미지
+                      width: 30,
+                      height: 30,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                '당신의 MBTI는 무엇인가요?',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     color: mainColor.black,
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width *
-                          (_progressAnimation?.value ?? 0.3) -
-                      15,
-                  bottom: -10,
-                  child: Image.asset(
-                    gender == Gender.male
-                        ? 'assets/man.png'
-                        : gender == Gender.female
-                            ? 'assets/woman.png'
-                            : 'assets/signupface.png', // 기본 이미지
-                    width: 30,
-                    height: 30,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              '당신의 MBTI는 무엇인가요?',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: mainColor.black,
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(height: 30),
-            Container(
-              width: 60,
-              height: 12,
-              child: Text(
-                '에너지방향',
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard'),
+                    fontFamily: 'Heebo'),
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                MBTIbox(width: width, index: 0),
-                MBTIbox(width: width, index: 1),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(0),
-                  child: Text(
-                    '외향형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(0),
-                  child: Text(
-                    '내항형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Container(
-              width: 44,
-              height: 12,
-              child: Text(
-                '인식',
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard'),
+              SizedBox(height: 30),
+              MBTIallDescription("에너지방향"),
+              SizedBox(
+                height: 4,
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                MBTIbox(width: width, index: 2),
-                MBTIbox(width: width, index: 3),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    '감각형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Text(
-                    '직관형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Container(
-              width: 44,
-              height: 12,
-              child: Text(
-                '판단',
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 0),
+                  MBTIbox(width, 1),
+                ],
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                MBTIbox(width: width, index: 4),
-                MBTIbox(width: width, index: 5),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    '사고형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Text(
-                    '감각형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Container(
-              width: 44,
-              height: 12,
-              child: Text(
-                '계획성',
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('외향형'),
+                  MBTIDescription('내향형'),
+                ],
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                MBTIbox(width: width, index: 6),
-                MBTIbox(width: width, index: 7),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    '판단형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Text(
-                    '인식형',
-                    style: TextStyle(
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 58),
-          ],
-        ),
-      ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-        child: InkWell(
-          child: signupButton(
-            text: '다음',
-            IsValid: IsValid,
+              SizedBox(
+                height: 3,
+              ),
+              MBTIallDescription("인식"),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 2),
+                  MBTIbox(width, 3),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('감각형'),
+                  MBTIDescription('직관형'),
+                ],
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              MBTIallDescription("판단"),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 4),
+                  MBTIbox(width, 5),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('사고형'),
+                  MBTIDescription('감각형'),
+                ],
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              MBTIallDescription("계획성"),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIbox(width, 6),
+                  MBTIbox(width, 7),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MBTIDescription('판단형'),
+                  MBTIDescription('인식형'),
+                ],
+              ),
+              SizedBox(height: 58),
+            ],
           ),
-          onTap: (IsValid)
-              ? () {
-                  _sendPostRequest();
-                }
-              : null,
         ),
+        floatingActionButton: Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(
+              text: '다음',
+              IsValid: IsValid,
+            ),
+            onTap: (IsValid)
+                ? () {
+                    _sendPostRequest();
+                  }
+                : null,
+          ),
+        ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

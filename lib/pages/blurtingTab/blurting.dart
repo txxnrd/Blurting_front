@@ -290,6 +290,7 @@ class _Blurting extends State<Blurting> {
                           margin: EdgeInsets.fromLTRB(0, 10, 10, 10),
                           width: 32,
                           child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
                               onTap: (isTap[currentPage] == true &&
                                       iSended[currentPage] == false)
                                   ? () {

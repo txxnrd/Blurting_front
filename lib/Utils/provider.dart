@@ -102,7 +102,7 @@ void showSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-Future<void> sendBackRequest(BuildContext context) async {
+Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
   print('_sendPostRequest called');
   var url = Uri.parse(API.signupback);
 
@@ -126,7 +126,9 @@ Future<void> sendBackRequest(BuildContext context) async {
       var token = data['signupToken'];
       print(token);
       await saveToken(token);
-      Navigator.of(context).pop();
+      if (isbutton) {
+        Navigator.of(context).pop();
+      }
     } else {
       showSnackBar(context, "뒤로가기에 실패하였습니다");
     }

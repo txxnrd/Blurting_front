@@ -254,15 +254,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(48, 48, 48, 1),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actions: <Widget>[],
       ),
 
@@ -486,6 +477,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       floatingActionButton: Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
         child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
           child: signupButton(
             text: !certification ? '인증번호 요청' : '다음',
             IsValid: IsValid,
