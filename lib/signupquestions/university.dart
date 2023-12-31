@@ -95,7 +95,7 @@ class _UniversityPageState extends State<UniversityPage>
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              sendBackRequest(context);
+              sendBackRequest(context,true);
             },
           ),
         ),
@@ -220,6 +220,7 @@ class _UniversityPageState extends State<UniversityPage>
         floatingActionButton: Container(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
             child: staticButton(text: '다음'),
             onTap: (IsValid)
                 ? () {

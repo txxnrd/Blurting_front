@@ -98,181 +98,181 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        sendBackRequest(context, false);
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        title: Text(''),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            sendBackRequest(context);
-          },
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(''),
+          elevation: 0,
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            Stack(
-              clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-              children: [
-                // 전체 배경색 설정 (하늘색)
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9), // 하늘색
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                // 완료된 부분 배경색 설정
-                Container(
-                  height: 10,
-                  width: MediaQuery.of(context).size.width *
-                      _progressAnimation!.value,
-                  decoration: BoxDecoration(
-                    color: mainColor.black, // 파란색
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width *
-                          _progressAnimation!.value -
-                      15,
-                  bottom: -10,
-                  child: Image.asset(
-                      _selectedGender == Gender.male
-                          ? 'assets/man.png'
-                          : _selectedGender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
-                      width: 30,
-                      height: 30),
-                )
-              ],
-            ),
-
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              '당신의 성별은 무엇인가요?',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: mainColor.black,
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(height: 30),
-            SizedBox(width: 20), // 두 버튼 사이의 간격 조정
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: width * 0.42, // 원하는 너비 값
-                  height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(DefinedColor.lightgrey),
-                        width: 2,
-                      ),
-                      primary: mainColor.black,
-                      backgroundColor: _selectedGender == Gender.male
-                          ? Color(DefinedColor.lightgrey)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected();
-                        _selectedGender = Gender.male;
-                      });
-                    },
-                    child: Text(
-                      '남성',
-                      style: TextStyle(
-                        color: _selectedGender == Gender.male
-                            ? Colors.white
-                            : mainColor.black,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+              ),
+              Stack(
+                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                children: [
+                  // 전체 배경색 설정 (하늘색)
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD9D9D9), // 하늘색
+                      borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-                ),
-
-                SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                Container(
-                  width: width * 0.42,
-                  height: 48, // 원하는 높이 값
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                          color: Color(DefinedColor.lightgrey), width: 2),
-                      primary: Color(DefinedColor.lightgrey),
-                      backgroundColor: _selectedGender == Gender.female
-                          ? Color(DefinedColor.lightgrey)
-                          : Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
-                      ),
+                  // 완료된 부분 배경색 설정
+                  Container(
+                    height: 10,
+                    width: MediaQuery.of(context).size.width *
+                        _progressAnimation!.value,
+                    decoration: BoxDecoration(
+                      color: mainColor.black, // 파란색
+                      borderRadius: BorderRadius.circular(4.0),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        IsSelected();
-                        _selectedGender = Gender.female;
-                      });
-                    },
-                    child: Text(
-                      '여성',
-                      style: TextStyle(
-                        color: _selectedGender == Gender.female
-                            ? Colors.white
-                            : mainColor.black,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                  ),
+                  Positioned(
+                    left: MediaQuery.of(context).size.width *
+                            _progressAnimation!.value -
+                        15,
+                    bottom: -10,
+                    child: Image.asset(
+                        _selectedGender == Gender.male
+                            ? 'assets/man.png'
+                            : _selectedGender == Gender.female
+                                ? 'assets/woman.png'
+                                : 'assets/signupface.png', // 기본 이미지
+                        width: 30,
+                        height: 30),
+                  )
+                ],
+              ),
+
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                '당신의 성별은 무엇인가요?',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: mainColor.black,
+                    fontFamily: 'Pretendard'),
+              ),
+              SizedBox(height: 30),
+              SizedBox(width: 20), // 두 버튼 사이의 간격 조정
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: width * 0.42, // 원하는 너비 값
+                    height: 48, // 원하는 높이 값
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(
+                          color: Color(DefinedColor.lightgrey),
+                          width: 2,
+                        ),
+                        primary: mainColor.black,
+                        backgroundColor: _selectedGender == Gender.male
+                            ? Color(DefinedColor.lightgrey)
+                            : Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          IsSelected();
+                          _selectedGender = Gender.male;
+                        });
+                      },
+                      child: Text(
+                        '남성',
+                        style: TextStyle(
+                          color: _selectedGender == Gender.male
+                              ? Colors.white
+                              : mainColor.black,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
 
-            SizedBox(height: 321),
-          ],
-        ),
-      ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-        child: InkWell(
-          child: signupButton(
-            text: '다음',
-            IsValid: IsValid,
+                  SizedBox(width: 23), // 두 버튼 사이의 간격 조정
+
+                  Container(
+                    width: width * 0.42,
+                    height: 48, // 원하는 높이 값
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(
+                            color: Color(DefinedColor.lightgrey), width: 2),
+                        primary: Color(DefinedColor.lightgrey),
+                        backgroundColor: _selectedGender == Gender.female
+                            ? Color(DefinedColor.lightgrey)
+                            : Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          IsSelected();
+                          _selectedGender = Gender.female;
+                        });
+                      },
+                      child: Text(
+                        '여성',
+                        style: TextStyle(
+                          color: _selectedGender == Gender.female
+                              ? Colors.white
+                              : mainColor.black,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 321),
+            ],
           ),
-          onTap: (IsValid)
-              ? () {
-                  _sendPostRequest();
-                }
-              : null,
         ),
+        floatingActionButton: Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(
+              text: '다음',
+              IsValid: IsValid,
+            ),
+            onTap: (IsValid)
+                ? () {
+                    _sendPostRequest();
+                  }
+                : null,
+          ),
+        ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

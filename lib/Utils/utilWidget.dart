@@ -1634,7 +1634,7 @@ class signupButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: IsValid ? mainColor.MainColor : Colors.transparent,
+        color: IsValid ? mainColor.MainColor : mainColor.lightGray,
       ),
       margin: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width * 0.9,
