@@ -486,7 +486,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       floatingActionButton: Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
         child: InkWell(
-          child: staticButton(text: !certification ? '인증번호 요청' : '다음'),
+          child: signupButton(
+            text: !certification ? '인증번호 요청' : '다음',
+            IsValid: IsValid,
+          ),
           onTap: IsValid
               ? () async {
                   if (!certification) {

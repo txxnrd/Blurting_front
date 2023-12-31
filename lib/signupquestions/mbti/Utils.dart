@@ -114,38 +114,52 @@ void setSelectedValues(int index) {
   }
 }
 
-Widget MBTIbox(width, int index) {
-  bool? isselected = selectedfunction(index);
-  return Container(
-    width: width * 0.42, //반응형으로
-    height: 48, // 높이는 고정
-    child: TextButton(
-      style: TextButton.styleFrom(
-        side: BorderSide(
-          color: mainColor.lightGray,
-          width: 2,
+class MBTIbox extends StatefulWidget {
+  final double width;
+  final int index;
+
+  MBTIbox({required this.width, required this.index});
+
+  @override
+  _MBTIboxState createState() => _MBTIboxState();
+}
+
+class _MBTIboxState extends State<MBTIbox> {
+  @override
+  Widget build(BuildContext context) {
+    bool? isselected = selectedfunction(widget.index);
+    return Container(
+      width: widget.width * 0.42, //반응형으로
+      height: 48, // 높이는 고정
+      child: TextButton(
+        style: TextButton.styleFrom(
+          side: BorderSide(
+            color: mainColor.lightGray,
+            width: 2,
+          ),
+          foregroundColor: mainColor.black,
+          backgroundColor:
+              isselected! ? mainColor.lightGray : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+          ),
         ),
-        foregroundColor: mainColor.black,
-        backgroundColor: isselected! ? mainColor.lightGray : Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+        onPressed: () {
+          IsSelected(widget.index ~/ 2);
+          setState(() {
+            setSelectedValues(widget.index);
+          });
+        },
+        child: Text(
+          mbtiMap[widget.index]!,
+          style: TextStyle(
+            color: isselected ? Colors.white : mainColor.black,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
         ),
       ),
-      onPressed: () {
-        IsSelected(index ~/ 2);
-        setState(() {
-          setSelectedValues(index);
-        });
-      },
-      child: Text(
-        mbtiMap[index]!,
-        style: TextStyle(
-          color: isselected ? Colors.white : mainColor.black,
-          fontFamily: 'Pretendard',
-          fontWeight: FontWeight.w500,
-          fontSize: 20,
-        ),
-      ),
-    ),
-  );
+    );
+  }
 }

@@ -396,7 +396,10 @@ class _EmailPageState extends State<EmailPage>
         floatingActionButton: Container(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: InkWell(
-            child: staticButton(text: !certification ? '인증번호 요청' : '다음'),
+            child: signupButton(
+              text: !certification ? '인증번호 요청' : '다음',
+              IsValid: true,
+            ),
             onTap: () async {
               if (!certification) {
                 // 인증번호를 요청할 때 이 부분이 실행됩니다.
