@@ -390,7 +390,7 @@ class HobbyPageState extends State<HobbyPage>
       floatingActionButton: Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
         child: InkWell(
-          child: staticButton(text: '다음'),
+          child: signupButton(text: '다음',IsValid:IsValid),
           onTap: (IsValid)
               ? () {
                   _sendPostRequest();

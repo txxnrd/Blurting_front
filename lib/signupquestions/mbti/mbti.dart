@@ -55,6 +55,7 @@ class _MBTIPageState extends State<MBTIPage>
   }
 
   Future<void> _sendPostRequest() async {
+    print("실행됨");
     bool hasFalse = isValidList.any((isValid) => !isValid);
     if (hasFalse) {
       showSnackBar(context, "모든 항목을 선택 해주세요");
@@ -189,8 +190,8 @@ class _MBTIPageState extends State<MBTIPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                MBTIbox(width, 0),
-                MBTIbox(width, 1),
+                MBTIbox(width: width, index: 0),
+                MBTIbox(width: width, index: 1),
               ],
             ),
             Row(
@@ -242,8 +243,8 @@ class _MBTIPageState extends State<MBTIPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                MBTIbox(width, 2),
-                MBTIbox(width, 3),
+                MBTIbox(width: width, index: 2),
+                MBTIbox(width: width, index: 3),
               ],
             ),
             Row(
@@ -293,8 +294,8 @@ class _MBTIPageState extends State<MBTIPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                MBTIbox(width, 4),
-                MBTIbox(width, 5),
+                MBTIbox(width: width, index: 4),
+                MBTIbox(width: width, index: 5),
               ],
             ),
             Row(
@@ -344,8 +345,8 @@ class _MBTIPageState extends State<MBTIPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                MBTIbox(width, 6),
-                MBTIbox(width, 7),
+                MBTIbox(width: width, index: 6),
+                MBTIbox(width: width, index: 7),
               ],
             ),
             Row(
@@ -382,7 +383,10 @@ class _MBTIPageState extends State<MBTIPage>
       floatingActionButton: Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
         child: InkWell(
-          child: staticButton(text: '다음'),
+          child: signupButton(
+            text: '다음',
+            IsValid: IsValid,
+          ),
           onTap: (IsValid)
               ? () {
                   _sendPostRequest();
