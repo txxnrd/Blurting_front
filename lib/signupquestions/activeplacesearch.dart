@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
+import 'package:blurting/Utils/provider.dart';
 
 // import 'package:blurting/signupquestions/activeplace.dart';
 // import 'package:blurting/signupquestions/activeplacedone.dart';
@@ -45,8 +46,8 @@ class _SearchPage extends State<SearchPage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 80,
-          backgroundColor: Colors.white, // 배경색을 투명하게 설정합니다.
-          elevation: 0, // 그림자 효과를 제거합니다.
+          backgroundColor: Colors.white, // 배경색을 투명하게 설정
+          elevation: 0, // 그림자 효과를 제거
 
           actions: <Widget>[],
         ),
@@ -152,7 +153,7 @@ class _SearchPage extends State<SearchPage> {
                             title: Text(
                               filteredItems[index],
                               style: TextStyle(
-                                color: Color(0xFF303030),
+                                color: mainColor.black,
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16,

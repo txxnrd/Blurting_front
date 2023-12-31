@@ -9,7 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/token.dart';
 
-// StatefulWidget으로 변경합니다.
+
 class NotificationandSound extends StatefulWidget {
   final bool fcmstate; // 생성자를 통해 받을 변수를 final로 선언
   NotificationandSound({Key? key, required this.fcmstate}) : super(key: key);

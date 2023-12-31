@@ -454,7 +454,7 @@ class _MyPageEditState extends State<MyPageEdit> {
             child: Text(
               hobbyText,
               style: TextStyle(
-                color: Color(0xFF303030),
+                color: mainColor.black,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
                 fontSize: index == 3 ? 14 : 15,
@@ -989,14 +989,14 @@ class _MyPageEditState extends State<MyPageEdit> {
                       child: Container(
                         width: screenWidth,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
+                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
                         alignment: Alignment.centerLeft,
-                        height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                        height: 48, // TextField의 높이와 일치하도록 설정
                         decoration: BoxDecoration(
                           border:
                               Border.all(color: mainColor.lightGray, width: 2),
                           borderRadius: BorderRadius.circular(
-                              10), // TextField의 테두리와 일치하도록 설정합니다.
+                              10), // TextField의 테두리와 일치하도록 설정
                         ),
                         child: Align(
                           alignment: Alignment.centerLeft,
@@ -1027,14 +1027,14 @@ class _MyPageEditState extends State<MyPageEdit> {
                       child: Container(
                         width: screenWidth,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가합니다.
+                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
                         alignment: Alignment.centerLeft,
-                        height: 48, // TextField의 높이와 일치하도록 설정합니다.
+                        height: 48, // TextField의 높이와 일치하도록 설정
                         decoration: BoxDecoration(
                           border:
                               Border.all(color: mainColor.lightGray, width: 2),
                           borderRadius: BorderRadius.circular(
-                              10), // TextField의 테두리와 일치하도록 설정합니다.
+                              10), // TextField의 테두리와 일치하도록 설정
                         ),
                         child: Align(
                           alignment: Alignment.centerLeft,
@@ -1307,7 +1307,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                     width: 2,
@@ -1329,7 +1329,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'E',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,
@@ -1342,7 +1342,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                     width: 2,
@@ -1364,7 +1364,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'I',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,
@@ -1423,7 +1423,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                     width: 2,
@@ -1445,7 +1445,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'S',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,
@@ -1458,7 +1458,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                     width: 2,
@@ -1480,7 +1480,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'N',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,
@@ -1537,7 +1537,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                     width: 2,
@@ -1559,7 +1559,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'T',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,
@@ -1572,7 +1572,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                     width: 2,
@@ -1594,7 +1594,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'F',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,
@@ -1651,7 +1651,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                   ),
@@ -1672,7 +1672,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'J',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,
@@ -1685,7 +1685,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               height: 48, // 원하는 높이 값
                               child: TextButton(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: Color(0xFF303030),
+                                  foregroundColor: mainColor.black,
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                     width: 2,
@@ -1707,7 +1707,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 child: Text(
                                   'P',
                                   style: TextStyle(
-                                    color: Color(0xFF303030),
+                                    color: mainColor.black,
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 20,

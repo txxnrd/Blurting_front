@@ -136,7 +136,7 @@ class _SmokePageState extends State<SmokePage>
               height: 25,
             ),
             Stack(
-              clipBehavior: Clip.none, // 이 부분 추가
+              clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
               children: [
                 // 전체 배경색 설정 (하늘색)
                 Container(
@@ -146,13 +146,13 @@ class _SmokePageState extends State<SmokePage>
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
-                // 완료된 부분 배경색 설정 (파란색)
+                // 완료된 부분 배경색 설정
                 Container(
                   height: 10,
                   width: MediaQuery.of(context).size.width *
                       (_progressAnimation?.value ?? 0.3),
                   decoration: BoxDecoration(
-                    color: Color(0xFF303030),
+                    color: mainColor.black,
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -181,7 +181,7 @@ class _SmokePageState extends State<SmokePage>
               style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF303030),
+                  color: mainColor.black,
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),

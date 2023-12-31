@@ -99,7 +99,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
 
     String savedToken = await getToken();
-
     if (first_post) login_token = savedToken;
     var token = first_post ? savedToken : login_token;
 
@@ -278,7 +277,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 height: 25,
               ),
               Stack(
-                clipBehavior: Clip.none, // 이 부분 추가
+                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
                 children: [
                   // 전체 배경색 설정 (하늘색)
                   Container(
@@ -288,13 +287,13 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-                  // 완료된 부분 배경색 설정 (파란색)
+                  // 완료된 부분 배경색 설정
                   Container(
                     height: 10,
                     width: MediaQuery.of(context).size.width *
                         _progressAnimation!.value,
                     decoration: BoxDecoration(
-                      color: Color(0xFF303030), // 파란색
+                      color: mainColor.black, // 파란색
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
@@ -316,7 +315,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF303030),
+                    color: mainColor.black,
                     fontFamily: 'Pretendard'),
               ),
               SizedBox(height: 20),
@@ -330,7 +329,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     fontSize: 15,
                   ),
                   controller: _controller,
-                  focusNode: myFocusNode, // FocusNode를 연결합니다.
+                  focusNode: myFocusNode, // FocusNode를 연결
                   keyboardType: TextInputType.number,
                   maxLength: 13,
                   decoration: InputDecoration(
@@ -420,7 +419,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                             ),
                           ),
                           Container(
-                            width: 56, // 버튼의 너비를 설정합니다.
+                            width: 56, // 버튼의 너비를 설정
                             child: ElevatedButton(
                               onPressed: () {
                                 _sendPostRequest(phonenumber);
@@ -433,11 +432,11 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                                 ),
                                 backgroundColor: Color(DefinedColor.darkpink),
                                 elevation: 0.0,
-                                padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거합니다.
+                                padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거
                               ),
                               child: FittedBox(
-                                // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절합니다.
-                                fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장합니다.
+                                // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절
+                                fit: BoxFit.fitWidth, // 가로 방향으로 콘텐츠를 확장
                                 child: Text(
                                   '재전송',
                                   style: TextStyle(
@@ -466,9 +465,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   padding: EdgeInsets.all(8.0),
                   margin: EdgeInsets.only(top: 5.0, bottom: 10),
                   decoration: BoxDecoration(
-                    color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정합니다.
-                    borderRadius:
-                        BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정합니다.
+                    color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정
+                    borderRadius: BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정
                   ),
                   child: Text(
                     Errormessage,
@@ -490,10 +488,10 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
           onTap: IsValid
               ? () async {
                   if (!certification) {
-                    // 인증번호를 요청할 때 이 부분이 실행됩니다.
+                    // 인증번호를 요청할 때 이 부분이 실행
                     await _sendPostRequest(_controller.text);
                   } else {
-                    // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
+                    // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행
                     _sendVerificationRequest(phonenumber);
                   }
                 }
@@ -551,7 +549,7 @@ class DismissKeyboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // 현재의 포커스를 해제합니다.
+        // 현재의 포커스를 해제
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: child,
