@@ -103,7 +103,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          '알림 및 소리',
+          '알림 설정',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
