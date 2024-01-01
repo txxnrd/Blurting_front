@@ -242,7 +242,9 @@ class _HeightPageState extends State<HeightPage>
                         height: 48,
                         child: TextField(
                           keyboardType: TextInputType.number,
+                          maxLength: 3,
                           decoration: InputDecoration(
+                            counterText: '',
                             isDense: true,
                             hintText: '',
                             border: OutlineInputBorder(

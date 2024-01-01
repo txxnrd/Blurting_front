@@ -14,7 +14,6 @@ import '../signupquestions/token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
 
-
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
@@ -152,23 +151,16 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  Future<void> _testfcm() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.testfcm);
-    String savedToken = await getToken();
-    print(savedToken);
-    print(json.encode({"title": "테스트 성공", "text": "이 정도는 껌이지"}));
-
-    var response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-      body: json
-          .encode({"title": "나는 이제 시험 공부하러", "text": "총총총", "type": "whisper"}),
+  Widget settingDescription(String text) {
+    return Container(
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: Color(DefinedColor.gray)),
+      ),
     );
-    print(response.body);
   }
 
   @override
@@ -212,22 +204,8 @@ class _SettingPageState extends State<SettingPage> {
                   SizedBox(
                     height: 18,
                   ),
-                  // Container(
-                  //   width:77, height: 22,
-                  //   child:
-                  //   Text(
-                  //     '알림 및 소리',
-                  //     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,color: Color(DefinedColor.gray)),
-                  //   ),
-                  // ),
-
                   InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => NotificationandSound()),
-                      // );
                       _checkfcm();
                     },
                     child: Container(
@@ -252,11 +230,9 @@ class _SettingPageState extends State<SettingPage> {
                           color: Color(DefinedColor.gray)),
                     ),
                   ),
-
                   SizedBox(
                     height: 18,
                   ),
-
                   InkWell(
                     onTap: () {
                       _getuserinfo();
@@ -271,11 +247,9 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 18,
                   ),
-
                   InkWell(
                     onTap: () {
                       _showVerificationFailedSnackBar("로그아웃 완료");
@@ -312,7 +286,6 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 34,
                   ),
@@ -345,7 +318,6 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 18,
                   ),

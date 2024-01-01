@@ -48,7 +48,7 @@ class _EmailPageState extends State<EmailPage>
     });
     WidgetsBinding.instance?.addObserver(this); // 생명주기 감지를 위한 옵저버 추가
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 400), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
     _progressAnimation = Tween<double>(
@@ -83,10 +83,12 @@ class _EmailPageState extends State<EmailPage>
   }
 
   String Email = '';
+  bool IsValid = false;
   @override
   void InputEmail(String value) {
     setState(() {
       Email = value;
+      if (value.length > 0) IsValid = true;
     });
   }
 
@@ -132,6 +134,7 @@ class _EmailPageState extends State<EmailPage>
 
           var data = json.decode(response.body);
           if (data['signupToken'] != null && trial > 0) {
+            showSnackBar(context, '이메일 전송이 완료 되었습니디.');
             var token = data['signupToken'];
             print(token);
             await saveToken(token);
@@ -263,12 +266,6 @@ class _EmailPageState extends State<EmailPage>
           backgroundColor: Colors.white,
           title: Text(''),
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              _handleBackPress();
-            },
-          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -394,10 +391,10 @@ class _EmailPageState extends State<EmailPage>
         floatingActionButton: Container(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: InkWell(
-          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
             child: signupButton(
               text: !certification ? '인증번호 요청' : '다음',
-              IsValid: true,
+              IsValid: IsValid,
             ),
             onTap: () async {
               if (!certification) {

@@ -220,182 +220,187 @@ class HobbyPageState extends State<HobbyPage>
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        sendBackRequest(context, false);
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        title: Text(''),
-        elevation: 0,
-
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            Stack(
-              clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-              children: [
-                // 전체 배경색 설정 (하늘색)
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9), // 하늘색
-                    borderRadius: BorderRadius.circular(4.0),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(''),
+          elevation: 0,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+              ),
+              Stack(
+                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                children: [
+                  // 전체 배경색 설정 (하늘색)
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD9D9D9), // 하늘색
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
                   ),
-                ),
-                // 완료된 부분 배경색 설정
-                Container(
-                  height: 10,
-                  width: MediaQuery.of(context).size.width *
-                      (_progressAnimation?.value ?? 0.3),
-                  decoration: BoxDecoration(
+                  // 완료된 부분 배경색 설정
+                  Container(
+                    height: 10,
+                    width: MediaQuery.of(context).size.width *
+                        (_progressAnimation?.value ?? 0.3),
+                    decoration: BoxDecoration(
+                      color: mainColor.black,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  Positioned(
+                    left: MediaQuery.of(context).size.width *
+                            (_progressAnimation?.value ?? 0.3) -
+                        15,
+                    bottom: -10,
+                    child: Image.asset(
+                      gender == Gender.male
+                          ? 'assets/man.png'
+                          : gender == Gender.female
+                              ? 'assets/woman.png'
+                              : 'assets/signupface.png', // 기본 이미지
+                      width: 30,
+                      height: 30,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                '당신의 취미는 무엇인가요?',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     color: mainColor.black,
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width *
-                          (_progressAnimation?.value ?? 0.3) -
-                      15,
-                  bottom: -10,
-                  child: Image.asset(
-                    gender == Gender.male
-                        ? 'assets/man.png'
-                        : gender == Gender.female
-                            ? 'assets/woman.png'
-                            : 'assets/signupface.png', // 기본 이미지
-                    width: 30,
-                    height: 30,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              '당신의 취미는 무엇인가요?',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: mainColor.black,
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                customHobbyCheckbox('🍢애니', 0, width, height),
-                customHobbyCheckbox('🎨그림그리기', 1, width, height),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
-              children: [
-                customHobbyCheckbox('🍻술', 2, width, height),
-                customHobbyCheckbox('🎞️영화/드라마', 3, width, height),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                customHobbyCheckbox('✈️여행', 4, width, height),
-                customHobbyCheckbox('🧑‍🍳요리', 5, width, height),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                customHobbyCheckbox('🤓자기계발', 6, width, height),
-                customHobbyCheckbox('📚독서', 7, width, height),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                customHobbyCheckbox('🎮게임', 8, width, height),
-                customHobbyCheckbox('🎧노래듣기', 9, width, height),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                customHobbyCheckbox('🕊️봉사활동', 10, width, height),
-                customHobbyCheckbox('🏃운동', 11, width, height),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                customHobbyCheckbox('🎤노래부르기', 12, width, height),
-                customHobbyCheckbox('🚶‍산책', 13, width, height),
-              ],
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: 180,
-              height: 12,
-              child: RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Pretendard',
-                    color: mainColor.black,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '*취미는 최대 ',
+                    fontFamily: 'Pretendard'),
+              ),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+                children: [
+                  customHobbyCheckbox('🍢애니', 0, width, height),
+                  customHobbyCheckbox('🎨그림그리기', 1, width, height),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+                children: [
+                  customHobbyCheckbox('🍻술', 2, width, height),
+                  customHobbyCheckbox('🎞️영화/드라마', 3, width, height),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  customHobbyCheckbox('✈️여행', 4, width, height),
+                  customHobbyCheckbox('🧑‍🍳요리', 5, width, height),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  customHobbyCheckbox('🤓자기계발', 6, width, height),
+                  customHobbyCheckbox('📚독서', 7, width, height),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  customHobbyCheckbox('🎮게임', 8, width, height),
+                  customHobbyCheckbox('🎧노래듣기', 9, width, height),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  customHobbyCheckbox('🕊️봉사활동', 10, width, height),
+                  customHobbyCheckbox('🏃운동', 11, width, height),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  customHobbyCheckbox('🎤노래부르기', 12, width, height),
+                  customHobbyCheckbox('🚶‍산책', 13, width, height),
+                ],
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: 180,
+                height: 12,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Pretendard',
+                      color: mainColor.black,
                     ),
-                    TextSpan(
-                      text: '4개',
-                      style:
-                          TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
-                    ),
-                    TextSpan(
-                      text: ' 까지 선택해주세요.',
-                    ),
-                  ],
+                    children: [
+                      TextSpan(
+                        text: '*취미는 최대 ',
+                      ),
+                      TextSpan(
+                        text: '4개',
+                        style: TextStyle(
+                            color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                      ),
+                      TextSpan(
+                        text: ' 까지 선택해주세요.',
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-        child: InkWell(
-          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-          child: signupButton(text: '다음',IsValid:IsValid),
-          onTap: (IsValid)
-              ? () {
-                  _sendPostRequest();
-                }
-              : null,
+        floatingActionButton: Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(text: '다음', IsValid: IsValid),
+            onTap: (IsValid)
+                ? () {
+                    _sendPostRequest();
+                  }
+                : null,
+          ),
         ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
