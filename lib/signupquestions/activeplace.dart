@@ -122,6 +122,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       body: json.encode({"region": content}), // JSON 형태로 인코딩
     );
     print(response.body);
+    print(json.encode({"region": content}));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리

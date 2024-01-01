@@ -1,6 +1,6 @@
 import 'package:blurting/StartPage/startpage.dart';
-import 'package:blurting/pages/useGuide/useguidepageone.dart';
-
+import 'package:blurting/settings/url_link.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/settings/info.dart';
 import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -48,25 +48,131 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  void _showVerificationFailedSnackBar(value) {
-    print("snackbar 실행");
-    final snackBar = SnackBar(
-      content: Text(value),
-      backgroundColor: Colors.black.withOpacity(0.7),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   int count = 10;
+
+  void _showWarning(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.2),
+            body: Stack(
+              children: [
+                Positioned(
+                  bottom: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.lightGray
+                                            .withOpacity(0.8)),
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '이대로 삭제하면 계정을 복구 할 수 없습니다.',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 10,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                          Text(
+                                            '계정을 정말로 삭제하시겠습니까?',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 10,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      // color: mainColor.MainColor,
+                                      child: Center(
+                                        child: Text(
+                                          '삭제하기',
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      _sendDeleteRequest();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.lightGray),
+                                // color: mainColor.MainColor,
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                if (mounted) {
+                                  setState(() {
+                                    Navigator.of(context).pop();
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
 
   Future<void> _sendDeleteRequest() async {
     print('_sendPostRequest called');
@@ -89,16 +195,7 @@ class _SettingPageState extends State<SettingPage> {
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-
-      var data = json.decode(response.body);
-
-      if (data['signupToken'] != null) {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-      } else {}
+      showSnackBar(context, "계정 삭제가 완료되었습니다.");
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
@@ -163,10 +260,23 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  Widget settingDescription_list(String text) {
+    return Container(
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Color(DefinedColor.gray)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         scrolledUnderElevation: 0.0,
         backgroundColor: Colors.transparent,
         title: Text(
@@ -192,15 +302,7 @@ class _SettingPageState extends State<SettingPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    child: Text(
-                      '알림 설정',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
+                  settingDescription("알림 설정"),
                   SizedBox(
                     height: 18,
                   ),
@@ -208,28 +310,12 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       _checkfcm();
                     },
-                    child: Container(
-                      child: Text(
-                        '알림 및 소리',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("알림"),
                   ),
                   SizedBox(
                     height: 34,
                   ),
-                  Container(
-                    child: Text(
-                      '사용자 설정',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
+                  settingDescription("사용자 설정"),
                   SizedBox(
                     height: 18,
                   ),
@@ -237,22 +323,14 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       _getuserinfo();
                     },
-                    child: Container(
-                      child: Text(
-                        '계정/정보 관리',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("계정 및 정보"),
                   ),
                   SizedBox(
                     height: 18,
                   ),
                   InkWell(
                     onTap: () {
-                      _showVerificationFailedSnackBar("로그아웃 완료");
+                      showSnackBar(context, "로그아웃 완료");
                       clearAllData();
                       Navigator.push(
                         context,
@@ -274,30 +352,14 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      _sendDeleteRequest();
+                      _showWarning(context);
                     },
-                    child: Container(
-                      child: Text(
-                        '계정 삭제하기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("계정 삭제하기"),
                   ),
                   SizedBox(
                     height: 34,
                   ),
-                  Container(
-                    child: Text(
-                      '기타',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
+                  settingDescription("기타"),
                   SizedBox(
                     height: 18,
                   ),
@@ -308,15 +370,7 @@ class _SettingPageState extends State<SettingPage> {
                         MaterialPageRoute(builder: (context) => NoticePage()),
                       );
                     },
-                    child: Container(
-                      child: Text(
-                        '공지사항',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("공지사항"),
                   ),
                   SizedBox(
                     height: 18,
@@ -324,22 +378,21 @@ class _SettingPageState extends State<SettingPage> {
                   InkWell(
                     onTap: () async {
                       launchUrl(
-                        Uri.parse(
-                            'https://www.instagram.com/blurting.official/'),
+                        Uri.parse(URLLink.blurting_instagram),
                       );
                     },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '개발자에게 문의하기',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.gray)),
-                        ),
-                      ],
-                    ),
+                    child: settingDescription_list("개발자에게 문의하기"),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      launchUrl(
+                        Uri.parse(URLLink.privacy_policy),
+                      );
+                    },
+                    child: settingDescription_list("개인정보 처리 방침"),
                   ),
                 ],
               ),
