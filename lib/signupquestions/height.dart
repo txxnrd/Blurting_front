@@ -65,38 +65,6 @@ class _HeightPageState extends State<HeightPage>
       });
   }
 
-  Future<void> _sendBackRequest() async {
-    print('_sendPostRequest called');
-    var url = Uri.parse(API.signupback);
-
-    String savedToken = await getToken();
-    print(savedToken);
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-    );
-    print(response.body);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-
-      if (data['signupToken'] != null) {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-        Navigator.of(context).pop();
-      } else {}
-    } else {
-      // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
-
   int? height;
   @override
   void InputHeightNumber(int value) {
@@ -104,17 +72,19 @@ class _HeightPageState extends State<HeightPage>
       height = value;
       if (140 <= height! && height! <= 240) {
         IsValid = true;
-      } else {}
+      }
     });
   }
 
   Future<void> _sendPostRequest() async {
+    if (140 > height! || height! > 240) {
+      showSnackBar(context, "유효한 키 정보를 입력해주세요");
+      return;
+    }
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
-
     String savedToken = await getToken();
     print(savedToken);
-    print(height);
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -124,10 +94,8 @@ class _HeightPageState extends State<HeightPage>
       body: json.encode({"height": height}), // JSON 형태로 인코딩
     );
     print(response.body);
-    if (140 > height! || height! > 240) {
-      showSnackBar(context, "유효한 키 정보를 입력해주세요");
-      return;
-    }
+    print(json.encode({"height": height}));
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
       print('Server returned OK');

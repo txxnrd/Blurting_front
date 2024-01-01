@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
+import 'package:blurting/mainApp.dart';
 import 'package:blurting/settings/setting.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class MyPageEdit extends StatefulWidget {
   MyPageEdit({Key? key, this.data}) : super(key: key); // Key 타입을 Key?로 변경
 
   /*MYPAGE에서 버튼 누르면 api 요청 보내서 정보 가져옴.*/
-  /*그게 this.data임 (widget.data['region])식으로 접근 가능.*/
+  /*그게 this.data임 (widget.data['region'])식으로 접근 가능.*/
 
   @override
   _MyPageEditState createState() => _MyPageEditState();
@@ -73,6 +74,8 @@ List<Widget> religion = <Widget>[
 int religionIndex = 0;
 int alcoholIndex = 0;
 int smokeIndex = 0;
+String region = "";
+int height = 0;
 
 List<Widget> sexualpreference = <Widget>[
   Text('이성애자',
@@ -528,7 +531,8 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     _selectedalcohol[widget.data["drink"]] = true;
     alcoholIndex = widget.data["drink"];
-
+    region = widget.data["region"];
+    height = widget.data['height'];
     _selectedsmoke[widget.data["cigarette"]] = true;
     smokeIndex = widget.data["cigarette"];
 
@@ -551,7 +555,6 @@ class _MyPageEditState extends State<MyPageEdit> {
   String selectedReligionString = '';
   String selectedDrinkString = '';
   String selectedSmokeString = '';
-  int height = 100;
 
   @override
   void InputHeightNumber(int value) {
@@ -622,6 +625,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     print(savedToken);
     print(selectedHobby);
     print(selectedCharacteristics);
+    var new_region = (content == "" ? region : content);
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -661,7 +665,12 @@ class _MyPageEditState extends State<MyPageEdit> {
       print('Response body: ${response.body}');
       _showEditsuccess("수정에 성공하였습니다.");
       sleep(const Duration(seconds: 2));
-      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MainApp(
+                    currentIndex: 3,
+                  ))).then((value) => setState(() {}));
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
@@ -1252,6 +1261,9 @@ class _MyPageEditState extends State<MyPageEdit> {
                         child: TextField(
                             controller: _textController,
                             decoration: InputDecoration(
+                              hintStyle: TextStyle(fontSize: 12),
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(12.0, 13, 10, 13),
                               isDense: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
