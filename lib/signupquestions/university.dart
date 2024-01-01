@@ -46,7 +46,6 @@ class _UniversityPageState extends State<UniversityPage>
   void InputUniversity(String value) {
     setState(() {
       University = value;
-      if (University.length > 0) IsValid = true;
     });
   }
 
@@ -92,12 +91,6 @@ class _UniversityPageState extends State<UniversityPage>
           backgroundColor: Colors.white,
           title: Text(''),
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              sendBackRequest(context,true);
-            },
-          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -220,8 +213,8 @@ class _UniversityPageState extends State<UniversityPage>
         floatingActionButton: Container(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: InkWell(
-          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-            child: staticButton(text: '다음'),
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(text: '다음', IsValid: IsValid),
             onTap: (IsValid)
                 ? () {
                     _increaseProgressAndNavigate();

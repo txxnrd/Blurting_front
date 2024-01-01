@@ -41,7 +41,7 @@ class _MBTIPageState extends State<MBTIPage>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 400), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
     _progressAnimation = Tween<double>(

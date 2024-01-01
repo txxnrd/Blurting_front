@@ -37,7 +37,6 @@ class ImagePageState extends State<ImagePage>
   int imageQuality = 90;
 
   Future<void> _pickAndUploadImage(int imageNumber) async {
-    count += 1;
     IsValid = false;
     var picker = ImagePicker();
     String savedToken = await getToken();
@@ -76,8 +75,8 @@ class ImagePageState extends State<ImagePage>
             },
           ),
         );
-
         if (response.statusCode == 200 || response.statusCode == 201) {
+          count += 1;
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
@@ -94,6 +93,7 @@ class ImagePageState extends State<ImagePage>
               } else if (imageNumber == 3) {
                 _image3Url = imageUrl;
               }
+
               if (count >= 3) IsValid = true;
             });
           }
@@ -122,8 +122,7 @@ class ImagePageState extends State<ImagePage>
         .then((_) {
       // 첫 번째 화면으로 돌아왔을 때 실행될 로직
       setState(() {
-        IsValid = true; // 이 변수도 초기화하는 것으로 보임
-        count = 3;
+        IsValid = true; // 이 변수도 초기화
       });
     });
   }
@@ -133,7 +132,7 @@ class ImagePageState extends State<ImagePage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
+      duration: Duration(milliseconds: 400), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
@@ -199,187 +198,192 @@ class ImagePageState extends State<ImagePage>
     }
     double width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        sendBackRequest(context, false);
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        title: Text(''),
-        elevation: 0,
-
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            Stack(
-              clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-              children: [
-                // 전체 배경색 설정 (하늘색)
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9), // 하늘색
-                    borderRadius: BorderRadius.circular(4.0),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(''),
+          elevation: 0,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+              ),
+              Stack(
+                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                children: [
+                  // 전체 배경색 설정 (하늘색)
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD9D9D9), // 하늘색
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
                   ),
-                ),
-                // 완료된 부분 배경색 설정
-                Container(
-                  height: 10,
-                  width: MediaQuery.of(context).size.width *
-                      (_progressAnimation?.value ?? 0.3),
-                  decoration: BoxDecoration(
+                  // 완료된 부분 배경색 설정
+                  Container(
+                    height: 10,
+                    width: MediaQuery.of(context).size.width *
+                        (_progressAnimation?.value ?? 0.3),
+                    decoration: BoxDecoration(
+                      color: mainColor.black,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  Positioned(
+                    left: MediaQuery.of(context).size.width *
+                            (_progressAnimation?.value ?? 0.3) -
+                        15,
+                    bottom: -10,
+                    child: Image.asset(
+                      gender == Gender.male
+                          ? 'assets/man.png'
+                          : gender == Gender.female
+                              ? 'assets/woman.png'
+                              : 'assets/signupface.png', // 기본 이미지
+                      width: 30,
+                      height: 30,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                '당신의 사진을 등록해주세요!',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     color: mainColor.black,
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width *
-                          (_progressAnimation?.value ?? 0.3) -
-                      15,
-                  bottom: -10,
-                  child: Image.asset(
-                    gender == Gender.male
-                        ? 'assets/man.png'
-                        : gender == Gender.female
-                            ? 'assets/woman.png'
-                            : 'assets/signupface.png', // 기본 이미지
-                    width: 30,
-                    height: 30,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              '당신의 사진을 등록해주세요!',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: mainColor.black,
-                  fontFamily: 'Pretendard'),
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
-              children: [
-                InkWell(
-                  onTap: () => _pickAndUploadImage(1),
-                  child: Container(
-                    width: 100,
-                    height: 125,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF868686)),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: _image1 == null
-                          ? Center(
-                              child: Icon(Icons.add,
-                                  color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image1!,
-                              fit: BoxFit.cover), // 선택된 이미지 표시
+                    fontFamily: 'Pretendard'),
+              ),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
+                children: [
+                  InkWell(
+                    onTap: () => _pickAndUploadImage(1),
+                    child: Container(
+                      width: 100,
+                      height: 125,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFF868686)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: _image1 == null
+                            ? Center(
+                                child: Icon(Icons.add,
+                                    color: Color(0xFF868686), size: 40.0))
+                            : Image.file(_image1!,
+                                fit: BoxFit.cover), // 선택된 이미지 표시
+                      ),
                     ),
                   ),
-                ),
-                InkWell(
-                  onTap: () => _pickAndUploadImage(2),
-                  child: Container(
-                    width: 100,
-                    height: 125,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF868686)),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: _image2 == null
-                          ? Center(
-                              child: Icon(Icons.add,
-                                  color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image2!,
-                              fit: BoxFit.cover), // 선택된 이미지 표시
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () => _pickAndUploadImage(3),
-                  child: Container(
-                    width: 100,
-                    height: 125,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFF868686)),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: _image3 == null
-                          ? Center(
-                              child: Icon(Icons.add,
-                                  color: Color(0xFF868686), size: 40.0))
-                          : Image.file(_image3!,
-                              fit: BoxFit.cover), // 선택된 이미지 표시
+                  InkWell(
+                    onTap: () => _pickAndUploadImage(2),
+                    child: Container(
+                      width: 100,
+                      height: 125,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFF868686)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: _image2 == null
+                            ? Center(
+                                child: Icon(Icons.add,
+                                    color: Color(0xFF868686), size: 40.0))
+                            : Image.file(_image2!,
+                                fit: BoxFit.cover), // 선택된 이미지 표시
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 26),
-            Container(
-              width: 180,
-              height: 12,
-              child: RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Pretendard',
-                    color: mainColor.black,
+                  InkWell(
+                    onTap: () => _pickAndUploadImage(3),
+                    child: Container(
+                      width: 100,
+                      height: 125,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFF868686)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: _image3 == null
+                            ? Center(
+                                child: Icon(Icons.add,
+                                    color: Color(0xFF868686), size: 40.0))
+                            : Image.file(_image3!,
+                                fit: BoxFit.cover), // 선택된 이미지 표시
+                      ),
+                    ),
                   ),
-                  children: [
-                    TextSpan(
-                      text: '*얼굴이 ',
+                ],
+              ),
+              SizedBox(height: 26),
+              Container(
+                width: 180,
+                height: 12,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Pretendard',
+                      color: mainColor.black,
                     ),
-                    TextSpan(
-                      text: '잘 보이는',
-                      style:
-                          TextStyle(color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
-                    ),
-                    TextSpan(
-                      text: ' 사진 3장을 등록해주세요.',
-                    ),
-                  ],
+                    children: [
+                      TextSpan(
+                        text: '*얼굴이 ',
+                      ),
+                      TextSpan(
+                        text: '잘 보이는',
+                        style: TextStyle(
+                            color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                      ),
+                      TextSpan(
+                        text: ' 사진 3장을 등록해주세요.',
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 28),
-          ],
+              SizedBox(height: 28),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-        child: InkWell(
-          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-          child: signupButton(text: '다음',IsValid:IsValid),
-          onTap: (IsValid)
-              ? () {
-                  _sendPostRequest();
-                }
-              : null,
+        floatingActionButton: Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(text: '다음', IsValid: IsValid),
+            onTap: (IsValid)
+                ? () {
+                    _sendPostRequest();
+                  }
+                : null,
+          ),
         ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
