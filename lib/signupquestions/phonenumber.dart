@@ -201,7 +201,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간
+      duration: Duration(milliseconds: 400), // 애니메이션의 지속 시간
       vsync: this,
     );
     Firebase.initializeApp().whenComplete(() {
@@ -328,7 +328,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   decoration: InputDecoration(
                     isDense: true,
                     hintText: '010-1234-5678',
-                    counterText: '', // 이 부분을 추가
+                    counterText: '', // /maxlength가 안보이게 추가
                     hintStyle: TextStyle(
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w700,

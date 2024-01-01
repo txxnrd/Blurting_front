@@ -51,7 +51,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간
+      duration: Duration(milliseconds: 400), // 애니메이션의 지속 시간
       vsync: this,
     );
 
