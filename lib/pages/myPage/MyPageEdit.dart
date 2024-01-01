@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/pages/myPage/Utils.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
@@ -26,180 +27,11 @@ class MyPageEdit extends StatefulWidget {
   _MyPageEditState createState() => _MyPageEditState();
 }
 
-List<bool> _selectedreligion = [true, false, false, false, false];
-
-List<Widget> religion = <Widget>[
-  Text('무교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[0] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('불교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[1] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('기독교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[2] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('천주교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[3] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('기타',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[4] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-];
-
 int religionIndex = 0;
 int alcoholIndex = 0;
 int smokeIndex = 0;
 String region = "";
 int height = 0;
-
-List<Widget> sexualpreference = <Widget>[
-  Text('이성애자',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('동성애자',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('양성애자',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-];
-// List<bool> _selectedsexualpreference = <bool>[false, false, false];
-
-List<Widget> alcohol = <Widget>[
-  Text('안 마심',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('가끔',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('자주',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('매일',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
-];
-List<bool> _selectedalcohol = <bool>[false, false, false, false];
-
-const List<Widget> smoke = <Widget>[
-  Text('안 피움',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('가끔',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('자주',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('매일',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
-];
-List<bool> _selectedsmoke = <bool>[false, false, false, false];
-
-//Hobby 각각 선택 되었는지 보여줌.
-List<bool> isValidHobbyList = [
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false
-];
-
-//Character 각각 선택 되었는지 보여줌.
-List<bool> isValidCharacterList = [
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false
-];
-
-List<String> characteristic = [
-  "개성적인",
-  "책임감있는",
-  "열정적인",
-  "귀여운",
-  "상냥한",
-  "감성적인",
-  "낙천적인",
-  "유머있는",
-  "차분한",
-  "지적인",
-  "섬세한",
-  "무뚝뚝한",
-  "외향적인",
-  "내향적인"
-];
-List<String> hobby = [
-  "애니",
-  "그림그리기",
-  "술",
-  "영화/드라마",
-  "여행",
-  "요리",
-  "자기계발",
-  "독서",
-  "게임",
-  "노래듣기",
-  "봉사활동",
-  "운동",
-  "노래부르기",
-  "산책"
-];
-
-enum EorI { e, i }
-
-enum SorN { s, n }
-
-enum TorF { t, f }
-
-enum JorP { j, p }
 
 @override
 class _MyPageEditState extends State<MyPageEdit> {
@@ -410,6 +242,77 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
+  Future<void> _pickAndUploadImage(int imageNumber) async {
+    IsValid = false;
+    var picker = ImagePicker();
+    String savedToken = await getToken();
+    var image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 60); // imageQuality는 필요에 따라 조절
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
+
+    if (image != null) {
+      File selectedImage = File(image.path);
+      setState(() {
+        if (imageNumber == 1) {
+          _image1 = selectedImage;
+        } else if (imageNumber == 2) {
+          _image2 = selectedImage;
+        } else if (imageNumber == 3) {
+          _image3 = selectedImage;
+        }
+      });
+
+      FormData formData = FormData.fromMap({
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image$imageNumber.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          count += 1;
+          print('Server returned OK');
+          print('Response body: ${response.data}');
+          var urlList = response.data;
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
+            String imageUrl = urlList[0]['url'];
+            print('Image $imageNumber URL: $imageUrl');
+            setState(() {
+              if (imageNumber == 1) {
+                _image1Url = imageUrl;
+              } else if (imageNumber == 2) {
+                _image2Url = imageUrl;
+              } else if (imageNumber == 3) {
+                _image3Url = imageUrl;
+              }
+
+              if (count >= 3) IsValid = true;
+            });
+          }
+        } else {
+          print('Request failed with status: ${response.statusCode}.');
+        }
+      } catch (e, stacktrace) {
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+      }
+    }
+  }
+
   ///체크하면 아까 ValidList가 수정이됨
   @override
   void IsHobbySelected(int index) {
@@ -493,25 +396,25 @@ class _MyPageEditState extends State<MyPageEdit> {
     _image3Url = widget.data['images'][2];
     print(_image1Url);
     // _selectedreligion 초기화
-    _selectedreligion = [false, false, false, false, false];
+    selectedreligion = [false, false, false, false, false];
 
     _textController.text = widget.data['height'].toString();
 
     // widget.data['religion']에 따라 초기값 설정
     if (widget.data['religion'] == "무교") {
-      _selectedreligion[0] = true;
+      selectedreligion[0] = true;
       religionIndex = 0;
     } else if (widget.data['religion'] == "불교") {
-      _selectedreligion[1] = true;
+      selectedreligion[1] = true;
       religionIndex = 1;
     } else if (widget.data['religion'] == "기독교") {
-      _selectedreligion[2] = true;
+      selectedreligion[2] = true;
       religionIndex = 2;
     } else if (widget.data['religion'] == "천주교") {
-      _selectedreligion[3] = true;
+      selectedreligion[3] = true;
       religionIndex = 3;
     } else {
-      _selectedreligion[4] = true;
+      selectedreligion[4] = true;
       religionIndex = 4;
     }
     // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
@@ -525,15 +428,15 @@ class _MyPageEditState extends State<MyPageEdit> {
         isValidHobbyList[i] = true;
       }
     }
-    _selectedalcohol = <bool>[false, false, false, false];
-    _selectedsmoke = <bool>[false, false, false, false];
+    selectedalcohol = <bool>[false, false, false, false];
+    selectedsmoke = <bool>[false, false, false, false];
     // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
 
-    _selectedalcohol[widget.data["drink"]] = true;
+    selectedalcohol[widget.data["drink"]] = true;
     alcoholIndex = widget.data["drink"];
     region = widget.data["region"];
     height = widget.data['height'];
-    _selectedsmoke[widget.data["cigarette"]] = true;
+    selectedsmoke[widget.data["cigarette"]] = true;
     smokeIndex = widget.data["cigarette"];
 
     if (widget.data.containsKey('mbti') && widget.data['mbti'] is String) {
@@ -601,19 +504,19 @@ class _MyPageEditState extends State<MyPageEdit> {
       return;
     }
 
-    for (int i = 0; i < _selectedalcohol.length; i++) {
-      if (_selectedalcohol[i]) {
+    for (int i = 0; i < selectedalcohol.length; i++) {
+      if (selectedalcohol[i]) {
         drink = i;
       }
     }
-    for (int i = 0; i < _selectedsmoke.length; i++) {
-      if (_selectedsmoke[i]) {
+    for (int i = 0; i < selectedsmoke.length; i++) {
+      if (selectedsmoke[i]) {
         smoke = i;
       }
     }
 
-    for (int i = 0; i < _selectedreligion.length; i++) {
-      if (_selectedreligion[i]) {
+    for (int i = 0; i < selectedreligion.length; i++) {
+      if (selectedreligion[i]) {
         String religionText = (religion[i] as Text).data!;
         selectedReligionString = religionText;
         break;
@@ -836,10 +739,10 @@ class _MyPageEditState extends State<MyPageEdit> {
       return InkWell(
         onTap: () {
           setState(() {
-            for (int i = 0; i < _selectedreligion.length; i++) {
-              _selectedreligion[i] = false;
+            for (int i = 0; i < selectedreligion.length; i++) {
+              selectedreligion[i] = false;
             }
-            _selectedreligion[index] = true;
+            selectedreligion[index] = true;
             religionIndex = index;
           });
         },
@@ -853,7 +756,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 fontFamily: 'Heebo',
-                color: _selectedreligion[index] == true
+                color: selectedreligion[index] == true
                     ? mainColor.MainColor
                     : mainColor.Gray),
             child: Text(
@@ -869,10 +772,10 @@ class _MyPageEditState extends State<MyPageEdit> {
         child: InkWell(
           onTap: () {
             setState(() {
-              for (int i = 0; i < _selectedsmoke.length; i++) {
-                _selectedalcohol[i] = false;
+              for (int i = 0; i < selectedsmoke.length; i++) {
+                selectedalcohol[i] = false;
               }
-              _selectedalcohol[index] = true;
+              selectedalcohol[index] = true;
               alcoholIndex = index;
             });
           },
@@ -886,7 +789,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Heebo',
-                  color: _selectedalcohol[index] == true
+                  color: selectedalcohol[index] == true
                       ? mainColor.MainColor
                       : mainColor.Gray),
               child: Text(
@@ -903,10 +806,10 @@ class _MyPageEditState extends State<MyPageEdit> {
         child: InkWell(
           onTap: () {
             setState(() {
-              for (int i = 0; i < _selectedsmoke.length; i++) {
-                _selectedsmoke[i] = false;
+              for (int i = 0; i < selectedsmoke.length; i++) {
+                selectedsmoke[i] = false;
               }
-              _selectedsmoke[index] = true;
+              selectedsmoke[index] = true;
               smokeIndex = index;
             });
           },
@@ -920,7 +823,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Heebo',
-                  color: _selectedsmoke[index] == true
+                  color: selectedsmoke[index] == true
                       ? mainColor.MainColor
                       : mainColor.Gray),
               child: Text(
@@ -1897,7 +1800,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                           MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
                       children: [
                         InkWell(
-                          onTap: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
+                          onTap: () => _pickAndUploadImage(
+                              1), // 버튼을 누를 때 _pickImage 함수 호출
                           child: Container(
                             width: 100,
                             height: 125,
@@ -1917,7 +1821,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                         ),
                         InkWell(
-                          onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
+                          onTap: () => _pickAndUploadImage(2),
                           child: Container(
                             width: 100,
                             height: 125,
@@ -1936,7 +1840,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                         ),
                         InkWell(
-                          onTap: _pickImage3, // 버튼을 누를 때 _pickImage 함수 호출
+                          onTap: () => _pickAndUploadImage(3),
                           child: Container(
                             width: 100,
                             height: 125,
