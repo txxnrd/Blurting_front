@@ -88,7 +88,7 @@ class _SettingPageState extends State<SettingPage> {
                                       child: Column(
                                         children: [
                                           Text(
-                                            '이대로 삭제하면 계정을 복구 할 수 없습니다.',
+                                            '이대로 삭제하면 계정을 복구할 수 없습니다.',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,

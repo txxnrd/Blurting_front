@@ -42,7 +42,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
   }
 
   bool IsValid = false;
-
   @override
   void IsSelected(String content) {
     setState(() {
@@ -141,7 +140,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     Gender? gender;

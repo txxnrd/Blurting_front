@@ -2,7 +2,6 @@ import 'package:blurting/mainApp.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'dart:async';
 
 class UseGuidePagedone extends StatefulWidget {
   @override

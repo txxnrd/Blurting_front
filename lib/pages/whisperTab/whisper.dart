@@ -189,9 +189,7 @@ class _Whisper extends State<Whisper> {
       widget.socket.on('disconnect', (_) {
         print('소켓 연결 끊김');
       });
-    }
-
-    ;
+    };
 
     initializeSocket();
 
@@ -214,7 +212,7 @@ class _Whisper extends State<Whisper> {
   @override
   void dispose() {
     super.dispose();
-
+    
     widget.socket.off('new_chat');
 
     if (mounted) {
@@ -287,6 +285,7 @@ class _Whisper extends State<Whisper> {
             onTap: () {
               Navigator.pop(context);
             }),
+        titleSpacing: 0,
         title: Row(
           children: [
             GestureDetector(
@@ -544,7 +543,6 @@ class _Whisper extends State<Whisper> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
             color: Colors.white.withOpacity(0.4),
           ),
@@ -556,7 +554,7 @@ class _Whisper extends State<Whisper> {
                   SingleChildScrollView(
                     controller: _scrollController,
                     child: Container(
-                      margin: EdgeInsets.only(top: 180),
+                      margin: EdgeInsets.only(top: 200),
                       child: Column(
                         children: <Widget>[
                           for (var chatItem in chatMessages) chatItem,
@@ -566,16 +564,15 @@ class _Whisper extends State<Whisper> {
                     ),
                   ),
                   AnimatedOpacity(
-                      opacity: isMaxScroll ? 0.0 : 1.0,
-                      duration: Duration(milliseconds: 500),
+                    opacity: isMaxScroll ? 0.0 : 1.0,
+                    duration: Duration(milliseconds: 500),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: Container(
                           margin: EdgeInsets.all(10),
                           child: FloatingActionButton(
                             backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                             mini: true,
                             onPressed: () {
                               _scrollController.position.jumpTo(

@@ -134,7 +134,6 @@ class HobbyPageState extends State<HobbyPage>
   }
 
   bool IsValid = false;
-
   @override
   void IsSelected(int index) {
     var true_length = isValidList.where((item) => item == true).length;
