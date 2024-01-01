@@ -277,7 +277,7 @@ class _Whisper extends State<Whisper> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      // resizeToAvoidBottomInset: true,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         toolbarHeight: 150,
@@ -291,6 +291,7 @@ class _Whisper extends State<Whisper> {
             onTap: () {
               Navigator.pop(context);
             }),
+        titleSpacing: 0,
         title: Row(
           children: [
             GestureDetector(
@@ -551,7 +552,6 @@ class _Whisper extends State<Whisper> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
             color: Colors.white.withOpacity(0.4),
           ),
@@ -563,7 +563,7 @@ class _Whisper extends State<Whisper> {
                   SingleChildScrollView(
                     controller: _scrollController,
                     child: Container(
-                      margin: EdgeInsets.only(top: 180),
+                      margin: EdgeInsets.only(top: 200),
                       child: Column(
                         children: <Widget>[
                           for (var chatItem in chatMessages) chatItem,

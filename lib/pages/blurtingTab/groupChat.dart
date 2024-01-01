@@ -41,36 +41,33 @@ class QuestionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Q$questionNumber. ',
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Q$questionNumber. ',
+          style: TextStyle(
+            fontFamily: 'Heebo',
+            fontSize: 12,
+            color: mainColor.Gray,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.98,
+          child: Text(
+            question,
             style: TextStyle(
               fontFamily: 'Heebo',
               fontSize: 12,
               color: mainColor.Gray,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w500,
             ),
+            overflow: TextOverflow.fade,
+            textAlign: TextAlign.center,
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.98,
-            child: Text(
-              question,
-              style: TextStyle(
-                fontFamily: 'Heebo',
-                fontSize: 12,
-                color: mainColor.Gray,
-                fontWeight: FontWeight.w500,
-              ),
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -233,7 +230,7 @@ class _GroupChat extends State<GroupChat> {
             alignment: Alignment.center,
             children: [
               Container(
-                height: 80,
+                height: 90,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -267,7 +264,6 @@ class _GroupChat extends State<GroupChat> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
             color: Colors.white.withOpacity(0.4),
           ),
