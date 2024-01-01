@@ -205,7 +205,22 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      String text = _controller.text;
+
+      // Checking if the text has been added or removed.
+      if (_previousText == null ||
+          (text.length > (_previousText?.length ?? 0))) {
+        if (text.length == 3 || text.length == 8) {
+          text += '-';
+          _controller.text = text;
+          _controller.selection =
+              TextSelection.fromPosition(TextPosition(offset: text.length));
         }
+      } else if (text.length < (_previousText?.length ?? 0)) {
         if (text.length == 4 || text.length == 9) {
           text = text.substring(0, text.length - 1);
           _controller.text = text;

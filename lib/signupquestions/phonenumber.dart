@@ -14,6 +14,9 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 
+class PhoneNumberPage extends StatefulWidget {
+  const PhoneNumberPage({super.key});
+
   @override
   _PhoneNumberPageState createState() => _PhoneNumberPageState();
 }

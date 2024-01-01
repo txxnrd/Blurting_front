@@ -31,7 +31,6 @@ class Whisper extends StatefulWidget {
 }
 
 double calculateBlurSigma(int blurValue) {
-  // Normalize the blur value to be between 0.0 and 1.0
   if (blurValue == 4) {
     return 0.0;
   } else {
@@ -232,7 +231,6 @@ class _Whisper extends State<Whisper> {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              // Background with semi-transparent black color
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -241,7 +239,6 @@ class _Whisper extends State<Whisper> {
                   color: Colors.black.withOpacity(0.5),
                 ),
               ),
-              // Your ProfileCard
               ProfileCard(
                 socket: widget.socket,
                 userId: otherId,

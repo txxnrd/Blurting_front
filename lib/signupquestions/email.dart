@@ -75,10 +75,7 @@ class _EmailPageState extends State<EmailPage>
     WidgetsBinding.instance?.removeObserver(this); // 옵저버 제거
     super.dispose();
   }
-  @override
-  void NowCertification() {
     setState(() {
-      certification = true;
     });
   }
 
