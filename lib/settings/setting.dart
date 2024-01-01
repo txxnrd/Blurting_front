@@ -1,6 +1,6 @@
 import 'package:blurting/StartPage/startpage.dart';
-import 'package:blurting/pages/useGuide/useguidepageone.dart';
-
+import 'package:blurting/settings/url_link.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/settings/info.dart';
 import 'package:blurting/signupquestions/welcomepage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -48,25 +48,40 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  void _showVerificationFailedSnackBar(value) {
-    print("snackbar 실행");
-    final snackBar = SnackBar(
-      content: Text(value),
-      backgroundColor: Colors.black.withOpacity(0.7),
-      action: SnackBarAction(
-        label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
-        onPressed: () {
-          // SnackBar 닫기 액션
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-      behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   int count = 10;
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('정말 탈퇴 하시겠어요?'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('계정 삭제 시, 계정을 복구 하실 수 없습니다.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('삭제'),
+              onPressed: () {
+                _sendDeleteRequest();
+              },
+            ),
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> _sendDeleteRequest() async {
     print('_sendPostRequest called');
@@ -89,16 +104,7 @@ class _SettingPageState extends State<SettingPage> {
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-
-      var data = json.decode(response.body);
-
-      if (data['signupToken'] != null) {
-        var token = data['signupToken'];
-        print(token);
-        await saveToken(token);
-      } else {}
+      showSnackBar(context, "계정 삭제가 완료되었습니다.");
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
@@ -163,10 +169,23 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  Widget settingDescription_list(String text) {
+    return Container(
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Color(DefinedColor.gray)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         scrolledUnderElevation: 0.0,
         backgroundColor: Colors.transparent,
         title: Text(
@@ -192,15 +211,7 @@ class _SettingPageState extends State<SettingPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    child: Text(
-                      '알림 설정',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
+                  settingDescription("알림 설정"),
                   SizedBox(
                     height: 18,
                   ),
@@ -208,28 +219,12 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       _checkfcm();
                     },
-                    child: Container(
-                      child: Text(
-                        '알림 및 소리',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("알림"),
                   ),
                   SizedBox(
                     height: 34,
                   ),
-                  Container(
-                    child: Text(
-                      '사용자 설정',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
+                  settingDescription("사용자 설정"),
                   SizedBox(
                     height: 18,
                   ),
@@ -237,22 +232,14 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       _getuserinfo();
                     },
-                    child: Container(
-                      child: Text(
-                        '계정/정보 관리',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("계정 및 정보"),
                   ),
                   SizedBox(
                     height: 18,
                   ),
                   InkWell(
                     onTap: () {
-                      _showVerificationFailedSnackBar("로그아웃 완료");
+                      showSnackBar(context, "로그아웃 완료");
                       clearAllData();
                       Navigator.push(
                         context,
@@ -274,30 +261,14 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      _sendDeleteRequest();
+                      _showMyDialog();
                     },
-                    child: Container(
-                      child: Text(
-                        '계정 삭제하기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("계정 삭제하기"),
                   ),
                   SizedBox(
                     height: 34,
                   ),
-                  Container(
-                    child: Text(
-                      '기타',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(DefinedColor.gray)),
-                    ),
-                  ),
+                  settingDescription("기타"),
                   SizedBox(
                     height: 18,
                   ),
@@ -308,15 +279,7 @@ class _SettingPageState extends State<SettingPage> {
                         MaterialPageRoute(builder: (context) => NoticePage()),
                       );
                     },
-                    child: Container(
-                      child: Text(
-                        '공지사항',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
-                      ),
-                    ),
+                    child: settingDescription_list("공지사항"),
                   ),
                   SizedBox(
                     height: 18,
@@ -324,22 +287,21 @@ class _SettingPageState extends State<SettingPage> {
                   InkWell(
                     onTap: () async {
                       launchUrl(
-                        Uri.parse(
-                            'https://www.instagram.com/blurting.official/'),
+                        Uri.parse(URLLink.blurting_instagram),
                       );
                     },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '개발자에게 문의하기',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.gray)),
-                        ),
-                      ],
-                    ),
+                    child: settingDescription_list("개발자에게 문의하기"),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      launchUrl(
+                        Uri.parse(URLLink.privacy_policy),
+                      );
+                    },
+                    child: settingDescription_list("개인정보 처리 방침"),
                   ),
                 ],
               ),

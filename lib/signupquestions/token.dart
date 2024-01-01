@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:blurting/StartPage/startpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,8 @@ Future<void> saveRefreshToken(String refreshToken) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('refreshToken', refreshToken);
   // 저장된 값을 확인하기 위해 바로 불러옵니다.
-  String savedRefreshToken = prefs.getString('refreshToken') ?? 'No Refresh Token';
+  String savedRefreshToken =
+      prefs.getString('refreshToken') ?? 'No Refresh Token';
   print('Saved Refresh Token: $savedRefreshToken'); // 콘솔에 출력하여 확인
 }
 
@@ -43,22 +43,20 @@ Future<String> getRefreshToken() async {
 }
 
 Future<void> getnewaccesstoken<T>(
-    BuildContext context, 
-    Future<void> Function() callback0,
+    BuildContext context, Future<void> Function() callback0,
     [Future<void> Function(T)? callback1,
     T? argument1,
     Future<void> Function(String, int)? callback2,
     dynamic argument2,
     Future<void> Function(int, int)? callback3,
     dynamic argument3]) async {
-
   // String token = await getToken();
   print('액세스 토큰 발급');
   // print(token);
 
 /*여기서부터 내 정보 요청하기*/
   var url = Uri.parse(API.refresh);
-  
+
   String refreshToken = await getRefreshToken();
   print(refreshToken);
 
@@ -92,7 +90,6 @@ Future<void> getnewaccesstoken<T>(
       print('인수 없는 함수 호출');
       await callback0();
     }
-    
   } else if (response.statusCode == 401) {
     print('refresh 토큰이 invalid, 로그인 페이지로');
     // refresh 토큰이 invalid한 경우, 로그인 페이지로
@@ -112,4 +109,3 @@ Future<void> clearAllData() async {
   await prefs.clear(); // 모든 저장된 데이터를 지웁니다.
   print('All data cleared'); // 콘솔에 'All data cleared' 메시지를 출력하여 확인
 }
-
