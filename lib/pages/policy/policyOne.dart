@@ -5,13 +5,12 @@ import 'package:blurting/pages/policy/policyFour.dart';
 import 'package:blurting/pages/policy/policyThree.dart';
 import 'package:blurting/pages/policy/policyTwo.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -43,8 +42,9 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
     false,
   ];
   Future<void> _increaseProgressAndNavigate() async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => UseGuidePagedone()));}
-
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => UseGuidePagedone()));
+  }
 
   Widget customCheckbox(String hobbyText, int index) {
     return Container(
@@ -65,7 +65,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
             child: Checkbox(
               side: BorderSide(color: Colors.transparent),
               fillColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
                   if (states.contains(MaterialState.selected)) {
                     return Color(0xFFF66464); // 선택되었을 때의 배경 색상
                   }
@@ -104,8 +104,8 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
       isValidList[4] = !isValidList[4];
       // If checked, set all items below to true
 
-        for (int i = 0; i < 4; i++) {
-          isValidList[i] = isValidList[4];
+      for (int i = 0; i < 4; i++) {
+        isValidList[i] = isValidList[4];
       }
     } else {
       // Clicked on other checkboxes
@@ -266,7 +266,6 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
                 ],
               ),
             ),
-
           ],
         ),
       ),
@@ -285,8 +284,8 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
           ),
           onPressed: (IsValid)
               ? () {
-            _increaseProgressAndNavigate();
-          }
+                  _increaseProgressAndNavigate();
+                }
               : null,
           child: Text(
             '다음',
@@ -300,7 +299,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

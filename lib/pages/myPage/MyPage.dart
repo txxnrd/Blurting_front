@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

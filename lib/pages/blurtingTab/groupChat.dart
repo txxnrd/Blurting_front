@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';
@@ -96,7 +96,7 @@ class _GroupChat extends State<GroupChat> {
   @override
   void initState() {
     super.initState();
-    
+
     Future<void> initializeSocket() async {
       // 맨 처음 들어왔을 땐 마지막...
       await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
@@ -134,7 +134,6 @@ class _GroupChat extends State<GroupChat> {
     _pageController = PageController(initialPage: _questionNumber - 1);
 
     loadTime();
-
   }
 
   @override
@@ -222,9 +221,7 @@ class _GroupChat extends State<GroupChat> {
                     )),
               ],
             ),
-            Positioned(
-                right: 0,
-                child: pointAppbar()),
+            Positioned(right: 0, child: pointAppbar()),
           ],
         ),
         bottom: PreferredSize(
@@ -275,7 +272,7 @@ class _GroupChat extends State<GroupChat> {
             margin: EdgeInsets.only(top: 250), // 시작 위치에 여백 추가
             child: PageView.builder(
               controller: _pageController,
-                  // PageController(initialPage: _questionNumber - 1),
+              // PageController(initialPage: _questionNumber - 1),
               itemCount: _questionNumber, // 전체 페이지 수
               itemBuilder: (BuildContext context, int index) {
                 return questionPage(index + 1);
@@ -303,7 +300,7 @@ class _GroupChat extends State<GroupChat> {
     });
 
     return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(
           child: SingleChildScrollView(
@@ -374,7 +371,7 @@ class _GroupChat extends State<GroupChat> {
     return Container(
       margin: EdgeInsets.zero,
       child: InkWell(
-          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+        splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
         onTap: (_questionNumber >= index)
             ? () {
                 _pageController.animateToPage(
@@ -415,7 +412,7 @@ class _GroupChat extends State<GroupChat> {
 
     final url = Uri.parse(API.latest);
     String savedToken = await getToken();
-        
+
     final response = await http.get(
       url,
       headers: {
@@ -425,14 +422,10 @@ class _GroupChat extends State<GroupChat> {
     );
 
     if (response.statusCode == 200) {
-
       socket = IO.io(
           '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
         'transports': ['websocket'],
-        'auth': {
-          'authorization':
-              'Bearer $savedToken'
-        },
+        'auth': {'authorization': 'Bearer $savedToken'},
       });
 
       try {
@@ -471,7 +464,9 @@ class _GroupChat extends State<GroupChat> {
               }
               if (mounted) {
                 setState(() {
-                  if (answerData['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
+                  if (answerData['userId'] ==
+                      Provider.of<UserProvider>(context, listen: false)
+                          .userId) {
                     answerList[currentIndex].add(MyChat(
                         message: answerData['answer'],
                         createdAt: '',
@@ -504,8 +499,7 @@ class _GroupChat extends State<GroupChat> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
@@ -552,7 +546,8 @@ class _GroupChat extends State<GroupChat> {
             }
 
             setState(() {
-              if (answerData['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
+              if (answerData['userId'] ==
+                  Provider.of<UserProvider>(context, listen: false).userId) {
                 answerList[currentIndex].add(MyChat(
                     message: answerData['answer'],
                     createdAt: '',
@@ -562,17 +557,18 @@ class _GroupChat extends State<GroupChat> {
                 isBlock[currentIndex] = true; // true가 맞음
               } else {
                 answerList[currentIndex].add(AnswerItem(
-                    key: ObjectKey(answerData['id']),
-                    message: answerData['answer'],
-                    iLike: answerData['ilike'],
-                    likedNum: answerData['likes'],
-                    userId: answerData['userId'],
-                    userName: answerData['userNickname'],
-                    isAlready: isAlready,
-                    image: answerData['userSex'],
-                    mbti: answerData['mbti'] ?? '',
-                    answerId: answerData['id'],
-                    socket: socket,));
+                  key: ObjectKey(answerData['id']),
+                  message: answerData['answer'],
+                  iLike: answerData['ilike'],
+                  likedNum: answerData['likes'],
+                  userId: answerData['userId'],
+                  userName: answerData['userNickname'],
+                  isAlready: isAlready,
+                  image: answerData['userSex'],
+                  mbti: answerData['mbti'] ?? '',
+                  answerId: answerData['id'],
+                  socket: socket,
+                ));
               }
             });
           }
@@ -583,19 +579,12 @@ class _GroupChat extends State<GroupChat> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       getnewaccesstoken(
-        context,
-        () async {
-        },
-        fetchIndexComments,
-        no,
-        null, null
-      );
-    }
-    else {
+          context, () async {}, fetchIndexComments, no, null, null);
+    } else {
       print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
@@ -639,13 +628,12 @@ class _GroupChat extends State<GroupChat> {
           print(response.body);
         });
       }
-    }    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      await getnewaccesstoken(context, () async {
-      }, null, null, SendAnswer, [answer, questionId]);
-    }
-    else {
+      await getnewaccesstoken(
+          context, () async {}, null, null, SendAnswer, [answer, questionId]);
+    } else {
       print('요청 실패');
       print(response.statusCode);
     }

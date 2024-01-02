@@ -4,7 +4,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/mbti/Utils.dart'; // sex.dart를 임포트
 
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/personality.dart'; // sex.dart를 임포트
@@ -224,8 +224,8 @@ class _MBTIPageState extends State<MBTIPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  MBTIDescription('외향형'),
-                  MBTIDescription('내향형'),
+                  MBTIeachDescription('외향형'),
+                  MBTIeachDescription('내향형'),
                 ],
               ),
               SizedBox(
@@ -245,8 +245,8 @@ class _MBTIPageState extends State<MBTIPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  MBTIDescription('감각형'),
-                  MBTIDescription('직관형'),
+                  MBTIeachDescription('감각형'),
+                  MBTIeachDescription('직관형'),
                 ],
               ),
               SizedBox(
@@ -266,8 +266,8 @@ class _MBTIPageState extends State<MBTIPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  MBTIDescription('사고형'),
-                  MBTIDescription('감각형'),
+                  MBTIeachDescription('사고형'),
+                  MBTIeachDescription('감각형'),
                 ],
               ),
               SizedBox(
@@ -287,8 +287,8 @@ class _MBTIPageState extends State<MBTIPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  MBTIDescription('판단형'),
-                  MBTIDescription('인식형'),
+                  MBTIeachDescription('판단형'),
+                  MBTIeachDescription('인식형'),
                 ],
               ),
               SizedBox(height: 58),

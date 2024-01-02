@@ -1,7 +1,7 @@
 import 'package:blurting/mainApp.dart';
 import 'package:blurting/pages/useGuide/useguidepagetwo.dart';
 import 'package:blurting/signupquestions/phonenumber.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
@@ -33,8 +33,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
 
-    Navigator.of(context)
-        .push(
+    Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             UseGuidePageTwo(),
@@ -113,7 +112,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                         width: 240.7,
                         height: 246,
                         child:
-                        Image.asset("assets/images/Blurting_welcome.png"),
+                            Image.asset("assets/images/Blurting_welcome.png"),
                       )
                     ],
                   ),

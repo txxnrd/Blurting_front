@@ -1,6 +1,6 @@
 import 'package:blurting/signupquestions/university.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:dio/dio.dart';
 import '../config/app_config.dart';
@@ -31,12 +31,15 @@ class ImagePageState extends State<ImagePage>
   String? _image1Url;
   String? _image2Url;
   String? _image3Url;
-  int count = 0;
+  int image_uploading_count = 0;
+  int image_uploaded_count = 0;
+
   double? image_maxheight = 700;
   double? image_maxwidth = 700;
   int imageQuality = 90;
 
   Future<void> _pickAndUploadImage(int imageNumber) async {
+    image_uploading_count += 1;
     IsValid = false;
     var picker = ImagePicker();
     String savedToken = await getToken();
@@ -76,7 +79,7 @@ class ImagePageState extends State<ImagePage>
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
-          count += 1;
+          image_uploaded_count += 1;
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
@@ -94,7 +97,8 @@ class ImagePageState extends State<ImagePage>
                 _image3Url = imageUrl;
               }
 
-              if (count >= 3) IsValid = true;
+              if (image_uploaded_count == image_uploading_count &&
+                  image_uploaded_count >= 3) IsValid = true;
             });
           }
         } else {

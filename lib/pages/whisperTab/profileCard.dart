@@ -3,7 +3,7 @@ import 'package:blurting/pages/myPage/MyPage.dart';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../config/app_config.dart';
@@ -231,40 +231,46 @@ class _ProfileCard extends State<ProfileCard> {
                   ],
                 ),
                 Container(
-                margin: EdgeInsets.only(top: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: (checkReason.any((element) => element == true)) ? () {
-                        Navigator.of(context).pop(); // 모달 닫기
-                        print('신고 접수');
-                        sendReport(widget.socket, reason);
-                        setState(() {});
-                      } : null,
-                      child: Container(
-                        width: 210,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: (checkReason.any((element) => element == true)) ? mainColor.MainColor : mainColor.lightGray,
-                          borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '신고하기',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Heebo",
-                                fontSize: 20,
-                                color: Colors.white),
+                  margin: EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed:
+                            (checkReason.any((element) => element == true))
+                                ? () {
+                                    Navigator.of(context).pop(); // 모달 닫기
+                                    print('신고 접수');
+                                    sendReport(widget.socket, reason);
+                                    setState(() {});
+                                  }
+                                : null,
+                        child: Container(
+                          width: 210,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color:
+                                (checkReason.any((element) => element == true))
+                                    ? mainColor.MainColor
+                                    : mainColor.lightGray,
+                            borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '신고하기',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Heebo",
+                                  fontSize: 20,
+                                  color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),  
               ],
             ),
           );

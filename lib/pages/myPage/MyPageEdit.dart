@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/pages/myPage/Utils.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
@@ -11,65 +12,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../config/app_config.dart';
 import '../../signupquestions/activeplacesearch.dart';
-import '../../signupquestions/token.dart';
+import '../../token.dart';
 import 'dart:io';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
 
 class MyPageEdit extends StatefulWidget {
   final dynamic data;
   MyPageEdit({Key? key, this.data}) : super(key: key); // Key 타입을 Key?로 변경
-
   /*MYPAGE에서 버튼 누르면 api 요청 보내서 정보 가져옴.*/
   /*그게 this.data임 (widget.data['region'])식으로 접근 가능.*/
-
   @override
   _MyPageEditState createState() => _MyPageEditState();
 }
-
-List<bool> _selectedreligion = [true, false, false, false, false];
-
-List<Widget> religion = <Widget>[
-  Text('무교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[0] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('불교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[1] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('기독교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[2] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('천주교',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[3] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-  Text('기타',
-      style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Heebo',
-          color: _selectedreligion[4] == true
-              ? mainColor.MainColor
-              : mainColor.Gray)),
-];
 
 int religionIndex = 0;
 int alcoholIndex = 0;
@@ -77,129 +31,11 @@ int smokeIndex = 0;
 String region = "";
 int height = 0;
 
-List<Widget> sexualpreference = <Widget>[
-  Text('이성애자',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('동성애자',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('양성애자',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-];
-// List<bool> _selectedsexualpreference = <bool>[false, false, false];
-
-List<Widget> alcohol = <Widget>[
-  Text('안 마심',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('가끔',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('자주',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('매일',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
-];
-List<bool> _selectedalcohol = <bool>[false, false, false, false];
-
-const List<Widget> smoke = <Widget>[
-  Text('안 피움',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('가끔',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('자주',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo')),
-  Text('매일',
-      style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'Heebo'))
-];
-List<bool> _selectedsmoke = <bool>[false, false, false, false];
-
-//Hobby 각각 선택 되었는지 보여줌.
-List<bool> isValidHobbyList = [
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false
-];
-
-//Character 각각 선택 되었는지 보여줌.
-List<bool> isValidCharacterList = [
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false
-];
-
-List<String> characteristic = [
-  "개성적인",
-  "책임감있는",
-  "열정적인",
-  "귀여운",
-  "상냥한",
-  "감성적인",
-  "낙천적인",
-  "유머있는",
-  "차분한",
-  "지적인",
-  "섬세한",
-  "무뚝뚝한",
-  "외향적인",
-  "내향적인"
-];
-List<String> hobby = [
-  "애니",
-  "그림그리기",
-  "술",
-  "영화/드라마",
-  "여행",
-  "요리",
-  "자기계발",
-  "독서",
-  "게임",
-  "노래듣기",
-  "봉사활동",
-  "운동",
-  "노래부르기",
-  "산책"
-];
-
-enum EorI { e, i }
-
-enum SorN { s, n }
-
-enum TorF { t, f }
-
-enum JorP { j, p }
+EorI? selectedEorI;
+SorN? selectedSorN;
+TorF? selectedTorF;
+JorP? selectedJorP;
+bool IsValid = true;
 
 @override
 class _MyPageEditState extends State<MyPageEdit> {
@@ -209,105 +45,46 @@ class _MyPageEditState extends State<MyPageEdit> {
   File? _image1;
   File? _image2;
   File? _image3;
-  EorI? _selectedEorI;
-  SorN? _selectedSorN;
-  TorF? _selectedTorF;
-  JorP? _selectedJorP;
-
   TextEditingController _textController = TextEditingController();
 
   String? _image1Url;
   String? _image2Url;
   String? _image3Url;
-  int count = 0;
+  int image_uploading_count = 0;
+  int image_uploaded_count = 0;
+
   double? image_maxheight = 700;
   double? image_maxwidth = 700;
   int imageQuality = 90;
 
-  Future<void> _pickImage1() async {
+  Future<void> _pickAndUploadImage(int imageNumber) async {
+    image_uploading_count += 1;
+    IsValid = false;
     var picker = ImagePicker();
     String savedToken = await getToken();
-    var image1 = await picker.pickImage(
+    var image = await picker.pickImage(
         source: ImageSource.gallery,
         maxHeight: image_maxheight,
         maxWidth: image_maxwidth,
-        imageQuality: imageQuality);
+        imageQuality: 60); // imageQuality는 필요에 따라 조절
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image1 != null) {
-      File selectedImage = File(image1.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image1 = selectedImage;
-      });
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
-      });
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          print('Server returned OK');
-          print('Response body: ${response.data}');
-          var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            // ... 기존 코드 ...
-            if (urlList.isNotEmpty &&
-                urlList[0] is Map &&
-                urlList[0].containsKey('url')) {
-              setState(() {
-                _image1Url = urlList[0]['url'];
-              });
-              print('Image 1 URL: $_image1Url');
-            }
-          }
 
-          // URL을 저장하거나 처리하는 로직을 추가
-          // print(savedUrls);
-        } else {
-          // 오류가 발생한 경우 처리
-          print('Request failed with status: ${response.statusCode}.');
+    if (image != null) {
+      File selectedImage = File(image.path);
+      setState(() {
+        if (imageNumber == 1) {
+          _image1 = selectedImage;
+        } else if (imageNumber == 2) {
+          _image2 = selectedImage;
+        } else if (imageNumber == 3) {
+          _image3 = selectedImage;
         }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
-      }
-    }
-  }
-
-  Future<void> _pickImage2() async {
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image2 = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 60);
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image2 != null) {
-      File selectedImage = File(image2.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image2 = selectedImage;
       });
+
       FormData formData = FormData.fromMap({
         'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image2.jpg'),
+            filename: 'image$imageNumber.jpg'),
       });
 
       try {
@@ -321,107 +98,38 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+          image_uploaded_count += 1;
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
           if (urlList.isNotEmpty &&
               urlList[0] is Map &&
               urlList[0].containsKey('url')) {
+            String imageUrl = urlList[0]['url'];
+            print('Image $imageNumber URL: $imageUrl');
             setState(() {
-              _image2Url = urlList[0]['url'];
+              if (imageNumber == 1) {
+                _image1Url = imageUrl;
+              } else if (imageNumber == 2) {
+                _image2Url = imageUrl;
+              } else if (imageNumber == 3) {
+                _image3Url = imageUrl;
+              }
+              if (image_uploaded_count == image_uploading_count) IsValid = true;
+              modifiedFlags["image"] = true;
             });
-            print('Image 2 URL: $_image2Url');
           }
-          // URL을 저장하거나 처리하는 로직을 추가
         } else {
-          // 오류가 발생한 경우 처리
           print('Request failed with status: ${response.statusCode}.');
         }
       } catch (e, stacktrace) {
         print('Error: $e');
         print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
       }
     }
   }
 
-  Future<void> _pickImage3() async {
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image3 = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 60);
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image3 != null) {
-      File selectedImage = File(image3.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image3 = selectedImage;
-      });
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image3.jpg'),
-      });
-
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          print('Server returned OK');
-          print('Response body: ${response.data}');
-          var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            setState(() {
-              _image3Url = urlList[0]['url'];
-            });
-            print('Image 3 URL: $_image3Url');
-          }
-          // URL을 저장하거나 처리하는 로직을 추가
-          // print(savedUrls);
-        } else {
-          // 오류가 발생한 경우 처리
-          print('Request failed with status: ${response.statusCode}.');
-        }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
-      }
-    }
-  }
-
-  ///체크하면 아까 ValidList가 수정이됨
-  @override
-  void IsHobbySelected(int index) {
-    isValidHobbyList[index] = !isValidHobbyList[index];
-  }
-
-  @override
-  void IsCharacterSelected(int index) {
-    isValidCharacterList[index] = !isValidCharacterList[index];
-  }
-
-  ///취미 및 성격 chewckbox. bool 하나로 두개의 위젯 다 처리함
+  ///취미 및 성격 checkbox. bool 하나로 두개의 위젯 다 처리함
   Widget customHobbyCheckbox(String hobbyText, int index, width, bool ishobby) {
     return Container(
       width: width * 0.37,
@@ -469,20 +177,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
   }
 
-  void setMbtiEnums(String mbti) {
-    // EorI 설정
-    _selectedEorI = (mbti[0].toLowerCase() == 'e') ? EorI.e : EorI.i;
-
-    // SorN 설정
-    _selectedSorN = (mbti[1].toLowerCase() == 's') ? SorN.s : SorN.n;
-
-    // TorF 설정
-    _selectedTorF = (mbti[2].toLowerCase() == 't') ? TorF.t : TorF.f;
-
-    // JorP 설정
-    _selectedJorP = (mbti[3].toLowerCase() == 'j') ? JorP.j : JorP.p;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -492,26 +186,26 @@ class _MyPageEditState extends State<MyPageEdit> {
     _image2Url = widget.data['images'][1];
     _image3Url = widget.data['images'][2];
     print(_image1Url);
-    // _selectedreligion 초기화
-    _selectedreligion = [false, false, false, false, false];
+    // selectedreligion 초기화
+    selectedreligion = [false, false, false, false, false];
 
     _textController.text = widget.data['height'].toString();
 
     // widget.data['religion']에 따라 초기값 설정
     if (widget.data['religion'] == "무교") {
-      _selectedreligion[0] = true;
+      selectedreligion[0] = true;
       religionIndex = 0;
     } else if (widget.data['religion'] == "불교") {
-      _selectedreligion[1] = true;
+      selectedreligion[1] = true;
       religionIndex = 1;
     } else if (widget.data['religion'] == "기독교") {
-      _selectedreligion[2] = true;
+      selectedreligion[2] = true;
       religionIndex = 2;
     } else if (widget.data['religion'] == "천주교") {
-      _selectedreligion[3] = true;
+      selectedreligion[3] = true;
       religionIndex = 3;
     } else {
-      _selectedreligion[4] = true;
+      selectedreligion[4] = true;
       religionIndex = 4;
     }
     // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
@@ -525,31 +219,25 @@ class _MyPageEditState extends State<MyPageEdit> {
         isValidHobbyList[i] = true;
       }
     }
-    _selectedalcohol = <bool>[false, false, false, false];
-    _selectedsmoke = <bool>[false, false, false, false];
+    selectedalcohol = <bool>[false, false, false, false];
+    selectedsmoke = <bool>[false, false, false, false];
     // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
-
-    _selectedalcohol[widget.data["drink"]] = true;
+    selectedalcohol[widget.data["drink"]] = true;
     alcoholIndex = widget.data["drink"];
     region = widget.data["region"];
     height = widget.data['height'];
-    _selectedsmoke[widget.data["cigarette"]] = true;
+    selectedsmoke[widget.data["cigarette"]] = true;
     smokeIndex = widget.data["cigarette"];
-
     if (widget.data.containsKey('mbti') && widget.data['mbti'] is String) {
       setMbtiEnums(widget.data['mbti']);
     }
   }
 
   List<bool> isValidList = [false, false, false, false];
-  bool IsValid = false;
 
   @override
   void IsSelected(int index) {
     isValidList[index] = true;
-    if (isValidList.every((isValid) => isValid)) {
-      IsValid = true;
-    }
   }
 
   String selectedReligionString = '';
@@ -559,64 +247,69 @@ class _MyPageEditState extends State<MyPageEdit> {
   @override
   void InputHeightNumber(int value) {
     setState(() {
-      height = value;
-      if (140 <= height && height <= 240) {
-        IsValid = true;
+      if (100 > height || height > 240) {
+        showSnackBar(context, "올바른 키 정보를 입력해주세요.");
       }
+      height = value;
+      modifiedFlags["height"] = true;
     });
   }
 
-  String getMBTIType() {
-    String eOrI = _selectedEorI == EorI.i ? 'i' : 'e';
-    String sOrN = _selectedSorN == SorN.s ? 's' : 'n';
-    String tOrF = _selectedTorF == TorF.t ? 't' : 'f';
-    String jOrP = _selectedJorP == JorP.j ? 'j' : 'p';
-    return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
-  }
-
   Future<void> _sendFixRequest() async {
-    List<String> selectedCharacteristics = [];
-    List<String> selectedHobby = [];
     int drink = 0;
     int smoke = 0;
+    List<String> selectedCharacteristics = [];
+    List<String> selectedHobby = [];
+
     print('_sendFixRequest called');
     var mbti = getMBTIType();
 
-    for (int i = 0; i < characteristic.length; i++) {
-      if (isValidCharacterList[i] == true) {
-        selectedCharacteristics.add(characteristic[i]);
+    if (modifiedFlags["character"] == true) {
+      for (int i = 0; i < characteristic.length; i++) {
+        if (isValidCharacterList[i] == true) {
+          selectedCharacteristics.add(characteristic[i]);
+        }
+      }
+      if (selectedCharacteristics.length > 4) {
+        showSnackBar(context, "성격 선택은 4개까지 가능합니다.");
+        return;
       }
     }
-    if (selectedCharacteristics.length > 4) {
-      showSnackBar(context, "성격 선택은 4개까지 가능합니다.");
-      return;
-    }
-    for (int i = 0; i < hobby.length; i++) {
-      if (isValidHobbyList[i] == true) {
-        selectedHobby.add(hobby[i]);
+    if (modifiedFlags["hobby"] == true) {
+      for (int i = 0; i < hobby.length; i++) {
+        if (isValidHobbyList[i] == true) {
+          selectedHobby.add(hobby[i]);
+        }
       }
-    }
-    if (selectedHobby.length > 4) {
-      showSnackBar(context, "취미 선택은 4개까지 가능합니다.");
-      return;
-    }
-
-    for (int i = 0; i < _selectedalcohol.length; i++) {
-      if (_selectedalcohol[i]) {
-        drink = i;
-      }
-    }
-    for (int i = 0; i < _selectedsmoke.length; i++) {
-      if (_selectedsmoke[i]) {
-        smoke = i;
+      if (selectedHobby.length > 4) {
+        showSnackBar(context, "취미 선택은 4개까지 가능합니다.");
+        return;
       }
     }
 
-    for (int i = 0; i < _selectedreligion.length; i++) {
-      if (_selectedreligion[i]) {
-        String religionText = (religion[i] as Text).data!;
-        selectedReligionString = religionText;
-        break;
+    if (modifiedFlags["drink"] == true) {
+      for (int i = 0; i < selectedalcohol.length; i++) {
+        if (selectedalcohol[i]) {
+          drink = i;
+        }
+      }
+    }
+
+    if (modifiedFlags["smoke"] == true) {
+      for (int i = 0; i < selectedsmoke.length; i++) {
+        if (selectedsmoke[i]) {
+          smoke = i;
+        }
+      }
+    }
+
+    if (modifiedFlags["religion"] == true) {
+      for (int i = 0; i < selectedreligion.length; i++) {
+        if (selectedreligion[i]) {
+          String religionText = (religion[i] as Text).data!;
+          selectedReligionString = religionText;
+          break;
+        }
       }
     }
 
@@ -633,28 +326,18 @@ class _MyPageEditState extends State<MyPageEdit> {
         'Authorization': 'Bearer $savedToken',
       },
       body: json.encode({
-        "religion": selectedReligionString,
-        "region": content,
-        "cigarette": smoke,
-        "drink": drink,
-        "height": height,
-        "mbti": mbti,
-        "hobby": selectedHobby,
-        "character": selectedCharacteristics,
-        "images": [_image1Url, _image2Url, _image3Url]
-      }), // JSON 형태로 인코딩
-    );
-    print(
-      json.encode({
-        "religion": selectedReligionString,
-        "region": content,
-        "cigarette": smoke,
-        "drink": drink,
-        "height": height,
-        "mbti": mbti,
-        "hobby": selectedHobby,
-        "character": selectedCharacteristics,
-        "images": [_image1Url, _image2Url, _image3Url]
+        if (modifiedFlags["religion"] == true)
+          "religion": selectedReligionString,
+        if (modifiedFlags["region"] == true) "region": content,
+        if (modifiedFlags["smoke"] == true) "cigarette": smoke,
+        if (modifiedFlags["drink"] == true) "drink": drink,
+        if (modifiedFlags["height"] == true) "height": height,
+        if (modifiedFlags["mbti"] == true) "mbti": mbti,
+        if (modifiedFlags["hobby"] == true) "hobby": selectedHobby,
+        if (modifiedFlags["character"] == true)
+          "character": selectedCharacteristics,
+        if (modifiedFlags["image"] == true)
+          "images": [_image1Url, _image2Url, _image3Url]
       }), // JSON 형태로 인코딩
     );
 
@@ -672,7 +355,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                     currentIndex: 3,
                   ))).then((value) => setState(() {}));
     } else {
-      // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
@@ -692,6 +374,44 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Widget MBTIbox(double width, int index) {
+    bool? isselected = selectedfunction(index);
+    return Container(
+      width: width * 00.4, //반응형으로
+      height: 48, // 높이는 고정
+      child: TextButton(
+        style: TextButton.styleFrom(
+          side: BorderSide(
+            color: mainColor.lightGray,
+            width: 2,
+          ),
+          foregroundColor: mainColor.black,
+          backgroundColor:
+              isselected ? mainColor.lightGray : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+          ),
+        ),
+        onPressed: () {
+          IsSelected(index ~/ 2);
+          modifiedFlags["mbti"] = true;
+          setState(() {
+            setSelectedValues(index);
+          });
+        },
+        child: Text(
+          mbtiMap[index]!,
+          style: TextStyle(
+            color: isselected ? Colors.white : mainColor.black,
+            fontFamily: 'Heebo',
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
   }
 
   void _showWarning(BuildContext context) {
@@ -836,10 +556,10 @@ class _MyPageEditState extends State<MyPageEdit> {
       return InkWell(
         onTap: () {
           setState(() {
-            for (int i = 0; i < _selectedreligion.length; i++) {
-              _selectedreligion[i] = false;
+            for (int i = 0; i < selectedreligion.length; i++) {
+              selectedreligion[i] = false;
             }
-            _selectedreligion[index] = true;
+            selectedreligion[index] = true;
             religionIndex = index;
           });
         },
@@ -853,7 +573,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 fontFamily: 'Heebo',
-                color: _selectedreligion[index] == true
+                color: selectedreligion[index] == true
                     ? mainColor.MainColor
                     : mainColor.Gray),
             child: Text(
@@ -869,10 +589,10 @@ class _MyPageEditState extends State<MyPageEdit> {
         child: InkWell(
           onTap: () {
             setState(() {
-              for (int i = 0; i < _selectedsmoke.length; i++) {
-                _selectedalcohol[i] = false;
+              for (int i = 0; i < selectedsmoke.length; i++) {
+                selectedalcohol[i] = false;
               }
-              _selectedalcohol[index] = true;
+              selectedalcohol[index] = true;
               alcoholIndex = index;
             });
           },
@@ -886,7 +606,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Heebo',
-                  color: _selectedalcohol[index] == true
+                  color: selectedalcohol[index] == true
                       ? mainColor.MainColor
                       : mainColor.Gray),
               child: Text(
@@ -903,10 +623,10 @@ class _MyPageEditState extends State<MyPageEdit> {
         child: InkWell(
           onTap: () {
             setState(() {
-              for (int i = 0; i < _selectedsmoke.length; i++) {
-                _selectedsmoke[i] = false;
+              for (int i = 0; i < selectedsmoke.length; i++) {
+                selectedsmoke[i] = false;
               }
-              _selectedsmoke[index] = true;
+              selectedsmoke[index] = true;
               smokeIndex = index;
             });
           },
@@ -920,7 +640,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Heebo',
-                  color: _selectedsmoke[index] == true
+                  color: selectedsmoke[index] == true
                       ? mainColor.MainColor
                       : mainColor.Gray),
               child: Text(
@@ -947,7 +667,6 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
           onPressed: () {
             // 이대로 나가면 변경 사항이 저장되지 않습니다. 나가시겠습니까?
-            // Navigator.of(context).pop();
             _showWarning(context);
           },
         ),
@@ -982,18 +701,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5, left: 10),
-                      child: Text(
-                        '닉네임',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription('닉네임'),
                     Center(
                       child: Container(
                         width: screenWidth,
@@ -1020,18 +728,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '활동 지역',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("활동 지역"),
                     Center(
                       child: Container(
                         width: screenWidth,
@@ -1099,18 +796,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '종교',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("종교"),
                     Center(
                       child: Stack(
                         children: [
@@ -1148,18 +834,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '음주 정도',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("음주 정도"),
                     Center(
                       child: Stack(
                         children: [
@@ -1195,18 +870,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '흡연 정도',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("흡연 정도"),
                     Center(
                       child: Stack(
                         children: [
@@ -1242,18 +906,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 5, left: 10),
-                      child: Text(
-                        '키',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("키"),
                     Center(
                       child: SizedBox(
                         height: 48,
@@ -1284,106 +937,16 @@ class _MyPageEditState extends State<MyPageEdit> {
                             }),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        'MBTI',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("MBTI"),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: 60,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '에너지방향',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("에너지방향"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: _selectedEorI == EorI.e
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(0);
-                                  setState(() {
-                                    _selectedEorI = EorI.e;
-                                  });
-                                },
-                                child: Text(
-                                  'E',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: _selectedEorI == EorI.i
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(0);
-                                  setState(() {
-                                    _selectedEorI = EorI.i;
-                                  });
-                                },
-                                child: Text(
-                                  'I',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 0),
+                            MBTIbox(width, 1),
                           ],
                         ),
                         Row(
@@ -1391,385 +954,62 @@ class _MyPageEditState extends State<MyPageEdit> {
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.all(0),
-                              child: Text(
-                                '외향형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
+                              child: MBTIeachDescription("외향형"),
                             ),
                             Container(
                               margin: EdgeInsets.all(0),
-                              child: Text(
-                                '내항형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
+                              child: MBTIeachDescription("내향형"),
                             ),
                           ],
                         ),
-                        Container(
-                          width: 44,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '인식',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("인식"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: _selectedSorN == SorN.s
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(1);
-                                  setState(() {
-                                    _selectedSorN = SorN.s;
-                                  });
-                                },
-                                child: Text(
-                                  'S',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: _selectedSorN == SorN.n
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(1);
-                                  setState(() {
-                                    _selectedSorN = SorN.n;
-                                  });
-                                },
-                                child: Text(
-                                  'N',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 2),
+                            MBTIbox(width, 3),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              child: Text(
-                                '감각형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                '직관형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
+                            MBTIeachDescription("감각형"),
+                            MBTIeachDescription("직관형"),
                           ],
                         ),
-                        Container(
-                          width: 44,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '판단',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("판단"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: _selectedTorF == TorF.t
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(2);
-                                    _selectedTorF = TorF.t;
-                                  });
-                                },
-                                child: Text(
-                                  'T',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: _selectedTorF == TorF.f
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(2);
-                                    _selectedTorF = TorF.f;
-                                  });
-                                },
-                                child: Text(
-                                  'F',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 4),
+                            MBTIbox(width, 5),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              child: Text(
-                                '사고형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                '감각형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
+                            MBTIeachDescription("사고형"),
+                            MBTIeachDescription("감각형"),
                           ],
                         ),
-                        Container(
-                          width: 44,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '계획성',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("계획형"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 0.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                  ),
-                                  backgroundColor: _selectedJorP == JorP.j
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(3);
-                                    _selectedJorP = JorP.j;
-                                  });
-                                },
-                                child: Text(
-                                  'J',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 0.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: _selectedJorP == JorP.p
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(3);
-                                    _selectedJorP = JorP.p;
-                                  });
-                                },
-                                child: Text(
-                                  'P',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 6),
+                            MBTIbox(width, 7),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              child: Text(
-                                '판단형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                '인식형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
+                            MBTIeachDescription("판단형"),
+                            MBTIeachDescription("인식형"),
                           ],
                         ),
                       ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '성격',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("성격"),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                       children: [
@@ -1819,18 +1059,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         customHobbyCheckbox('내향적인', 13, width, false),
                       ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '취미',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("취미"),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                       children: [
@@ -1880,24 +1109,14 @@ class _MyPageEditState extends State<MyPageEdit> {
                         customHobbyCheckbox('🚶‍산책', 13, width, true),
                       ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '사진',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("사진"),
                     Row(
                       mainAxisAlignment:
                           MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
                       children: [
                         InkWell(
-                          onTap: _pickImage1, // 버튼을 누를 때 _pickImage 함수 호출
+                          onTap: () => _pickAndUploadImage(
+                              1), // 버튼을 누를 때 _pickImage 함수 호출
                           child: Container(
                             width: 100,
                             height: 125,
@@ -1917,7 +1136,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                         ),
                         InkWell(
-                          onTap: _pickImage2, // 버튼을 누를 때 _pickImage 함수 호출
+                          onTap: () => _pickAndUploadImage(2),
                           child: Container(
                             width: 100,
                             height: 125,
@@ -1936,7 +1155,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                         ),
                         InkWell(
-                          onTap: _pickImage3, // 버튼을 누를 때 _pickImage 함수 호출
+                          onTap: () => _pickAndUploadImage(3),
                           child: Container(
                             width: 100,
                             height: 125,
@@ -1960,7 +1179,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                       child: Container(
                         margin: EdgeInsets.only(top: 30, bottom: 20),
                         child: InkWell(
-                          child: staticButton(text: '수정 완료'),
+                          child: signupButton(
+                            text: '수정 완료',
+                            IsValid: IsValid,
+                          ),
                           onTap: () {
                             _sendFixRequest();
                           },

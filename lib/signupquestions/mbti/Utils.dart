@@ -114,7 +114,7 @@ void setSelectedValues(int index) {
   }
 }
 
-Widget MBTIDescription(String text) {
+Widget MBTIeachDescription(String text) {
   return Container(
     margin: EdgeInsets.all(0),
     child: Text(
