@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/signupquestions/activeplace.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/phonenumber.dart'; // sex.dart를 임포트
 import 'package:blurting/colors/colors.dart';

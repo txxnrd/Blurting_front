@@ -3,7 +3,7 @@ import 'package:blurting/Utils/time.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/homeTab/alarm.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';

@@ -3,7 +3,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/colors/colors.dart';
 import 'package:blurting/signupquestions/Alcohol.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/signupquestions/sex.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -7,7 +7,7 @@ import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurtingTab/groupChat.dart';
 import 'package:blurting/settings/setting.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,28 +120,28 @@ class _Blurting extends State<Blurting> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(140),
-          child: AppBar(
-            toolbarHeight: 80,
-            scrolledUnderElevation: 0.0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 80),
-                    padding: EdgeInsets.all(13),
-                    child: ellipseText(text: 'Blurting')),
-              ],
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-            pointAppbar(),
-            SizedBox(width: 10),
+        preferredSize: Size.fromHeight(140),
+        child: AppBar(
+          toolbarHeight: 80,
+          scrolledUnderElevation: 0.0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: 80),
+                  padding: EdgeInsets.all(13),
+                  child: ellipseText(text: 'Blurting')),
             ],
           ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            pointAppbar(),
+            SizedBox(width: 10),
+          ],
         ),
+      ),
       extendBodyBehindAppBar: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -290,7 +290,8 @@ class _Blurting extends State<Blurting> {
                           margin: EdgeInsets.fromLTRB(0, 10, 10, 10),
                           width: 32,
                           child: InkWell(
-          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+                              splashColor:
+                                  Colors.transparent, // 터치 효과를 투명하게 만듭니다.
                               onTap: (isTap[currentPage] == true &&
                                       iSended[currentPage] == false)
                                   ? () {
@@ -380,11 +381,14 @@ class _Blurting extends State<Blurting> {
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
 
-              DateTime lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
+              DateTime lastTime =
+                  _parseDateTime(prefs.getString('timeInSeconds'));
 
-              DateTime day1Time = createdAt;     // 하루가 지난 시간
-              DateTime day2Time = createdAt.add(Duration(hours: 24));     // 하루가 지난 시간
-              DateTime day3Time = createdAt.add(Duration(hours: 48));     // 이틀이 지난 시간
+              DateTime day1Time = createdAt; // 하루가 지난 시간
+              DateTime day2Time =
+                  createdAt.add(Duration(hours: 24)); // 하루가 지난 시간
+              DateTime day3Time =
+                  createdAt.add(Duration(hours: 48)); // 이틀이 지난 시간
 
               print(day1Time);
               print(day2Time);
@@ -395,14 +399,13 @@ class _Blurting extends State<Blurting> {
               if (isState == 'Continue') {
                 if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
                     day == 'Day2' && (lastTime.isAfter(day2Time)) ||
-                    day == 'Day3' && (lastTime.isAfter(day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                    day == 'Day3' &&
+                        (lastTime.isAfter(
+                            day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
                 {
                   print('날이 바뀌고 처음 들어간 게 아님');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GroupChat(
-                              )));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => GroupChat()));
                 } else {
                   print('날 바뀌고 처음');
                   Navigator.push(
@@ -412,17 +415,16 @@ class _Blurting extends State<Blurting> {
                                 day: day,
                               )));
                 }
-              } else if (isState == 'Start' || isState == 'Matching...' ) {
+              } else if (isState == 'Start' || isState == 'Matching...') {
                 // 아직 방이 만들어지지 않음
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Matching()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Matching()));
               }
 
               // 데이터를 로컬에 저장하는 함수
-              await prefs.setString('timeInSeconds',  DateTime.now().toString());
-              print('마지막으로 들어간 시간 저장: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
+              await prefs.setString('timeInSeconds', DateTime.now().toString());
+              print(
+                  '마지막으로 들어간 시간 저장: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
             },
           )
         ],
@@ -595,15 +597,15 @@ class _Blurting extends State<Blurting> {
       print('요청 성공');
 
       try {
-        int responseData = jsonDecode(response.body);        // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
+        int responseData = jsonDecode(response
+            .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
         if (mounted) {
           setState(() {
             if (responseData == 1) {
               isState = 'Continue';
-            } else if(responseData == 0) {
+            } else if (responseData == 0) {
               isState = 'Start';
-            }
-            else {
+            } else {
               isState = 'Matching...';
             }
           });
@@ -647,8 +649,7 @@ class _Blurting extends State<Blurting> {
             createdAt = _parseDateTime(responseData['createdAt']);
             print('createdAt : $createdAt');
 
-            Duration timeDifference =
-                DateTime.now().difference(createdAt);
+            Duration timeDifference = DateTime.now().difference(createdAt);
 
             print(timeDifference);
 
@@ -832,7 +833,7 @@ class _Blurting extends State<Blurting> {
           if (j >= 3) break;
           iSended[j] = true;
         }
-        
+
         print(iSended);
 
         print('Response body: ${response.body}');
@@ -883,8 +884,8 @@ class _Blurting extends State<Blurting> {
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      await getnewaccesstoken(context, () async {}, null, null, null, null, sendArrow,
-          [userId, day]);
+      await getnewaccesstoken(context, () async {}, null, null, null, null,
+          sendArrow, [userId, day]);
     } else {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
@@ -962,7 +963,6 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
-
   @override
   Widget build(BuildContext context) {
     bool canSendArrow = isValidDay[widget.day];
@@ -987,7 +987,7 @@ class _profileState extends State<profile> {
       child: Column(
         children: [
           Container(
-                padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(5),
             width: 55,
             height: 55,
             decoration: BoxDecoration(
@@ -999,8 +999,7 @@ class _profileState extends State<profile> {
                     ? Border.all(color: mainColor.MainColor, width: 1)
                     : Border.all(color: Colors.transparent, width: 1)),
             child: Image.asset(
-                  fit: BoxFit.fill,
-
+              fit: BoxFit.fill,
               widget.userSex == 'M'
                   ? 'assets/man.png'
                   : widget.userSex == 'none'

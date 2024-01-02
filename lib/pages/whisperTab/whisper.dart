@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:flutter/scheduler.dart';

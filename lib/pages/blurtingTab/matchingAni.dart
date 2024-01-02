@@ -1,4 +1,4 @@
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:blurting/Utils/provider.dart';

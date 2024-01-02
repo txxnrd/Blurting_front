@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import '../colors/colors.dart';
 import '../config/app_config.dart';

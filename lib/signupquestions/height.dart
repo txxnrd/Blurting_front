@@ -5,7 +5,7 @@ import 'package:blurting/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/token.dart'; // token.dart를 임포트
+import 'package:blurting/token.dart'; // token.dart를 임포트
 import 'package:blurting/signupquestions/major.dart'; // major.dart를 임포트
 import 'package:blurting/Utils/utilWidget.dart';
 

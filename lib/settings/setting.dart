@@ -10,7 +10,7 @@ import 'package:blurting/config/app_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import '../colors/colors.dart';
-import '../signupquestions/token.dart';
+import '../token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
 

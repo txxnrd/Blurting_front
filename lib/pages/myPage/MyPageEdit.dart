@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../config/app_config.dart';
 import '../../signupquestions/activeplacesearch.dart';
-import '../../signupquestions/token.dart';
+import '../../token.dart';
 import 'dart:io';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
 
@@ -35,6 +35,7 @@ EorI? selectedEorI;
 SorN? selectedSorN;
 TorF? selectedTorF;
 JorP? selectedJorP;
+bool IsValid = true;
 
 @override
 class _MyPageEditState extends State<MyPageEdit> {
@@ -49,12 +50,15 @@ class _MyPageEditState extends State<MyPageEdit> {
   String? _image1Url;
   String? _image2Url;
   String? _image3Url;
-  int count = 0;
+  int image_uploading_count = 0;
+  int image_uploaded_count = 0;
+
   double? image_maxheight = 700;
   double? image_maxwidth = 700;
   int imageQuality = 90;
 
   Future<void> _pickAndUploadImage(int imageNumber) async {
+    image_uploading_count += 1;
     IsValid = false;
     var picker = ImagePicker();
     String savedToken = await getToken();
@@ -94,7 +98,7 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
-          count += 1;
+          image_uploaded_count += 1;
           print('Server returned OK');
           print('Response body: ${response.data}');
           var urlList = response.data;
@@ -111,8 +115,8 @@ class _MyPageEditState extends State<MyPageEdit> {
               } else if (imageNumber == 3) {
                 _image3Url = imageUrl;
               }
-
-              if (count >= 3) IsValid = true;
+              if (image_uploaded_count == image_uploading_count) IsValid = true;
+              modifiedFlags["image"] = true;
             });
           }
         } else {
@@ -218,28 +222,22 @@ class _MyPageEditState extends State<MyPageEdit> {
     selectedalcohol = <bool>[false, false, false, false];
     selectedsmoke = <bool>[false, false, false, false];
     // 각 특성이 widget.data에 있는지 확인하고, 있으면 해당 인덱스의 값을 true로 설정
-
     selectedalcohol[widget.data["drink"]] = true;
     alcoholIndex = widget.data["drink"];
     region = widget.data["region"];
     height = widget.data['height'];
     selectedsmoke[widget.data["cigarette"]] = true;
     smokeIndex = widget.data["cigarette"];
-
     if (widget.data.containsKey('mbti') && widget.data['mbti'] is String) {
       setMbtiEnums(widget.data['mbti']);
     }
   }
 
   List<bool> isValidList = [false, false, false, false];
-  bool IsValid = false;
 
   @override
   void IsSelected(int index) {
     isValidList[index] = true;
-    if (isValidList.every((isValid) => isValid)) {
-      IsValid = true;
-    }
   }
 
   String selectedReligionString = '';
@@ -258,10 +256,11 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
 
   Future<void> _sendFixRequest() async {
-    List<String> selectedCharacteristics = [];
-    List<String> selectedHobby = [];
     int drink = 0;
     int smoke = 0;
+    List<String> selectedCharacteristics = [];
+    List<String> selectedHobby = [];
+
     print('_sendFixRequest called');
     var mbti = getMBTIType();
 
@@ -333,23 +332,12 @@ class _MyPageEditState extends State<MyPageEdit> {
         if (modifiedFlags["smoke"] == true) "cigarette": smoke,
         if (modifiedFlags["drink"] == true) "drink": drink,
         if (modifiedFlags["height"] == true) "height": height,
-        "mbti": mbti,
-        "hobby": selectedHobby,
-        "character": selectedCharacteristics,
-        "images": [_image1Url, _image2Url, _image3Url]
-      }), // JSON 형태로 인코딩
-    );
-    print(
-      json.encode({
-        "religion": selectedReligionString,
-        "region": content,
-        "cigarette": smoke,
-        "drink": drink,
-        "height": height,
-        "mbti": mbti,
-        "hobby": selectedHobby,
-        "character": selectedCharacteristics,
-        "images": [_image1Url, _image2Url, _image3Url]
+        if (modifiedFlags["mbti"] == true) "mbti": mbti,
+        if (modifiedFlags["hobby"] == true) "hobby": selectedHobby,
+        if (modifiedFlags["character"] == true)
+          "character": selectedCharacteristics,
+        if (modifiedFlags["image"] == true)
+          "images": [_image1Url, _image2Url, _image3Url]
       }), // JSON 형태로 인코딩
     );
 
@@ -367,7 +355,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                     currentIndex: 3,
                   ))).then((value) => setState(() {}));
     } else {
-      // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
     }
   }
@@ -387,6 +374,44 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Widget MBTIbox(double width, int index) {
+    bool? isselected = selectedfunction(index);
+    return Container(
+      width: width * 00.4, //반응형으로
+      height: 48, // 높이는 고정
+      child: TextButton(
+        style: TextButton.styleFrom(
+          side: BorderSide(
+            color: mainColor.lightGray,
+            width: 2,
+          ),
+          foregroundColor: mainColor.black,
+          backgroundColor:
+              isselected ? mainColor.lightGray : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+          ),
+        ),
+        onPressed: () {
+          IsSelected(index ~/ 2);
+          modifiedFlags["mbti"] = true;
+          setState(() {
+            setSelectedValues(index);
+          });
+        },
+        child: Text(
+          mbtiMap[index]!,
+          style: TextStyle(
+            color: isselected ? Colors.white : mainColor.black,
+            fontFamily: 'Heebo',
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
   }
 
   void _showWarning(BuildContext context) {
@@ -642,7 +667,6 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
           onPressed: () {
             // 이대로 나가면 변경 사항이 저장되지 않습니다. 나가시겠습니까?
-            // Navigator.of(context).pop();
             _showWarning(context);
           },
         ),
@@ -677,18 +701,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5, left: 10),
-                      child: Text(
-                        '닉네임',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription('닉네임'),
                     Center(
                       child: Container(
                         width: screenWidth,
@@ -715,18 +728,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '활동 지역',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("활동 지역"),
                     Center(
                       child: Container(
                         width: screenWidth,
@@ -794,18 +796,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '종교',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("종교"),
                     Center(
                       child: Stack(
                         children: [
@@ -843,18 +834,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '음주 정도',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("음주 정도"),
                     Center(
                       child: Stack(
                         children: [
@@ -890,18 +870,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '흡연 정도',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("흡연 정도"),
                     Center(
                       child: Stack(
                         children: [
@@ -937,18 +906,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 5, left: 10),
-                      child: Text(
-                        '키',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("키"),
                     Center(
                       child: SizedBox(
                         height: 48,
@@ -979,106 +937,16 @@ class _MyPageEditState extends State<MyPageEdit> {
                             }),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        'MBTI',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("MBTI"),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: 60,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '에너지방향',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("에너지방향"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: selectedEorI == EorI.e
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(0);
-                                  setState(() {
-                                    selectedEorI = EorI.e;
-                                  });
-                                },
-                                child: Text(
-                                  'E',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: selectedEorI == EorI.i
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(0);
-                                  setState(() {
-                                    selectedEorI = EorI.i;
-                                  });
-                                },
-                                child: Text(
-                                  'I',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 0),
+                            MBTIbox(width, 1),
                           ],
                         ),
                         Row(
@@ -1086,385 +954,62 @@ class _MyPageEditState extends State<MyPageEdit> {
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.all(0),
-                              child: Text(
-                                '외향형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
+                              child: MBTIeachDescription("외향형"),
                             ),
                             Container(
                               margin: EdgeInsets.all(0),
-                              child: Text(
-                                '내항형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
+                              child: MBTIeachDescription("내향형"),
                             ),
                           ],
                         ),
-                        Container(
-                          width: 44,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '인식',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("인식"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: selectedSorN == SorN.s
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(1);
-                                  setState(() {
-                                    selectedSorN = SorN.s;
-                                  });
-                                },
-                                child: Text(
-                                  'S',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: selectedSorN == SorN.n
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  IsSelected(1);
-                                  setState(() {
-                                    selectedSorN = SorN.n;
-                                  });
-                                },
-                                child: Text(
-                                  'N',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 2),
+                            MBTIbox(width, 3),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              child: Text(
-                                '감각형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                '직관형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
+                            MBTIeachDescription("감각형"),
+                            MBTIeachDescription("직관형"),
                           ],
                         ),
-                        Container(
-                          width: 44,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '판단',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("판단"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: selectedTorF == TorF.t
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(2);
-                                    selectedTorF = TorF.t;
-                                  });
-                                },
-                                child: Text(
-                                  'T',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 00.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: selectedTorF == TorF.f
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(2);
-                                    selectedTorF = TorF.f;
-                                  });
-                                },
-                                child: Text(
-                                  'F',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 4),
+                            MBTIbox(width, 5),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              child: Text(
-                                '사고형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                '감각형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
+                            MBTIeachDescription("사고형"),
+                            MBTIeachDescription("감각형"),
                           ],
                         ),
-                        Container(
-                          width: 44,
-                          height: 12,
-                          margin: EdgeInsets.only(bottom: 5, left: 10),
-                          child: Text(
-                            '계획성',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Pretendard'),
-                          ),
-                        ),
+                        MBTIallDescription("계획형"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              width: width * 0.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                  ),
-                                  backgroundColor: selectedJorP == JorP.j
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(3);
-                                    selectedJorP = JorP.j;
-                                  });
-                                },
-                                child: Text(
-                                  'J',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: width * 0.4, // 원하는 너비 값
-                              height: 48, // 원하는 높이 값
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: mainColor.black,
-                                  side: BorderSide(
-                                    color: mainColor.lightGray,
-                                    width: 2,
-                                  ),
-                                  backgroundColor: selectedJorP == JorP.p
-                                      ? mainColor.lightGray
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // 원하는 모서리 둥글기 값
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    IsSelected(3);
-                                    selectedJorP = JorP.p;
-                                  });
-                                },
-                                child: Text(
-                                  'P',
-                                  style: TextStyle(
-                                    color: mainColor.black,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            MBTIbox(width, 6),
+                            MBTIbox(width, 7),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Container(
-                              child: Text(
-                                '판단형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                '인식형',
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
+                            MBTIeachDescription("판단형"),
+                            MBTIeachDescription("인식형"),
                           ],
                         ),
                       ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '성격',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("성격"),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                       children: [
@@ -1514,18 +1059,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         customHobbyCheckbox('내향적인', 13, width, false),
                       ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '취미',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("취미"),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                       children: [
@@ -1575,18 +1109,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         customHobbyCheckbox('🚶‍산책', 13, width, true),
                       ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 13, bottom: 5, left: 10),
-                      child: Text(
-                        '사진',
-                        style: TextStyle(
-                          fontFamily: 'Heebo',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    MyPageallDescription("사진"),
                     Row(
                       mainAxisAlignment:
                           MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
@@ -1656,7 +1179,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                       child: Container(
                         margin: EdgeInsets.only(top: 30, bottom: 20),
                         child: InkWell(
-                          child: staticButton(text: '수정 완료'),
+                          child: signupButton(
+                            text: '수정 완료',
+                            IsValid: IsValid,
+                          ),
                           onTap: () {
                             _sendFixRequest();
                           },

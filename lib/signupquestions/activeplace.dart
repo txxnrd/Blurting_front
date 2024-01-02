@@ -6,7 +6,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
+import 'package:blurting/token.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';

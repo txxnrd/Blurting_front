@@ -4,7 +4,7 @@ import 'dart:convert';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 
 class AlarmPage extends StatefulWidget {
   // Constructor to receive the user token
