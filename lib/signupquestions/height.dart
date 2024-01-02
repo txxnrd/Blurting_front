@@ -77,7 +77,7 @@ class _HeightPageState extends State<HeightPage>
   }
 
   Future<void> _sendPostRequest() async {
-    if (140 > height! || height! > 240) {
+    if (100 > height! || height! > 240) {
       showSnackBar(context, "유효한 키 정보를 입력해주세요");
       return;
     }

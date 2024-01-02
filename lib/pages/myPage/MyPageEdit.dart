@@ -19,10 +19,8 @@ import 'package:extended_image/extended_image.dart' hide MultipartFile;
 class MyPageEdit extends StatefulWidget {
   final dynamic data;
   MyPageEdit({Key? key, this.data}) : super(key: key); // Key 타입을 Key?로 변경
-
   /*MYPAGE에서 버튼 누르면 api 요청 보내서 정보 가져옴.*/
   /*그게 this.data임 (widget.data['region'])식으로 접근 가능.*/
-
   @override
   _MyPageEditState createState() => _MyPageEditState();
 }
@@ -33,6 +31,11 @@ int smokeIndex = 0;
 String region = "";
 int height = 0;
 
+EorI? selectedEorI;
+SorN? selectedSorN;
+TorF? selectedTorF;
+JorP? selectedJorP;
+
 @override
 class _MyPageEditState extends State<MyPageEdit> {
   /*이미지 형식을 바꿔줌*/
@@ -41,11 +44,6 @@ class _MyPageEditState extends State<MyPageEdit> {
   File? _image1;
   File? _image2;
   File? _image3;
-  EorI? _selectedEorI;
-  SorN? _selectedSorN;
-  TorF? _selectedTorF;
-  JorP? _selectedJorP;
-
   TextEditingController _textController = TextEditingController();
 
   String? _image1Url;
@@ -55,192 +53,6 @@ class _MyPageEditState extends State<MyPageEdit> {
   double? image_maxheight = 700;
   double? image_maxwidth = 700;
   int imageQuality = 90;
-
-  Future<void> _pickImage1() async {
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image1 = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: imageQuality);
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image1 != null) {
-      File selectedImage = File(image1.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image1 = selectedImage;
-      });
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
-      });
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          print('Server returned OK');
-          print('Response body: ${response.data}');
-          var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            // ... 기존 코드 ...
-            if (urlList.isNotEmpty &&
-                urlList[0] is Map &&
-                urlList[0].containsKey('url')) {
-              setState(() {
-                _image1Url = urlList[0]['url'];
-              });
-              print('Image 1 URL: $_image1Url');
-            }
-          }
-
-          // URL을 저장하거나 처리하는 로직을 추가
-          // print(savedUrls);
-        } else {
-          // 오류가 발생한 경우 처리
-          print('Request failed with status: ${response.statusCode}.');
-        }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
-      }
-    }
-  }
-
-  Future<void> _pickImage2() async {
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image2 = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 60);
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image2 != null) {
-      File selectedImage = File(image2.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image2 = selectedImage;
-      });
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image2.jpg'),
-      });
-
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          print('Server returned OK');
-          print('Response body: ${response.data}');
-          var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            setState(() {
-              _image2Url = urlList[0]['url'];
-            });
-            print('Image 2 URL: $_image2Url');
-          }
-          // URL을 저장하거나 처리하는 로직을 추가
-        } else {
-          // 오류가 발생한 경우 처리
-          print('Request failed with status: ${response.statusCode}.');
-        }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
-      }
-    }
-  }
-
-  Future<void> _pickImage3() async {
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image3 = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 60);
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-    // 새로운 이미지를 선택한 경우에만 처리
-    if (image3 != null) {
-      File selectedImage = File(image3.path); // 선택된 이미지 파일
-      // UI 업데이트를 위해 setState 호출
-      setState(() {
-        _image3 = selectedImage;
-      });
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image3.jpg'),
-      });
-
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-          print('Server returned OK');
-          print('Response body: ${response.data}');
-          var urlList = response.data;
-          print(urlList);
-// urlList는 리스트이므로, 첫 번째 요소에 접근하여 'url' 키의 값을 가져옵니다.
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            setState(() {
-              _image3Url = urlList[0]['url'];
-            });
-            print('Image 3 URL: $_image3Url');
-          }
-          // URL을 저장하거나 처리하는 로직을 추가
-          // print(savedUrls);
-        } else {
-          // 오류가 발생한 경우 처리
-          print('Request failed with status: ${response.statusCode}.');
-        }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-        // _showVerificationFailedSnackBar();
-      }
-    }
-  }
 
   Future<void> _pickAndUploadImage(int imageNumber) async {
     IsValid = false;
@@ -313,18 +125,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
-  ///체크하면 아까 ValidList가 수정이됨
-  @override
-  void IsHobbySelected(int index) {
-    isValidHobbyList[index] = !isValidHobbyList[index];
-  }
-
-  @override
-  void IsCharacterSelected(int index) {
-    isValidCharacterList[index] = !isValidCharacterList[index];
-  }
-
-  ///취미 및 성격 chewckbox. bool 하나로 두개의 위젯 다 처리함
+  ///취미 및 성격 checkbox. bool 하나로 두개의 위젯 다 처리함
   Widget customHobbyCheckbox(String hobbyText, int index, width, bool ishobby) {
     return Container(
       width: width * 0.37,
@@ -372,20 +173,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
   }
 
-  void setMbtiEnums(String mbti) {
-    // EorI 설정
-    _selectedEorI = (mbti[0].toLowerCase() == 'e') ? EorI.e : EorI.i;
-
-    // SorN 설정
-    _selectedSorN = (mbti[1].toLowerCase() == 's') ? SorN.s : SorN.n;
-
-    // TorF 설정
-    _selectedTorF = (mbti[2].toLowerCase() == 't') ? TorF.t : TorF.f;
-
-    // JorP 설정
-    _selectedJorP = (mbti[3].toLowerCase() == 'j') ? JorP.j : JorP.p;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -395,7 +182,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     _image2Url = widget.data['images'][1];
     _image3Url = widget.data['images'][2];
     print(_image1Url);
-    // _selectedreligion 초기화
+    // selectedreligion 초기화
     selectedreligion = [false, false, false, false, false];
 
     _textController.text = widget.data['height'].toString();
@@ -462,19 +249,12 @@ class _MyPageEditState extends State<MyPageEdit> {
   @override
   void InputHeightNumber(int value) {
     setState(() {
-      height = value;
-      if (140 <= height && height <= 240) {
-        IsValid = true;
+      if (100 > height || height > 240) {
+        showSnackBar(context, "올바른 키 정보를 입력해주세요.");
       }
+      height = value;
+      modifiedFlags["height"] = true;
     });
-  }
-
-  String getMBTIType() {
-    String eOrI = _selectedEorI == EorI.i ? 'i' : 'e';
-    String sOrN = _selectedSorN == SorN.s ? 's' : 'n';
-    String tOrF = _selectedTorF == TorF.t ? 't' : 'f';
-    String jOrP = _selectedJorP == JorP.j ? 'j' : 'p';
-    return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
   }
 
   Future<void> _sendFixRequest() async {
@@ -485,41 +265,52 @@ class _MyPageEditState extends State<MyPageEdit> {
     print('_sendFixRequest called');
     var mbti = getMBTIType();
 
-    for (int i = 0; i < characteristic.length; i++) {
-      if (isValidCharacterList[i] == true) {
-        selectedCharacteristics.add(characteristic[i]);
+    if (modifiedFlags["character"] == true) {
+      for (int i = 0; i < characteristic.length; i++) {
+        if (isValidCharacterList[i] == true) {
+          selectedCharacteristics.add(characteristic[i]);
+        }
+      }
+      if (selectedCharacteristics.length > 4) {
+        showSnackBar(context, "성격 선택은 4개까지 가능합니다.");
+        return;
       }
     }
-    if (selectedCharacteristics.length > 4) {
-      showSnackBar(context, "성격 선택은 4개까지 가능합니다.");
-      return;
-    }
-    for (int i = 0; i < hobby.length; i++) {
-      if (isValidHobbyList[i] == true) {
-        selectedHobby.add(hobby[i]);
+    if (modifiedFlags["hobby"] == true) {
+      for (int i = 0; i < hobby.length; i++) {
+        if (isValidHobbyList[i] == true) {
+          selectedHobby.add(hobby[i]);
+        }
       }
-    }
-    if (selectedHobby.length > 4) {
-      showSnackBar(context, "취미 선택은 4개까지 가능합니다.");
-      return;
-    }
-
-    for (int i = 0; i < selectedalcohol.length; i++) {
-      if (selectedalcohol[i]) {
-        drink = i;
-      }
-    }
-    for (int i = 0; i < selectedsmoke.length; i++) {
-      if (selectedsmoke[i]) {
-        smoke = i;
+      if (selectedHobby.length > 4) {
+        showSnackBar(context, "취미 선택은 4개까지 가능합니다.");
+        return;
       }
     }
 
-    for (int i = 0; i < selectedreligion.length; i++) {
-      if (selectedreligion[i]) {
-        String religionText = (religion[i] as Text).data!;
-        selectedReligionString = religionText;
-        break;
+    if (modifiedFlags["drink"] == true) {
+      for (int i = 0; i < selectedalcohol.length; i++) {
+        if (selectedalcohol[i]) {
+          drink = i;
+        }
+      }
+    }
+
+    if (modifiedFlags["smoke"] == true) {
+      for (int i = 0; i < selectedsmoke.length; i++) {
+        if (selectedsmoke[i]) {
+          smoke = i;
+        }
+      }
+    }
+
+    if (modifiedFlags["religion"] == true) {
+      for (int i = 0; i < selectedreligion.length; i++) {
+        if (selectedreligion[i]) {
+          String religionText = (religion[i] as Text).data!;
+          selectedReligionString = religionText;
+          break;
+        }
       }
     }
 
@@ -536,11 +327,12 @@ class _MyPageEditState extends State<MyPageEdit> {
         'Authorization': 'Bearer $savedToken',
       },
       body: json.encode({
-        "religion": selectedReligionString,
-        "region": content,
-        "cigarette": smoke,
-        "drink": drink,
-        "height": height,
+        if (modifiedFlags["religion"] == true)
+          "religion": selectedReligionString,
+        if (modifiedFlags["region"] == true) "region": content,
+        if (modifiedFlags["smoke"] == true) "cigarette": smoke,
+        if (modifiedFlags["drink"] == true) "drink": drink,
+        if (modifiedFlags["height"] == true) "height": height,
         "mbti": mbti,
         "hobby": selectedHobby,
         "character": selectedCharacteristics,
@@ -1227,7 +1019,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                     color: mainColor.lightGray,
                                     width: 2,
                                   ),
-                                  backgroundColor: _selectedEorI == EorI.e
+                                  backgroundColor: selectedEorI == EorI.e
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1238,7 +1030,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   IsSelected(0);
                                   setState(() {
-                                    _selectedEorI = EorI.e;
+                                    selectedEorI = EorI.e;
                                   });
                                 },
                                 child: Text(
@@ -1262,7 +1054,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                     color: mainColor.lightGray,
                                     width: 2,
                                   ),
-                                  backgroundColor: _selectedEorI == EorI.i
+                                  backgroundColor: selectedEorI == EorI.i
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1273,7 +1065,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   IsSelected(0);
                                   setState(() {
-                                    _selectedEorI = EorI.i;
+                                    selectedEorI = EorI.i;
                                   });
                                 },
                                 child: Text(
@@ -1343,7 +1135,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                     color: mainColor.lightGray,
                                     width: 2,
                                   ),
-                                  backgroundColor: _selectedSorN == SorN.s
+                                  backgroundColor: selectedSorN == SorN.s
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1354,7 +1146,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   IsSelected(1);
                                   setState(() {
-                                    _selectedSorN = SorN.s;
+                                    selectedSorN = SorN.s;
                                   });
                                 },
                                 child: Text(
@@ -1378,7 +1170,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                     color: mainColor.lightGray,
                                     width: 2,
                                   ),
-                                  backgroundColor: _selectedSorN == SorN.n
+                                  backgroundColor: selectedSorN == SorN.n
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1389,7 +1181,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   IsSelected(1);
                                   setState(() {
-                                    _selectedSorN = SorN.n;
+                                    selectedSorN = SorN.n;
                                   });
                                 },
                                 child: Text(
@@ -1457,7 +1249,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                     color: mainColor.lightGray,
                                     width: 2,
                                   ),
-                                  backgroundColor: _selectedTorF == TorF.t
+                                  backgroundColor: selectedTorF == TorF.t
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1468,7 +1260,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   setState(() {
                                     IsSelected(2);
-                                    _selectedTorF = TorF.t;
+                                    selectedTorF = TorF.t;
                                   });
                                 },
                                 child: Text(
@@ -1492,7 +1284,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                     color: mainColor.lightGray,
                                     width: 2,
                                   ),
-                                  backgroundColor: _selectedTorF == TorF.f
+                                  backgroundColor: selectedTorF == TorF.f
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1503,7 +1295,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   setState(() {
                                     IsSelected(2);
-                                    _selectedTorF = TorF.f;
+                                    selectedTorF = TorF.f;
                                   });
                                 },
                                 child: Text(
@@ -1570,7 +1362,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                   side: BorderSide(
                                     color: mainColor.lightGray,
                                   ),
-                                  backgroundColor: _selectedJorP == JorP.j
+                                  backgroundColor: selectedJorP == JorP.j
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1581,7 +1373,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   setState(() {
                                     IsSelected(3);
-                                    _selectedJorP = JorP.j;
+                                    selectedJorP = JorP.j;
                                   });
                                 },
                                 child: Text(
@@ -1605,7 +1397,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                     color: mainColor.lightGray,
                                     width: 2,
                                   ),
-                                  backgroundColor: _selectedJorP == JorP.p
+                                  backgroundColor: selectedJorP == JorP.p
                                       ? mainColor.lightGray
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -1616,7 +1408,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 onPressed: () {
                                   setState(() {
                                     IsSelected(3);
-                                    _selectedJorP = JorP.p;
+                                    selectedJorP = JorP.p;
                                   });
                                 },
                                 child: Text(

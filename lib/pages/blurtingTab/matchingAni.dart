@@ -2,12 +2,11 @@ import 'package:blurting/signupquestions/token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/mainApp.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
 
 class Matching extends StatefulWidget {
-
-
   Matching({super.key});
 
   @override
@@ -33,7 +32,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
     super.initState();
 
     register();
-    
+
     controller = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
@@ -154,7 +153,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
                           ? 210
                           : rightValue == 210
                               ? -140
-                              : -130.0;          
+                              : -130.0;
         });
       }
     });
@@ -162,98 +161,105 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white.withOpacity(0),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(48, 48, 48, 1),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.white.withOpacity(0),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Color.fromRGBO(48, 48, 48, 1),
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainApp(
+                            currentIndex: 1,
+                          ))).then((value) => setState(() {}));
+            },
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 1500),
-            curve: Curves.easeInOut,
-            left: leftValue,
-            bottom: bottomValue,
-            child: AnimatedContainer(
-              color: Colors.transparent,
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: [
+            AnimatedPositioned(
               duration: Duration(milliseconds: 1500),
-            curve: Curves.easeInOut,
-              width: girlWidth,
-              child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 1500),
-                  opacity: girlOpacity,
-                  child: Image.asset('assets/animation/girl.png')),
-            ),
-          ),
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 1500),
-            curve: Curves.easeInOut,
-            right: rightValue,
-            top: topValue,
-            child: AnimatedContainer(
-              color: Colors.transparent,
-              duration: Duration(milliseconds: 1500),
-            curve: Curves.easeInOut,
-              width: boyWidth,
-              child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 1500),
-            curve: Curves.easeInOut,
-                  opacity: boyOpacity,
-                  child: Image.asset('assets/animation/boy.png')),
-            ),
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: AnimatedDefaultTextStyle(
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 40,
-                fontFamily: 'Heebo',
-              ),
-              duration: Duration(milliseconds: 1200),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'matching',
-                  ),
-                  Text(
-                    '블러팅 방을 만드는 중입니다',
-                    style: TextStyle(
-                      fontSize: 10,
-                    ),
-                  ),
-                  Text(
-                    '완료가 되면 알림을 보내 드릴게요!',
-                    style: TextStyle(
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
+              curve: Curves.easeInOut,
+              left: leftValue,
+              bottom: bottomValue,
+              child: AnimatedContainer(
+                color: Colors.transparent,
+                duration: Duration(milliseconds: 1500),
+                curve: Curves.easeInOut,
+                width: girlWidth,
+                child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 1500),
+                    opacity: girlOpacity,
+                    child: Image.asset('assets/animation/girl.png')),
               ),
             ),
-          ),
-        ],
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 1500),
+              curve: Curves.easeInOut,
+              right: rightValue,
+              top: topValue,
+              child: AnimatedContainer(
+                color: Colors.transparent,
+                duration: Duration(milliseconds: 1500),
+                curve: Curves.easeInOut,
+                width: boyWidth,
+                child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 1500),
+                    curve: Curves.easeInOut,
+                    opacity: boyOpacity,
+                    child: Image.asset('assets/animation/boy.png')),
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: AnimatedDefaultTextStyle(
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 40,
+                  fontFamily: 'Heebo',
+                ),
+                duration: Duration(milliseconds: 1200),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'matching',
+                    ),
+                    Text(
+                      '블러팅 방을 만드는 중입니다',
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                    Text(
+                      '완료가 되면 알림을 보내 드릴게요!',
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Future<void> register() async {
-    final url =
-        Uri.parse(API.register);
+    final url = Uri.parse(API.register);
     String savedToken = await getToken();
 
     final response = await http.post(url, headers: {
@@ -265,13 +271,11 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
       print('요청 성공');
       print('등록 완료');
       print('Response body: ${response.body}');
-    } else if(response.statusCode == 400) {
+    } else if (response.statusCode == 400) {
       print('매칭 중');
-    }
-    else if(response.statusCode == 409) {
+    } else if (response.statusCode == 409) {
       print('매칭 완료');
-    }
-    else {
+    } else {
       print(response.statusCode);
       throw Exception('매칭 등록 실패');
     }
