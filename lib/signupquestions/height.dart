@@ -5,7 +5,7 @@ import 'package:blurting/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/token.dart'; // token.dart를 임포트
+import 'package:blurting/token.dart'; // token.dart를 임포트
 import 'package:blurting/signupquestions/major.dart'; // major.dart를 임포트
 import 'package:blurting/Utils/utilWidget.dart';
 
@@ -77,7 +77,7 @@ class _HeightPageState extends State<HeightPage>
   }
 
   Future<void> _sendPostRequest() async {
-    if (140 > height! || height! > 240) {
+    if (100 > height! || height! > 240) {
       showSnackBar(context, "유효한 키 정보를 입력해주세요");
       return;
     }

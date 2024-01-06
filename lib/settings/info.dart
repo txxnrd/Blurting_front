@@ -3,9 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'dart:convert';
 import '../colors/colors.dart';
-import '../signupquestions/token.dart';
+import '../token.dart';
 import 'package:blurting/Utils/provider.dart';
-
 
 class InfoPage extends StatefulWidget {
   final String email;

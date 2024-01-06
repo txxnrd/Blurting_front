@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/height.dart';
 import 'package:shared_preferences/shared_preferences.dart';

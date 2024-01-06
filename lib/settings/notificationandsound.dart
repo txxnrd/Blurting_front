@@ -7,8 +7,7 @@ import 'package:blurting/colors/colors.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart';
-
+import 'package:blurting/token.dart';
 
 class NotificationandSound extends StatefulWidget {
   final bool fcmstate; // 생성자를 통해 받을 변수를 final로 선언

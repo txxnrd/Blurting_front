@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/whisperTab/whisper.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,6 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -73,12 +72,12 @@ class _chatListItemState extends State<ChatListItem> {
                               children: [
                                 Container(
                                   width:
-                                  MediaQuery.of(context).size.width * 0.9,
+                                      MediaQuery.of(context).size.width * 0.9,
                                   height: 100,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color:
-                                      mainColor.lightGray.withOpacity(0.8)),
+                                          mainColor.lightGray.withOpacity(0.8)),
                                   alignment: Alignment.topCenter,
                                   child: Container(
                                     margin: EdgeInsets.all(10),
@@ -107,7 +106,7 @@ class _chatListItemState extends State<ChatListItem> {
                                 GestureDetector(
                                   child: Container(
                                     width:
-                                    MediaQuery.of(context).size.width * 0.9,
+                                        MediaQuery.of(context).size.width * 0.9,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: mainColor.MainColor),
@@ -205,7 +204,7 @@ class _chatListItemState extends State<ChatListItem> {
               const end = Offset.zero;
               const curve = Curves.easeInOut;
               var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               var offsetAnimation = animation.drive(tween);
               return SlideTransition(position: offsetAnimation, child: child);
             },
@@ -245,7 +244,10 @@ class _chatListItemState extends State<ChatListItem> {
                       ),
                       width: 60,
                       height: 60,
-                      child: Image.asset(widget.image, fit: BoxFit.fill,),
+                      child: Image.asset(
+                        widget.image,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                     Expanded(
                       child: Container(
@@ -258,11 +260,10 @@ class _chatListItemState extends State<ChatListItem> {
                               children: <Widget>[
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.only(
-                                          left: 20, top: 6),
+                                      margin: EdgeInsets.only(left: 20, top: 6),
                                       child: Text(
                                         widget.userName,
                                         style: TextStyle(
@@ -280,12 +281,15 @@ class _chatListItemState extends State<ChatListItem> {
                                         decoration: BoxDecoration(
                                             color: mainColor.MainColor,
                                             borderRadius:
-                                            BorderRadius.circular(50)),
+                                                BorderRadius.circular(50)),
                                       ),
                                   ],
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(left: 20, right: 20,),
+                                  margin: EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                  ),
                                   child: Text(
                                     widget.latest_chat,
                                     overflow: TextOverflow.ellipsis,
@@ -293,7 +297,9 @@ class _chatListItemState extends State<ChatListItem> {
                                     style: TextStyle(
                                       fontFamily: "Pretendard",
                                       fontSize: 15,
-                                      color: widget.read ? mainColor.Gray : Colors.black,
+                                      color: widget.read
+                                          ? mainColor.Gray
+                                          : Colors.black,
                                     ),
                                   ),
                                 ),
@@ -384,7 +390,8 @@ class _chattingList extends State<ChattingList> {
             DateTime latestTime = _parseDateTime(data['createdAt']);
             bool read;
 
-            if (data['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
+            if (data['userId'] ==
+                Provider.of<UserProvider>(context, listen: false).userId) {
               read = true;
             } else {
               read = data['read'];
@@ -449,7 +456,8 @@ class _chattingList extends State<ChattingList> {
         // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
         // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
         print('leave_room 소켓 받음');
-        if (data['userId'] == Provider.of<UserProvider>(context, listen: false).userId) {
+        if (data['userId'] ==
+            Provider.of<UserProvider>(context, listen: false).userId) {
           print('내가 나감');
           for (int i = 0; i < chatLists.length; i++) {
             Widget widget = chatLists[i];
@@ -489,7 +497,6 @@ class _chattingList extends State<ChattingList> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(244),
         child: AppBar(
@@ -610,10 +617,7 @@ class _chattingList extends State<ChattingList> {
       socket = IO.io(
           '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
         'transports': ['websocket'],
-        'auth': {
-          'authorization':
-              'Bearer $savedToken'
-        },
+        'auth': {'authorization': 'Bearer $savedToken'},
       });
 
       try {
@@ -636,7 +640,7 @@ class _chattingList extends State<ChattingList> {
                   roomId: chatData['roomId'] as String? ?? '',
                   userName: chatData['nickname'] as String? ?? '',
                   latest_chat:
-                  chatData['latest_chat'] as String? ?? '지금 귓속말을 보내 보세요!',
+                      chatData['latest_chat'] as String? ?? '지금 귓속말을 보내 보세요!',
                   latest_time: latestTime,
                   image: chatData['sex'] == "F"
                       ? 'assets/woman.png'
@@ -653,13 +657,11 @@ class _chattingList extends State<ChattingList> {
         print('Error decoding JSON: $e');
         print('Response body: ${response.body}');
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchList);
-    }
-     else {
+    } else {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }

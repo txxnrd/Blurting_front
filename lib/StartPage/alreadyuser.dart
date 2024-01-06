@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart'; // sex.dart를 임포트
+import 'package:blurting/token.dart'; // sex.dart를 임포트
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +16,7 @@ import 'package:blurting/colors/colors.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
+import 'package:blurting/Utils/utilWidget.dart';
 
 class AlreadyUserPage extends StatefulWidget {
   const AlreadyUserPage({super.key});
@@ -406,8 +407,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                                     backgroundColor:
                                         Color(DefinedColor.darkpink),
                                     elevation: 0.0,
-                                    padding:
-                                        EdgeInsets.zero, // 버튼 내부 패딩을 제거
+                                    padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거
                                   ),
                                   child: FittedBox(
                                     // FittedBox를 사용하여 내용을 버튼 크기에 맞게 조절
@@ -463,11 +463,11 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       ),
 
       floatingActionButton: Container(
-        width: 350.0, // 너비 조정
-        height: 80.0, // 높이 조정
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
-        child: FloatingActionButton(
-          onPressed: IsValid
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+        child: InkWell(
+          splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+          child: signupButton(text: '다음', IsValid: IsValid),
+          onTap: IsValid
               ? () async {
                   if (!certification) {
                     // 인증번호를 요청할 때 이 부분이 실행됩니다.
@@ -479,21 +479,6 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                   }
                 }
               : null,
-          backgroundColor: Color(0xFFF66464), // 버튼의 배경색
-          elevation: 0.0,
-          hoverElevation: 50,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Text(
-            !certification ? '인증번호 요청' : '다음',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pretendard',
-              fontSize: 16.0, // 텍스트 크기 조정
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
       floatingActionButtonLocation:

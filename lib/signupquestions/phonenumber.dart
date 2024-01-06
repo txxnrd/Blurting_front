@@ -6,7 +6,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/token.dart';
+import 'package:blurting/token.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/colors/colors.dart';
@@ -211,30 +211,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     });
     myFocusNode = FocusNode();
     myFocusNode.unfocus();
-    _controller.addListener(() {
-      String text = _controller.text;
-
-      // Checking if the text has been added or removed.
-      if (_previousText == null ||
-          (text.length > (_previousText?.length ?? 0))) {
-        if (text.length == 3 || text.length == 8) {
-          text += '-';
-          _controller.text = text;
-          _controller.selection =
-              TextSelection.fromPosition(TextPosition(offset: text.length));
-        }
-      } else if (text.length < (_previousText?.length ?? 0)) {
-        if (text.length == 4 || text.length == 9) {
-          text = text.substring(0, text.length - 1);
-          _controller.text = text;
-          _controller.selection =
-              TextSelection.fromPosition(TextPosition(offset: text.length));
-        }
-      }
-
-      _previousText = _controller.text;
-    });
-
     _progressAnimation = Tween<double>(
       begin: 0.3 / 15, // 시작 게이지 값
       end: 1 / 15, // 종료 게이지 값
