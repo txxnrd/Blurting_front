@@ -337,7 +337,7 @@ class _Blurting extends State<Blurting> {
             ],
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(width * 0.05, 27, 0, height * 0.14),
+            margin: EdgeInsets.fromLTRB(width * 0.05, 20, 0, height * 0.08),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -440,7 +440,7 @@ class _Blurting extends State<Blurting> {
         Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 8),
               child: Text(
                 'Day${index + 1}',
                 style: TextStyle(

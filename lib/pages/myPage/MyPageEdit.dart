@@ -30,7 +30,7 @@ int alcoholIndex = 0;
 int smokeIndex = 0;
 String region = "";
 int height = 0;
-
+String sex = "";
 EorI? selectedEorI;
 SorN? selectedSorN;
 TorF? selectedTorF;
@@ -129,6 +129,44 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
+  @override
+  void IsHobbySelected(int index) {
+    modifiedFlags["hobby"] = true;
+    var true_length = isValidHobbyList.where((item) => item == true).length;
+    print(true_length);
+    if (true_length >= 4 && isValidHobbyList[index] == false) {
+      print("여기");
+      showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
+      return;
+    } else {
+      print("저기");
+      isValidHobbyList[index] = !isValidHobbyList[index];
+      if (isValidHobbyList.any((isValid) => isValid)) {
+        IsValid = true;
+      } else
+        IsValid = false;
+    }
+  }
+
+  @override
+  void IsCharacterSelected(index) {
+    modifiedFlags["character"] = true;
+    var true_length = isValidCharacterList.where((item) => item == true).length;
+    print(true_length);
+    if (true_length >= 4 && isValidCharacterList[index] == false) {
+      print("여기");
+      showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
+      return;
+    } else {
+      print("저기");
+      isValidCharacterList[index] = !isValidCharacterList[index];
+      if (isValidCharacterList.any((isValid) => isValid)) {
+        IsValid = true;
+      } else
+        IsValid = false;
+    }
+  }
+
   ///취미 및 성격 checkbox. bool 하나로 두개의 위젯 다 처리함
   Widget customHobbyCheckbox(String hobbyText, int index, width, bool ishobby) {
     return Container(
@@ -191,6 +229,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     _textController.text = widget.data['height'].toString();
 
+    sex = widget.data['sex'];
     // widget.data['religion']에 따라 초기값 설정
     if (widget.data['religion'] == "무교") {
       selectedreligion[0] = true;
@@ -670,14 +709,14 @@ class _MyPageEditState extends State<MyPageEdit> {
             _showWarning(context);
           },
         ),
-        flexibleSpace: Stack(
-          children: [
-            ClipRRect(
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(color: Colors.transparent))),
-          ],
-        ),
+        // flexibleSpace: Stack(
+        //   children: [
+        //     ClipRRect(
+        //         child: BackdropFilter(
+        //             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        //             child: Container(color: Colors.transparent))),
+        //   ],
+        // ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -685,19 +724,19 @@ class _MyPageEditState extends State<MyPageEdit> {
           child: Column(
             children: [
               Container(
-                  padding: EdgeInsets.only(left: 13),
+                  padding: EdgeInsets.only(left: 13, top: 20),
                   child: ellipseText(text: 'Editing')),
               Center(
                 child: Container(
                   width: 57,
                   child: Image.asset(
-                    'assets/woman.png',
+                    sex == "W" ? 'assets/woman.png' : 'assets/man.png',
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: EdgeInsets.only(top: 2),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -1175,20 +1214,9 @@ class _MyPageEditState extends State<MyPageEdit> {
                         ),
                       ],
                     ),
-                    Center(
-                      child: Container(
-                        margin: EdgeInsets.only(top: 30, bottom: 20),
-                        child: InkWell(
-                          child: signupButton(
-                            text: '수정 완료',
-                            IsValid: IsValid,
-                          ),
-                          onTap: () {
-                            _sendFixRequest();
-                          },
-                        ),
-                      ),
-                    ),
+                    Container(
+                      height: 100,
+                    )
                   ],
                 ),
               ),
@@ -1196,6 +1224,19 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
         ),
       ),
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(top: 0, bottom: 20),
+        child: InkWell(
+          child: signupButton(
+            text: '수정 완료',
+            IsValid: IsValid,
+          ),
+          onTap: () {
+            _sendFixRequest();
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
