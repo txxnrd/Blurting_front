@@ -105,6 +105,9 @@ class _Blurting extends State<Blurting> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     dividedProfileList[0].clear();
     dividedProfileList[1].clear();
 
@@ -116,11 +119,10 @@ class _Blurting extends State<Blurting> {
         dividedProfileList[1].add(ProfileList[currentPage][i]);
       }
     }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(140),
+        preferredSize: Size.fromHeight(160),
         child: AppBar(
           toolbarHeight: 80,
           scrolledUnderElevation: 0.0,
@@ -129,7 +131,7 @@ class _Blurting extends State<Blurting> {
             alignment: Alignment.topRight,
             children: [
               Container(
-                  margin: EdgeInsets.only(top: 80),
+                  margin: EdgeInsets.only(top: 110),
                   padding: EdgeInsets.all(13),
                   child: ellipseText(text: 'Blurting')),
             ],
@@ -144,15 +146,15 @@ class _Blurting extends State<Blurting> {
       ),
       extendBodyBehindAppBar: false,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Column(
             children: [
               Container(
                 margin: EdgeInsets.only(bottom: 20),
-                width: MediaQuery.of(context).size.width * 0.6,
+                width: width * 0.6,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     InkWell(
                       onTap: () {
@@ -217,10 +219,10 @@ class _Blurting extends State<Blurting> {
                       decoration: BoxDecoration(
                           color: mainColor.Gray.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(10)),
-                      width: MediaQuery.of(context).size.width * 0.9,
+                      width: width * 0.9,
                       height: ProfileList[currentPage].length > 4
-                          ? MediaQuery.of(context).size.width * 0.8
-                          : MediaQuery.of(context).size.width * 0.7,
+                          ? width * 0.8
+                          : width * 0.7,
                       child: isState == 'Start'
                           ? Center(
                               child: Column(
@@ -335,8 +337,7 @@ class _Blurting extends State<Blurting> {
             ],
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0.05, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(width * 0.05, 27, 0, height * 0.14),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Column(

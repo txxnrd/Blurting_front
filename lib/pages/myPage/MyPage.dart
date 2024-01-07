@@ -153,7 +153,7 @@ class _MyPage extends State<MyPage> {
               alignment: Alignment.topRight,
               children: [
                 Container(
-                    margin: EdgeInsets.only(top: 80),
+                    margin: EdgeInsets.only(top: 110),
                     padding: EdgeInsets.all(13),
                     child: ellipseText(text: 'My Profile')),
               ],
