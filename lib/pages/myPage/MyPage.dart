@@ -366,9 +366,9 @@ class _MyPage extends State<MyPage> {
     if (imagePaths.isEmpty || index >= imagePaths.length) {
       // Handle the case where imagePaths is empty or the index is out of bounds.
       return Container(
-        // You can customize this container to display a placeholder or handle the error.
-        child: Text('No Image'),
-      );
+          // You can customize this container to display a placeholder or handle the error.
+
+          );
     }
 
     return Column(
