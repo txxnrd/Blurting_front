@@ -35,6 +35,18 @@ class GroupChatProvider with ChangeNotifier {
   }
 }
 
+
+class ScrollProvider with ChangeNotifier {
+  bool _isMax = false;
+
+  bool get isMax => _isMax;
+
+  set changeMax(bool value) {
+    _isMax = value;
+    notifyListeners();
+  }
+}
+
 class WhisperProvider with ChangeNotifier {
   bool _newChat = false;
 
