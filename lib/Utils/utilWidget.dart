@@ -166,7 +166,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 minLines: 1, maxLines: 3,
                 enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
                 focusNode: _focusNode,
-                onTapOutside: (event) => _focusNode.unfocus(),
+                // onTapOutside: (event) => _focusNode.unfocus(),
                 onChanged: (value) {
                   if (value != '') {
                     inputValid(true);

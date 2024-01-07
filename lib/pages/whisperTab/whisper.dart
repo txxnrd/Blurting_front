@@ -51,7 +51,6 @@ class _Whisper extends State<Whisper> {
   final String roomId = '';
 
   int blurValue = 0;
-  int blurChange = 0;
   late String appbarphoto = '';
   late ExtendedImage image;
 
@@ -59,6 +58,7 @@ class _Whisper extends State<Whisper> {
 
   List<Widget> chatMessages = [];
   Map<String, dynamic>? responseData;
+  int isBlurChanged = -1;
 
   bool isValid = false;
 
@@ -166,19 +166,12 @@ class _Whisper extends State<Whisper> {
       });
 
       widget.socket.on('leave_room', (data) {
-        // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
-        // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
-        // 귓속말 내에서 내가 나갔을 때, 이전으로 돌아가기 (채팅 리스트로)
-        // 상대방이 방금 나간 roomId가 지금 내가 보고 있는 roomId라면
         if (data['roomId'] == widget.roomId) {
           if (mounted) {
             setState(() {
               isBlock = true;
             });
           }
-          // if (data['userId'] == UserProvider.UserId) {
-          //   print(context);
-          // } else {}
         }
       });
 
@@ -270,6 +263,9 @@ class _Whisper extends State<Whisper> {
 
   @override
   Widget build(BuildContext context) {
+    // print(MediaQuery.of(context).viewInsets.bottom);
+    double bottom = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -292,6 +288,9 @@ class _Whisper extends State<Whisper> {
               onTap: (!isBlock)
                   ? () {
                       _showProfileModal(context);
+                      setState(() {
+                        isBlurChanged = -1;
+                      });
                     }
                   : null,
               child: Container(
@@ -301,7 +300,7 @@ class _Whisper extends State<Whisper> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   color: Colors.white,
-                  border: responseData?['blurChange'] != null
+                  border: isBlurChanged != -1
                       ? Border.all(
                           color: Color(0XFFF66464),
                           width: 1.0,
@@ -339,7 +338,7 @@ class _Whisper extends State<Whisper> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (responseData?['blurChange'] != null)
+                if (isBlurChanged != -1)
                   Positioned(
                     top: 0,
                     left: 3,
@@ -358,7 +357,7 @@ class _Whisper extends State<Whisper> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            '  $blurChange단계 블러가 풀렸어요!',
+                            '  $isBlurChanged단계 블러가 풀렸어요!',
                             style: TextStyle(
                                 color: Color(0XFF868686),
                                 fontSize: 10,
@@ -548,43 +547,43 @@ class _Whisper extends State<Whisper> {
           ),
           Column(
             children: <Widget>[
-              Expanded(
-                  child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    controller: _scrollController,
+              Stack(
+                              children: [
+              SingleChildScrollView(
+                controller: _scrollController,
+                child: Container(
+                  margin: EdgeInsets.only(top: 200), 
+                  padding: EdgeInsets.only(bottom: bottom),
+                  child: Column(
+                    children: <Widget>[
+                      for (var chatItem in chatMessages) chatItem,
+                      for (var chatItem in sendingMessageList) chatItem,
+                    ],
+                  ),
+                ),
+              ),
+              AnimatedOpacity(
+                opacity: isMaxScroll ? 0.0 : 1.0,
+                duration: Duration(milliseconds: 500),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
                     child: Container(
-                      margin: EdgeInsets.only(top: 200),
-                      child: Column(
-                        children: <Widget>[
-                          for (var chatItem in chatMessages) chatItem,
-                          for (var chatItem in sendingMessageList) chatItem,
-                        ],
+                      margin: EdgeInsets.all(10),
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        mini: true,
+                        onPressed: () {
+                          _scrollController.position.jumpTo(
+                              _scrollController.position.maxScrollExtent);
+                        },
+                        child: Icon(Icons.keyboard_arrow_down_rounded,
+                            color: Colors.black),
                       ),
                     ),
-                  ),
-                  AnimatedOpacity(
-                    opacity: isMaxScroll ? 0.0 : 1.0,
-                    duration: Duration(milliseconds: 500),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: FloatingActionButton(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                            mini: true,
-                            onPressed: () {
-                              _scrollController.position.jumpTo(
-                                  _scrollController.position.maxScrollExtent);
-                            },
-                            child: Icon(Icons.keyboard_arrow_down_rounded,
-                                color: Colors.black),
-                          ),
-                        ),
-                      ))
-                ],
-              )),
+                  ))
+                              ],
+                            ),
               CustomInputField(
                 controller: controller,
                 sendFunction: sendChat,
@@ -626,6 +625,7 @@ class _Whisper extends State<Whisper> {
     if (mounted) {
       setState(() {
         sendingMessageList.add(newAnswer);
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       });
     }
 
@@ -678,9 +678,10 @@ class _Whisper extends State<Whisper> {
         } else {
           blurValue = 1;
         }
-        if (responseData?['blurChange'] != null) {
-          blurChange = responseData!['blur'];
+        if(responseData?['blurChange'] == null){
+          isBlurChanged = -1;
         }
+        else isBlurChanged = responseData?['blurChange'];
 
         print(hasRead);
 
