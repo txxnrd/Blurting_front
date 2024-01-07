@@ -50,7 +50,7 @@ flutter_native_splash:
     # 640 pixels in diameter.
     # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
     # 768 pixels in diameter.
-    image: assets/blurtingLogo.png
+    image: assets/splash.png
 
     # Splash screen background color.
     color: "#FFFFFF"
@@ -70,9 +70,8 @@ flutter_native_splash:
 
   # The android, ios and web parameters can be used to disable generating a splash screen on a given
   # platform.
-  #android: false
   #ios: false
-  #web: false
+  web: false
 
   # Platform specific images can be specified with the following parameters, which will override
   # the respective parameter.  You may specify all, selected, or none of these parameters:

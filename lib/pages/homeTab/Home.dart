@@ -124,7 +124,7 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: SizedBox(
-            height: 280,
+            height: 260,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -592,7 +592,7 @@ class _HomeState extends State<Home> {
 Widget NowBlurting(
     String icon, String getCountText, int dynamicCount, double height) {
   return Container(
-      margin: EdgeInsets.fromLTRB(0, height / 18, 0, height / 24),
+      margin: EdgeInsets.fromLTRB(0, height / 22, 0, height / 22),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
