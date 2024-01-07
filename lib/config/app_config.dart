@@ -46,6 +46,8 @@ class API {
       "${ServerEndpoints.serverEndpoint}/geocoding/search/district/by-geo";
   /*HOME */
   static final String homeLike = "${ServerEndpoints.serverEndpoint}/home/like";
+  static final String home = "${ServerEndpoints.serverEndpoint}/home";
+
   static final String alarm = "${ServerEndpoints.serverEndpoint}/fcm";
   /*BLURTING */
   static final String matching = "${ServerEndpoints.serverEndpoint}/blurting";
