@@ -147,12 +147,6 @@ String getMBTIType() {
   return '$eOrI$sOrN$tOrF$jOrP'.toLowerCase();
 }
 
-///체크하면 ValidList가 수정이됨
-@override
-void IsHobbySelected(int index) {
-  isValidHobbyList[index] = !isValidHobbyList[index];
-}
-
 @override
 void IsCharacterSelected(int index) {
   isValidCharacterList[index] = !isValidCharacterList[index];

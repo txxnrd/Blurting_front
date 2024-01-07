@@ -45,11 +45,7 @@ class _ProfileCard extends State<ProfileCard> {
   @override
   void initState() {
     super.initState();
-
     fetchUserProfile();
-    for (String imagePath in imagePaths) {
-      precacheImage(NetworkImage(imagePath), context);
-    }
   }
 
   Future<void> fetchUserProfile() async {
