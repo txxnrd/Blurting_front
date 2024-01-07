@@ -293,7 +293,7 @@ class _GroupChat extends State<GroupChat> {
   Widget questionPage(int index) {
     ScrollController pageScrollController =
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
-
+    
     SchedulerBinding.instance.addPostFrameCallback((_) {
       pageScrollController
           .jumpTo(pageScrollController.position.maxScrollExtent);
@@ -303,58 +303,66 @@ class _GroupChat extends State<GroupChat> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(
-          child: SingleChildScrollView(
-            controller: pageScrollController,
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 5),
-                  child: Column(
-                    children: <Widget>[
-                      for (var answer in answerList[index])
-                        answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
-                    ],
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                controller: pageScrollController,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Column(
+                        children: <Widget>[
+                          for (var answer in answerList[index])
+                            answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (Provider.of<GroupChatProvider>(context).isPocus)
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 500),
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
+                    width: 73,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Provider.of<GroupChatProvider>(context).pointValid
+                          ? mainColor.MainColor
+                          : Colors.white,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(left: 5, right: 3),
+                            child: Image.asset(
+                              'assets/images/check.png',
+                              color: Provider.of<GroupChatProvider>(context)
+                                      .pointValid
+                                  ? Colors.white
+                                  : mainColor.lightGray,
+                            )),
+                        Text(
+                          '100자 이상',
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: "Heebo",
+                              color: Provider.of<GroupChatProvider>(context).pointValid
+                                  ? Colors.white
+                                  : mainColor.lightGray),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
         ),
-        if (Provider.of<GroupChatProvider>(context).isPocus)
-          AnimatedContainer(
-            duration: Duration(milliseconds: 500),
-            margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
-            width: 73,
-            height: 20,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Provider.of<GroupChatProvider>(context).pointValid
-                  ? mainColor.MainColor
-                  : Colors.white,
-            ),
-            child: Row(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(left: 5, right: 3),
-                    child: Image.asset(
-                      'assets/images/check.png',
-                      color: Provider.of<GroupChatProvider>(context).pointValid
-                          ? Colors.white
-                          : mainColor.lightGray,
-                    )),
-                Text(
-                  '100자 이상',
-                  style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: "Heebo",
-                      color: Provider.of<GroupChatProvider>(context).pointValid
-                          ? Colors.white
-                          : mainColor.lightGray),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
         CustomInputField(
           controller: _controller,
           sendFunction: SendAnswer,

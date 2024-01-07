@@ -142,6 +142,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
         isPocusState(false);
       }
     });
+    inputPointValid(false);
   }
 
   @override
@@ -152,6 +153,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
       padding: EdgeInsets.fromLTRB(0, 7, 0, 20),
@@ -166,7 +168,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 minLines: 1, maxLines: 3,
                 enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
                 focusNode: _focusNode,
-                // onTapOutside: (event) => _focusNode.unfocus(),
+                onTapOutside: (event) => _focusNode.unfocus(),
                 onChanged: (value) {
                   if (value != '') {
                     inputValid(true);
@@ -246,34 +248,37 @@ class pointAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () {
-          print('포인트 내역 버튼 눌러짐');
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PointHistoryPage()),
-          );
-        },
-        child: Container(
-          height: 30,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: mainColor.MainColor.withOpacity(0.5),
-          ),
-          child: Center(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(9, 0, 9, 0),
-              child: Text(
-                '${Provider.of<UserProvider>(context, listen: false).point}p',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Heebo',
-                    color: Colors.white,
-                    fontSize: 15),
+    return Container(
+          margin: EdgeInsets.only(top: 20),
+      child: InkWell(
+          onTap: () {
+            print('포인트 내역 버튼 눌러짐');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PointHistoryPage()),
+            );
+          },
+          child: Container(
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: mainColor.MainColor.withOpacity(0.5),
+            ),
+            child: Center(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(9, 0, 9, 0),
+                child: Text(
+                  '${Provider.of<UserProvider>(context, listen: false).point}p',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Heebo',
+                      color: Colors.white,
+                      fontSize: 15),
+                ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
 
@@ -1387,6 +1392,7 @@ class _AnswerItemState extends State<AnswerItem> {
                         GestureDetector(
                           onDoubleTap: () {
                             changeLike(widget.answerId);
+                            HapticFeedback.vibrate();
                           },
                           child: Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
@@ -1429,6 +1435,7 @@ class _AnswerItemState extends State<AnswerItem> {
                           child: GestureDetector(
                             onTap: () {
                               changeLike(widget.answerId);
+                              HapticFeedback.vibrate();
                             },
                             child: Container(
                               width: (likedNum == 0) ? 15 : 25,
@@ -1602,7 +1609,7 @@ class staticButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: mainColor.MainColor,
       ),
-      margin: EdgeInsets.only(bottom: 10),
+      // margin: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width * 0.9,
       height: 48,
       child: Column(

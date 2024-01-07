@@ -124,7 +124,7 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: SizedBox(
-            height: 260,
+            height: 280,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -301,52 +301,59 @@ class _HomeState extends State<Home> {
     });
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        foregroundColor: Colors.amber,
         automaticallyImplyLeading: false,
-        toolbarHeight: 100,
+        toolbarHeight: 80,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Row(
-          children: [
-            Text(
-              '다음 질문까지   ',
-              style: TextStyle(
-                color: Color.fromRGBO(48, 48, 48, 0.8),
-                fontFamily: 'Heebo',
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+        title: Container(
+          margin: EdgeInsets.only(top: 20),
+          child: Row(
+            children: [
+              Text(
+                '다음 질문까지   ',
+                style: TextStyle(
+                  color: Color.fromRGBO(48, 48, 48, 0.8),
+                  fontFamily: 'Heebo',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            Text(
-              formatDuration(remainingTime),
-              style: TextStyle(
-                color: mainColor.MainColor.withOpacity(0.8),
-                fontFamily: 'Heebo',
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            )
-          ],
+              Text(
+                formatDuration(remainingTime),
+                style: TextStyle(
+                  color: mainColor.MainColor.withOpacity(0.8),
+                  fontFamily: 'Heebo',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+            ],
+          ),
         ),
         actions: <Widget>[
           pointAppbar(),
-          IconButton(
-            icon: Icon(
-              Icons.notifications_rounded,
-              color: mainColor.Gray,
+          Container(
+          margin: EdgeInsets.only(top: 20),
+            child: IconButton(
+              icon: Icon(
+                Icons.notifications_rounded,
+                color: mainColor.Gray,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AlarmPage()),
+                );
+              },
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AlarmPage()),
-              );
-            },
           ),
         ],
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
@@ -381,9 +388,8 @@ class _HomeState extends State<Home> {
                   ))
             ],
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            height: height * 2 / 3,
+          SizedBox(
+            height: 240,
             child: apiResponse != null && apiResponse!['answers'].isNotEmpty
                 ? PageView.builder(
                     onPageChanged: (index) => {mvpName(index)},
@@ -421,7 +427,7 @@ class _HomeState extends State<Home> {
             ),
           // Today's Blurting
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 25, 0, 0),
+            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             child: Text(
               'Now Blurting',
               style: TextStyle(
@@ -432,10 +438,10 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          NowBlurting('arrow', '현재 블러팅에서 날아다니는 화살', arrow, height),
-          NowBlurting('match', '블러팅에서 매치된 화살의 개수', matchedArrows, height),
-          NowBlurting('chat', '블러팅에서 오고가는 귓속말', chats, height),
-          NowBlurting('like', '지금까지 당신의 답변을 좋아한 사람', likes, height),
+          NowBlurting('arrow', '현재 블러팅에서 날아다니는 화살', arrow),
+          NowBlurting('match', '블러팅에서 매치된 화살의 개수', matchedArrows),
+          NowBlurting('chat', '블러팅에서 오고가는 귓속말', chats),
+          NowBlurting('like', '지금까지 당신의 답변을 좋아한 사람', likes),
         ],
       ),
     );
@@ -445,9 +451,10 @@ class _HomeState extends State<Home> {
     print('home data 불러오기 시작');
     String savedToken = await getToken();
 
-    final response =
-        await http.get(Uri.parse(API.home), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
-            headers: {
+    final response = await http.get(
+        Uri.parse(
+            'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
+        headers: {
           'authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
         });
@@ -576,6 +583,7 @@ class _HomeState extends State<Home> {
       if (mounted) {
         setState(() {
           if (!cardItems[index].ilike) {
+            // If not liked, increase likes count and set ilike to true
             cardItems[index].likes++;
           } else {
             cardItems[index].likes--;
@@ -589,52 +597,49 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget NowBlurting(
-    String icon, String getCountText, int dynamicCount, double height) {
-  return Container(
-      margin: EdgeInsets.fromLTRB(0, height / 22, 0, height / 22),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Image.asset('./assets/images/$icon.png',
-                  width: 35, height: 35),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: Text(
-                getCountText,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontFamily: 'heebo',
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+Widget NowBlurting(String icon, String getCountText, int dynamicCount) {
+  return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child:
+              Image.asset('./assets/images/$icon.png', width: 35, height: 35),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 31),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color.fromRGBO(255, 210, 210, 0.3),
-            ),
-            width: 58,
-            height: 28,
-            child: Center(
-              child: Text(
-                '$dynamicCount',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+          padding: const EdgeInsets.only(left: 12),
+          child: Text(
+            getCountText,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.black,
+              fontFamily: 'heebo',
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
-      ]));
+      ],
+    ),
+    Padding(
+      padding: const EdgeInsets.only(right: 31),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromRGBO(255, 210, 210, 0.3),
+        ),
+        width: 58,
+        height: 28,
+        child: Center(
+          child: Text(
+            '$dynamicCount', // Use dynamic count here
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    ),
+  ]);
 }

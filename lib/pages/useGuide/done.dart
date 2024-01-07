@@ -68,7 +68,7 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                       height: 30,
                     ),
                     InkWell(
-                      child: staticButton(text: '시작하기'),
+                      child: Container(margin: EdgeInsets.only(bottom: 10), child: staticButton(text: '시작하기')),
                       onTap: () {
                         Navigator.push(
                           context,
