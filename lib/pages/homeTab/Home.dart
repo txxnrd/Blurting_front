@@ -108,6 +108,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.width;
+    print(height);
+
     final pages = List.generate(cardItems.length, (index) {
       final answercontroller = ScrollController();
       return Container(
@@ -122,7 +126,6 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: SizedBox(
-            height: 280,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -200,32 +203,20 @@ class _HomeState extends State<Home> {
                       ),
                       Positioned(
                         top: 40,
-                        left: 150,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              width: 15,
-                              height: 15,
-                              child: FloatingActionButton(
-                                elevation: 0,
-                                onPressed: () {
-                                  print(
-                                      "답변 스크롤되고있나?: ${answercontroller.position.maxScrollExtent}");
-                                  answercontroller.animateTo(
-                                      answercontroller.position.maxScrollExtent,
-                                      duration: Duration(milliseconds: 500),
-                                      curve: Curves.ease);
-                                },
-                                backgroundColor: mainColor.Gray,
-                                child: Icon(
-                                  Icons.keyboard_arrow_down_rounded,
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
+                        left: width * 0.67,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          child: InkWell(
+                              onTap: () {
+                                print("눌림");
+                                answercontroller.animateTo(
+                                    answercontroller.position.maxScrollExtent,
+                                    duration: Duration(milliseconds: 500),
+                                    curve: Curves.ease);
+                              },
+                              child: Image.asset(
+                                  'assets/images/home_scroll_button.png')),
                         ),
                       ),
                     ],
@@ -392,7 +383,7 @@ class _HomeState extends State<Home> {
             ],
           ),
           SizedBox(
-            height: 240,
+            height: height * 2 / 3,
             child: apiResponse != null && apiResponse!['answers'].isNotEmpty
                 ? PageView.builder(
                     onPageChanged: (index) => {mvpName(index)},
@@ -454,10 +445,9 @@ class _HomeState extends State<Home> {
     print('home data 불러오기 시작');
     String savedToken = await getToken();
 
-    final response = await http.get(
-        Uri.parse(
-            'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
-        headers: {
+    final response =
+        await http.get(Uri.parse(API.home), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
+            headers: {
           'authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
         });
@@ -470,18 +460,10 @@ class _HomeState extends State<Home> {
         if (mounted) {
           setState(() {
             apiResponse = data;
-            print('왜 null이니');
-            print(apiResponse);
-
             arrow = data['arrows'];
             matchedArrows = data['matchedArrows'];
             chats = data['chats'];
             likes = data['likes'];
-
-            print(arrow);
-            print(matchedArrows);
-            print(chats);
-            print(likes);
 
             List<dynamic> answers = data['answers'];
 
@@ -502,9 +484,7 @@ class _HomeState extends State<Home> {
             }
 
             int milliseconds = data['seconds'];
-            print(milliseconds);
             remainingTime = Duration(milliseconds: milliseconds);
-            print(remainingTime);
           });
         }
       } catch (e) {
@@ -525,7 +505,6 @@ class _HomeState extends State<Home> {
   Future<void> fetchPoint() async {
     // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
     print('point 불러오기 시작');
-
     final url = Uri.parse(API.userpoint);
     String savedToken = await getToken();
     int userId = await getuserId();
@@ -586,7 +565,6 @@ class _HomeState extends State<Home> {
       if (mounted) {
         setState(() {
           if (!cardItems[index].ilike) {
-            // If not liked, increase likes count and set ilike to true
             cardItems[index].likes++;
           } else {
             cardItems[index].likes--;

@@ -149,6 +149,7 @@ flutter:
     - assets/images/blurafter.png
     - assets/images/useguidetwo.png
     - assets/blurtingStart.png
+    - assets/images/home_scroll_button.png
 
   fonts:
     - family: Pretendard

@@ -333,7 +333,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 ),
               ),
               Visibility(
-                visible: certification, // showButton이 true이면 보이고, false이면 숨김
+                visible: certification, // certification true이면 보이고, false이면 숨김
                 child: Container(
                   margin: EdgeInsets.only(top: 15),
                   width: 350,
