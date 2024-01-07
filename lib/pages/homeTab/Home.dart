@@ -205,8 +205,8 @@ class _HomeState extends State<Home> {
                         top: 40,
                         left: width * 0.67,
                         child: Container(
-                          width: 20,
-                          height: 20,
+                          width: 15,
+                          height: 15,
                           child: InkWell(
                               onTap: () {
                                 print("눌림");
@@ -383,7 +383,7 @@ class _HomeState extends State<Home> {
             ],
           ),
           SizedBox(
-            height: height * 2 / 3,
+            height: 240,
             child: apiResponse != null && apiResponse!['answers'].isNotEmpty
                 ? PageView.builder(
                     onPageChanged: (index) => {mvpName(index)},
