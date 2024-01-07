@@ -1387,6 +1387,7 @@ class _AnswerItemState extends State<AnswerItem> {
                         GestureDetector(
                           onDoubleTap: () {
                             changeLike(widget.answerId);
+                            HapticFeedback.vibrate();
                           },
                           child: Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
@@ -1429,6 +1430,7 @@ class _AnswerItemState extends State<AnswerItem> {
                           child: GestureDetector(
                             onTap: () {
                               changeLike(widget.answerId);
+                              HapticFeedback.vibrate();
                             },
                             child: Container(
                               width: (likedNum == 0) ? 15 : 25,

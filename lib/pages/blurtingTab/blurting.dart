@@ -112,10 +112,10 @@ class _Blurting extends State<Blurting> {
     dividedProfileList[1].clear();
 
     if (ProfileList[currentPage].length > 3) {
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 4; i++) {
         dividedProfileList[0].add(ProfileList[currentPage][i]);
       }
-      for (int i = 3; i < ProfileList[currentPage].length; i++) {
+      for (int i = 4; i < ProfileList[currentPage].length; i++) {
         dividedProfileList[1].add(ProfileList[currentPage][i]);
       }
     }
