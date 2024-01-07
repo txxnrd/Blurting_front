@@ -146,7 +146,7 @@ class _Blurting extends State<Blurting> {
       ),
       extendBodyBehindAppBar: false,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
             children: [
@@ -337,7 +337,7 @@ class _Blurting extends State<Blurting> {
             ],
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(width * 0.05, 20, 0, height * 0.08),
+            margin: EdgeInsets.fromLTRB(width * 0.05, 0, 0, 0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -497,7 +497,7 @@ class _Blurting extends State<Blurting> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
