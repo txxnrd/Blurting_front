@@ -11,13 +11,11 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
-import 'package:blurting/Utils/provider.dart';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
-    return DateTime(1, 11, 30, 0, 0, 0, 0); // 혹은 다른 기본 값으로 대체
+    return DateTime(1, 11, 30, 0, 0, 0, 0); //  기본 값
   }
-
   try {
     return DateTime.parse(dateTimeString);
   } catch (e) {
@@ -32,7 +30,7 @@ class CardItem {
   final String answer;
   final String postedAt;
   final String userSex;
-  int likes; // 추가: 좋아요 수
+  int likes; // 좋아요 수
   bool ilike; //내가 좋아요 눌렀는지 여부
   int answerId;
 
@@ -68,12 +66,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-
     print('홈으로 옴');
     cardItems = [];
-
-    initializePages(); // Call a separate function to handle async initialization
-
+    initializePages(); //위젯 생성 될 때 불러와야하는 정보들
     updateRemainingTime();
   }
 
@@ -173,7 +168,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(height: 5),
-
                 SingleChildScrollView(
                   child: Text(
                     'Q. ${cardItems[index].question}',

@@ -32,7 +32,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   void startTimer() {
     _timer?.cancel(); // 이전 타이머가 있다면 취소
     _duration = Duration(minutes: 3); // 타이머 초기화
-
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_duration.inSeconds == 0) {
         timer.cancel();
