@@ -32,7 +32,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   void startTimer() {
     _timer?.cancel(); // 이전 타이머가 있다면 취소
     _duration = Duration(minutes: 3); // 타이머 초기화
-
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_duration.inSeconds == 0) {
         timer.cancel();
@@ -334,7 +333,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                 ),
               ),
               Visibility(
-                visible: certification, // showButton이 true이면 보이고, false이면 숨김
+                visible: certification, // certification true이면 보이고, false이면 숨김
                 child: Container(
                   margin: EdgeInsets.only(top: 15),
                   width: 350,
