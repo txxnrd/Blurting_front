@@ -182,7 +182,9 @@ class _Whisper extends State<Whisper> {
       widget.socket.on('disconnect', (_) {
         print('소켓 연결 끊김');
       });
-    };
+    }
+
+    ;
 
     initializeSocket();
 
@@ -205,7 +207,7 @@ class _Whisper extends State<Whisper> {
   @override
   void dispose() {
     super.dispose();
-    
+
     widget.socket.off('new_chat');
 
     if (mounted) {
@@ -547,43 +549,46 @@ class _Whisper extends State<Whisper> {
           ),
           Column(
             children: <Widget>[
-              Stack(
-                              children: [
-              SingleChildScrollView(
-                controller: _scrollController,
-                child: Container(
-                  margin: EdgeInsets.only(top: 200), 
-                  padding: EdgeInsets.only(bottom: bottom),
-                  child: Column(
-                    children: <Widget>[
-                      for (var chatItem in chatMessages) chatItem,
-                      for (var chatItem in sendingMessageList) chatItem,
-                    ],
-                  ),
-                ),
-              ),
-              AnimatedOpacity(
-                opacity: isMaxScroll ? 0.0 : 1.0,
-                duration: Duration(milliseconds: 500),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                        mini: true,
-                        onPressed: () {
-                          _scrollController.position.jumpTo(
-                              _scrollController.position.maxScrollExtent);
-                        },
-                        child: Icon(Icons.keyboard_arrow_down_rounded,
-                            color: Colors.black),
+              Expanded(
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 200),
+                        padding: EdgeInsets.only(bottom: bottom),
+                        child: Column(
+                          children: <Widget>[
+                            for (var chatItem in chatMessages) chatItem,
+                            for (var chatItem in sendingMessageList) chatItem,
+                          ],
+                        ),
                       ),
                     ),
-                  ))
-                              ],
+                    AnimatedOpacity(
+                        opacity: isMaxScroll ? 0.0 : 1.0,
+                        duration: Duration(milliseconds: 500),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            child: FloatingActionButton(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50)),
+                              mini: true,
+                              onPressed: () {
+                                _scrollController.position.jumpTo(
+                                    _scrollController.position.maxScrollExtent);
+                              },
+                              child: Icon(Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.black),
                             ),
+                          ),
+                        ))
+                  ],
+                ),
+              ),
               CustomInputField(
                 controller: controller,
                 sendFunction: sendChat,
@@ -678,10 +683,10 @@ class _Whisper extends State<Whisper> {
         } else {
           blurValue = 1;
         }
-        if(responseData?['blurChange'] == null){
+        if (responseData?['blurChange'] == null) {
           isBlurChanged = -1;
-        }
-        else isBlurChanged = responseData?['blurChange'];
+        } else
+          isBlurChanged = responseData?['blurChange'];
 
         print(hasRead);
 
