@@ -98,44 +98,49 @@ class _Whisper extends State<Whisper> {
         int userId = data['userId'];
         String chat = data['chat'];
         bool read = data['read']; // (읽음 표시)
+        String roomId = data['roomId'];
         Widget newAnswer;
 
         String formattedDate = dateFormatFull
             .format(_parseDateTime(data['createdAt'] as String? ?? ''));
 
-        if (userId ==
-            Provider.of<UserProvider>(context, listen: false).userId) {
-          // userProvider
-          newAnswer = MyChat(
-            message: chat,
-            createdAt: dateFormatAA
-                .format(_parseDateTime(data['createdAt'] as String? ?? '')),
-            read: read,
-            isBlurting: false,
-            likedNum: 0,
-          );
-          sendingMessageList.clear();
-          print('내 메시지 전송 완료: $chat');
-        } else {
-          newAnswer = OtherChat(
+        if (roomId == widget.roomId) {
+          if (userId ==
+              Provider.of<UserProvider>(context, listen: false).userId) {
+            // userProvider
+            newAnswer = MyChat(
               message: chat,
               createdAt: dateFormatAA
-                  .format(_parseDateTime(data['createdAt'] as String? ?? '')));
-          print('상대방 메시지 도착: $chat');
-        }
-        if (mounted) {
-          setState(() {
-            if (chatMessages.isEmpty) {
-              chatMessages.add(Center(child: DateWidget(date: formattedDate)));
-            }
+                  .format(_parseDateTime(data['createdAt'] as String? ?? '')),
+              read: read,
+              isBlurting: false,
+              likedNum: 0,
+            );
+            sendingMessageList.clear();
+            print('내 메시지 전송 완료: $chat');
+          } else {
+            newAnswer = OtherChat(
+                message: chat,
+                createdAt: dateFormatAA.format(
+                    _parseDateTime(data['createdAt'] as String? ?? '')));
+            print('상대방 메시지 도착: $chat');
+          }
+          if (mounted) {
+            setState(() {
+              if (chatMessages.isEmpty) {
+                chatMessages
+                    .add(Center(child: DateWidget(date: formattedDate)));
+              }
 
-            chatMessages.add(newAnswer); // 새로운 메시지 추가
-          });
+              chatMessages.add(newAnswer); // 새로운 메시지 추가
+            });
+          }
         }
       });
 
       widget.socket.on('read_all', (data) {
-        print('다 읽음');
+        print('다 읽음 $data');
+
         for (int i = 0; i < chatMessages.length; i++) {
           Widget widget = chatMessages[i];
           if (widget is MyChat) {
@@ -374,150 +379,153 @@ class _Whisper extends State<Whisper> {
         ),
         actions: <Widget>[
           pointAppbar(),
-          IconButton(
-            icon: Image.asset('assets/images/leaveRoom.png'),
-            color: Color.fromRGBO(48, 48, 48, 1),
-            onPressed: () {
-              showDialog(
-                barrierDismissible: true,
-                context: context,
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    backgroundColor: Colors.black.withOpacity(0.2),
-                    body: Stack(
-                      children: [
-                        Positioned(
-                          bottom: 100,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.only(top: 30),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(bottom: 20),
-                                      child: Stack(
-                                        alignment: Alignment.bottomCenter,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.9,
-                                            height: 100,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: mainColor.lightGray
-                                                    .withOpacity(0.8)),
-                                            alignment: Alignment.topCenter,
-                                            child: Container(
-                                              margin: EdgeInsets.all(10),
-                                              child: Column(
-                                                children: const [
-                                                  Text(
-                                                    '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 10,
-                                                        fontFamily: "Heebo"),
-                                                  ),
-                                                  Text(
-                                                    '채팅 상대방과 다시는 매칭되지 않습니다.',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 10,
-                                                        fontFamily: "Heebo"),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            child: Container(
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: IconButton(
+              icon: Container(width: 20, height: 20, child: Image.asset('assets/images/leaveRoom.png', fit: BoxFit.fill)),
+              color: Color.fromRGBO(48, 48, 48, 1),
+              onPressed: () {
+                showDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Scaffold(
+                      backgroundColor: Colors.black.withOpacity(0.2),
+                      body: Stack(
+                        children: [
+                          Positioned(
+                            bottom: 100,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.only(top: 30),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 20),
+                                        child: Stack(
+                                          alignment: Alignment.bottomCenter,
+                                          children: [
+                                            Container(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
                                                   0.9,
+                                              height: 100,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  color: mainColor.MainColor),
-                                              height: 50,
-                                              // color: mainColor.MainColor,
-                                              child: Center(
-                                                child: Text(
-                                                  '방 나가기',
-                                                  style: TextStyle(
-                                                      fontFamily: 'Heebo',
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                                  color: mainColor.lightGray
+                                                      .withOpacity(0.8)),
+                                              alignment: Alignment.topCenter,
+                                              child: Container(
+                                                margin: EdgeInsets.all(10),
+                                                child: Column(
+                                                  children: const [
+                                                    Text(
+                                                      '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 10,
+                                                          fontFamily: "Heebo"),
+                                                    ),
+                                                    Text(
+                                                      '채팅 상대방과 다시는 매칭되지 않습니다.',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 10,
+                                                          fontFamily: "Heebo"),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
-                                            onTap: () {
-                                              widget.socket.emit(
-                                                  'leave_room', widget.roomId);
-                                              print('채팅 나가는 중...');
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: mainColor.lightGray),
-                                        // color: mainColor.MainColor,
-                                        child: Center(
-                                          child: Text(
-                                            '취소',
-                                            style: TextStyle(
-                                                fontFamily: 'Heebo',
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500),
-                                          ),
+                                            GestureDetector(
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.9,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(10),
+                                                    color: mainColor.MainColor),
+                                                height: 50,
+                                                // color: mainColor.MainColor,
+                                                child: Center(
+                                                  child: Text(
+                                                    '방 나가기',
+                                                    style: TextStyle(
+                                                        fontFamily: 'Heebo',
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                widget.socket.emit(
+                                                    'leave_room', widget.roomId);
+                                                print('채팅 나가는 중...');
+                                                Navigator.pop(context);
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      onTap: () {
-                                        if (mounted) {
-                                          setState(() {
-                                            Navigator.of(context).pop();
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
+                                      GestureDetector(
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width *
+                                                  0.9,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: mainColor.lightGray),
+                                          // color: mainColor.MainColor,
+                                          child: Center(
+                                            child: Text(
+                                              '취소',
+                                              style: TextStyle(
+                                                  fontFamily: 'Heebo',
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          if (mounted) {
+                                            setState(() {
+                                              Navigator.of(context).pop();
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
         flexibleSpace: Stack(
@@ -684,7 +692,9 @@ class _Whisper extends State<Whisper> {
         if(responseData?['blurChange'] == null){
           isBlurChanged = -1;
         }
-        else isBlurChanged = responseData?['blurChange'];
+        else {
+          isBlurChanged = responseData?['blurChange'];
+        }
 
         print(hasRead);
 
