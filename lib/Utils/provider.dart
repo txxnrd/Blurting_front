@@ -13,6 +13,7 @@ class mainColor {
   // ignore: non_constant_identifier_names
   static Color Gray = Color.fromRGBO(134, 134, 134, 1);
   static Color lightGray = Color.fromRGBO(217, 217, 217, 1);
+  static Color pink = Color.fromRGBO(255, 125, 125, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
   static Color black = Color.fromRGBO(48, 48, 48, 1);
 }

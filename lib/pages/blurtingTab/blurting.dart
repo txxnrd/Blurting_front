@@ -395,8 +395,6 @@ class _Blurting extends State<Blurting> {
               print(day2Time);
               print(day3Time);
 
-              print(day);
-
               if (isState == 'Continue') {
                 if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
                     day == 'Day2' && (lastTime.isAfter(day2Time)) ||
@@ -815,27 +813,26 @@ class _Blurting extends State<Blurting> {
 
         // 받은 화살표 처리
         if (iReceivedList.isEmpty) {
-          print('받은 화살표가 없음');
+          // print('받은 화살표가 없음');
         } else {
-          print('받은 화살표가 있음');
+          // print('받은 화살표가 있음');/
           for (final iReceivedItem in iReceivedList) {
             int day = (iReceivedItem['day'] - 1);
-            print(day);
             iReceived[day].add(recievedProfile(
                 userName: iReceivedItem['username'],
                 userSex: iReceivedItem['userSex']));
           }
         }
-        print('내가 보낸 화살 맨 처음에: $iSended');
+        // print('내가 보낸 화살 맨 처음에: $iSended');
 
         int i = iSendedList.length;
-        print(i);
+        // print(i);
         for (int j = 0; j < i; j++) {
           if (j >= 3) break;
           iSended[j] = true;
         }
 
-        print(iSended);
+        // print(iSended);
 
         print('Response body: ${response.body}');
       } catch (e) {
@@ -872,7 +869,7 @@ class _Blurting extends State<Blurting> {
         if (mounted) {
           setState(() {
             iSended[day] = true;
-            print(iSended);
+            // print(iSended);
           });
         }
 
@@ -967,9 +964,6 @@ class _profileState extends State<profile> {
   @override
   Widget build(BuildContext context) {
     bool canSendArrow = isValidDay[widget.day];
-    print('고를 수 있는 날: $isValidDay');
-    print('$canSendArrow');
-    print(widget.day);
 
     return GestureDetector(
       onTap: () {

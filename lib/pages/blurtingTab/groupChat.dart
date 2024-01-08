@@ -42,9 +42,9 @@ class QuestionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Q$questionNumber. ',
@@ -55,19 +55,15 @@ class QuestionItem extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.98,
-            child: Text(
-              question,
-              style: TextStyle(
-                fontFamily: 'Heebo',
-                fontSize: 12,
-                color: mainColor.Gray,
-                fontWeight: FontWeight.w500,
-              ),
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.center,
+          Text(
+            question,
+            style: TextStyle(
+              fontFamily: 'Heebo',
+              fontSize: 12,
+              color: mainColor.Gray,
+              fontWeight: FontWeight.w500,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -338,12 +334,14 @@ class _GroupChat extends State<GroupChat> {
                     child: Row(
                       children: [
                         Container(
+                          width: 11,
                             margin: EdgeInsets.only(left: 5, right: 3),
                             child: Image.asset(
                               'assets/images/check.png',
+                              fit: BoxFit.fill,
                               color: Provider.of<GroupChatProvider>(context)
                                       .pointValid
-                                  ? Colors.white
+                                  ? mainColor.lightPink
                                   : mainColor.lightGray,
                             )),
                         Text(
