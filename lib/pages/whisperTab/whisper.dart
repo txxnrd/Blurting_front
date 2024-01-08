@@ -70,7 +70,7 @@ class _Whisper extends State<Whisper> {
       await fetchChats();
 
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
       });
 
       if (appbarphoto.isNotEmpty) {
@@ -192,7 +192,7 @@ class _Whisper extends State<Whisper> {
     _scrollController.addListener(() {
       // 스크롤 위치가 변경될 때 호출되는 함수
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+          _scrollController.position.minScrollExtent) {
         setState(() {
           isMaxScroll = true;
         });
@@ -553,10 +553,10 @@ class _Whisper extends State<Whisper> {
                 child: Stack(
                   children: [
                     SingleChildScrollView(
+                      reverse: true,
                       controller: _scrollController,
                       child: Container(
                         margin: EdgeInsets.only(top: 200),
-                        padding: EdgeInsets.only(bottom: bottom),
                         child: Column(
                           children: <Widget>[
                             for (var chatItem in chatMessages) chatItem,
@@ -579,7 +579,7 @@ class _Whisper extends State<Whisper> {
                               mini: true,
                               onPressed: () {
                                 _scrollController.position.jumpTo(
-                                    _scrollController.position.maxScrollExtent);
+                                    _scrollController.position.minScrollExtent);
                               },
                               child: Icon(Icons.keyboard_arrow_down_rounded,
                                   color: Colors.black),
@@ -630,7 +630,7 @@ class _Whisper extends State<Whisper> {
     if (mounted) {
       setState(() {
         sendingMessageList.add(newAnswer);
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
       });
     }
 

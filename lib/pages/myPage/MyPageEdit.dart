@@ -730,7 +730,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 child: Container(
                   width: 57,
                   child: Image.asset(
-                    sex == "W" ? 'assets/woman.png' : 'assets/man.png',
+                    sex == "F" ? 'assets/woman.png' : 'assets/man.png',
                     fit: BoxFit.fill,
                   ),
                 ),

@@ -112,10 +112,10 @@ class _Blurting extends State<Blurting> {
     dividedProfileList[1].clear();
 
     if (ProfileList[currentPage].length > 3) {
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 4; i++) {
         dividedProfileList[0].add(ProfileList[currentPage][i]);
       }
-      for (int i = 3; i < ProfileList[currentPage].length; i++) {
+      for (int i = 4; i < ProfileList[currentPage].length; i++) {
         dividedProfileList[1].add(ProfileList[currentPage][i]);
       }
     }
@@ -146,7 +146,7 @@ class _Blurting extends State<Blurting> {
       ),
       extendBodyBehindAppBar: false,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
             children: [
@@ -337,7 +337,7 @@ class _Blurting extends State<Blurting> {
             ],
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(width * 0.05, 20, 0, height * 0.08),
+            margin: EdgeInsets.fromLTRB(width * 0.05, 0, 0, 0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -497,7 +497,7 @@ class _Blurting extends State<Blurting> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

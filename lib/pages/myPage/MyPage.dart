@@ -162,17 +162,20 @@ class _MyPage extends State<MyPage> {
             elevation: 0,
             actions: [
               pointAppbar(),
-              IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: mainColor.Gray,
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.settings,
+                    color: mainColor.Gray,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingPage()),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SettingPage()),
-                  );
-                },
               ),
             ],
           ),
