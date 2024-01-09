@@ -108,6 +108,7 @@ class _EmailPageState extends State<EmailPage>
   String old_token = "";
 
   Future<void> _sendPostRequest() async {
+    showSnackBar(context, '이메일 전송이 완료 되었습니다.');
     if (trial == 0) {
       try {
         trial += 1;
@@ -136,7 +137,6 @@ class _EmailPageState extends State<EmailPage>
 
           var data = json.decode(response.body);
           if (data['signupToken'] != null && trial > 0) {
-            showSnackBar(context, '이메일 전송이 완료 되었습니디.');
             var token = data['signupToken'];
             print(token);
             await saveToken(token);

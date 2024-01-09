@@ -10,6 +10,7 @@ import 'package:blurting/Utils/utilWidget.dart';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
 import '../../config/app_config.dart';
 import '../../settings/setting.dart';
+import 'package:photo_view/photo_view.dart';
 
 String getCigaretteString(int? cigarette) {
   switch (cigarette) {
@@ -109,6 +110,19 @@ class _MyPage extends State<MyPage> {
   void initState() {
     super.initState();
     fetchUserProfile();
+  }
+
+  Future<void> _increaseProgressAndNavigate(
+      List<String> imagePaths, int initialIndex) async {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            FullScreenImageViewer(imagePaths, initialIndex),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
   }
 
   Future<void> fetchUserProfile() async {
@@ -391,16 +405,21 @@ class _MyPage extends State<MyPage> {
         SizedBox(
           height: 14,
         ),
-        Container(
-          color: Colors.white,
-          width: 175,
-          height: 190,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: ExtendedImage.network(
-              imagePaths[index],
-              fit: BoxFit.cover,
-              cache: true,
+        GestureDetector(
+          onTap: () {
+            _increaseProgressAndNavigate(imagePaths, index);
+          },
+          child: Container(
+            color: Colors.white,
+            width: 175,
+            height: 190,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: ExtendedImage.network(
+                imagePaths[index],
+                fit: BoxFit.cover,
+                cache: true,
+              ),
             ),
           ),
         ),
@@ -470,6 +489,54 @@ class _MyPage extends State<MyPage> {
           color: Colors.white,
         ),
         textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
+class FullScreenImageViewer extends StatelessWidget {
+  const FullScreenImageViewer(this.imagePaths, this.initialIndex, {Key? key})
+      : super(key: key);
+
+  final List<String> imagePaths;
+  final int initialIndex;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          PageView.builder(
+            itemCount: imagePaths.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  // Navigator.pop(context);
+                },
+                child: PhotoView(
+                  imageProvider: NetworkImage(imagePaths[index]),
+                  initialScale: PhotoViewComputedScale.contained,
+                  minScale: PhotoViewComputedScale.contained,
+                  maxScale: PhotoViewComputedScale.covered * 2.0,
+                  // backgroundDecoration: BoxDecoration(
+                  //   color: Colors.black,
+                  // ),
+                ),
+              );
+            },
+            scrollDirection: Axis.horizontal,
+            controller: PageController(initialPage: initialIndex),
+          ),
+          Positioned(
+            top: 50,
+            left: 0,
+            child: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
