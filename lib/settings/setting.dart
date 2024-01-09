@@ -279,14 +279,7 @@ class _SettingPageState extends State<SettingPage> {
         centerTitle: true,
         scrolledUnderElevation: 0.0,
         backgroundColor: Colors.transparent,
-        title: Text(
-          '설정',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray),
-          ),
-        ),
+        title: AppbarDescription("설정"),
         elevation: 0,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
