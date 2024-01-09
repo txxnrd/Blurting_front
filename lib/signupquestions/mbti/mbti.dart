@@ -6,7 +6,7 @@ import 'package:blurting/signupquestions/mbti/Utils.dart'; // sex.dart를 임포
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/Utils.dart';
 import 'package:blurting/signupquestions/personality.dart'; // sex.dart를 임포트
 import 'package:http/http.dart' as http;
 import '../../colors/colors.dart';
@@ -162,53 +162,11 @@ class _MBTIPageState extends State<MBTIPage>
               SizedBox(
                 height: 25,
               ),
-              Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는거 나오게 하기
-                children: [
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        (_progressAnimation?.value ?? 0.3),
-                    decoration: BoxDecoration(
-                      color: mainColor.black,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                            (_progressAnimation?.value ?? 0.3) -
-                        15,
-                    bottom: -10,
-                    child: Image.asset(
-                      gender == Gender.male
-                          ? 'assets/man.png'
-                          : gender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
-                      width: 30,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
+              ProgressBar(context, _progressAnimation!),
               SizedBox(
                 height: 50,
               ),
-              Text(
-                '당신의 MBTI는 무엇인가요?',
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: mainColor.black,
-                    fontFamily: 'Heebo'),
-              ),
+              TitleQuestion("당신의 MBTI는 무엇인가요?"),
               SizedBox(height: 30),
               MBTIallDescription("에너지방향"),
               SizedBox(

@@ -5,7 +5,7 @@ import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/Utils.dart';
 import 'package:blurting/token.dart'; // sex.dart를 임포트
 import 'package:blurting/signupquestions/religion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -140,6 +140,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -171,55 +172,11 @@ class _ActivePlacePageState extends State<ActivePlacePage>
               SizedBox(
                 height: 25,
               ),
-              Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                children: [
-                  // 전체 배경색 설정 (하늘색)
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // 하늘색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  // 완료된 부분 배경색 설정
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        _progressAnimation!.value,
-                    decoration: BoxDecoration(
-                      color: mainColor.black, // 파란색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                            _progressAnimation!.value -
-                        15,
-                    bottom: -10,
-                    child: Image.asset(
-                      gender == Gender.male
-                          ? 'assets/man.png'
-                          : gender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
-                      width: 30,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
+              ProgressBar(context, _progressAnimation!),
               SizedBox(
                 height: 50,
               ),
-              Text(
-                '주로 활동하는 지역이 어디인가요?',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: mainColor.black,
-                    fontFamily: 'Pretendard'),
-              ),
+              TitleQuestion("주로 활동하는 지역이 어디인가요?"),
               SizedBox(height: 20),
               GestureDetector(
                 onTap: () {

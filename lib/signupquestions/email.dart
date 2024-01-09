@@ -9,7 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signupquestions/activeplace.dart';
 import 'package:blurting/signupquestions/religion.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/Utils.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
@@ -246,6 +246,11 @@ class _EmailPageState extends State<EmailPage>
 
   bool certification = false;
 
+  Future<void> _whenpoped() async {
+    if (certification) await saveToken(old_token);
+    sendBackRequest(context, false);
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -261,157 +266,163 @@ class _EmailPageState extends State<EmailPage>
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+      child: PopScope(
+        canPop: true,
+        onPopInvoked: (didPop) {
+          _whenpoped();
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          title: Text(''),
-          elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 25,
-              ),
-              Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                children: [
-                  // 전체 배경색 설정 (하늘색)
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // 하늘색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  // 완료된 부분 배경색 설정
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        (_progressAnimation?.value ?? 0.3),
-                    decoration: BoxDecoration(
-                      color: mainColor.black,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                            (_progressAnimation?.value ?? 0.3) -
-                        15,
-                    bottom: -10,
-                    child: Image.asset(
-                      gender == Gender.male
-                          ? 'assets/man.png'
-                          : gender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
-                      width: 30,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Text(
-                '이메일을 입력해주세요.',
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: mainColor.black,
-                    fontFamily: 'Pretendard'),
-              ),
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  Container(
-                    width: 150,
-                    height: 48,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        isDense: true,
-                        hintText: '이메일 입력',
-                        border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(DefinedColor.lightgrey)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(DefinedColor.lightgrey)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFF66464)),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        InputEmail(value);
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
-                  Text(
-                    '@',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  SizedBox(width: 4),
-                  Expanded(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
-                      alignment: Alignment.centerLeft,
-                      height: 48, // TextField의 높이와 일치하도록 설정
-                      width: 150,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: Text(''),
+            elevation: 0,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 25,
+                ),
+                Stack(
+                  clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                  children: [
+                    // 전체 배경색 설정 ()
+                    Container(
+                      height: 10,
                       decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Color(DefinedColor.lightgrey)),
-                        borderRadius: BorderRadius.circular(
-                            4), // TextField의 테두리와 일치하도록 설정
+                        color: Color(0xFFD9D9D9), //
+                        borderRadius: BorderRadius.circular(4.0),
                       ),
-                      child: Align(
+                    ),
+                    // 완료된 부분 배경색 설정
+                    Container(
+                      height: 10,
+                      width: MediaQuery.of(context).size.width *
+                          (_progressAnimation?.value ?? 0.3),
+                      decoration: BoxDecoration(
+                        color: mainColor.black,
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                    ),
+                    Positioned(
+                      left: MediaQuery.of(context).size.width *
+                              (_progressAnimation?.value ?? 0.3) -
+                          15,
+                      bottom: -10,
+                      child: Image.asset(
+                        gender == Gender.male
+                            ? 'assets/man.png'
+                            : gender == Gender.female
+                                ? 'assets/woman.png'
+                                : 'assets/signupface.png', // 기본 이미지
+                        width: 30,
+                        height: 30,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Text(
+                  '이메일을 입력해주세요.',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: mainColor.black,
+                      fontFamily: 'Pretendard'),
+                ),
+                SizedBox(height: 30),
+                Row(
+                  children: [
+                    Container(
+                      width: 150,
+                      height: 48,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          isDense: true,
+                          hintText: '이메일 입력',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color(DefinedColor.lightgrey)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color(DefinedColor.lightgrey)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFF66464)),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          InputEmail(value);
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
+                    Text(
+                      '@',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    SizedBox(width: 4),
+                    Expanded(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.domain,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                        height: 48, // TextField의 높이와 일치하도록 설정
+                        width: 150,
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Color(DefinedColor.lightgrey)),
+                          borderRadius: BorderRadius.circular(
+                              4), // TextField의 테두리와 일치하도록 설정
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.domain,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-          child: InkWell(
-            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-            child: signupButton(
-              text: !certification ? '인증번호 요청' : '다음',
-              IsValid: IsValid,
+                  ],
+                ),
+              ],
             ),
-            onTap: () async {
-              if (!certification) {
-                // 인증번호를 요청할 때 이 부분이 실행됩니다.
-                await _sendPostRequest();
-                NowCertification();
-              } else {
-                // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
-                _sendVerificationRequest();
-              }
-            },
           ),
+          floatingActionButton: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+            child: InkWell(
+              splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+              child: signupButton(
+                text: !certification ? '인증번호 요청' : '다음',
+                IsValid: IsValid,
+              ),
+              onTap: () async {
+                if (!certification) {
+                  // 인증번호를 요청할 때 이 부분이 실행됩니다.
+                  await _sendPostRequest();
+                  NowCertification();
+                } else {
+                  // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
+                  _sendVerificationRequest();
+                }
+              },
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked, // 버튼의 위치
         ),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
   }

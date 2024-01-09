@@ -105,12 +105,6 @@ class _NotificationandSoundState extends State<NotificationandSound> {
         backgroundColor: Colors.transparent,
         title: AppbarDescription("알림 설정"),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actions: <Widget>[],
       ),
       body: SingleChildScrollView(

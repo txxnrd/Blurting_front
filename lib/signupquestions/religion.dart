@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/Utils.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/signupquestions/sexualpreference.dart';
 import 'package:blurting/config/app_config.dart';
@@ -142,54 +142,11 @@ class _ReligionPageState extends State<ReligionPage>
               SizedBox(
                 height: 25,
               ),
-              Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                children: [
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: mainColor.lightGray,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        _progressAnimation!.value,
-                    decoration: BoxDecoration(
-                      color: mainColor.black,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                            _progressAnimation!.value -
-                        15,
-                    bottom: -10,
-                    child: Image.asset(
-                      gender == Gender.male
-                          ? 'assets/man.png'
-                          : gender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
-                      width: 30,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
-
+              ProgressBar(context, _progressAnimation!),
               SizedBox(
                 height: 50,
               ),
-              Text(
-                '종교가 있으신가요?',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: mainColor.black,
-                    fontFamily: 'Pretendard'),
-              ),
+              TitleQuestion("종교가 있으신가요?"),
               SizedBox(height: 30),
               SizedBox(width: 20), // 두 버튼 사이의 간격 조정
 
