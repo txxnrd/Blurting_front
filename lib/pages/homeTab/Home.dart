@@ -2,7 +2,9 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/config/app_config.dart';
+import 'package:blurting/model/post.dart';
 import 'package:blurting/pages/homeTab/alarm.dart';
+import 'package:blurting/service/homeService.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +55,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final controller = PageController(viewportFraction: 0.9, keepPage: true);
+  final controller = PageController(viewportFraction: 0.8, keepPage: true);
   Map<String, dynamic>? apiResponse;
   late Duration remainingTime = Duration.zero;
   late List<CardItem> cardItems = [];
@@ -63,6 +65,8 @@ class _HomeState extends State<Home> {
   int chats = 0;
   int likes = 0;
 
+  late Future<List<home>> futureHome;
+
   @override
   void initState() {
     super.initState();
@@ -70,11 +74,17 @@ class _HomeState extends State<Home> {
     cardItems = [];
     initializePages(); //위젯 생성 될 때 불러와야하는 정보들
     updateRemainingTime();
+
+    // print(futureHome);
   }
 
   Future<void> initializePages() async {
     await fetchData();
     await fetchPoint();
+
+    futureHome = fetchHome(context);
+
+    print('object');
   }
 
   void updateRemainingTime() {
@@ -108,12 +118,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.width;
+
     final pages = List.generate(cardItems.length, (index) {
       final answercontroller = ScrollController();
       return Container(
-        margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+        margin: index == cardItems.length - 1 ? EdgeInsets.fromLTRB(10, 5, 10, 5) : EdgeInsets.fromLTRB(10, 5, 0, 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
@@ -124,7 +133,6 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: SizedBox(
-            height: 280,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -136,7 +144,7 @@ class _HomeState extends State<Home> {
                         ClipOval(
                           child: Container(
                             padding: EdgeInsets.all(5),
-                            color: mainColor.MainColor.withOpacity(0.5),
+                            color: mainColor.pink.withOpacity(0.5),
                             child: Image.asset(
                               './assets/man.png',
                               width: 30,
@@ -183,29 +191,44 @@ class _HomeState extends State<Home> {
                     maxLines: 3,
                   ),
                 ),
-                SizedBox(height: 11),
+                SizedBox(height: 5),
                 Expanded(
                   child: Stack(
                     children: [
-                      SingleChildScrollView(
-                        controller: answercontroller,
-                        child: Text(
-                          'A. ${cardItems[index].answer}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Heebo',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                      ShaderMask(
+                        shaderCallback: (rect) {
+                          return const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.white,
+                              Color.fromRGBO(255, 255, 255, 0)
+                            ],
+                            stops: [0.5, 1]
+                          ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                        },
+                        child: SingleChildScrollView(
+                          controller: answercontroller,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 14.0),
+                            child: Text(
+                              'A. ${cardItems[index].answer}\n',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Heebo',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.fade,
+                            ),
                           ),
-                          overflow: TextOverflow.fade,
                         ),
                       ),
-                      Positioned(
-                        top: 40,
-                        left: width * 0.67,
-                        child: Container(
-                          width: 15,
-                          height: 15,
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: SizedBox(
+                          width: 13,
+                          height: 13,
                           child: InkWell(
                               onTap: () {
                                 print("눌림");
@@ -226,7 +249,7 @@ class _HomeState extends State<Home> {
                   height: 10,
                 ),
                 Row(
-                  children: [
+                  children: const [
                     Expanded(
                       child: Divider(
                         color: Colors.white,
@@ -371,7 +394,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(7, 0, 0, 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: mainColor.MainColor, width: 1)),
@@ -389,14 +412,16 @@ class _HomeState extends State<Home> {
             ],
           ),
           SizedBox(
-            height: 240,
+            height: 250,
             child: apiResponse != null && apiResponse!['answers'].isNotEmpty
                 ? PageView.builder(
-                    onPageChanged: (index) => {mvpName(index)},
+                  padEnds: false,
+                  pageSnapping: true,
+                    onPageChanged: (index) => {mvpName(index), print(index)},
                     controller: controller,
                     itemCount: min(cardItems.length, 3),
                     itemBuilder: (_, index) {
-                      return pages[index % pages.length];
+                      return pages[index];
                     },
                   )
                 : Center(
@@ -417,10 +442,11 @@ class _HomeState extends State<Home> {
               child: SmoothPageIndicator(
                 controller: controller,
                 count: pages.length,
-                effect: const WormEffect(
+                effect: ScrollingDotsEffect(
+                  activeDotScale: 1.0,
                     dotHeight: 7,
                     dotWidth: 27,
-                    type: WormType.thinUnderground,
+                    // type: WormType.thinUnderground,
                     dotColor: Color.fromRGBO(217, 217, 217, 1),
                     activeDotColor: Color.fromRGBO(246, 100, 100, 0.5)),
               ),
@@ -452,8 +478,7 @@ class _HomeState extends State<Home> {
     String savedToken = await getToken();
 
     final response = await http.get(
-        Uri.parse(
-            'http://13.124.149.234:3080/home'), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
+        Uri.parse(API.home), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
         headers: {
           'authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
@@ -467,18 +492,11 @@ class _HomeState extends State<Home> {
         if (mounted) {
           setState(() {
             apiResponse = data;
-            print('왜 null이니');
-            print(apiResponse);
 
             arrow = data['arrows'];
             matchedArrows = data['matchedArrows'];
             chats = data['chats'];
             likes = data['likes'];
-
-            print(arrow);
-            print(matchedArrows);
-            print(chats);
-            print(likes);
 
             List<dynamic> answers = data['answers'];
 
@@ -499,13 +517,11 @@ class _HomeState extends State<Home> {
             }
 
             int milliseconds = data['seconds'];
-            print(milliseconds);
             remainingTime = Duration(milliseconds: milliseconds);
-            print(remainingTime);
           });
         }
       } catch (e) {
-        print('뭔가 문제 잇음');
+        print('error: home data');
       }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
@@ -558,7 +574,7 @@ class _HomeState extends State<Home> {
       await getnewaccesstoken(context, fetchPoint);
     } else {
       print(response.statusCode);
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+      throw Exception('point : 잔여 포인트를 로드하는 데 실패했습니다');
     }
   }
 
