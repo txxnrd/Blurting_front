@@ -1,3 +1,4 @@
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -100,22 +101,10 @@ class _NotificationandSoundState extends State<NotificationandSound> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.transparent,
-        title: Text(
-          '알림 설정',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray),
-          ),
-        ),
+        title: AppbarDescription("알림 설정"),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actions: <Widget>[],
       ),
       body: SingleChildScrollView(

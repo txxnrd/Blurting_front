@@ -36,7 +36,6 @@ class GroupChatProvider with ChangeNotifier {
   }
 }
 
-
 class ScrollProvider with ChangeNotifier {
   bool _isMax = false;
 
@@ -149,4 +148,16 @@ Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
     // 오류가 발생한 경우 처리
     print('Request failed with status: ${response.statusCode}.');
   }
+}
+
+Widget AppbarDescription(String text) {
+  return Container(
+      child: Text(
+    text,
+    style: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      color: mainColor.Gray,
+    ),
+  ));
 }

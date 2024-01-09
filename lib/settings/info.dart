@@ -22,27 +22,26 @@ class _InfoPageState extends State<InfoPage> {
     super.initState();
   }
 
+  Widget infoDescription(String text) {
+    return Container(
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: Color(DefinedColor.gray)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        title: Text(
-          '계정/정보관리',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray),
-          ),
-        ),
+        title: AppbarDescription("계정/정보관리"),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: SingleChildScrollView(
         child: Row(
@@ -52,57 +51,13 @@ class _InfoPageState extends State<InfoPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 170,
-                    height: 22,
-                    child: Text(
-                      '이메일',
-                      style: TextStyle(
-                          color: mainColor.Gray,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    ),
-                  ),
-                  Container(
-                    width: 170,
-                    height: 22,
-                    child: Text(
-                      widget.email,
-                      style: TextStyle(
-                          color: mainColor.Gray,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    ),
-                  ),
+                  infoDescription("이메일"),
+                  infoDescription(widget.email),
                   SizedBox(
                     height: 17,
                   ),
-                  Container(
-                    width: 170,
-                    height: 22,
-                    child: Text(
-                      '전화번호',
-                      style: TextStyle(
-                          color: mainColor.Gray,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    ),
-                  ),
-                  Container(
-                    width: 170,
-                    height: 22,
-                    child: Text(
-                      widget.phoneNumber,
-                      style: TextStyle(
-                          color: mainColor.Gray,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    ),
-                  ),
+                  infoDescription("전화번호"),
+                  infoDescription(widget.phoneNumber),
                 ],
               ),
             ),

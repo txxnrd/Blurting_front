@@ -187,7 +187,9 @@ class _Whisper extends State<Whisper> {
       widget.socket.on('disconnect', (_) {
         print('소켓 연결 끊김');
       });
-    };
+    }
+
+    ;
 
     initializeSocket();
 
@@ -210,7 +212,7 @@ class _Whisper extends State<Whisper> {
   @override
   void dispose() {
     super.dispose();
-    
+
     widget.socket.off('new_chat');
 
     if (mounted) {
@@ -382,7 +384,11 @@ class _Whisper extends State<Whisper> {
           Container(
             margin: EdgeInsets.only(top: 20),
             child: IconButton(
-              icon: Container(width: 20, height: 20, child: Image.asset('assets/images/leaveRoom.png', fit: BoxFit.fill)),
+              icon: Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset('assets/images/leaveRoom.png',
+                      fit: BoxFit.fill)),
               color: Color.fromRGBO(48, 48, 48, 1),
               onPressed: () {
                 showDialog(
@@ -456,7 +462,8 @@ class _Whisper extends State<Whisper> {
                                                     0.9,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     color: mainColor.MainColor),
                                                 height: 50,
                                                 // color: mainColor.MainColor,
@@ -473,8 +480,8 @@ class _Whisper extends State<Whisper> {
                                                 ),
                                               ),
                                               onTap: () {
-                                                widget.socket.emit(
-                                                    'leave_room', widget.roomId);
+                                                widget.socket.emit('leave_room',
+                                                    widget.roomId);
                                                 print('채팅 나가는 중...');
                                                 Navigator.pop(context);
                                                 Navigator.pop(context);
@@ -485,9 +492,10 @@ class _Whisper extends State<Whisper> {
                                       ),
                                       GestureDetector(
                                         child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width *
-                                                  0.9,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
                                           height: 50,
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -689,12 +697,10 @@ class _Whisper extends State<Whisper> {
         } else {
           blurValue = 1;
         }
-        if(responseData?['blurChange'] == null){
+        if (responseData?['blurChange'] == null) {
           isBlurChanged = -1;
-        }
-        else {
+        } else
           isBlurChanged = responseData?['blurChange'];
-        }
 
         print(hasRead);
 

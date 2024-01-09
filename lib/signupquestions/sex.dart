@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/Utils/provider.dart';
 import '../config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/signupquestions/Utils.dart';
 
 class SexPage extends StatefulWidget {
   const SexPage({super.key});
@@ -17,23 +18,27 @@ class SexPage extends StatefulWidget {
   _SexPageState createState() => _SexPageState();
 }
 
-enum Gender { male, female }
-
 class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
-  Gender? _selectedGender;
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
-    Navigator.of(context).push(
+    Navigator.of(context)
+        .push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            ActivePlacePage(selectedGender: _selectedGender.toString()),
+            ActivePlacePage(selectedGender: selectedGender.toString()),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
-    );
+    )
+        .then((_) {
+      // 첫 번째 화면으로 돌아왔을 때 실행될 로직
+      setState(() {
+        IsValid = true; // 이 변수도 초기화
+      });
+    });
   }
 
   bool IsValid = false;
@@ -46,7 +51,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
   Future<void> _sendPostRequest() async {
     print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
-    var sex = _selectedGender == Gender.female ? "F" : "M";
+    var sex = selectedGender == Gender.female ? "F" : "M";
 
     String savedToken = await getToken();
     print(savedToken);
@@ -118,58 +123,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
               SizedBox(
                 height: 25,
               ),
-              Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                children: [
-                  // 전체 배경색 설정 (하늘색)
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // 하늘색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  // 완료된 부분 배경색 설정
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        _progressAnimation!.value,
-                    decoration: BoxDecoration(
-                      color: mainColor.black, // 파란색
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                            _progressAnimation!.value -
-                        15,
-                    bottom: -10,
-                    child: Image.asset(
-                        _selectedGender == Gender.male
-                            ? 'assets/man.png'
-                            : _selectedGender == Gender.female
-                                ? 'assets/woman.png'
-                                : 'assets/signupface.png', // 기본 이미지
-                        width: 30,
-                        height: 30),
-                  )
-                ],
-              ),
-
+              ProgressBar(context, _progressAnimation!),
               SizedBox(
                 height: 50,
               ),
-              Text(
-                '당신의 성별은 무엇인가요?',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: mainColor.black,
-                    fontFamily: 'Pretendard'),
-              ),
-              SizedBox(height: 30),
-              SizedBox(width: 20), // 두 버튼 사이의 간격 조정
-
+              TitleQuestion("당신의 성별은 무엇인가요?"),
+              SizedBox(height: 30, width: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -183,7 +142,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                           width: 2,
                         ),
                         primary: mainColor.black,
-                        backgroundColor: _selectedGender == Gender.male
+                        backgroundColor: selectedGender == Gender.male
                             ? Color(DefinedColor.lightgrey)
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
@@ -194,13 +153,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                       onPressed: () {
                         setState(() {
                           IsSelected();
-                          _selectedGender = Gender.male;
+                          selectedGender = Gender.male;
                         });
                       },
                       child: Text(
                         '남성',
                         style: TextStyle(
-                          color: _selectedGender == Gender.male
+                          color: selectedGender == Gender.male
                               ? Colors.white
                               : mainColor.black,
                           fontFamily: 'Pretendard',
@@ -210,9 +169,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-
                   SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
                   Container(
                     width: width * 0.42,
                     height: 48, // 원하는 높이 값
@@ -221,7 +178,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                         side: BorderSide(
                             color: Color(DefinedColor.lightgrey), width: 2),
                         primary: Color(DefinedColor.lightgrey),
-                        backgroundColor: _selectedGender == Gender.female
+                        backgroundColor: selectedGender == Gender.female
                             ? Color(DefinedColor.lightgrey)
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
@@ -232,13 +189,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                       onPressed: () {
                         setState(() {
                           IsSelected();
-                          _selectedGender = Gender.female;
+                          selectedGender = Gender.female;
                         });
                       },
                       child: Text(
                         '여성',
                         style: TextStyle(
-                          color: _selectedGender == Gender.female
+                          color: selectedGender == Gender.female
                               ? Colors.white
                               : mainColor.black,
                           fontFamily: 'Pretendard',
@@ -250,7 +207,6 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-
               SizedBox(height: 321),
             ],
           ),

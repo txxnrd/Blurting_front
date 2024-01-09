@@ -1,7 +1,7 @@
 import 'package:blurting/signupquestions/university.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signupquestions/sex.dart'; // sex.dart를 임포트
+import 'package:blurting/signupquestions/Utils.dart';
 import 'package:dio/dio.dart';
 import '../config/app_config.dart';
 import 'dart:io';
@@ -225,11 +225,11 @@ class ImagePageState extends State<ImagePage>
               Stack(
                 clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
                 children: [
-                  // 전체 배경색 설정 (하늘색)
+                  // 전체 배경색 설정 ()
                   Container(
                     height: 10,
                     decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // 하늘색
+                      color: Color(0xFFD9D9D9), //
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),

@@ -144,7 +144,7 @@ class _AlarmPageState extends State<AlarmPage> {
 
   Widget _buildHistoryList(List<Map<String, dynamic>> AlarmHistoryList) {
     if (AlarmHistoryList.isEmpty) {
-      return Center(child: Text('No data available'));
+      return Center(child: Text('알림 내역이 없습니다.'));
     }
 
     // Group data by date
