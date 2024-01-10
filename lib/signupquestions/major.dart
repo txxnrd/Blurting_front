@@ -74,6 +74,54 @@ class _MajorPageState extends State<MajorPage>
       });
   }
 
+  Widget major_checkbox(double width, Major major, String major_name) {
+    return Container(
+      width: width * 0.42, // 원하는 너비 값
+      height: 48, // 원하는 높이 값
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Checkbox(
+            value: _selectedMajor == major,
+            side: BorderSide(color: Colors.transparent),
+            fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return mainColor.pink; // 선택되었을 때의 배경 색상
+                }
+                return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+              },
+            ),
+            onChanged: (bool? newValue) {
+              setState(() {
+                _selectedMajor = major;
+                IsSelected();
+              });
+            },
+            activeColor: mainColor.pink, // 체크 표시 색상을 설정
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedMajor = major;
+                IsSelected();
+              });
+            },
+            child: Text(
+              major_name,
+              style: TextStyle(
+                color: mainColor.black,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -165,373 +213,33 @@ class _MajorPageState extends State<MajorPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
                 children: [
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          value: _selectedMajor == Major.humanities,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedMajor = Major.humanities;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.humanities;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '인문계열',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          value: _selectedMajor == Major.social,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedMajor = Major.social;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.social;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '사회계열',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  major_checkbox(width, Major.humanities, "인문계열"),
+                  major_checkbox(width, Major.social, "사회계열"),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
                 children: [
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          value: _selectedMajor == Major.education,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedMajor = Major.education;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.education;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '교육계열',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          value: _selectedMajor == Major.engineering,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedMajor = Major.engineering;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.engineering;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '공학계열',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  major_checkbox(width, Major.education, "교육계열"),
+                  major_checkbox(width, Major.engineering, "공학계열"),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
                 children: [
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          value: _selectedMajor == Major.naturalScience,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedMajor = Major.naturalScience;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.naturalScience;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '자연계열',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          value: _selectedMajor == Major.medical,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedMajor = Major.medical;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.medical;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '의학계열',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  major_checkbox(width, Major.naturalScience, "자연계열"),
+                  major_checkbox(width, Major.medical, "의학계열"),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
                 children: [
+                  major_checkbox(width, Major.artsPhysical, "예체능계열"),
                   Container(
                     width: width * 0.42, // 원하는 너비 값
                     height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          value: _selectedMajor == Major.artsPhysical,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedMajor = Major.artsPhysical;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.artsPhysical;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '예체능 계열',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMajor = Major.humanities;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 150,
               ),
             ],
           ),

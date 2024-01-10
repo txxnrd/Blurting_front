@@ -122,8 +122,6 @@ class _HeightPageState extends State<HeightPage>
     } else if (widget.selectedGender == "Gender.female") {
       gender = Gender.female;
     }
-    double width = MediaQuery.of(context).size.width;
-
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
@@ -173,18 +171,17 @@ class _HeightPageState extends State<HeightPage>
                             hintText: '',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(DefinedColor.lightgrey),
+                                color: mainColor.lightGray,
                               ), // 초기 테두리 색상
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(DefinedColor.lightgrey),
+                                color: mainColor.lightGray,
                               ), // 입력할 때 테두리 색상
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0xFFF66464),
-                              ), // 선택/포커스 됐을 때 테두리 색상
+                                  color: mainColor.pink), // 선택/포커스 됐을 때 테두리 색상
                             ),
                           ),
                           onChanged: (value) {
