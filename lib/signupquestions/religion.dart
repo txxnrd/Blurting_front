@@ -112,6 +112,55 @@ class _ReligionPageState extends State<ReligionPage>
     }
   }
 
+  Widget religion_checkbox(
+      double width, Religion religion, String religion_name) {
+    return Container(
+      width: width * 0.42, // 원하는 너비 값
+      height: 48, // 원하는 높이 값
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Checkbox(
+            value: _selectedReligion == religion,
+            side: BorderSide(color: Colors.transparent),
+            fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return mainColor.pink; // 선택되었을 때의 배경 색상
+                }
+                return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+              },
+            ),
+            onChanged: (bool? newValue) {
+              setState(() {
+                _selectedReligion = religion;
+                IsSelected();
+              });
+            },
+            activeColor: mainColor.pink, // 체크 표시 색상을 설정
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedReligion = religion;
+                IsSelected();
+              });
+            },
+            child: Text(
+              religion_name,
+              style: TextStyle(
+                color: mainColor.black,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? gender;
@@ -147,106 +196,13 @@ class _ReligionPageState extends State<ReligionPage>
                 height: 50,
               ),
               TitleQuestion("종교가 있으신가요?"),
-              SizedBox(height: 30),
-              SizedBox(width: 20), // 두 버튼 사이의 간격 조정
-
+              SizedBox(height: 30, width: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          value: _selectedReligion == Religion.none,
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedReligion = Religion.none;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedReligion = Religion.none;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '무교',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  religion_checkbox(width, Religion.none, "무교"),
                   SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          value: _selectedReligion == Religion.buddhism,
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedReligion = Religion.buddhism;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedReligion = Religion.buddhism;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '불교',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  religion_checkbox(width, Religion.buddhism, "불교"),
                 ],
               ),
               SizedBox(
@@ -255,101 +211,9 @@ class _ReligionPageState extends State<ReligionPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          value: _selectedReligion == Religion.christian,
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedReligion = Religion.christian;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedReligion = Religion.christian;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '기독교',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
+                  religion_checkbox(width, Religion.christian, "기독교"),
                   SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          value: _selectedReligion == Religion.catholicism,
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedReligion = Religion.catholicism;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedReligion = Religion.catholicism;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '천주교',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  religion_checkbox(width, Religion.catholicism, "천주교"),
                 ],
               ),
               SizedBox(
@@ -358,62 +222,14 @@ class _ReligionPageState extends State<ReligionPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: width * 0.42, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Checkbox(
-                          value: _selectedReligion == Religion.etc,
-                          side: BorderSide(color: Colors.transparent),
-                          fillColor: MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
-                                return Color(0xFFF66464); // 선택되었을 때의 배경 색상
-                              }
-                              return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
-                            },
-                          ),
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              _selectedReligion = Religion.etc;
-                              IsSelected();
-                            });
-                          },
-                          activeColor:
-                              Color(DefinedColor.darkpink), // 체크 표시 색상을 설정
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedReligion = Religion.etc;
-                              IsSelected();
-                            });
-                          },
-                          child: Text(
-                            '기타',
-                            style: TextStyle(
-                              color: mainColor.black,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
+                  religion_checkbox(width, Religion.etc, "기타"),
                   SizedBox(width: 23), // 두 버튼 사이의 간격 조정
-
                   Container(
                     width: width * 0.42, // 원하는 너비 값
                     height: 48, // 원하는 높이 값
                   ),
                 ],
               ),
-
               SizedBox(height: 191),
             ],
           ),

@@ -86,9 +86,9 @@ class HobbyPageState extends State<HobbyPage>
             fillColor: MaterialStateProperty.resolveWith<Color?>(
               (Set<MaterialState> states) {
                 if (states.contains(MaterialState.selected)) {
-                  return Color(0xFFF66464); // 선택되었을 때의 배경 색상
+                  return mainColor.pink; // 선택되었을 때의 배경 색상
                 }
-                return Color(0xFFD9D9D9); // 선택되지 않았을 때의 배경 색상
+                return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
               },
             ),
             value: isValidList[index],

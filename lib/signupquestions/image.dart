@@ -34,8 +34,8 @@ class ImagePageState extends State<ImagePage>
   int image_uploading_count = 0;
   int image_uploaded_count = 0;
 
-  double? image_maxheight = 700;
-  double? image_maxwidth = 700;
+  double? image_maxheight = 1000;
+  double? image_maxwidth = 1000;
   int imageQuality = 90;
 
   Future<void> _pickAndUploadImage(int imageNumber) async {
@@ -47,7 +47,7 @@ class ImagePageState extends State<ImagePage>
         source: ImageSource.gallery,
         maxHeight: image_maxheight,
         maxWidth: image_maxwidth,
-        imageQuality: 60); // imageQuality는 필요에 따라 조절
+        imageQuality: 80); // imageQuality는 필요에 따라 조절
     Dio dio = Dio();
     var url = Uri.parse(API.uploadimage);
 
@@ -222,44 +222,7 @@ class ImagePageState extends State<ImagePage>
               SizedBox(
                 height: 25,
               ),
-              Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                children: [
-                  // 전체 배경색 설정 ()
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), //
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  // 완료된 부분 배경색 설정
-                  Container(
-                    height: 10,
-                    width: MediaQuery.of(context).size.width *
-                        (_progressAnimation?.value ?? 0.3),
-                    decoration: BoxDecoration(
-                      color: mainColor.black,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  Positioned(
-                    left: MediaQuery.of(context).size.width *
-                            (_progressAnimation?.value ?? 0.3) -
-                        15,
-                    bottom: -10,
-                    child: Image.asset(
-                      gender == Gender.male
-                          ? 'assets/man.png'
-                          : gender == Gender.female
-                              ? 'assets/woman.png'
-                              : 'assets/signupface.png', // 기본 이미지
-                      width: 30,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
+              ProgressBar(context, _progressAnimation!),
               SizedBox(
                 height: 50,
               ),
@@ -282,7 +245,7 @@ class ImagePageState extends State<ImagePage>
                       width: 100,
                       height: 125,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFF868686)),
+                        border: Border.all(color: mainColor.lightGray),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -324,7 +287,7 @@ class ImagePageState extends State<ImagePage>
                       width: 100,
                       height: 125,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFF868686)),
+                        border: Border.all(color: mainColor.lightGray),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -333,7 +296,7 @@ class ImagePageState extends State<ImagePage>
                         child: _image3 == null
                             ? Center(
                                 child: Icon(Icons.add,
-                                    color: Color(0xFF868686), size: 40.0))
+                                    color: mainColor.lightGray, size: 40.0))
                             : Image.file(_image3!,
                                 fit: BoxFit.cover), // 선택된 이미지 표시
                       ),

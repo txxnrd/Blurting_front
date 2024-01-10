@@ -506,7 +506,7 @@ class FullScreenImageViewer extends StatefulWidget {
 }
 
 class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
-  int currentPageIndex = 0;
+  late int currentPageIndex = widget.initialIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -530,6 +530,7 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
           scrollDirection: Axis.horizontal,
           controller: PageController(initialPage: widget.initialIndex),
           onPageChanged: (index) {
+            print(index);
             setState(() {
               currentPageIndex = index;
             });
