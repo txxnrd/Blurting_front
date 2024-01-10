@@ -149,7 +149,7 @@ class _MyPage extends State<MyPage> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchUserProfile);
     } else {
-      print('Failed to load user profile. Status code: ${response.statusCode}');
+      print('${response.statusCode}');
     }
   }
 
@@ -494,50 +494,73 @@ class _MyPage extends State<MyPage> {
   }
 }
 
-class FullScreenImageViewer extends StatelessWidget {
+class FullScreenImageViewer extends StatefulWidget {
   const FullScreenImageViewer(this.imagePaths, this.initialIndex, {Key? key})
       : super(key: key);
 
   final List<String> imagePaths;
   final int initialIndex;
+
+  @override
+  State<FullScreenImageViewer> createState() => _FullScreenImageViewerState();
+}
+
+class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
+  int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          PageView.builder(
-            itemCount: imagePaths.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  // Navigator.pop(context);
-                },
-                child: PhotoView(
-                  imageProvider: NetworkImage(imagePaths[index]),
-                  initialScale: PhotoViewComputedScale.contained,
-                  minScale: PhotoViewComputedScale.contained,
-                  maxScale: PhotoViewComputedScale.covered * 2.0,
-                  // backgroundDecoration: BoxDecoration(
-                  //   color: Colors.black,
-                  // ),
-                ),
-              );
-            },
-            scrollDirection: Axis.horizontal,
-            controller: PageController(initialPage: initialIndex),
-          ),
-          Positioned(
-            top: 50,
-            left: 0,
-            child: IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                Navigator.pop(context);
+        body: Stack(
+      children: [
+        PageView.builder(
+          itemCount: widget.imagePaths.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                // Navigator.pop(context);
               },
-            ),
+              child: PhotoView(
+                imageProvider: NetworkImage(widget.imagePaths[index]),
+                initialScale: PhotoViewComputedScale.contained,
+                minScale: PhotoViewComputedScale.contained * 1,
+                maxScale: PhotoViewComputedScale.covered * 2.0,
+              ),
+            );
+          },
+          scrollDirection: Axis.horizontal,
+          controller: PageController(initialPage: widget.initialIndex),
+          onPageChanged: (index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+        ),
+        Positioned(
+          top: 50,
+          left: 0,
+          child: IconButton(
+            icon: Icon(Icons.close),
+            color: mainColor.lightGray,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-        ],
-      ),
-    );
+        ),
+        Positioned(
+          top: 61,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "${currentPageIndex + 1} / 3",
+                style: TextStyle(fontSize: 20, color: mainColor.lightGray),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 }
