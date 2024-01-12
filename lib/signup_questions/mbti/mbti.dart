@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/signup_questions/mbti/Utils.dart';
+import 'package:blurting/signup_questions/mbti/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/utils/util_widget.dart';
