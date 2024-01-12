@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/pages/whisperTab/whisper.dart';
+import 'package:blurting/pages/whisper_tab/whisper.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
@@ -289,7 +289,7 @@ class _GroupChat extends State<GroupChat> {
   Widget questionPage(int index) {
     ScrollController pageScrollController =
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
-    
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
       pageScrollController
           .jumpTo(pageScrollController.position.maxScrollExtent);
@@ -334,7 +334,7 @@ class _GroupChat extends State<GroupChat> {
                     child: Row(
                       children: [
                         Container(
-                          width: 11,
+                            width: 11,
                             margin: EdgeInsets.only(left: 5, right: 3),
                             child: Image.asset(
                               'assets/images/check.png',
@@ -349,7 +349,8 @@ class _GroupChat extends State<GroupChat> {
                           style: TextStyle(
                               fontSize: 10,
                               fontFamily: "Heebo",
-                              color: Provider.of<GroupChatProvider>(context).pointValid
+                              color: Provider.of<GroupChatProvider>(context)
+                                      .pointValid
                                   ? Colors.white
                                   : mainColor.lightGray),
                           textAlign: TextAlign.center,

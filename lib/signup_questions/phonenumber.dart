@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:blurting/signupquestions/sex.dart';
+import 'package:blurting/signup_questions/sex.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/colors/colors.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
-import 'package:blurting/signupquestions/Utils.dart';
+import 'package:blurting/signup_questions/Utils.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   const PhoneNumberPage({super.key});
@@ -266,7 +266,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   maxLength: 13,
                   decoration: InputDecoration(
                     isDense: true,
-                    hintText: '010-1234-5678',
+                    hintText: '01012345678',
                     counterText: '', // /maxlength가 안보이게 추가
                     hintStyle: TextStyle(
                         fontFamily: 'Pretendard',
@@ -276,12 +276,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
-                        color: Color(DefinedColor.lightgrey),
+                        color: mainColor.lightGray,
                       ), // 초기 테두리 색상
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(DefinedColor.lightgrey),
+                        color: mainColor.lightGray,
                       ), // 입력할 때 테두리 색상
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -322,12 +322,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: Color(DefinedColor.lightgrey),
+                          color: mainColor.lightGray,
                         ), // 초기 테두리 색상
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(DefinedColor.lightgrey),
+                          color: mainColor.lightGray,
                         ), // 입력할 때 테두리 색상
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -345,7 +345,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                               formatDuration(_duration), // 타이머 초기값
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Color(DefinedColor.darkpink), // 타이머 색상
+                                color: mainColor.pink, // 타이머 색상
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -362,8 +362,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                                   borderRadius: BorderRadius.circular(
                                       5), // 버튼의 모서리 둥글게 조정
                                 ),
-                                backgroundColor: Color(DefinedColor.darkpink),
-                                elevation: 0.0,
+                                backgroundColor: mainColor.pink, elevation: 0.0,
                                 padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거
                               ),
                               child: FittedBox(
@@ -397,7 +396,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                   padding: EdgeInsets.all(8.0),
                   margin: EdgeInsets.only(top: 5.0, bottom: 10),
                   decoration: BoxDecoration(
-                    color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정
+                    color: mainColor.pink, // 배경색을 여기서 설정
                     borderRadius: BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정
                   ),
                   child: Text(

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:blurting/StartPage/startpage.dart';
+import 'package:blurting/startpage/startpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

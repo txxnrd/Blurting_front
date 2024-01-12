@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/colors/colors.dart';
-import 'package:blurting/signupquestions/Alcohol.dart';
+
+import 'package:blurting/signup_questions/Alcohol.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/signupquestions/sex.dart';
+import 'package:blurting/signup_questions/sex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:blurting/signupquestions/Utils.dart';
+import 'package:blurting/signup_questions/Utils.dart';
 
 import '../config/app_config.dart'; // sex.dart를 임포트
 

@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'package:blurting/signupquestions/activeplace.dart';
+import 'package:blurting/signup_questions/activeplace.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/phonenumber.dart'; // sex.dart를 임포트
-import 'package:blurting/colors/colors.dart';
+import 'package:blurting/signup_questions/phonenumber.dart'; // sex.dart를 임포트
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/Utils/provider.dart';
 import '../config/app_config.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:blurting/signupquestions/Utils.dart';
+import 'package:blurting/signup_questions/Utils.dart';
 
 class SexPage extends StatefulWidget {
   const SexPage({super.key});
@@ -138,12 +138,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     child: TextButton(
                       style: TextButton.styleFrom(
                         side: BorderSide(
-                          color: Color(DefinedColor.lightgrey),
+                          color: mainColor.lightGray,
                           width: 2,
                         ),
                         primary: mainColor.black,
                         backgroundColor: selectedGender == Gender.male
-                            ? Color(DefinedColor.lightgrey)
+                            ? mainColor.lightGray
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius:
@@ -175,11 +175,10 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     height: 48, // 원하는 높이 값
                     child: TextButton(
                       style: TextButton.styleFrom(
-                        side: BorderSide(
-                            color: Color(DefinedColor.lightgrey), width: 2),
-                        primary: Color(DefinedColor.lightgrey),
+                        side: BorderSide(color: mainColor.lightGray, width: 2),
+                        primary: mainColor.lightGray,
                         backgroundColor: selectedGender == Gender.female
-                            ? Color(DefinedColor.lightgrey)
+                            ? mainColor.lightGray
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius:

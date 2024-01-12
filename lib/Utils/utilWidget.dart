@@ -11,9 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
-import 'package:blurting/pages/blurtingTab/groupChat.dart';
+import 'package:blurting/pages/blurting_tab/groupChat.dart';
 import 'package:provider/provider.dart';
-import 'package:blurting/pages/myPage/PointHistory.dart';
+import 'package:blurting/pages/mypage/PointHistory.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -153,7 +153,6 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
       padding: EdgeInsets.fromLTRB(0, 7, 0, 20),
@@ -249,7 +248,7 @@ class pointAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-          margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 20),
       child: InkWell(
           onTap: () {
             print('포인트 내역 버튼 눌러짐');

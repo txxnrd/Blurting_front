@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signupquestions/Utils.dart';
-import 'package:blurting/signupquestions/universitylist.dart';
+import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/universitylist.dart';
 import 'package:http/http.dart' as http;
-import '../colors/colors.dart';
 import '../config/app_config.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'email.dart'; // email.dart를 임포트
@@ -141,12 +140,12 @@ class _UniversityPageState extends State<UniversityPage>
                       hintText: '당신의 대학교를 입력하세요',
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(DefinedColor.lightgrey),
+                          color: mainColor.lightGray,
                         ), // 초기 테두리 색상
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(DefinedColor.lightgrey),
+                          color: mainColor.lightGray,
                         ), // 입력할 때 테두리 색상
                       ),
                       focusedBorder: OutlineInputBorder(

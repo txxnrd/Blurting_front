@@ -1,17 +1,15 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/pages/myPage/Utils.dart';
+import 'package:blurting/pages/mypage/Utils.dart';
 import 'package:blurting/Utils/utilWidget.dart';
-import 'package:blurting/colors/colors.dart';
+import 'package:blurting/signup_questions/activeplacesearch.dart';
 import 'package:blurting/mainApp.dart';
-import 'package:blurting/settings/setting.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../config/app_config.dart';
-import '../../signupquestions/activeplacesearch.dart';
 import '../../token.dart';
 import 'dart:io';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
@@ -192,7 +190,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 ishobby ? IsHobbySelected(index) : IsCharacterSelected(index);
               });
             },
-            activeColor: Color(DefinedColor.darkpink),
+            activeColor: mainColor.pink,
           ),
           GestureDetector(
             onTap: () {
@@ -403,7 +401,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       content: Text(value),
       action: SnackBarAction(
         label: '닫기',
-        textColor: Color(DefinedColor.darkpink),
+        textColor: mainColor.pink,
         onPressed: () {
           // SnackBar 닫기 액션
           ScaffoldMessenger.of(context).hideCurrentSnackBar();

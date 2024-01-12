@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:blurting/signupquestions/Utils.dart';
+import 'package:blurting/signup_questions/Utils.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signupquestions/sexualpreference.dart';
+import 'package:blurting/signup_questions/sexualpreference.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../colors/colors.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 

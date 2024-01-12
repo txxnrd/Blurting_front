@@ -1,4 +1,3 @@
-import 'package:blurting/colors/colors.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -67,12 +66,12 @@ class _SearchPage extends State<SearchPage> {
                         contentPadding: EdgeInsets.all(10.0),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color(DefinedColor.lightgrey),
+                            color: mainColor.lightGray,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color(DefinedColor.lightgrey),
+                            color: mainColor.lightGray,
                           ), // 입력할 때 테두리 색상
                         ),
                         focusedBorder: OutlineInputBorder(

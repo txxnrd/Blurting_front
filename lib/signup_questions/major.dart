@@ -3,10 +3,10 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
-import '../colors/colors.dart';
+
 import '../config/app_config.dart';
-import 'package:blurting/signupquestions/Utils.dart';
-import 'package:blurting/signupquestions/mbti/mbti.dart';
+import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/mbti/mbti.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'majorlist.dart'; // sex.dart를 임포트
 

@@ -1,14 +1,17 @@
 import 'dart:async';
-import 'package:blurting/mainApp.dart';
-import 'package:blurting/pages/useGuide/useguidepageone.dart';
+import 'package:blurting/pages/blurting_tab/groupChat.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeScreen extends StatefulWidget {
+class DayAni extends StatefulWidget {
+  final String day;
+
+  DayAni({Key? key, required this.day}) : super(key: key);
+
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  State<DayAni> createState() => _DayAniState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateMixin {
+class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
   late AnimationController controller;
   // late IO.Socket socket;
 
@@ -24,11 +27,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     );
 
     Timer(Duration(milliseconds: 5000), () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              UseGuidePageOne(),
+          pageBuilder: (context, animation, secondaryAnimation) => GroupChat(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = 0.0;
             const end = 1.0;
@@ -98,23 +100,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                 top: (seconds >= 1 ? -200 : -1000),
                 duration: Duration(milliseconds: 2000),
                 child: Image.asset('assets/animation/rightTop.png')),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              margin: EdgeInsets.fromLTRB(20, 140, 0, 0),
+            Center(
               child: AnimatedOpacity(
                 duration: Duration(milliseconds: 2000),
                 opacity: seconds >= 1 ? 1 : 0,
-                child: Text(
-                  '인증이 완료되었습니다.\n블러팅에 오신걸 환영합니다!',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Pretendard'
-                  ),
-                ),
+                child: Text(day,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 48,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Pretendard')),
               ),
             ),
           ],

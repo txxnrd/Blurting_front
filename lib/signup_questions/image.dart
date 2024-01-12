@@ -1,7 +1,7 @@
-import 'package:blurting/signupquestions/university.dart';
+import 'package:blurting/signup_questions/university.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signupquestions/Utils.dart';
+import 'package:blurting/signup_questions/Utils.dart';
 import 'package:dio/dio.dart';
 import '../config/app_config.dart';
 import 'dart:io';
@@ -254,7 +254,7 @@ class ImagePageState extends State<ImagePage>
                         child: _image1 == null
                             ? Center(
                                 child: Icon(Icons.add,
-                                    color: Color(0xFF868686), size: 40.0))
+                                    color: mainColor.Gray, size: 40.0))
                             : Image.file(_image1!,
                                 fit: BoxFit.cover), // 선택된 이미지 표시
                       ),
@@ -266,7 +266,7 @@ class ImagePageState extends State<ImagePage>
                       width: 100,
                       height: 125,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFF868686)),
+                        border: Border.all(color: mainColor.lightGray),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -275,7 +275,7 @@ class ImagePageState extends State<ImagePage>
                         child: _image2 == null
                             ? Center(
                                 child: Icon(Icons.add,
-                                    color: Color(0xFF868686), size: 40.0))
+                                    color: mainColor.Gray, size: 40.0))
                             : Image.file(_image2!,
                                 fit: BoxFit.cover), // 선택된 이미지 표시
                       ),
@@ -296,7 +296,7 @@ class ImagePageState extends State<ImagePage>
                         child: _image3 == null
                             ? Center(
                                 child: Icon(Icons.add,
-                                    color: mainColor.lightGray, size: 40.0))
+                                    color: mainColor.Gray, size: 40.0))
                             : Image.file(_image3!,
                                 fit: BoxFit.cover), // 선택된 이미지 표시
                       ),

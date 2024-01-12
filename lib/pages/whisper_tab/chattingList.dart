@@ -3,7 +3,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/pages/whisperTab/whisper.dart';
+import 'package:blurting/pages/whisper_tab/whisper.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui';
 import 'package:socket_io_client/socket_io_client.dart' as IO;

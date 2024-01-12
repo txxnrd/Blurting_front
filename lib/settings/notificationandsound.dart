@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 import 'dart:convert';
-import 'package:blurting/colors/colors.dart';
+
 import 'package:blurting/mainApp.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -131,7 +131,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
                       }
                     },
 
-                    activeColor: Color(DefinedColor.darkpink), // 활성화 상태일 때의 색상
+                    activeColor: mainColor.pink, // 활성화 상태일 때의 색상
                   ),
                 ],
               ),

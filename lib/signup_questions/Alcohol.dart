@@ -3,8 +3,8 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/token.dart';
-import 'package:blurting/signupquestions/Utils.dart';
-import 'package:blurting/signupquestions/smoke.dart';
+import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/smoke.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 

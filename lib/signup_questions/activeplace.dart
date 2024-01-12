@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:blurting/colors/colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-import 'package:blurting/signupquestions/Utils.dart';
+import 'package:blurting/signup_questions/Utils.dart';
 import 'package:blurting/token.dart'; // sex.dart를 임포트
-import 'package:blurting/signupquestions/religion.dart';
+import 'package:blurting/signup_questions/religion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';
 import 'activeplacesearch.dart'; // sex.dart를 임포트
@@ -192,8 +192,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: (content == '')
-                              ? Color(DefinedColor.lightgrey)
-                              : Color(DefinedColor.darkpink), // 초기 테두리 색상
+                              ? mainColor.lightGray
+                              : mainColor.pink, // 초기 테두리 색상
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(10.0),

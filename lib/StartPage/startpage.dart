@@ -1,23 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
-
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/Utils/utilWidget.dart';
-import 'package:blurting/mainApp.dart';
-import 'package:blurting/signupquestions/phonenumber.dart';
+import 'package:blurting/signup_questions/phonenumber.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:blurting/colors/colors.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../colors/colors.dart';
-import '../config/app_config.dart';
 import 'alreadyuser.dart';
 
 void main() {
@@ -250,11 +239,10 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               '이미 회원이신가요?',
                               style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                decorationColor: Color(DefinedColor.darkpink),
-                                fontSize: 15,
-                                color: Color(DefinedColor.darkpink),
-                              ),
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: mainColor.pink,
+                                  fontSize: 15,
+                                  color: mainColor.pink),
                             ),
                           ),
                         ),

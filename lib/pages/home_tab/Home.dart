@@ -3,7 +3,7 @@ import 'package:blurting/Utils/time.dart';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/model/post.dart';
-import 'package:blurting/pages/homeTab/alarm.dart';
+import 'package:blurting/pages/home_tab/alarm.dart';
 import 'package:blurting/service/homeService.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
@@ -118,11 +118,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     final pages = List.generate(cardItems.length, (index) {
       final answercontroller = ScrollController();
       return Container(
-        margin: index == cardItems.length - 1 ? EdgeInsets.fromLTRB(10, 5, 10, 5) : EdgeInsets.fromLTRB(10, 5, 0, 5),
+        margin: index == cardItems.length - 1
+            ? EdgeInsets.fromLTRB(10, 5, 10, 5)
+            : EdgeInsets.fromLTRB(10, 5, 0, 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
@@ -198,14 +199,17 @@ class _HomeState extends State<Home> {
                       ShaderMask(
                         shaderCallback: (rect) {
                           return const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.white,
-                              Color.fromRGBO(255, 255, 255, 0)
-                            ],
-                            stops: [0.5, 1]
-                          ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white,
+                                Color.fromRGBO(255, 255, 255, 0)
+                              ],
+                              stops: [
+                                0.5,
+                                1
+                              ]).createShader(
+                              Rect.fromLTRB(0, 0, rect.width, rect.height));
                         },
                         child: SingleChildScrollView(
                           controller: answercontroller,
@@ -359,7 +363,7 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           pointAppbar(),
           Container(
-          margin: EdgeInsets.only(top: 20),
+            margin: EdgeInsets.only(top: 20),
             child: IconButton(
               icon: Icon(
                 Icons.notifications_rounded,
@@ -415,8 +419,8 @@ class _HomeState extends State<Home> {
             height: 250,
             child: apiResponse != null && apiResponse!['answers'].isNotEmpty
                 ? PageView.builder(
-                  padEnds: false,
-                  pageSnapping: true,
+                    padEnds: false,
+                    pageSnapping: true,
                     onPageChanged: (index) => {mvpName(index), print(index)},
                     controller: controller,
                     itemCount: min(cardItems.length, 3),
@@ -443,7 +447,7 @@ class _HomeState extends State<Home> {
                 controller: controller,
                 count: pages.length,
                 effect: ScrollingDotsEffect(
-                  activeDotScale: 1.0,
+                    activeDotScale: 1.0,
                     dotHeight: 7,
                     dotWidth: 27,
                     // type: WormType.thinUnderground,
@@ -477,9 +481,9 @@ class _HomeState extends State<Home> {
     print('home data 불러오기 시작');
     String savedToken = await getToken();
 
-    final response = await http.get(
-        Uri.parse(API.home), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
-        headers: {
+    final response =
+        await http.get(Uri.parse(API.home), // Uri.parse를 사용하여 URL을 Uri 객체로 변환
+            headers: {
           'authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
         });

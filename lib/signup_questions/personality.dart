@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signupquestions/Utils.dart';
-import 'package:blurting/signupquestions/hobby.dart';
+import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/hobby.dart';
 import 'dart:convert';
 import 'package:blurting/Utils/utilWidget.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/colors/colors.dart';
 
 class PersonalityPage extends StatefulWidget {
   final String selectedGender;
@@ -117,23 +116,22 @@ class _PersonalityPageState extends State<PersonalityPage>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Checkbox(
-            side: BorderSide(color: Colors.transparent),
-            fillColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return mainColor.pink; // 선택되었을 때의 배경 색상
-                }
-                return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+              side: BorderSide(color: Colors.transparent),
+              fillColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return mainColor.pink; // 선택되었을 때의 배경 색상
+                  }
+                  return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                },
+              ),
+              value: isValidList[index],
+              onChanged: (bool? newValue) {
+                setState(() {
+                  IsSelected(index);
+                });
               },
-            ),
-            value: isValidList[index],
-            onChanged: (bool? newValue) {
-              setState(() {
-                IsSelected(index);
-              });
-            },
-            activeColor: Color(DefinedColor.darkpink),
-          ),
+              activeColor: mainColor.pink),
           GestureDetector(
             onTap: () {
               setState(() {
