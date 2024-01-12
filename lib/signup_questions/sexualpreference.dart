@@ -64,7 +64,6 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
   }
 
   Future<void> _sendPostRequest() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
 
     var sexOrient = "";
@@ -76,7 +75,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
       sexOrient = "bi";
     }
     String savedToken = await getToken();
-    print(savedToken);
+
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -85,22 +84,20 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
       },
       body: json.encode({"sexOrient": sexOrient}), // JSON 형태로 인코딩
     );
-    print(response.body);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-        print(token);
+
         await saveToken(token);
         _increaseProgressAndNavigate();
       }
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
     }
   }
 

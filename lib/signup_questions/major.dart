@@ -132,9 +132,9 @@ class _MajorPageState extends State<MajorPage>
     double width = MediaQuery.of(context).size.width;
 
     Future<void> _sendPostRequest() async {
-      print('_sendPostRequest called');
+      ;
       var url = Uri.parse(API.signup);
-      print(_selectedMajor);
+      ;
       var major = '';
       if (_selectedMajor == Major.humanities) {
         major = '인문계열';
@@ -153,7 +153,7 @@ class _MajorPageState extends State<MajorPage>
       }
 
       String savedToken = await getToken();
-      print(savedToken);
+      ;
 
       var response = await http.post(
         url,
@@ -163,22 +163,22 @@ class _MajorPageState extends State<MajorPage>
         },
         body: json.encode({"major": major}), // JSON 형태로 인코딩
       );
-      print(response.body);
+      ;
       if (response.statusCode == 200 || response.statusCode == 201) {
         // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-        print('Server returned OK');
-        print('Response body: ${response.body}');
+        ;
+        ;
         var data = json.decode(response.body);
 
         if (data['signupToken'] != null) {
           var token = data['signupToken'];
-          print(token);
+          ;
           await saveToken(token);
           _increaseProgressAndNavigate();
         } else {}
       } else {
         // 오류가 발생한 경우 처리
-        print('Request failed with status: ${response.statusCode}.');
+        ;
       }
     }
 

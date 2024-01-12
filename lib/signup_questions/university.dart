@@ -111,12 +111,10 @@ class _UniversityPageState extends State<UniversityPage>
                       .contains(textEditingValue.text.toLowerCase()));
                 },
                 onSelected: (String selection) {
-                  print('You just selected $selection');
                   int selectedIndex = universities.indexOf(selection);
                   selectedUniversity = selection;
                   // 선택된 인덱스를 사용하거나 저장
                   if (selectedIndex != null) {
-                    print('Selected university index: $selectedIndex');
                     Domain = university_domain[selectedIndex!];
                     setState(() {
                       IsValid = true;

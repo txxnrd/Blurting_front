@@ -80,7 +80,6 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       });
     }
     IsSelected(content); //비었는지 확인하는
-    print(content);
   }
 
   Future<void> _getLocation() async {
@@ -105,11 +104,10 @@ class _ActivePlacePageState extends State<ActivePlacePage>
   }
 
   Future<void> _sendPostRequest() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
 
     String savedToken = await getToken();
-    print(savedToken);
+
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -118,24 +116,20 @@ class _ActivePlacePageState extends State<ActivePlacePage>
       },
       body: json.encode({"region": content}), // JSON 형태로 인코딩
     );
-    print(response.body);
-    print(json.encode({"region": content}));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-        print(token);
+
         await saveToken(token);
         _increaseProgressAndNavigate();
       } else {}
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
     }
   }
 
@@ -150,83 +144,82 @@ class _ActivePlacePageState extends State<ActivePlacePage>
     double width = MediaQuery.of(context).size.width;
 
     return PopScope(
-      canPop: true,
-      onPopInvoked: (didPop) {
-        sendBackRequest(context, false);
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+        canPop: true,
+        onPopInvoked: (didPop) {
+          sendBackRequest(context, false);
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          title: Text(''),
-          elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 25,
-              ),
-              ProgressBar(context, _progressAnimation!),
-              SizedBox(
-                height: 50,
-              ),
-              TitleQuestion("주로 활동하는 지역이 어디인가요?"),
-              SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  goToSearchPage(context);
-                  print(content);
-                  setState(() {});
-                },
-                child: Container(
-                    width: width * 1, // 원하는 너비 값
-                    height: 48, // 원하는 높이 값
-                    child: Container(
-                      padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: (content == '')
-                              ? mainColor.lightGray
-                              : mainColor.pink, // 초기 테두리 색상
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        (content == '') ? '구명으로 검색 (ex. 강남구)' : content,
-                        style: TextStyle(
-                          color: mainColor.black,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
-                      ),
-                    )),
-              ),
-              SizedBox(height: 331),
-            ],
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: Text(''),
+            elevation: 0,
           ),
-        ),
-        floatingActionButton: Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-          child: InkWell(
-            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-            child: signupButton(text: '다음', IsValid: IsValid),
-            onTap: (IsValid)
-                ? () {
-                    _sendPostRequest();
-                  }
-                : null,
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 25,
+                ),
+                ProgressBar(context, _progressAnimation!),
+                SizedBox(
+                  height: 50,
+                ),
+                TitleQuestion("주로 활동하는 지역이 어디인가요?"),
+                SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    goToSearchPage(context);
+
+                    setState(() {});
+                  },
+                  child: Container(
+                      width: width * 1, // 원하는 너비 값
+                      height: 48, // 원하는 높이 값
+                      child: Container(
+                        padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: (content == '')
+                                ? mainColor.lightGray
+                                : mainColor.pink, // 초기 테두리 색상
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          (content == '') ? '구명으로 검색 (ex. 강남구)' : content,
+                          style: TextStyle(
+                            color: mainColor.black,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                      )),
+                ),
+                SizedBox(height: 331),
+              ],
+            ),
           ),
-        ),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-      ),
-    );
+          floatingActionButton: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+            child: InkWell(
+              splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+              child: signupButton(text: '다음', IsValid: IsValid),
+              onTap: (IsValid)
+                  ? () {
+                      _sendPostRequest();
+                    }
+                  : null,
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+        ));
   }
 }
 

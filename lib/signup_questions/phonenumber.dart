@@ -91,8 +91,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     var fcmToken = await FirebaseMessaging.instance.getToken(
         vapidKey:
             "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-    print("------------");
-    print(fcmToken);
 
     var url = Uri.parse(API.sendphone);
     //API.sendphone
@@ -115,21 +113,19 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
 
       var data = json.decode(response.body);
       var token = data['signupToken'];
       if (token != null) {
         startTimer();
         NowCertification();
-        print(token);
+
         // 토큰을 로컬에 저장
         await saveToken(token);
       }
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       var data = json.decode(response.body);
       errormessage = data['message'];
       // ignore: use_build_context_synchronously
@@ -158,13 +154,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-        print(token);
+
         await saveToken(token);
         _increaseProgressAndNavigate();
       } else {
@@ -175,8 +170,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       }
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-      print("error");
     }
   }
 
@@ -203,7 +196,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       vsync: this,
     );
     Firebase.initializeApp().whenComplete(() {
-      print("completed");
       setState(() {});
     });
     myFocusNode = FocusNode();

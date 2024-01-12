@@ -156,13 +156,11 @@ class _PersonalityPageState extends State<PersonalityPage>
   @override
   void IsSelected(int index) {
     var true_length = isValidList.where((item) => item == true).length;
-    print(true_length);
+
     if (true_length >= 4 && isValidList[index] == false) {
-      print("여기");
       showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
       return;
     } else {
-      print("저기");
       isValidList[index] = !isValidList[index];
       if (isValidList.any((isValid) => isValid)) {
         IsValid = true;
@@ -172,16 +170,14 @@ class _PersonalityPageState extends State<PersonalityPage>
   }
 
   Future<void> _sendPostRequest() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
     updateSelectedCharacteristics();
-    print(selectedCharacteristics);
+
     if (selectedCharacteristics.length > 4) {
       showSnackBar(context, "성격 선택은 4개까지 가능합니다.");
       return;
     }
     String savedToken = await getToken();
-    print(savedToken);
 
     var response = await http.post(
       url,
@@ -191,22 +187,20 @@ class _PersonalityPageState extends State<PersonalityPage>
       },
       body: json.encode({"character": selectedCharacteristics}), // JSON 형태로 인코딩
     );
-    print(response.body);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-        print(token);
+
         await saveToken(token);
         _increaseProgressAndNavigate();
       } else {}
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
     }
   }
 

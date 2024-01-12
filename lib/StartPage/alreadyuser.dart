@@ -97,13 +97,12 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       startTimer();
       NowCertification();
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       var data = json.decode(response.body);
       errormessage = data['message'];
       showSnackBar(context, errormessage);
@@ -128,8 +127,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['accessToken'] != null) {
@@ -137,18 +135,14 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
         var refreshtoken = data['refreshToken'];
         var userId = data['id'];
 
-        print(userId);
         await saveuserId(userId);
 
-        print(token);
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
 
         var fcmToken = await FirebaseMessaging.instance.getToken(
             vapidKey:
                 "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-        print("-------");
-        print(fcmToken);
 
         var urlfcm = Uri.parse(API.notification);
 
@@ -160,7 +154,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
           },
           body: json.encode({"token": fcmToken}),
         );
-        print(response.body);
+
         _increaseProgressAndNavigate();
       } else {
         var data = json.decode(response.body);

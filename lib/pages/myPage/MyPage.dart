@@ -58,9 +58,8 @@ class _MyPage extends State<MyPage> {
   Map<String, dynamic> userProfile = {};
 
   Future<void> goToMyPageEdit(BuildContext context) async {
-    print("수정 버튼 눌러짐");
     // var token = getToken();
-    // print(token);
+    //
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
@@ -73,11 +72,9 @@ class _MyPage extends State<MyPage> {
       },
     );
 
-    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       final result = await Navigator.push(
@@ -88,18 +85,15 @@ class _MyPage extends State<MyPage> {
       );
 
       // 이후에 필요한 작업을 수행할 수 있습니다.
-      if (result != null) {
-        print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
-      }
+      if (result != null) {}
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         await getnewaccesstoken(context, () async {
           // callback0의 내용
-          print('Callback0 called');
         }, goToMyPageEdit, context, null, null);
       }
     }
@@ -134,9 +128,7 @@ class _MyPage extends State<MyPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-    print('Response Headers: ${response.headers}');
+
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       setState(() {
@@ -147,9 +139,7 @@ class _MyPage extends State<MyPage> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchUserProfile);
-    } else {
-      print('${response.statusCode}');
-    }
+    } else {}
   }
 
   @override
@@ -370,7 +360,6 @@ class _MyPage extends State<MyPage> {
                 child: staticButton(text: '수정'),
                 onTap: () {
                   goToMyPageEdit(context);
-                  print('edit 버튼 클릭됨');
                 },
               ),
             ],
@@ -529,7 +518,6 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
           scrollDirection: Axis.horizontal,
           controller: PageController(initialPage: widget.initialIndex),
           onPageChanged: (index) {
-            print(index);
             setState(() {
               currentPageIndex = index;
             });

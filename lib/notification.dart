@@ -18,9 +18,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   description: "제발 돼라 ㅠㅠ,",
 );
 
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message");
-}
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 
 Future<void> initFcm() async {
   await Firebase.initializeApp();
@@ -58,21 +56,18 @@ Future<void> initFcm() async {
                 importance: Importance.max)),
         payload: json.encode(message?.data),
       );
-      print(message?.data);
-      print("yes");
+
       // }
     } catch (e) {
       // 오류 처리 로직
       // 예: 오류 로그를 출력하거나 사용자에게 알림을 보내는 등의 처리
-      print('FirebaseMessaging onMessage error: $e');
+
       // 필요한 경우 추가적인 오류 처리 로직을 여기에 작성하세요.
     }
   });
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-    print("onMessageOpenedApp: $message");
     if (message?.data['type'] == "whisper") {
-      print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
 
       navigatorKey.currentState?.push(MaterialPageRoute(
@@ -80,7 +75,6 @@ Future<void> initFcm() async {
                 currentIndex: 2,
               )));
     } else {
-      print('이거 실행됏음.');
       await Future.delayed(Duration(milliseconds: 100));
       navigatorKey.currentState?.push(MaterialPageRoute(
           builder: (context) => MainApp(

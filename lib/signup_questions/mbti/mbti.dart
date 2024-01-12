@@ -52,17 +52,15 @@ class _MBTIPageState extends State<MBTIPage>
   }
 
   Future<void> _sendPostRequest() async {
-    print("실행됨");
     bool hasFalse = isValidList.any((isValid) => !isValid);
     if (hasFalse) {
       showSnackBar(context, "모든 항목을 선택 해주세요");
     }
-    print('_sendPostRequest called');
+
     var url = Uri.parse(API.signup);
     var mbti = getMBTIType();
 
     String savedToken = await getToken();
-    print(savedToken);
 
     var response = await http.post(
       url,
@@ -72,23 +70,20 @@ class _MBTIPageState extends State<MBTIPage>
       },
       body: json.encode({"mbti": mbti}), // JSON 형태로 인코딩
     );
-    print(json.encode({"mbti": mbti}));
-    print(response.body);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-        print(token);
+
         await saveToken(token);
         _increaseProgressAndNavigate();
       }
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
     }
   }
 

@@ -35,7 +35,6 @@ class _AlarmPageState extends State<AlarmPage> {
 
   Future<List<Map<String, dynamic>>> fetchAlarm() async {
     if (!mounted) return [];
-    print('fetchalarm called');
 
     try {
       final url = Uri.parse(API.alarm);
@@ -46,10 +45,6 @@ class _AlarmPageState extends State<AlarmPage> {
         'Content-Type': 'application/json',
       });
 
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-      print('Response Headers: ${response.headers}');
-
       // Handle the response as needed
       if (response.statusCode == 200) {
         // Extract data from the response and update the state
@@ -58,8 +53,6 @@ class _AlarmPageState extends State<AlarmPage> {
 
         AlarmHistoryList = data;
 
-        print('alarm loaded successfully.');
-        print(AlarmHistoryList);
         setState(() {
           groupedData = groupDataByDate(AlarmHistoryList);
         });
@@ -70,12 +63,9 @@ class _AlarmPageState extends State<AlarmPage> {
         await getnewaccesstoken(context, fetchAlarm);
         return [];
       } else {
-        print(
-            'Failed to load added points. Status code: ${response.statusCode}');
         throw Exception('failed to load added point');
       }
     } catch (error) {
-      print('Error occurred while loading added points: $error');
       throw error;
     }
   }

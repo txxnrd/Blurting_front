@@ -35,7 +35,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
   Future<List<Map<String, dynamic>>> fetchPointAdd() async {
     if (!mounted) return [];
-    print('fetchPointAdd called');
 
     try {
       final url = Uri.parse(API.pointAdd);
@@ -46,10 +45,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         'Content-Type': 'application/json',
       });
 
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-      print('Response Headers: ${response.headers}');
-
       // Handle the response as needed
       if (response.statusCode == 200) {
         // Extract data from the response and update the state
@@ -59,7 +54,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         usageHistoryList = [];
         earningHistoryList = data;
 
-        print('added Points loaded successfully.');
         return data;
       } else if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
@@ -67,19 +61,15 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         await getnewaccesstoken(context, fetchPointAdd);
         return [];
       } else {
-        print(
-            'Failed to load added points. Status code: ${response.statusCode}');
         throw Exception('failed to load added point');
       }
     } catch (error) {
-      print('Error occurred while loading added points: $error');
       throw error;
     }
   }
 
   Future<List<Map<String, dynamic>>> fetchPointSubtract() async {
     if (!mounted) return [];
-    print('fetchPointSubtract called');
 
     try {
       final url = Uri.parse(API.pointSub);
@@ -90,10 +80,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         'Content-Type': 'application/json',
       });
 
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-      print('Response Headers: ${response.headers}');
-
       // Handle the response as needed
       if (response.statusCode == 200) {
         // Extract data from the response and update the state
@@ -103,7 +89,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         earningHistoryList = data;
         usageHistoryList = data;
 
-        print('subtracted Points loaded successfully.');
         return data;
       } else if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
@@ -111,12 +96,9 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         await getnewaccesstoken(context, fetchPointSubtract);
         return [];
       } else {
-        print(
-            'Failed to load subtracted points. Status code: ${response.statusCode}');
         throw Exception('failed to load subtracted point');
       }
     } catch (error) {
-      print('Error occurred while loading subtracted points: $error');
       throw error;
     }
   }
@@ -142,7 +124,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       }
     } catch (e) {
       // Handle the exception or log the error
-      print("Error parsing date-time: $e");
     }
 
     return 'Unknown time';
@@ -166,7 +147,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       }
     } catch (e) {
       // Handle the exception or log the error
-      print("Error parsing date-time: $e");
     }
 
     // Return a default value or handle the error as needed
@@ -201,7 +181,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       // Handle tab change (if needed)
     } else {
       // Tab has finished animating, get the current index
-      print(_tabController.index);
+
       _fetchDataForCurrentTab();
     }
   }
@@ -221,9 +201,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           usageHistoryList = data;
         });
       }
-    } catch (error) {
-      print('Error in fetchDataForCurrentTab: $error');
-    }
+    } catch (error) {}
   }
 
   @override

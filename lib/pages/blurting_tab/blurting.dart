@@ -6,7 +6,6 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurting_tab/groupChat.dart';
-import 'package:blurting/settings/setting.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +61,6 @@ DateTime _parseDateTime(String? dateTimeString) {
   try {
     return DateTime.parse(dateTimeString);
   } catch (e) {
-    print('Error parsing DateTime: $e');
     return DateTime.now(); // 혹은 다른 기본 값으로 대체
   }
 }
@@ -298,9 +296,8 @@ class _Blurting extends State<Blurting> {
                                       iSended[currentPage] == false)
                                   ? () {
                                       // 하나라도 true일 떄 (하나라도 선택되었을 때)
-                                      print('선택 완료');
+
                                       sendArrow(userId, currentDay);
-                                      print(userId);
                                     }
                                   : null,
                               child: Image.asset(
@@ -391,10 +388,6 @@ class _Blurting extends State<Blurting> {
               DateTime day3Time =
                   createdAt.add(Duration(hours: 48)); // 이틀이 지난 시간
 
-              print(day1Time);
-              print(day2Time);
-              print(day3Time);
-
               if (isState == 'Continue') {
                 if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
                     day == 'Day2' && (lastTime.isAfter(day2Time)) ||
@@ -402,11 +395,9 @@ class _Blurting extends State<Blurting> {
                         (lastTime.isAfter(
                             day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
                 {
-                  print('날이 바뀌고 처음 들어간 게 아님');
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => GroupChat()));
                 } else {
-                  print('날 바뀌고 처음');
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -422,8 +413,6 @@ class _Blurting extends State<Blurting> {
 
               // 데이터를 로컬에 저장하는 함수
               await prefs.setString('timeInSeconds', DateTime.now().toString());
-              print(
-                  '마지막으로 들어간 시간 저장: ${_parseDateTime(prefs.getString('timeInSeconds'))}');
             },
           )
         ],
@@ -593,8 +582,6 @@ class _Blurting extends State<Blurting> {
     });
 
     if (response.statusCode == 200) {
-      print('요청 성공');
-
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
@@ -609,18 +596,12 @@ class _Blurting extends State<Blurting> {
             }
           });
         }
-
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, isMatched);
     } else {
-      print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
@@ -646,11 +627,8 @@ class _Blurting extends State<Blurting> {
           setState(() {
             // createdAt = DateTime.now().add(Duration(hours: -47));
             createdAt = _parseDateTime(responseData['createdAt']);
-            print('createdAt : $createdAt');
 
             Duration timeDifference = DateTime.now().difference(createdAt);
-
-            print(timeDifference);
 
             setState(() {
               // 시작하자마자 day1 고르기
@@ -661,7 +639,7 @@ class _Blurting extends State<Blurting> {
             if (timeDifference >= Duration(hours: 24)) {
               day = 'Day2';
               pageController.page == 1;
-              print('하루 지남');
+
               if (mounted) {
                 setState(() {
                   isValidDay[1] = true;
@@ -670,7 +648,6 @@ class _Blurting extends State<Blurting> {
               }
 
               if (iSended[0] == false) {
-                print('day2가 되엇는데도 day1 화살표 아직 안 보냄');
                 sendArrow(-1, 0);
               }
             }
@@ -679,7 +656,7 @@ class _Blurting extends State<Blurting> {
               day = 'Day3';
 
               pageController.page == 2;
-              print('이틀 지남');
+
               if (mounted) {
                 setState(() {
                   isValidDay[2] = true;
@@ -688,23 +665,18 @@ class _Blurting extends State<Blurting> {
               }
 
               if (iSended[1] == false) {
-                print('day3이 되엇는데도 day2 화살표 아직 안 보냄');
                 sendArrow(-1, 1);
               }
             }
           });
         }
-        // print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+        //
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
     } else {
-      print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
   }
@@ -772,17 +744,12 @@ class _Blurting extends State<Blurting> {
               userId: -1,
               clickProfile: clickProfile));
         }
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchGroupInfo);
     } else {
-      print(response.statusCode);
       throw Exception('groupInfo : 블러팅 정보를 로드하는 데 실패했습니다');
     }
   }
@@ -813,9 +780,9 @@ class _Blurting extends State<Blurting> {
 
         // 받은 화살표 처리
         if (iReceivedList.isEmpty) {
-          // print('받은 화살표가 없음');
+          //
         } else {
-          // print('받은 화살표가 있음');/
+          //
           for (final iReceivedItem in iReceivedList) {
             int day = (iReceivedItem['day'] - 1);
             iReceived[day].add(recievedProfile(
@@ -823,29 +790,22 @@ class _Blurting extends State<Blurting> {
                 userSex: iReceivedItem['userSex']));
           }
         }
-        // print('내가 보낸 화살 맨 처음에: $iSended');
+        //
 
         int i = iSendedList.length;
-        // print(i);
+        //
         for (int j = 0; j < i; j++) {
           if (j >= 3) break;
           iSended[j] = true;
         }
 
-        // print(iSended);
-
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('MyArrow 에러');
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+        //
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, MyArrow);
     } else {
-      print(response.statusCode);
       throw Exception('myArrow: 화살표 정보를 로드하는 데 실패했습니다');
     }
   }
@@ -861,31 +821,22 @@ class _Blurting extends State<Blurting> {
     });
 
     if (response.statusCode == 201) {
-      print('화살표 날리기 요청 성공');
-
       try {
         // bool responseData = json.decode(response.body);
 
         if (mounted) {
           setState(() {
             iSended[day] = true;
-            // print(iSended);
+            //
           });
         }
-
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('SendArrow 에러');
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, () async {}, null, null, null, null,
           sendArrow, [userId, day]);
     } else {
-      print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
@@ -970,8 +921,6 @@ class _profileState extends State<profile> {
         if (isTap[currentPage] == true && !widget.thisSelected) {
         } else {
           if (canSendArrow) {
-            print('눌림');
-            print(widget.userId);
             setState(() {
               widget.thisSelected = !widget.thisSelected;
             });
