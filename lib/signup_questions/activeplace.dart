@@ -25,6 +25,7 @@ class _ActivePlacePageState extends State<ActivePlacePage>
   Location location = new Location();
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
+  LocationData? _locationData;
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
