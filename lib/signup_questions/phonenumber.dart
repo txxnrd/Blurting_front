@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/signup_questions/sex.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/services.dart';
 import 'package:blurting/signup_questions/Utils.dart';
 
 class PhoneNumberPage extends StatefulWidget {

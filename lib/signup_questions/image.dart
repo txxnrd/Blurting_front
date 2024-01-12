@@ -7,7 +7,7 @@ import '../config/app_config.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart'; // 추가
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class ImagePage extends StatefulWidget {
   final String selectedGender;

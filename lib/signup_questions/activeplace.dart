@@ -1,16 +1,14 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:blurting/signup_questions/Utils.dart';
-import 'package:blurting/token.dart'; // sex.dart를 임포트
+import 'package:blurting/token.dart';
 import 'package:blurting/signup_questions/religion.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';
-import 'activeplacesearch.dart'; // sex.dart를 임포트
+import 'activeplacesearch.dart';
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;

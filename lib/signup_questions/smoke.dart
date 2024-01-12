@@ -1,14 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/token.dart';
 import 'package:blurting/signup_questions/Utils.dart';
 import 'package:blurting/signup_questions/height.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/Utils/utilWidget.dart';
-import '../config/app_config.dart'; // sex.dart를 임포트
+import 'package:blurting/utils/util_widget.dart';
+import '../config/app_config.dart';
 
 final labels = ['안 피움', '가끔', '자주', '매일'];
 

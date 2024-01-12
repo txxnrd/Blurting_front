@@ -1,14 +1,9 @@
 import 'dart:convert';
-
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/Utils/utilWidget.dart';
-
-import 'package:blurting/mainApp.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/signup_questions/welcomepage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signup_questions/activeplace.dart';
-import 'package:blurting/signup_questions/religion.dart';
 import 'package:blurting/signup_questions/Utils.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;

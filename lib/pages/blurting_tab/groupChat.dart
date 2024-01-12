@@ -5,7 +5,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisper_tab/whisper.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;

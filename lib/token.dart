@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:blurting/startpage/startpage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +8,7 @@ import 'config/app_config.dart';
 Future<void> saveToken(String token) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('signupToken', token);
-  // 저장된 값을 확인하기 위해 바로 불러옵니다.
+  // 저장된 값을 확인하는 용도
   String savedToken = prefs.getString('signupToken') ?? 'No Token';
   print('Saved Token: $savedToken'); // 콘솔에 출력하여 확인
 }
@@ -18,7 +16,7 @@ Future<void> saveToken(String token) async {
 // 저장된 토큰을 불러오는 함수
 Future<String> getToken() async {
   final prefs = await SharedPreferences.getInstance();
-  // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+  // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져오기.
   // 값이 없을 경우 'No Token'을 반환
   String token = prefs.getString('signupToken') ?? 'No Token';
   print(token);
@@ -28,7 +26,7 @@ Future<String> getToken() async {
 Future<void> saveRefreshToken(String refreshToken) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('refreshToken', refreshToken);
-  // 저장된 값을 확인하기 위해 바로 불러옵니다.
+  // 저장된 값을 확인하는 용도
   String savedRefreshToken =
       prefs.getString('refreshToken') ?? 'No Refresh Token';
   print('Saved Refresh Token: $savedRefreshToken'); // 콘솔에 출력하여 확인
@@ -36,7 +34,7 @@ Future<void> saveRefreshToken(String refreshToken) async {
 
 Future<String> getRefreshToken() async {
   final prefs = await SharedPreferences.getInstance();
-  // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져옵니다.
+  // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져오기.
   // 값이 없을 경우 'No Token'을 반환
   String token = prefs.getString('refreshToken') ?? 'No Token';
   return token;
@@ -50,11 +48,8 @@ Future<void> getnewaccesstoken<T>(
     dynamic argument2,
     Future<void> Function(int, int)? callback3,
     dynamic argument3]) async {
-  // String token = await getToken();
   print('액세스 토큰 발급');
-  // print(token);
 
-/*여기서부터 내 정보 요청하기*/
   var url = Uri.parse(API.refresh);
 
   String refreshToken = await getRefreshToken();

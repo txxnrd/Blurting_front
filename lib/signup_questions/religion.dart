@@ -5,9 +5,8 @@ import 'package:blurting/token.dart';
 import 'package:blurting/signup_questions/sexualpreference.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class ReligionPage extends StatefulWidget {
   final String selectedGender;

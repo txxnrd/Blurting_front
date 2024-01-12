@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 void main() {
   runApp(MyApp());

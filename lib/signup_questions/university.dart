@@ -1,14 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:blurting/token.dart';
-import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/utils.dart';
 import 'package:blurting/signup_questions/universitylist.dart';
-import 'package:http/http.dart' as http;
-import '../config/app_config.dart';
 import 'package:blurting/Utils/provider.dart';
-import 'email.dart'; // email.dart를 임포트
-import 'package:blurting/Utils/utilWidget.dart';
+import 'email.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class UniversityPage extends StatefulWidget {
   final String selectedGender;

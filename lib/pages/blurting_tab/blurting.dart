@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/pages/blurting_tab/matchingAni.dart';
 import 'package:blurting/pages/blurting_tab/dayAni.dart';
 import 'package:http/http.dart' as http;

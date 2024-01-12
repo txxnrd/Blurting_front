@@ -1,6 +1,6 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/model/post.dart';
 import 'package:blurting/pages/home_tab/alarm.dart';

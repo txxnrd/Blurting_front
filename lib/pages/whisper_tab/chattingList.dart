@@ -9,7 +9,7 @@ import 'dart:ui';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {

@@ -1,7 +1,7 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class UseGuidePagedone extends StatefulWidget {
   @override

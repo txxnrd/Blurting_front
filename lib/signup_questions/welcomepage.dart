@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:blurting/mainApp.dart';
 import 'package:blurting/pages/useguide/useguidepageone.dart';
 import 'package:flutter/material.dart';
 
