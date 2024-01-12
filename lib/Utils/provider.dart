@@ -1,7 +1,5 @@
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
-import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

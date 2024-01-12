@@ -1,11 +1,6 @@
-import 'package:blurting/mainApp.dart';
-import 'package:blurting/pages/useGuide/useguidepagetwo.dart';
-import 'package:blurting/signupquestions/phonenumber.dart';
-import 'package:blurting/token.dart';
+import 'package:blurting/pages/useguide/useguidepagetwo.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/config/app_config.dart';
-import 'package:http/http.dart' as http;
-import 'package:blurting/colors/colors.dart';
+import 'package:blurting/Utils/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -94,7 +89,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
-                            color: Color(DefinedColor.darkpink),
+                            color: mainColor.pink,
                             fontFamily: 'Pretendard',
                           )),
                       SizedBox(
@@ -104,7 +99,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
-                            color: Color(DefinedColor.darkpink),
+                            color: mainColor.pink,
                             fontFamily: 'Pretendard',
                           )),
                       SizedBox(height: 112),

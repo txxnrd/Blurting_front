@@ -1,15 +1,12 @@
-import 'package:blurting/StartPage/startpage.dart';
+import 'package:blurting/startpage/startpage.dart';
 import 'package:blurting/settings/url_link.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/settings/info.dart';
-import 'package:blurting/signupquestions/welcomepage.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
-import '../colors/colors.dart';
 import '../token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
@@ -253,9 +250,7 @@ class _SettingPageState extends State<SettingPage> {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray)),
+            fontSize: 15, fontWeight: FontWeight.w700, color: mainColor.Gray),
       ),
     );
   }
@@ -265,9 +260,7 @@ class _SettingPageState extends State<SettingPage> {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            color: Color(DefinedColor.gray)),
+            fontSize: 15, fontWeight: FontWeight.w500, color: mainColor.Gray),
       ),
     );
   }
@@ -336,7 +329,7 @@ class _SettingPageState extends State<SettingPage> {
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
+                            color: mainColor.Gray),
                       ),
                     ),
                   ),

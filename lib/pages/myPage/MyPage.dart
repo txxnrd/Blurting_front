@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:blurting/pages/myPage/MyPageEdit.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/pages/mypage/mypage_edit.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
 import '../../config/app_config.dart';
 import '../../settings/setting.dart';

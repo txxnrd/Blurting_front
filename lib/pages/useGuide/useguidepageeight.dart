@@ -1,11 +1,12 @@
- import 'dart:ui';
+import 'dart:ui';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/useGuide/done.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/colors/colors.dart';
+
 import 'dart:async';
- import 'package:blurting/pages/policy/policyOne.dart';
+import 'package:blurting/pages/policy/policyOne.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -29,8 +30,6 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
 
-
- 
   bool _isImageBefore = true;
   bool _isImageMiddle = false;
   bool _isImageAfter = false;
@@ -41,7 +40,6 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
   int time = 0;
   double blurValue = 100;
   String blurImage = 'assets/images/blurafter.png';
-
 
   late final AnimationController _blurController =
       AnimationController(vsync: this, duration: Duration(seconds: 1));
@@ -68,8 +66,8 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                             ? 0.0
                             : blurValue == 0.0
                                 ? 0.0
-                                : 0.0; 
-                                         });
+                                : 0.0;
+          });
           time++;
         }
       });
@@ -93,7 +91,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _blurController.dispose();
     super.dispose();
   }
@@ -104,8 +102,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
     Navigator.of(context)
         .push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            PolicyOne(),
+        pageBuilder: (context, animation, secondaryAnimation) => PolicyOne(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -114,14 +111,13 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
         .then((_) {
       // 첫 번째 화면으로 돌아왔을 때 실행될 로직
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if(time >= 6) {
+        if (time >= 6) {
           _increaseProgressAndNavigate();
         }
       },
@@ -129,7 +125,11 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){Navigator.pop(context);}),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           backgroundColor: Colors.white, //appBar 투명색
           elevation: 0.0,
         ),
@@ -154,7 +154,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                                 fontSize: 32,
                                 fontWeight: FontWeight.w700,
                                 fontFamily: 'Pretendard',
-                                color: Color(DefinedColor.darkpink),
+                                color: mainColor.pink,
                               ),
                               children: const [
                                 TextSpan(
@@ -181,7 +181,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
-                                color: Color(DefinedColor.darkpink),
+                                color: mainColor.pink,
                                 fontFamily: 'Pretendard',
                               )),
                         ),
@@ -192,7 +192,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
-                                color: Color(DefinedColor.darkpink),
+                                color: mainColor.pink,
                                 fontFamily: 'Pretendard',
                               )),
                         ),
@@ -226,13 +226,14 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: AnimatedBuilder(
-                            animation: _blurAnimation,
-                            builder: (context, child) {
-                              return BackdropFilter(
-                                  filter: ImageFilter.blur(sigmaX: blurValue, sigmaY: blurValue),
-                                  child: Container(color: Colors.transparent));
-                            }
-                          )),
+                              animation: _blurAnimation,
+                              builder: (context, child) {
+                                return BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: blurValue, sigmaY: blurValue),
+                                    child:
+                                        Container(color: Colors.transparent));
+                              })),
                     ),
                   ],
                 ),
@@ -258,8 +259,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                         (_progressAnimation?.value ?? 0.3) -
                     32, // 좌우 패딩을 고려하여 너비 조정
                 decoration: BoxDecoration(
-                  color:
-                      Color(DefinedColor.darkpink), // 다크핑크 색상을 사용자 지정 색상으로 가정
+                  color: mainColor.pink, // 다크핑크 색상을 사용자 지정 색상으로 가정
                   borderRadius: BorderRadius.circular(4.0),
                 ),
               ),

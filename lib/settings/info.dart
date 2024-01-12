@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:blurting/config/app_config.dart';
-import 'dart:convert';
-import '../colors/colors.dart';
-import '../token.dart';
 import 'package:blurting/Utils/provider.dart';
 
 class InfoPage extends StatefulWidget {
@@ -27,9 +22,7 @@ class _InfoPageState extends State<InfoPage> {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray)),
+            fontSize: 15, fontWeight: FontWeight.w700, color: mainColor.Gray),
       ),
     );
   }
