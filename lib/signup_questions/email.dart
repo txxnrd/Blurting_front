@@ -264,7 +264,7 @@ class _EmailPageState extends State<EmailPage>
       child: PopScope(
         canPop: true,
         onPopInvoked: (didPop) {
-          _whenpoped();
+          _handleBackPress();
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
