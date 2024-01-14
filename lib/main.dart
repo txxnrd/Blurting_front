@@ -4,7 +4,7 @@ import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/startpage/startpage.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/mainApp.dart';
+import 'package:blurting/mainapp.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';

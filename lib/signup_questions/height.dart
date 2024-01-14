@@ -115,11 +115,11 @@ class _HeightPageState extends State<HeightPage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
     return PopScope(
       canPop: true,
@@ -147,7 +147,7 @@ class _HeightPageState extends State<HeightPage>
                 SizedBox(
                   height: 25,
                 ),
-                ProgressBar(context, _progressAnimation!),
+                ProgressBar(context, _progressAnimation!, _gender!),
                 SizedBox(
                   height: 50,
                 ),

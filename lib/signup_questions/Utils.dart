@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 
-enum Gender { male, female }
+enum Gender { male, female, none }
 
-Gender? selectedGender;
-
-Widget ProgressBar(BuildContext context, Animation<double> progressAnimation) {
+Widget ProgressBar(
+    BuildContext context, Animation<double> progressAnimation, Gender gender) {
   return Stack(
     clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
     children: [
-      // 전체 배경색 설정 ()
       Container(
         height: 10,
         decoration: BoxDecoration(
-          color: mainColor.lightGray, //
+          color: mainColor.lightGray,
           borderRadius: BorderRadius.circular(4.0),
         ),
       ),
@@ -33,9 +31,9 @@ Widget ProgressBar(BuildContext context, Animation<double> progressAnimation) {
             15,
         bottom: -10,
         child: Image.asset(
-          selectedGender == Gender.male
+          gender == Gender.male
               ? 'assets/man.png'
-              : selectedGender == Gender.female
+              : gender == Gender.female
                   ? 'assets/woman.png'
                   : 'assets/signupface.png', // 기본 이미지
           width: 30,

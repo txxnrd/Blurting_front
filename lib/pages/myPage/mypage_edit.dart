@@ -4,7 +4,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/mypage/Utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/signup_questions/activeplacesearch.dart';
-import 'package:blurting/mainApp.dart';
+import 'package:blurting/mainapp.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

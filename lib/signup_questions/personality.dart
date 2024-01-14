@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/utils.dart';
 import 'package:blurting/signup_questions/hobby.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -212,11 +212,11 @@ class _PersonalityPageState extends State<PersonalityPage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -241,7 +241,7 @@ class _PersonalityPageState extends State<PersonalityPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, _gender!),
               SizedBox(
                 height: 50,
               ),

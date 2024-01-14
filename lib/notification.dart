@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:blurting/mainApp.dart';
+import 'package:blurting/mainapp.dart';
 import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/whisper_tab/chattingList.dart';
 import 'package:blurting/pages/whisper_tab/whisper.dart';
