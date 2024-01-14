@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/pages/mypage/MyPage.dart';
+import 'package:blurting/pages/mypage/mypage.dart';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
