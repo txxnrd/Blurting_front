@@ -33,7 +33,7 @@ EorI? selectedEorI;
 SorN? selectedSorN;
 TorF? selectedTorF;
 JorP? selectedJorP;
-bool IsValid = true;
+bool IsValid = false;
 
 @override
 class _MyPageEditState extends State<MyPageEdit> {
@@ -390,7 +390,9 @@ class _MyPageEditState extends State<MyPageEdit> {
           MaterialPageRoute(
               builder: (context) => MainApp(
                     currentIndex: 3,
-                  ))).then((value) => setState(() {}));
+                  ))).then((value) => setState(() {
+            IsValid = false;
+          }));
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -530,6 +532,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                       ),
                                     ),
                                     onTap: () {
+                                      IsValid = false;
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                     },
@@ -559,6 +562,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                               onTap: () {
                                 if (mounted) {
                                   setState(() {
+                                    IsValid = false;
+
                                     Navigator.of(context).pop();
                                   });
                                 }
@@ -594,6 +599,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       return InkWell(
         onTap: () {
           setState(() {
+            IsValid = true;
             for (int i = 0; i < selectedreligion.length; i++) {
               selectedreligion[i] = false;
             }
@@ -624,11 +630,11 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     Widget toggleAlcohol(BuildContext context, int index, String alcohol) {
       modifiedFlags["drink"] = true;
-
       return Container(
         child: InkWell(
           onTap: () {
             setState(() {
+              IsValid = true;
               for (int i = 0; i < selectedsmoke.length; i++) {
                 selectedalcohol[i] = false;
               }
@@ -664,6 +670,7 @@ class _MyPageEditState extends State<MyPageEdit> {
         child: InkWell(
           onTap: () {
             setState(() {
+              IsValid = true;
               for (int i = 0; i < selectedsmoke.length; i++) {
                 selectedsmoke[i] = false;
               }
@@ -699,7 +706,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         toolbarHeight: 80,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -711,14 +718,6 @@ class _MyPageEditState extends State<MyPageEdit> {
             _showWarning(context);
           },
         ),
-        // flexibleSpace: Stack(
-        //   children: [
-        //     ClipRRect(
-        //         child: BackdropFilter(
-        //             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        //             child: Container(color: Colors.transparent))),
-        //   ],
-        // ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -1227,11 +1226,33 @@ class _MyPageEditState extends State<MyPageEdit> {
         ),
       ),
       floatingActionButton: Container(
-        margin: EdgeInsets.only(top: 0, bottom: 20),
+        color: Colors.white,
         child: InkWell(
-          child: signupButton(
-            text: '수정 완료',
-            IsValid: IsValid,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: IsValid ? mainColor.MainColor : mainColor.lightGray,
+            ),
+            margin: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.05,
+                vertical: 10),
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: 48,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '수정 완료',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Heebo',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
           ),
           onTap: () {
             _sendFixRequest();
