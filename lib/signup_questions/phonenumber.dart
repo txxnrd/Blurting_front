@@ -243,7 +243,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, Gender.none),
               SizedBox(
                 height: 50,
               ),

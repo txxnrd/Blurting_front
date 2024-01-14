@@ -97,6 +97,8 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
     });
   }
 
+  Gender? selectedGender = Gender.none;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -120,7 +122,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, selectedGender!),
               SizedBox(
                 height: 50,
               ),

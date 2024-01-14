@@ -10,10 +10,10 @@ import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 
 class EmailPage extends StatefulWidget {
-  final String selectedGender;
   final String domain;
+  final String selectedGender;
 
-  EmailPage({required this.selectedGender, required this.domain});
+  EmailPage({required this.domain, required this.selectedGender});
   @override
   _EmailPageState createState() => _EmailPageState();
 }
@@ -248,13 +248,12 @@ class _EmailPageState extends State<EmailPage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
-    double width = MediaQuery.of(context).size.width;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -264,7 +263,7 @@ class _EmailPageState extends State<EmailPage>
       child: PopScope(
         canPop: true,
         onPopInvoked: (didPop) {
-          _whenpoped();
+          _handleBackPress();
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -282,44 +281,7 @@ class _EmailPageState extends State<EmailPage>
                 SizedBox(
                   height: 25,
                 ),
-                Stack(
-                  clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                  children: [
-                    // 전체 배경색 설정 ()
-                    Container(
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFD9D9D9), //
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                    ),
-                    // 완료된 부분 배경색 설정
-                    Container(
-                      height: 10,
-                      width: MediaQuery.of(context).size.width *
-                          (_progressAnimation?.value ?? 0.3),
-                      decoration: BoxDecoration(
-                        color: mainColor.black,
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                    ),
-                    Positioned(
-                      left: MediaQuery.of(context).size.width *
-                              (_progressAnimation?.value ?? 0.3) -
-                          15,
-                      bottom: -10,
-                      child: Image.asset(
-                        gender == Gender.male
-                            ? 'assets/man.png'
-                            : gender == Gender.female
-                                ? 'assets/woman.png'
-                                : 'assets/signupface.png', // 기본 이미지
-                        width: 30,
-                        height: 30,
-                      ),
-                    )
-                  ],
-                ),
+                ProgressBar(context, _progressAnimation!, _gender!),
                 SizedBox(
                   height: 50,
                 ),

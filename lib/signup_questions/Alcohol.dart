@@ -106,11 +106,11 @@ class _AlcoholPageState extends State<AlcoholPage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
     return PopScope(
@@ -133,7 +133,7 @@ class _AlcoholPageState extends State<AlcoholPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, _gender!),
               SizedBox(
                 height: 50,
               ),

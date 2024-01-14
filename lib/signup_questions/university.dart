@@ -7,6 +7,7 @@ import 'package:blurting/utils/util_widget.dart';
 
 class UniversityPage extends StatefulWidget {
   final String selectedGender;
+
   UniversityPage({super.key, required this.selectedGender});
   @override
   _UniversityPageState createState() => _UniversityPageState();
@@ -25,8 +26,10 @@ class _UniversityPageState extends State<UniversityPage>
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            EmailPage(selectedGender: widget.selectedGender, domain: Domain),
+        pageBuilder: (context, animation, secondaryAnimation) => EmailPage(
+          domain: Domain,
+          selectedGender: widget.selectedGender,
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -64,15 +67,12 @@ class _UniversityPageState extends State<UniversityPage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
-
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
-    double width = MediaQuery.of(context).size.width;
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -94,7 +94,7 @@ class _UniversityPageState extends State<UniversityPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, _gender!),
               SizedBox(
                 height: 50,
               ),
@@ -145,7 +145,7 @@ class _UniversityPageState extends State<UniversityPage>
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFF66464),
+                          color: mainColor.pink,
                         ), // 선택/포커스 됐을 때 테두리 색상
                       ),
                     ),

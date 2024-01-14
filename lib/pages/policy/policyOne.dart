@@ -1,4 +1,4 @@
-import 'package:blurting/mainApp.dart';
+import 'package:blurting/mainapp.dart';
 import 'package:blurting/pages/useguide/done.dart';
 import 'package:blurting/pages/policy/policyFive.dart';
 import 'package:blurting/pages/policy/policyFour.dart';
