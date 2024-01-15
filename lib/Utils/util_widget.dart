@@ -240,7 +240,6 @@ class pointAppbar extends StatelessWidget {
       margin: EdgeInsets.only(top: 20),
       child: InkWell(
           onTap: () {
-            print('포인트 내역 버튼 눌러짐');
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => PointHistoryPage()),
@@ -672,14 +671,11 @@ class _AnswerItemState extends State<AnswerItem> {
   int likedNum = 0;
 
   Future<void> sendReport(IO.Socket socket, String reason) async {
-    print(reason);
     Map<String, dynamic> data = {
       'reportingId': widget.userId,
       'reason': reason
     };
     widget.socket.emit('report', data);
-
-    print('신고 내용 서버에 전송 완료 $data');
   }
 
   // 신고하시겠습니까? 모달 띄우는 함수
@@ -690,13 +686,10 @@ class _AnswerItemState extends State<AnswerItem> {
     List<bool> checkReason = [false, false, false];
     String reason = '';
 
-    print(checkReason);
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
-          print(checkReason);
           Colors.white;
           return AlertDialog(
             surfaceTintColor: Colors.white,
@@ -825,7 +818,7 @@ class _AnswerItemState extends State<AnswerItem> {
                             (checkReason.any((element) => element == true))
                                 ? () {
                                     Navigator.of(context).pop(); // 모달 닫기
-                                    print('신고 접수');
+
                                     sendReport(widget.socket, reason);
                                     setState(() {});
                                   }
@@ -926,7 +919,6 @@ class _AnswerItemState extends State<AnswerItem> {
                                     onTap: () {
                                       _ClickWarningButton(context,
                                           widget.userId); // jsonData 줘야 함
-                                      print('신고 버튼 눌림');
                                     },
                                   ),
                                 ),
@@ -1478,8 +1470,6 @@ class _AnswerItemState extends State<AnswerItem> {
   }
 
   Future<void> changeLike(int answerId) async {
-    print('좋아요 누름');
-
     // answerId 보내
     final url = Uri.parse('${API.like}$answerId');
     String savedToken = await getToken();
@@ -1498,21 +1488,13 @@ class _AnswerItemState extends State<AnswerItem> {
         }
 
         iLike = !(iLike);
-
-        print(answerId);
       });
     }
     if (response.statusCode == 200) {
-      print('요청 성공');
-      print(response.body);
-    } else {
-      print(response.statusCode);
-    }
+    } else {}
   }
 
   Future<void> checkPoint() async {
-    print('포인트 확인');
-
     final url = Uri.parse(API.pointcheck);
     String savedToken = await getToken();
 
@@ -1524,29 +1506,20 @@ class _AnswerItemState extends State<AnswerItem> {
     dynamic responseData = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      print('요청 성공');
-      print(response.body);
-
       if (responseData == false) {
-        print('포인트 부족');
         if (mounted) {
           setState(() {
             enoughPoint = false;
             isTap(false);
-            print(enoughPoint);
-            print(isValid);
           });
         }
       }
     } else {
-      print(response.statusCode);
       throw Exception('프로필을 로드하는 데 실패했습니다');
     }
   }
 
   Future<void> startWhisper() async {
-    print('귓속말 걸기');
-
     final url = Uri.parse(API.pointchat);
     String savedToken = await getToken();
 
@@ -1560,18 +1533,12 @@ class _AnswerItemState extends State<AnswerItem> {
     dynamic responseData = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
-      print('요청 성공');
-
-      print(responseData);
-
       if (responseData != false) {
         // 귓속말을 걸 수 있으면
         widget.socket.emit('create_room', widget.userId);
-        print("${widget.userId}에게 귓속말 거는 중...");
 
         Provider.of<UserProvider>(context, listen: false).point =
             responseData['point'];
-        print('귓속말 포인트 차감: $responseData');
       } else {
         // 신고한 회원 또는 탈퇴한 회원
         setState(() {
@@ -1579,7 +1546,6 @@ class _AnswerItemState extends State<AnswerItem> {
         });
       }
     } else {
-      print(response.statusCode);
       throw Exception('프로필을 로드하는 데 실패했습니다');
     }
   }

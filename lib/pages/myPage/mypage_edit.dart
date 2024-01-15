@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/pages/mypage/Utils.dart';
+import 'package:blurting/pages/mypage/utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/signup_questions/activeplacesearch.dart';
 import 'package:blurting/mainapp.dart';
@@ -97,14 +97,13 @@ class _MyPageEditState extends State<MyPageEdit> {
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
           image_uploaded_count += 1;
-          print('Server returned OK');
-          print('Response body: ${response.data}');
+
           var urlList = response.data;
           if (urlList.isNotEmpty &&
               urlList[0] is Map &&
               urlList[0].containsKey('url')) {
             String imageUrl = urlList[0]['url'];
-            print('Image $imageNumber URL: $imageUrl');
+
             setState(() {
               if (imageNumber == 1) {
                 _image1Url = imageUrl;
@@ -117,13 +116,8 @@ class _MyPageEditState extends State<MyPageEdit> {
               modifiedFlags["image"] = true;
             });
           }
-        } else {
-          print('Request failed with status: ${response.statusCode}.');
-        }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-      }
+        } else {}
+      } catch (e, stacktrace) {}
     }
   }
 
@@ -131,13 +125,11 @@ class _MyPageEditState extends State<MyPageEdit> {
   void IsHobbySelected(int index) {
     modifiedFlags["hobby"] = true;
     var true_length = isValidHobbyList.where((item) => item == true).length;
-    print(true_length);
+
     if (true_length >= 4 && isValidHobbyList[index] == false) {
-      print("여기");
       showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
       return;
     } else {
-      print("저기");
       isValidHobbyList[index] = !isValidHobbyList[index];
       if (isValidHobbyList.any((isValid) => isValid)) {
         IsValid = true;
@@ -150,13 +142,11 @@ class _MyPageEditState extends State<MyPageEdit> {
   void IsCharacterSelected(index) {
     modifiedFlags["character"] = true;
     var true_length = isValidCharacterList.where((item) => item == true).length;
-    print(true_length);
+
     if (true_length >= 4 && isValidCharacterList[index] == false) {
-      print("여기");
       showSnackBar(context, "성격은 최대 4개까지 고를 수 있습니다.");
       return;
     } else {
-      print("저기");
       isValidCharacterList[index] = !isValidCharacterList[index];
       if (isValidCharacterList.any((isValid) => isValid)) {
         IsValid = true;
@@ -217,11 +207,11 @@ class _MyPageEditState extends State<MyPageEdit> {
   void initState() {
     super.initState();
     content = "";
-    print(content);
+
     _image1Url = widget.data['images'][0];
     _image2Url = widget.data['images'][1];
     _image3Url = widget.data['images'][2];
-    print(_image1Url);
+
     // selectedreligion 초기화
     selectedreligion = [false, false, false, false, false];
 
@@ -298,7 +288,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     List<String> selectedCharacteristics = [];
     List<String> selectedHobby = [];
 
-    print('_sendFixRequest called');
     var mbti = getMBTIType();
 
     if (modifiedFlags["character"] == true) {
@@ -352,9 +341,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     var url = Uri.parse(API.userupdate);
     String savedToken = await getToken();
-    print(savedToken);
-    print(selectedHobby);
-    print(selectedCharacteristics);
+
     var new_region = (content == "" ? region : content);
     var response = await http.post(
       url,
@@ -378,11 +365,9 @@ class _MyPageEditState extends State<MyPageEdit> {
       }), // JSON 형태로 인코딩
     );
 
-    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       _showEditsuccess("수정에 성공하였습니다.");
       sleep(const Duration(seconds: 2));
       Navigator.push(
@@ -390,12 +375,8 @@ class _MyPageEditState extends State<MyPageEdit> {
           MaterialPageRoute(
               builder: (context) => MainApp(
                     currentIndex: 3,
-                  ))).then((value) => setState(() {
-            IsValid = false;
-          }));
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+                  ))).then((value) => setState(() {}));
+    } else {}
   }
 
   void _showEditsuccess(value) {

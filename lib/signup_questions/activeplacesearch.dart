@@ -27,7 +27,7 @@ class _SearchPage extends State<SearchPage> {
 
   void cardClickEvent(BuildContext context, int index) {
     String content = filteredItems[index];
-    // print(content);
+    //
     Navigator.pop(context, content);
 
     // Navigator.pop(context); // 뒤로가기 버튼을 눌렀을 때의 동작
@@ -111,7 +111,6 @@ class _SearchPage extends State<SearchPage> {
                     padding: EdgeInsets.all(0),
                   ),
                   onPressed: () async {
-                    print("현위치 검색 버튼 클릭됨");
                     searchByLocation = true;
                     await searchCurrentLocation();
                   },
@@ -131,15 +130,6 @@ class _SearchPage extends State<SearchPage> {
                     // items 변수에 저장되어 있는 모든 값 출력
                     itemCount: filteredItems.length,
                     itemBuilder: (BuildContext currentcontext, int index) {
-                      // // 검색 기능, 검색어가 있을 경우
-                      // if (searchText.isNotEmpty &&
-                      //     !items[index]
-                      //         .toLowerCase()
-                      //         .contains(searchText.toLowerCase())) {
-                      //   return SizedBox.shrink();
-                      // }
-                      // // 검색어가 없을 경우, 모든 항목 표시
-                      // else {
                       return Card(
                         elevation: 0,
                         // shadowColor: null,
@@ -200,17 +190,16 @@ class _SearchPage extends State<SearchPage> {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      print("위도,경도" + "${position.longitude}" + "," + "${position.latitude}");
+
       // double new_longtitude = position.longitude;
 
       final String apiUrl =
           '${API.geobygeo}?geo=point%28${position.longitude}%20${position.latitude}%29}';
-      print(apiUrl);
+
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
         // 서버 응답이 성공한 경우
-        print('서버 응답: ${response.body}');
 
         // 서버 응답을 사용하여 검색 결과 업데이트
         List<String> serverResponse =
@@ -221,12 +210,8 @@ class _SearchPage extends State<SearchPage> {
         });
       } else {
         // 서버 응답이 에러인 경우
-        print('에러: ${response.statusCode}');
-        print('에러 메시지: ${response.body}');
       }
-    } catch (e) {
-      print('Error getting location: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> searchByLocationName() async {
@@ -234,19 +219,15 @@ class _SearchPage extends State<SearchPage> {
 
     final String apiUrl = '${API.geobyname}?name=$searchText';
     final response = await http.get(Uri.parse(apiUrl));
-    print('검색어: $searchText');
+
     if (response.statusCode == 200) {
-      print('서버 응답: ${response.body}');
       List<String> serverResponse =
           (json.decode(response.body) as List<dynamic>).cast<String>();
       setState(() {
         itemsByName = serverResponse;
         filterItems();
       });
-    } else {
-      print('에러: ${response.statusCode}');
-      print('에러 메시지: ${response.body}');
-    }
+    } else {}
   }
 
   // 검색어에 따라 리스트 필터링하는 함수

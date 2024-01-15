@@ -80,10 +80,10 @@ class _HeightPageState extends State<HeightPage>
       showSnackBar(context, "유효한 키 정보를 입력해주세요");
       return;
     }
-    print('_sendPostRequest called');
+
     var url = Uri.parse(API.signup);
     String savedToken = await getToken();
-    print(savedToken);
+
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -92,24 +92,20 @@ class _HeightPageState extends State<HeightPage>
       },
       body: json.encode({"height": height}), // JSON 형태로 인코딩
     );
-    print(response.body);
-    print(json.encode({"height": height}));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-        print(token);
+
         await saveToken(token);
         _increaseProgressAndNavigate();
       } else {}
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
     }
   }
 

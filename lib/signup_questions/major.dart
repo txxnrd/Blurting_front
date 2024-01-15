@@ -181,7 +181,6 @@ class _MajorPageState extends State<MajorPage>
       _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
-
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {

@@ -21,7 +21,6 @@ DateTime _parseDateTime(String? dateTimeString) {
   try {
     return DateTime.parse(dateTimeString);
   } catch (e) {
-    print('Error parsing DateTime: $e');
     return DateTime.now(); // 혹은 다른 기본 값으로 대체
   }
 }
@@ -70,12 +69,12 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    print('홈으로 옴');
+
     cardItems = [];
     initializePages(); //위젯 생성 될 때 불러와야하는 정보들
     updateRemainingTime();
 
-    // print(futureHome);
+    //
   }
 
   Future<void> initializePages() async {
@@ -83,8 +82,6 @@ class _HomeState extends State<Home> {
     await fetchPoint();
 
     futureHome = fetchHome(context);
-
-    print('object');
   }
 
   void updateRemainingTime() {
@@ -95,9 +92,7 @@ class _HomeState extends State<Home> {
         });
         updateRemainingTime();
       } // 다음 업데이트 예약
-      else {
-        print("0초남음");
-      }
+      else {}
     });
   }
 
@@ -112,7 +107,6 @@ class _HomeState extends State<Home> {
   void mvpName(int index) {
     setState(() {
       _mvpName = cardItems[index].userName;
-      print(_mvpName);
     });
   }
 
@@ -235,7 +229,6 @@ class _HomeState extends State<Home> {
                           height: 13,
                           child: InkWell(
                               onTap: () {
-                                print("눌림");
                                 answercontroller.animateTo(
                                     answercontroller.position.maxScrollExtent,
                                     duration: Duration(milliseconds: 500),
@@ -478,7 +471,6 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> fetchData() async {
-    print('home data 불러오기 시작');
     String savedToken = await getToken();
 
     final response =
@@ -490,7 +482,6 @@ class _HomeState extends State<Home> {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      print('Server Response: $data'); // Add this line to print server response
 
       try {
         if (mounted) {
@@ -524,24 +515,19 @@ class _HomeState extends State<Home> {
             remainingTime = Duration(milliseconds: milliseconds);
           });
         }
-      } catch (e) {
-        print('error: home data');
-      }
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      print('home 정보 불러오기 401');
+
       await getnewaccesstoken(context, fetchData);
     } else {
       throw Exception('Failed to load data');
     }
-
-    print('home data 불러오기 complete');
   }
 
   Future<void> fetchPoint() async {
     // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
-    print('point 불러오기 시작');
 
     final url = Uri.parse(API.userpoint);
     String savedToken = await getToken();
@@ -566,25 +552,17 @@ class _HomeState extends State<Home> {
                 responseData['point'];
           });
         }
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+      } catch (e) {}
     } else if (response.statusCode == 401) {
-      print('point 불러오기 401');
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchPoint);
     } else {
-      print(response.statusCode);
       throw Exception('point : 잔여 포인트를 로드하는 데 실패했습니다');
     }
   }
 
   Future<void> changeLike(int answerId, int index) async {
-    print('좋아요 누름');
-
     // answerId 보내
     final url = Uri.parse(API.homeLike);
     String savedToken = await getToken();
@@ -597,9 +575,6 @@ class _HomeState extends State<Home> {
         body: json.encode({'answerId': answerId}));
 
     if (response.statusCode == 200) {
-      print('요청 성공');
-      print(response.body);
-
       if (mounted) {
         setState(() {
           if (!cardItems[index].ilike) {
@@ -611,9 +586,7 @@ class _HomeState extends State<Home> {
           cardItems[index].ilike = !cardItems[index].ilike;
         });
       }
-    } else {
-      print(response.statusCode);
-    }
+    } else {}
   }
 }
 

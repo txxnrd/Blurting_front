@@ -267,17 +267,17 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
       'Content-Type': 'application/json',
     });
 
-    if (response.statusCode == 201) {
-      print('요청 성공');
-      print('등록 완료');
-      print('Response body: ${response.body}');
-    } else if (response.statusCode == 400) {
-      print('매칭 중');
-    } else if (response.statusCode == 409) {
-      print('매칭 완료');
-    } else {
-      print(response.statusCode);
-      throw Exception('매칭 등록 실패');
-    }
+    // if (response.statusCode == 201) {
+    //   print('요청 성공');
+    //   print('등록 완료');
+    //   print('Response body: ${response.body}');
+    // } else if (response.statusCode == 400) {
+    //   print('매칭 중');
+    // } else if (response.statusCode == 409) {
+    //   print('매칭 완료');
+    // } else {
+    //   print(response.statusCode);
+    //   throw Exception('매칭 등록 실패');
+    // }
   }
 }

@@ -60,7 +60,6 @@ class _SmokePageState extends State<SmokePage>
   }
 
   Future<void> _sendPostRequest() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
     var cigarette = 0;
     if (_selectedSmokePreference == SmokePreference.none) {
@@ -73,8 +72,7 @@ class _SmokePageState extends State<SmokePage>
       cigarette = 3;
     }
     String savedToken = await getToken();
-    print(savedToken);
-    print(json.encode({"cigarette": cigarette})); // JSON 형태로 인코딩)
+
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -83,22 +81,20 @@ class _SmokePageState extends State<SmokePage>
       },
       body: json.encode({"cigarette": cigarette}), // JSON 형태로 인코딩
     );
-    print(response.body);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-        print(token);
+
         await saveToken(token);
         _increaseProgressAndNavigate();
       }
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
     }
   }
 

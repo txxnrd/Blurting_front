@@ -32,22 +32,18 @@ class _NotificationandSoundState extends State<NotificationandSound> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
       if (response.body == "true") {
         fcmstate = true;
       }
       setState(() {
         _notificationSettings = fcmstate;
       });
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   Future<void> _sendEnableNotificationRequest() async {
     String savedToken = await getToken();
-    print("알림 켜기 시도");
+
     var url = Uri.parse(API.notification);
     var fcmToken = await FirebaseMessaging.instance.getToken(
         vapidKey:
@@ -61,16 +57,12 @@ class _NotificationandSoundState extends State<NotificationandSound> {
       body: json.encode({"token": fcmToken}),
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   Future<void> _sendDisableNotificationRequest() async {
     String savedToken = await getToken();
-    print("알림 끄기 시도");
+
     var url = Uri.parse(API.disable);
     var response = await http.get(
       url,
@@ -80,11 +72,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   @override

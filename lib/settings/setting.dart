@@ -30,7 +30,6 @@ class _SettingPageState extends State<SettingPage> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
       if (response.body == "true") {
         fcmstate = true;
       }
@@ -39,10 +38,7 @@ class _SettingPageState extends State<SettingPage> {
         MaterialPageRoute(
             builder: (context) => NotificationandSound(fcmstate: fcmstate)),
       );
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   int count = 10;
@@ -172,10 +168,8 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Future<void> _sendDeleteRequest() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.user);
     String savedToken = await getToken();
-    print(savedToken);
 
     var response = await http.delete(
       url,
@@ -184,7 +178,7 @@ class _SettingPageState extends State<SettingPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-    print(response.body);
+
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 204) {
@@ -195,7 +189,7 @@ class _SettingPageState extends State<SettingPage> {
       showSnackBar(context, "계정 삭제가 완료되었습니다.");
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -208,7 +202,6 @@ class _SettingPageState extends State<SettingPage> {
   String phoneNumber = "";
 
   Future<void> _getuserinfo() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.userinfo);
     String savedToken = await getToken();
     var response = await http.get(
@@ -218,13 +211,10 @@ class _SettingPageState extends State<SettingPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-    print(response.body);
+
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 204) {
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-
       var data = json.decode(response.body);
       phoneNumber = data['phoneNumber'];
       email = data['email'];
@@ -236,7 +226,7 @@ class _SettingPageState extends State<SettingPage> {
       );
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)

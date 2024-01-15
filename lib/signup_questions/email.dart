@@ -91,9 +91,7 @@ class _EmailPageState extends State<EmailPage>
 
   int trial = 0;
   Future<void> _handleBackPress() async {
-    print("trial: $trial");
     if (trial > 0) {
-      print("old_token: $old_token");
       await saveToken(old_token);
       trial = 0;
     }
@@ -107,13 +105,12 @@ class _EmailPageState extends State<EmailPage>
     if (trial == 0) {
       try {
         trial += 1;
-        print("trial:$trial");
+
         certification = true;
-        print('_sendPostRequest called');
+
         var url = Uri.parse(API.signupemail);
 
         old_token = await getToken();
-        print("old token" + old_token);
 
         var response = await http.post(
           url,
@@ -124,42 +121,34 @@ class _EmailPageState extends State<EmailPage>
           body: json.encode({"email": Email + '@' + widget.domain}),
         );
 
-        print(json.encode({"email": Email + '@' + widget.domain}));
-
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Server returned OK');
-          print('Response body: ${response.body}');
-
           var data = json.decode(response.body);
           if (data['signupToken'] != null && trial > 0) {
             var token = data['signupToken'];
-            print(token);
+
             await saveToken(token);
           } else {
             showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
           }
         } else {
           trial = 0;
-          print('Request failed with status: ${response.statusCode}.');
-          print('Response body: ${response.body}');
+
           var data = json.decode(response.body);
           var message = data['message'];
           showSnackBar(context, message);
         }
       } catch (e) {
         trial = 0;
-        print('An error occurred: $e');
+
         showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
       }
     }
   }
 
   Future<void> _sendVerificationRequest() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.signup);
 
     String savedToken = await getToken();
-    print(savedToken);
 
     var response = await http.post(
       url,
@@ -171,25 +160,23 @@ class _EmailPageState extends State<EmailPage>
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK 200');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
       if (data['accessToken'] != null) {
         var token = data['accessToken'];
         var refreshtoken = data['refreshToken'];
         var userId = data['userId'];
-        print(token);
+
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
         await saveuserId(userId);
         var url = Uri.parse(API.notification);
         String savedToken = await getToken();
-        print(savedToken);
+
         var fcmToken = await FirebaseMessaging.instance.getToken(
             vapidKey:
                 "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-        print("-------");
-        print(fcmToken);
+
         var response = await http.post(
           url,
           headers: <String, String>{
@@ -198,7 +185,6 @@ class _EmailPageState extends State<EmailPage>
           },
           body: json.encode({"token": fcmToken}),
         );
-        print(response);
 
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
@@ -232,8 +218,7 @@ class _EmailPageState extends State<EmailPage>
       }
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
+
       showSnackBar(context, '인증이 완료가 되지 않았습니다.');
       if (response.statusCode == 409) showSnackBar(context, '이미 가입한 이메일입니다.');
     }

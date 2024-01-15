@@ -80,14 +80,13 @@ class ImagePageState extends State<ImagePage>
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
           image_uploaded_count += 1;
-          print('Server returned OK');
-          print('Response body: ${response.data}');
+
           var urlList = response.data;
           if (urlList.isNotEmpty &&
               urlList[0] is Map &&
               urlList[0].containsKey('url')) {
             String imageUrl = urlList[0]['url'];
-            print('Image $imageNumber URL: $imageUrl');
+
             setState(() {
               if (imageNumber == 1) {
                 _image1Url = imageUrl;
@@ -101,13 +100,8 @@ class ImagePageState extends State<ImagePage>
                   image_uploaded_count >= 3) IsValid = true;
             });
           }
-        } else {
-          print('Request failed with status: ${response.statusCode}.');
-        }
-      } catch (e, stacktrace) {
-        print('Error: $e');
-        print('Stacktrace: $stacktrace');
-      }
+        } else {}
+      } catch (e, stacktrace) {}
     }
   }
 
@@ -152,12 +146,11 @@ class ImagePageState extends State<ImagePage>
   }
 
   Future<void> _sendPostRequest() async {
-    print('_sendPostRequest called');
     String savedToken = await getToken();
-    print(savedToken);
+
     Dio dio = Dio();
     var url2 = Uri.parse(API.signupimage);
-    print([_image1Url, _image2Url, _image3Url]);
+
     try {
       var response = await dio.post(
         url2.toString(),
@@ -172,25 +165,18 @@ class ImagePageState extends State<ImagePage>
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-        print("signupimagerequestsuccess");
-        print('Server returned OK');
-        print('Response body: ${response.data}');
 
         var data = (response.data);
 
         var token = data['signupToken'];
-        print("token 분해 완료");
+
         await saveToken(token);
-        print("token 저장 완료");
+
         _increaseProgressAndNavigate();
       } else {
         // 오류가 발생한 경우 처리
-        print('Request failed with status: ${response.statusCode}.');
       }
-    } catch (e, stacktrace) {
-      print('Error: $e');
-      print('Stacktrace: $stacktrace');
-    }
+    } catch (e, stacktrace) {}
   }
 
   @override

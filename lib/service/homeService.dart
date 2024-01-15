@@ -19,15 +19,15 @@ Future<List<home>> fetchHome(BuildContext context) async {
   if (response.statusCode == 200) {
     final responseBody = json.decode(response.body);
 
-    final List<home> Home = (responseBody['answers'] as List).map<home>((json) => home.fromJson(json)).toList();
+    final List<home> Home = (responseBody['answers'] as List)
+        .map<home>((json) => home.fromJson(json))
+        .toList();
 
     return Home;
   } else if (response.statusCode == 401) {
-    print('home 정보 불러오기 401');
     // ignore: use_build_context_synchronously
-    await getnewaccesstoken(context, () async {
-      print('Callback0 called');
-    }, fetchHome, context, null, null);
+    await getnewaccesstoken(
+        context, () async {}, fetchHome, context, null, null);
     return [];
   } else {
     throw Exception('Failed to load data');

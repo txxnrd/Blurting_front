@@ -27,7 +27,6 @@ DateTime _parseDateTime(String? dateTimeString) {
   try {
     return DateTime.parse(dateTimeString);
   } catch (e) {
-    print('Error parsing DateTime: $e');
     return DateTime.now(); // 혹은 다른 기본 값으로 대체
   }
 }
@@ -97,12 +96,7 @@ class _GroupChat extends State<GroupChat> {
       // 맨 처음 들어왔을 땐 마지막...
       await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
 
-      print(_questionNumber);
-
       socket.on('create_room', (data) {
-        print(data);
-        print('${data['nickname']}, ${data['roomId']}');
-
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -117,13 +111,9 @@ class _GroupChat extends State<GroupChat> {
         });
       });
 
-      socket.on('connect', (_) {
-        print('소켓 연결됨');
-      });
+      socket.on('connect', (_) {});
 
-      socket.on('disconnect', (_) {
-        print('소켓 연결 끊김');
-      });
+      socket.on('disconnect', (_) {});
     }
 
     initializeSocket();
@@ -145,7 +135,6 @@ class _GroupChat extends State<GroupChat> {
     setState(() {
       lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
     });
-    print('마지막으로 들어온 시간: $lastTime');
 
     // Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
   }
@@ -448,7 +437,6 @@ class _GroupChat extends State<GroupChat> {
             currentIndex = _questionNumber;
             currentQuestionId = responseData['questionId'];
 
-            print(currentIndex);
             answerList[currentIndex].clear();
 
             Duration timeDifference =
@@ -500,18 +488,12 @@ class _GroupChat extends State<GroupChat> {
             }
           });
         }
-
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
     } else {
-      print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
   }
@@ -541,8 +523,6 @@ class _GroupChat extends State<GroupChat> {
             currentIndex = responseData['questionNo'];
             _question = responseData['question'];
             currentQuestionId = responseData['questionId'];
-
-            print(currentIndex);
           });
 
           for (final answerData in responseData['answers']) {
@@ -580,19 +560,13 @@ class _GroupChat extends State<GroupChat> {
             });
           }
         }
-
-        print('Response body: ${response.body}');
-      } catch (e) {
-        print('Error decoding JSON: $e');
-        print('Response body: ${response.body}');
-      }
+      } catch (e) {}
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       getnewaccesstoken(
           context, () async {}, fetchIndexComments, no, null, null);
     } else {
-      print(response.statusCode);
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
     }
   }
@@ -622,17 +596,13 @@ class _GroupChat extends State<GroupChat> {
         Map responseData = jsonDecode(response.body);
         Provider.of<UserProvider>(context, listen: false).point =
             responseData['point'];
-        print(Provider.of<UserProvider>(context, listen: false).point);
-      } else {
-        print('포인트 반환 X');
-      }
+      } else {}
 
       // 성공적으로 응답
       if (mounted) {
         setState(() {
           isBlock[currentIndex] = true; // true가 맞음
           answerList[currentIndex].add(newAnswer);
-          print(response.body);
         });
       }
     } else if (response.statusCode == 401) {
@@ -640,9 +610,6 @@ class _GroupChat extends State<GroupChat> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(
           context, () async {}, null, null, SendAnswer, [answer, questionId]);
-    } else {
-      print('요청 실패');
-      print(response.statusCode);
-    }
+    } else {}
   }
 }
