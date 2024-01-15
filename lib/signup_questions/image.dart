@@ -1,7 +1,7 @@
 import 'package:blurting/signup_questions/university.dart';
+import 'package:blurting/signup_questions/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signup_questions/Utils.dart';
 import 'package:dio/dio.dart';
 import '../config/app_config.dart';
 import 'dart:io';
@@ -110,8 +110,9 @@ class ImagePageState extends State<ImagePage>
     Navigator.of(context)
         .push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            UniversityPage(selectedGender: widget.selectedGender),
+        pageBuilder: (context, animation, secondaryAnimation) => UniversityPage(
+          selectedGender: widget.selectedGender,
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -180,13 +181,12 @@ class ImagePageState extends State<ImagePage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
-    double width = MediaQuery.of(context).size.width;
 
     return PopScope(
       canPop: true,
@@ -208,7 +208,7 @@ class ImagePageState extends State<ImagePage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, _gender!),
               SizedBox(
                 height: 50,
               ),

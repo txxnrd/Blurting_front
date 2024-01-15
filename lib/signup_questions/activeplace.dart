@@ -135,91 +135,92 @@ class _ActivePlacePageState extends State<ActivePlacePage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
 
     return PopScope(
-        canPop: true,
-        onPopInvoked: (didPop) {
-          sendBackRequest(context, false);
-        },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
+      canPop: true,
+      onPopInvoked: (didPop) {
+        sendBackRequest(context, false);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            title: Text(''),
-            elevation: 0,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 25,
-                ),
-                ProgressBar(context, _progressAnimation!),
-                SizedBox(
-                  height: 50,
-                ),
-                TitleQuestion("주로 활동하는 지역이 어디인가요?"),
-                SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {
-                    goToSearchPage(context);
+          title: Text(''),
+          elevation: 0,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+              ),
+              ProgressBar(context, _progressAnimation!, _gender!),
+              SizedBox(
+                height: 50,
+              ),
+              TitleQuestion("주로 활동하는 지역이 어디인가요?"),
+              SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  goToSearchPage(context);
 
-                    setState(() {});
-                  },
-                  child: Container(
-                      width: width * 1, // 원하는 너비 값
-                      height: 48, // 원하는 높이 값
-                      child: Container(
-                        padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: (content == '')
-                                ? mainColor.lightGray
-                                : mainColor.pink, // 초기 테두리 색상
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
+                  setState(() {});
+                },
+                child: Container(
+                    width: width * 1, // 원하는 너비 값
+                    height: 48, // 원하는 높이 값
+                    child: Container(
+                      padding: EdgeInsets.all(10.0), // 내부 패딩 조절 가능
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: (content == '')
+                              ? mainColor.lightGray
+                              : mainColor.pink, // 초기 테두리 색상
+                          width: 2,
                         ),
-                        child: Text(
-                          (content == '') ? '구명으로 검색 (ex. 강남구)' : content,
-                          style: TextStyle(
-                            color: mainColor.black,
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Text(
+                        (content == '') ? '구명으로 검색 (ex. 강남구)' : content,
+                        style: TextStyle(
+                          color: mainColor.black,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
                         ),
-                      )),
-                ),
-                SizedBox(height: 331),
-              ],
-            ),
+                      ),
+                    )),
+              ),
+              SizedBox(height: 331),
+            ],
           ),
-          floatingActionButton: Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-            child: InkWell(
-              splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-              child: signupButton(text: '다음', IsValid: IsValid),
-              onTap: (IsValid)
-                  ? () {
-                      _sendPostRequest();
-                    }
-                  : null,
-            ),
+        ),
+        floatingActionButton: Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+          child: InkWell(
+            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+            child: signupButton(text: '다음', IsValid: IsValid),
+            onTap: (IsValid)
+                ? () {
+                    _sendPostRequest();
+                  }
+                : null,
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked, // 버튼의 위치
-        ));
+        ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+      ),
+    );
   }
 }
 

@@ -2,7 +2,7 @@ import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/mainApp.dart';
+import 'package:blurting/mainapp.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
 

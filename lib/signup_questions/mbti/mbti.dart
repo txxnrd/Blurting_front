@@ -4,7 +4,7 @@ import 'package:blurting/signup_questions/mbti/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/utils.dart';
 import 'package:blurting/signup_questions/personality.dart';
 import 'package:http/http.dart' as http;
 import '../../config/app_config.dart';
@@ -126,11 +126,11 @@ class _MBTIPageState extends State<MBTIPage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
 
@@ -154,7 +154,7 @@ class _MBTIPageState extends State<MBTIPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, _gender!),
               SizedBox(
                 height: 50,
               ),

@@ -152,11 +152,11 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
 
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
 
@@ -180,7 +180,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, _gender!),
               SizedBox(
                 height: 50,
               ),

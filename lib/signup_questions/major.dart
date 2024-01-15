@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
-import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/signup_questions/utils.dart';
 import 'package:blurting/signup_questions/mbti/mbti.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'majorlist.dart';
@@ -121,67 +121,66 @@ class _MajorPageState extends State<MajorPage>
     );
   }
 
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+    print(_selectedMajor);
+    var major = '';
+    if (_selectedMajor == Major.humanities) {
+      major = '인문계열';
+    } else if (_selectedMajor == Major.social) {
+      major = '사회계열';
+    } else if (_selectedMajor == Major.education) {
+      major = '교육계열';
+    } else if (_selectedMajor == Major.engineering) {
+      major = '공학계열';
+    } else if (_selectedMajor == Major.naturalScience) {
+      major = '자연계열';
+    } else if (_selectedMajor == Major.medical) {
+      major = '의학계열';
+    } else {
+      major = '예체능계열';
+    }
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"major": major}), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if (data['signupToken'] != null) {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      } else {}
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
+    Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
-      gender = Gender.male;
+      _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
-      gender = Gender.female;
+      _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
-
-    Future<void> _sendPostRequest() async {
-      ;
-      var url = Uri.parse(API.signup);
-      ;
-      var major = '';
-      if (_selectedMajor == Major.humanities) {
-        major = '인문계열';
-      } else if (_selectedMajor == Major.social) {
-        major = '사회계열';
-      } else if (_selectedMajor == Major.education) {
-        major = '교육계열';
-      } else if (_selectedMajor == Major.engineering) {
-        major = '공학계열';
-      } else if (_selectedMajor == Major.naturalScience) {
-        major = '자연계열';
-      } else if (_selectedMajor == Major.medical) {
-        major = '의학계열';
-      } else {
-        major = '예체능계열';
-      }
-
-      String savedToken = await getToken();
-      ;
-
-      var response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
-        },
-        body: json.encode({"major": major}), // JSON 형태로 인코딩
-      );
-      ;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-        ;
-        ;
-        var data = json.decode(response.body);
-
-        if (data['signupToken'] != null) {
-          var token = data['signupToken'];
-          ;
-          await saveToken(token);
-          _increaseProgressAndNavigate();
-        } else {}
-      } else {
-        // 오류가 발생한 경우 처리
-        ;
-      }
-    }
-
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
@@ -203,7 +202,7 @@ class _MajorPageState extends State<MajorPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!),
+              ProgressBar(context, _progressAnimation!, _gender!),
               SizedBox(
                 height: 50,
               ),

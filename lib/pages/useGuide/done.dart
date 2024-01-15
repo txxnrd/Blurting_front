@@ -76,7 +76,7 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => MainApp(
-                                    currentIndex: 0,
+                                    currentIndex: 1,
                                   )),
                         );
                         print('시작하기 버튼 클릭됨');

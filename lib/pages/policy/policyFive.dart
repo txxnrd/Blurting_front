@@ -1,4 +1,4 @@
-import 'package:blurting/mainApp.dart';
+import 'package:blurting/mainapp.dart';
 import 'package:blurting/pages/useguide/useguidepagetwo.dart';
 import 'package:blurting/signup_questions/phonenumber.dart';
 import 'package:blurting/token.dart';
