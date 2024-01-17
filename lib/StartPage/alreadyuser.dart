@@ -357,7 +357,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                                       borderRadius: BorderRadius.circular(
                                           5), // 버튼의 모서리 둥글게 조정
                                     ),
-                                    backgroundColor: mainColor.lightGray,
+                                    backgroundColor: mainColor.pink,
                                     elevation: 0.0,
                                     padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거
                                   ),

@@ -168,6 +168,127 @@ class _SettingPageState extends State<SettingPage> {
         });
   }
 
+  void _showlogoutWarning(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.2),
+            body: Stack(
+              children: [
+                Positioned(
+                  bottom: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.lightGray
+                                            .withOpacity(0.8)),
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '정말로 blurting에서 로그아웃 하시겠습니까?',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      // color: mainColor.MainColor,
+                                      child: Center(
+                                        child: Text(
+                                          '로그아웃',
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      clearAllData();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.lightGray),
+                                // color: mainColor.MainColor,
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                if (mounted) {
+                                  setState(() {
+                                    Navigator.of(context).pop();
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
   Future<void> _sendDeleteRequest() async {
     var url = Uri.parse(API.user);
     String savedToken = await getToken();
@@ -284,10 +405,16 @@ class _SettingPageState extends State<SettingPage> {
                     height: 18,
                   ),
                   InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () {
                       _checkfcm();
                     },
-                    child: settingDescription_list("알림"),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("알림"),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 34,
@@ -297,41 +424,46 @@ class _SettingPageState extends State<SettingPage> {
                     height: 18,
                   ),
                   InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () {
                       _getuserinfo();
                     },
-                    child: settingDescription_list("계정 및 정보"),
-                  ),
-                  SizedBox(
-                    height: 18,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      showSnackBar(context, "로그아웃 완료");
-                      clearAllData();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    child: Container(
-                      child: Text(
-                        '로그아웃 하기',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: mainColor.Gray),
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("계정 정보"),
+                      ],
                     ),
                   ),
                   SizedBox(
                     height: 18,
                   ),
                   InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      _showlogoutWarning(context);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("로그아웃 하기"),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () {
                       _showWarning(context);
                     },
-                    child: settingDescription_list("계정 삭제하기"),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("계정 삭제하기"),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 34,
@@ -341,48 +473,53 @@ class _SettingPageState extends State<SettingPage> {
                     height: 18,
                   ),
                   InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => NoticePage()),
                       );
                     },
-                    child: settingDescription_list("공지사항"),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("공지사항"),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 18,
                   ),
                   InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () async {
                       launchUrl(
                         Uri.parse(URLLink.blurting_instagram),
                       );
                     },
-                    child: settingDescription_list("개발자에게 문의하기"),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("개발자에게 문의하기"),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 18,
                   ),
                   InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () async {
                       launchUrl(
                         Uri.parse(URLLink.privacy_policy),
                       );
                     },
-                    child: settingDescription_list("개인정보 처리 방침"),
-                  ),
-                  SizedBox(
-                    height: 18,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UseGuidePageOne()),
-                      );
-                    },
-                    child: settingDescription_list("개인정보 처리 방침"),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("개인정보 처리 방침"),
+                      ],
+                    ),
                   ),
                 ],
               ),

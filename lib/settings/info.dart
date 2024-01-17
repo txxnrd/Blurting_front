@@ -33,7 +33,7 @@ class _InfoPageState extends State<InfoPage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        title: AppbarDescription("계정/정보관리"),
+        title: AppbarDescription("계정 정보"),
         elevation: 0,
       ),
       body: SingleChildScrollView(
