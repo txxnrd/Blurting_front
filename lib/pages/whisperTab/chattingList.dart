@@ -191,6 +191,8 @@ class _chatListItemState extends State<ChatListItem> {
         _leaveRoom(context);
       },
       onTap: () {
+        widget.socket.disconnect();
+
         Navigator.push(
           context,
           PageRouteBuilder(
@@ -490,6 +492,7 @@ class _chattingList extends State<ChattingList> {
   @override
   void dispose() {
     super.dispose();
+    print('채팅 리스트 나감');
     socket.disconnect();
   }
 
