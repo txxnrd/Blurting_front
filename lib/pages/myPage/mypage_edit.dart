@@ -584,6 +584,8 @@ class _MyPageEditState extends State<MyPageEdit> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double mediaquery_height = MediaQuery.of(context).size.height;
+
     String characters = widget.data['character'].toString();
     String showinghobby = widget.data['hobby'].toString();
     FocusNode _focusNode = FocusNode();
@@ -719,509 +721,516 @@ class _MyPageEditState extends State<MyPageEdit> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.only(top: 100),
-          child: Column(
-            children: [
-              Container(
-                  padding: EdgeInsets.only(left: 13, top: 20),
-                  child: ellipseText(text: 'Editing')),
-              Center(
-                child: Container(
-                  width: 57,
-                  child: Image.asset(
-                    sex == "F" ? 'assets/woman.png' : 'assets/man.png',
-                    fit: BoxFit.fill,
+      body: Container(
+        height: mediaquery_height * 0.9,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+          child: Container(
+            margin: EdgeInsets.only(top: 110),
+            child: Column(
+              children: [
+                Container(
+                    padding: EdgeInsets.only(left: 13, top: 20),
+                    child: ellipseText(text: 'Editing')),
+                Center(
+                  child: Container(
+                    width: 57,
+                    child: Image.asset(
+                      sex == "F" ? 'assets/woman.png' : 'assets/man.png',
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 2),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    MyPageallDescription('닉네임'),
-                    Center(
-                      child: Container(
-                        width: screenWidth,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
-                        alignment: Alignment.centerLeft,
-                        height: 48, // TextField의 높이와 일치하도록 설정
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(color: mainColor.lightGray, width: 2),
-                          borderRadius: BorderRadius.circular(
-                              10), // TextField의 테두리와 일치하도록 설정
-                        ),
-                        child: Align(
+                Container(
+                  margin: EdgeInsets.only(top: 2),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      MyPageallDescription('닉네임'),
+                      Center(
+                        child: Container(
+                          width: screenWidth,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            widget.data['nickname'],
-                            style: TextStyle(
-                              color: mainColor.Gray,
-                              fontSize: 16.0,
-                              // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                          height: 48, // TextField의 높이와 일치하도록 설정
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: mainColor.lightGray, width: 2),
+                            borderRadius: BorderRadius.circular(
+                                10), // TextField의 테두리와 일치하도록 설정
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              widget.data['nickname'],
+                              style: TextStyle(
+                                color: mainColor.Gray,
+                                fontSize: 16.0,
+                                // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    MyPageallDescription("활동 지역"),
-                    Center(
-                      child: Container(
-                        width: screenWidth,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
-                        alignment: Alignment.centerLeft,
-                        height: 48, // TextField의 높이와 일치하도록 설정
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(color: mainColor.lightGray, width: 2),
-                          borderRadius: BorderRadius.circular(
-                              10), // TextField의 테두리와 일치하도록 설정
-                        ),
-                        child: Align(
+                      MyPageallDescription("활동 지역"),
+                      Center(
+                        child: Container(
+                          width: screenWidth,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
                           alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                content == "" ? widget.data['region'] : content,
-                                style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontSize: 16.0,
-                                  // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                          height: 48, // TextField의 높이와 일치하도록 설정
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: mainColor.lightGray, width: 2),
+                            borderRadius: BorderRadius.circular(
+                                10), // TextField의 테두리와 일치하도록 설정
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  content == ""
+                                      ? widget.data['region']
+                                      : content,
+                                  style: TextStyle(
+                                    color: mainColor.Gray,
+                                    fontSize: 16.0,
+                                    // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                child: InkWell(
-                                  onTap: () async {
-                                    final result = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SearchPage()),
-                                    );
-                                    setState(() {
-                                      // 'result'가 null이 아닐 경우에만 content 업데이트
-                                      if (result != null) {
-                                        content = result;
-                                      }
-                                    });
-                                  },
-                                  child: Ink(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: mainColor.MainColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      padding: EdgeInsets.fromLTRB(9, 2, 9, 2),
-                                      child: Text(
-                                        '수정',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 12,
-                                          fontFamily: 'Pretendard',
-                                          color: Colors.white,
+                                Container(
+                                  margin: EdgeInsets.all(10),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SearchPage()),
+                                      );
+                                      setState(() {
+                                        // 'result'가 null이 아닐 경우에만 content 업데이트
+                                        if (result != null) {
+                                          content = result;
+                                        }
+                                      });
+                                    },
+                                    child: Ink(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: mainColor.MainColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        padding:
+                                            EdgeInsets.fromLTRB(9, 2, 9, 2),
+                                        child: Text(
+                                          '수정',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12,
+                                            fontFamily: 'Pretendard',
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      MyPageallDescription("종교"),
+                      Center(
+                        child: Stack(
+                          children: [
+                            Container(
+                                width: screenWidth,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.lightGray)),
+                            AnimatedPositioned(
+                              duration: Duration(milliseconds: 500),
+                              left: screenWidth / 5 * religionIndex,
+                              child: Container(
+                                  width: screenWidth / 5,
+                                  // width: screenWidth-4,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 2, color: mainColor.MainColor),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white)),
+                            ),
+                            SizedBox(
+                              width: screenWidth,
+                              child: Row(
+                                children: [
+                                  toggleReligion(context, 0, '무교'),
+                                  toggleReligion(context, 1, '불교'),
+                                  toggleReligion(context, 2, '기독교'),
+                                  toggleReligion(context, 3, '천주교'),
+                                  toggleReligion(context, 4, '기타'),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      MyPageallDescription("음주 정도"),
+                      Center(
+                        child: Stack(
+                          children: [
+                            Container(
+                                width: screenWidth,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.lightGray)),
+                            AnimatedPositioned(
+                              duration: Duration(milliseconds: 500),
+                              left: screenWidth / 4 * alcoholIndex,
+                              child: Container(
+                                  width: screenWidth / 4,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 2, color: mainColor.MainColor),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white)),
+                            ),
+                            SizedBox(
+                              width: screenWidth,
+                              child: Row(
+                                children: [
+                                  toggleAlcohol(context, 0, '안 마심'),
+                                  toggleAlcohol(context, 1, '가끔'),
+                                  toggleAlcohol(context, 2, '자주'),
+                                  toggleAlcohol(context, 3, '매일'),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      MyPageallDescription("흡연 정도"),
+                      Center(
+                        child: Stack(
+                          children: [
+                            Container(
+                                width: screenWidth,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.lightGray)),
+                            AnimatedPositioned(
+                              duration: Duration(milliseconds: 500),
+                              left: screenWidth / 4 * smokeIndex,
+                              child: Container(
+                                  width: screenWidth / 4,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 2, color: mainColor.MainColor),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white)),
+                            ),
+                            SizedBox(
+                              width: screenWidth,
+                              child: Row(
+                                children: [
+                                  toggleSmoke(context, 0, '안 피움'),
+                                  toggleSmoke(context, 1, '가끔'),
+                                  toggleSmoke(context, 2, '자주'),
+                                  toggleSmoke(context, 3, '매일'),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      MyPageallDescription("키"),
+                      Center(
+                        child: SizedBox(
+                          height: 48,
+                          width: screenWidth,
+                          child: TextField(
+                              controller: _textController,
+                              decoration: InputDecoration(
+                                hintStyle: TextStyle(fontSize: 12),
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(12.0, 13, 10, 13),
+                                isDense: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: mainColor.lightGray, width: 2),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: mainColor.MainColor, width: 2),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  int intValue = int.parse(value);
+                                  InputHeightNumber(intValue);
+                                });
+                              }),
+                        ),
+                      ),
+                      MyPageallDescription("MBTI"),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          MBTIallDescription("에너지방향"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              MBTIbox(width, 0),
+                              MBTIbox(width, 1),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.all(0),
+                                child: MBTIeachDescription("외향형"),
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(0),
+                                child: MBTIeachDescription("내향형"),
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                    ),
-                    MyPageallDescription("종교"),
-                    Center(
-                      child: Stack(
-                        children: [
-                          Container(
-                              width: screenWidth,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: mainColor.lightGray)),
-                          AnimatedPositioned(
-                            duration: Duration(milliseconds: 500),
-                            left: screenWidth / 5 * religionIndex,
-                            child: Container(
-                                width: screenWidth / 5,
-                                // width: screenWidth-4,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2, color: mainColor.MainColor),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white)),
+                          MBTIallDescription("인식"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              MBTIbox(width, 2),
+                              MBTIbox(width, 3),
+                            ],
                           ),
-                          SizedBox(
-                            width: screenWidth,
-                            child: Row(
-                              children: [
-                                toggleReligion(context, 0, '무교'),
-                                toggleReligion(context, 1, '불교'),
-                                toggleReligion(context, 2, '기독교'),
-                                toggleReligion(context, 3, '천주교'),
-                                toggleReligion(context, 4, '기타'),
-                              ],
-                            ),
-                          )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              MBTIeachDescription("감각형"),
+                              MBTIeachDescription("직관형"),
+                            ],
+                          ),
+                          MBTIallDescription("판단"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              MBTIbox(width, 4),
+                              MBTIbox(width, 5),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              MBTIeachDescription("사고형"),
+                              MBTIeachDescription("감각형"),
+                            ],
+                          ),
+                          MBTIallDescription("계획형"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              MBTIbox(width, 6),
+                              MBTIbox(width, 7),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              MBTIeachDescription("판단형"),
+                              MBTIeachDescription("인식형"),
+                            ],
+                          ),
                         ],
                       ),
-                    ),
-                    MyPageallDescription("음주 정도"),
-                    Center(
-                      child: Stack(
+                      MyPageallDescription("성격"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                         children: [
-                          Container(
-                              width: screenWidth,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: mainColor.lightGray)),
-                          AnimatedPositioned(
-                            duration: Duration(milliseconds: 500),
-                            left: screenWidth / 4 * alcoholIndex,
-                            child: Container(
-                                width: screenWidth / 4,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2, color: mainColor.MainColor),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white)),
-                          ),
-                          SizedBox(
-                            width: screenWidth,
-                            child: Row(
-                              children: [
-                                toggleAlcohol(context, 0, '안 마심'),
-                                toggleAlcohol(context, 1, '가끔'),
-                                toggleAlcohol(context, 2, '자주'),
-                                toggleAlcohol(context, 3, '매일'),
-                              ],
-                            ),
-                          )
+                          customHobbyCheckbox('개성있는', 0, width, false),
+                          customHobbyCheckbox('책임감있는', 1, width, false),
                         ],
                       ),
-                    ),
-                    MyPageallDescription("흡연 정도"),
-                    Center(
-                      child: Stack(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                         children: [
-                          Container(
-                              width: screenWidth,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: mainColor.lightGray)),
-                          AnimatedPositioned(
-                            duration: Duration(milliseconds: 500),
-                            left: screenWidth / 4 * smokeIndex,
-                            child: Container(
-                                width: screenWidth / 4,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2, color: mainColor.MainColor),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white)),
-                          ),
-                          SizedBox(
-                            width: screenWidth,
-                            child: Row(
-                              children: [
-                                toggleSmoke(context, 0, '안 피움'),
-                                toggleSmoke(context, 1, '가끔'),
-                                toggleSmoke(context, 2, '자주'),
-                                toggleSmoke(context, 3, '매일'),
-                              ],
-                            ),
-                          )
+                          customHobbyCheckbox('열정적인', 2, width, false),
+                          customHobbyCheckbox('귀여운', 3, width, false),
                         ],
                       ),
-                    ),
-                    MyPageallDescription("키"),
-                    Center(
-                      child: SizedBox(
-                        height: 48,
-                        width: screenWidth,
-                        child: TextField(
-                            controller: _textController,
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 12),
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(12.0, 13, 10, 13),
-                              isDense: true,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                    color: mainColor.lightGray, width: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('상냥한', 4, width, false),
+                          customHobbyCheckbox('감성적인', 5, width, false),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('낙천적인', 6, width, false),
+                          customHobbyCheckbox('유머있는', 7, width, false),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('차분한', 8, width, false),
+                          customHobbyCheckbox('지적인', 9, width, false),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('섬세한', 10, width, false),
+                          customHobbyCheckbox('무뚝뚝한', 11, width, false),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('외향적인', 12, width, false),
+                          customHobbyCheckbox('내향적인', 13, width, false),
+                        ],
+                      ),
+                      MyPageallDescription("취미"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
+                        children: [
+                          customHobbyCheckbox('🍢애니', 0, width, true),
+                          customHobbyCheckbox('🎨그림그리기', 1, width, true),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
+                        children: [
+                          customHobbyCheckbox('🍻술', 2, width, true),
+                          customHobbyCheckbox('🎞️영화/드라마', 3, width, true),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('✈️여행', 4, width, true),
+                          customHobbyCheckbox('🧑‍🍳요리', 5, width, true),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('🤓자기계발', 6, width, true),
+                          customHobbyCheckbox('📚독서', 7, width, true),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('🎮게임', 8, width, true),
+                          customHobbyCheckbox('🎧노래듣기', 9, width, true),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('🕊️봉사활동', 10, width, true),
+                          customHobbyCheckbox('🏃운동', 11, width, true),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          customHobbyCheckbox('🎤노래부르기', 12, width, true),
+                          customHobbyCheckbox('🚶‍산책', 13, width, true),
+                        ],
+                      ),
+                      MyPageallDescription("사진"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
+                        children: [
+                          InkWell(
+                            onTap: () => _pickAndUploadImage(
+                                1), // 버튼을 누를 때 _pickImage 함수 호출
+                            child: Container(
+                              width: 100,
+                              height: 125,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: mainColor.lightGray),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                    color: mainColor.MainColor, width: 2),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: ExtendedImage.network(
+                                    _image1Url!,
+                                    fit: BoxFit.cover,
+                                    cache: true,
+                                  ) // 선택된 이미지 표시
+                                  ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () => _pickAndUploadImage(2),
+                            child: Container(
+                              width: 100,
+                              height: 125,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: mainColor.lightGray),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: ExtendedImage.network(
+                                    _image2Url!,
+                                    fit: BoxFit.cover,
+                                    cache: true,
+                                  )),
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                int intValue = int.parse(value);
-                                InputHeightNumber(intValue);
-                              });
-                            }),
+                          ),
+                          InkWell(
+                            onTap: () => _pickAndUploadImage(3),
+                            child: Container(
+                              width: 100,
+                              height: 125,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: mainColor.lightGray),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: ExtendedImage.network(
+                                    _image3Url!,
+                                    fit: BoxFit.cover,
+                                    cache: true,
+                                  )),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    MyPageallDescription("MBTI"),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        MBTIallDescription("에너지방향"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            MBTIbox(width, 0),
-                            MBTIbox(width, 1),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.all(0),
-                              child: MBTIeachDescription("외향형"),
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(0),
-                              child: MBTIeachDescription("내향형"),
-                            ),
-                          ],
-                        ),
-                        MBTIallDescription("인식"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            MBTIbox(width, 2),
-                            MBTIbox(width, 3),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            MBTIeachDescription("감각형"),
-                            MBTIeachDescription("직관형"),
-                          ],
-                        ),
-                        MBTIallDescription("판단"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            MBTIbox(width, 4),
-                            MBTIbox(width, 5),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            MBTIeachDescription("사고형"),
-                            MBTIeachDescription("감각형"),
-                          ],
-                        ),
-                        MBTIallDescription("계획형"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            MBTIbox(width, 6),
-                            MBTIbox(width, 7),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            MBTIeachDescription("판단형"),
-                            MBTIeachDescription("인식형"),
-                          ],
-                        ),
-                      ],
-                    ),
-                    MyPageallDescription("성격"),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                      children: [
-                        customHobbyCheckbox('개성있는', 0, width, false),
-                        customHobbyCheckbox('책임감있는', 1, width, false),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                      children: [
-                        customHobbyCheckbox('열정적인', 2, width, false),
-                        customHobbyCheckbox('귀여운', 3, width, false),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('상냥한', 4, width, false),
-                        customHobbyCheckbox('감성적인', 5, width, false),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('낙천적인', 6, width, false),
-                        customHobbyCheckbox('유머있는', 7, width, false),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('차분한', 8, width, false),
-                        customHobbyCheckbox('지적인', 9, width, false),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('섬세한', 10, width, false),
-                        customHobbyCheckbox('무뚝뚝한', 11, width, false),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('외향적인', 12, width, false),
-                        customHobbyCheckbox('내향적인', 13, width, false),
-                      ],
-                    ),
-                    MyPageallDescription("취미"),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                      children: [
-                        customHobbyCheckbox('🍢애니', 0, width, true),
-                        customHobbyCheckbox('🎨그림그리기', 1, width, true),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
-                      children: [
-                        customHobbyCheckbox('🍻술', 2, width, true),
-                        customHobbyCheckbox('🎞️영화/드라마', 3, width, true),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('✈️여행', 4, width, true),
-                        customHobbyCheckbox('🧑‍🍳요리', 5, width, true),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('🤓자기계발', 6, width, true),
-                        customHobbyCheckbox('📚독서', 7, width, true),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('🎮게임', 8, width, true),
-                        customHobbyCheckbox('🎧노래듣기', 9, width, true),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('🕊️봉사활동', 10, width, true),
-                        customHobbyCheckbox('🏃운동', 11, width, true),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        customHobbyCheckbox('🎤노래부르기', 12, width, true),
-                        customHobbyCheckbox('🚶‍산책', 13, width, true),
-                      ],
-                    ),
-                    MyPageallDescription("사진"),
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
-                      children: [
-                        InkWell(
-                          onTap: () => _pickAndUploadImage(
-                              1), // 버튼을 누를 때 _pickImage 함수 호출
-                          child: Container(
-                            width: 100,
-                            height: 125,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: mainColor.lightGray),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: ExtendedImage.network(
-                                  _image1Url!,
-                                  fit: BoxFit.cover,
-                                  cache: true,
-                                ) // 선택된 이미지 표시
-                                ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () => _pickAndUploadImage(2),
-                          child: Container(
-                            width: 100,
-                            height: 125,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: mainColor.lightGray),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: ExtendedImage.network(
-                                  _image2Url!,
-                                  fit: BoxFit.cover,
-                                  cache: true,
-                                )),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () => _pickAndUploadImage(3),
-                          child: Container(
-                            width: 100,
-                            height: 125,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: mainColor.lightGray),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: ExtendedImage.network(
-                                  _image3Url!,
-                                  fit: BoxFit.cover,
-                                  cache: true,
-                                )),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 100,
-                    )
-                  ],
+                      Container(
+                        height: 100,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1255,7 +1264,7 @@ class _MyPageEditState extends State<MyPageEdit> {
             ),
           ),
           onTap: () {
-            _sendFixRequest();
+            IsValid ? _sendFixRequest() : null;
           },
         ),
       ),
