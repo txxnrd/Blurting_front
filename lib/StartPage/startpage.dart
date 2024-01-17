@@ -236,7 +236,6 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               '이미 회원이신가요?',
                               style: TextStyle(
-                                  decoration: TextDecoration.underline,
                                   decorationColor: mainColor.pink,
                                   fontSize: 15,
                                   color: mainColor.pink),

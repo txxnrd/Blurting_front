@@ -59,6 +59,8 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
 
   @override
   Widget build(BuildContext context) {
+    double mediaquery_height = MediaQuery.of(context).size.height;
+    print(mediaquery_height);
     return GestureDetector(
       onTap: () {
         _increaseProgressAndNavigate();
@@ -90,7 +92,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
                             color: mainColor.pink,
-                            fontFamily: 'Pretendard',
+                            fontFamily: 'Heebo',
                           )),
                       SizedBox(
                         height: 0,
@@ -100,15 +102,23 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
                             color: mainColor.pink,
-                            fontFamily: 'Pretendard',
+                            fontFamily: 'Heebo',
                           )),
-                      SizedBox(height: 112),
+                      SizedBox(height: mediaquery_height * 30 / 360),
                       SizedBox(
                         width: 240.7,
                         height: 246,
                         child:
                             Image.asset("assets/images/Blurting_welcome.png"),
-                      )
+                      ),
+                      SizedBox(height: mediaquery_height * 7 / 90),
+                      Text("화면을 터치해 주세요",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: mainColor.Gray,
+                            fontFamily: 'Heebo',
+                          )),
                     ],
                   ),
                 ],

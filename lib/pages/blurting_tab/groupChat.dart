@@ -40,31 +40,43 @@ class QuestionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double mediaquery_height = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Q$questionNumber. ',
-            style: TextStyle(
-              fontFamily: 'Heebo',
-              fontSize: 12,
-              color: mainColor.Gray,
-              fontWeight: FontWeight.w700,
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: RichText(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Q$questionNumber. ',
+                      style: TextStyle(
+                        fontFamily: 'Heebo',
+                        fontSize: 12,
+                        color: mainColor.Gray,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    TextSpan(
+                      text: question,
+                      style: TextStyle(
+                        fontFamily: 'Heebo',
+                        fontSize: 12,
+                        color: mainColor.Gray,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          Text(
-            question,
-            style: TextStyle(
-              fontFamily: 'Heebo',
-              fontSize: 12,
-              color: mainColor.Gray,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

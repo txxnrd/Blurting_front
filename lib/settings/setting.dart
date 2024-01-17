@@ -10,6 +10,7 @@ import 'dart:convert';
 import '../token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
+import "package:blurting/pages/useguide/useguidepageone.dart";
 
 class SettingPage extends StatefulWidget {
   @override
@@ -366,6 +367,19 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () async {
                       launchUrl(
                         Uri.parse(URLLink.privacy_policy),
+                      );
+                    },
+                    child: settingDescription_list("개인정보 처리 방침"),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UseGuidePageOne()),
                       );
                     },
                     child: settingDescription_list("개인정보 처리 방침"),
