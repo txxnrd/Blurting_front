@@ -94,7 +94,7 @@ class _SmokePageState extends State<SmokePage>
         _increaseProgressAndNavigate();
       }
     } else {
-      // 오류가 발생한 경우 처리
+      // 오류가 발생한 경우 처리용도
     }
   }
 
