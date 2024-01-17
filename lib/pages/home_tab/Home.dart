@@ -288,22 +288,26 @@ class _HomeState extends State<Home> {
                             // 좋아요 버튼을 눌렀을 때의 로직
                             changeLike(cardItems[index].answerId, index);
                           },
-                          child: Icon(
-                            Icons.thumb_up,
-                            color: cardItems[index].ilike
-                                ? Color(0xFFFF7D7D)
-                                : Colors.white,
-                            size: 15,
-                          ),
-                        ),
-                        SizedBox(width: 7),
-                        Text(
-                          '${cardItems[index].likes}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Heebo',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.thumb_up,
+                                color: cardItems[index].ilike
+                                    ? mainColor.pink
+                                    : Colors.white,
+                                size: 15,
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                '${cardItems[index].likes}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
