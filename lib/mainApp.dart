@@ -1,9 +1,9 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/pages/blurtingTab/blurting.dart';
-import 'package:blurting/pages/homeTab/Home.dart';
-import 'package:blurting/pages/myPage/MyPage.dart';
-import 'package:blurting/pages/whisperTab/chattingList.dart';
+import 'package:blurting/pages/blurting_tab/blurting.dart';
+import 'package:blurting/pages/home_tab/Home.dart';
+import 'package:blurting/pages/mypage/mypage.dart';
+import 'package:blurting/pages/whisper_tab/chattingList.dart';
 
 class MainApp extends StatefulWidget {
   final int currentIndex;

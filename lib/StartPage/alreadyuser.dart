@@ -3,20 +3,13 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/mainApp.dart';
-import 'package:blurting/signupquestions/sex.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/token.dart'; // sex.dart를 임포트
+import 'package:blurting/token.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:blurting/colors/colors.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/services.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class AlreadyUserPage extends StatefulWidget {
   const AlreadyUserPage({super.key});
@@ -104,13 +97,12 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       startTimer();
       NowCertification();
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       var data = json.decode(response.body);
       errormessage = data['message'];
       showSnackBar(context, errormessage);
@@ -135,8 +127,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       if (data['accessToken'] != null) {
@@ -144,18 +135,14 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
         var refreshtoken = data['refreshToken'];
         var userId = data['id'];
 
-        print(userId);
         await saveuserId(userId);
 
-        print(token);
         await saveToken(token);
         await saveRefreshToken(refreshtoken);
 
         var fcmToken = await FirebaseMessaging.instance.getToken(
             vapidKey:
                 "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");
-        print("-------");
-        print(fcmToken);
 
         var urlfcm = Uri.parse(API.notification);
 
@@ -167,7 +154,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
           },
           body: json.encode({"token": fcmToken}),
         );
-        print(response.body);
+
         _increaseProgressAndNavigate();
       } else {
         var data = json.decode(response.body);
@@ -353,8 +340,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                                   formatDuration(_duration), // 타이머 초기값
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color:
-                                        Color(DefinedColor.darkpink), // 타이머 색상
+                                    color: mainColor.pink, // 타이머 색상
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -371,8 +357,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                                       borderRadius: BorderRadius.circular(
                                           5), // 버튼의 모서리 둥글게 조정
                                     ),
-                                    backgroundColor:
-                                        Color(DefinedColor.darkpink),
+                                    backgroundColor: mainColor.lightGray,
                                     elevation: 0.0,
                                     padding: EdgeInsets.zero, // 버튼 내부 패딩을 제거
                                   ),
@@ -406,7 +391,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                       padding: EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(top: 5.0, bottom: 10),
                       decoration: BoxDecoration(
-                        color: Color(DefinedColor.darkpink), // 배경색을 여기서 설정
+                        color: mainColor.lightGray, // 배경색을 여기서 설정
                         borderRadius:
                             BorderRadius.circular(8.0), // 둥근 모서리의 반지름을 설정
                       ),

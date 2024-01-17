@@ -1,12 +1,9 @@
+import 'dart:convert';
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
-import 'dart:convert';
-import 'package:blurting/colors/colors.dart';
-import 'package:blurting/mainApp.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 
 class NotificationandSound extends StatefulWidget {
@@ -35,22 +32,18 @@ class _NotificationandSoundState extends State<NotificationandSound> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
       if (response.body == "true") {
         fcmstate = true;
       }
       setState(() {
         _notificationSettings = fcmstate;
       });
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   Future<void> _sendEnableNotificationRequest() async {
     String savedToken = await getToken();
-    print("알림 켜기 시도");
+
     var url = Uri.parse(API.notification);
     var fcmToken = await FirebaseMessaging.instance.getToken(
         vapidKey:
@@ -64,16 +57,12 @@ class _NotificationandSoundState extends State<NotificationandSound> {
       body: json.encode({"token": fcmToken}),
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   Future<void> _sendDisableNotificationRequest() async {
     String savedToken = await getToken();
-    print("알림 끄기 시도");
+
     var url = Uri.parse(API.disable);
     var response = await http.get(
       url,
@@ -83,11 +72,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   @override
@@ -100,22 +85,10 @@ class _NotificationandSoundState extends State<NotificationandSound> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.transparent,
-        title: Text(
-          '알림 설정',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray),
-          ),
-        ),
+        title: AppbarDescription("알림 설정"),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actions: <Widget>[],
       ),
       body: SingleChildScrollView(
@@ -142,7 +115,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
                       }
                     },
 
-                    activeColor: Color(DefinedColor.darkpink), // 활성화 상태일 때의 색상
+                    activeColor: mainColor.pink, // 활성화 상태일 때의 색상
                   ),
                 ],
               ),

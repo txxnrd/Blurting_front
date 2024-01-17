@@ -1,7 +1,7 @@
+import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/mainApp.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/colors/colors.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class UseGuidePagedone extends StatefulWidget {
   @override
@@ -42,7 +42,7 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
-                            color: Color(DefinedColor.darkpink),
+                            color: mainColor.pink,
                             fontFamily: 'Pretendard',
                           )),
                     ),
@@ -54,7 +54,7 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
-                            color: Color(DefinedColor.darkpink),
+                            color: mainColor.pink,
                             fontFamily: 'Pretendard',
                           )),
                     ),
@@ -68,13 +68,15 @@ class _UseGuidePagedoneState extends State<UseGuidePagedone> {
                       height: 30,
                     ),
                     InkWell(
-                      child: Container(margin: EdgeInsets.only(bottom: 10), child: staticButton(text: '시작하기')),
+                      child: Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: staticButton(text: '시작하기')),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MainApp(
-                                    currentIndex: 0,
+                                    currentIndex: 1,
                                   )),
                         );
                         print('시작하기 버튼 클릭됨');

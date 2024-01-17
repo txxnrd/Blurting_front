@@ -1,11 +1,6 @@
-import 'package:blurting/mainApp.dart';
-import 'package:blurting/pages/useGuide/useguidepagetwo.dart';
-import 'package:blurting/signupquestions/phonenumber.dart';
-import 'package:blurting/token.dart';
+import 'package:blurting/pages/useguide/useguidepagetwo.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/config/app_config.dart';
-import 'package:http/http.dart' as http;
-import 'package:blurting/colors/colors.dart';
+import 'package:blurting/Utils/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -64,6 +59,8 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
 
   @override
   Widget build(BuildContext context) {
+    double mediaquery_height = MediaQuery.of(context).size.height;
+    print(mediaquery_height);
     return GestureDetector(
       onTap: () {
         _increaseProgressAndNavigate();
@@ -94,8 +91,8 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
-                            color: Color(DefinedColor.darkpink),
-                            fontFamily: 'Pretendard',
+                            color: mainColor.pink,
+                            fontFamily: 'Heebo',
                           )),
                       SizedBox(
                         height: 0,
@@ -104,16 +101,24 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w700,
-                            color: Color(DefinedColor.darkpink),
-                            fontFamily: 'Pretendard',
+                            color: mainColor.pink,
+                            fontFamily: 'Heebo',
                           )),
-                      SizedBox(height: 112),
+                      SizedBox(height: mediaquery_height * 30 / 360),
                       SizedBox(
                         width: 240.7,
                         height: 246,
                         child:
                             Image.asset("assets/images/Blurting_welcome.png"),
-                      )
+                      ),
+                      SizedBox(height: mediaquery_height * 7 / 90),
+                      Text("화면을 터치해 주세요",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: mainColor.Gray,
+                            fontFamily: 'Heebo',
+                          )),
                     ],
                   ),
                 ],

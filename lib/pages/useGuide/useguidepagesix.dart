@@ -1,6 +1,6 @@
 import 'package:blurting/pages/useGuide/useguidepageseven.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/colors/colors.dart';
+import 'package:blurting/Utils/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -70,7 +70,11 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){Navigator.pop(context);}),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           backgroundColor: Colors.white, //appBar 투명색
           elevation: 0.0,
         ),
@@ -92,11 +96,10 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
                         child: RichText(
                           text: TextSpan(
                             style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Pretendard',
-                              color: Color(DefinedColor.darkpink),
-                            ),
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Pretendard',
+                                color: mainColor.pink),
                             children: [
                               TextSpan(
                                 text: '귓속말',
@@ -121,7 +124,7 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.darkpink),
+                              color: mainColor.pink,
                               fontFamily: 'Pretendard',
                             )),
                       ),
@@ -132,7 +135,7 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.darkpink),
+                              color: mainColor.pink,
                               fontFamily: 'Pretendard',
                             )),
                       ),
@@ -187,8 +190,7 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
                         (_progressAnimation?.value ?? 0.3) -
                     32, // 좌우 패딩을 고려하여 너비 조정
                 decoration: BoxDecoration(
-                  color:
-                      Color(DefinedColor.darkpink), // 다크핑크 색상을 사용자 지정 색상으로 가정
+                  color: mainColor.pink, // 다크핑크 색상을 사용자 지정 색상으로 가정
                   borderRadius: BorderRadius.circular(4.0),
                 ),
               ),

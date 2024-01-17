@@ -1,18 +1,16 @@
-import 'package:blurting/StartPage/startpage.dart';
+import 'package:blurting/startpage/startpage.dart';
 import 'package:blurting/settings/url_link.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/settings/info.dart';
-import 'package:blurting/signupquestions/welcomepage.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
-import '../colors/colors.dart';
 import '../token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
+import "package:blurting/pages/useguide/useguidepageone.dart";
 
 class SettingPage extends StatefulWidget {
   @override
@@ -33,7 +31,6 @@ class _SettingPageState extends State<SettingPage> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(response.body);
       if (response.body == "true") {
         fcmstate = true;
       }
@@ -42,10 +39,7 @@ class _SettingPageState extends State<SettingPage> {
         MaterialPageRoute(
             builder: (context) => NotificationandSound(fcmstate: fcmstate)),
       );
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   int count = 10;
@@ -175,10 +169,8 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Future<void> _sendDeleteRequest() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.user);
     String savedToken = await getToken();
-    print(savedToken);
 
     var response = await http.delete(
       url,
@@ -187,7 +179,7 @@ class _SettingPageState extends State<SettingPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-    print(response.body);
+
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 204) {
@@ -198,7 +190,7 @@ class _SettingPageState extends State<SettingPage> {
       showSnackBar(context, "계정 삭제가 완료되었습니다.");
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -211,7 +203,6 @@ class _SettingPageState extends State<SettingPage> {
   String phoneNumber = "";
 
   Future<void> _getuserinfo() async {
-    print('_sendPostRequest called');
     var url = Uri.parse(API.userinfo);
     String savedToken = await getToken();
     var response = await http.get(
@@ -221,13 +212,10 @@ class _SettingPageState extends State<SettingPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-    print(response.body);
+
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 204) {
-      print('Server returned OK');
-      print('Response body: ${response.body}');
-
       var data = json.decode(response.body);
       phoneNumber = data['phoneNumber'];
       email = data['email'];
@@ -239,7 +227,7 @@ class _SettingPageState extends State<SettingPage> {
       );
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -253,9 +241,7 @@ class _SettingPageState extends State<SettingPage> {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray)),
+            fontSize: 15, fontWeight: FontWeight.w700, color: mainColor.Gray),
       ),
     );
   }
@@ -265,9 +251,7 @@ class _SettingPageState extends State<SettingPage> {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            color: Color(DefinedColor.gray)),
+            fontSize: 15, fontWeight: FontWeight.w500, color: mainColor.Gray),
       ),
     );
   }
@@ -279,14 +263,7 @@ class _SettingPageState extends State<SettingPage> {
         centerTitle: true,
         scrolledUnderElevation: 0.0,
         backgroundColor: Colors.transparent,
-        title: Text(
-          '설정',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Color(DefinedColor.gray),
-          ),
-        ),
+        title: AppbarDescription("설정"),
         elevation: 0,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -343,7 +320,7 @@ class _SettingPageState extends State<SettingPage> {
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
-                            color: Color(DefinedColor.gray)),
+                            color: mainColor.Gray),
                       ),
                     ),
                   ),
@@ -390,6 +367,19 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () async {
                       launchUrl(
                         Uri.parse(URLLink.privacy_policy),
+                      );
+                    },
+                    child: settingDescription_list("개인정보 처리 방침"),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UseGuidePageOne()),
                       );
                     },
                     child: settingDescription_list("개인정보 처리 방침"),

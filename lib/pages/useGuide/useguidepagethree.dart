@@ -1,8 +1,6 @@
-import 'package:blurting/pages/useGuide/useguidepagefour.dart';
+import 'package:blurting/pages/useguide/useguidepagefour.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/colors/colors.dart';
-
-
+import 'package:blurting/Utils/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,10 +20,8 @@ class UseGuidePageThree extends StatefulWidget {
   _UseGuidePageThreeState createState() => _UseGuidePageThreeState();
 }
 
-
-class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProviderStateMixin {
-
-
+class _UseGuidePageThreeState extends State<UseGuidePageThree>
+    with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
 
@@ -37,18 +33,15 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             UseGuidePageFour(),
-
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
-
     )
         .then((_) {
       // 첫 번째 화면으로 돌아왔을 때 실행될 로직
     });
   }
-
 
   @override
   void initState() {
@@ -59,10 +52,8 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
     );
 
     _progressAnimation = Tween<double>(
-
       begin: 2 / 7, // 시작 너비 (30%)
       end: 3 / 7, // 종료 너비 (40%)
-
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -74,22 +65,22 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-
         _increaseProgressAndNavigate();
-
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){Navigator.pop(context);}),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           backgroundColor: Colors.white, //appBar 투명색
           elevation: 0.0,
         ),
         body: Padding(
-
-          padding: EdgeInsets.fromLTRB(30.0,0,30,0),
-
+          padding: EdgeInsets.fromLTRB(30.0, 0, 30, 0),
           child: Form(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -98,18 +89,18 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-
-                      SizedBox(height: 60,),
+                      SizedBox(
+                        height: 60,
+                      ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: RichText(
                           text: TextSpan(
                             style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Pretendard',
-                              color: Color(DefinedColor.darkpink),
-                            ),
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Pretendard',
+                                color: mainColor.pink),
                             children: [
                               TextSpan(
                                 text: '블러팅',
@@ -132,58 +123,50 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text("마음에 드는 답변을 한 상대방의 프로필을",
-
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.darkpink),
+                              color: mainColor.pink,
                               fontFamily: 'Pretendard',
-
-                            )
-                        ),
+                            )),
                       ),
-                      SizedBox(height:0),
+                      SizedBox(height: 0),
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                            "누르면 귓속말을 걸 수 있어요!",
-
+                        child: Text("누르면 귓속말을 걸 수 있어요!",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Color(DefinedColor.darkpink),
+                              color: mainColor.pink,
                               fontFamily: 'Pretendard',
-
-                            )
-                        ),
+                            )),
                       ),
-
-                      SizedBox(height:40),
-                      Column(
+                      SizedBox(height: 40),
+                      Column(children: <Widget>[
+                        Stack(
+                          clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
                           children: <Widget>[
-                            Stack(
-                              clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                              children: <Widget>[
-                                Container(
-                                  width: 293.7,
-                                  height: 86,
-                                  child: Image.asset("assets/images/useguidepagethreemessage.png"),
-                                ),
-                                Positioned(
-                                  left: 24, // 원하는 위치로 조정하세요.
-                                  top: 50, // 원하는 위치로 조정하세요.
-                                  child: Image.asset(
-                                    "assets/images/pointer.png",
-                                    width: 36.7,
-                                    height: 47,
-                                  ),
-                                ),
-                              ],
-                            )
-
-                          ]
+                            Container(
+                              width: 293.7,
+                              height: 86,
+                              child: Image.asset(
+                                  "assets/images/useguidepagethreemessage.png"),
+                            ),
+                            Positioned(
+                              left: 24, // 원하는 위치로 조정하세요.
+                              top: 50, // 원하는 위치로 조정하세요.
+                              child: Image.asset(
+                                "assets/images/pointer.png",
+                                width: 36.7,
+                                height: 47,
+                              ),
+                            ),
+                          ],
+                        )
+                      ]),
+                      SizedBox(
+                        height: 200,
                       ),
-                      SizedBox(height: 200,),
                     ],
                   ),
                 ),
@@ -191,9 +174,8 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
             ),
           ),
         ),
-              floatingActionButton: Padding(
-
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 80),// 좌우 마진을 16.0으로 설정
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 80), // 좌우 마진을 16.0으로 설정
 
           child: Stack(
             clipBehavior: Clip.none,
@@ -208,9 +190,11 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
               Container(
                 height: 10,
 
-                width: MediaQuery.of(context).size.width * (_progressAnimation?.value ?? 0.3) - 32, // 좌우 패딩을 고려하여 너비 조정
+                width: MediaQuery.of(context).size.width *
+                        (_progressAnimation?.value ?? 0.3) -
+                    32, // 좌우 패딩을 고려하여 너비 조정
                 decoration: BoxDecoration(
-                  color: Color(DefinedColor.darkpink), // 다크핑크 색상을 사용자 지정 색상으로 가정
+                  color: mainColor.pink,
                   borderRadius: BorderRadius.circular(4.0),
                 ),
               ),
@@ -218,8 +202,8 @@ class _UseGuidePageThreeState extends State<UseGuidePageThree> with TickerProvid
           ),
         ),
 
-
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
   }

@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:blurting/pages/myPage/MyPageEdit.dart';
-import 'package:blurting/Utils/utilWidget.dart';
+import 'package:blurting/pages/mypage/mypage_edit.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
 import '../../config/app_config.dart';
 import '../../settings/setting.dart';
+import 'package:photo_view/photo_view.dart';
 
 String getCigaretteString(int? cigarette) {
   switch (cigarette) {
@@ -58,9 +58,8 @@ class _MyPage extends State<MyPage> {
   Map<String, dynamic> userProfile = {};
 
   Future<void> goToMyPageEdit(BuildContext context) async {
-    print("수정 버튼 눌러짐");
     // var token = getToken();
-    // print(token);
+    //
 
 /*여기서부터 내 정보 요청하기*/
     var url = Uri.parse(API.userprofile);
@@ -73,11 +72,9 @@ class _MyPage extends State<MyPage> {
       },
     );
 
-    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-      print('Server returned OK');
-      print('Response body: ${response.body}');
+
       var data = json.decode(response.body);
 
       final result = await Navigator.push(
@@ -88,18 +85,15 @@ class _MyPage extends State<MyPage> {
       );
 
       // 이후에 필요한 작업을 수행할 수 있습니다.
-      if (result != null) {
-        print('받아올 게 없음'); // MyPageEdit 페이지에서 작업 결과를 받아서 처리
-      }
+      if (result != null) {}
     } else {
       // 오류가 발생한 경우 처리
-      print('Request failed with status: ${response.statusCode}.');
+
       if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
         //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
         await getnewaccesstoken(context, () async {
           // callback0의 내용
-          print('Callback0 called');
         }, goToMyPageEdit, context, null, null);
       }
     }
@@ -109,6 +103,19 @@ class _MyPage extends State<MyPage> {
   void initState() {
     super.initState();
     fetchUserProfile();
+  }
+
+  Future<void> _increaseProgressAndNavigate(
+      List<String> imagePaths, int initialIndex) async {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            FullScreenImageViewer(imagePaths, initialIndex),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
   }
 
   Future<void> fetchUserProfile() async {
@@ -121,9 +128,7 @@ class _MyPage extends State<MyPage> {
         'Authorization': 'Bearer $savedToken',
       },
     );
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-    print('Response Headers: ${response.headers}');
+
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       setState(() {
@@ -134,9 +139,7 @@ class _MyPage extends State<MyPage> {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchUserProfile);
-    } else {
-      print('Failed to load user profile. Status code: ${response.statusCode}');
-    }
+    } else {}
   }
 
   @override
@@ -357,7 +360,6 @@ class _MyPage extends State<MyPage> {
                 child: staticButton(text: '수정'),
                 onTap: () {
                   goToMyPageEdit(context);
-                  print('edit 버튼 클릭됨');
                 },
               ),
             ],
@@ -391,16 +393,21 @@ class _MyPage extends State<MyPage> {
         SizedBox(
           height: 14,
         ),
-        Container(
-          color: Colors.white,
-          width: 175,
-          height: 190,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: ExtendedImage.network(
-              imagePaths[index],
-              fit: BoxFit.cover,
-              cache: true,
+        GestureDetector(
+          onTap: () {
+            _increaseProgressAndNavigate(imagePaths, index);
+          },
+          child: Container(
+            color: Colors.white,
+            width: 175,
+            height: 190,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: ExtendedImage.network(
+                imagePaths[index],
+                fit: BoxFit.cover,
+                cache: true,
+              ),
             ),
           ),
         ),
@@ -472,5 +479,76 @@ class _MyPage extends State<MyPage> {
         textAlign: TextAlign.center,
       ),
     );
+  }
+}
+
+class FullScreenImageViewer extends StatefulWidget {
+  const FullScreenImageViewer(this.imagePaths, this.initialIndex, {Key? key})
+      : super(key: key);
+
+  final List<String> imagePaths;
+  final int initialIndex;
+
+  @override
+  State<FullScreenImageViewer> createState() => _FullScreenImageViewerState();
+}
+
+class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
+  late int currentPageIndex = widget.initialIndex;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Stack(
+      children: [
+        PageView.builder(
+          itemCount: widget.imagePaths.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                // Navigator.pop(context);
+              },
+              child: PhotoView(
+                imageProvider: NetworkImage(widget.imagePaths[index]),
+                initialScale: PhotoViewComputedScale.contained,
+                minScale: PhotoViewComputedScale.contained * 1,
+                maxScale: PhotoViewComputedScale.covered * 2.0,
+              ),
+            );
+          },
+          scrollDirection: Axis.horizontal,
+          controller: PageController(initialPage: widget.initialIndex),
+          onPageChanged: (index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+        ),
+        Positioned(
+          top: 50,
+          left: 0,
+          child: IconButton(
+            icon: Icon(Icons.close),
+            color: mainColor.lightGray,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        Positioned(
+          top: 61,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "${currentPageIndex + 1} / 3",
+                style: TextStyle(fontSize: 20, color: mainColor.lightGray),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 }

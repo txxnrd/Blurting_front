@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:blurting/pages/myPage/MyPageEdit.dart';
 import 'package:blurting/Utils/provider.dart';
 
 Widget toggleeach(String text, bool isselected) {

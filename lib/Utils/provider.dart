@@ -1,7 +1,5 @@
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
-import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +34,6 @@ class GroupChatProvider with ChangeNotifier {
   }
 }
 
-
 class ScrollProvider with ChangeNotifier {
   bool _isMax = false;
 
@@ -64,7 +61,6 @@ Future<void> saveuserId(int userId) async {
   await prefs.setInt('userId', userId);
   // 저장된 값을 확인하기 위해 바로 불러옵니다.
   int savedUserId = prefs.getInt('userId') ?? -1;
-  print('Saved UserId: $savedUserId'); // 콘솔에 출력하여 확인
 }
 
 // 저장된 토큰을 불러오는 함수
@@ -73,7 +69,7 @@ Future<int> getuserId() async {
   // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져오기
   // 값이 없을 경우 -1 을 반환
   int userId = prefs.getInt('userId') ?? -1;
-  print(userId);
+
   return userId;
 }
 
@@ -98,7 +94,6 @@ class UserProvider with ChangeNotifier {
 }
 
 void showSnackBar(BuildContext context, String message) {
-  print("Snackbar 실행");
   final snackBar = SnackBar(
     content: Text(message),
     action: SnackBarAction(
@@ -116,11 +111,10 @@ void showSnackBar(BuildContext context, String message) {
 }
 
 Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
-  print('_sendPostRequest called');
   var url = Uri.parse(API.signupback);
 
   String savedToken = await getToken();
-  print(savedToken);
+
   var response = await http.get(
     url,
     headers: <String, String>{
@@ -128,16 +122,15 @@ Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
       'Authorization': 'Bearer $savedToken',
     },
   );
-  print(response.body);
+
   if (response.statusCode == 200 || response.statusCode == 201) {
     // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-    print('Server returned OK');
-    print('Response body: ${response.body}');
+
     var data = json.decode(response.body);
 
     if (data['signupToken'] != null) {
       var token = data['signupToken'];
-      print(token);
+
       await saveToken(token);
       if (isbutton) {
         Navigator.of(context).pop();
@@ -147,6 +140,17 @@ Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
     }
   } else {
     // 오류가 발생한 경우 처리
-    print('Request failed with status: ${response.statusCode}.');
   }
+}
+
+Widget AppbarDescription(String text) {
+  return Container(
+      child: Text(
+    text,
+    style: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      color: mainColor.Gray,
+    ),
+  ));
 }
