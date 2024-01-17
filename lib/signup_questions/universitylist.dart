@@ -755,7 +755,7 @@ var university_domain = [
   'suwon.ac.kr',
   'sookmyung.ac.kr',
   'kcc.ac.kr',
-  'scnu.ac.kr',
+  's.scnu.ac.kr',
   'sch.ac.kr',
   'soongsil.ac.kr',
   'kcu.ac',
