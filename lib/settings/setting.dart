@@ -526,8 +526,7 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => UseGuidePageOne()),
+                        MaterialPageRoute(builder: (context) => UseGuidePageOne()),
                       );
                     },
                     child: Row(

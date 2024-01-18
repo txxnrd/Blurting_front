@@ -95,7 +95,6 @@ class _GroupChat extends State<GroupChat> {
   PageController _pageController = PageController();
 
   TextEditingController _controller = TextEditingController();
-  ScrollController _scrollController = ScrollController();
   List<bool> isBlock = List<bool>.filled(10, false);
   late DateTime lastTime = DateTime.now();
   late IO.Socket socket;
@@ -107,6 +106,8 @@ class _GroupChat extends State<GroupChat> {
     Future<void> initializeSocket() async {
       // 맨 처음 들어왔을 땐 마지막...
       await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
+
+      print(currentIndex);
 
       socket.on('create_room', (data) {
         Navigator.push(
@@ -155,9 +156,6 @@ class _GroupChat extends State<GroupChat> {
 
   @override
   Widget build(BuildContext context) {
-    // SchedulerBinding.instance!.addPostFrameCallback((_) {
-    //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    // });
 
     return Scaffold(
       appBar: AppBar(
@@ -287,13 +285,17 @@ class _GroupChat extends State<GroupChat> {
     );
   }
 
+
   Widget questionPage(int index) {
+    
     ScrollController pageScrollController =
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      pageScrollController
-          .jumpTo(pageScrollController.position.maxScrollExtent);
+      if (pageScrollController.positions.isNotEmpty) {
+        pageScrollController
+            .jumpTo(pageScrollController.position.maxScrollExtent);
+      }
     });
 
     return Column(
@@ -367,7 +369,8 @@ class _GroupChat extends State<GroupChat> {
           controller: _controller,
           sendFunction: SendAnswer,
           isBlock: isBlock[currentIndex],
-          hintText: "이미 답변이 완료된 질문입니다.",
+          blockText: "이미 답변이 완료된 질문입니다.",
+          hintText: "내 생각 쓰기...(부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다)",
           questionId: 1,
         ),
       ],
@@ -552,7 +555,7 @@ class _GroupChat extends State<GroupChat> {
                     createdAt: '',
                     read: true,
                     isBlurting: true,
-                    likedNum: 0));
+                    likedNum: answerData['likes']));
                 isBlock[currentIndex] = true; // true가 맞음
               } else {
                 answerList[currentIndex].add(AnswerItem(

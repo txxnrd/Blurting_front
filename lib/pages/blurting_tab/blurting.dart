@@ -381,21 +381,28 @@ class _Blurting extends State<Blurting> {
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
 
-              DateTime lastTime =
-                  _parseDateTime(prefs.getString('timeInSeconds'));
+              // DateTime lastTime =
+              //     _parseDateTime(prefs.getString('timeInSeconds'));
 
-              DateTime day1Time = createdAt; // 하루가 지난 시간
-              DateTime day2Time =
-                  createdAt.add(Duration(hours: 24)); // 하루가 지난 시간
-              DateTime day3Time =
-                  createdAt.add(Duration(hours: 48)); // 이틀이 지난 시간
+              String? localDay = prefs.getString('day');
+              print(localDay);
+              print(day);
+
+              // DateTime day1Time = createdAt; // 만들어진 시간
+              // DateTime day2Time =
+              //     createdAt.add(Duration(hours: 24)); // 하루가 지난 시간
+              // DateTime day3Time =
+              //     createdAt.add(Duration(hours: 48)); // 이틀이 지난 시간
 
               if (isState == 'Continue') {
-                if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
-                    day == 'Day2' && (lastTime.isAfter(day2Time)) ||
-                    day == 'Day3' &&
-                        (lastTime.isAfter(
-                            day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                // if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
+                //     day == 'Day2' && (lastTime.isAfter(day2Time)) ||
+                //     day == 'Day3' &&
+                //         (lastTime.isAfter(
+                //             day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
+                
+                if(localDay == day)
+                
                 {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => GroupChat()));
@@ -414,7 +421,8 @@ class _Blurting extends State<Blurting> {
               }
 
               // 데이터를 로컬에 저장하는 함수
-              await prefs.setString('timeInSeconds', DateTime.now().toString());
+              // await prefs.setString('timeInSeconds', DateTime.now().toString());
+              await prefs.setString('day', day);
             },
           )
         ],
@@ -584,19 +592,24 @@ class _Blurting extends State<Blurting> {
     });
 
     if (response.statusCode == 200) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
         if (mounted) {
-          setState(() {
+          setState(() async {
             if (responseData == 1) {
               isState = 'Continue';
             } else if (responseData == 0) {
               isState = 'Start';
+              await pref.setString('day', 'Day0');
             } else {
               isState = 'Matching...';
             }
           });
+
+          print(pref.getString('day'));
         }
       } catch (e) {}
     } else if (response.statusCode == 401) {
@@ -629,6 +642,9 @@ class _Blurting extends State<Blurting> {
           setState(() {
             // createdAt = DateTime.now().add(Duration(hours: -47));
             createdAt = _parseDateTime(responseData['createdAt']);
+            int latestIndex = responseData['questionNo'];
+
+            print(latestIndex);
 
             Duration timeDifference = DateTime.now().difference(createdAt);
 
@@ -638,7 +654,8 @@ class _Blurting extends State<Blurting> {
               currentDay = 0;
             });
 
-            if (timeDifference >= Duration(hours: 24)) {
+            // if (timeDifference >= Duration(hours: 24)) {
+            if (latestIndex >= 4 && latestIndex <= 6) {
               day = 'Day2';
               pageController.page == 1;
 
@@ -654,7 +671,9 @@ class _Blurting extends State<Blurting> {
               }
             }
 
-            if (timeDifference >= Duration(hours: 48)) {
+            // if (timeDifference >= Duration(hours: 48)) {
+            if (latestIndex >= 7) {
+
               day = 'Day3';
 
               pageController.page == 2;

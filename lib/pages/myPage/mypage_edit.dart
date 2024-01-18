@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/main.dart';
 import 'package:blurting/pages/mypage/utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/signup_questions/activeplacesearch.dart';
@@ -814,11 +815,15 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
           onPressed: () {
             // 이대로 나가면 변경 사항이 저장되지 않습니다. 나가시겠습니까?
-            _showWarning(context);
+            if (IsValid) {
+              _showWarning(context);
+            } else {
+              Navigator.pop(context);
+            }
           },
         ),
       ),
-      body: Container(
+      body: SizedBox(
         height: mediaquery_height * 0.9,
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
@@ -830,7 +835,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                     padding: EdgeInsets.only(left: 13, top: 20),
                     child: ellipseText(text: 'Editing')),
                 Center(
-                  child: Container(
+                  child: SizedBox(
                     width: 57,
                     child: Image.asset(
                       sex == "F" ? 'assets/woman.png' : 'assets/man.png',

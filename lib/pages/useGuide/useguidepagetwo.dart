@@ -24,10 +24,8 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  bool isVisible = true;
 
-  //얘를 호출해서 페이지 넘김
-
-  //이유: 넘길 때 부드럽게 넘기는 애니메이션 적용하려여
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
 
@@ -42,7 +40,6 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
       ),
     )
         .then((_) {
-      // 첫 번째 화면으로 돌아왔을 때 실행될 로직
     });
   }
 
@@ -63,6 +60,19 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
       ..addListener(() {
         setState(() {});
       });
+    _startBlinking();
+    
+  }
+
+  void _startBlinking() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+          _startBlinking(); // 다음 깜빡임을 예약합니다.
+        });
+      }
+    });
   }
 
   @override

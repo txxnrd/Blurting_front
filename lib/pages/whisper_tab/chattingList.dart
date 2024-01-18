@@ -47,6 +47,7 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _chatListItemState extends State<ChatListItem> {
+
   void _leaveRoom(BuildContext context) {
     showDialog(
       context: context,
@@ -175,6 +176,8 @@ class _chatListItemState extends State<ChatListItem> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.roomId);
+
     String latest_time = dateFormatAA.format(widget.latest_time);
 
     if (dateFormatMM.format(widget.latest_time) !=
@@ -191,6 +194,8 @@ class _chatListItemState extends State<ChatListItem> {
         _leaveRoom(context);
       },
       onTap: () {
+        widget.socket.disconnect();
+
         Navigator.push(
           context,
           PageRouteBuilder(
@@ -456,20 +461,26 @@ class _chattingList extends State<ChattingList> {
         // roomId, userId를 받고, 내가 나갔으면 리스트에서 삭제
         // 채팅 리스트에서 -> http로 처리, 귓속말에서 -> 소켓으로 처리
         print('leave_room 소켓 받음');
+        print(data);
         if (data['userId'] ==
             Provider.of<UserProvider>(context, listen: false).userId) {
           print('내가 나감');
           for (int i = 0; i < chatLists.length; i++) {
+            print(i);
+
             Widget widget = chatLists[i];
             if (widget is ChatListItem) {
+              print('chatListItem임');
               if (data['roomId'] == widget.roomId) {
+                print('roomId 같음');
                 if (mounted) {
+                  print('mounted임');
                   setState(() {
                     chatLists.removeAt(i);
+                    return;
                   });
                 }
               }
-              return;
             }
           }
         }
@@ -490,6 +501,7 @@ class _chattingList extends State<ChattingList> {
   @override
   void dispose() {
     super.dispose();
+    print('채팅 리스트 나감');
     socket.disconnect();
   }
 

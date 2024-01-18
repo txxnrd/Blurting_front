@@ -88,6 +88,7 @@ class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
   final Function(String, int)? sendFunction;
   final bool isBlock;
+  final String blockText;
   final String hintText;
   final int questionId;
 
@@ -95,6 +96,7 @@ class CustomInputField extends StatefulWidget {
       {required this.controller,
       this.sendFunction,
       required this.isBlock,
+      required this.blockText,
       required this.hintText,
       required this.questionId});
 
@@ -113,11 +115,15 @@ class _CustomInputFieldState extends State<CustomInputField> {
   }
 
   void inputPointValid(bool state) {
-    Provider.of<GroupChatProvider>(context, listen: false).pointValid = state;
+    if(mounted) {
+      Provider.of<GroupChatProvider>(context, listen: false).pointValid = state;
+    }
   }
 
   void isPocusState(bool state) {
-    Provider.of<GroupChatProvider>(context, listen: false).isPocus = state;
+    if(mounted) {
+      Provider.of<GroupChatProvider>(context, listen: false).isPocus = state;
+    }
   }
 
   @override
@@ -192,7 +198,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: !widget.isBlock ? "내 생각 쓰기..." : widget.hintText,
+                  hintText: !widget.isBlock
+                      ? widget.hintText
+                      : widget.blockText,
                   hintStyle: TextStyle(fontSize: 12),
                   suffixIcon: IconButton(
                     onPressed: (isValid)
@@ -479,23 +487,24 @@ class _MyChatState extends State<MyChat> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              if (widget.likedNum != 0)
-                                Container(
-                                  margin: EdgeInsets.only(right: 3, top: 1),
-                                  child: Text(
-                                    '${widget.likedNum}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontFamily: 'Heebo'),
+                                SizedBox(
+                                  width: 8,
+                                  height: 7,
+                                  child: Image(
+                                    image:
+                                        AssetImage('assets/images/heart.png'),
+                                    color: Colors.white,
                                   ),
                                 ),
-                              SizedBox(
-                                width: 8,
-                                height: 7,
-                                child: Image(
-                                  image: AssetImage('assets/images/heart.png'),
-                                  color: Colors.white,
+                              if (widget.likedNum != 0)
+                              Container(
+                                margin: EdgeInsets.only(left: 3, top: 1),
+                                child: Text(
+                                  '${widget.likedNum}',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: 'Heebo'),
                                 ),
                               ),
                             ],
