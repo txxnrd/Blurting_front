@@ -871,7 +871,7 @@ var university_domain = [
   'htus.ac.kr',
   'hoseo.edu',
   'howon.ac.kr',
-  'hongik.ac.kr',
-  'hongik.ac.kr',
+  'g.hongik.ac.kr',
+  'g.hongik.ac.kr',
   'hscu.ac.kr'
 ];
