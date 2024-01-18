@@ -87,7 +87,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
               style: TextStyle(
                 color: Color(0xFF868686),
                 fontFamily: 'Pretendard',
-                fontWeight: index == 4 ? FontWeight.w700 : FontWeight.w400,
+                fontWeight: index == 5 ? FontWeight.w700 : FontWeight.w400,
                 fontSize: 16,
               ),
             ),
