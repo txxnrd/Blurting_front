@@ -164,7 +164,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
     } else {
       // 오류가 발생한 경우 처리
       print('Request failed with status: ${response.statusCode}.');
-      if (response.statusCode == 400) {
+      if (response.statusCode == 401) {
         showSnackBar(context, "인증번호가 틀렸습니다.");
       } else if (response.statusCode == 408) {
         showSnackBar(context, "인증 제한 시간 3분이 지났습니다.");
@@ -259,7 +259,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                       maxLength: 13,
                       decoration: InputDecoration(
                         isDense: true,
-                        hintText: '010-1234-5678',
+                        hintText: '01012345678',
                         counterText: '', // 이 부분을 추가
                         hintStyle: TextStyle(
                             fontFamily: 'Pretendard',
