@@ -40,6 +40,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
     false,
     false,
     false,
+    false,
   ];
   Future<void> _increaseProgressAndNavigate() async {
     Navigator.push(
@@ -55,9 +56,9 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
               print("detected");
               setState(() {
                 IsSelected(index);
-                if (index == 4) {
-                  for (int i = 0; i < 4; i++) {
-                    isValidList[i] = isValidList[4];
+                if (index == 5) {
+                  for (int i = 0; i < 5; i++) {
+                    isValidList[i] = isValidList[5];
                   }
                 }
               });
@@ -86,7 +87,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
               style: TextStyle(
                 color: Color(0xFF868686),
                 fontFamily: 'Pretendard',
-                fontWeight: index == 4 ? FontWeight.w700 : FontWeight.w400,
+                fontWeight: index == 5 ? FontWeight.w700 : FontWeight.w400,
                 fontSize: 16,
               ),
             ),
@@ -99,22 +100,20 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
   bool IsValid = false;
   @override
   void IsSelected(int index) {
-    if (index == 4) {
-      // Clicked on "아래 항목에 전부 동의합니다." checkbox
-      isValidList[4] = !isValidList[4];
-      // If checked, set all items below to true
+    if (index == 5) {
+      // "아래 항목에 전부 동의합니다." 눌렀는지
+      isValidList[5] = !isValidList[5];
 
-      for (int i = 0; i < 4; i++) {
-        isValidList[i] = isValidList[4];
+      for (int i = 0; i < 5; i++) {
+        isValidList[i] = isValidList[5];
       }
     } else {
-      // Clicked on other checkboxes
+      // 각자 선택 여부
       isValidList[index] = !isValidList[index];
-      // Check if all items below are selected, if yes, set "아래 항목에 전부 동의합니다." checkbox to true
     }
 
-    // Check if all items (0, 1, 2, 3) are selected
-    IsValid = isValidList.sublist(0, 4).every((element) => element);
+    //  (0, 1, 2, 3, 4) 선택 여부
+    IsValid = isValidList.sublist(0, 5).every((element) => element);
   }
 
   @override
@@ -155,7 +154,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
                   fontFamily: 'Pretendard'),
             ),
             SizedBox(height: 30),
-            customCheckbox('아래 항목에 전부 동의합니다.', 4),
+            customCheckbox('아래 항목에 전부 동의합니다.', 5),
             Padding(
               padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
               child: Column(
@@ -263,6 +262,9 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
                               fontFamily: 'Pretendard'),
                         ),
                       )),
+                  customCheckbox(
+                      '(필수) 부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있고, 신고의 대상이 될 수 있음을 동의합니다.',
+                      4),
                 ],
               ),
             ),

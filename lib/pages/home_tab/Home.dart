@@ -385,7 +385,7 @@ class _HomeState extends State<Home> {
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  '오늘의 MVP',
+                  '명예의 전당',
                   style: TextStyle(
                     color: mainColor.black,
                     fontFamily: 'Heebo',

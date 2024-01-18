@@ -192,9 +192,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: !widget.isBlock
-                      ? "내 생각 쓰기...(부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다)"
-                      : widget.hintText,
+                  hintText: !widget.isBlock ? "내 생각 쓰기..." : widget.hintText,
                   hintStyle: TextStyle(fontSize: 12),
                   suffixIcon: IconButton(
                     onPressed: (isValid)

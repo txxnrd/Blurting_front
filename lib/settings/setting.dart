@@ -521,6 +521,22 @@ class _SettingPageState extends State<SettingPage> {
                       ],
                     ),
                   ),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UseGuidePageOne()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("계정 정보"),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
