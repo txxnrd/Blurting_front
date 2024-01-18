@@ -130,11 +130,12 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Positioned(
                   bottom: 0,
-                  left: -150,
+                  left: -220,
                   child: SizedBox(
-                      width: 500,
+                      width: 700,
+                      height: 500,
                       child: Image.asset('assets/blurtingStart.png',
-                          fit: BoxFit.fill))),
+                          fit: BoxFit.contain))),
               AnimatedOpacity(
                 duration: Duration(milliseconds: 1500),
                 opacity: opacity,
@@ -236,9 +237,11 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               '이미 회원이신가요?',
                               style: TextStyle(
-                                  decorationColor: mainColor.pink,
+                                  decorationColor: Colors.white,
+                                  decoration: TextDecoration.underline,
                                   fontSize: 15,
-                                  color: mainColor.pink),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                           ),
                         ),

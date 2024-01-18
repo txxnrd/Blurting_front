@@ -258,7 +258,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
                       maxLength: 13,
                       decoration: InputDecoration(
                         isDense: true,
-                        hintText: '010-1234-5678',
+                        hintText: '01012345678',
                         counterText: '', // 이 부분을 추가
                         hintStyle: TextStyle(
                             fontFamily: 'Pretendard',
