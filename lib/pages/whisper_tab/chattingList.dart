@@ -523,7 +523,7 @@ class _chattingList extends State<ChattingList> {
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: Container(color: Colors.transparent))),
               Container(
-                  margin: EdgeInsets.only(top: 110),
+                  margin: EdgeInsets.only(top: 100),
                   padding: EdgeInsets.all(13),
                   child: ellipseText(text: 'Connect')),
             ],

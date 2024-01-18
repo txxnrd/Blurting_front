@@ -374,7 +374,10 @@ class _Blurting extends State<Blurting> {
             ),
           ),
           InkWell(
-            child: staticButton(text: isState),
+            child: staticButton(
+                text: isState == 'Continue'
+                    ? "방 입장하기"
+                    : (isState == "Start" ? "방 생성하기" : "매칭중")),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
 

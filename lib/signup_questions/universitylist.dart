@@ -64,6 +64,7 @@ var universities = [
   '문경대학교',
   '배화여자대학교',
   '백석문화대학교',
+  "백석예술대학교",
   '백제예술대학교',
   '벽성대학',
   '부산경상대학교',
@@ -502,6 +503,7 @@ var university_domain = [
   'mkc.ac.kr',
   'baewha.ac.kr',
   'bscu.ac.kr',
+  "bau.ac.kr",
   'paekche.ac.kr',
   'bs.ac.kr',
   'bsks.ac.kr',
@@ -869,7 +871,7 @@ var university_domain = [
   'htus.ac.kr',
   'hoseo.edu',
   'howon.ac.kr',
-  'hongik.ac.kr',
-  'hongik.ac.kr',
+  'g.hongik.ac.kr',
+  'g.hongik.ac.kr',
   'hscu.ac.kr'
 ];

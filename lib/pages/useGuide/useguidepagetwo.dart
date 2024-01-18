@@ -77,6 +77,8 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
 
   @override
   Widget build(BuildContext context) {
+    double mediaquery_height = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: () {
         _increaseProgressAndNavigate();
@@ -169,6 +171,7 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
             ),
           ),
         ),
+
 //애니메이션 위치 폰마다 똑같이 위치 지정해주려고 플로팅 액션 버튼으로 해서 밑에서부터 올라오게 지정 해놨음
         floatingActionButton: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 80), // 좌우 마진을 20.0으로 설정
