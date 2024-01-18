@@ -1367,6 +1367,7 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
           onTap: () {
             IsValid ? _sendFixRequest() : null;
+            IsValid = false;
           },
         ),
       ),
