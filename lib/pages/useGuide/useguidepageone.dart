@@ -24,6 +24,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  bool isVisible = true;
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -55,10 +56,25 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
       ..addListener(() {
         setState(() {});
       });
+
+    _startBlinking();
+  }
+
+  void _startBlinking() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+          _startBlinking(); // 다음 깜빡임을 예약합니다.
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(isVisible);
+
     double mediaquery_height = MediaQuery.of(context).size.height;
     print(mediaquery_height);
     return GestureDetector(
@@ -112,13 +128,17 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                             Image.asset("assets/images/Blurting_welcome.png"),
                       ),
                       SizedBox(height: mediaquery_height * 7 / 90),
-                      Text("화면을 터치해 주세요",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: mainColor.Gray,
-                            fontFamily: 'Heebo',
-                          )),
+                      AnimatedOpacity(
+                        duration: Duration(milliseconds: 1500),
+                        opacity: isVisible ? 1.0 : 0.3,
+                        child: Text("화면을 터치해 주세요!",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: mainColor.Gray,
+                              fontFamily: 'Heebo',
+                            )),
+                      ),
                     ],
                   ),
                 ],
@@ -130,3 +150,4 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
     );
   }
 }
+

@@ -378,11 +378,13 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => UseGuidePageOne()),
+                        MaterialPageRoute(builder: (context) => UseGuidePageOne()),
                       );
                     },
-                    child: settingDescription_list("개인정보 처리 방침"),
+                    child: settingDescription_list("사용설명서로 이동"),
+                  ),
+                  SizedBox(
+                    height: 18,
                   ),
                 ],
               ),
