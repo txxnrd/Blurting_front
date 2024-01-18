@@ -301,30 +301,38 @@ class _Whisper extends State<Whisper> {
                     }
                   : null,
               child: Container(
-                width: 60,
-                height: 60,
-                margin: EdgeInsets.all(0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.white,
-                  border: isBlurChanged != -1
-                      ? Border.all(
-                          color: Color(0XFFF66464),
-                          width: 1.0,
-                        )
-                      : null,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(
-                      sigmaX: calculateBlurSigma(blurValue),
-                      sigmaY: calculateBlurSigma(blurValue),
-                    ),
-                    child: ExtendedImage.network(
-                      appbarphoto,
-                      fit: BoxFit.cover,
-                      cache: true,
+                    borderRadius: BorderRadius.circular(50),
+                    border: isBlurChanged != -1
+                        ? Border.all(
+                            color: Color(0XFFF66464),
+                            width: 1.0,
+                          )
+                        : null),
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  margin: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.white,
+                    border: Border.all(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(
+                        sigmaX: calculateBlurSigma(blurValue),
+                        sigmaY: calculateBlurSigma(blurValue),
+                      ),
+                      child: ExtendedImage.network(
+                        appbarphoto,
+                        fit: BoxFit.cover,
+                        cache: true,
+                      ),
                     ),
                   ),
                 ),

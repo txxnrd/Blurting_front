@@ -99,7 +99,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
           appBarTheme: AppBarTheme(color: Colors.white),
-          scaffoldBackgroundColor: Colors.white),
+          scaffoldBackgroundColor: Colors.white,
+          scrollbarTheme: ScrollbarThemeData().copyWith(
+              thumbColor:
+                  MaterialStateProperty.all(mainColor.pink.withOpacity(0.8)),
+              trackColor:
+                  MaterialStateProperty.all(Colors.white.withOpacity(0.7)))),
       builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context)
               .copyWith(textScaler: TextScaler.linear(1.0)),

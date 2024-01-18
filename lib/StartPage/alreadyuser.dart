@@ -223,7 +223,8 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
             opacity: 1.0,
             child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                child: Container(color: Colors.white.withOpacity(0.3))),
+                child: Container(
+                    color: Color.fromRGBO(118, 118, 118, 1).withOpacity(0.3))),
           ),
           Container(
             margin: EdgeInsets.only(bottom: 70),
