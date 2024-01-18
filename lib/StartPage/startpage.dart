@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                 opacity: opacity,
                 child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                    child: Container(color: Colors.white.withOpacity(0.3))),
+                    child: Container(color: Color.fromRGBO(118, 118, 118, 1).withOpacity(0.3))),
               ),
               Container(
                 margin: EdgeInsets.only(bottom: 50),
@@ -236,9 +236,9 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               '이미 회원이신가요?',
                               style: TextStyle(
-                                  decorationColor: mainColor.pink,
+                                  decorationColor: Colors.white,
                                   fontSize: 15,
-                                  color: mainColor.pink),
+                                  color: Colors.white),
                             ),
                           ),
                         ),

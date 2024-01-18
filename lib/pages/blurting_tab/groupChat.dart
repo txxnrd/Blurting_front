@@ -326,7 +326,7 @@ class _GroupChat extends State<GroupChat> {
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 500),
                     margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
-                    width: 73,
+                    width: 47,
                     height: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -348,7 +348,7 @@ class _GroupChat extends State<GroupChat> {
                                   : mainColor.lightGray,
                             )),
                         Text(
-                          '100자 이상',
+                          '10P',
                           style: TextStyle(
                               fontSize: 10,
                               fontFamily: "Heebo",

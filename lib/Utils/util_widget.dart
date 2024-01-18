@@ -107,6 +107,7 @@ class CustomInputField extends StatefulWidget {
 class _CustomInputFieldState extends State<CustomInputField> {
   late FocusNode _focusNode;
   bool isValid = false;
+  int length = 0;
 
   void inputValid(bool state) {
     setState(() {
@@ -150,88 +151,105 @@ class _CustomInputFieldState extends State<CustomInputField> {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
-      padding: EdgeInsets.fromLTRB(0, 7, 0, 20),
+      padding: _focusNode.hasFocus ? EdgeInsets.fromLTRB(0, 7, 0, 0) : EdgeInsets.fromLTRB(0, 7, 0, 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          ClipPath(
-            clipper: InputfieldClipper(),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width - 20,
-              child: TextField(
-                minLines: 1, maxLines: 3,
-                enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
-                focusNode: _focusNode,
-                onTapOutside: (event) => _focusNode.unfocus(),
-                onChanged: (value) {
-                  if (value != '') {
-                    inputValid(true);
-                  } else {
-                    inputValid(false);
-                  }
-
-                  if (value.length >= 100) {
-                    inputPointValid(true);
-                  } else {
-                    inputPointValid(false);
-                  }
-                },
-                style: TextStyle(fontSize: 12),
-                controller: widget.controller,
-                cursorColor: mainColor.MainColor,
-                decoration: InputDecoration(
-                  isDense: true,
-                  contentPadding: widget.isBlock
-                      ? EdgeInsets.only(top: 15, left: 10)
-                      : EdgeInsets.only(left: 10),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 0,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 0,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: !widget.isBlock
-                      ? widget.hintText
-                      : widget.blockText,
-                  hintStyle: TextStyle(fontSize: 12),
-                  suffixIcon: IconButton(
-                    onPressed: (isValid)
-                        ? () {
-                            widget.sendFunction!(
-                                widget.controller.text, widget.questionId);
-                            setState(() {
-                              inputValid(false);
-                              inputPointValid(false);
-                              widget.controller.clear();
-                            });
-                          }
-                        : null,
-                    icon: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: isValid
-                            ? mainColor.MainColor
-                            : mainColor.MainColor.withOpacity(0.5),
+          Column(
+            children: [
+              ClipPath(
+                clipper: InputfieldClipper(),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 20,
+                  child: TextField(
+                    minLines: 1, maxLines: 3,
+                    enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
+                    focusNode: _focusNode,
+                    onTapOutside: (event) => _focusNode.unfocus(),
+                    onChanged: (value) {
+                      length = value.length;
+                  
+                      if (value != '') {
+                        inputValid(true);
+                      } else {
+                        inputValid(false);
+                      }
+                  
+                      if (value.length >= 100) {
+                        inputPointValid(true);
+                      } else {
+                        inputPointValid(false);
+                      }
+                    },
+                    style: TextStyle(fontSize: 12),
+                    controller: widget.controller,
+                    cursorColor: mainColor.MainColor,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: widget.isBlock
+                          ? EdgeInsets.only(top: 15, left: 10)
+                          : EdgeInsets.only(left: 10),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 0,
+                        ),
                       ),
-                      child: Icon(
-                        Icons.keyboard_arrow_up_outlined,
-                        color: Colors.white,
-                        size: 25,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 0,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: !widget.isBlock
+                          ? widget.hintText
+                          : widget.blockText,
+                      hintStyle: TextStyle(fontSize: 12),
+                      suffixIcon: IconButton(
+                        onPressed: (isValid)
+                            ? () {
+                                widget.sendFunction!(
+                                    widget.controller.text, widget.questionId);
+                                setState(() {
+                                  inputValid(false);
+                                  inputPointValid(false);
+                                  widget.controller.clear();
+                                });
+                              }
+                            : null,
+                        icon: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: isValid
+                                ? mainColor.MainColor
+                                : mainColor.MainColor.withOpacity(0.5),
+                          ),
+                          child: Icon(
+                            Icons.keyboard_arrow_up_outlined,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                        ),
+                        color: Color.fromRGBO(48, 48, 48, 1),
                       ),
                     ),
-                    color: Color.fromRGBO(48, 48, 48, 1),
                   ),
                 ),
               ),
-            ),
+              if (_focusNode.hasFocus)
+                Container(
+                    padding: EdgeInsets.all(3),
+                    child: Text(
+                      '$length/100',
+                      style: TextStyle(
+                          color: mainColor.Gray,
+                          fontFamily: 'Heebo',
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400),
+                    ))
+            ],
           ),
         ],
       ),

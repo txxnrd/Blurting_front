@@ -645,6 +645,7 @@ class _Blurting extends State<Blurting> {
             int latestIndex = responseData['questionNo'];
 
             print(latestIndex);
+            print(iSended);
 
             Duration timeDifference = DateTime.now().difference(createdAt);
 
@@ -667,12 +668,13 @@ class _Blurting extends State<Blurting> {
               }
 
               if (iSended[0] == false) {
+                print('이틀째인데 첫 번째 안 보냄');
                 sendArrow(-1, 0);
               }
             }
 
             // if (timeDifference >= Duration(hours: 48)) {
-            if (latestIndex >= 7) {
+            else if (latestIndex >= 7) {
 
               day = 'Day3';
 
@@ -686,9 +688,12 @@ class _Blurting extends State<Blurting> {
               }
 
               if (iSended[1] == false) {
+                print('삼일째인데 두 번째 안 보냄');
                 sendArrow(-1, 1);
               }
             }
+
+            print(day);
           });
         }
         //
@@ -799,6 +804,8 @@ class _Blurting extends State<Blurting> {
         List<dynamic> iReceivedList = responseData['iReceived'];
         List<dynamic> iSendedList = responseData['iSended'];
 
+        print(iSendedList);
+
         // 받은 화살표 처리
         if (iReceivedList.isEmpty) {
           //
@@ -807,8 +814,8 @@ class _Blurting extends State<Blurting> {
           for (final iReceivedItem in iReceivedList) {
             int day = (iReceivedItem['day'] - 1);
             iReceived[day].add(recievedProfile(
-                userName: iReceivedItem['username'],
-                userSex: iReceivedItem['userSex']));
+                userName: iReceivedItem['username'] ?? '탈퇴한 사용자',
+                userSex: iReceivedItem['userSex'] ?? 'none'));
           }
         }
         //
@@ -881,13 +888,19 @@ class recievedProfile extends StatelessWidget {
     return Column(
       children: [
         Container(
+          padding: EdgeInsets.all(5),
           width: 55,
           height: 55,
           decoration: BoxDecoration(
               color: mainColor.lightPink,
               borderRadius: BorderRadius.circular(50)),
           child: Image.asset(
-            userSex == 'M' ? 'assets/man.png' : 'assets/woman.png',
+            fit: BoxFit.fill,
+            userSex == 'M'
+                ? 'assets/man.png'
+                : userSex == 'none'
+                    ? 'assets/none.png'
+                    : 'assets/woman.png',
           ),
         ),
         Container(
