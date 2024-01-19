@@ -119,7 +119,9 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!, selectedGender!),
+              Center(
+                  child: ProgressBar(
+                      context, _progressAnimation!, selectedGender!)),
               SizedBox(
                 height: 50,
               ),
@@ -228,23 +230,23 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
   }
 }
 
-class FaceIconPainter extends CustomPainter {
-  final double progress;
+// class FaceIconPainter extends CustomPainter {
+//   final double progress;
 
-  FaceIconPainter(this.progress);
+//   FaceIconPainter(this.progress);
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.fill;
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()
+//       ..color = Colors.blue
+//       ..style = PaintingStyle.fill;
 
-    final facePosition = Offset(size.width * progress - 10, size.height / 2);
-    canvas.drawCircle(facePosition, 5.0, paint);
-  }
+//     final facePosition = Offset(size.width * progress - 10, size.height / 2);
+//     canvas.drawCircle(facePosition, 5.0, paint);
+//   }
 
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return true;
+//   }
+// }

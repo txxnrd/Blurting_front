@@ -3,25 +3,27 @@ import 'package:blurting/Utils/provider.dart';
 
 enum Gender { male, female, none }
 
+Gender? selectedGender;
+
 Widget ProgressBar(
     BuildContext context, Animation<double> progressAnimation, Gender gender) {
   return Stack(
     clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
     children: [
-      Center(
-        child: Container(
-          height: 10,
-          width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            color: mainColor.lightGray,
-            borderRadius: BorderRadius.circular(4.0),
-          ),
+      Container(
+        alignment: Alignment.center,
+        height: 10,
+        width: MediaQuery.of(context).size.width * 0.8,
+        decoration: BoxDecoration(
+          color: mainColor.lightGray, //
+          borderRadius: BorderRadius.circular(4.0),
         ),
       ),
       // 완료된 부분 배경색 설정
       Container(
         height: 10,
         width: MediaQuery.of(context).size.width *
+            0.8 *
             (progressAnimation?.value ?? 0.3),
         decoration: BoxDecoration(
           color: mainColor.black,
@@ -30,7 +32,8 @@ Widget ProgressBar(
       ),
       Positioned(
         left: MediaQuery.of(context).size.width *
-                (progressAnimation?.value ?? 0.2) -
+                0.8 *
+                (progressAnimation?.value ?? 0.3) -
             15,
         bottom: -10,
         child: Image.asset(

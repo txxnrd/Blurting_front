@@ -67,6 +67,8 @@ class _UniversityPageState extends State<UniversityPage>
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
       _gender = Gender.male;
@@ -94,7 +96,11 @@ class _UniversityPageState extends State<UniversityPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!, _gender!),
+              Center(
+                child: Container(
+                    width: width * 0.8,
+                    child: ProgressBar(context, _progressAnimation!, _gender!)),
+              ),
               SizedBox(
                 height: 50,
               ),
@@ -174,26 +180,5 @@ class _UniversityPageState extends State<UniversityPage>
             FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
-  }
-}
-
-class FaceIconPainter extends CustomPainter {
-  final double progress;
-
-  FaceIconPainter(this.progress);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.fill;
-
-    final facePosition = Offset(size.width * progress - 10, size.height / 2);
-    canvas.drawCircle(facePosition, 5.0, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
   }
 }
