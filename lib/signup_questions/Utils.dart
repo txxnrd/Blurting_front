@@ -8,11 +8,14 @@ Widget ProgressBar(
   return Stack(
     clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
     children: [
-      Container(
-        height: 10,
-        decoration: BoxDecoration(
-          color: mainColor.lightGray,
-          borderRadius: BorderRadius.circular(4.0),
+      Center(
+        child: Container(
+          height: 10,
+          width: MediaQuery.of(context).size.width * 0.8,
+          decoration: BoxDecoration(
+            color: mainColor.lightGray,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
         ),
       ),
       // 완료된 부분 배경색 설정
@@ -27,7 +30,7 @@ Widget ProgressBar(
       ),
       Positioned(
         left: MediaQuery.of(context).size.width *
-                (progressAnimation?.value ?? 0.3) -
+                (progressAnimation?.value ?? 0.2) -
             15,
         bottom: -10,
         child: Image.asset(
