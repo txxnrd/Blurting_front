@@ -273,110 +273,107 @@ class _EmailPageState extends State<EmailPage>
                 imageFilter: isBlurred
                     ? ImageFilter.blur(sigmaX: 12, sigmaY: 12)
                     : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Center(
-                            child: Container(
-                                width: width * 0.8,
-                                child: ProgressBar(
-                                    context, _progressAnimation!, _gender!)),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Text(
-                            '마지막 질문입니다!',
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                color: mainColor.black,
-                                fontFamily: 'Pretendard'),
-                          ),
-                          Text(
-                            '당신의 이메일을 입력해주세요!',
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                color: mainColor.black,
-                                fontFamily: 'Pretendard'),
-                          ),
-                          SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 48,
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    hintText: '이메일 입력',
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: mainColor.lightGray),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: mainColor.lightGray),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xFFF66464)),
-                                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Center(
+                          child: Container(
+                              width: width * 0.8,
+                              child: ProgressBar(
+                                  context, _progressAnimation!, _gender!)),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Text(
+                          '마지막 질문입니다!',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: mainColor.black,
+                              fontFamily: 'Pretendard'),
+                        ),
+                        Text(
+                          '당신의 이메일을 입력해주세요!',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: mainColor.black,
+                              fontFamily: 'Pretendard'),
+                        ),
+                        SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 150,
+                              height: 48,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: '이메일 입력',
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: mainColor.lightGray),
                                   ),
-                                  onChanged: (value) {
-                                    InputEmail(value);
-                                  },
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: mainColor.lightGray),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFF66464)),
+                                  ),
                                 ),
+                                onChanged: (value) {
+                                  InputEmail(value);
+                                },
                               ),
-                              SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
-                              Text(
-                                '@',
-                                style: TextStyle(fontSize: 24),
+                            ),
+                            SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
+                            Text(
+                              '@',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            SizedBox(width: 4),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12), // 내부 여백을 추가
+                              alignment: Alignment.centerLeft,
+                              height: 48, // TextField의 높이와 일치하도록 설정
+                              width: 150,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: mainColor.lightGray),
+                                borderRadius: BorderRadius.circular(
+                                    4), // TextField의 테두리와 일치하도록 설정
                               ),
-                              SizedBox(width: 4),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12), // 내부 여백을 추가
+                              child: Align(
                                 alignment: Alignment.centerLeft,
-                                height: 48, // TextField의 높이와 일치하도록 설정
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: mainColor.lightGray),
-                                  borderRadius: BorderRadius.circular(
-                                      4), // TextField의 테두리와 일치하도록 설정
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    widget.domain,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
-                                    ),
+                                child: Text(
+                                  widget.domain,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                    // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          Container(
-                            height: height * 0.56,
-                            child: Text("."),
-                          )
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: height * 0.56,
+                          child: Text("."),
+                        )
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
               Visibility(
@@ -423,6 +420,46 @@ class _EmailPageState extends State<EmailPage>
                       )
                     ],
                   )),
+              Visibility(
+                visible: isBlurred,
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, height * 0.51, 0, 0),
+                    child: InkWell(
+                      splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: mainColor.pink,
+                              width: 2,
+                            )),
+                        margin: EdgeInsets.only(bottom: 10),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 48,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "인증 이메일 재전송 받기",
+                              style: TextStyle(
+                                  color: mainColor.pink,
+                                  fontSize: 20,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        _sendPostRequest();
+                      },
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           floatingActionButton: Container(
