@@ -303,7 +303,7 @@ class _HomeState extends State<Home> {
                                           cardItems[index].answerId, index);
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.fromLTRB(5, 0, 5, 3),
+                                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Colors.white, width: 1.0),
@@ -533,7 +533,7 @@ class _HomeState extends State<Home> {
                             changeLike(cardItems[index].answerId, index);
                           },
                           child: Container(
-                            padding: EdgeInsets.fromLTRB(5, 0, 5, 3),
+                            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                             decoration: BoxDecoration(
                                 border:
                                     Border.all(color: Colors.white, width: 1.0),
