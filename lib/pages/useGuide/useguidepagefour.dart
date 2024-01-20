@@ -24,6 +24,7 @@ class _UseGuidePageFourState extends State<UseGuidePageFour>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  bool isVisible = true;
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -58,6 +59,18 @@ class _UseGuidePageFourState extends State<UseGuidePageFour>
       ..addListener(() {
         setState(() {});
       });
+    _startBlinking();
+  }
+
+  void _startBlinking() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+          _startBlinking(); // 다음 깜빡임을 예약합니다.
+        });
+      }
+    });
   }
 
   @override
@@ -80,95 +93,95 @@ class _UseGuidePageFourState extends State<UseGuidePageFour>
         ),
         body: Padding(
           padding: EdgeInsets.fromLTRB(30.0, 0, 30, 0),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 60,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(top: 60),
+                alignment: Alignment.centerLeft,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Pretendard',
+                        color: mainColor.pink),
+                    children: [
+                      TextSpan(
+                        text: '블러팅',
                       ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Pretendard',
-                                color: mainColor.pink),
-                            children: [
-                              TextSpan(
-                                text: '블러팅',
-                              ),
-                              TextSpan(
-                                text: '에서',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ), // 원하는 색으로 변경하세요.
-                              ),
-                            ],
-                          ),
-                        ),
+                      TextSpan(
+                        text: '에서',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ), // 원하는 색으로 변경하세요.
                       ),
-                      SizedBox(
-                        height: 0,
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("상대방의 프로필을 누르면 귓속말을 걸 수",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: mainColor.pink,
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 0),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("있어요!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: mainColor.pink,
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 40),
-                      Column(children: <Widget>[
-                        Stack(
-                          clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                          children: <Widget>[
-                            Container(
-                              width: 294,
-                              height: 338,
-                              child:
-                                  Image.asset("assets/images/profilecard.png"),
-                            ),
-                            Positioned(
-                              left: 130, // 원하는 위치로 조정하세요.
-                              top: 270, // 원하는 위치로 조정하세요.
-                              child: Image.asset(
-                                "assets/images/pointer.png",
-                                width: 36.7,
-                                height: 47,
-                              ),
-                            ),
-                          ],
-                        )
-                      ]),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("상대방의 프로필을 누르면 귓속말을 걸 수",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: mainColor.pink,
+                      fontFamily: 'Pretendard',
+                    )),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("있어요!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: mainColor.pink,
+                      fontFamily: 'Pretendard',
+                    )),
+              ),
+              SizedBox(height: 40),
+              Stack(
+                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                children: <Widget>[
+                  Container(
+                    width: 294,
+                    height: 338,
+                    child: Image.asset("assets/images/profilecard.png"),
+                  ),
+                  Positioned(
+                    left: 130, // 원하는 위치로 조정하세요.
+                    top: 270, // 원하는 위치로 조정하세요.
+                    child: Image.asset(
+                      "assets/images/pointer.png",
+                      width: 36.7,
+                      height: 47,
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 1500),
+                    opacity: isVisible ? 1.0 : 0.3,
+                    child: Text("화면을 터치해 주세요!",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: mainColor.Gray,
+                          fontFamily: 'Heebo',
+                        )),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+
         floatingActionButton: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 80), // 좌우 마진을 16.0으로 설정
           child: Stack(

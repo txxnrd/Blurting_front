@@ -24,6 +24,7 @@ class _UseGuidePageFiveState extends State<UseGuidePageFive>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  bool isVisible = true;
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -58,6 +59,18 @@ class _UseGuidePageFiveState extends State<UseGuidePageFive>
       ..addListener(() {
         setState(() {});
       });
+    _startBlinking();
+  }
+
+  void _startBlinking() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+          _startBlinking(); // 다음 깜빡임을 예약합니다.
+        });
+      }
+    });
   }
 
   @override
@@ -80,99 +93,101 @@ class _UseGuidePageFiveState extends State<UseGuidePageFive>
         ),
         body: Padding(
           padding: EdgeInsets.fromLTRB(30.0, 0, 30, 0),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 60,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 60,
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Pretendard',
+                      color: mainColor.pink,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '귓속말',
                       ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Pretendard',
-                              color: mainColor.pink,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: '귓속말',
-                              ),
-                              TextSpan(
-                                text: '을',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ), // 원하는 색으로 변경하세요.
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 0,
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("걸기 위해서는 포인트가 필요해요!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: mainColor.pink,
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 0),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("블러팅에서 답변이 100자를 넘어갈 때마다 포인트를 얻어보세요!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: mainColor.pink,
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 100),
-                      Column(children: <Widget>[
-                        Stack(
-                          clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                          children: <Widget>[
-                            Container(
-                              width: 350,
-                              height: 64,
-                              child:
-                                  Image.asset("assets/images/useguidefive.png"),
-                            ),
-                            // Positioned(
-                            //   left: 130, // 원하는 위치로 조정하세요.
-                            //   top: 270, // 원하는 위치로 조정하세요.
-                            //   child: Image.asset(
-                            //     "assets/images/pointer.png",
-                            //     width: 36.7,
-                            //     height: 47,
-                            //   ),
-                            // ),
-                          ],
-                        )
-                      ]),
-                      SizedBox(
-                        height: 200,
+                      TextSpan(
+                        text: '을',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ), // 원하는 색으로 변경하세요.
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("걸기 위해서는 포인트가 필요해요!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: mainColor.pink,
+                      fontFamily: 'Pretendard',
+                    )),
+              ),
+              SizedBox(height: 0),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("블러팅에서 답변이 100자를 넘어갈 때마다 포인트를 얻어보세요!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: mainColor.pink,
+                      fontFamily: 'Pretendard',
+                    )),
+              ),
+              SizedBox(height: 100),
+              Column(children: <Widget>[
+                Stack(
+                  clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                  children: <Widget>[
+                    Container(
+                      width: 350,
+                      height: 64,
+                      child: Image.asset("assets/images/useguidefive.png"),
+                    ),
+                    // Positioned(
+                    //   left: 130, // 원하는 위치로 조정하세요.
+                    //   top: 270, // 원하는 위치로 조정하세요.
+                    //   child: Image.asset(
+                    //     "assets/images/pointer.png",
+                    //     width: 36.7,
+                    //     height: 47,
+                    //   ),
+                    // ),
+                  ],
+                )
+              ]),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 1500),
+                    opacity: isVisible ? 1.0 : 0.3,
+                    child: Text("화면을 터치해 주세요!",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: mainColor.Gray,
+                          fontFamily: 'Heebo',
+                        )),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+
         floatingActionButton: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 80), // 좌우 마진을 16.0으로 설정
           child: Stack(

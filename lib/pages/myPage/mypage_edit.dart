@@ -798,6 +798,9 @@ class _MyPageEditState extends State<MyPageEdit> {
                                         // 'result'가 null이 아닐 경우에만 content 업데이트
                                         if (result != null) {
                                           content = result;
+                                          setState(() {
+                                            IsValid = true;
+                                          });
                                         }
                                       });
                                     },
@@ -1206,9 +1209,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                         ],
                       ),
-                      Container(
-                        height: 100,
-                      )
                     ],
                   ),
                 ),
