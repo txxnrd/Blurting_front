@@ -75,7 +75,7 @@ class Blurting extends StatefulWidget {
 
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
-  late Timer _blinkTimer;
+  Timer? _blinkTimer;
 
   @override
   void initState() {
@@ -113,7 +113,9 @@ class _Blurting extends State<Blurting> {
   @override
   void dispose() {
     // 타이머가 여전히 실행 중이라면 중지합니다.
-    _blinkTimer.cancel();
+      _blinkTimer?.cancel();
+      isVisible = false;
+      isTap = [false, false, false];
     super.dispose();
   }
 
@@ -158,7 +160,7 @@ class _Blurting extends State<Blurting> {
             alignment: Alignment.topRight,
             children: [
               Container(
-                  margin: EdgeInsets.only(top: 110),
+                  margin: EdgeInsets.only(top: 100),
                   padding: EdgeInsets.all(13),
                   child: ellipseText(text: 'Blurting')),
             ],
@@ -335,7 +337,7 @@ class _Blurting extends State<Blurting> {
                             ),
                           ),
                           Container(
-                              margin: EdgeInsets.fromLTRB(0, 7, 10, 10),
+                              margin: EdgeInsets.fromLTRB(0, 4, 10, 10),
                               width: 40,
                               child: InkWell(
                                   splashColor:
@@ -344,7 +346,6 @@ class _Blurting extends State<Blurting> {
                                           iSended[currentPage] == false)
                                       ? () {
                                           // 하나라도 true일 떄 (하나라도 선택되었을 때)
-                          
                                           sendArrow(userId, currentDay);
                                         }
                                       : null,
@@ -506,7 +507,7 @@ class _Blurting extends State<Blurting> {
             if (!iSended[currentPage])
               if (ProfileList[currentPage].length <= 4)
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -939,7 +940,7 @@ class _Blurting extends State<Blurting> {
         if (mounted) {
           setState(() {
             iSended[day] = true;
-            _blinkTimer.cancel();
+            _blinkTimer?.cancel();
             isVisible = false;
           });
         }
@@ -966,7 +967,7 @@ class _Blurting extends State<Blurting> {
       if (status == false) {
         print('취소');
 
-        _blinkTimer.cancel();
+        _blinkTimer?.cancel();
         isVisible = false;
       }
       else{

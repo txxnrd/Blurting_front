@@ -39,7 +39,7 @@ class _MainApp extends State<MainApp> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        extendBody: _currentIndex == 2 ? true : false,
+        extendBody: false,
         body: _pages[_currentIndex],
         bottomNavigationBar: Container(
           decoration: BoxDecoration(

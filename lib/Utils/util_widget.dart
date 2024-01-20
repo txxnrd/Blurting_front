@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
@@ -419,6 +420,8 @@ class _MyChatState extends State<MyChat> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.key);
+
     return ListTile(
       subtitle: // 답변 내용
           Container(
@@ -727,6 +730,7 @@ class _AnswerItemState extends State<AnswerItem> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(7)),
             ),
+            contentPadding: EdgeInsets.zero,
             title: Center(
               child: Container(
                 margin: EdgeInsets.all(5),
@@ -740,147 +744,150 @@ class _AnswerItemState extends State<AnswerItem> {
                 ),
               ),
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Checkbox(
-                        side: BorderSide(color: Colors.transparent),
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
-                            }
-                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
-                          },
-                        ),
-                        value: isCheckSexuality,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == false || !checkReason.contains(true)) {
-                              isCheckSexuality = value!;
-                              checkReason[0] = !checkReason[0];
-                              reason = '음란성/선정성';
-                            }
-                          });
-                        }),
-                    Text(
-                      '음란성/선정성',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                        side: BorderSide(color: Colors.transparent),
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
-                            }
-                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
-                          },
-                        ),
-                        value: isCheckedAbuse,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == false || !checkReason.contains(true)) {
-                              isCheckedAbuse = value!;
-                              checkReason[1] = !checkReason[1];
-                              reason = '욕설/인신공격';
-                            }
-                          });
-                        }),
-                    Text(
-                      '욕설/인신공격',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                        side: BorderSide(color: Colors.transparent),
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
-                            }
-                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
-                          },
-                        ),
-                        value: isCheckedEtc,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == false || !checkReason.contains(true)) {
-                              isCheckedEtc = value!;
-                              checkReason[2] = !checkReason[2];
-                              reason = '기타';
-                            }
-                          });
-                        }),
-                    Text(
-                      '기타',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    )
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            content: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
                     children: [
-                      TextButton(
-                        onPressed:
-                            (checkReason.any((element) => element == true))
-                                ? () {
-                                    Navigator.of(context).pop(); // 모달 닫기
-
-                                    sendReport(widget.socket, reason);
-                                    setState(() {});
-                                  }
-                                : null,
-                        child: Container(
-                          width: 210,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color:
-                                (checkReason.any((element) => element == true))
-                                    ? mainColor.MainColor
-                                    : mainColor.lightGray,
-                            borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                      Checkbox(
+                          side: BorderSide(color: Colors.transparent),
+                          fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                              }
+                              return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                            },
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '신고하기',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Heebo",
-                                  fontSize: 20,
-                                  color: Colors.white),
+                          value: isCheckSexuality,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == false || !checkReason.contains(true)) {
+                                isCheckSexuality = value!;
+                                checkReason[0] = !checkReason[0];
+                                reason = '음란성/선정성';
+                              }
+                            });
+                          }),
+                      Text(
+                        '음란성/선정성',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            fontFamily: 'Heebo'),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          side: BorderSide(color: Colors.transparent),
+                          fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                              }
+                              return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                            },
+                          ),
+                          value: isCheckedAbuse,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == false || !checkReason.contains(true)) {
+                                isCheckedAbuse = value!;
+                                checkReason[1] = !checkReason[1];
+                                reason = '욕설/인신공격';
+                              }
+                            });
+                          }),
+                      Text(
+                        '욕설/인신공격',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            fontFamily: 'Heebo'),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          side: BorderSide(color: Colors.transparent),
+                          fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                              }
+                              return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                            },
+                          ),
+                          value: isCheckedEtc,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == false || !checkReason.contains(true)) {
+                                isCheckedEtc = value!;
+                                checkReason[2] = !checkReason[2];
+                                reason = '기타';
+                              }
+                            });
+                          }),
+                      Text(
+                        '기타',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            fontFamily: 'Heebo'),
+                      )
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed:
+                              (checkReason.any((element) => element == true))
+                                  ? () {
+                                      Navigator.of(context).pop(); // 모달 닫기
+              
+                                      sendReport(widget.socket, reason);
+                                      setState(() {});
+                                    }
+                                  : null,
+                          child: Container(
+                            width: 210,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color:
+                                  (checkReason.any((element) => element == true))
+                                      ? mainColor.MainColor
+                                      : mainColor.lightGray,
+                              borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                            ),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                '신고하기',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Heebo",
+                                    fontSize: 20,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });
@@ -902,7 +909,7 @@ class _AnswerItemState extends State<AnswerItem> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
-      print('재빌드');
+          print('재빌드');
 
           return Stack(
             children: [
@@ -916,133 +923,181 @@ class _AnswerItemState extends State<AnswerItem> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       side: BorderSide(color: mainColor.MainColor, width: 1.0),
                     ),
-                    content: Column(
-                      // 동적으로 눌린 유저의 정보 받아오기
-                      mainAxisSize: MainAxisSize.min,
+                    // contentPadding: EdgeInsets.zero,
+                    content: Stack(
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  // padding: EdgeInsets.only(top: 10),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Profile',
-                                    style: TextStyle(
-                                        color: mainColor.MainColor,
-                                        fontFamily: "Heebo",
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: GestureDetector(
-                                    child: Image.asset(
-                                      'assets/images/block.png',
-                                      fit: BoxFit.fill,
-                                    ),
-                                    onTap: () {
-                                      _ClickWarningButton(context,
-                                          widget.userId); // jsonData 줘야 함
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                            // margin: EdgeInsets.only(top: 5),
-                            width: 150,
-                            child: Image.asset(
-                              widget.image == "F"
-                                  ? 'assets/images/profile_woman.png'
-                                  : 'assets/images/profile_man.png',
-                              fit: BoxFit.fitHeight,
-                            )),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              widget.userName,
-                              style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 24,
-                                  color: mainColor.MainColor),
-                            ),
-                            Text(
-                              widget.mbti.toUpperCase(),
-                              style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  color: mainColor.MainColor),
-                            ),
-                            Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: (!isAlready)
-                                      ? () async {
-                                          await checkPoint();
-                                          setState(() {
-                                            if (!isAlready && enoughPoint) {
-                                              isTap(true);
-                                              HapticFeedback.vibrate();
-                                            }
-                                          });
-                                        }
-                                      : null,
-                                  child: Container(
-                                    margin: EdgeInsets.only(top: 20),
-                                    child: Stack(
+                            Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      // 동적으로 눌린 유저의 정보 받아오기
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        AnimatedContainer(
-                                          duration: Duration(milliseconds: 500),
-                                          width: 60,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              color: isValid || isAlready
-                                                  ? mainColor.MainColor
-                                                  : mainColor.lightGray,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                        ),
-                                        AnimatedPositioned(
-                                          duration: Duration(milliseconds: 500),
-                                          top: 2.5,
-                                          right:
-                                              isValid || isAlready ? 2.5 : 32.5,
-                                          child: Container(
-                                            width: 25,
-                                            height: 25,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.white),
+                                        Container(
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  // padding: EdgeInsets.only(top: 10),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Profile',
+                                                    style: TextStyle(
+                                                        color: mainColor.MainColor,
+                                                        fontFamily: "Heebo",
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w400),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        )
-                                      ],
+                                        ),
+                                        SizedBox(
+                                            width: 150,
+                                            child: Image.asset(
+                                              widget.image == "F"
+                                                  ? 'assets/images/profile_woman.png'
+                                                  : 'assets/images/profile_man.png',
+                                              fit: BoxFit.fitHeight,
+                                            )),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              widget.userName,
+                                              style: TextStyle(
+                                                  fontFamily: "Pretendard",
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 24,
+                                                  color: mainColor.MainColor),
+                                            ),
+                                            Text(
+                                              widget.mbti.toUpperCase(),
+                                              style: TextStyle(
+                                                  fontFamily: "Pretendard",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15,
+                                                  color: mainColor.MainColor),
+                                            ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned.fill(
+                                  child: AnimatedOpacity(
+                                    duration: Duration(milliseconds: 500),
+                                    opacity: isValid ? 1.0 : 0.0,
+                                    child: ClipRRect(
+                                        child: BackdropFilter(
+                                            filter: ImageFilter.blur(
+                                                sigmaX: 7, sigmaY: 7),
+                                            child: Container(
+                                                color: Colors.transparent))),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 12),
+                                    width: 20,
+                                    height: 20,
+                                    child: GestureDetector(
+                                      child: Image.asset(
+                                        'assets/images/block.png',
+                                        fit: BoxFit.fill,
+                                      ),
+                                      onTap: () {
+                                        _ClickWarningButton(context,
+                                            widget.userId); // jsonData 줘야 함
+                                      },
                                     ),
                                   ),
                                 ),
-                                if (!isAlready)
-                                  Text(
-                                    '귓속말 걸기',
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        color: mainColor.lightGray),
+                                Positioned.fill(
+                                  child: AnimatedOpacity(
+                                    duration: Duration(milliseconds: 500),
+                                    opacity: isValid ? 1.0 : 0.0,
+                                    child: Container(
+                                      margin: EdgeInsets.only(top: 30),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            '귓속말을 걸면 10p가 차감됩니다.',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                          Text(
+                                            '계속 진행하시겠습니까?',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
+                                ),
                               ],
+                            ),
+                            GestureDetector(
+                              onTap: (!isAlready)
+                                  ? () async {
+                                      await checkPoint();
+                                      setState(() {
+                                        if (!isAlready && enoughPoint) {
+                                          isTap(true);
+                                          HapticFeedback.vibrate();
+                                        }
+                                      });
+                                    }
+                                  : null,
+                              child: Stack(
+                                children: [
+                                  AnimatedContainer(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    duration: Duration(milliseconds: 500),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                            color: isAlready || isValid
+                                              ? mainColor.lightGray
+                                              : mainColor.MainColor,
+                                            width: 2)),
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(15, 3, 15, 5),
+                                      child: AnimatedDefaultTextStyle(
+                                        duration: Duration(milliseconds: 500),
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                          color: isAlready || isValid
+                                              ? mainColor.lightGray
+                                              : mainColor.MainColor,
+                                        ),
+                                        child: Text(
+                                          '귓속말 걸기',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             )
                           ],
                         ),
@@ -1051,6 +1106,7 @@ class _AnswerItemState extends State<AnswerItem> {
                   ),
                 ),
               ),
+
               Positioned(
                 bottom: 80,
                 child: AnimatedOpacity(
@@ -1222,45 +1278,7 @@ class _AnswerItemState extends State<AnswerItem> {
                               child: Stack(
                                 alignment: Alignment.bottomCenter,
                                 children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    height: 110,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.warning),
-                                    alignment: Alignment.topCenter,
-                                    child: GestureDetector(
-                                      child: Container(
-                                        margin: EdgeInsets.all(10),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              '귓속말을 걸면 10p가 차감됩니다.',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                  fontFamily: "Heebo"),
-                                            ),
-                                            Text(
-                                              '계속 진행하시겠습니까?',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                  fontFamily: "Heebo"),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ),
                                   GestureDetector(
-                                    // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.9,
@@ -1271,7 +1289,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                       height: 50,
                                       child: Center(
                                         child: Text(
-                                          '귓속말 걸기',
+                                          '계속하기',
                                           style: TextStyle(
                                               fontFamily: 'Heebo',
                                               color: Colors.white,
@@ -1280,7 +1298,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                         ),
                                       ),
                                     ),
-                                    onTap: () async {
+                                    onTap: () async {           // 귓속말 걸기가...
                                       if (isValid) {
                                         await startWhisper();
                                         if (!reportedUser) {
@@ -1351,6 +1369,8 @@ class _AnswerItemState extends State<AnswerItem> {
   // 답변 위젯
   @override
   Widget build(BuildContext context) {
+    print(widget.key);
+
     return ListTile(
       subtitle: // 답변 내용
           Row(
