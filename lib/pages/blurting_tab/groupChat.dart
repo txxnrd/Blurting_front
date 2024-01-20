@@ -40,7 +40,6 @@ class QuestionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double mediaquery_height = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
       child: Center(
@@ -312,7 +311,7 @@ class _GroupChat extends State<GroupChat> {
                 controller: pageScrollController,
                 child: Column(
                   children: [
-                    Container(
+                    Container(            // 여기에서 중복된 키가 발견되엇다는뎅...
                       padding: EdgeInsets.only(left: 5),
                       child: Column(
                         children: <Widget>[
@@ -483,6 +482,7 @@ class _GroupChat extends State<GroupChat> {
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
                     answerList[currentIndex].add(MyChat(
+                        key: ObjectKey(answerData['id']),
                         message: answerData['answer'],
                         createdAt: '',
                         read: true,
@@ -556,6 +556,7 @@ class _GroupChat extends State<GroupChat> {
               if (answerData['userId'] ==
                   Provider.of<UserProvider>(context, listen: false).userId) {
                 answerList[currentIndex].add(MyChat(
+                    key: ObjectKey(answerData['id']),
                     message: answerData['answer'],
                     createdAt: '',
                     read: true,
