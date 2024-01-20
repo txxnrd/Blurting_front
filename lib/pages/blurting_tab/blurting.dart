@@ -351,7 +351,7 @@ class _Blurting extends State<Blurting> {
                                   child: Image.asset(
                                     'assets/images/blurtingArrow.png',
                                     color: isTap[currentPage] == true ||
-                                            (day != 'Day${currentPage+1}' || iSended[currentPage]) == true
+                                            ( iSended[currentPage]) == true
                                         ? mainColor.MainColor
                                         : mainColor.Gray.withOpacity(0.2),
                                   ))),
@@ -481,7 +481,7 @@ class _Blurting extends State<Blurting> {
                     fontFamily: 'Heebo'),
               ),
             ),
-            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]))
+            if (!iSended[currentPage])
               Text(
                 (isValidDay[index] == true)
                     ? '누가 당신의 마음을 사로잡았나요?'
@@ -492,7 +492,7 @@ class _Blurting extends State<Blurting> {
                     fontSize: 16,
                     fontFamily: 'Heebo'),
               ),
-            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]) && isValidDay[index])
+            if (! iSended[currentPage] && isValidDay[index])
               Text(
                 '* 오늘이 지나기 전에 화살표를 날려 주세요!',
                 style: TextStyle(
@@ -501,7 +501,7 @@ class _Blurting extends State<Blurting> {
                     fontSize: 10,
                     fontFamily: 'Heebo'),
               ),
-            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]))
+            if (!iSended[currentPage])
               if (ProfileList[currentPage].length <= 4)
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
@@ -512,7 +512,7 @@ class _Blurting extends State<Blurting> {
                     ],
                   ),
                 ),
-            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]))
+            if (!iSended[currentPage])
               if (ProfileList[currentPage].length > 4)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -541,7 +541,7 @@ class _Blurting extends State<Blurting> {
                 ),
           ],
         ),
-        if (day != 'Day${currentPage+1}' || iSended[currentPage])
+        if (iSended[currentPage])
           Align(
             alignment: Alignment.center,
             child: Text(
