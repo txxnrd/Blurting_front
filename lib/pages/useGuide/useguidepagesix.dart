@@ -94,8 +94,21 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
         body: Padding(
           padding: EdgeInsets.fromLTRB(30.0, 0, 30, 0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Container(
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 1500),
+                  opacity: isVisible ? 1.0 : 0.3,
+                  child: Text("화면을 터치해 주세요!",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: mainColor.Gray,
+                        fontFamily: 'Heebo',
+                      )),
+                ),
+              ),
               Container(
                 padding: EdgeInsets.only(top: 60),
                 alignment: Alignment.centerLeft,
@@ -115,7 +128,7 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                        ), // 원하는 색으로 변경하세요.
+                        ),
                       ),
                     ],
                   ),
@@ -163,23 +176,6 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
                   ],
                 )
               ]),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 40),
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 1500),
-                    opacity: isVisible ? 1.0 : 0.3,
-                    child: Text("화면을 터치해 주세요!",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: mainColor.Gray,
-                          fontFamily: 'Heebo',
-                        )),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
