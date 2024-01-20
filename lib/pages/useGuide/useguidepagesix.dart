@@ -24,6 +24,7 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  bool isVisible = true;
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -58,6 +59,18 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
       ..addListener(() {
         setState(() {});
       });
+    _startBlinking();
+  }
+
+  void _startBlinking() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+          _startBlinking(); // 다음 깜빡임을 예약합니다.
+        });
+      }
+    });
   }
 
   @override
@@ -80,96 +93,90 @@ class _UseGuidePageSixState extends State<UseGuidePageSix>
         ),
         body: Padding(
           padding: EdgeInsets.fromLTRB(30.0, 0, 30, 0),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 60,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 1500),
+                  opacity: isVisible ? 1.0 : 0.3,
+                  child: Text("화면을 터치해 주세요!",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: mainColor.Gray,
+                        fontFamily: 'Heebo',
+                      )),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 60),
+                alignment: Alignment.centerLeft,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Pretendard',
+                        color: mainColor.pink),
+                    children: [
+                      TextSpan(
+                        text: '귓속말',
                       ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Pretendard',
-                                color: mainColor.pink),
-                            children: [
-                              TextSpan(
-                                text: '귓속말',
-                              ),
-                              TextSpan(
-                                text: '에서',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ), // 원하는 색으로 변경하세요.
-                              ),
-                            ],
-                          ),
+                      TextSpan(
+                        text: '에서',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-                      SizedBox(
-                        height: 0,
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("상대방의 프로필을 누르면 상대방의",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: mainColor.pink,
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 0),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("프로필 카드를 볼 수 있어요!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: mainColor.pink,
-                              fontFamily: 'Pretendard',
-                            )),
-                      ),
-                      SizedBox(height: 100),
-                      Column(children: <Widget>[
-                        Stack(
-                          clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                          children: <Widget>[
-                            Container(
-                              width: 350,
-                              height: 64,
-                              child:
-                                  Image.asset("assets/images/useguidesix.png"),
-                            ),
-                            Positioned(
-                              left: 50, // 원하는 위치로 조정하세요.
-                              top: 50, // 원하는 위치로 조정하세요.
-                              child: Image.asset(
-                                "assets/images/pointer.png",
-                                width: 36.7,
-                                height: 47,
-                              ),
-                            ),
-                          ],
-                        )
-                      ]),
-                      SizedBox(
-                        height: 200,
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("상대방의 프로필을 누르면 상대방의",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: mainColor.pink,
+                      fontFamily: 'Pretendard',
+                    )),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("프로필 카드를 볼 수 있어요!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: mainColor.pink,
+                      fontFamily: 'Pretendard',
+                    )),
+              ),
+              SizedBox(height: 100),
+              Column(children: <Widget>[
+                Stack(
+                  clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                  children: <Widget>[
+                    Container(
+                      width: 350,
+                      height: 64,
+                      child: Image.asset("assets/images/useguidesix.png"),
+                    ),
+                    Positioned(
+                      left: 50,
+                      top: 50,
+                      child: Image.asset(
+                        "assets/images/pointer.png",
+                        width: 36.7,
+                        height: 47,
+                      ),
+                    ),
+                  ],
+                )
+              ]),
+            ],
           ),
         ),
         floatingActionButton: Padding(
