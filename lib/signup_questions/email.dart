@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/signup_questions/welcomepage.dart';
@@ -47,8 +48,8 @@ class _EmailPageState extends State<EmailPage>
       vsync: this,
     );
     _progressAnimation = Tween<double>(
-      begin: 14 / 15, // 시작 너비 (30%)
-      end: 14.02 / 15, // 종료 너비 (40%)
+      begin: 14 / 15,
+      end: 14.02 / 15,
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -81,6 +82,7 @@ class _EmailPageState extends State<EmailPage>
 
   String Email = '';
   bool IsValid = false;
+  bool Certification = false;
   @override
   void InputEmail(String value) {
     setState(() {
@@ -95,7 +97,6 @@ class _EmailPageState extends State<EmailPage>
       await saveToken(old_token);
       trial = 0;
     }
-    Navigator.of(context).pop();
   }
 
   String old_token = "";
@@ -103,12 +104,13 @@ class _EmailPageState extends State<EmailPage>
   Future<void> _sendPostRequest() async {
     try {
       trial += 1;
-
       certification = true;
-
       var url = Uri.parse(API.signupemail);
       if (trial == 1) old_token = await getToken();
-
+      print("old_token");
+      print(old_token);
+      print("trial");
+      print(trial);
       var response = await http.post(
         url,
         headers: <String, String>{
@@ -120,6 +122,7 @@ class _EmailPageState extends State<EmailPage>
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         showSnackBar(context, '이메일 전송이 완료 되었습니다.');
+        Certification = true;
         var data = json.decode(response.body);
         if (data['signupToken'] != null && trial > 0) {
           var token = data['signupToken'];
@@ -134,7 +137,6 @@ class _EmailPageState extends State<EmailPage>
       }
     } catch (e) {
       trial = 0;
-
       showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
     }
   }
@@ -219,6 +221,7 @@ class _EmailPageState extends State<EmailPage>
   }
 
   bool certification = false;
+  bool isBlurred = false;
 
   Future<void> _whenpoped() async {
     if (certification) await saveToken(old_token);
@@ -227,6 +230,9 @@ class _EmailPageState extends State<EmailPage>
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
       _gender = Gender.male;
@@ -242,7 +248,7 @@ class _EmailPageState extends State<EmailPage>
       child: PopScope(
         canPop: true,
         onPopInvoked: (didPop) {
-          _handleBackPress();
+          isBlurred ? isBlurred = false : _handleBackPress();
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -251,107 +257,210 @@ class _EmailPageState extends State<EmailPage>
             backgroundColor: Colors.white,
             title: Text(''),
             elevation: 0,
+            leading: IconButton(
+                onPressed: () {
+                  isBlurred
+                      ? setState(() {
+                          isBlurred = false;
+                        })
+                      : Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back_ios)),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 25,
-                ),
-                ProgressBar(context, _progressAnimation!, _gender!),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  '마지막 질문입니다!',
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: mainColor.black,
-                      fontFamily: 'Pretendard'),
-                ),
-                Text(
-                  '당신의 이메일을 입력해주세요!',
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: mainColor.black,
-                      fontFamily: 'Pretendard'),
-                ),
-                SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 150,
-                      height: 48,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          isDense: true,
-                          hintText: '이메일 입력',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: mainColor.lightGray),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: mainColor.lightGray),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFF66464)),
-                          ),
+          body: Stack(
+            children: [
+              ImageFiltered(
+                imageFilter: isBlurred
+                    ? ImageFilter.blur(sigmaX: 12, sigmaY: 12)
+                    : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 25,
                         ),
-                        onChanged: (value) {
-                          InputEmail(value);
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
-                    Text(
-                      '@',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    SizedBox(width: 4),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
-                      alignment: Alignment.centerLeft,
-                      height: 48, // TextField의 높이와 일치하도록 설정
-                      width: 150,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: mainColor.lightGray),
-                        borderRadius: BorderRadius.circular(
-                            4), // TextField의 테두리와 일치하도록 설정
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.domain,
+                        Center(
+                          child: Container(
+                              width: width * 0.8,
+                              child: ProgressBar(
+                                  context, _progressAnimation!, _gender!)),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Text(
+                          '마지막 질문입니다!',
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
-                          ),
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: mainColor.black,
+                              fontFamily: 'Pretendard'),
                         ),
-                      ),
-                    ),
-                    // 두 위젯 사이의 간격을 주기 위한 SizedBox
-                  ],
-                ),
-                SizedBox(height: 40),
-                GestureDetector(
-                  onTap: () {
-                    _sendPostRequest();
-                  },
-                  child: Center(
-                    child: Text(
-                      '이메일 재전송하기',
-                      style: TextStyle(fontSize: 24),
+                        Text(
+                          '당신의 이메일을 입력해주세요!',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: mainColor.black,
+                              fontFamily: 'Pretendard'),
+                        ),
+                        SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 150,
+                              height: 48,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: '이메일 입력',
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: mainColor.lightGray),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: mainColor.lightGray),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFF66464)),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  InputEmail(value);
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
+                            Text(
+                              '@',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            SizedBox(width: 4),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12), // 내부 여백을 추가
+                              alignment: Alignment.centerLeft,
+                              height: 48, // TextField의 높이와 일치하도록 설정
+                              width: 150,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: mainColor.lightGray),
+                                borderRadius: BorderRadius.circular(
+                                    4), // TextField의 테두리와 일치하도록 설정
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  widget.domain,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                    // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: height * 0.56,
+                          child: Text("."),
+                        )
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Visibility(
+                  visible: isBlurred,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(10, height * 0.1, 0, 0),
+                    child: Text(
+                      "인증 메일이 발송되었습니다.",
+                      style: TextStyle(
+                          color: mainColor.pink,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              Visibility(
+                  visible: isBlurred,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, height * 0.15, 0, 0),
+                        child: Text(
+                          "회원가입을 완료하기 위해서는 이메일 인증이 필요합니다.",
+                          style: TextStyle(
+                              color: mainColor.pink,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
+                  )),
+              Visibility(
+                  visible: isBlurred,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, height * 0.175, 0, 0),
+                        child: Text(
+                          "편지함에서 인증하기를 눌러주세요",
+                          style: TextStyle(
+                              color: mainColor.pink,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
+                  )),
+              Visibility(
+                visible: isBlurred,
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, height * 0.51, 0, 0),
+                    child: InkWell(
+                      splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: mainColor.pink,
+                              width: 2,
+                            )),
+                        margin: EdgeInsets.only(bottom: 10),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 48,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "인증 이메일 재전송 받기",
+                              style: TextStyle(
+                                  color: mainColor.pink,
+                                  fontSize: 20,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        _sendPostRequest();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           floatingActionButton: Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
@@ -362,10 +471,15 @@ class _EmailPageState extends State<EmailPage>
                 IsValid: IsValid,
               ),
               onTap: () async {
-                if (!certification) {
+                if (!isBlurred) {
                   // 인증번호를 요청할 때 이 부분이 실행됩니다.
                   await _sendPostRequest();
-                  NowCertification();
+                  if (Certification) {
+                    NowCertification();
+                    setState(() {
+                      isBlurred = true;
+                    });
+                  }
                 } else {
                   // 인증번호가 이미 요청되었고, 유저가 다음 단계로 진행할 준비가 되었을 때 실행됩니다.
                   _sendVerificationRequest();
@@ -381,23 +495,23 @@ class _EmailPageState extends State<EmailPage>
   }
 }
 
-class FaceIconPainter extends CustomPainter {
-  final double progress;
+// class FaceIconPainter extends CustomPainter {
+//   final double progress;
 
-  FaceIconPainter(this.progress);
+//   FaceIconPainter(this.progress);
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.fill;
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()
+//       ..color = Colors.blue
+//       ..style = PaintingStyle.fill;
 
-    final facePosition = Offset(size.width * progress - 10, size.height / 2);
-    canvas.drawCircle(facePosition, 5.0, paint);
-  }
+//     final facePosition = Offset(size.width * progress - 10, size.height / 2);
+//     canvas.drawCircle(facePosition, 5.0, paint);
+//   }
 
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return true;
+//   }
+// }

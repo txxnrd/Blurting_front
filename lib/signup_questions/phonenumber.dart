@@ -201,7 +201,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     myFocusNode = FocusNode();
     myFocusNode.unfocus();
     _progressAnimation = Tween<double>(
-      begin: 0.3 / 15, // 시작 게이지 값
+      begin: 0.5 / 15, // 시작 게이지 값
       end: 1 / 15, // 종료 게이지 값
     ).animate(_animationController!);
 
@@ -443,9 +443,7 @@ class FaceIconPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.fill;
+    final paint = Paint()..style = PaintingStyle.fill;
 
     final facePosition = Offset(size.width * progress - 10, size.height / 2);
     canvas.drawCircle(facePosition, 5.0, paint);

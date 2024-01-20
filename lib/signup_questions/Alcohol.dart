@@ -129,7 +129,7 @@ class _AlcoholPageState extends State<AlcoholPage>
               SizedBox(
                 height: 25,
               ),
-              ProgressBar(context, _progressAnimation!, _gender!),
+              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),
