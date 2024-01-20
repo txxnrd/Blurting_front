@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
@@ -18,10 +19,11 @@ import 'package:http/http.dart' as http;
 /** */
 DateTime createdAt = DateTime.now();
 
-String isState = 'loading...'; // 방이 있으면 true (Continue), 없으면 false (Start)
+String isState = 'loading...';
+
+bool isVisible = false;
 
 List<bool> isTap = [
-  // setState를 위한... 내가 누군가를 눌렀는지 아닌지
   false, false, false
 ];
 
@@ -73,15 +75,23 @@ class Blurting extends StatefulWidget {
 
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
+  late Timer _blinkTimer;
 
   @override
   void initState() {
     super.initState();
 
     Future.delayed(Duration.zero, () async {
+      await fetchPoint();
+
       await isMatched();
+      print(isState);
+
       if (isState == 'Continue') {
         await MyArrow();
+
+        print(iSended);
+
         await fetchLatestComments();
         await fetchGroupInfo();
         if (mounted) {
@@ -101,9 +111,29 @@ class _Blurting extends State<Blurting> {
   }
 
   @override
+  void dispose() {
+    // 타이머가 여전히 실행 중이라면 중지합니다.
+    _blinkTimer.cancel();
+    super.dispose();
+  }
+
+  void _startBlinking() {
+    // 타이머를 생성하고 1초마다 콜백을 호출하여 깜빡임을 구현합니다.
+    _blinkTimer = Timer.periodic(Duration(milliseconds: 1000), (Timer timer) {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+        });
+      } else {
+        // State가 이미 해제되었다면 타이머를 중지합니다.
+        timer.cancel();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     dividedProfileList[0].clear();
     dividedProfileList[1].clear();
@@ -244,7 +274,7 @@ class _Blurting extends State<Blurting> {
                                 ],
                               ),
                             )
-                          : isState == 'Matching...'
+                          : isState == 'Matching'
                               ? Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -285,27 +315,48 @@ class _Blurting extends State<Blurting> {
                                         ]),
                     ),
                     if (isState == 'Continue' && !isMine)
-                      Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 10, 10),
-                          width: 32,
-                          child: InkWell(
-                              splashColor:
-                                  Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-                              onTap: (isTap[currentPage] == true &&
-                                      iSended[currentPage] == false)
-                                  ? () {
-                                      // 하나라도 true일 떄 (하나라도 선택되었을 때)
-
-                                      sendArrow(userId, currentDay);
-                                    }
-                                  : null,
-                              child: Image.asset(
-                                'assets/images/blurtingArrow.png',
-                                color: isTap[currentPage] == true ||
-                                        iSended[currentPage] == true
-                                    ? mainColor.MainColor
-                                    : mainColor.Gray.withOpacity(0.2),
-                              )))
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          AnimatedOpacity(
+                            duration: Duration(milliseconds: 1000),
+                            opacity: isVisible ? 1 : 0,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                '터치해서 화살을 날려주세요!',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: "Heebo"
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                              margin: EdgeInsets.fromLTRB(0, 7, 10, 10),
+                              width: 40,
+                              child: InkWell(
+                                  splashColor:
+                                      Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+                                  onTap: (isTap[currentPage] == true &&
+                                          iSended[currentPage] == false)
+                                      ? () {
+                                          // 하나라도 true일 떄 (하나라도 선택되었을 때)
+                          
+                                          sendArrow(userId, currentDay);
+                                        }
+                                      : null,
+                                  child: Image.asset(
+                                    'assets/images/blurtingArrow.png',
+                                    color: isTap[currentPage] == true ||
+                                            (day != 'Day${currentPage+1}' || iSended[currentPage]) == true
+                                        ? mainColor.MainColor
+                                        : mainColor.Gray.withOpacity(0.2),
+                                  ))),
+                        ],
+                      )
                   ],
                 ),
               ),
@@ -377,32 +428,16 @@ class _Blurting extends State<Blurting> {
             child: staticButton(
                 text: isState == 'Continue'
                     ? "방 입장하기"
-                    : (isState == "Start" ? "방 생성하기" : "매칭중")),
+                    : isState == 'Matching' ? '매칭중' : "방 생성하기"),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
-
-              // DateTime lastTime =
-              //     _parseDateTime(prefs.getString('timeInSeconds'));
 
               String? localDay = prefs.getString('day');
               print(localDay);
               print(day);
 
-              // DateTime day1Time = createdAt; // 만들어진 시간
-              // DateTime day2Time =
-              //     createdAt.add(Duration(hours: 24)); // 하루가 지난 시간
-              // DateTime day3Time =
-              //     createdAt.add(Duration(hours: 48)); // 이틀이 지난 시간
-
               if (isState == 'Continue') {
-                // if (day == 'Day1' && (lastTime.isAfter(day1Time)) ||
-                //     day == 'Day2' && (lastTime.isAfter(day2Time)) ||
-                //     day == 'Day3' &&
-                //         (lastTime.isAfter(
-                //             day3Time))) // 마지막으로 본 시간과 만들어진 시간 + 24, 48시간 중 둘 중 하나라도, 현재 시간이 Before라면
-                
                 if(localDay == day)
-                
                 {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => GroupChat()));
@@ -414,14 +449,13 @@ class _Blurting extends State<Blurting> {
                                 day: day,
                               )));
                 }
-              } else if (isState == 'Start' || isState == 'Matching...') {
+              } else if (isState == 'Start' || isState == 'Matching') {
                 // 아직 방이 만들어지지 않음
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Matching()));
               }
 
               // 데이터를 로컬에 저장하는 함수
-              // await prefs.setString('timeInSeconds', DateTime.now().toString());
               await prefs.setString('day', day);
             },
           )
@@ -447,7 +481,7 @@ class _Blurting extends State<Blurting> {
                     fontFamily: 'Heebo'),
               ),
             ),
-            if (!iSended[currentPage])
+            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]))
               Text(
                 (isValidDay[index] == true)
                     ? '누가 당신의 마음을 사로잡았나요?'
@@ -458,7 +492,7 @@ class _Blurting extends State<Blurting> {
                     fontSize: 16,
                     fontFamily: 'Heebo'),
               ),
-            if (!iSended[currentPage] && isValidDay[index])
+            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]) && isValidDay[index])
               Text(
                 '* 오늘이 지나기 전에 화살표를 날려 주세요!',
                 style: TextStyle(
@@ -467,7 +501,7 @@ class _Blurting extends State<Blurting> {
                     fontSize: 10,
                     fontFamily: 'Heebo'),
               ),
-            if (!iSended[currentPage])
+            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]))
               if (ProfileList[currentPage].length <= 4)
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
@@ -478,7 +512,7 @@ class _Blurting extends State<Blurting> {
                     ],
                   ),
                 ),
-            if (!iSended[currentPage])
+            if (!(day != 'Day${currentPage+1}' || iSended[currentPage]))
               if (ProfileList[currentPage].length > 4)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -507,7 +541,7 @@ class _Blurting extends State<Blurting> {
                 ),
           ],
         ),
-        if (iSended[currentPage])
+        if (day != 'Day${currentPage+1}' || iSended[currentPage])
           Align(
             alignment: Alignment.center,
             child: Text(
@@ -596,22 +630,26 @@ class _Blurting extends State<Blurting> {
 
       try {
         int responseData = jsonDecode(response
-            .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching...
+            .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
+
+        print(responseData);
         if (mounted) {
-          setState(() async {
+          setState(() {
             if (responseData == 1) {
               isState = 'Continue';
             } else if (responseData == 0) {
               isState = 'Start';
-              await pref.setString('day', 'Day0');
+              pref.setString('day', 'Day0');
             } else {
-              isState = 'Matching...';
+              isState = 'Matching';
             }
           });
 
           print(pref.getString('day'));
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -640,14 +678,8 @@ class _Blurting extends State<Blurting> {
 
         if (mounted) {
           setState(() {
-            // createdAt = DateTime.now().add(Duration(hours: -47));
             createdAt = _parseDateTime(responseData['createdAt']);
             int latestIndex = responseData['questionNo'];
-
-            print(latestIndex);
-            print(iSended);
-
-            Duration timeDifference = DateTime.now().difference(createdAt);
 
             setState(() {
               // 시작하자마자 day1 고르기
@@ -655,7 +687,6 @@ class _Blurting extends State<Blurting> {
               currentDay = 0;
             });
 
-            // if (timeDifference >= Duration(hours: 24)) {
             if (latestIndex >= 4 && latestIndex <= 6) {
               day = 'Day2';
               pageController.page == 1;
@@ -673,7 +704,6 @@ class _Blurting extends State<Blurting> {
               }
             }
 
-            // if (timeDifference >= Duration(hours: 48)) {
             else if (latestIndex >= 7) {
 
               day = 'Day3';
@@ -692,18 +722,56 @@ class _Blurting extends State<Blurting> {
                 sendArrow(-1, 1);
               }
             }
-
-            print(day);
           });
         }
         //
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
     } else {
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+    }
+  }
+
+  Future<void> fetchPoint() async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
+
+    final url = Uri.parse(API.userpoint);
+    String savedToken = await getToken();
+    int userId = await getuserId();
+    Provider.of<UserProvider>(context, listen: false).userId = userId;
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point =
+                responseData['point'];
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchPoint);
+    } else {
+      throw Exception('point : 잔여 포인트를 로드하는 데 실패했습니다');
     }
   }
 
@@ -770,7 +838,10 @@ class _Blurting extends State<Blurting> {
               userId: -1,
               clickProfile: clickProfile));
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+
+      }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -805,13 +876,18 @@ class _Blurting extends State<Blurting> {
         List<dynamic> iSendedList = responseData['iSended'];
 
         print(iSendedList);
+        print(iReceivedList);
 
         // 받은 화살표 처리
         if (iReceivedList.isEmpty) {
           //
         } else {
+          int i = 0;
           //
           for (final iReceivedItem in iReceivedList) {
+            i++;
+            if(i>=3) break;
+
             int day = (iReceivedItem['day'] - 1);
             iReceived[day].add(recievedProfile(
                 userName: iReceivedItem['username'] ?? '탈퇴한 사용자',
@@ -820,6 +896,7 @@ class _Blurting extends State<Blurting> {
         }
         //
 
+        iSended = [false, false, false];
         int i = iSendedList.length;
         //
         for (int j = 0; j < i; j++) {
@@ -828,7 +905,9 @@ class _Blurting extends State<Blurting> {
         }
 
         //
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -850,15 +929,16 @@ class _Blurting extends State<Blurting> {
 
     if (response.statusCode == 201) {
       try {
-        // bool responseData = json.decode(response.body);
-
         if (mounted) {
           setState(() {
             iSended[day] = true;
-            //
+            _blinkTimer.cancel();
+            isVisible = false;
           });
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -873,6 +953,19 @@ class _Blurting extends State<Blurting> {
     setState(() {
       isTap[currentPage] = status;
       userId = userId_;
+
+      print(status);
+
+      if (status == false) {
+        print('취소');
+
+        _blinkTimer.cancel();
+        isVisible = false;
+      }
+      else{
+        print('클릭');
+        _startBlinking();
+      }
     });
   }
 }
@@ -954,7 +1047,7 @@ class _profileState extends State<profile> {
       onTap: () {
         if (isTap[currentPage] == true && !widget.thisSelected) {
         } else {
-          if (canSendArrow) {
+          if (canSendArrow) {            
             setState(() {
               widget.thisSelected = !widget.thisSelected;
             });
