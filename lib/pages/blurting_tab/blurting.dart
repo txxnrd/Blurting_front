@@ -89,11 +89,10 @@ class _Blurting extends State<Blurting> {
 
       if (isState == 'Continue') {
         await MyArrow();
-
         print(iSended);
 
-        await fetchLatestComments();
         await fetchGroupInfo();
+        await fetchLatestComments();
         if (mounted) {
           pageController.jumpToPage(currentDay);
         }
@@ -741,7 +740,7 @@ class _Blurting extends State<Blurting> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchLatestComments);
     } else {
-      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다');
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다 ${response.statusCode}');
     }
   }
 
@@ -804,6 +803,10 @@ class _Blurting extends State<Blurting> {
         }
 
         List<dynamic> responseData = jsonDecode(response.body);
+
+        print(responseData);
+        print('responseData');
+
         for (final profileData in responseData) {
           if (mounted) {
             setState(() {
