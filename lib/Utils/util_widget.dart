@@ -724,6 +724,7 @@ class _AnswerItemState extends State<AnswerItem> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
+          print(checkReason);
           Colors.white;
           return AlertDialog(
             surfaceTintColor: Colors.white,
@@ -855,7 +856,7 @@ class _AnswerItemState extends State<AnswerItem> {
                               (checkReason.any((element) => element == true))
                                   ? () {
                                       Navigator.of(context).pop(); // 모달 닫기
-              
+                                      print('신고 접수');
                                       sendReport(widget.socket, reason);
                                       setState(() {});
                                     }
