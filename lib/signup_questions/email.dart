@@ -494,24 +494,3 @@ class _EmailPageState extends State<EmailPage>
     );
   }
 }
-
-// class FaceIconPainter extends CustomPainter {
-//   final double progress;
-
-//   FaceIconPainter(this.progress);
-
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final paint = Paint()
-//       ..color = Colors.blue
-//       ..style = PaintingStyle.fill;
-
-//     final facePosition = Offset(size.width * progress - 10, size.height / 2);
-//     canvas.drawCircle(facePosition, 5.0, paint);
-//   }
-
-//   @override
-//   bool shouldRepaint(CustomPainter oldDelegate) {
-//     return true;
-//   }
-// }
