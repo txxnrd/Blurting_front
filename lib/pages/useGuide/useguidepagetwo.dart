@@ -31,16 +31,16 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
 
     Navigator.of(context)
         .push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            UseGuidePageThree(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    )
-        .then((_) {
-    });
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                UseGuidePageThree(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        )
+        .then((_) {});
   }
 
 //여기에서 밑에 애니메이션 어느정도 진행됐는지 저장함. 1/7,2/7,3/7로 지정해주면 될듯
@@ -61,7 +61,6 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
         setState(() {});
       });
     _startBlinking();
-    
   }
 
   void _startBlinking() {
@@ -196,6 +195,17 @@ class _UseGuidePageTwoState extends State<UseGuidePageTwo>
                   color: mainColor.pink,
                   borderRadius: BorderRadius.circular(4.0),
                 ),
+              ),
+              AnimatedOpacity(
+                duration: Duration(milliseconds: 1500),
+                opacity: isVisible ? 1.0 : 0.3,
+                child: Text("화면을 터치해 주세요!",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: mainColor.Gray,
+                      fontFamily: 'Heebo',
+                    )),
               ),
             ],
           ),
