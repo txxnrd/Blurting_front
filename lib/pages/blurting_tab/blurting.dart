@@ -75,7 +75,7 @@ class Blurting extends StatefulWidget {
 
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
-  late Timer _blinkTimer;
+  Timer? _blinkTimer;
 
   @override
   void initState() {
@@ -113,7 +113,9 @@ class _Blurting extends State<Blurting> {
   @override
   void dispose() {
     // 타이머가 여전히 실행 중이라면 중지합니다.
-    _blinkTimer.cancel();
+      _blinkTimer?.cancel();
+      isVisible = false;
+      isTap = [false, false, false];
     super.dispose();
   }
 
@@ -939,7 +941,7 @@ class _Blurting extends State<Blurting> {
         if (mounted) {
           setState(() {
             iSended[day] = true;
-            _blinkTimer.cancel();
+            _blinkTimer?.cancel();
             isVisible = false;
           });
         }
@@ -966,7 +968,7 @@ class _Blurting extends State<Blurting> {
       if (status == false) {
         print('취소');
 
-        _blinkTimer.cancel();
+        _blinkTimer?.cancel();
         isVisible = false;
       }
       else{
