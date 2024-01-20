@@ -1206,9 +1206,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                           ),
                         ],
                       ),
-                      Container(
-                        height: 100,
-                      )
                     ],
                   ),
                 ),
