@@ -71,11 +71,10 @@ class _SettingPageState extends State<SettingPage> {
                                   Container(
                                     width:
                                         MediaQuery.of(context).size.width * 0.9,
-                                    height: 100,
+                                    height: 110,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.lightGray
-                                            .withOpacity(0.8)),
+                                        color: mainColor.warning),
                                     alignment: Alignment.topCenter,
                                     child: Container(
                                       margin: EdgeInsets.all(10),
@@ -86,7 +85,7 @@ class _SettingPageState extends State<SettingPage> {
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 10,
+                                                fontSize: 14,
                                                 fontFamily: "Heebo"),
                                           ),
                                           Text(
@@ -94,7 +93,7 @@ class _SettingPageState extends State<SettingPage> {
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 10,
+                                                fontSize: 14,
                                                 fontFamily: "Heebo"),
                                           ),
                                         ],
@@ -135,7 +134,7 @@ class _SettingPageState extends State<SettingPage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray),
+                                    color: mainColor.warning),
                                 // color: mainColor.MainColor,
                                 child: Center(
                                   child: Text(
@@ -195,11 +194,10 @@ class _SettingPageState extends State<SettingPage> {
                                   Container(
                                     width:
                                         MediaQuery.of(context).size.width * 0.9,
-                                    height: 100,
+                                    height: 90,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.lightGray
-                                            .withOpacity(0.8)),
+                                        color: mainColor.warning),
                                     alignment: Alignment.topCenter,
                                     child: Container(
                                       margin: EdgeInsets.all(10),
@@ -210,7 +208,7 @@ class _SettingPageState extends State<SettingPage> {
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 12,
+                                                fontSize: 14,
                                                 fontFamily: "Heebo"),
                                           ),
                                         ],
@@ -256,7 +254,7 @@ class _SettingPageState extends State<SettingPage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray),
+                                    color: mainColor.warning),
                                 // color: mainColor.MainColor,
                                 child: Center(
                                   child: Text(

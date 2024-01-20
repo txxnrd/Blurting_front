@@ -111,190 +111,259 @@ class _HomeState extends State<Home> {
   }
 
   void _showMVPCard(BuildContext context, int index) {
+    int likes = cardItems[index].likes;
+    bool ilike = cardItems[index].ilike;
+
+    void setDialog(int index) {
+      setState(() {
+        if (!ilike) {
+          likes++;
+        } else {
+          likes--;
+        }
+        ilike = !ilike;
+      });
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Stack(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  padding: EdgeInsets.only(bottom: 10),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22),
-                    image: DecorationImage(
-                      image: AssetImage('./assets/images/homecard.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: SizedBox(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Row(
-                              children: [
-                                if (cardItems[index].userSex == 'M')
-                                  ClipOval(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      color: mainColor.pink.withOpacity(0.5),
-                                      child: Image.asset(
-                                        './assets/man.png',
-                                        width: 30,
-                                        height: 30,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            print('재빌드');
+            return Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: 10),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        image: DecorationImage(
+                          image: AssetImage('./assets/images/homecard.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Row(
+                                  children: [
+                                    if (cardItems[index].userSex == 'M')
+                                      ClipOval(
+                                        child: Container(
+                                          padding: EdgeInsets.all(5),
+                                          color: mainColor.pink.withOpacity(0.5),
+                                          child: Image.asset(
+                                            './assets/man.png',
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                        ),
+                                      ),
+                                    if (cardItems[index].userSex == 'F')
+                                      ClipOval(
+                                        child: Container(
+                                          padding: EdgeInsets.all(5),
+                                          color: mainColor.MainColor.withOpacity(0.5),
+                                          child: Image.asset(
+                                            './assets/woman.png',
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                        ),
+                                      ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      '${cardItems[index].userName} 님의 답변',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Heebo',
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                  ),
-                                if (cardItems[index].userSex == 'F')
-                                  ClipOval(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      color: mainColor.MainColor.withOpacity(0.5),
-                                      child: Image.asset(
-                                        './assets/woman.png',
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                    ),
-                                  ),
-                                SizedBox(width: 8),
-                                Text(
-                                  '${cardItems[index].userName} 님의 답변',
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 12),
+                              SingleChildScrollView(
+                                child: Text(
+                                  'Q: ${cardItems[index].question}',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Heebo',
-                                    fontSize: 17,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          SingleChildScrollView(
-                            child: Text(
-                              'Q: ${cardItems[index].question}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Heebo',
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
                               ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                Scrollbar(
-                                  controller: _answercontroller,
-                                  trackVisibility: true,
-                                  thumbVisibility: true,
-                                  thickness: 4,
-                                  radius: Radius.circular(5),
-                                  child: ShaderMask(
-                                    shaderCallback: (rect) {
-                                      return const LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Colors.white,
-                                            Color.fromRGBO(255, 255, 255, 0)
-                                          ],
-                                          stops: [
-                                            0.6,
-                                        1
-                                      ]).createShader(Rect.fromLTRB(
-                                      0, 0, rect.width, rect.height));
-                                },
-                                    child: SingleChildScrollView(
+                              SizedBox(height: 13),
+                              Expanded(
+                                child: Stack(
+                                  children: [
+                                    Scrollbar(
                                       controller: _answercontroller,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 14.0),
+                                      trackVisibility: true,
+                                      thumbVisibility: true,
+                                      thickness: 4,
+                                      radius: Radius.circular(5),
+                                      child: ShaderMask(
+                                        shaderCallback: (rect) {
+                                          return const LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Colors.white,
+                                                Color.fromRGBO(255, 255, 255, 0)
+                                              ],
+                                              stops: [
+                                                0.7,
+                                            1
+                                          ]).createShader(Rect.fromLTRB(
+                                          0, 0, rect.width, rect.height));
+                                    },
+                                        child: SingleChildScrollView(
+                                          controller: _answercontroller,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(right: 14.0),
+                                            child: Text(
+                                              'A: ${cardItems[index].answer}\n\n',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'Heebo',
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              overflow: TextOverflow.fade,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: const [
+                                  Expanded(
+                                    child: Divider(
+                                      color: Colors.white,
+                                      height: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.thumb_up,
+                                            color: ilike
+                                                ? mainColor.pink
+                                                : Colors.white,
+                                        size: 17,
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 5),
                                         child: Text(
-                                          'A: ${cardItems[index].answer}\n',
+                                          '${likes}',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Heebo',
                                             fontSize: 17,
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w400,
                                           ),
-                                          overflow: TextOverflow.fade,
                                         ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 3),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        setDialog(index);
+                                      });
+                                      changeLike(
+                                          cardItems[index].answerId, index);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.fromLTRB(5, 0, 5, 3),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.white, width: 1.0),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 3),
+                                            child: Icon(
+                                              Icons.thumb_up,
+                                              color: Colors.white,
+                                              size: 15,
+                                            ),
+                                          ),
+                                          Text(
+                                            '좋아요',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Heebo',
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: const [
-                              Expanded(
-                                child: Divider(
-                                  color: Colors.white,
-                                  height: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                          // SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '좋아요 ${cardItems[index].likes}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Heebo',
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                  //     setState(() {
+                                  //       setDialog(index);
+                                  //     });
+                                  //     changeLike(
+                                  //         cardItems[index].answerId, index);
+                                  //   },
+                                  //   child: Icon(
+                                  //     Icons.thumb_up,
+                                  //       color: ilike
+                                  //           ? mainColor.pink
+                                  //           : Colors.white,
+                                  //       size: 17,
+                                  //     ),
+                                  //   ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // 좋아요 버튼을 눌렀을 때의 로직
-                                      changeLike(
-                                          cardItems[index].answerId, index);
-                                    },
-                                    child: Icon(
-                                      Icons.thumb_up,
-                                      color: cardItems[index].ilike
-                                          ? mainColor.pink
-                                          : Colors.white,
-                                      size: 17,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              SizedBox(
+                                height: 10,
+                              )
                             ],
                           ),
-                          SizedBox(
-                            height: 10,
-                          )
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ],
-          );
+                ],
+              );
+          }
+        );
         });
   }
 
@@ -432,37 +501,85 @@ class _HomeState extends State<Home> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Text('좋아요 ${cardItems[index].likes}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Heebo',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // 좋아요 버튼을 눌렀을 때의 로직
-                              changeLike(cardItems[index].answerId, index);
-                            },
-                            child: Icon(
+                      GestureDetector(
+                        child: Row(
+                          children: [
+                            Icon(
                               Icons.thumb_up,
                               color: cardItems[index].ilike
                                   ? mainColor.pink
                                   : Colors.white,
                               size: 15,
                             ),
-                          ),
-                        ],
+                            Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Text(
+                                '${cardItems[index].likes}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                      Container(
+                        margin: EdgeInsets.only(top: 3),
+                        child: GestureDetector(
+                          onTap: () {
+                            changeLike(cardItems[index].answerId, index);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(5, 0, 5, 3),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 1.0),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 3),
+                                  child: Icon(
+                                    Icons.thumb_up,
+                                    color: Colors.white,
+                                    size: 12,
+                                  ),
+                                ),
+                                Text(
+                                  '좋아요',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Heebo',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     setState(() {
+                      //       setDialog(index);
+                      //     });
+                      //     changeLike(
+                                  //         cardItems[index].answerId, index);
+                                  //   },
+                                  //   child: Icon(
+                                  //     Icons.thumb_up,
+                                  //       color: ilike
+                                  //           ? mainColor.pink
+                                  //           : Colors.white,
+                                  //       size: 17,
+                                  //     ),
+                                  //   ),
+                                ],
+                              ),
                   SizedBox(
                     height: 10,
                   )
@@ -735,7 +852,6 @@ class _HomeState extends State<Home> {
       if (mounted) {
         setState(() {
           if (!cardItems[index].ilike) {
-            // If not liked, increase likes count and set ilike to true
             cardItems[index].likes++;
           } else {
             cardItems[index].likes--;

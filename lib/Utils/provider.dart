@@ -14,6 +14,7 @@ class mainColor {
   static Color pink = Color.fromRGBO(255, 125, 125, 1);
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
   static Color black = Color.fromRGBO(48, 48, 48, 1);
+  static Color warning = Color.fromRGBO(195, 192, 195, 1);
 }
 
 class GroupChatProvider with ChangeNotifier {

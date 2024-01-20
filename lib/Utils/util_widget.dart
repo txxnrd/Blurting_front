@@ -91,6 +91,7 @@ class CustomInputField extends StatefulWidget {
   final String blockText;
   final String hintText;
   final int questionId;
+  final bool isBlurting;
 
   CustomInputField(
       {required this.controller,
@@ -98,7 +99,8 @@ class CustomInputField extends StatefulWidget {
       required this.isBlock,
       required this.blockText,
       required this.hintText,
-      required this.questionId});
+      required this.questionId,
+      required this.isBlurting});
 
   @override
   _CustomInputFieldState createState() => _CustomInputFieldState();
@@ -116,7 +118,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
   }
 
   void inputPointValid(bool state) {
-    if(mounted) {
+    if(_focusNode.hasFocus) {
       Provider.of<GroupChatProvider>(context, listen: false).pointValid = state;
     }
   }
@@ -151,11 +153,13 @@ class _CustomInputFieldState extends State<CustomInputField> {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
-      padding: _focusNode.hasFocus ? EdgeInsets.fromLTRB(0, 7, 0, 0) : EdgeInsets.fromLTRB(0, 7, 0, 20),
+      padding: !widget.isBlurting ? EdgeInsets.fromLTRB(0, 7, 0, 20) : 
+                                   _focusNode.hasFocus ? EdgeInsets.fromLTRB(0, 7, 0, 0) :EdgeInsets.fromLTRB(0, 7, 0, 20) ,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               ClipPath(
                 clipper: InputfieldClipper(),
@@ -238,9 +242,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                 ),
               ),
-              if (_focusNode.hasFocus)
+              if (_focusNode.hasFocus && widget.isBlurting)
                 Container(
-                    padding: EdgeInsets.all(3),
+                    padding: EdgeInsets.all(5),
                     child: Text(
                       '$length/100',
                       style: TextStyle(
@@ -898,6 +902,8 @@ class _AnswerItemState extends State<AnswerItem> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
+      print('재빌드');
+
           return Stack(
             children: [
               Center(
@@ -1219,11 +1225,10 @@ class _AnswerItemState extends State<AnswerItem> {
                                   Container(
                                     width:
                                         MediaQuery.of(context).size.width * 0.9,
-                                    height: 100,
+                                    height: 110,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.lightGray
-                                            .withOpacity(0.8)),
+                                        color: mainColor.warning),
                                     alignment: Alignment.topCenter,
                                     child: GestureDetector(
                                       child: Container(
@@ -1235,7 +1240,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 10,
+                                                  fontSize: 14,
                                                   fontFamily: "Heebo"),
                                             ),
                                             Text(
@@ -1243,7 +1248,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 10,
+                                                  fontSize: 14,
                                                   fontFamily: "Heebo"),
                                             ),
                                           ],
@@ -1302,7 +1307,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray),
+                                    color: mainColor.warning),
                                 // color: mainColor.MainColor,
                                 child: Center(
                                   child: Text(
