@@ -30,10 +30,13 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
 
+  double isVisible = 0;
+
   bool _isImageBefore = true;
   bool _isImageMiddle = false;
   bool _isImageAfter = false;
   late Timer _imageTimer;
+  late Timer _timer;
 
   double opacity = 1.0;
   double imageOpacity = 0.3;
@@ -53,7 +56,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
     time = 0;
 
     void _startAnimation() {
-      Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         if (mounted) {
           setState(() {
             blurValue = blurValue == 100.0
@@ -70,11 +73,17 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
           });
           time++;
         }
+
+        if (time == 6) {
+          print('시작');
+          _startBlinking();
+          isVisible = 1.0;
+        }
       });
     }
 
     _startAnimation();
-
+    
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
@@ -87,12 +96,25 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
-      });
+      });      
+  }
+
+    void _startBlinking() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          if (isVisible == 0.3) isVisible = 1.0;
+          else if (isVisible == 1.0) isVisible = 0.3;
+          _startBlinking(); // 다음 깜빡임을 예약합니다.
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     _blurController.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -198,6 +220,23 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                         ),
                       ],
                     ),
+                                                  Expanded(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 1500),
+                    opacity: isVisible,
+                    child: Text("화면을 터치해 주세요!",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: mainColor.Gray,
+                          fontFamily: 'Heebo',
+                        )),
+                  ),
+                ),
+              ),
                   ],
                 ),
               ),
