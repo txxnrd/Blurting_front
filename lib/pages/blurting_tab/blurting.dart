@@ -433,7 +433,9 @@ class _Blurting extends State<Blurting> {
               SharedPreferences prefs = await SharedPreferences.getInstance();
 
               String? localDay = prefs.getString('day');
+              print('로컬 데이');
               print(localDay);
+              print('실제 데이');
               print(day);
 
               if (isState == 'Continue') {
@@ -642,6 +644,7 @@ class _Blurting extends State<Blurting> {
               pref.setString('day', 'Day0');
             } else {
               isState = 'Matching';
+              pref.setString('day', 'Day0');
             }
           });
 
@@ -687,7 +690,11 @@ class _Blurting extends State<Blurting> {
               currentDay = 0;
             });
 
-            if (latestIndex >= 4 && latestIndex <= 6) {
+            if(latestIndex >= 1 && latestIndex <= 3){
+              day = 'Day1';
+            }
+
+            else if (latestIndex >= 4 && latestIndex <= 6) {
               day = 'Day2';
               pageController.page == 1;
 
@@ -888,8 +895,8 @@ class _Blurting extends State<Blurting> {
             i++;
             if(i>=3) break;
 
-            int day = (iReceivedItem['day'] - 1);
-            iReceived[day].add(recievedProfile(
+            int _day = (iReceivedItem['day'] - 1);
+            iReceived[_day].add(recievedProfile(
                 userName: iReceivedItem['username'] ?? '탈퇴한 사용자',
                 userSex: iReceivedItem['userSex'] ?? 'none'));
           }
