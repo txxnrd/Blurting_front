@@ -85,7 +85,7 @@ class _chatListItemState extends State<ChatListItem> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          '채팅방을 나가면 현재까지의 대화 내용이 모두 사라지고',
+                                          '채팅방을 나가면 대화 내용이 모두 사라지고',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w500,
