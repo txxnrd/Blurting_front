@@ -462,11 +462,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                                   Container(
                                     width:
                                         MediaQuery.of(context).size.width * 0.9,
-                                    height: 100,
+                                    height: 110,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.lightGray
-                                            .withOpacity(0.8)),
+                                        color: mainColor.warning),
                                     alignment: Alignment.topCenter,
                                     child: Container(
                                       margin: EdgeInsets.all(10),
@@ -477,7 +476,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 10,
+                                                fontSize: 14,
                                                 fontFamily: "Heebo"),
                                           ),
                                           Text(
@@ -485,7 +484,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 10,
+                                                fontSize: 14,
                                                 fontFamily: "Heebo"),
                                           ),
                                         ],
@@ -528,125 +527,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray),
-                                // color: mainColor.MainColor,
-                                child: Center(
-                                  child: Text(
-                                    '취소',
-                                    style: TextStyle(
-                                        fontFamily: 'Heebo',
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                if (mounted) {
-                                  setState(() {
-                                    Navigator.of(context).pop();
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  void _showlogoutWarning(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.2),
-            body: Stack(
-              children: [
-                Positioned(
-                  bottom: 100,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(top: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: 20),
-                              child: Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.lightGray
-                                            .withOpacity(0.8)),
-                                    alignment: Alignment.topCenter,
-                                    child: Container(
-                                      margin: EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '블러팅에서 로그아웃 하시겠습니까?',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10,
-                                                fontFamily: "Heebo"),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: mainColor.MainColor),
-                                      height: 50,
-                                      // color: mainColor.MainColor,
-                                      child: Center(
-                                        child: Text(
-                                          '로그아웃',
-                                          style: TextStyle(
-                                              fontFamily: 'Heebo',
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      IsValid = false;
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.lightGray),
+                                    color: mainColor.warning),
                                 // color: mainColor.MainColor,
                                 child: Center(
                                   child: Text(

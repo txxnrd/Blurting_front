@@ -124,9 +124,13 @@ class _GroupChat extends State<GroupChat> {
         });
       });
 
-      socket.on('connect', (_) {});
+      socket.on('connect', (_) {
+        print('소켓 연결됨');
+      });
 
-      socket.on('disconnect', (_) {});
+      socket.on('disconnect', (_) {
+        print('소켓 연결 끊김');
+      });
     }
 
     initializeSocket();
@@ -372,6 +376,7 @@ class _GroupChat extends State<GroupChat> {
           blockText: "이미 답변이 완료된 질문입니다.",
           hintText: "내 생각 쓰기...(부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다)",
           questionId: 1,
+          isBlurting: true
         ),
       ],
     );

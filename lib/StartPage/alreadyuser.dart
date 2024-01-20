@@ -190,7 +190,6 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

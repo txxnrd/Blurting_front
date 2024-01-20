@@ -104,7 +104,7 @@ class _Whisper extends State<Whisper> {
         String formattedDate = dateFormatFull
             .format(_parseDateTime(data['createdAt'] as String? ?? ''));
 
-        if (roomId == widget.roomId) {
+          if (mounted) {        if (roomId == widget.roomId) {
           if (userId ==
               Provider.of<UserProvider>(context, listen: false).userId) {
             // userProvider
@@ -125,7 +125,7 @@ class _Whisper extends State<Whisper> {
                     _parseDateTime(data['createdAt'] as String? ?? '')));
             print('상대방 메시지 도착: $chat');
           }
-          if (mounted) {
+
             setState(() {
               if (chatMessages.isEmpty) {
                 chatMessages
@@ -134,8 +134,7 @@ class _Whisper extends State<Whisper> {
 
               chatMessages.add(newAnswer); // 새로운 메시지 추가
             });
-          }
-        }
+        }}
       });
 
       widget.socket.on('read_all', (data) {
@@ -213,7 +212,7 @@ class _Whisper extends State<Whisper> {
   void dispose() {
     super.dispose();
 
-    widget.socket.off('new_chat');
+    // widget.socket.off('new_chat');
 
     if (mounted) {
       Map<String, dynamic> data = {'roomId': widget.roomId, 'inRoom': false};
@@ -429,12 +428,11 @@ class _Whisper extends State<Whisper> {
                                                       .size
                                                       .width *
                                                   0.9,
-                                              height: 100,
+                                              height: 110,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  color: mainColor.lightGray
-                                                      .withOpacity(0.8)),
+                                                  color: mainColor.warning),
                                               alignment: Alignment.topCenter,
                                               child: Container(
                                                 margin: EdgeInsets.all(10),
@@ -446,7 +444,7 @@ class _Whisper extends State<Whisper> {
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.w500,
-                                                          fontSize: 10,
+                                                          fontSize: 14,
                                                           fontFamily: "Heebo"),
                                                     ),
                                                     Text(
@@ -455,7 +453,7 @@ class _Whisper extends State<Whisper> {
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.w500,
-                                                          fontSize: 10,
+                                                          fontSize: 14,
                                                           fontFamily: "Heebo"),
                                                     ),
                                                   ],
@@ -508,7 +506,7 @@ class _Whisper extends State<Whisper> {
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
-                                              color: mainColor.lightGray),
+                                              color: mainColor.warning),
                                           // color: mainColor.MainColor,
                                           child: Center(
                                             child: Text(
@@ -618,6 +616,7 @@ class _Whisper extends State<Whisper> {
                 blockText: "귓속말이 끊긴 상대입니다",
                 hintText: "",
                 questionId: 0,
+                isBlurting: false
               ),
             ],
           ),
@@ -720,6 +719,7 @@ class _Whisper extends State<Whisper> {
           bool read = createdAt.isBefore(hasRead);
 
           Widget fetchChatList;
+
           if (mounted) {
             setState(() {
               // 만약에 지금 보고 있는 애의 날짜가 이전에 본 애의 날짜랑 같다면 냅두고, 다르다면 날짜 위젯을 chatMessages에 추가
