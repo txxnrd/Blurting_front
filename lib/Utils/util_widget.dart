@@ -730,6 +730,7 @@ class _AnswerItemState extends State<AnswerItem> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(7)),
             ),
+            contentPadding: EdgeInsets.zero,
             title: Center(
               child: Container(
                 margin: EdgeInsets.all(5),
@@ -743,147 +744,150 @@ class _AnswerItemState extends State<AnswerItem> {
                 ),
               ),
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Checkbox(
-                        side: BorderSide(color: Colors.transparent),
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
-                            }
-                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
-                          },
-                        ),
-                        value: isCheckSexuality,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == false || !checkReason.contains(true)) {
-                              isCheckSexuality = value!;
-                              checkReason[0] = !checkReason[0];
-                              reason = '음란성/선정성';
-                            }
-                          });
-                        }),
-                    Text(
-                      '음란성/선정성',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                        side: BorderSide(color: Colors.transparent),
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
-                            }
-                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
-                          },
-                        ),
-                        value: isCheckedAbuse,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == false || !checkReason.contains(true)) {
-                              isCheckedAbuse = value!;
-                              checkReason[1] = !checkReason[1];
-                              reason = '욕설/인신공격';
-                            }
-                          });
-                        }),
-                    Text(
-                      '욕설/인신공격',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                        side: BorderSide(color: Colors.transparent),
-                        fillColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return mainColor.MainColor; // 선택되었을 때의 배경 색상
-                            }
-                            return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
-                          },
-                        ),
-                        value: isCheckedEtc,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == false || !checkReason.contains(true)) {
-                              isCheckedEtc = value!;
-                              checkReason[2] = !checkReason[2];
-                              reason = '기타';
-                            }
-                          });
-                        }),
-                    Text(
-                      '기타',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          fontFamily: 'Heebo'),
-                    )
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            content: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
                     children: [
-                      TextButton(
-                        onPressed:
-                            (checkReason.any((element) => element == true))
-                                ? () {
-                                    Navigator.of(context).pop(); // 모달 닫기
-
-                                    sendReport(widget.socket, reason);
-                                    setState(() {});
-                                  }
-                                : null,
-                        child: Container(
-                          width: 210,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color:
-                                (checkReason.any((element) => element == true))
-                                    ? mainColor.MainColor
-                                    : mainColor.lightGray,
-                            borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                      Checkbox(
+                          side: BorderSide(color: Colors.transparent),
+                          fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                              }
+                              return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                            },
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '신고하기',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Heebo",
-                                  fontSize: 20,
-                                  color: Colors.white),
+                          value: isCheckSexuality,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == false || !checkReason.contains(true)) {
+                                isCheckSexuality = value!;
+                                checkReason[0] = !checkReason[0];
+                                reason = '음란성/선정성';
+                              }
+                            });
+                          }),
+                      Text(
+                        '음란성/선정성',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            fontFamily: 'Heebo'),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          side: BorderSide(color: Colors.transparent),
+                          fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                              }
+                              return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                            },
+                          ),
+                          value: isCheckedAbuse,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == false || !checkReason.contains(true)) {
+                                isCheckedAbuse = value!;
+                                checkReason[1] = !checkReason[1];
+                                reason = '욕설/인신공격';
+                              }
+                            });
+                          }),
+                      Text(
+                        '욕설/인신공격',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            fontFamily: 'Heebo'),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          side: BorderSide(color: Colors.transparent),
+                          fillColor: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return mainColor.MainColor; // 선택되었을 때의 배경 색상
+                              }
+                              return mainColor.lightGray; // 선택되지 않았을 때의 배경 색상
+                            },
+                          ),
+                          value: isCheckedEtc,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == false || !checkReason.contains(true)) {
+                                isCheckedEtc = value!;
+                                checkReason[2] = !checkReason[2];
+                                reason = '기타';
+                              }
+                            });
+                          }),
+                      Text(
+                        '기타',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            fontFamily: 'Heebo'),
+                      )
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed:
+                              (checkReason.any((element) => element == true))
+                                  ? () {
+                                      Navigator.of(context).pop(); // 모달 닫기
+              
+                                      sendReport(widget.socket, reason);
+                                      setState(() {});
+                                    }
+                                  : null,
+                          child: Container(
+                            width: 210,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color:
+                                  (checkReason.any((element) => element == true))
+                                      ? mainColor.MainColor
+                                      : mainColor.lightGray,
+                              borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                            ),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                '신고하기',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Heebo",
+                                    fontSize: 20,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });
@@ -952,23 +956,6 @@ class _AnswerItemState extends State<AnswerItem> {
                                                   ),
                                                 ),
                                               ),
-                                              Align(
-                                                alignment: Alignment.topRight,
-                                                child: Container(
-                                                  width: 20,
-                                                  height: 20,
-                                                  child: GestureDetector(
-                                                    child: Image.asset(
-                                                      'assets/images/block.png',
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                    onTap: () {
-                                                      _ClickWarningButton(context,
-                                                          widget.userId); // jsonData 줘야 함
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
                                             ],
                                           ),
                                         ),
@@ -1014,6 +1001,24 @@ class _AnswerItemState extends State<AnswerItem> {
                                                 sigmaX: 7, sigmaY: 7),
                                             child: Container(
                                                 color: Colors.transparent))),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 12),
+                                    width: 20,
+                                    height: 20,
+                                    child: GestureDetector(
+                                      child: Image.asset(
+                                        'assets/images/block.png',
+                                        fit: BoxFit.fill,
+                                      ),
+                                      onTap: () {
+                                        _ClickWarningButton(context,
+                                            widget.userId); // jsonData 줘야 함
+                                      },
+                                    ),
                                   ),
                                 ),
                                 Positioned.fill(
