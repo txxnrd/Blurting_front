@@ -312,7 +312,7 @@ class _EmailPageState extends State<EmailPage>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 150,
+                              width: width * 0.4,
                               height: 48,
                               child: TextField(
                                 decoration: InputDecoration(
@@ -347,7 +347,7 @@ class _EmailPageState extends State<EmailPage>
                                   horizontal: 12), // 내부 여백을 추가
                               alignment: Alignment.centerLeft,
                               height: 48, // TextField의 높이와 일치하도록 설정
-                              width: 150,
+                              width: width * 0.4,
                               decoration: BoxDecoration(
                                 border: Border.all(color: mainColor.lightGray),
                                 borderRadius: BorderRadius.circular(
@@ -424,7 +424,8 @@ class _EmailPageState extends State<EmailPage>
                 visible: isBlurred,
                 child: Center(
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(0, height * 0.51, 0, 0),
+                    alignment: Alignment.bottomCenter,
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
                     child: InkWell(
                       splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
                       child: Container(
@@ -435,7 +436,6 @@ class _EmailPageState extends State<EmailPage>
                               color: mainColor.pink,
                               width: 2,
                             )),
-                        margin: EdgeInsets.only(bottom: 10),
                         width: MediaQuery.of(context).size.width * 0.9,
                         height: 48,
                         child: Column(

@@ -17,7 +17,7 @@ int currentIndex = 0; // 현재 보고 있는 페이지
 int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
 String _question = '';
-String day = 'Day1';
+String day = 'Day0';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {

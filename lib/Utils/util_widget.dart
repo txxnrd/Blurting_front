@@ -246,7 +246,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 Container(
                     padding: EdgeInsets.all(5),
                     child: Text(
-                      '$length/100',
+                      '$length자',
                       style: TextStyle(
                           color: mainColor.Gray,
                           fontFamily: 'Heebo',
