@@ -275,15 +275,17 @@ class _MyPageEditState extends State<MyPageEdit> {
   @override
   void InputHeightNumber(int value) {
     setState(() {
-      if (100 > height || height > 240) {
-        showSnackBar(context, "올바른 키 정보를 입력해주세요.");
-      }
       height = value;
       modifiedFlags["height"] = true;
+      IsValid = true;
     });
   }
 
   Future<void> _sendFixRequest() async {
+    if (100 > height || height > 240) {
+      showSnackBar(context, "올바른 키 정보를 입력해주세요.");
+      return;
+    }
     int drink = 0;
     int smoke = 0;
     List<String> selectedCharacteristics = [];
@@ -395,6 +397,165 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _pickAndUploadImage1() async {
+    image_uploading_count += 1;
+    IsValid = false;
+    var picker = ImagePicker();
+    String savedToken = await getToken();
+    var image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 80); // imageQuality는 필요에 따라 조절
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
+
+    if (image != null) {
+      File selectedImage = File(image.path);
+      setState(() {
+        _image1 = selectedImage;
+      });
+
+      FormData formData = FormData.fromMap({
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image1.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          image_uploaded_count += 1;
+
+          var urlList = response.data;
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
+            String imageUrl = urlList[0]['url'];
+
+            setState(() {
+              _image1Url = imageUrl;
+              if (image_uploaded_count == image_uploading_count) IsValid = true;
+            });
+          }
+        } else {}
+      } catch (e, stacktrace) {}
+    }
+  }
+
+  Future<void> _pickAndUploadImage2() async {
+    image_uploading_count += 1;
+    IsValid = false;
+    var picker = ImagePicker();
+    String savedToken = await getToken();
+    var image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 80); // imageQuality는 필요에 따라 조절
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
+
+    if (image != null) {
+      File selectedImage = File(image.path);
+      setState(() {
+        _image2 = selectedImage;
+      });
+
+      FormData formData = FormData.fromMap({
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image2.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          image_uploaded_count += 1;
+
+          var urlList = response.data;
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
+            String imageUrl = urlList[0]['url'];
+
+            setState(() {
+              _image2Url = imageUrl;
+              if (image_uploaded_count == image_uploading_count) IsValid = true;
+            });
+          }
+        } else {}
+      } catch (e, stacktrace) {}
+    }
+  }
+
+  Future<void> _pickAndUploadImage3() async {
+    image_uploading_count += 1;
+    IsValid = false;
+    var picker = ImagePicker();
+    String savedToken = await getToken();
+    var image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: image_maxheight,
+        maxWidth: image_maxwidth,
+        imageQuality: 80); // imageQuality는 필요에 따라 조절
+    Dio dio = Dio();
+    var url = Uri.parse(API.uploadimage);
+
+    if (image != null) {
+      File selectedImage = File(image.path);
+      setState(() {
+        _image3 = selectedImage;
+      });
+
+      FormData formData = FormData.fromMap({
+        'files': await MultipartFile.fromFile(selectedImage.path,
+            filename: 'image3.jpg'),
+      });
+
+      try {
+        var response = await dio.post(
+          url.toString(),
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $savedToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          image_uploaded_count += 1;
+
+          var urlList = response.data;
+          if (urlList.isNotEmpty &&
+              urlList[0] is Map &&
+              urlList[0].containsKey('url')) {
+            String imageUrl = urlList[0]['url'];
+
+            setState(() {
+              _image3Url = imageUrl;
+              if (image_uploaded_count == image_uploading_count) IsValid = true;
+            });
+          }
+        } else {}
+      } catch (e, stacktrace) {}
+    }
   }
 
   Widget MBTIbox(double width, int index) {
@@ -947,8 +1108,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                           width: screenWidth,
                           child: TextField(
                               controller: _textController,
+                              maxLength: 3,
                               decoration: InputDecoration(
                                 hintStyle: TextStyle(fontSize: 12),
+                                counterText: '', // /maxlength가 안보이게 추가
                                 contentPadding:
                                     EdgeInsets.fromLTRB(12.0, 13, 10, 13),
                                 isDense: true,
@@ -1149,8 +1312,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                             .spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
                         children: [
                           InkWell(
-                            onTap: () => _pickAndUploadImage(
-                                1), // 버튼을 누를 때 _pickImage 함수 호출
+                            onTap: () =>
+                                _pickAndUploadImage1(), // 버튼을 누를 때 _pickImage 함수 호출
                             child: Container(
                               width: 100,
                               height: 125,
@@ -1170,7 +1333,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                             ),
                           ),
                           InkWell(
-                            onTap: () => _pickAndUploadImage(2),
+                            onTap: () => _pickAndUploadImage2(),
                             child: Container(
                               width: 100,
                               height: 125,
@@ -1189,7 +1352,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                             ),
                           ),
                           InkWell(
-                            onTap: () => _pickAndUploadImage(3),
+                            onTap: () => _pickAndUploadImage3(),
                             child: Container(
                               width: 100,
                               height: 125,

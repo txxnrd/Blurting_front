@@ -159,7 +159,6 @@ class _GroupChat extends State<GroupChat> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
@@ -288,9 +287,7 @@ class _GroupChat extends State<GroupChat> {
     );
   }
 
-
   Widget questionPage(int index) {
-    
     ScrollController pageScrollController =
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
 
@@ -311,7 +308,8 @@ class _GroupChat extends State<GroupChat> {
                 controller: pageScrollController,
                 child: Column(
                   children: [
-                    Container(            // 여기에서 중복된 키가 발견되엇다는뎅...
+                    Container(
+                      // 여기에서 중복된 키가 발견되엇다는뎅...
                       padding: EdgeInsets.only(left: 5),
                       child: Column(
                         children: <Widget>[
@@ -369,14 +367,13 @@ class _GroupChat extends State<GroupChat> {
           ),
         ),
         CustomInputField(
-          controller: _controller,
-          sendFunction: SendAnswer,
-          isBlock: isBlock[currentIndex],
-          blockText: "이미 답변이 완료된 질문입니다.",
-          hintText: "내 생각 쓰기...(부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다)",
-          questionId: 1,
-          isBlurting: true
-        ),
+            controller: _controller,
+            sendFunction: SendAnswer,
+            isBlock: isBlock[currentIndex],
+            blockText: "이미 답변이 완료된 질문입니다.",
+            hintText: "내 생각 쓰기...",
+            questionId: 1,
+            isBlurting: true),
       ],
     );
   }
