@@ -368,7 +368,7 @@ class _EmailPageState extends State<EmailPage>
                 child: Center(
                   child: Container(
                     alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.17),
                     child: InkWell(
                       splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
                       child: Container(
