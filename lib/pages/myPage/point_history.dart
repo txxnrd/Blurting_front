@@ -4,6 +4,7 @@ import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:blurting/token.dart';
+import 'package:blurting/utils/provider.dart';
 
 class PointHistoryPage extends StatefulWidget {
   // Constructor to receive the user token
@@ -217,15 +218,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0.0,
         toolbarHeight: 80,
-        title: Text(
-          '포인트 내역',
-          style: TextStyle(
-            fontFamily: 'Heebo',
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Colors.grey,
-          ),
-        ),
+        title: AppbarDescription("포인트 내역"),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,

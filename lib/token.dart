@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/startpage/startpage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +19,6 @@ Future<String> getToken() async {
   // 'signupToken' 키를 사용하여 저장된 토큰 값을 가져오기.
   // 값이 없을 경우 'No Token'을 반환
   String token = prefs.getString('signupToken') ?? 'No Token';
-
   return token;
 }
 
@@ -89,4 +89,16 @@ Future<void> getnewaccesstoken<T>(
 Future<void> clearAllData() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.clear(); // 모든 저장된 데이터를 지웁니다.
+
+  var url = Uri.parse(API.signup);
+  String savedToken = await getToken();
+
+  var response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $savedToken',
+    },
+    body: json.encode({"token": ""}),
+  );
 }

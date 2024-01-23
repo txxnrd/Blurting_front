@@ -267,100 +267,98 @@ class _EmailPageState extends State<EmailPage>
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Center(
-                        child: Container(
-                            width: width * 0.8,
-                            child: ProgressBar(
-                                context, _progressAnimation!, _gender!)),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        '마지막 질문입니다!',
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: mainColor.black,
-                            fontFamily: 'Pretendard'),
-                      ),
-                      Text(
-                        '당신의 이메일을 입력해주세요!',
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: mainColor.black,
-                            fontFamily: 'Pretendard'),
-                      ),
-                      SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: width * 0.4,
-                            height: 48,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                isDense: true,
-                                hintText: '이메일 입력',
-                                border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: mainColor.lightGray),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: mainColor.lightGray),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFF66464)),
-                                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Center(
+                      child: Container(
+                          width: width * 0.8,
+                          child: ProgressBar(
+                              context, _progressAnimation!, _gender!)),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Text(
+                      '마지막 질문입니다!',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: mainColor.black,
+                          fontFamily: 'Pretendard'),
+                    ),
+                    Text(
+                      '당신의 이메일을 입력해주세요!',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: mainColor.black,
+                          fontFamily: 'Pretendard'),
+                    ),
+                    SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: width * 0.4,
+                          height: 48,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText: '이메일 입력',
+                              border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: mainColor.lightGray),
                               ),
-                              onChanged: (value) {
-                                InputEmail(value);
-                              },
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: mainColor.lightGray),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xFFF66464)),
+                              ),
                             ),
+                            onChanged: (value) {
+                              InputEmail(value);
+                            },
                           ),
-                          SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
-                          Text(
-                            '@',
-                            style: TextStyle(fontSize: 24),
+                        ),
+                        SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
+                        Text(
+                          '@',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        SizedBox(width: 4),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
+                          alignment: Alignment.centerLeft,
+                          height: 48, // TextField의 높이와 일치하도록 설정
+                          width: width * 0.4,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: mainColor.lightGray),
+                            borderRadius: BorderRadius.circular(
+                                4), // TextField의 테두리와 일치하도록 설정
                           ),
-                          SizedBox(width: 4),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12), // 내부 여백을 추가
+                          child: Align(
                             alignment: Alignment.centerLeft,
-                            height: 48, // TextField의 높이와 일치하도록 설정
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: mainColor.lightGray),
-                              borderRadius: BorderRadius.circular(
-                                  4), // TextField의 테두리와 일치하도록 설정
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                widget.domain,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                  // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
-                                ),
+                            child: Text(
+                              widget.domain,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               Visibility(

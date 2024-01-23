@@ -105,15 +105,7 @@ class _AlarmPageState extends State<AlarmPage> {
           backgroundColor: Colors.white,
           scrolledUnderElevation: 0.0,
           toolbarHeight: 80,
-          title: Text(
-            '알림',
-            style: TextStyle(
-              fontFamily: 'Heebo',
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.grey,
-            ),
-          ),
+          title: AppbarDescription("알림"),
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,

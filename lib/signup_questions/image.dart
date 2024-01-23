@@ -31,102 +31,73 @@ class ImagePageState extends State<ImagePage>
   String? _image1Url;
   String? _image2Url;
   String? _image3Url;
-  int image_uploading_count = 0;
-  int image_uploaded_count = 0;
+  bool image_uploading_count_1 = false;
+  bool image_uploaded_count_1 = false;
+  bool image_uploading_count_2 = false;
+  bool image_uploaded_count_2 = false;
+  bool image_uploading_count_3 = false;
+  bool image_uploaded_count_3 = false;
 
   double? image_maxheight = 1000;
   double? image_maxwidth = 1000;
   int imageQuality = 90;
 
-  // Future<void> _pickAndUploadImage(int imageNumber) async {
-  //   image_uploading_count += 1;
-  //   IsValid = false;
-  //   var picker = ImagePicker();
-  //   String savedToken = await getToken();
-  //   var image = await picker.pickImage(
-  //       source: ImageSource.gallery,
-  //       maxHeight: image_maxheight,
-  //       maxWidth: image_maxwidth,
-  //       imageQuality: 80); // imageQuality는 필요에 따라 조절
-  //   Dio dio = Dio();
-  //   var url = Uri.parse(API.uploadimage);
-
-  //   if (image != null) {
-  //     File selectedImage = File(image.path);
-  //     setState(() {
-  //       if (imageNumber == 1) {
-  //         _image1 = selectedImage;
-  //       } else if (imageNumber == 2) {
-  //         _image2 = selectedImage;
-  //       } else if (imageNumber == 3) {
-  //         _image3 = selectedImage;
-  //       }
-  //     });
-
-  //     FormData formData = FormData.fromMap({
-  //       'files': await MultipartFile.fromFile(selectedImage.path,
-  //           filename: 'image$imageNumber.jpg'),
-  //     });
-
-  //     try {
-  //       var response = await dio.post(
-  //         url.toString(),
-  //         data: formData,
-  //         options: Options(
-  //           headers: {
-  //             'Authorization': 'Bearer $savedToken',
-  //           },
-  //         ),
-  //       );
-  //       if (response.statusCode == 200 || response.statusCode == 201) {
-  //         image_uploaded_count += 1;
-
-  //         var urlList = response.data;
-  //         if (urlList.isNotEmpty &&
-  //             urlList[0] is Map &&
-  //             urlList[0].containsKey('url')) {
-  //           String imageUrl = urlList[0]['url'];
-
-  //           setState(() {
-  //             if (imageNumber == 1) {
-  //               _image1Url = imageUrl;
-  //             } else if (imageNumber == 2) {
-  //               _image2Url = imageUrl;
-  //             } else if (imageNumber == 3) {
-  //               _image3Url = imageUrl;
-  //             }
-
-  //             if (image_uploaded_count == image_uploading_count &&
-  //                 image_uploaded_count >= 3) IsValid = true;
-  //           });
-  //         }
-  //       } else {}
-  //     } catch (e, stacktrace) {}
-  //   }
-  // }
-
-  Future<void> _pickAndUploadImage1() async {
-    image_uploading_count += 1;
+  Future<void> _pickAndUploadImage(int imageNumber) async {
+    if (imageNumber == 1) {
+      image_uploading_count_1 = true;
+      image_uploaded_count_1 = false;
+      print("image1 start");
+    } else if (imageNumber == 2) {
+      image_uploading_count_2 = true;
+      image_uploaded_count_2 = false;
+      print("image2 start");
+    } else {
+      image_uploading_count_3 = true;
+      image_uploaded_count_3 = false;
+      print("image3 start");
+    }
     IsValid = false;
     var picker = ImagePicker();
-    String savedToken = await getToken();
+    if (imageNumber == 1) {
+      print("ImagePicker1 start");
+    } else {
+      print("ImagePicker2 start");
+    }
     var image = await picker.pickImage(
         source: ImageSource.gallery,
         maxHeight: image_maxheight,
         maxWidth: image_maxwidth,
-        imageQuality: 80); // imageQuality는 필요에 따라 조절
+        imageQuality: 80);
+
+    if (imageNumber == 1) {
+      print("ImagePicker1 pick");
+    } else {
+      print("ImagePicker2 pick");
+    }
+
+    String savedToken = await getToken();
+    // imageQuality는 필요에 따라 조절
     Dio dio = Dio();
+
     var url = Uri.parse(API.uploadimage);
 
     if (image != null) {
       File selectedImage = File(image.path);
+      print(imageNumber);
+      print(selectedImage);
       setState(() {
-        _image1 = selectedImage;
+        if (imageNumber == 1) {
+          _image1 = selectedImage;
+        } else if (imageNumber == 2) {
+          _image2 = selectedImage;
+        } else if (imageNumber == 3) {
+          _image3 = selectedImage;
+        }
       });
 
       FormData formData = FormData.fromMap({
         'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image1.jpg'),
+            filename: 'image$imageNumber.jpg'),
       });
 
       try {
@@ -140,62 +111,20 @@ class ImagePageState extends State<ImagePage>
           ),
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
-          image_uploaded_count += 1;
-
-          var urlList = response.data;
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            String imageUrl = urlList[0]['url'];
-
+          if (imageNumber == 1) {
+            image_uploaded_count_1 = true;
+          } else if (imageNumber == 2) {
+            image_uploaded_count_2 = true;
+          } else {
+            image_uploaded_count_3 = true;
+          }
+          if (image_uploaded_count_1 &&
+              image_uploaded_count_2 &&
+              image_uploaded_count_3) {
             setState(() {
-              _image1Url = imageUrl;
-              if (image_uploaded_count == image_uploading_count &&
-                  image_uploaded_count >= 3) IsValid = true;
+              IsValid = true;
             });
           }
-        } else {}
-      } catch (e, stacktrace) {}
-    }
-  }
-
-  Future<void> _pickAndUploadImage2() async {
-    image_uploading_count += 1;
-    IsValid = false;
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 80); // imageQuality는 필요에 따라 조절
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-
-    if (image != null) {
-      File selectedImage = File(image.path);
-      setState(() {
-        _image2 = selectedImage;
-      });
-
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image2.jpg'),
-      });
-
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          image_uploaded_count += 1;
-
           var urlList = response.data;
           if (urlList.isNotEmpty &&
               urlList[0] is Map &&
@@ -203,63 +132,13 @@ class ImagePageState extends State<ImagePage>
             String imageUrl = urlList[0]['url'];
 
             setState(() {
-              _image2Url = imageUrl;
-              if (image_uploaded_count == image_uploading_count &&
-                  image_uploaded_count >= 3) IsValid = true;
-            });
-          }
-        } else {}
-      } catch (e, stacktrace) {}
-    }
-  }
-
-  Future<void> _pickAndUploadImage3() async {
-    image_uploading_count += 1;
-    IsValid = false;
-    var picker = ImagePicker();
-    String savedToken = await getToken();
-    var image = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: image_maxheight,
-        maxWidth: image_maxwidth,
-        imageQuality: 80); // imageQuality는 필요에 따라 조절
-    Dio dio = Dio();
-    var url = Uri.parse(API.uploadimage);
-
-    if (image != null) {
-      File selectedImage = File(image.path);
-      setState(() {
-        _image3 = selectedImage;
-      });
-
-      FormData formData = FormData.fromMap({
-        'files': await MultipartFile.fromFile(selectedImage.path,
-            filename: 'image3.jpg'),
-      });
-
-      try {
-        var response = await dio.post(
-          url.toString(),
-          data: formData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $savedToken',
-            },
-          ),
-        );
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          image_uploaded_count += 1;
-
-          var urlList = response.data;
-          if (urlList.isNotEmpty &&
-              urlList[0] is Map &&
-              urlList[0].containsKey('url')) {
-            String imageUrl = urlList[0]['url'];
-
-            setState(() {
-              _image3Url = imageUrl;
-              if (image_uploaded_count == image_uploading_count &&
-                  image_uploaded_count >= 3) IsValid = true;
+              if (imageNumber == 1) {
+                _image1Url = imageUrl;
+              } else if (imageNumber == 2) {
+                _image2Url = imageUrl;
+              } else if (imageNumber == 3) {
+                _image3Url = imageUrl;
+              }
             });
           }
         } else {}
@@ -390,7 +269,7 @@ class ImagePageState extends State<ImagePage>
                     MainAxisAlignment.spaceEvenly, // 각 위젯 사이의 공간을 동일하게 분배
                 children: [
                   InkWell(
-                    onTap: () => _pickAndUploadImage1(),
+                    onTap: () => _pickAndUploadImage(1),
                     child: Container(
                       width: 100,
                       height: 125,
@@ -411,7 +290,7 @@ class ImagePageState extends State<ImagePage>
                     ),
                   ),
                   InkWell(
-                    onTap: () => _pickAndUploadImage2(),
+                    onTap: () => _pickAndUploadImage(2),
                     child: Container(
                       width: 100,
                       height: 125,
@@ -432,7 +311,7 @@ class ImagePageState extends State<ImagePage>
                     ),
                   ),
                   InkWell(
-                    onTap: () => _pickAndUploadImage3(),
+                    onTap: () => _pickAndUploadImage(3),
                     child: Container(
                       width: 100,
                       height: 125,
@@ -903,3 +782,167 @@ class FaceIconPainter extends CustomPainter {
 //     return true;
 //   }
 // }
+
+
+
+// Future<void> _pickAndUploadImage1() async {
+//     image_uploading_count += 1;
+//     IsValid = false;
+//     var picker = ImagePicker();
+//     String savedToken = await getToken();
+//     var image = await picker.pickImage(
+//         source: ImageSource.gallery,
+//         maxHeight: image_maxheight,
+//         maxWidth: image_maxwidth,
+//         imageQuality: 80); // imageQuality는 필요에 따라 조절
+//     Dio dio = Dio();
+//     var url = Uri.parse(API.uploadimage);
+
+//     if (image != null) {
+//       File selectedImage = File(image.path);
+//       setState(() {
+//         _image1 = selectedImage;
+//       });
+
+//       FormData formData = FormData.fromMap({
+//         'files': await MultipartFile.fromFile(selectedImage.path,
+//             filename: 'image1.jpg'),
+//       });
+
+//       try {
+//         var response = await dio.post(
+//           url.toString(),
+//           data: formData,
+//           options: Options(
+//             headers: {
+//               'Authorization': 'Bearer $savedToken',
+//             },
+//           ),
+//         );
+//         if (response.statusCode == 200 || response.statusCode == 201) {
+//           image_uploaded_count += 1;
+
+//           var urlList = response.data;
+//           if (urlList.isNotEmpty &&
+//               urlList[0] is Map &&
+//               urlList[0].containsKey('url')) {
+//             String imageUrl = urlList[0]['url'];
+
+//             setState(() {
+//               _image1Url = imageUrl;
+//               if (image_uploaded_count == image_uploading_count &&
+//                   image_uploaded_count >= 3) IsValid = true;
+//             });
+//           }
+//         } else {}
+//       } catch (e, stacktrace) {}
+//     }
+//   }
+
+//   Future<void> _pickAndUploadImage2() async {
+//     image_uploading_count += 1;
+//     IsValid = false;
+//     var picker = ImagePicker();
+//     String savedToken = await getToken();
+//     var image = await picker.pickImage(
+//         source: ImageSource.gallery,
+//         maxHeight: image_maxheight,
+//         maxWidth: image_maxwidth,
+//         imageQuality: 80); // imageQuality는 필요에 따라 조절
+//     Dio dio = Dio();
+//     var url = Uri.parse(API.uploadimage);
+
+//     if (image != null) {
+//       File selectedImage = File(image.path);
+//       setState(() {
+//         _image2 = selectedImage;
+//       });
+
+//       FormData formData = FormData.fromMap({
+//         'files': await MultipartFile.fromFile(selectedImage.path,
+//             filename: 'image2.jpg'),
+//       });
+
+//       try {
+//         var response = await dio.post(
+//           url.toString(),
+//           data: formData,
+//           options: Options(
+//             headers: {
+//               'Authorization': 'Bearer $savedToken',
+//             },
+//           ),
+//         );
+//         if (response.statusCode == 200 || response.statusCode == 201) {
+//           image_uploaded_count += 1;
+
+//           var urlList = response.data;
+//           if (urlList.isNotEmpty &&
+//               urlList[0] is Map &&
+//               urlList[0].containsKey('url')) {
+//             String imageUrl = urlList[0]['url'];
+
+//             setState(() {
+//               _image2Url = imageUrl;
+//               if (image_uploaded_count == image_uploading_count &&
+//                   image_uploaded_count >= 3) IsValid = true;
+//             });
+//           }
+//         } else {}
+//       } catch (e, stacktrace) {}
+//     }
+//   }
+
+//   Future<void> _pickAndUploadImage3() async {
+//     image_uploading_count += 1;
+//     IsValid = false;
+//     var picker = ImagePicker();
+//     String savedToken = await getToken();
+//     var image = await picker.pickImage(
+//         source: ImageSource.gallery,
+//         maxHeight: image_maxheight,
+//         maxWidth: image_maxwidth,
+//         imageQuality: 80); // imageQuality는 필요에 따라 조절
+//     Dio dio = Dio();
+//     var url = Uri.parse(API.uploadimage);
+
+//     if (image != null) {
+//       File selectedImage = File(image.path);
+//       setState(() {
+//         _image3 = selectedImage;
+//       });
+
+//       FormData formData = FormData.fromMap({
+//         'files': await MultipartFile.fromFile(selectedImage.path,
+//             filename: 'image3.jpg'),
+//       });
+
+//       try {
+//         var response = await dio.post(
+//           url.toString(),
+//           data: formData,
+//           options: Options(
+//             headers: {
+//               'Authorization': 'Bearer $savedToken',
+//             },
+//           ),
+//         );
+//         if (response.statusCode == 200 || response.statusCode == 201) {
+//           image_uploaded_count += 1;
+
+//           var urlList = response.data;
+//           if (urlList.isNotEmpty &&
+//               urlList[0] is Map &&
+//               urlList[0].containsKey('url')) {
+//             String imageUrl = urlList[0]['url'];
+
+//             setState(() {
+//               _image3Url = imageUrl;
+//               if (image_uploaded_count == image_uploading_count &&
+//                   image_uploaded_count >= 3) IsValid = true;
+//             });
+//           }
+//         } else {}
+//       } catch (e, stacktrace) {}
+//     }
+//   }
