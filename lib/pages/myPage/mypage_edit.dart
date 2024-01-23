@@ -579,6 +579,7 @@ class _MyPageEditState extends State<MyPageEdit> {
         onPressed: () {
           IsSelected(index ~/ 2);
           modifiedFlags["mbti"] = true;
+          IsValid = true;
           setState(() {
             setSelectedValues(index);
           });
