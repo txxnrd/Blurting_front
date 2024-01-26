@@ -111,10 +111,10 @@ class _Blurting extends State<Blurting> {
 
   @override
   void dispose() {
-    // 타이머가 여전히 실행 중이라면 중지합니다.
-      _blinkTimer?.cancel();
-      isVisible = false;
-      isTap = [false, false, false];
+    _blinkTimer?.cancel();
+    isVisible = false;
+    isTap = [false, false, false];
+    // pageController.jumpToPage(currentDay);
     super.dispose();
   }
 
@@ -167,7 +167,7 @@ class _Blurting extends State<Blurting> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            pointAppbar(),
+            Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
             SizedBox(width: 10),
           ],
         ),
@@ -729,6 +729,8 @@ class _Blurting extends State<Blurting> {
                 sendArrow(-1, 1);
               }
             }
+
+            pageController.jumpToPage(currentDay);
           });
         }
         //

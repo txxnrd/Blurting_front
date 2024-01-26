@@ -628,7 +628,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: <Widget>[
-          pointAppbar(),
+          Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
           Container(
             margin: EdgeInsets.only(top: 20),
             child: IconButton(

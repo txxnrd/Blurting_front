@@ -164,7 +164,7 @@ class _MyPage extends State<MyPage> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             actions: [
-              pointAppbar(),
+              Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
               Container(
                 margin: EdgeInsets.only(top: 20),
                 child: IconButton(

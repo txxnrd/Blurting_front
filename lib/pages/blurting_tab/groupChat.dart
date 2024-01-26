@@ -163,61 +163,63 @@ class _GroupChat extends State<GroupChat> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        toolbarHeight: 220,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned(
-              left: 0,
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Color.fromRGBO(48, 48, 48, 1),
+        toolbarHeight: 200,
+        titleSpacing: 0,
+        title: Container(
+          // margin: EdgeInsets.only(top: 20),
+          child: Stack(
+            // alignment: Alignment.center,
+            children: [
+              Positioned(
+                left: 8,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Color.fromRGBO(48, 48, 48, 1),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
               ),
-            ),
-            Column(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          day,
-                          style: TextStyle(
-                              fontFamily: "Heebo",
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: mainColor.MainColor),
-                        ),
-                      ],
-                    )),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: 25,
-                    margin: EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        QuestionNumber(1),
-                        QuestionNumber(2),
-                        QuestionNumber(3),
-                        QuestionNumber(4),
-                        QuestionNumber(5),
-                        QuestionNumber(6),
-                        QuestionNumber(7),
-                        QuestionNumber(8),
-                        QuestionNumber(9),
-                      ],
-                    )),
-              ],
-            ),
-            Positioned(right: 0, child: pointAppbar()),
-          ],
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        day,
+                        style: TextStyle(
+                            fontFamily: "Heebo",
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                            color: mainColor.MainColor),
+                      ),
+                    ],
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: 25,
+                      margin: EdgeInsets.only(top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          QuestionNumber(1),
+                          QuestionNumber(2),
+                          QuestionNumber(3),
+                          QuestionNumber(4),
+                          QuestionNumber(5),
+                          QuestionNumber(6),
+                          QuestionNumber(7),
+                          QuestionNumber(8),
+                          QuestionNumber(9),
+                        ],
+                      )),
+                ],
+              ),
+              Positioned(right: 0, child: Container(margin: EdgeInsets.fromLTRB(0, 8, 10, 0), child: pointAppbar())),
+            ],
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: Size(10, 10),

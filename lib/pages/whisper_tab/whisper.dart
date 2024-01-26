@@ -269,125 +269,129 @@ class _Whisper extends State<Whisper> {
 
   @override
   Widget build(BuildContext context) {
-    // print(MediaQuery.of(context).viewInsets.bottom);
-    double bottom = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        toolbarHeight: 150,
+        toolbarHeight: 80,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: InkWell(
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Color.fromRGBO(48, 48, 48, 1),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            }),
+        leading: Container(
+          margin: EdgeInsets.only(top: 20),
+          child: InkWell(
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Color.fromRGBO(48, 48, 48, 1),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              }),
+        ),
         titleSpacing: 0,
-        title: Row(
-          children: [
-            GestureDetector(
-              onTap: (!isBlock)
-                  ? () {
-                      _showProfileModal(context);
-                      setState(() {
-                        isBlurChanged = -1;
-                      });
-                    }
-                  : null,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: isBlurChanged != -1
-                        ? Border.all(
-                            color: Color(0XFFF66464),
-                            width: 1.0,
-                          )
-                        : null),
+        title: Container(
+          margin: EdgeInsets.only(top: 20),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: (!isBlock)
+                    ? () {
+                        _showProfileModal(context);
+                        setState(() {
+                          isBlurChanged = -1;
+                        });
+                      }
+                    : null,
                 child: Container(
-                  width: 60,
-                  height: 60,
-                  margin: EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.white,
-                    border: Border.all(
-                            color: Colors.transparent,
-                            width: 1.0,
-                          ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: ImageFiltered(
-                      imageFilter: ImageFilter.blur(
-                        sigmaX: calculateBlurSigma(blurValue),
-                        sigmaY: calculateBlurSigma(blurValue),
-                      ),
-                      child: ExtendedImage.network(
-                        appbarphoto,
-                        fit: BoxFit.cover,
-                        cache: true,
+                      borderRadius: BorderRadius.circular(50),
+                      border: isBlurChanged != -1
+                          ? Border.all(
+                              color: Color(0XFFF66464),
+                              width: 1.0,
+                            )
+                          : null),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    margin: EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
+                      border: Border.all(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: ImageFiltered(
+                        imageFilter: ImageFilter.blur(
+                          sigmaX: calculateBlurSigma(blurValue),
+                          sigmaY: calculateBlurSigma(blurValue),
+                        ),
+                        child: ExtendedImage.network(
+                          appbarphoto,
+                          fit: BoxFit.cover,
+                          cache: true,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Stack(
-              children: [
-                Container(
-                  width: 120,
-                  margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: Text(
-                    widget.userName,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                        fontFamily: "Heebo"),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (isBlurChanged != -1)
-                  Positioned(
-                    top: 0,
-                    left: 3,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                          size: 10,
-                        ),
-                        Container(
-                          width: 110,
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
-                            '  $isBlurChanged단계 블러가 풀렸어요!',
-                            style: TextStyle(
-                                color: Color(0XFF868686),
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: "Heebo"),
-                          ),
-                        ),
-                      ],
+              Stack(
+                children: [
+                  Container(
+                    width: 120,
+                    margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    child: Text(
+                      widget.userName,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          fontFamily: "Heebo"),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-              ],
-            )
-          ],
+                  if (isBlurChanged != -1)
+                    Positioned(
+                      top: 0,
+                      left: 3,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                            size: 10,
+                          ),
+                          Container(
+                            width: 110,
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              '  $isBlurChanged단계 블러가 풀렸어요!',
+                              style: TextStyle(
+                                  color: Color(0XFF868686),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "Heebo"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              )
+            ],
+          ),
         ),
         actions: <Widget>[
-          pointAppbar(),
+          Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
           Container(
             margin: EdgeInsets.only(top: 20),
             child: IconButton(
@@ -576,7 +580,7 @@ class _Whisper extends State<Whisper> {
                       reverse: true,
                       controller: _scrollController,
                       child: Container(
-                        margin: EdgeInsets.only(top: 200),
+                        margin: EdgeInsets.only(top: 150),
                         child: Column(
                           children: <Widget>[
                             for (var chatItem in chatMessages) chatItem,

@@ -197,23 +197,29 @@ class _chatListItemState extends State<ChatListItem> {
         // widget.socket.disconnect();
 
         Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => Whisper(
-                socket: widget.socket,
-                userName: widget.userName,
-                roomId: widget.roomId),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              const begin = Offset(0.0, 1.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-              var tween =
-                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              var offsetAnimation = animation.drive(tween);
-              return SlideTransition(position: offsetAnimation, child: child);
-            },
-          ),
+            context,
+            MaterialPageRoute(
+                builder: (context) => Whisper(
+                      socket: widget.socket,
+                      userName: widget.userName,
+                      roomId: widget.roomId,
+                    ))
+          // PageRouteBuilder(
+          //   pageBuilder: (context, animation, secondaryAnimation) => Whisper(
+          //       socket: widget.socket,
+          //       userName: widget.userName,
+          //       roomId: widget.roomId),
+          //   transitionsBuilder:
+          //       (context, animation, secondaryAnimation, child) {
+          //     const begin = Offset(0.0, 1.0);
+          //     const end = Offset.zero;
+          //     const curve = Curves.easeInOut;
+          //     var tween =
+          //         Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          //     var offsetAnimation = animation.drive(tween);
+          //     return SlideTransition(position: offsetAnimation, child: child);
+          //   },
+          // ),
         );
       },
       child: Container(
@@ -531,7 +537,7 @@ class _chattingList extends State<ChattingList> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            pointAppbar(),
+            Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
             SizedBox(width: 10),
           ],
           bottom: PreferredSize(
