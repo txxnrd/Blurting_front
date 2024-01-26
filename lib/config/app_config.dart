@@ -83,4 +83,5 @@ class API {
   static final String fcmcheck = "${ServerEndpoints.serverEndpoint}/fcm/check";
   static final String userinfo =
       "${ServerEndpoints.serverEndpoint}/user/account";
+  static final String nickname = "${ServerEndpoints.serverEndpoint}/point/nickname";
 }

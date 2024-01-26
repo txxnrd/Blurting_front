@@ -305,14 +305,14 @@ class _ProfileCard extends State<ProfileCard> {
                 _buildPage(1),
                 _buildPage(2),
                 _buildInfoPage(titles: [
-                  '지역:',
+                  // '지역:',
                   '종교:',
                   '전공:',
                   '키:',
                   '흡연정도:',
                   '음주정도:',
                 ], values: [
-                  userProfile['region'].toString() ?? 'Unknown',
+                  // userProfile['region'].toString() ?? 'Unknown',
                   userProfile['religion'].toString() ?? 'Unknown',
                   userProfile['major'].toString() ?? 'Unknown',
                   userProfile['height'].toString() ?? 'Unknown',
@@ -529,22 +529,43 @@ class _ProfileCard extends State<ProfileCard> {
               color: Color(0XFFF66464)),
         ),
         Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
-        Row(
+        Column(
           children: [
-            SizedBox(width: 25),
-            Text(userProfile['nickname'] ?? 'Unknown',
-                style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 30,
-                    color: Color(0XFFF66464))),
-            SizedBox(width: 7),
-            Text(userProfile['mbti'] ?? 'Unknown',
-                style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                    color: Color(0XFFF66464))),
+            Row(
+              children: [
+                SizedBox(width: 25),
+                Text(userProfile['nickname'] ?? 'Unknown',
+                    style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w700,
+                        fontSize: 30,
+                        color: Color(0XFFF66464))),
+                SizedBox(width: 7),
+                Text(userProfile['mbti'] ?? 'Unknown',
+                    style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                        color: Color(0XFFF66464))),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(25, 0, 0, 15),
+              child: Row(
+                children: [
+                  // Padding(
+                  //   padding: const EdgeInsets.only(right: 5),
+                  //   child: Icon(Icons.check, color: mainColor.lightPink,),
+                  // ),
+                  Text('🏡 ${userProfile['region'].toString() ?? 'Unknown'}',
+                      style: TextStyle(
+                          fontFamily: "Heebo",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: mainColor.MainColor)),
+                ],
+              ),
+            ),
           ],
         ),
         Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),

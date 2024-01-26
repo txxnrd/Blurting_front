@@ -558,6 +558,33 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
+  Future<void> changeName() async {
+    final url = Uri.parse(API.nickname);
+    String savedToken = await getToken();
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $savedToken',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      if (response.body == 'false') {
+        showSnackBar(context, '포인트 부족!');
+      } else {
+        showSnackBar(context, '닉네임 변경 완료');
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      // ignore: use_build_context_synchronously
+      await getnewaccesstoken(
+          context, () async {}, null, changeName, null, null);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   Widget MBTIbox(double width, int index) {
     bool? isselected = selectedfunction(index);
     return Container(
@@ -597,7 +624,18 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
   }
 
-  void _showWarning(BuildContext context) {
+  void popPage() {
+    IsValid = false;
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  void changeNickName() {
+    Navigator.pop(context);
+    changeName();
+  }
+
+  void _showWarning(BuildContext context, String warningText1, String warningText2, String text, Function function) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -634,7 +672,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                       child: Column(
                                         children: [
                                           Text(
-                                            '이대로 나가면 변경 사항은 저장되지 않습니다.',
+                                            warningText1,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
@@ -642,7 +680,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                                 fontFamily: "Heebo"),
                                           ),
                                           Text(
-                                            '편집한 내용을 버리고 나가시겠습니까?',
+                                            warningText2,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
@@ -665,7 +703,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                                       // color: mainColor.MainColor,
                                       child: Center(
                                         child: Text(
-                                          '나가기',
+                                          text,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily: 'Heebo',
                                               color: Colors.white,
@@ -675,9 +714,10 @@ class _MyPageEditState extends State<MyPageEdit> {
                                       ),
                                     ),
                                     onTap: () {
-                                      IsValid = false;
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
+                                      function();
+                                      // IsValid = false;
+                                      // Navigator.pop(context);
+                                      // Navigator.pop(context);
                                     },
                                   ),
                                 ],
@@ -851,20 +891,27 @@ class _MyPageEditState extends State<MyPageEdit> {
         toolbarHeight: 80,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(48, 48, 48, 1),
+        leading: Container(
+          margin: EdgeInsets.only(top: 20),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Color.fromRGBO(48, 48, 48, 1),
+            ),
+            onPressed: () {
+              // 이대로 나가면 변경 사항이 저장되지 않습니다. 나가시겠습니까?
+              if (IsValid) {
+                _showWarning(context, '이대로 나가면 변경 사항이 저장되지 않습니다.', '나가시겠습니까?', '나가기', popPage);
+              } else {
+                Navigator.pop(context);
+              }
+            },
           ),
-          onPressed: () {
-            // 이대로 나가면 변경 사항이 저장되지 않습니다. 나가시겠습니까?
-            if (IsValid) {
-              _showWarning(context);
-            } else {
-              Navigator.pop(context);
-            }
-          },
         ),
+        actions: [
+            Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
+            SizedBox(width: 10),
+        ],
       ),
       body: SizedBox(
         height: mediaquery_height * 0.9,
@@ -925,6 +972,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                       margin: EdgeInsets.all(10),
                                       child: InkWell(
                                         onTap: () async {
+                                          _showWarning(context, '닉네임을 바꾸기 위해선 10포인트가 필요합니다.', '계속하시겠습니까?', '계속하기', changeNickName);
                                         },
                                         child: Ink(
                                           child: Container(
