@@ -149,8 +149,6 @@ class _GroupChat extends State<GroupChat> {
     setState(() {
       lastTime = _parseDateTime(prefs.getString('timeInSeconds'));
     });
-
-    // Provider.of<GroupChatProvider>(context, listen: false).lastTime = lastTime;
   }
 
   List<List<Widget>> answerList = List.generate(10, (index) => <Widget>[]);
@@ -284,6 +282,7 @@ class _GroupChat extends State<GroupChat> {
       ),
     );
   }
+// 노태윤에게. 이 위젯이랑 utilWidget이랑... fetch 함수만 보면 될 듯
 
   Widget questionPage(int index) {
     ScrollController pageScrollController =
@@ -302,12 +301,12 @@ class _GroupChat extends State<GroupChat> {
         Expanded(
           child: Stack(
             children: [
+              // 노태윤에게. 여기에서 답변 내용 스크롤뷰로 보여줌
               SingleChildScrollView(
                 controller: pageScrollController,
                 child: Column(
                   children: [
                     Container(
-                      // 여기에서 중복된 키가 발견되엇다는뎅...
                       padding: EdgeInsets.only(left: 5),
                       child: Column(
                         children: <Widget>[
@@ -319,6 +318,7 @@ class _GroupChat extends State<GroupChat> {
                   ],
                 ),
               ),
+              // 노태윤에게. 여긴 그... 100자 채웠는지 확인하는 거
               if (Provider.of<GroupChatProvider>(context).isPocus)
                 Align(
                   alignment: Alignment.bottomRight,
@@ -413,11 +413,8 @@ class _GroupChat extends State<GroupChat> {
 
   bool isAlready = false;
 
+  // 노태윤에게. 백엔드에서 어떻게 줄진 모르겟는데 이게 딱 맨 처음에 들어갓을 때 뜨는 거임. 번호 눌럿을 때 or 페이지 넘겻을 때에는 fetchIndexComments 호출 둘이 작동하는 방식은 걍 같아요
   Future<void> fetchLatestComments() async {
-    // 딱 누르자마자 뜨는 거...
-    // 최신 QnA
-    // 이 방이 만들어진 시간에서 24시간 계산, day 띄워 주기
-
     DateTime createdAt;
 
     final url = Uri.parse(API.latest);
@@ -443,6 +440,7 @@ class _GroupChat extends State<GroupChat> {
 
         createdAt = _parseDateTime(responseData['createdAt']);
 
+        // 노태윤에게. day 관련해서는 안 봐도 되고
         if (mounted) {
           setState(() {
             _questionNumber = responseData['questionNo'];
@@ -464,7 +462,7 @@ class _GroupChat extends State<GroupChat> {
               // 48시간 지났으면 3일차
               day = 'Day3';
             }
-
+            // 노태윤에게. 여기가 답변 추가하는 부분인데 여기만 수정하면 됨
             for (final answerData in responseData['answers']) {
               if (answerData['room'] != null) {
                 isAlready = true;
@@ -473,6 +471,8 @@ class _GroupChat extends State<GroupChat> {
               }
               if (mounted) {
                 setState(() {
+                  // 노태윤에게. 만약에 답글을 식별하는 스키마가 잇으면 그거 판별해서 너가 utilWidget에 답글 위젯 하나 만들어서 그 위젯을 answerList[currentIndex].add 해주면 댐
+                  // 지금은 내 거인지 아닌지만 판별
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
@@ -588,7 +588,8 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> SendAnswer(String answer, int questionId) async {
-    // 입력한 내용을 ListTile에 추가
+    // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
+    // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget newAnswer = MyChat(
       message: answer,
       createdAt: '',
