@@ -893,29 +893,77 @@ class _MyPageEditState extends State<MyPageEdit> {
                     children: <Widget>[
                       MyPageallDescription('닉네임'),
                       Center(
-                        child: Container(
-                          width: screenWidth,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
-                          alignment: Alignment.centerLeft,
-                          height: 48, // TextField의 높이와 일치하도록 설정
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: mainColor.lightGray, width: 2),
-                            borderRadius: BorderRadius.circular(
-                                10), // TextField의 테두리와 일치하도록 설정
-                          ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              widget.data['nickname'],
-                              style: TextStyle(
-                                color: mainColor.Gray,
-                                fontSize: 16.0,
-                                // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: screenWidth,
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
+                              alignment: Alignment.centerLeft,
+                              height: 48, // TextField의 높이와 일치하도록 설정
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: mainColor.lightGray, width: 2),
+                                borderRadius: BorderRadius.circular(
+                                    10), // TextField의 테두리와 일치하도록 설정
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      widget.data['nickname'],
+                                      style: TextStyle(
+                                        color: mainColor.Gray,
+                                        fontSize: 16.0,
+                                        // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: InkWell(
+                                        onTap: () async {
+                                        },
+                                        child: Ink(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: mainColor.MainColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            padding:
+                                                EdgeInsets.fromLTRB(9, 2, 9, 2),
+                                            child: Text(
+                                              '수정',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12,
+                                                fontFamily: 'Pretendard',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: Text(
+                                '* 10포인트를 지불하고 랜덤으로 닉네임을 바꿀 수 있어요!',
+                                style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontSize: 11.0,
+                                  fontFamily: "Heebo"
+                                  // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       MyPageallDescription("활동 지역"),
