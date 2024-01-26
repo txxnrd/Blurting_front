@@ -48,8 +48,6 @@ class QuestionItem extends StatelessWidget {
           children: [
             Flexible(
               child: RichText(
-                // overflow: TextOverflow.ellipsis,
-                // maxLines: 3,
                 text: TextSpan(
                   children: [
                     TextSpan(
