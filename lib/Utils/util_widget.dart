@@ -393,6 +393,7 @@ class OtherChat extends StatelessWidget {
 }
 
 // 귓속말탭 + 블러팅탭 본인 말풍선 위젯
+// 노태윤에게. 이거랑 OtherChat에다가 GestureDetector 추가해서 onTap에 sendChat 함수 호출하는 키보드 올라오게 하면 될 듯
 class MyChat extends StatefulWidget {
   final String message;
   final String createdAt;
