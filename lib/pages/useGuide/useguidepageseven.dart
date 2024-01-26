@@ -24,6 +24,7 @@ class _UseGuidePageSevenState extends State<UseGuidePageSeven>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  bool isVisible = true;
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -58,6 +59,18 @@ class _UseGuidePageSevenState extends State<UseGuidePageSeven>
       ..addListener(() {
         setState(() {});
       });
+    _startBlinking();
+  }
+
+  void _startBlinking() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+          _startBlinking(); // 다음 깜빡임을 예약합니다.
+        });
+      }
+    });
   }
 
   @override
@@ -156,6 +169,23 @@ class _UseGuidePageSevenState extends State<UseGuidePageSeven>
                     ],
                   ),
                 ),
+                              Expanded(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 1500),
+                    opacity: isVisible ? 1.0 : 0.3,
+                    child: Text("화면을 터치해 주세요!",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: mainColor.Gray,
+                          fontFamily: 'Heebo',
+                        )),
+                  ),
+                ),
+              ),
               ],
             ),
           ),

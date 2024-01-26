@@ -157,7 +157,6 @@ class _GroupChat extends State<GroupChat> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
@@ -286,8 +285,8 @@ class _GroupChat extends State<GroupChat> {
     );
   }
 // 노태윤에게. 이 위젯이랑 utilWidget이랑... fetch 함수만 보면 될 듯
+
   Widget questionPage(int index) {
-    
     ScrollController pageScrollController =
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
 
@@ -368,14 +367,13 @@ class _GroupChat extends State<GroupChat> {
           ),
         ),
         CustomInputField(
-          controller: _controller,
-          sendFunction: SendAnswer,
-          isBlock: isBlock[currentIndex],
-          blockText: "이미 답변이 완료된 질문입니다.",
-          hintText: "내 생각 쓰기...(부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다)",
-          questionId: 1,
-          isBlurting: true
-        ),
+            controller: _controller,
+            sendFunction: SendAnswer,
+            isBlock: isBlock[currentIndex],
+            blockText: "이미 답변이 완료된 질문입니다.",
+            hintText: "내 생각 쓰기...",
+            questionId: 1,
+            isBlurting: true),
       ],
     );
   }

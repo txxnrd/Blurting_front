@@ -519,18 +519,22 @@ class _SettingPageState extends State<SettingPage> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 18,
+                  ),
                   InkWell(
                     splashColor: Colors.transparent,
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UseGuidePageOne()),
+                        MaterialPageRoute(
+                            builder: (context) => UseGuidePageOne()),
                       );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        settingDescription_list("계정 정보"),
+                        settingDescription_list("사용 설명서 확인하기"),
                       ],
                     ),
                   ),
