@@ -209,29 +209,31 @@ class _HomeState extends State<Home> {
                               Expanded(
                                 child: Stack(
                                   children: [
-                                    Scrollbar(
-                                      controller: _answercontroller,
-                                      trackVisibility: true,
-                                      thumbVisibility: true,
-                                      thickness: 4,
-                                      radius: Radius.circular(5),
-                                      child: ShaderMask(
-                                        shaderCallback: (rect) {
-                                          return const LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Colors.white,
-                                                Color.fromRGBO(255, 255, 255, 0)
-                                              ],
-                                              stops: [
-                                                0.7,
-                                            1
-                                          ]).createShader(Rect.fromLTRB(
-                                          0, 0, rect.width, rect.height));
-                                    },
-                                        child: SingleChildScrollView(
-                                          controller: _answercontroller,
+                                  RawScrollbar(
+                                    thumbColor: mainColor.pink.withOpacity(0.8),
+                                    trackColor: Colors.white.withOpacity(0.7),
+                                    thumbVisibility: true,
+                                    trackVisibility: true,
+                                    thickness: 5,
+                                    radius: Radius.circular(3),
+                                    trackRadius: Radius.circular(3),
+                                    child: ShaderMask(
+                                      shaderCallback: (rect) {
+                                        return const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.white,
+                                              Color.fromRGBO(255, 255, 255, 0)
+                                            ],
+                                            stops: [
+                                              0.7,
+                                              1
+                                            ]).createShader(Rect.fromLTRB(
+                                            0, 0, rect.width, rect.height));
+                                      },
+                                      child: SingleChildScrollView(
+                                        controller: _answercontroller,
                                           child: Padding(
                                             padding: const EdgeInsets.only(right: 14.0),
                                             child: Text(
@@ -247,9 +249,9 @@ class _HomeState extends State<Home> {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                  )
+                                ],
+                              ),
                               ),
                               SizedBox(
                                 height: 10,
@@ -796,6 +798,7 @@ class _HomeState extends State<Home> {
 
       await getnewaccesstoken(context, fetchData);
     } else {
+      print(response.statusCode);
       throw Exception('Failed to load data');
     }
   }

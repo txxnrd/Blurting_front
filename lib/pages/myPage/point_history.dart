@@ -89,6 +89,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
         earningHistoryList = data;
         usageHistoryList = data;
+        print(data);
 
         return data;
       } else if (response.statusCode == 401) {
@@ -120,13 +121,12 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
           DateTime dateTime = DateTime(1, 1, 1, hours, minutes, seconds);
 
-          return DateFormat.Hms().format(dateTime);
+          return DateFormat.Hm().format(dateTime);
         }
       }
     } catch (e) {
       // Handle the exception or log the error
     }
-
     return 'Unknown time';
   }
 
@@ -218,7 +218,73 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0.0,
         toolbarHeight: 80,
-        title: AppbarDescription("포인트 내역"),
+        title: Column(
+          children: [
+            AppbarDescription("포인트 내역"),
+          ],
+        ),
+        flexibleSpace: Container(
+          margin: EdgeInsets.only(top: 80),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                child: GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: _tabController.index == 0
+                            ? mainColor.MainColor
+                            : mainColor.Gray.withOpacity(0.5)),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '지급내역',
+                        style: TextStyle(
+                          fontFamily: "Heebo",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    _tabController.index = 0;
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                child: GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: _tabController.index == 1
+                            ? mainColor.MainColor
+                            : mainColor.Gray.withOpacity(0.5)),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '사용내역',
+                        style: TextStyle(
+                          fontFamily: "Heebo",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    _tabController.index = 1;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -232,57 +298,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: 120,
-                height: 30,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _tabController.index = 0;
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _tabController.index == 0
-                        ? Color(0xFFF66464)
-                        : Color(0xFF9E9E9E),
-                  ),
-                  child: Text(
-                    '지급내역',
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 120,
-                height: 30,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _tabController.index = 1;
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _tabController.index == 1
-                        ? Color(0xFFF66464)
-                        : Color(0xFF9E9E9E),
-                  ),
-                  child: Text(
-                    '사용내역',
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -311,7 +326,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         groupDataByDate(historyList);
 
     return ListView.builder(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.only(top: 15),
       itemCount: groupedData.length,
       itemBuilder: (context, index) {
         String date = groupedData.keys.elementAt(index);
@@ -321,28 +336,37 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(18.0),
+              padding: const EdgeInsets.all(10.0),
               child: Text(
                 date, // Show only date
                 style: TextStyle(
                   fontFamily: "Heebo",
                   fontWeight: FontWeight.w500,
                   fontSize: 10,
-                  color: Colors.grey,
+                  color: mainColor.Gray,
                 ),
                 textAlign: TextAlign.right,
               ),
             ),
             for (var entry in dateEntries)
               ListTile(
+                minLeadingWidth: 0,
+                minVerticalPadding: 0,
+                leading: Container(
+                  height: 25,
+                  width: 3,
+                  decoration: BoxDecoration(
+                      color: mainColor.MainColor,
+                      borderRadius: BorderRadius.circular(3)),
+                ),
                 title: formatHistoryText(entry['history'] ?? 'Unknown'),
                 trailing: Text(
                   entry['time'] ?? 'Unknown',
                   style: TextStyle(
-                    fontFamily: "Pretendard",
+                    fontFamily: "Heebo",
                     fontWeight: FontWeight.w500,
                     fontSize: 11,
-                    color: Colors.grey,
+                    color: mainColor.Gray
                   ),
                 ),
               ),
@@ -351,32 +375,23 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       },
     );
   }
-}
-
+  
 // Function to format history text with pink square bullet
-Widget formatHistoryText(String history) {
-  return RichText(
-    text: TextSpan(
-      children: [
-        WidgetSpan(
-          child: Padding(
-              padding: EdgeInsets.only(right: 10.0), // Adjust spacing as needed
-              child: Container(
-                height: 15,
-                width: 2,
-                color: Color(0xFFFF7D7D),
-              )),
-        ),
-        TextSpan(
-          text: history,
-          style: TextStyle(
-            fontFamily: "Pretendard",
-            fontWeight: FontWeight.w500,
-            fontSize: 13,
-            color: Colors.black,
+  Widget formatHistoryText(String history) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: history,
+            style: TextStyle(
+              fontFamily: "Heebo",
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              color: mainColor.Gray,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
 }
