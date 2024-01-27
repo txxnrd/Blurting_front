@@ -25,6 +25,7 @@ class UseGuidePageFour extends StatefulWidget {
 class _UseGuidePageFourState extends State<UseGuidePageFour>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
+  
   Animation<double>? _progressAnimation;
   bool isVisible = true;
   Timer? _blinkTimer;

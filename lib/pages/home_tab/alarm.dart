@@ -56,6 +56,8 @@ class _AlarmPageState extends State<AlarmPage> {
         setState(() {
           groupedData = groupDataByDate(AlarmHistoryList);
         });
+        print(data);
+
         return data;
       } else if (response.statusCode == 401) {
         //refresh token으로 새로운 accesstoken 불러오는 코드.
@@ -135,7 +137,7 @@ class _AlarmPageState extends State<AlarmPage> {
 
     return ListView.builder(
       controller: _scrollController,
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.only(top: 15),
       itemCount: groupedData.length,
       itemBuilder: (context, index) {
         String date = groupedData.keys.elementAt(index);
@@ -147,29 +149,37 @@ class _AlarmPageState extends State<AlarmPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(18.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Text(
                   date, // Show only date
                   style: TextStyle(
                     fontFamily: "Heebo",
                     fontWeight: FontWeight.w500,
                     fontSize: 10,
-                    color: Colors.grey,
+                    color: mainColor.Gray,
                   ),
                   textAlign: TextAlign.right,
                 ),
               ),
               for (var entry in dateEntries)
                 ListTile(
+                  minLeadingWidth: 0,
+                  minVerticalPadding: 0,
+                  leading: Container(
+                    height: 25,
+                    width: 3,
+                    decoration: BoxDecoration(
+                        color: mainColor.MainColor,
+                        borderRadius: BorderRadius.circular(3)),
+                  ),
                   title: formatHistoryText(entry['message'] ?? 'Unknown'),
                   trailing: Text(
                     entry['time'] ?? 'Unknown',
                     style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 11,
-                      color: mainColor.Gray,
-                    ),
+                        fontFamily: "Heebo",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 11,
+                        color: mainColor.Gray),
                   ),
                 ),
             ],
@@ -183,27 +193,18 @@ class _AlarmPageState extends State<AlarmPage> {
 // Function to format history text with pink square bullet
 Widget formatHistoryText(String history) {
   return RichText(
-    text: TextSpan(
-      children: [
-        WidgetSpan(
-          child: Padding(
-              padding: EdgeInsets.only(right: 10.0), // Adjust spacing as needed
-              child: Container(
-                height: 15,
-                width: 2,
-                color: mainColor.MainColor,
-              )),
-        ),
-        TextSpan(
-          text: history,
-          style: TextStyle(
-            fontFamily: "Pretendard",
-            fontWeight: FontWeight.w500,
-            fontSize: 13,
-            color: Colors.black,
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: history,
+            style: TextStyle(
+              fontFamily: "Heebo",
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              color: mainColor.Gray,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
 }
