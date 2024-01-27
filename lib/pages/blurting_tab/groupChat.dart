@@ -161,61 +161,63 @@ class _GroupChat extends State<GroupChat> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        toolbarHeight: 220,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned(
-              left: 0,
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Color.fromRGBO(48, 48, 48, 1),
+        toolbarHeight: 200,
+        titleSpacing: 0,
+        title: Container(
+          // margin: EdgeInsets.only(top: 20),
+          child: Stack(
+            // alignment: Alignment.center,
+            children: [
+              Positioned(
+                left: 8,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Color.fromRGBO(48, 48, 48, 1),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
               ),
-            ),
-            Column(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          day,
-                          style: TextStyle(
-                              fontFamily: "Heebo",
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: mainColor.MainColor),
-                        ),
-                      ],
-                    )),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: 25,
-                    margin: EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        QuestionNumber(1),
-                        QuestionNumber(2),
-                        QuestionNumber(3),
-                        QuestionNumber(4),
-                        QuestionNumber(5),
-                        QuestionNumber(6),
-                        QuestionNumber(7),
-                        QuestionNumber(8),
-                        QuestionNumber(9),
-                      ],
-                    )),
-              ],
-            ),
-            Positioned(right: 0, child: pointAppbar()),
-          ],
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        day,
+                        style: TextStyle(
+                            fontFamily: "Heebo",
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                            color: mainColor.MainColor),
+                      ),
+                    ],
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: 25,
+                      margin: EdgeInsets.only(top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          QuestionNumber(1),
+                          QuestionNumber(2),
+                          QuestionNumber(3),
+                          QuestionNumber(4),
+                          QuestionNumber(5),
+                          QuestionNumber(6),
+                          QuestionNumber(7),
+                          QuestionNumber(8),
+                          QuestionNumber(9),
+                        ],
+                      )),
+                ],
+              ),
+              Positioned(right: 0, child: Container(margin: EdgeInsets.fromLTRB(0, 8, 10, 0), child: pointAppbar())),
+            ],
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: Size(10, 10),
@@ -477,26 +479,26 @@ class _GroupChat extends State<GroupChat> {
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
                     answerList[currentIndex].add(MyChat(
-                        key: ObjectKey(answerData['id']),
-                        message: answerData['answer'],
-                        createdAt: '',
-                        read: true,
-                        isBlurting: true,
-                        likedNum: answerData['likes']));
+                        key: ObjectKey(answerData['id']),         // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                        message: answerData['answer'],            // 답변 내용
+                        createdAt: '',                            // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                        read: true,                               // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                        isBlurting: true,                         // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                        likedNum: answerData['likes']));          // 좋아요 개수
                     isBlock[currentIndex] = true; // true가 맞음
                   } else {
                     answerList[currentIndex].add(AnswerItem(
-                        key: ObjectKey(answerData['id']),
-                        message: answerData['answer'],
-                        iLike: answerData['ilike'],
-                        likedNum: answerData['likes'],
-                        userId: answerData['userId'],
-                        userName: answerData['userNickname'],
-                        isAlready: isAlready,
-                        image: answerData['userSex'],
-                        mbti: answerData['mbti'] ?? '',
-                        answerId: answerData['id'],
-                        socket: socket));
+                        key: ObjectKey(answerData['id']),         // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                        message: answerData['answer'],            // 답변 내용
+                        iLike: answerData['ilike'],               // 내가 좋아요 했는지 안 했는지
+                        likedNum: answerData['likes'],            // 좋아요 개수
+                        userId: answerData['userId'],             // 답글 단 사람 아이디 (귓속말 걸 때 필요)
+                        userName: answerData['userNickname'],     // 답글 단 사람 닉네임
+                        isAlready: isAlready,                     // 지금 귓속말 하고 있는지 아닌지
+                        image: answerData['userSex'],             // 성별
+                        mbti: answerData['mbti'] ?? '',           // mbti
+                        answerId: answerData['id'],               // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
+                        socket: socket));                         // 걍... 소켓임 신경 쓸 필요 없음
                   }
                 });
               }

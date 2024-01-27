@@ -37,6 +37,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
   bool _isImageAfter = false;
   late Timer _imageTimer;
   late Timer _timer;
+  Timer? _blinkTimer;
 
   double opacity = 1.0;
   double imageOpacity = 0.3;
@@ -99,14 +100,17 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
       });      
   }
 
-    void _startBlinking() {
-    Future.delayed(Duration(milliseconds: 1500), () {
+  void _startBlinking() {
+    _blinkTimer = Timer.periodic(Duration(milliseconds: 1000), (Timer timer) {
       if (mounted) {
         setState(() {
           if (isVisible == 0.3) isVisible = 1.0;
           else if (isVisible == 1.0) isVisible = 0.3;
           _startBlinking(); // 다음 깜빡임을 예약합니다.
         });
+      } else {
+        // State가 이미 해제되었다면 타이머를 중지합니다.
+        timer.cancel();
       }
     });
   }
@@ -114,6 +118,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
   @override
   void dispose() {
     _blurController.dispose();
+    _blinkTimer?.cancel();
     _timer.cancel();
     super.dispose();
   }
@@ -225,7 +230,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                   alignment: Alignment.bottomCenter,
                   padding: EdgeInsets.only(bottom: 40),
                   child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 1500),
+                    duration: Duration(milliseconds: 700),
                     opacity: isVisible,
                     child: Text("화면을 터치해 주세요!",
                         style: TextStyle(

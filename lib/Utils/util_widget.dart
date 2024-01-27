@@ -154,7 +154,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
-      padding: !widget.isBlurting ? EdgeInsets.fromLTRB(0, 7, 0, 20) : 
+      padding: !widget.isBlurting ? EdgeInsets.fromLTRB(0, 7, 0, 27) : 
                                    _focusNode.hasFocus ? EdgeInsets.fromLTRB(0, 7, 0, 0) :EdgeInsets.fromLTRB(0, 7, 0, 20) ,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -268,7 +268,6 @@ class pointAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 20),
       child: InkWell(
           onTap: () {
             Navigator.push(

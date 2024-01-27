@@ -164,7 +164,7 @@ class _MyPage extends State<MyPage> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             actions: [
-              pointAppbar(),
+              Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
               Container(
                 margin: EdgeInsets.only(top: 20),
                 child: IconButton(
@@ -299,27 +299,49 @@ class _MyPage extends State<MyPage> {
                               color: Color(0XFFF66464)),
                         ),
                         Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(width: 25),
-                            Text(userProfile['nickname'] ?? 'Unknown',
-                                style: TextStyle(
-                                    fontFamily: "Heebo",
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 30,
-                                    color: mainColor.MainColor)),
-                            SizedBox(width: 7),
-                            Text(userProfile['mbti'] ?? 'Unknown',
-                                style: TextStyle(
-                                    fontFamily: "Heebo",
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                    color: mainColor.MainColor)),
+                            Row(
+                              children: [
+                                SizedBox(width: 25),
+                                Text(userProfile['nickname'] ?? 'Unknown',
+                                    style: TextStyle(
+                                        fontFamily: "Heebo",
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 30,
+                                        color: mainColor.MainColor)),
+                                SizedBox(width: 7),
+                                Text(userProfile['mbti'] ?? 'Unknown',
+                                    style: TextStyle(
+                                        fontFamily: "Heebo",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20,
+                                        color: mainColor.MainColor)),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(25, 0, 0, 15),
+                              child: Row(
+                                children: [
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(right: 5),
+                                  //   child: Icon(Icons.check, color: mainColor.lightPink,),
+                                  // ),
+                                  Text('🏡 ${userProfile['region'].toString() ?? 'Unknown'}',
+                                      style: TextStyle(
+                                          fontFamily: "Heebo",
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15,
+                                          color: mainColor.MainColor)),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                         Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                        _buildInfoRow('지역:',
-                            userProfile['region'].toString() ?? 'Unknown'),
+                        // _buildInfoRow('지역:',
+                        //     userProfile['region'].toString() ?? 'Unknown'),
                         _buildInfoRow('종교:',
                             userProfile['religion'].toString() ?? 'Unknown'),
                         _buildInfoRow('전공:',

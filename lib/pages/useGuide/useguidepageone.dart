@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blurting/pages/useguide/useguidepagetwo.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -25,6 +27,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
   bool isVisible = true;
+  Timer? _blinkTimer;
 
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
@@ -60,13 +63,21 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
     _startBlinking();
   }
 
+  @override
+  void dispose() {
+    _blinkTimer?.cancel();
+    super.dispose();
+  }
+
   void _startBlinking() {
-    Future.delayed(Duration(milliseconds: 1500), () {
+    _blinkTimer = Timer.periodic(Duration(milliseconds: 1000), (Timer timer) {
       if (mounted) {
         setState(() {
           isVisible = !isVisible;
-          _startBlinking(); // 다음 깜빡임을 예약합니다.
         });
+      } else {
+        // State가 이미 해제되었다면 타이머를 중지합니다.
+        timer.cancel();
       }
     });
   }
@@ -129,7 +140,7 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
                       ),
                       SizedBox(height: mediaquery_height * 7 / 90),
                       AnimatedOpacity(
-                        duration: Duration(milliseconds: 1500),
+                        duration: Duration(milliseconds: 700),
                         opacity: isVisible ? 1.0 : 0.3,
                         child: Text("화면을 터치해 주세요!",
                             style: TextStyle(
