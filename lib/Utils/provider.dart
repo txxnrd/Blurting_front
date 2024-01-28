@@ -94,6 +94,22 @@ class UserProvider with ChangeNotifier {
   }
 }
 
+class FocusNodeProvider with ChangeNotifier {
+  FocusNode _focusNode = FocusNode();
+  FocusNode get focusNode => _focusNode;
+
+  set focusnode(FocusNode value) {
+    _focusNode = value;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+}
+
 void showSnackBar(BuildContext context, String message) {
   final snackBar = SnackBar(
     content: Text(message),

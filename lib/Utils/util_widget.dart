@@ -108,7 +108,7 @@ class CustomInputField extends StatefulWidget {
 }
 
 class _CustomInputFieldState extends State<CustomInputField> {
-  late FocusNode _focusNode;
+  late FocusNode focusNode;
   bool isValid = false;
   int length = 0;
 
@@ -119,13 +119,13 @@ class _CustomInputFieldState extends State<CustomInputField> {
   }
 
   void inputPointValid(bool state) {
-    if(_focusNode.hasFocus) {
+    if (focusNode.hasFocus) {
       Provider.of<GroupChatProvider>(context, listen: false).pointValid = state;
     }
   }
 
   void isPocusState(bool state) {
-    if(mounted) {
+    if (mounted) {
       Provider.of<GroupChatProvider>(context, listen: false).isPocus = state;
     }
   }
@@ -133,20 +133,23 @@ class _CustomInputFieldState extends State<CustomInputField> {
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode();
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
+    focusNode =
+        Provider.of<FocusNodeProvider>(context, listen: false).focusNode;
+
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
         isPocusState(true);
       } else {
         isPocusState(false);
       }
     });
     inputPointValid(false);
+    Provider.of<FocusNodeProvider>(context, listen: false).focusnode =
+        focusNode;
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
     super.dispose();
   }
 
@@ -154,8 +157,11 @@ class _CustomInputFieldState extends State<CustomInputField> {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
-      padding: !widget.isBlurting ? EdgeInsets.fromLTRB(0, 7, 0, 27) : 
-                                   _focusNode.hasFocus ? EdgeInsets.fromLTRB(0, 7, 0, 0) :EdgeInsets.fromLTRB(0, 7, 0, 20) ,
+      padding: !widget.isBlurting
+          ? EdgeInsets.fromLTRB(0, 7, 0, 27)
+          : focusNode.hasFocus
+              ? EdgeInsets.fromLTRB(0, 7, 0, 0)
+              : EdgeInsets.fromLTRB(0, 7, 0, 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -168,18 +174,18 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   width: MediaQuery.of(context).size.width - 20,
                   child: TextField(
                     minLines: 1, maxLines: 3,
-                    enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
-                    focusNode: _focusNode,
-                    onTapOutside: (event) => _focusNode.unfocus(),
+                    // enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
+                    focusNode: focusNode,
+                    onTapOutside: (event) => focusNode.unfocus(),
                     onChanged: (value) {
                       length = value.length;
-                  
+
                       if (value != '') {
                         inputValid(true);
                       } else {
                         inputValid(false);
                       }
-                  
+
                       if (value.length >= 100) {
                         inputPointValid(true);
                       } else {
@@ -208,9 +214,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       ),
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: !widget.isBlock
-                          ? widget.hintText
-                          : widget.blockText,
+                      // hintText:
+                      // !widget.isBlock ? widget.hintText : widget.blockText,
                       hintStyle: TextStyle(fontSize: 12),
                       suffixIcon: IconButton(
                         onPressed: (isValid)
@@ -243,7 +248,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                 ),
               ),
-              if (_focusNode.hasFocus && widget.isBlurting)
+              if (focusNode.hasFocus && widget.isBlurting)
                 Container(
                     padding: EdgeInsets.all(5),
                     child: Text(
@@ -423,6 +428,12 @@ class _MyChatState extends State<MyChat> {
     print(widget.key);
 
     return ListTile(
+      onTap: () {
+        print("눌림");
+        Provider.of<FocusNodeProvider>(context, listen: false)
+            .focusNode
+            .requestFocus();
+      },
       subtitle: // 답변 내용
           Container(
         margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
@@ -512,26 +523,25 @@ class _MyChatState extends State<MyChat> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                                SizedBox(
-                                  width: 8,
-                                  height: 7,
-                                  child: Image(
-                                    image:
-                                        AssetImage('assets/images/heart.png'),
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              if (widget.likedNum != 0)
-                              Container(
-                                margin: EdgeInsets.only(left: 3, top: 1),
-                                child: Text(
-                                  '${widget.likedNum}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontFamily: 'Heebo'),
+                              SizedBox(
+                                width: 8,
+                                height: 7,
+                                child: Image(
+                                  image: AssetImage('assets/images/heart.png'),
+                                  color: Colors.white,
                                 ),
                               ),
+                              if (widget.likedNum != 0)
+                                Container(
+                                  margin: EdgeInsets.only(left: 3, top: 1),
+                                  child: Text(
+                                    '${widget.likedNum}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontFamily: 'Heebo'),
+                                  ),
+                                ),
                             ],
                           ),
                         ),
@@ -765,7 +775,8 @@ class _AnswerItemState extends State<AnswerItem> {
                           value: isCheckSexuality,
                           onChanged: (value) {
                             setState(() {
-                              if (value == false || !checkReason.contains(true)) {
+                              if (value == false ||
+                                  !checkReason.contains(true)) {
                                 isCheckSexuality = value!;
                                 checkReason[0] = !checkReason[0];
                                 reason = '음란성/선정성';
@@ -797,7 +808,8 @@ class _AnswerItemState extends State<AnswerItem> {
                           value: isCheckedAbuse,
                           onChanged: (value) {
                             setState(() {
-                              if (value == false || !checkReason.contains(true)) {
+                              if (value == false ||
+                                  !checkReason.contains(true)) {
                                 isCheckedAbuse = value!;
                                 checkReason[1] = !checkReason[1];
                                 reason = '욕설/인신공격';
@@ -829,7 +841,8 @@ class _AnswerItemState extends State<AnswerItem> {
                           value: isCheckedEtc,
                           onChanged: (value) {
                             setState(() {
-                              if (value == false || !checkReason.contains(true)) {
+                              if (value == false ||
+                                  !checkReason.contains(true)) {
                                 isCheckedEtc = value!;
                                 checkReason[2] = !checkReason[2];
                                 reason = '기타';
@@ -865,11 +878,12 @@ class _AnswerItemState extends State<AnswerItem> {
                             width: 210,
                             height: 50,
                             decoration: BoxDecoration(
-                              color:
-                                  (checkReason.any((element) => element == true))
-                                      ? mainColor.MainColor
-                                      : mainColor.lightGray,
-                              borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                              color: (checkReason
+                                      .any((element) => element == true))
+                                  ? mainColor.MainColor
+                                  : mainColor.lightGray,
+                              borderRadius:
+                                  BorderRadius.circular(7), // 둥근 모서리 설정
                             ),
                             child: Align(
                               alignment: Alignment.center,
@@ -931,62 +945,65 @@ class _AnswerItemState extends State<AnswerItem> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Stack(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      // 동적으로 눌린 유저의 정보 받아오기
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(bottom: 10),
-                                          child: Stack(
-                                            children: [
-                                              Align(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    // 동적으로 눌린 유저의 정보 받아오기
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: Stack(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                // padding: EdgeInsets.only(top: 10),
                                                 alignment: Alignment.center,
-                                                child: Container(
-                                                  // padding: EdgeInsets.only(top: 10),
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    'Profile',
-                                                    style: TextStyle(
-                                                        color: mainColor.MainColor,
-                                                        fontFamily: "Heebo",
-                                                        fontSize: 20,
-                                                        fontWeight: FontWeight.w400),
-                                                  ),
+                                                child: Text(
+                                                  'Profile',
+                                                  style: TextStyle(
+                                                      color:
+                                                          mainColor.MainColor,
+                                                      fontFamily: "Heebo",
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w400),
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                        SizedBox(
-                                            width: 150,
-                                            child: Image.asset(
-                                              widget.image == "F"
-                                                  ? 'assets/images/profile_woman.png'
-                                                  : 'assets/images/profile_man.png',
-                                              fit: BoxFit.fitHeight,
-                                            )),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              widget.userName,
-                                              style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 24,
-                                                  color: mainColor.MainColor),
-                                            ),
-                                            Text(
-                                              widget.mbti.toUpperCase(),
-                                              style: TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 15,
-                                                  color: mainColor.MainColor),
-                                            ),
+                                      ),
+                                      SizedBox(
+                                          width: 150,
+                                          child: Image.asset(
+                                            widget.image == "F"
+                                                ? 'assets/images/profile_woman.png'
+                                                : 'assets/images/profile_man.png',
+                                            fit: BoxFit.fitHeight,
+                                          )),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            widget.userName,
+                                            style: TextStyle(
+                                                fontFamily: "Pretendard",
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 24,
+                                                color: mainColor.MainColor),
+                                          ),
+                                          Text(
+                                            widget.mbti.toUpperCase(),
+                                            style: TextStyle(
+                                                fontFamily: "Pretendard",
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15,
+                                                color: mainColor.MainColor),
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -1029,7 +1046,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                     child: Container(
                                       margin: EdgeInsets.only(top: 30),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: const [
                                           Text(
                                             '귓속말을 걸면 10p가 차감됩니다.',
@@ -1076,12 +1094,12 @@ class _AnswerItemState extends State<AnswerItem> {
                                         borderRadius: BorderRadius.circular(50),
                                         border: Border.all(
                                             color: isAlready || isValid
-                                              ? mainColor.lightGray
-                                              : mainColor.MainColor,
+                                                ? mainColor.lightGray
+                                                : mainColor.MainColor,
                                             width: 2)),
                                     child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(15, 3, 15, 5),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 3, 15, 5),
                                       child: AnimatedDefaultTextStyle(
                                         duration: Duration(milliseconds: 500),
                                         style: TextStyle(
@@ -1107,7 +1125,6 @@ class _AnswerItemState extends State<AnswerItem> {
                   ),
                 ),
               ),
-
               Positioned(
                 bottom: 80,
                 child: AnimatedOpacity(
@@ -1299,7 +1316,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                         ),
                                       ),
                                     ),
-                                    onTap: () async {           // 귓속말 걸기가...
+                                    onTap: () async {
+                                      // 귓속말 걸기가...
                                       if (isValid) {
                                         await startWhisper();
                                         if (!reportedUser) {

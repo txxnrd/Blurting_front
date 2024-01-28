@@ -104,27 +104,28 @@ class _Whisper extends State<Whisper> {
         String formattedDate = dateFormatFull
             .format(_parseDateTime(data['createdAt'] as String? ?? ''));
 
-          if (mounted) {        if (roomId == widget.roomId) {
-          if (userId ==
-              Provider.of<UserProvider>(context, listen: false).userId) {
-            // userProvider
-            newAnswer = MyChat(
-              message: chat,
-              createdAt: dateFormatAA
-                  .format(_parseDateTime(data['createdAt'] as String? ?? '')),
-              read: read,
-              isBlurting: false,
-              likedNum: 0,
-            );
-            sendingMessageList.clear();
-            print('내 메시지 전송 완료: $chat');
-          } else {
-            newAnswer = OtherChat(
+        if (mounted) {
+          if (roomId == widget.roomId) {
+            if (userId ==
+                Provider.of<UserProvider>(context, listen: false).userId) {
+              // userProvider
+              newAnswer = MyChat(
                 message: chat,
-                createdAt: dateFormatAA.format(
-                    _parseDateTime(data['createdAt'] as String? ?? '')));
-            print('상대방 메시지 도착: $chat');
-          }
+                createdAt: dateFormatAA
+                    .format(_parseDateTime(data['createdAt'] as String? ?? '')),
+                read: read,
+                isBlurting: false,
+                likedNum: 0,
+              );
+              sendingMessageList.clear();
+              print('내 메시지 전송 완료: $chat');
+            } else {
+              newAnswer = OtherChat(
+                  message: chat,
+                  createdAt: dateFormatAA.format(
+                      _parseDateTime(data['createdAt'] as String? ?? '')));
+              print('상대방 메시지 도착: $chat');
+            }
 
             setState(() {
               if (chatMessages.isEmpty) {
@@ -134,7 +135,8 @@ class _Whisper extends State<Whisper> {
 
               chatMessages.add(newAnswer); // 새로운 메시지 추가
             });
-        }}
+          }
+        }
       });
 
       widget.socket.on('read_all', (data) {
@@ -269,7 +271,6 @@ class _Whisper extends State<Whisper> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -319,9 +320,9 @@ class _Whisper extends State<Whisper> {
                       borderRadius: BorderRadius.circular(50),
                       color: Colors.white,
                       border: Border.all(
-                              color: Colors.transparent,
-                              width: 1.0,
-                            ),
+                        color: Colors.transparent,
+                        width: 1.0,
+                      ),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
@@ -614,14 +615,13 @@ class _Whisper extends State<Whisper> {
                 ),
               ),
               CustomInputField(
-                controller: controller,
-                sendFunction: sendChat,
-                isBlock: isBlock,
-                blockText: "귓속말이 끊긴 상대입니다",
-                hintText: "",
-                questionId: 0,
-                isBlurting: false
-              ),
+                  controller: controller,
+                  sendFunction: sendChat,
+                  isBlock: isBlock,
+                  blockText: "귓속말이 끊긴 상대입니다",
+                  hintText: "",
+                  questionId: 0,
+                  isBlurting: false),
             ],
           ),
         ],

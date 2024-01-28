@@ -48,6 +48,8 @@ class QuestionItem extends StatelessWidget {
           children: [
             Flexible(
               child: RichText(
+                // overflow: TextOverflow.ellipsis,
+                // maxLines: 3,
                 text: TextSpan(
                   children: [
                     TextSpan(
@@ -215,7 +217,11 @@ class _GroupChat extends State<GroupChat> {
                       )),
                 ],
               ),
-              Positioned(right: 0, child: Container(margin: EdgeInsets.fromLTRB(0, 8, 10, 0), child: pointAppbar())),
+              Positioned(
+                  right: 0,
+                  child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 8, 10, 0),
+                      child: pointAppbar())),
             ],
           ),
         ),
@@ -479,26 +485,31 @@ class _GroupChat extends State<GroupChat> {
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
                     answerList[currentIndex].add(MyChat(
-                        key: ObjectKey(answerData['id']),         // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                        message: answerData['answer'],            // 답변 내용
-                        createdAt: '',                            // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-                        read: true,                               // 읽었는지인데 귓속말에서만 필요해서 true로 처리
-                        isBlurting: true,                         // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                        likedNum: answerData['likes']));          // 좋아요 개수
+                        key: ObjectKey(
+                            answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                        message: answerData['answer'], // 답변 내용
+                        createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                        read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                        isBlurting:
+                            true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                        likedNum: answerData['likes'])); // 좋아요 개수
                     isBlock[currentIndex] = true; // true가 맞음
                   } else {
                     answerList[currentIndex].add(AnswerItem(
-                        key: ObjectKey(answerData['id']),         // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                        message: answerData['answer'],            // 답변 내용
-                        iLike: answerData['ilike'],               // 내가 좋아요 했는지 안 했는지
-                        likedNum: answerData['likes'],            // 좋아요 개수
-                        userId: answerData['userId'],             // 답글 단 사람 아이디 (귓속말 걸 때 필요)
-                        userName: answerData['userNickname'],     // 답글 단 사람 닉네임
-                        isAlready: isAlready,                     // 지금 귓속말 하고 있는지 아닌지
-                        image: answerData['userSex'],             // 성별
-                        mbti: answerData['mbti'] ?? '',           // mbti
-                        answerId: answerData['id'],               // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
-                        socket: socket));                         // 걍... 소켓임 신경 쓸 필요 없음
+                        key: ObjectKey(
+                            answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                        message: answerData['answer'], // 답변 내용
+                        iLike: answerData['ilike'], // 내가 좋아요 했는지 안 했는지
+                        likedNum: answerData['likes'], // 좋아요 개수
+                        userId:
+                            answerData['userId'], // 답글 단 사람 아이디 (귓속말 걸 때 필요)
+                        userName: answerData['userNickname'], // 답글 단 사람 닉네임
+                        isAlready: isAlready, // 지금 귓속말 하고 있는지 아닌지
+                        image: answerData['userSex'], // 성별
+                        mbti: answerData['mbti'] ?? '', // mbti
+                        answerId:
+                            answerData['id'], // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
+                        socket: socket)); // 걍... 소켓임 신경 쓸 필요 없음
                   }
                 });
               }
