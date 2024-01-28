@@ -88,7 +88,7 @@ class InputfieldClipper extends CustomClipper<Path> {
 class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
   final Function(String, int)? sendFunction;
-  final bool isBlock;
+  bool isBlock;
   final String blockText;
   final String hintText;
   final int questionId;
@@ -155,6 +155,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<FocusNodeProvider>(context, listen: false)
+        .focusNode
+        .requestFocus();
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
       padding: !widget.isBlurting
@@ -174,9 +177,14 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   width: MediaQuery.of(context).size.width - 20,
                   child: TextField(
                     minLines: 1, maxLines: 3,
-                    // enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
+                    enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
                     focusNode: focusNode,
-                    onTapOutside: (event) => focusNode.unfocus(),
+                    onTapOutside: (event) {
+                      focusNode.unfocus();
+
+                      Provider.of<ReplyProvider>(context, listen: false)
+                          .IsReply = false;
+                    },
                     onChanged: (value) {
                       length = value.length;
 
@@ -214,8 +222,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       ),
                       filled: true,
                       fillColor: Colors.white,
-                      // hintText:
-                      // !widget.isBlock ? widget.hintText : widget.blockText,
+                      hintText:
+                          !widget.isBlock ? widget.hintText : widget.blockText,
                       hintStyle: TextStyle(fontSize: 12),
                       suffixIcon: IconButton(
                         onPressed: (isValid)
@@ -426,13 +434,14 @@ class _MyChatState extends State<MyChat> {
   @override
   Widget build(BuildContext context) {
     print(widget.key);
-
     return ListTile(
       onTap: () {
         print("눌림");
         Provider.of<FocusNodeProvider>(context, listen: false)
             .focusNode
             .requestFocus();
+        print(Provider.of<FocusNodeProvider>(context, listen: false).focusNode);
+        Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
       },
       subtitle: // 답변 내용
           Container(
@@ -1449,32 +1458,46 @@ class _AnswerItemState extends State<AnswerItem> {
                             padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
                             child: ClipPath(
                               clipper: LeftTailClipper(),
-                              child: Container(
-                                width: 200,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color.fromRGBO(255, 238, 238, 1),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 5,
-                                          bottom: 5),
-                                      child: Text(
-                                        widget.message,
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 12,
-                                          color: Colors.black,
+                              //채팅 내역 있는곳
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("눌림");
+                                  Provider.of<FocusNodeProvider>(context,
+                                          listen: false)
+                                      .focusNode
+                                      .requestFocus();
+                                  Provider.of<ReplyProvider>(context,
+                                          listen: false)
+                                      .IsReply = true;
+                                },
+                                child: Container(
+                                  width: 200,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color.fromRGBO(255, 238, 238, 1),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            top: 5,
+                                            bottom: 5),
+                                        child: Text(
+                                          widget.message,
+                                          style: TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

@@ -51,7 +51,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => ScrollProvider()),
-        ChangeNotifierProvider(create: (context) => FocusNodeProvider())
+        ChangeNotifierProvider(create: (context) => FocusNodeProvider()),
+        ChangeNotifierProvider(create: (context) => ReplyProvider())
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

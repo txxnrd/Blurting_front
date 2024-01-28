@@ -372,14 +372,28 @@ class _GroupChat extends State<GroupChat> {
             ],
           ),
         ),
-        CustomInputField(
-            controller: _controller,
-            sendFunction: SendAnswer,
-            isBlock: isBlock[currentIndex],
-            blockText: "이미 답변이 완료된 질문입니다.",
-            hintText: "내 생각 쓰기...",
-            questionId: 1,
-            isBlurting: true),
+        Visibility(
+          visible: !Provider.of<ReplyProvider>(context, listen: true).isReply,
+          child: CustomInputField(
+              controller: _controller,
+              sendFunction: SendAnswer,
+              isBlock: isBlock[currentIndex],
+              blockText: "이미 답변이 완료된 질문입니다.",
+              hintText: "내 생각 쓰기...",
+              questionId: 1,
+              isBlurting: true),
+        ),
+        Visibility(
+          visible: Provider.of<ReplyProvider>(context, listen: true).isReply,
+          child: CustomInputField(
+              controller: _controller,
+              sendFunction: SendAnswer,
+              isBlock: false,
+              blockText: "이미 답변이 완료된 질문입니다?!",
+              hintText: "내 생각 쓰기!!",
+              questionId: 1,
+              isBlurting: true),
+        ),
       ],
     );
   }

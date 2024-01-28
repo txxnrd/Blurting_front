@@ -57,6 +57,17 @@ class WhisperProvider with ChangeNotifier {
   }
 }
 
+class ReplyProvider with ChangeNotifier {
+  bool _isReply = false;
+
+  bool get isReply => _isReply;
+
+  set IsReply(bool value) {
+    _isReply = value;
+    notifyListeners();
+  }
+}
+
 Future<void> saveuserId(int userId) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setInt('userId', userId);
