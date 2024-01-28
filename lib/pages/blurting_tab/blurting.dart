@@ -178,6 +178,7 @@ class _Blurting extends State<Blurting> {
         children: [
           Column(
             children: [
+              if (isState == 'Continue')
               Container(
                 margin: EdgeInsets.only(bottom: 20),
                 width: width * 0.6,
@@ -353,7 +354,7 @@ class _Blurting extends State<Blurting> {
                                     color: isTap[currentPage] == true ||
                                             ( iSended[currentPage]) == true
                                         ? mainColor.MainColor
-                                        : mainColor.Gray.withOpacity(0.2),
+                                        : mainColor.lightPink,
                                   ))),
                         ],
                       )
@@ -375,7 +376,7 @@ class _Blurting extends State<Blurting> {
                       activeDotScale: 1.0,
                       maxVisibleDots: 5,
                       radius: 8,
-                      spacing: 3,
+                      spacing: 5,
                       dotHeight: 10,
                       dotWidth: 10,
                     ),
@@ -888,7 +889,9 @@ class _Blurting extends State<Blurting> {
         List<dynamic> iReceivedList = responseData['iReceived'];
         List<dynamic> iSendedList = responseData['iSended'];
 
+        print('iSendedList');
         print(iSendedList);
+        print('iReceivedList');
         print(iReceivedList);
 
         // 받은 화살표 처리
@@ -932,8 +935,10 @@ class _Blurting extends State<Blurting> {
 
   Future<void> sendArrow(int userId, int day) async {
     // 화살표를 보냄
-    final url = Uri.parse('${API.sendArrow}${userId}');
+    final url = Uri.parse('${API.sendArrow}$userId/${day+1}');
     String savedToken = await getToken();
+
+    print(day);
 
     final response = await http.post(url, headers: {
       'authorization': 'Bearer $savedToken',
@@ -955,9 +960,11 @@ class _Blurting extends State<Blurting> {
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      print(response.statusCode);
       await getnewaccesstoken(context, () async {}, null, null, null, null,
           sendArrow, [userId, day]);
     } else {
+      print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }

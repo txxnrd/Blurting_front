@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../../config/app_config.dart';
 import '../../token.dart';
 import 'dart:io';
@@ -573,6 +574,13 @@ class _MyPageEditState extends State<MyPageEdit> {
         showSnackBar(context, '포인트 부족!');
       } else {
         showSnackBar(context, '닉네임 변경 완료');
+        Map responseData = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point =
+                responseData['point'];
+          });
+        }
       }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
@@ -899,7 +907,6 @@ class _MyPageEditState extends State<MyPageEdit> {
               color: Color.fromRGBO(48, 48, 48, 1),
             ),
             onPressed: () {
-              // 이대로 나가면 변경 사항이 저장되지 않습니다. 나가시겠습니까?
               if (IsValid) {
                 _showWarning(context, '이대로 나가면 변경 사항이 저장되지 않습니다.', '나가시겠습니까?', '나가기', popPage);
               } else {

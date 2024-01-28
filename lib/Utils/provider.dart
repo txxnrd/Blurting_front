@@ -145,13 +145,13 @@ Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
 }
 
 Widget AppbarDescription(String text) {
-  return Container(
-      child: Text(
+  return Text(
     text,
     style: TextStyle(
+      fontFamily: "Heebo",
       fontSize: 20,
       fontWeight: FontWeight.w700,
       color: mainColor.Gray,
     ),
-  ));
+  );
 }
