@@ -371,7 +371,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-
+      print(response.body);
       _showEditsuccess("수정에 성공하였습니다.");
       sleep(const Duration(seconds: 2));
       Navigator.push(
@@ -643,7 +643,8 @@ class _MyPageEditState extends State<MyPageEdit> {
     changeName();
   }
 
-  void _showWarning(BuildContext context, String warningText1, String warningText2, String text, Function function) {
+  void _showWarning(BuildContext context, String warningText1,
+      String warningText2, String text, Function function) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -908,7 +909,8 @@ class _MyPageEditState extends State<MyPageEdit> {
             ),
             onPressed: () {
               if (IsValid) {
-                _showWarning(context, '이대로 나가면 변경 사항이 저장되지 않습니다.', '나가시겠습니까?', '나가기', popPage);
+                _showWarning(context, '이대로 나가면 변경 사항이 저장되지 않습니다.', '나가시겠습니까?',
+                    '나가기', popPage);
               } else {
                 Navigator.pop(context);
               }
@@ -916,8 +918,8 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
         ),
         actions: [
-            Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
-            SizedBox(width: 10),
+          Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
+          SizedBox(width: 10),
         ],
       ),
       body: SizedBox(
@@ -952,8 +954,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                           children: [
                             Container(
                               width: screenWidth,
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12), // 내부 여백을 추가
                               alignment: Alignment.centerLeft,
                               height: 48, // TextField의 높이와 일치하도록 설정
                               decoration: BoxDecoration(
@@ -965,7 +967,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       widget.data['nickname'],
@@ -979,7 +982,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                                       margin: EdgeInsets.all(10),
                                       child: InkWell(
                                         onTap: () async {
-                                          _showWarning(context, '닉네임을 바꾸기 위해선 10포인트가 필요합니다.', '계속하시겠습니까?', '계속하기', changeNickName);
+                                          _showWarning(
+                                              context,
+                                              '닉네임을 바꾸기 위해선 10포인트가 필요합니다.',
+                                              '계속하시겠습니까?',
+                                              '계속하기',
+                                              changeNickName);
                                         },
                                         child: Ink(
                                           child: Container(
@@ -1011,11 +1019,11 @@ class _MyPageEditState extends State<MyPageEdit> {
                               child: Text(
                                 '* 10포인트를 지불하고 랜덤으로 닉네임을 바꿀 수 있어요!',
                                 style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontSize: 11.0,
-                                  fontFamily: "Heebo"
-                                  // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
-                                ),
+                                    color: mainColor.Gray,
+                                    fontSize: 11.0,
+                                    fontFamily: "Heebo"
+                                    // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                                    ),
                               ),
                             ),
                           ],
