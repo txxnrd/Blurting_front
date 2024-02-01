@@ -149,8 +149,11 @@ flutter:
     - assets/images/blur4.png
     - assets/images/blurafter.png
     - assets/images/useguidetwo.png
+    - assets/images/random.png
     - assets/blurtingStart.png
     - assets/images/home_scroll_button.png
+    - assets/images/dashedLine.png
+    - assets/images/unmatch.png
 
   fonts:
     - family: Pretendard

@@ -61,6 +61,7 @@ class API {
   static final String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
   static final String blurtingInfo =
       "${ServerEndpoints.serverEndpoint}/blurting/group-info";
+  static final String result = "${ServerEndpoints.serverEndpoint}/blurting/result";
   /*ARROW */
   static final String sendArrow =
       "${ServerEndpoints.serverEndpoint}/blurting/arrow/";

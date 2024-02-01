@@ -559,40 +559,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
-  Future<void> changeName() async {
-    final url = Uri.parse(API.nickname);
-    String savedToken = await getToken();
-
-    var response = await http.get(url, headers: {
-      'Authorization': 'Bearer $savedToken',
-      'Content-Type': 'application/json',
-    });
-
-    if (response.statusCode == 200) {
-      print(response.body);
-      if (response.body == 'false') {
-        showSnackBar(context, '포인트 부족!');
-      } else {
-        showSnackBar(context, '닉네임 변경 완료');
-        Map responseData = jsonDecode(response.body);
-        if (mounted) {
-          setState(() {
-            Provider.of<UserProvider>(context, listen: false).point =
-                responseData['point'];
-          });
-        }
-      }
-    } else if (response.statusCode == 401) {
-      //refresh token으로 새로운 accesstoken 불러오는 코드.
-      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      // ignore: use_build_context_synchronously
-      await getnewaccesstoken(
-          context, () async {}, null, changeName, null, null);
-    } else {
-      print(response.statusCode);
-    }
-  }
-
   Widget MBTIbox(double width, int index) {
     bool? isselected = selectedfunction(index);
     return Container(
@@ -638,11 +604,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     Navigator.pop(context);
   }
 
-  void changeNickName() {
-    Navigator.pop(context);
-    changeName();
-  }
-
   void _showWarning(BuildContext context, String warningText1, String warningText2, String text, Function function) {
     showDialog(
         context: context,
@@ -652,7 +613,7 @@ class _MyPageEditState extends State<MyPageEdit> {
             body: Stack(
               children: [
                 Positioned(
-                  bottom: 100,
+                  bottom: 50,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -973,33 +934,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                                         color: mainColor.Gray,
                                         fontSize: 16.0,
                                         // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.all(10),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          _showWarning(context, '닉네임을 바꾸기 위해선 10포인트가 필요합니다.', '계속하시겠습니까?', '계속하기', changeNickName);
-                                        },
-                                        child: Ink(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: mainColor.MainColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            padding:
-                                                EdgeInsets.fromLTRB(9, 2, 9, 2),
-                                            child: Text(
-                                              '수정',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 12,
-                                                fontFamily: 'Pretendard',
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
                                       ),
                                     ),
                                   ],

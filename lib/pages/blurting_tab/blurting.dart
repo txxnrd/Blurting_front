@@ -52,6 +52,12 @@ List<List<Widget>> iReceived = List.generate(
 int currentPage = 0; // 지금 보고 있는 페이지 (day 몇인지)
 int userId = 0;
 int currentDay = 0;
+
+bool finalMatching = false;
+late String matchingSex = '';
+late String matchingName = '';
+late String myName = '';
+late String mySex = '';
 /** */
 
 DateTime _parseDateTime(String? dateTimeString) {
@@ -82,21 +88,37 @@ class _Blurting extends State<Blurting> {
     super.initState();
 
     Future.delayed(Duration.zero, () async {
-      await fetchPoint();
+      SharedPreferences pref = await SharedPreferences.getInstance();
 
+      await fetchPoint();
       await isMatched();
-      print(isState);
+
+      if (isState == 'Continue' || isState == 'end') {
+        await fetchLatestComments();
+      }
 
       if (isState == 'Continue') {
         await MyArrow();
         print(iSended);
 
         await fetchGroupInfo();
-        await fetchLatestComments();
         if (mounted) {
           pageController.jumpToPage(currentDay);
         }
+      } else {
+        print('gd');
+        pref.setString('day', 'Day0');
+        day = 'Day0';
       }
+
+      if (isState == 'end') {
+        // 만약에 블러팅이 끝났다면
+        // 몇 번째 블러팅인지, 매칭 되었는지
+        // 매칭 상대방 정보 받아오기
+        await result();
+        print(finalMatching);
+      }
+      print(day);
     });
 
     pageController.addListener(() {
@@ -107,6 +129,7 @@ class _Blurting extends State<Blurting> {
         });
       }
     });
+
   }
 
   @override
@@ -244,45 +267,33 @@ class _Blurting extends State<Blurting> {
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: mainColor.Gray.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10)),
-                      width: width * 0.9,
-                      height: ProfileList[currentPage].length > 4
-                          ? width * 0.8
-                          : width * 0.7,
-                      child: isState == 'Start'
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '진행 중인 블러팅이 없어요.',
-                                    style: TextStyle(
-                                        color: mainColor.Gray,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Heebo'),
-                                  ),
-                                  Text(
-                                    '새로운 블러팅을 시작해 주세요!',
-                                    style: TextStyle(
-                                        color: mainColor.Gray,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Heebo'),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : isState == 'Matching'
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // if (isState == 'end')
+                        //   Text(
+                        //     '# blurting',        // API 연결
+                        //     style: TextStyle(
+                        //         color: mainColor.Gray,
+                        //         fontWeight: FontWeight.w600,
+                        //         fontSize: 16,
+                        //         fontFamily: 'Pretendard'),
+                        //   ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: mainColor.Gray.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10)),
+                          width: width * 0.9,
+                          height: ProfileList[currentPage].length > 4
+                              ? width * 0.8
+                              : width * 0.7,
+                          child: isState == 'Start'
                               ? Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '블러팅 방이 매칭 중이에요.',
+                                        '진행 중인 블러팅이 없어요.',
                                         style: TextStyle(
                                             color: mainColor.Gray,
                                             fontWeight: FontWeight.w600,
@@ -290,7 +301,7 @@ class _Blurting extends State<Blurting> {
                                             fontFamily: 'Heebo'),
                                       ),
                                       Text(
-                                        '잠시만 기다려 주세요!',
+                                        '새로운 블러팅을 시작해 주세요!',
                                         style: TextStyle(
                                             color: mainColor.Gray,
                                             fontWeight: FontWeight.w600,
@@ -300,21 +311,47 @@ class _Blurting extends State<Blurting> {
                                     ],
                                   ),
                                 )
-                              : !isMine
-                                  ? PageView(
-                                      controller: pageController,
-                                      children: [
-                                          _arrowPage(0),
-                                          _arrowPage(1),
-                                          _arrowPage(2),
-                                        ])
-                                  : PageView(
-                                      controller: pageController,
-                                      children: [
-                                          _myArrowPage(0),
-                                          _myArrowPage(1),
-                                          _myArrowPage(2),
-                                        ]),
+                              : isState == 'Matching'
+                                  ? Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '블러팅 방이 매칭 중이에요.',
+                                            style: TextStyle(
+                                                color: mainColor.Gray,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                fontFamily: 'Heebo'),
+                                          ),
+                                          Text(
+                                            '잠시만 기다려 주세요!',
+                                            style: TextStyle(
+                                                color: mainColor.Gray,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                fontFamily: 'Heebo'),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : !isMine
+                                      ? PageView(
+                                          controller: pageController,
+                                          children: [
+                                              _arrowPage(0),
+                                              _arrowPage(1),
+                                              _arrowPage(2),
+                                            ])
+                                      : PageView(
+                                          controller: pageController,
+                                          children: [
+                                              _myArrowPage(0),
+                                              _myArrowPage(1),
+                                              _myArrowPage(2),
+                                            ]),
+                        ),
+                      ],
                     ),
                     if (isState == 'Continue' && !isMine)
                       Column(
@@ -399,21 +436,21 @@ class _Blurting extends State<Blurting> {
                         fontSize: 20,
                         fontFamily: 'Heebo'),
                   ),
-                  if (isState != 'Continue')
+                  if (isState != 'Continue' && isState != 'end')
                     Text('진행 중인 블러팅이 없습니다.',
                         style: TextStyle(
                             color: mainColor.Gray,
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
                             fontFamily: 'Heebo')),
-                  if (isState == 'Continue')
+                  if (isState == 'Continue' || isState == 'end')
                     Text('start: ${dateFormatInfo.format(createdAt)}',
                         style: TextStyle(
                             color: mainColor.Gray,
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
                             fontFamily: 'Heebo')),
-                  if (isState == 'Continue')
+                  if (isState == 'Continue' || isState == 'end')
                     Text(
                         'finish: ${dateFormatInfo.format(createdAt.add(Duration(days: 3)))}',
                         style: TextStyle(
@@ -429,7 +466,7 @@ class _Blurting extends State<Blurting> {
             child: staticButton(
                 text: isState == 'Continue'
                     ? "방 입장하기"
-                    : isState == 'Matching' ? '매칭중' : "방 생성하기"),
+                    : isState == 'Matching' ? '매칭중' : "새로운 블러팅 시작하기"),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -452,7 +489,7 @@ class _Blurting extends State<Blurting> {
                                 day: day,
                               )));
                 }
-              } else if (isState == 'Start' || isState == 'Matching') {
+              } else if (isState == 'Start' || isState == 'Matching' || isState == 'end') {
                 // 아직 방이 만들어지지 않음
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Matching()));
@@ -467,7 +504,7 @@ class _Blurting extends State<Blurting> {
     );
   }
 
-  Widget _arrowPage(int index) {
+  Widget _arrowPage(int index) {        // end일 때, continue일 때로 나눠서... 리팩토링해야 댐ㅜ
     return Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -476,7 +513,7 @@ class _Blurting extends State<Blurting> {
             Container(
               margin: EdgeInsets.only(top: 8),
               child: Text(
-                'Day${index + 1}',
+                isState == 'end' ? 'Final Day' : 'Day${index + 1}',
                 style: TextStyle(
                     color: mainColor.Gray,
                     fontWeight: FontWeight.w700,
@@ -484,7 +521,127 @@ class _Blurting extends State<Blurting> {
                     fontFamily: 'Heebo'),
               ),
             ),
-            if (!iSended[currentPage])
+            if (isState == 'end')
+              Text(
+                (finalMatching)
+                    ? '최종 매칭되었습니다. 축하드립니다!\n'
+                    : '최종 매칭이 되지 않았습니다.. ㅜㅜ\n새로운 블러팅을 시작해보세요!',
+                style: TextStyle(
+                    color: mainColor.Gray,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    fontFamily: 'Heebo'),
+                textAlign: TextAlign.center,
+              ),
+            if (isState == 'end')
+              Container(
+                margin: EdgeInsets.only(top: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    finalMatching ? 
+                    Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          width: 55,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            color: mainColor.lightPink,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Image.asset(
+                            fit: BoxFit.fill,
+                            matchingSex == 'M' ?
+                            'assets/man.png' 
+                          : 'assets/woman.png'
+                          ),       // API 연결 (OTHER)
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 7),
+                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          decoration: BoxDecoration(
+                            color: mainColor.lightPink,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Text(
+                            matchingName,        // API 연결 (OTHER)
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Heebo',
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                          children: [
+                              Positioned(
+                                  left: 27.5,
+                                  top: 20,
+                                  child: Text(
+                                    '?',
+                                    style: TextStyle(
+                                        color: mainColor.Gray,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Pretendard'),
+                                  )),
+                              Container(
+                                margin: EdgeInsets.all(5),
+                                width: 55,
+                                child: Image.asset(
+                                    fit: BoxFit.fill, 'assets/images/unmatch.png'),
+                              ),
+                          ],
+                        ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      width: 70,
+                      child: Image.asset(
+                        'assets/images/dashedLine.png',
+                        fit: BoxFit.fill,
+                        color: finalMatching ? mainColor.MainColor : mainColor.Gray,
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          width: 55,
+                          height: 55,
+                          decoration: BoxDecoration(
+                              color: mainColor.lightPink,
+                              borderRadius: BorderRadius.circular(50),),
+                          child: Image.asset(
+                            fit: BoxFit.fill,
+                            matchingSex == 'M' ?
+                            'assets/man.png'        // API 연결 (MY)
+                          : 'assets/woman.png'
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 7),
+                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          decoration: BoxDecoration(
+                              color: mainColor.lightPink,
+                              borderRadius: BorderRadius.circular(50),),
+                          child: Text(
+                            myName,        // API 연결 (MY)
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Heebo',
+                                color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            if (isState == 'Continue' && !iSended[currentPage])
               Text(
                 (isValidDay[index] == true)
                     ? '누가 당신의 마음을 사로잡았나요?'
@@ -495,7 +652,7 @@ class _Blurting extends State<Blurting> {
                     fontSize: 16,
                     fontFamily: 'Heebo'),
               ),
-            if (! iSended[currentPage] && isValidDay[index])
+            if (isState == 'Continue'&&(! iSended[currentPage] && isValidDay[index]))
               Text(
                 '* 오늘이 지나기 전에 화살표를 날려 주세요!',
                 style: TextStyle(
@@ -504,7 +661,7 @@ class _Blurting extends State<Blurting> {
                     fontSize: 10,
                     fontFamily: 'Heebo'),
               ),
-            if (!iSended[currentPage])
+            if (isState == 'Continue' && !iSended[currentPage])
               if (ProfileList[currentPage].length <= 4)
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -515,7 +672,7 @@ class _Blurting extends State<Blurting> {
                     ],
                   ),
                 ),
-            if (!iSended[currentPage])
+            if (isState == 'Continue' && !iSended[currentPage])
               if (ProfileList[currentPage].length > 4)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -544,7 +701,7 @@ class _Blurting extends State<Blurting> {
                 ),
           ],
         ),
-        if (iSended[currentPage])
+        if (isState == 'Continue' && iSended[currentPage])
           Align(
             alignment: Alignment.center,
             child: Text(
@@ -618,6 +775,38 @@ class _Blurting extends State<Blurting> {
     );
   }
 
+  Future<void> result() async{
+    final url = Uri.parse(API.result);
+    String savedToken = await getToken();
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $savedToken',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      try {
+        print(response.body);
+        print('object');
+
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        myName = responseData['myname'];
+        mySex = responseData['mysex'];
+
+        if (responseData['othername'] == null) {
+          finalMatching = false;
+          matchingName = '';
+          matchingSex = '';
+        } else {
+          finalMatching = true;
+        }
+      } catch (e) {print(e);}
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   Future<void> isMatched() async {
     // 방이 있는지 없는지 확인
     final url = Uri.parse(API.matching);
@@ -634,6 +823,7 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
+        // responseData = 3;       // 없애야 할 것
 
         print(responseData);
         if (mounted) {
@@ -642,10 +832,13 @@ class _Blurting extends State<Blurting> {
               isState = 'Continue';
             } else if (responseData == 0) {
               isState = 'Start';
-              pref.setString('day', 'Day0');
-            } else {
+              // pref.setString('day', 'Day0');
+            } else if(responseData == 2) {
               isState = 'Matching';
-              pref.setString('day', 'Day0');
+              // pref.setString('day', 'Day0');
+            } else if(responseData == 3) {
+              isState = 'end';
+              // pref.setString('day', 'Day0');
             }
           });
 
@@ -683,7 +876,10 @@ class _Blurting extends State<Blurting> {
         if (mounted) {
           setState(() {
             createdAt = _parseDateTime(responseData['createdAt']);
+
+            print(createdAt);
             int latestIndex = responseData['questionNo'];
+            print(latestIndex);
 
             setState(() {
               // 시작하자마자 day1 고르기

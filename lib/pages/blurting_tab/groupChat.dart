@@ -263,7 +263,7 @@ class _GroupChat extends State<GroupChat> {
           Container(
             padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-            color: Colors.white.withOpacity(0.4),
+            color: Colors.white.withOpacity(0.2),
           ),
           Container(
             margin: EdgeInsets.only(top: 250), // 시작 위치에 여백 추가
