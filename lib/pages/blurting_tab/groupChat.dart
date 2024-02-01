@@ -498,15 +498,27 @@ class _GroupChat extends State<GroupChat> {
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
-                    answerList[currentIndex].add(MyChat(
+                    // answerList[currentIndex].add(MyChat(
+                    //     key: ObjectKey(
+                    //         answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                    //     message: answerData['answer'], // 답변 내용
+                    //     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                    //     read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                    //     isBlurting:
+                    //         true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                    //     likedNum: answerData['likes'])); // 좋아요 개수
+
+                    answerList[currentIndex].add(MyChatReply(
                         key: ObjectKey(
                             answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                        message: answerData['answer'], // 답변 내용
+                        message: answerData['answer'],
+                        answerID: answerData['id'], // 답변 내용
                         createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
                         read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                         isBlurting:
                             true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                        likedNum: answerData['likes'])); // 좋아요 개수
+                        likedNum: answerData['likes']));
+
                     isBlock[currentIndex] = true; // true가 맞음
                   } else {
                     answerList[currentIndex].add(AnswerItem(
@@ -615,6 +627,49 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> SendAnswer(String answer, int questionId) async {
+    // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
+    // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
+    Widget newAnswer = MyChat(
+      message: answer,
+      createdAt: '',
+      read: true,
+      isBlurting: true,
+      likedNum: 0,
+    );
+
+    final url = Uri.parse(API.answer);
+    String savedToken = await getToken();
+
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $savedToken',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'questionId': currentQuestionId, 'answer': answer}));
+
+    if (response.statusCode == 201) {
+      if (response.body != 'Created') {
+        Map responseData = jsonDecode(response.body);
+        Provider.of<UserProvider>(context, listen: false).point =
+            responseData['point'];
+      } else {}
+
+      // 성공적으로 응답
+      if (mounted) {
+        setState(() {
+          isBlock[currentIndex] = true; // true가 맞음
+          answerList[currentIndex].add(newAnswer);
+        });
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(
+          context, () async {}, null, null, SendAnswer, [answer, questionId]);
+    } else {}
+  }
+
+  Future<void> SendReply(String answer, int questionId) async {
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget newAnswer = MyChat(

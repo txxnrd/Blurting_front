@@ -84,6 +84,28 @@ class InputfieldClipper extends CustomClipper<Path> {
   }
 }
 
+// 본인 말풍선 클리퍼
+class RightTailReplyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.moveTo(size.width, 5);
+    path.lineTo(25, 5);
+    path.quadraticBezierTo(0, 5, 0, 25);
+    path.lineTo(0, size.height - 25);
+    path.quadraticBezierTo(0, size.height, 25, size.height);
+    path.lineTo(size.width - 25, size.height);
+    path.quadraticBezierTo(
+        size.width, size.height, size.width, size.height - 20);
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
 // 인풋필드 위젯 (컨트롤러, 시간, 보내는 함수)
 class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
@@ -572,6 +594,7 @@ class MyChatReply extends StatefulWidget {
   final bool read;
   final bool isBlurting;
   final int likedNum;
+  final int answerID;
 
   MyChatReply(
       {super.key,
@@ -579,7 +602,8 @@ class MyChatReply extends StatefulWidget {
       required this.createdAt,
       required this.read,
       required this.isBlurting,
-      required this.likedNum});
+      required this.likedNum,
+      required this.answerID});
 
   @override
   State<MyChatReply> createState() => _MyChatReplyState();
@@ -597,15 +621,11 @@ class _MyChatReplyState extends State<MyChatReply> {
     return ListTile(
       onTap: () {
         print("눌림");
-        Provider.of<FocusNodeProvider>(context, listen: false)
-            .focusNode
-            .requestFocus();
-        print(Provider.of<FocusNodeProvider>(context, listen: false).focusNode);
-        Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
+        print(widget.answerID);
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -615,15 +635,15 @@ class _MyChatReplyState extends State<MyChatReply> {
                 Stack(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(60, 6, 25, 0),
                       child: ClipPath(
-                        clipper: RightTailClipper(),
+                        clipper: RightTailReplyClipper(),
                         child: Container(
-                          width: 200,
+                          width: 160,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color.fromRGBO(255, 210, 210, 1),
+                            color: Color.fromARGB(255, 152, 106, 124),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -645,76 +665,19 @@ class _MyChatReplyState extends State<MyChatReply> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          if (!widget.read)
-                            Container(
-                              margin: EdgeInsets.only(top: 20, right: 5),
-                              child: Text(
-                                '읽지 않음',
-                                style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  fontSize: 10,
-                                  color: mainColor.Gray,
-                                ),
-                              ),
-                            ),
-                          Container(
-                            margin: EdgeInsets.only(top: 5, right: 5),
-                            child: Text(
-                              widget.createdAt,
-                              style: TextStyle(
-                                fontFamily: "Pretendard",
-                                fontSize: 10,
-                                color: mainColor.Gray,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (widget.isBlurting)
-                      Positioned(
-                        bottom: 0,
-                        left: (widget.likedNum == 0) ? 40 : 30,
-                        child: Container(
-                          width: (widget.likedNum == 0) ? 15 : 25,
-                          height: 15,
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(255, 210, 210, 1),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 8,
-                                height: 7,
-                                child: Image(
-                                  image: AssetImage('assets/images/heart.png'),
-                                  color: Colors.white,
-                                ),
-                              ),
-                              if (widget.likedNum != 0)
-                                Container(
-                                  margin: EdgeInsets.only(left: 3, top: 1),
-                                  child: Text(
-                                    '${widget.likedNum}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontFamily: 'Heebo'),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    // Positioned(
+                    //   top: 0,
+                    //   right: 0,
+                    //   child: Container(
+                    //     width: 40,
+                    //     height: 40,
+                    //     decoration: BoxDecoration(
+                    //       color: Color.fromARGB(255, 152, 106, 124),
+                    //       borderRadius: BorderRadius.circular(50),
+                    //     ),
+                    //     child: Text("퓨퓨651"),
+                    //   ),
+                    // ),
                   ],
                 ),
               ],
