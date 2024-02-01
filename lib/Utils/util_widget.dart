@@ -566,6 +566,166 @@ class _MyChatState extends State<MyChat> {
   }
 }
 
+class MyChatReply extends StatefulWidget {
+  final String message;
+  final String createdAt;
+  final bool read;
+  final bool isBlurting;
+  final int likedNum;
+
+  MyChatReply(
+      {super.key,
+      required this.message,
+      required this.createdAt,
+      required this.read,
+      required this.isBlurting,
+      required this.likedNum});
+
+  @override
+  State<MyChatReply> createState() => _MyChatReplyState();
+}
+
+class _MyChatReplyState extends State<MyChatReply> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.key);
+    return ListTile(
+      onTap: () {
+        print("눌림");
+        Provider.of<FocusNodeProvider>(context, listen: false)
+            .focusNode
+            .requestFocus();
+        print(Provider.of<FocusNodeProvider>(context, listen: false).focusNode);
+        Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
+      },
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
+                      child: ClipPath(
+                        clipper: RightTailClipper(),
+                        child: Container(
+                          width: 200,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color.fromRGBO(255, 210, 210, 1),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, top: 5, bottom: 5),
+                                child: Text(
+                                  widget.message,
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (!widget.read)
+                            Container(
+                              margin: EdgeInsets.only(top: 20, right: 5),
+                              child: Text(
+                                '읽지 않음',
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 10,
+                                  color: mainColor.Gray,
+                                ),
+                              ),
+                            ),
+                          Container(
+                            margin: EdgeInsets.only(top: 5, right: 5),
+                            child: Text(
+                              widget.createdAt,
+                              style: TextStyle(
+                                fontFamily: "Pretendard",
+                                fontSize: 10,
+                                color: mainColor.Gray,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (widget.isBlurting)
+                      Positioned(
+                        bottom: 0,
+                        left: (widget.likedNum == 0) ? 40 : 30,
+                        child: Container(
+                          width: (widget.likedNum == 0) ? 15 : 25,
+                          height: 15,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 210, 210, 1),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 8,
+                                height: 7,
+                                child: Image(
+                                  image: AssetImage('assets/images/heart.png'),
+                                  color: Colors.white,
+                                ),
+                              ),
+                              if (widget.likedNum != 0)
+                                Container(
+                                  margin: EdgeInsets.only(left: 3, top: 1),
+                                  child: Text(
+                                    '${widget.likedNum}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontFamily: 'Heebo'),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class QustionState extends StatefulWidget {
   final String message;
   final String createdAt;
