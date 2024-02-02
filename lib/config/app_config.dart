@@ -56,6 +56,8 @@ class API {
   static final String answerNo = "${ServerEndpoints.serverEndpoint}/blurting/";
   static final String answer =
       "${ServerEndpoints.serverEndpoint}/blurting/answer";
+  static final String reply =
+      "${ServerEndpoints.serverEndpoint}/blurting/reply";
   static final String register =
       "${ServerEndpoints.serverEndpoint}/blurting/register";
   static final String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
@@ -83,5 +85,6 @@ class API {
   static final String fcmcheck = "${ServerEndpoints.serverEndpoint}/fcm/check";
   static final String userinfo =
       "${ServerEndpoints.serverEndpoint}/user/account";
-  static final String nickname = "${ServerEndpoints.serverEndpoint}/point/nickname";
+  static final String nickname =
+      "${ServerEndpoints.serverEndpoint}/point/nickname";
 }

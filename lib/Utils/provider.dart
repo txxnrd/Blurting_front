@@ -57,6 +57,7 @@ class WhisperProvider with ChangeNotifier {
   }
 }
 
+//custominputfield에서 답글인지 아닌지 확인하는 provider
 class ReplyProvider with ChangeNotifier {
   bool _isReply = false;
 
@@ -64,6 +65,19 @@ class ReplyProvider with ChangeNotifier {
 
   set IsReply(bool value) {
     _isReply = value;
+    notifyListeners();
+  }
+}
+
+class QuestionNumberProvider with ChangeNotifier {
+  // questionId 관리
+
+  int _questionId = 0;
+
+  int get questionId => _questionId;
+
+  set questionId(int value) {
+    _questionId = value;
     notifyListeners();
   }
 }

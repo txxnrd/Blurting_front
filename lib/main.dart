@@ -52,7 +52,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => ScrollProvider()),
         ChangeNotifierProvider(create: (context) => FocusNodeProvider()),
-        ChangeNotifierProvider(create: (context) => ReplyProvider())
+        ChangeNotifierProvider(create: (context) => ReplyProvider()),
+        ChangeNotifierProvider(create: (context) => QuestionNumberProvider())
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

@@ -434,6 +434,7 @@ class MyChat extends StatefulWidget {
   final bool read;
   final bool isBlurting;
   final int likedNum;
+  final int answerID;
 
   MyChat(
       {super.key,
@@ -441,7 +442,8 @@ class MyChat extends StatefulWidget {
       required this.createdAt,
       required this.read,
       required this.isBlurting,
-      required this.likedNum});
+      required this.likedNum,
+      required this.answerID});
 
   @override
   State<MyChat> createState() => _MyChatState();
@@ -459,6 +461,8 @@ class _MyChatState extends State<MyChat> {
     return ListTile(
       onTap: () {
         print("눌림");
+        print("음..?");
+        print(widget.answerID);
         Provider.of<FocusNodeProvider>(context, listen: false)
             .focusNode
             .requestFocus();
@@ -1585,6 +1589,10 @@ class _AnswerItemState extends State<AnswerItem> {
                               child: GestureDetector(
                                 onTap: () {
                                   print("눌림");
+                                  print(widget.answerId);
+                                  Provider.of<QuestionNumberProvider>(context,
+                                          listen: false)
+                                      .questionId = widget.answerId;
                                   Provider.of<FocusNodeProvider>(context,
                                           listen: false)
                                       .focusNode

@@ -110,6 +110,7 @@ class _Whisper extends State<Whisper> {
                 Provider.of<UserProvider>(context, listen: false).userId) {
               // userProvider
               newAnswer = MyChat(
+                answerID: 0,
                 message: chat,
                 createdAt: dateFormatAA
                     .format(_parseDateTime(data['createdAt'] as String? ?? '')),
@@ -151,6 +152,7 @@ class _Whisper extends State<Whisper> {
                 chatMessages.insert(
                     i,
                     MyChat(
+                      answerID: 0,
                       message: widget.message,
                       createdAt: widget.createdAt,
                       read: true,
@@ -639,6 +641,7 @@ class _Whisper extends State<Whisper> {
 
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(
+      answerID: 0,
       message: message,
       createdAt: '전송 중...',
       read: true,
@@ -730,6 +733,7 @@ class _Whisper extends State<Whisper> {
               if (chatData['userId'] ==
                   Provider.of<UserProvider>(context, listen: false).userId) {
                 fetchChatList = MyChat(
+                  answerID: 0,
                   message: chatData['chat'] as String? ?? '',
                   createdAt: dateFormatAA.format(
                       _parseDateTime(chatData['createdAt'] as String? ?? '')),

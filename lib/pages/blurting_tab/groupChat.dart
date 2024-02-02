@@ -387,7 +387,7 @@ class _GroupChat extends State<GroupChat> {
           visible: Provider.of<ReplyProvider>(context, listen: true).isReply,
           child: CustomInputField(
               controller: _controller,
-              sendFunction: SendAnswer,
+              sendFunction: SendReply,
               isBlock: false,
               blockText: "이미 답변이 완료된 질문입니다?!",
               hintText: "내 생각 쓰기!!",
@@ -501,7 +501,8 @@ class _GroupChat extends State<GroupChat> {
                     // answerList[currentIndex].add(MyChat(
                     //     key: ObjectKey(
                     //         answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                    //     message: answerData['answer'], // 답변 내용
+                    //     message: answerData['answer'],
+                    //     answerID: answerData['id'], // 답변 내용
                     //     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
                     //     read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                     //     isBlurting:
@@ -594,6 +595,7 @@ class _GroupChat extends State<GroupChat> {
                     message: answerData['answer'],
                     createdAt: '',
                     read: true,
+                    answerID: answerData['id'],
                     isBlurting: true,
                     likedNum: answerData['likes']));
                 isBlock[currentIndex] = true; // true가 맞음
@@ -630,6 +632,7 @@ class _GroupChat extends State<GroupChat> {
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget newAnswer = MyChat(
+      answerID: 0,
       message: answer,
       createdAt: '',
       read: true,
@@ -670,17 +673,23 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> SendReply(String answer, int questionId) async {
+    print("SendReply 실행이 됨");
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
-    Widget newAnswer = MyChat(
+    Widget newReply = MyChatReply(
+      answerID: 0,
       message: answer,
       createdAt: '',
       read: true,
       isBlurting: true,
       likedNum: 0,
     );
+    int answerId =
+        Provider.of<QuestionNumberProvider>(context, listen: false).questionId;
 
-    final url = Uri.parse(API.answer);
+    // 답변 아이디
+    final url = Uri.parse("${API.reply}/${answerId}");
+    print(url);
     String savedToken = await getToken();
 
     var response = await http.post(url,
@@ -688,27 +697,29 @@ class _GroupChat extends State<GroupChat> {
           'Authorization': 'Bearer $savedToken',
           'Content-Type': 'application/json',
         },
-        body: json.encode({'questionId': currentQuestionId, 'answer': answer}));
+        body: json.encode({'content': answer}));
 
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 201) {
       if (response.body != 'Created') {
-        Map responseData = jsonDecode(response.body);
-        Provider.of<UserProvider>(context, listen: false).point =
-            responseData['point'];
+        // Map responseData = jsonDecode(response.body);
+        // Provider.of<UserProvider>(context, listen: false).point =
+        //     responseData['point'];
       } else {}
 
       // 성공적으로 응답
       if (mounted) {
         setState(() {
           isBlock[currentIndex] = true; // true가 맞음
-          answerList[currentIndex].add(newAnswer);
+          answerList[currentIndex].add(newReply);
         });
       }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(
-          context, () async {}, null, null, SendAnswer, [answer, questionId]);
+          context, () async {}, null, null, SendReply, [answer]);
     } else {}
   }
 }
