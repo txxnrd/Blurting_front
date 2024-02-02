@@ -153,7 +153,8 @@ class _GroupChat extends State<GroupChat> {
     });
   }
 
-  List<List<Widget>> answerList = List.generate(10, (index) => <Widget>[]);
+  List<List<Widget>> answerList =
+      List.generate(10, (index) => <Widget>[]); //리스트를 만들어서 10개의 리스트를 담음
 
   @override
   Widget build(BuildContext context) {
@@ -498,18 +499,7 @@ class _GroupChat extends State<GroupChat> {
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
-                    // answerList[currentIndex].add(MyChat(
-                    //     key: ObjectKey(
-                    //         answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                    //     message: answerData['answer'],
-                    //     answerID: answerData['id'], // 답변 내용
-                    //     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-                    //     read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
-                    //     isBlurting:
-                    //         true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                    //     likedNum: answerData['likes'])); // 좋아요 개수
-
-                    answerList[currentIndex].add(MyChatReply(
+                    answerList[currentIndex].add(MyChat(
                         key: ObjectKey(
                             answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
                         message: answerData['answer'],
@@ -518,7 +508,18 @@ class _GroupChat extends State<GroupChat> {
                         read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                         isBlurting:
                             true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                        likedNum: answerData['likes']));
+                        likedNum: answerData['likes'])); // 좋아요 개수
+
+                    // answerList[currentIndex].add(MyChatReply(
+                    //     key: ObjectKey(
+                    //         answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                    //     message: answerData['answer'],
+                    //     answerID: answerData['id'], // 답변 내용
+                    //     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                    //     read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                    //     isBlurting:
+                    //         true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                    //     likedNum: answerData['likes']));
 
                     isBlock[currentIndex] = true; // true가 맞음
                   } else {
