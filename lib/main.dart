@@ -56,6 +56,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => QuestionNumberProvider()),
         ChangeNotifierProvider(
             create: (context) => ReplySelectedNumberProvider()),
+        ChangeNotifierProvider(create: (context) => MyChatReplyProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

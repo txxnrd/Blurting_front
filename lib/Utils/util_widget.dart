@@ -38,6 +38,30 @@ class LeftTailClipper extends CustomClipper<Path> {
   }
 }
 
+class OtherChatReplyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    // 시작점을 변경하여 둥근 모서리를 시작점으로 합니다.
+    path.moveTo(0, 25); // 왼쪽 상단 모서리를 둥글게 시작하기 위해 Y 좌표를 25로 설정
+    path.quadraticBezierTo(0, 0, 25, 0); // 변경: 왼쪽 상단 모서리를 둥글게 처리
+    path.lineTo(size.width - 30, 0); // 상단 선
+    path.quadraticBezierTo(size.width, 0, size.width, 25); // 우측 상단 둥글게
+    path.lineTo(size.width, size.height - 25); // 우측 선
+    path.quadraticBezierTo(
+        size.width, size.height, size.width - 25, size.height); // 우측 하단 둥글게
+    path.lineTo(25, size.height); // 하단 선
+    path.quadraticBezierTo(0, size.height, 0, size.height - 25); // 좌측 하단 둥글게
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
 class ReplyClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -215,9 +239,12 @@ class _CustomInputFieldState extends State<CustomInputField> {
       color: Color.fromRGBO(250, 250, 250, 0.5),
       padding: !widget.isBlurting
           ? EdgeInsets.fromLTRB(0, 7, 0, 27)
-          : focusNode.hasFocus
-              ? EdgeInsets.fromLTRB(0, 7, 0, 0)
-              : EdgeInsets.fromLTRB(0, 7, 0, 20),
+          : !Provider.of<ReplyProvider>(context, listen: true).isReply
+              ? (focusNode.hasFocus
+                  ? EdgeInsets.fromLTRB(0, 7, 0, 0)
+                  : EdgeInsets.fromLTRB(0, 7, 0, 20))
+              : EdgeInsets.fromLTRB(0, 7, 0, 25),
+      //여기에서 키보드 밑에 여백 처리함.
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -502,8 +529,14 @@ class _MyChatState extends State<MyChat> {
         Provider.of<FocusNodeProvider>(context, listen: false)
             .focusNode
             .requestFocus();
+        Provider.of<QuestionNumberProvider>(context, listen: false).questionId =
+            widget.answerID;
         print(Provider.of<FocusNodeProvider>(context, listen: false).focusNode);
         Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
+        Provider.of<ReplySelectedNumberProvider>(context, listen: false)
+            .replyselectednumber = widget.index;
+        Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
+            true;
       },
       subtitle: // 답변 내용
           Container(
@@ -673,13 +706,13 @@ class _MyChatReplyState extends State<MyChatReply> {
                     Container(
                       padding: EdgeInsets.fromLTRB(60, 6, 25, 0),
                       child: ClipPath(
-                        clipper: RightTailReplyClipper(),
+                        clipper: OtherChatReplyClipper(),
                         child: Container(
                           width: 160,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color.fromARGB(255, 152, 106, 124),
+                            color: Color(0xffffeeee),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -725,6 +758,104 @@ class _MyChatReplyState extends State<MyChatReply> {
   }
 }
 
+class MyChatReplyOtherPerson extends StatefulWidget {
+  final int writerUserId;
+  final String writerUserName;
+  final String content;
+  final String createdAt;
+
+  MyChatReplyOtherPerson({
+    super.key,
+    required this.writerUserId,
+    required this.writerUserName,
+    required this.content,
+    required this.createdAt,
+  });
+
+  @override
+  State<MyChatReplyOtherPerson> createState() => _MyChatReplyOtherPersonState();
+}
+
+class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.key);
+    return ListTile(
+      onTap: () {
+        print("눌림");
+      },
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(60, 6, 25, 0),
+                      child: ClipPath(
+                        clipper: OtherChatReplyClipper(),
+                        child: Container(
+                          width: 160,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xffffeeee),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, top: 5, bottom: 5),
+                                child: Text(
+                                  widget.content,
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Positioned(
+                    //   top: 0,
+                    //   right: 0,
+                    //   child: Container(
+                    //     width: 40,
+                    //     height: 40,
+                    //     decoration: BoxDecoration(
+                    //       color: Color.fromARGB(255, 152, 106, 124),
+                    //       borderRadius: BorderRadius.circular(50),
+                    //     ),
+                    //     child: Text("퓨퓨651"),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//남들이 채팅한거의 답변 위젯
 class OtherChatReply extends StatefulWidget {
   final int writerUserId;
   final String writerUserName;
@@ -758,7 +889,7 @@ class _OtherChatReplyState extends State<OtherChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -770,13 +901,13 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                     Container(
                       padding: EdgeInsets.fromLTRB(60, 0, 25, 0),
                       child: ClipPath(
-                        clipper: LeftTailClipper(),
+                        clipper: OtherChatReplyClipper(),
                         child: Container(
                           width: 160,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color.fromARGB(255, 152, 106, 124),
+                            color: Color(0xFFFFEEEE),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1736,6 +1867,9 @@ class _AnswerItemState extends State<AnswerItem> {
                                   Provider.of<ReplyProvider>(context,
                                           listen: false)
                                       .IsReply = true;
+                                  Provider.of<MyChatReplyProvider>(context,
+                                          listen: false)
+                                      .ismychatReply = true;
                                 },
                                 child: Container(
                                   width: 200,

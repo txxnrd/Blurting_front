@@ -69,6 +69,18 @@ class ReplyProvider with ChangeNotifier {
   }
 }
 
+//custominputfield에서 답글인지 아닌지 확인하는 provider
+class MyChatReplyProvider with ChangeNotifier {
+  bool _ismychatReply = false;
+
+  bool get ismychatReply => _ismychatReply;
+
+  set ismychatReply(bool value) {
+    _ismychatReply = value;
+    notifyListeners();
+  }
+}
+
 class QuestionNumberProvider with ChangeNotifier {
   // questionId 관리
 

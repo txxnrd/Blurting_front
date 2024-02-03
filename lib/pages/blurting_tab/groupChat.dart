@@ -507,9 +507,10 @@ class _GroupChat extends State<GroupChat> {
               // 48시간 지났으면 3일차
               day = 'Day3';
             }
+            int index = 0;
             // 노태윤에게. 여기가 답변 추가하는 부분인데 여기만 수정하면 됨
             for (final answerData in responseData['answers']) {
-              int index = 0;
+              index++;
               if (answerData['room'] != null) {
                 isAlready = true;
               } else {
@@ -522,13 +523,23 @@ class _GroupChat extends State<GroupChat> {
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
-                    childReplies.add(ChildReply(MyChatReply(
-                      writerUserId: reply['writerUserId'],
-                      writerUserName: reply['writerUserName'],
-                      content: reply['content'],
-
-                      createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-                    )));
+                    if (reply['writerUserId'] ==
+                        Provider.of<UserProvider>(context, listen: false)
+                            .userId) {
+                      childReplies.add(ChildReply(MyChatReply(
+                        writerUserId: reply['writerUserId'],
+                        writerUserName: reply['writerUserName'],
+                        content: reply['content'],
+                        createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                      )));
+                    } else {
+                      childReplies.add(ChildReply(MyChatReplyOtherPerson(
+                        writerUserId: reply['writerUserId'],
+                        writerUserName: reply['writerUserName'],
+                        content: reply['content'],
+                        createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                      )));
+                    }
                   } else {
                     childReplies.add(ChildReply(OtherChatReply(
                       writerUserId: reply['writerUserId'],
@@ -759,6 +770,13 @@ class _GroupChat extends State<GroupChat> {
       content: reply,
       createdAt: "",
     );
+
+    Widget newReply2 = MyChatReply(
+      writerUserId: 0,
+      writerUserName: "",
+      content: reply,
+      createdAt: "",
+    );
     int answerId =
         Provider.of<QuestionNumberProvider>(context, listen: false).questionId;
 
@@ -788,13 +806,26 @@ class _GroupChat extends State<GroupChat> {
         setState(() {
           isBlock[currentIndex] = true; // true가 맞음
           // rooms[currentIndex].replies.add(Reply(newReply, []));
-          rooms[currentIndex]
-              .replies[Provider.of<ReplySelectedNumberProvider>(context,
-                          listen: false)
-                      .ReplySelectedNumber -
-                  1]
-              .childReplies
-              .insert(0, ChildReply(newReply));
+
+          if (Provider.of<MyChatReplyProvider>(context, listen: false)
+                  .ismychatReply ==
+              true) {
+            rooms[currentIndex]
+                .replies[Provider.of<ReplySelectedNumberProvider>(context,
+                            listen: false)
+                        .ReplySelectedNumber -
+                    1]
+                .childReplies
+                .insert(0, ChildReply(newReply2));
+          } else {
+            rooms[currentIndex]
+                .replies[Provider.of<ReplySelectedNumberProvider>(context,
+                            listen: false)
+                        .ReplySelectedNumber -
+                    1]
+                .childReplies
+                .insert(0, ChildReply(newReply));
+          }
         });
       }
     } else if (response.statusCode == 401) {
