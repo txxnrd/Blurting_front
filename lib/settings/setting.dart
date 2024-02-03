@@ -538,6 +538,22 @@ class _SettingPageState extends State<SettingPage> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () async {
+                      var token = await getToken();
+                      print(token);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("토큰 출력하기"),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -57,6 +57,42 @@ class WhisperProvider with ChangeNotifier {
   }
 }
 
+//custominputfield에서 답글인지 아닌지 확인하는 provider
+class ReplyProvider with ChangeNotifier {
+  bool _isReply = false;
+
+  bool get isReply => _isReply;
+
+  set IsReply(bool value) {
+    _isReply = value;
+    notifyListeners();
+  }
+}
+
+class QuestionNumberProvider with ChangeNotifier {
+  // questionId 관리
+
+  int _questionId = 0;
+
+  int get questionId => _questionId;
+
+  set questionId(int value) {
+    _questionId = value;
+    notifyListeners();
+  }
+}
+
+class ReplySelectedNumberProvider with ChangeNotifier {
+  int _ReplySelectedNumber = 0;
+
+  int get ReplySelectedNumber => _ReplySelectedNumber;
+
+  set replyselectednumber(int value) {
+    _ReplySelectedNumber = value;
+    notifyListeners();
+  }
+}
+
 Future<void> saveuserId(int userId) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setInt('userId', userId);
@@ -91,6 +127,22 @@ class UserProvider with ChangeNotifier {
   set userId(int value) {
     _userId = value;
     notifyListeners();
+  }
+}
+
+class FocusNodeProvider with ChangeNotifier {
+  FocusNode _focusNode = FocusNode();
+  FocusNode get focusNode => _focusNode;
+
+  set focusnode(FocusNode value) {
+    _focusNode = value;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 }
 

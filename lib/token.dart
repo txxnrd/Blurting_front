@@ -42,7 +42,7 @@ Future<void> getnewaccesstoken<T>(
     BuildContext context, Future<void> Function() callback0,
     [Future<void> Function(T)? callback1,
     T? argument1,
-    Future<void> Function(String, int)? callback2,
+    Future<void> Function(String, int, int)? callback2,
     dynamic argument2,
     Future<void> Function(int, int)? callback3,
     dynamic argument3]) async {
@@ -68,7 +68,7 @@ Future<void> getnewaccesstoken<T>(
     if (callback1 != null && argument1 != null) {
       await callback1(argument1);
     } else if (callback2 != null && argument2 != null) {
-      await callback2(argument2[0], argument2[1]);
+      await callback2(argument2[0], argument2[1], argument2[2]);
     } else if (callback3 != null && argument3 != null) {
       await callback3(argument3[0], argument3[1]);
     } else {
