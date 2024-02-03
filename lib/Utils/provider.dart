@@ -82,6 +82,17 @@ class QuestionNumberProvider with ChangeNotifier {
   }
 }
 
+class ReplySelectedNumberProvider with ChangeNotifier {
+  int _ReplySelectedNumber = 0;
+
+  int get ReplySelectedNumber => _ReplySelectedNumber;
+
+  set replyselectednumber(int value) {
+    _ReplySelectedNumber = value;
+    notifyListeners();
+  }
+}
+
 Future<void> saveuserId(int userId) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setInt('userId', userId);

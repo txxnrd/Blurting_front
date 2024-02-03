@@ -38,6 +38,37 @@ class LeftTailClipper extends CustomClipper<Path> {
   }
 }
 
+class ReplyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.moveTo(0, 5);
+    path.lineTo(size.width - 30, 5);
+    path.quadraticBezierTo(size.width, 5, size.width, 25); // 우측 상단 둥글게
+    path.lineTo(size.width, size.height - 25); // 우측 선
+    path.quadraticBezierTo(
+        // 우측 하단 둥글게
+        size.width,
+        size.height,
+        size.width - 25,
+        size.height);
+    path.lineTo(25, size.height); // 하측 선 어디까지?!
+    path.quadraticBezierTo(0, size.height, 0, size.height - 25); // 좌측 하단 둥글게
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+@override
+bool shouldReclip(CustomClipper<Path> oldClipper) {
+  return false;
+}
+
 // 본인 말풍선 클리퍼
 class RightTailClipper extends CustomClipper<Path> {
   @override
@@ -109,7 +140,7 @@ class RightTailReplyClipper extends CustomClipper<Path> {
 // 인풋필드 위젯 (컨트롤러, 시간, 보내는 함수)
 class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
-  final Function(String, int)? sendFunction;
+  final Function(String, int, int)? sendFunction;
   bool isBlock;
   final String blockText;
   final String hintText;
@@ -250,8 +281,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       suffixIcon: IconButton(
                         onPressed: (isValid)
                             ? () {
-                                widget.sendFunction!(
-                                    widget.controller.text, widget.questionId);
+                                widget.sendFunction!(widget.controller.text,
+                                    widget.questionId, 0);
                                 setState(() {
                                   inputValid(false);
                                   inputPointValid(false);
@@ -278,7 +309,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ),
                 ),
               ),
-              if (focusNode.hasFocus && widget.isBlurting)
+              if (focusNode.hasFocus &&
+                  widget.isBlurting &&
+                  !Provider.of<ReplyProvider>(context, listen: true).isReply)
                 Container(
                     padding: EdgeInsets.all(5),
                     child: Text(
@@ -376,7 +409,7 @@ class OtherChat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ClipPath(
-            clipper: LeftTailClipper(),
+            clipper: ReplyClipper(),
             child: Container(
               width: 200,
               padding: EdgeInsets.all(10),
@@ -435,6 +468,7 @@ class MyChat extends StatefulWidget {
   final bool isBlurting;
   final int likedNum;
   final int answerID;
+  final int index;
 
   MyChat(
       {super.key,
@@ -443,7 +477,8 @@ class MyChat extends StatefulWidget {
       required this.read,
       required this.isBlurting,
       required this.likedNum,
-      required this.answerID});
+      required this.answerID,
+      required this.index});
 
   @override
   State<MyChat> createState() => _MyChatState();
@@ -463,6 +498,7 @@ class _MyChatState extends State<MyChat> {
         print("눌림");
         print("음..?");
         print(widget.answerID);
+        print(widget.index);
         Provider.of<FocusNodeProvider>(context, listen: false)
             .focusNode
             .requestFocus();
@@ -689,6 +725,103 @@ class _MyChatReplyState extends State<MyChatReply> {
   }
 }
 
+class OtherChatReply extends StatefulWidget {
+  final int writerUserId;
+  final String writerUserName;
+  final String content;
+  final String createdAt;
+
+  OtherChatReply({
+    super.key,
+    required this.writerUserId,
+    required this.writerUserName,
+    required this.content,
+    required this.createdAt,
+  });
+
+  @override
+  State<OtherChatReply> createState() => _OtherChatReplyState();
+}
+
+class _OtherChatReplyState extends State<OtherChatReply> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.key);
+    return ListTile(
+      onTap: () {
+        print("눌림");
+      },
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(60, 0, 25, 0),
+                      child: ClipPath(
+                        clipper: LeftTailClipper(),
+                        child: Container(
+                          width: 160,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color.fromARGB(255, 152, 106, 124),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, top: 5, bottom: 5),
+                                child: Text(
+                                  widget.content,
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Positioned(
+                    //   top: 0,
+                    //   right: 0,
+                    //   child: Container(
+                    //     width: 40,
+                    //     height: 40,
+                    //     decoration: BoxDecoration(
+                    //       color: Color.fromARGB(255, 152, 106, 124),
+                    //       borderRadius: BorderRadius.circular(50),
+                    //     ),
+                    //     child: Text("퓨퓨651"),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class QustionState extends StatefulWidget {
   final String message;
   final String createdAt;
@@ -821,6 +954,7 @@ class AnswerItem extends StatefulWidget {
   final String image;
   final String mbti;
   final int answerId;
+  final int index;
 
   AnswerItem(
       {super.key,
@@ -833,7 +967,8 @@ class AnswerItem extends StatefulWidget {
       required this.isAlready,
       required this.image,
       required this.mbti,
-      required this.answerId});
+      required this.answerId,
+      required this.index});
 
   @override
   State<AnswerItem> createState() => _AnswerItemState();
@@ -1585,7 +1720,12 @@ class _AnswerItemState extends State<AnswerItem> {
                               child: GestureDetector(
                                 onTap: () {
                                   print("눌림");
+                                  print(widget.index);
                                   print(widget.answerId);
+                                  Provider.of<ReplySelectedNumberProvider>(
+                                          context,
+                                          listen: false)
+                                      .replyselectednumber = widget.index;
                                   Provider.of<QuestionNumberProvider>(context,
                                           listen: false)
                                       .questionId = widget.answerId;

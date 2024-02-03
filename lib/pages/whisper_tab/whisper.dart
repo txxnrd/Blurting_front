@@ -110,6 +110,7 @@ class _Whisper extends State<Whisper> {
                 Provider.of<UserProvider>(context, listen: false).userId) {
               // userProvider
               newAnswer = MyChat(
+                index: 0,
                 answerID: 0,
                 message: chat,
                 createdAt: dateFormatAA
@@ -152,6 +153,7 @@ class _Whisper extends State<Whisper> {
                 chatMessages.insert(
                     i,
                     MyChat(
+                      index: 0,
                       answerID: 0,
                       message: widget.message,
                       createdAt: widget.createdAt,
@@ -633,7 +635,7 @@ class _Whisper extends State<Whisper> {
 
   List<Widget> sendingMessageList = []; // 전송 중인 답변을 저장할 리스트
 
-  void sendChat(String message, int i) {
+  void sendChat(String message, int i, int j) {
     Map<String, dynamic> data = {
       'roomId': widget.roomId,
       'chat': message,
@@ -641,6 +643,7 @@ class _Whisper extends State<Whisper> {
 
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(
+      index: 0,
       answerID: 0,
       message: message,
       createdAt: '전송 중...',
@@ -733,6 +736,7 @@ class _Whisper extends State<Whisper> {
               if (chatData['userId'] ==
                   Provider.of<UserProvider>(context, listen: false).userId) {
                 fetchChatList = MyChat(
+                  index: 0,
                   answerID: 0,
                   message: chatData['chat'] as String? ?? '',
                   createdAt: dateFormatAA.format(
