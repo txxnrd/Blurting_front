@@ -593,21 +593,18 @@ class _MyChatState extends State<MyChat> {
 }
 
 class MyChatReply extends StatefulWidget {
-  final String message;
+  final int writerUserId;
+  final String writerUserName;
+  final String content;
   final String createdAt;
-  final bool read;
-  final bool isBlurting;
-  final int likedNum;
-  final int answerID;
 
-  MyChatReply(
-      {super.key,
-      required this.message,
-      required this.createdAt,
-      required this.read,
-      required this.isBlurting,
-      required this.likedNum,
-      required this.answerID});
+  MyChatReply({
+    super.key,
+    required this.writerUserId,
+    required this.writerUserName,
+    required this.content,
+    required this.createdAt,
+  });
 
   @override
   State<MyChatReply> createState() => _MyChatReplyState();
@@ -625,7 +622,6 @@ class _MyChatReplyState extends State<MyChatReply> {
     return ListTile(
       onTap: () {
         print("눌림");
-        print(widget.answerID);
       },
       subtitle: // 답변 내용
           Container(
@@ -656,7 +652,7 @@ class _MyChatReplyState extends State<MyChatReply> {
                                 margin: EdgeInsets.only(
                                     left: 10, right: 10, top: 5, bottom: 5),
                                 child: Text(
-                                  widget.message,
+                                  widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,

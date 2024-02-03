@@ -13,6 +13,25 @@ import 'package:blurting/config/app_config.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//방마다 이름과 답변들이 있음.
+class Room {
+  int roomNum; // 방의 이름 또는 번호를 추가합니다.
+  List<Reply> replies; // 이 방의 답글들을 저장합니다.
+  Room(this.roomNum, this.replies);
+}
+
+//방에 있는 답변은 위젯을 갖고 있고, 하위 답변들을 갖고 있음.
+class Reply {
+  Widget replyWidget; // 답변에 해당하는 위젯입니다.
+  List<ChildReply> childReplies; // 하위 답변들을 저장합니다.
+  Reply(this.replyWidget, this.childReplies);
+}
+
+class ChildReply {
+  Widget childreplyWidget;
+  ChildReply(this.childreplyWidget);
+}
+
 int currentIndex = 0; // 현재 보고 있는 페이지
 int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
@@ -153,8 +172,7 @@ class _GroupChat extends State<GroupChat> {
     });
   }
 
-  List<List<Widget>> answerList =
-      List.generate(10, (index) => <Widget>[]); //리스트를 만들어서 10개의 리스트를 담음
+  List<Room> rooms = List.generate(10, (index) => Room(index + 1, []));
 
   @override
   Widget build(BuildContext context) {
@@ -315,15 +333,30 @@ class _GroupChat extends State<GroupChat> {
                 controller: pageScrollController,
                 child: Column(
                   children: [
+                    // Container(
+                    //   padding: EdgeInsets.only(left: 5),
+                    //   child: Column(
+                    //     children: <Widget>[
+                    //       for (var answer in rooms[index].replies)
+                    //         answer.replyWidget
+                    //         for (var childReply in answer.childReplies)
+                    //           childReply.childreplyWidget
+                    //       //여기에서 답글 보여주는 거 만들어야 함
+                    //     ],
+                    //   ),
+                    // ),
                     Container(
                       padding: EdgeInsets.only(left: 5),
                       child: Column(
                         children: <Widget>[
-                          for (var answer in answerList[index])
-                            answer, // answerList에 있는 내용 순회하며 추가 (질문에 맞는 인덱스)
+                          for (var answer in rooms[index].replies) ...[
+                            answer.replyWidget,
+                            for (var childReply in answer.childReplies)
+                              childReply.childreplyWidget,
+                          ],
                         ],
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -472,7 +505,7 @@ class _GroupChat extends State<GroupChat> {
             currentIndex = _questionNumber;
             currentQuestionId = responseData['questionId'];
 
-            answerList[currentIndex].clear();
+            rooms[currentIndex].replies.clear();
 
             Duration timeDifference =
                 DateTime.now().add(Duration(hours: 9)).difference(createdAt);
@@ -493,22 +526,38 @@ class _GroupChat extends State<GroupChat> {
                 isAlready = false;
               }
               if (mounted) {
+                List<ChildReply> childReplies = [];
+
+                for (var reply in answerData['reply']) {
+                  childReplies.add(ChildReply(MyChatReply(
+                    writerUserId: reply['writerUserId'], // 답변 내용
+                    writerUserName:
+                        reply['writerUserName'], // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                    content: reply['content'],
+
+                    createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+
+                    // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                  )));
+                }
                 setState(() {
                   // 노태윤에게. 만약에 답글을 식별하는 스키마가 잇으면 그거 판별해서 너가 utilWidget에 답글 위젯 하나 만들어서 그 위젯을 answerList[currentIndex].add 해주면 댐
                   // 지금은 내 거인지 아닌지만 판별
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) {
-                    answerList[currentIndex].add(MyChat(
-                        key: ObjectKey(
-                            answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                        message: answerData['answer'],
-                        answerID: answerData['id'], // 답변 내용
-                        createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-                        read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
-                        isBlurting:
-                            true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                        likedNum: answerData['likes'])); // 좋아요 개수
+                    rooms[currentIndex].replies.add(Reply(
+                        MyChat(
+                            key: ObjectKey(
+                                answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                            message: answerData['answer'],
+                            answerID: answerData['id'], // 답변 내용
+                            createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                            read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                            isBlurting:
+                                true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                            likedNum: answerData['likes']),
+                        childReplies));
 
                     // answerList[currentIndex].add(MyChatReply(
                     //     key: ObjectKey(
@@ -523,21 +572,23 @@ class _GroupChat extends State<GroupChat> {
 
                     isBlock[currentIndex] = true; // true가 맞음
                   } else {
-                    answerList[currentIndex].add(AnswerItem(
-                        key: ObjectKey(
-                            answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                        message: answerData['answer'], // 답변 내용
-                        iLike: answerData['ilike'], // 내가 좋아요 했는지 안 했는지
-                        likedNum: answerData['likes'], // 좋아요 개수
-                        userId:
-                            answerData['userId'], // 답글 단 사람 아이디 (귓속말 걸 때 필요)
-                        userName: answerData['userNickname'], // 답글 단 사람 닉네임
-                        isAlready: isAlready, // 지금 귓속말 하고 있는지 아닌지
-                        image: answerData['userSex'], // 성별
-                        mbti: answerData['mbti'] ?? '', // mbti
-                        answerId:
-                            answerData['id'], // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
-                        socket: socket)); // 걍... 소켓임 신경 쓸 필요 없음
+                    rooms[currentIndex].replies.add(Reply(
+                        AnswerItem(
+                            key: ObjectKey(
+                                answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                            message: answerData['answer'], // 답변 내용
+                            iLike: answerData['ilike'], // 내가 좋아요 했는지 안 했는지
+                            likedNum: answerData['likes'], // 좋아요 개수
+                            userId: answerData[
+                                'userId'], // 답글 단 사람 아이디 (귓속말 걸 때 필요)
+                            userName: answerData['userNickname'], // 답글 단 사람 닉네임
+                            isAlready: isAlready, // 지금 귓속말 하고 있는지 아닌지
+                            image: answerData['userSex'], // 성별
+                            mbti: answerData['mbti'] ?? '', // mbti
+                            answerId:
+                                answerData['id'], // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
+                            socket: socket),
+                        childReplies)); // 걍... 소켓임 신경 쓸 필요 없음
                   }
                 });
               }
@@ -555,7 +606,7 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> fetchIndexComments(int no) async {
-    answerList[currentIndex].clear();
+    rooms[currentIndex].replies.clear();
 
     // 선택된 QnA
     // 선택된 QnA로 화면 새로 그리기
@@ -587,33 +638,50 @@ class _GroupChat extends State<GroupChat> {
             } else {
               isAlready = false;
             }
+            List<ChildReply> childReplies = [];
 
+            for (var reply in answerData['reply']) {
+              childReplies.add(ChildReply(MyChatReply(
+                writerUserId: reply['writerUserId'], // 답변 내용
+                writerUserName:
+                    reply['writerUserName'], // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                content: reply['content'],
+
+                createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+
+                // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+              )));
+            }
             setState(() {
               if (answerData['userId'] ==
                   Provider.of<UserProvider>(context, listen: false).userId) {
-                answerList[currentIndex].add(MyChat(
-                    key: ObjectKey(answerData['id']),
-                    message: answerData['answer'],
-                    createdAt: '',
-                    read: true,
-                    answerID: answerData['id'],
-                    isBlurting: true,
-                    likedNum: answerData['likes']));
+                rooms[currentIndex].replies.add(Reply(
+                    MyChat(
+                        key: ObjectKey(answerData['id']),
+                        message: answerData['answer'],
+                        createdAt: '',
+                        read: true,
+                        answerID: answerData['id'],
+                        isBlurting: true,
+                        likedNum: answerData['likes']),
+                    childReplies));
                 isBlock[currentIndex] = true; // true가 맞음
               } else {
-                answerList[currentIndex].add(AnswerItem(
-                  key: ObjectKey(answerData['id']),
-                  message: answerData['answer'],
-                  iLike: answerData['ilike'],
-                  likedNum: answerData['likes'],
-                  userId: answerData['userId'],
-                  userName: answerData['userNickname'],
-                  isAlready: isAlready,
-                  image: answerData['userSex'],
-                  mbti: answerData['mbti'] ?? '',
-                  answerId: answerData['id'],
-                  socket: socket,
-                ));
+                rooms[currentIndex].replies.add(Reply(
+                    AnswerItem(
+                      key: ObjectKey(answerData['id']),
+                      message: answerData['answer'],
+                      iLike: answerData['ilike'],
+                      likedNum: answerData['likes'],
+                      userId: answerData['userId'],
+                      userName: answerData['userNickname'],
+                      isAlready: isAlready,
+                      image: answerData['userSex'],
+                      mbti: answerData['mbti'] ?? '',
+                      answerId: answerData['id'],
+                      socket: socket,
+                    ),
+                    childReplies));
               }
             });
           }
@@ -662,7 +730,8 @@ class _GroupChat extends State<GroupChat> {
       if (mounted) {
         setState(() {
           isBlock[currentIndex] = true; // true가 맞음
-          answerList[currentIndex].add(newAnswer);
+          // answerList[currentIndex].add(newAnswer);
+          rooms[currentIndex].replies.add(Reply(newAnswer, []));
         });
       }
     } else if (response.statusCode == 401) {
@@ -678,12 +747,10 @@ class _GroupChat extends State<GroupChat> {
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget newReply = MyChatReply(
-      answerID: 0,
-      message: answer,
-      createdAt: '',
-      read: true,
-      isBlurting: true,
-      likedNum: 0,
+      writerUserId: 0,
+      writerUserName: "",
+      content: "",
+      createdAt: "",
     );
     int answerId =
         Provider.of<QuestionNumberProvider>(context, listen: false).questionId;
@@ -713,7 +780,7 @@ class _GroupChat extends State<GroupChat> {
       if (mounted) {
         setState(() {
           isBlock[currentIndex] = true; // true가 맞음
-          answerList[currentIndex].add(newReply);
+          rooms[currentIndex].replies.add(Reply(newReply, []));
         });
       }
     } else if (response.statusCode == 401) {
