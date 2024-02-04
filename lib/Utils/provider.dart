@@ -96,11 +96,18 @@ class QuestionNumberProvider with ChangeNotifier {
 
 class ReplySelectedNumberProvider with ChangeNotifier {
   int _ReplySelectedNumber = 0;
+  String _ReplySelectedUsername = "";
 
   int get ReplySelectedNumber => _ReplySelectedNumber;
+  String get ReplySelectedUsername => _ReplySelectedUsername;
 
   set replyselectednumber(int value) {
     _ReplySelectedNumber = value;
+    notifyListeners();
+  }
+
+  set replyselectedusername(String value) {
+    _ReplySelectedUsername = value;
     notifyListeners();
   }
 }

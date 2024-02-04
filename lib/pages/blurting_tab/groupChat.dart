@@ -155,6 +155,7 @@ class _GroupChat extends State<GroupChat> {
     _pageController = PageController(initialPage: _questionNumber - 1);
 
     loadTime();
+    // FocusScope.of(context).unfocus();
   }
 
   @override
@@ -565,6 +566,7 @@ class _GroupChat extends State<GroupChat> {
                               answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
                           message: answerData['answer'],
                           answerID: answerData['id'], // 답변 내용
+
                           createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
                           read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                           isBlurting:
@@ -654,7 +656,7 @@ class _GroupChat extends State<GroupChat> {
                     Provider.of<UserProvider>(context, listen: false).userId) {
                   childReplies.add(ChildReply(MyChatReplyOtherPerson(
                     writerUserId: reply['writerUserId'],
-                    writerUserName: reply['writerUserName'],
+                    writerUserName: "나의 답변",
                     content: reply['content'],
                     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
                   )));
@@ -673,8 +675,7 @@ class _GroupChat extends State<GroupChat> {
                 {
                   childReplies.add(ChildReply(OtherChatReply(
                     writerUserId: reply['writerUserId'], // 답변 내용
-                    writerUserName:
-                        reply['writerUserName'], // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                    writerUserName: "나의 답변", // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                     content: reply['content'],
 
                     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
@@ -792,14 +793,14 @@ class _GroupChat extends State<GroupChat> {
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget otherchatReply = OtherChatReply(
       writerUserId: 0,
-      writerUserName: "",
+      writerUserName: "나의 답변",
       content: reply,
       createdAt: "",
     );
 
     Widget mychatReply = MyChatReplyOtherPerson(
       writerUserId: 0,
-      writerUserName: "",
+      writerUserName: "나의 답변",
       content: reply,
       createdAt: "",
     );

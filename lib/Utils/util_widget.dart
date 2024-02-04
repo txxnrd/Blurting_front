@@ -238,118 +238,238 @@ class _CustomInputFieldState extends State<CustomInputField> {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
       padding: !widget.isBlurting
+          //여기에서 키보드 밑에 여백 처리함.
           ? EdgeInsets.fromLTRB(0, 7, 0, 27)
           : !Provider.of<ReplyProvider>(context, listen: true).isReply
               ? (focusNode.hasFocus
                   ? EdgeInsets.fromLTRB(0, 7, 0, 0)
                   : EdgeInsets.fromLTRB(0, 7, 0, 20))
-              : EdgeInsets.fromLTRB(0, 7, 0, 25),
-      //여기에서 키보드 밑에 여백 처리함.
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ClipPath(
-                clipper: InputfieldClipper(),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 20,
-                  child: TextField(
-                    minLines: 1, maxLines: 3,
-                    enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
-                    focusNode: focusNode,
-                    onTapOutside: (event) {
-                      focusNode.unfocus();
+              : EdgeInsets.fromLTRB(0, 10, 0, 25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (Provider.of<ReplyProvider>(context, listen: false).isReply ==
+                  true &&
+              Provider.of<MyChatReplyProvider>(context, listen: false)
+                      .ismychatReply ==
+                  true)
+            Container(
+              margin: EdgeInsets.only(left: 10, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      ImageIcon(AssetImage('assets/images/reply.png'),
+                          color: Color(0xff868686), size: 20),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
+                          child: Text("나에게 답변",
+                              style: TextStyle(
+                                  color: Color(0xff868686),
+                                  fontSize: 12,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.normal))),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        focusNode.unfocus();
+
+                        print(
+                            "After unfocus: ${focusNode.hasFocus}"); // Debug log
+                        inputValid(false);
+                        inputPointValid(false);
+                        widget.controller.clear();
+                      });
                       if (Provider.of<ReplyProvider>(context, listen: false)
                           .IsReply = true)
                         Provider.of<ReplyProvider>(context, listen: false)
                             .IsReply = false;
+                      print(Provider.of<ReplyProvider>(context, listen: false)
+                          .isReply);
+                      print("close 누름");
                     },
-                    onChanged: (value) {
-                      length = value.length;
+                    child: Container(
+                      margin: EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Icons.close,
+                        color: Color(0xff868686),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          if (Provider.of<ReplyProvider>(context, listen: false).isReply ==
+                  true &&
+              Provider.of<MyChatReplyProvider>(context, listen: false)
+                      .ismychatReply ==
+                  false)
+            Container(
+              margin: EdgeInsets.only(left: 10, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      ImageIcon(AssetImage('assets/images/reply.png'),
+                          color: Color(0xff868686), size: 20),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
+                          child: Text(
+                              Provider.of<ReplySelectedNumberProvider>(context,
+                                          listen: false)
+                                      .ReplySelectedUsername +
+                                  "에게 답변",
+                              style: TextStyle(
+                                  color: Color(0xff868686),
+                                  fontSize: 12,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.normal))),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        focusNode.unfocus();
 
-                      if (value != '') {
-                        inputValid(true);
-                      } else {
+                        print(
+                            "After unfocus: ${focusNode.hasFocus}"); // Debug log
                         inputValid(false);
-                      }
-
-                      if (value.length >= 100) {
-                        inputPointValid(true);
-                      } else {
                         inputPointValid(false);
-                      }
+                        widget.controller.clear();
+                      });
+                      if (Provider.of<ReplyProvider>(context, listen: false)
+                          .IsReply = true)
+                        Provider.of<ReplyProvider>(context, listen: false)
+                            .IsReply = false;
+                      print(Provider.of<ReplyProvider>(context, listen: false)
+                          .isReply);
+                      print("close 누름");
                     },
-                    style: TextStyle(fontSize: 12),
-                    controller: widget.controller,
-                    cursorColor: mainColor.MainColor,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: widget.isBlock
-                          ? EdgeInsets.only(top: 15, left: 10)
-                          : EdgeInsets.only(left: 10),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                        ),
+                    child: Container(
+                      margin: EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Icons.close,
+                        color: Color(0xff868686),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText:
-                          !widget.isBlock ? widget.hintText : widget.blockText,
-                      hintStyle: TextStyle(fontSize: 12),
-                      suffixIcon: IconButton(
-                        onPressed: (isValid)
-                            ? () {
-                                widget.sendFunction!(widget.controller.text,
-                                    widget.questionId, 0);
-                                setState(() {
-                                  inputValid(false);
-                                  inputPointValid(false);
-                                  widget.controller.clear();
-                                });
-                              }
-                            : null,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: isValid
-                                ? mainColor.MainColor
-                                : mainColor.MainColor.withOpacity(0.5),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipPath(
+                    clipper: InputfieldClipper(),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - 20,
+                      child: TextField(
+                        minLines: 1, maxLines: 3,
+                        enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
+                        focusNode: focusNode,
+                        onTapOutside: (event) {
+                          // focusNode.unfocus();
+                          // if (Provider.of<ReplyProvider>(context, listen: false)
+                          //     .IsReply = true)
+                          //   Provider.of<ReplyProvider>(context, listen: false)
+                          //       .IsReply = false;
+                        },
+                        onChanged: (value) {
+                          length = value.length;
+
+                          if (value != '') {
+                            inputValid(true);
+                          } else {
+                            inputValid(false);
+                          }
+
+                          if (value.length >= 100) {
+                            inputPointValid(true);
+                          } else {
+                            inputPointValid(false);
+                          }
+                        },
+                        style: TextStyle(fontSize: 12),
+                        controller: widget.controller,
+                        cursorColor: mainColor.MainColor,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: widget.isBlock
+                              ? EdgeInsets.only(top: 15, left: 10)
+                              : EdgeInsets.only(left: 10),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 0,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.keyboard_arrow_up_outlined,
-                            color: Colors.white,
-                            size: 25,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 0,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: !widget.isBlock
+                              ? widget.hintText
+                              : widget.blockText,
+                          hintStyle: TextStyle(fontSize: 12),
+                          suffixIcon: IconButton(
+                            onPressed: (isValid)
+                                ? () {
+                                    widget.sendFunction!(widget.controller.text,
+                                        widget.questionId, 0);
+                                    setState(() {
+                                      inputValid(false);
+                                      inputPointValid(false);
+                                      widget.controller.clear();
+                                    });
+                                  }
+                                : null,
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: isValid
+                                    ? mainColor.MainColor
+                                    : mainColor.MainColor.withOpacity(0.5),
+                              ),
+                              child: Icon(
+                                Icons.keyboard_arrow_up_outlined,
+                                color: Colors.white,
+                                size: 25,
+                              ),
+                            ),
+                            color: Color.fromRGBO(48, 48, 48, 1),
                           ),
                         ),
-                        color: Color.fromRGBO(48, 48, 48, 1),
                       ),
                     ),
                   ),
-                ),
+                  if (focusNode.hasFocus &&
+                      widget.isBlurting &&
+                      !Provider.of<ReplyProvider>(context, listen: true)
+                          .isReply)
+                    Container(
+                        alignment: Alignment.bottomRight,
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          '$length자',
+                          style: TextStyle(
+                              color: mainColor.Gray,
+                              fontFamily: 'Heebo',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400),
+                        ))
+                ],
               ),
-              if (focusNode.hasFocus &&
-                  widget.isBlurting &&
-                  !Provider.of<ReplyProvider>(context, listen: true).isReply)
-                Container(
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      '$length자',
-                      style: TextStyle(
-                          color: mainColor.Gray,
-                          fontFamily: 'Heebo',
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400),
-                    ))
             ],
           ),
         ],
@@ -925,12 +1045,13 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: widget.writerUserName.length * 10 + 7,
+                                    // left: widget.writerUserName.length * 10 + 7,
+                                    left: 10,
                                     right: 10,
                                     top: 5,
                                     bottom: 5),
                                 child: Text(
-                                  widget.content,
+                                  "               " + widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
@@ -2007,6 +2128,10 @@ class _AnswerItemState extends State<AnswerItem> {
                                   Provider.of<MyChatReplyProvider>(context,
                                           listen: false)
                                       .ismychatReply = false;
+                                  Provider.of<ReplySelectedNumberProvider>(
+                                          context,
+                                          listen: false)
+                                      .replyselectedusername = widget.userName;
                                 },
                                 child: Container(
                                   width: 200,
