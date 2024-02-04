@@ -302,6 +302,8 @@ class _GroupChat extends State<GroupChat> {
                 setState(() {
                   currentIndex = index + 1;
                   fetchIndexComments(currentIndex);
+                  Provider.of<ReplyProvider>(context, listen: false).IsReply =
+                      false;
                 });
               },
             ),
