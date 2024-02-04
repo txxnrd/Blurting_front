@@ -155,6 +155,7 @@ class _GroupChat extends State<GroupChat> {
     _pageController = PageController(initialPage: _questionNumber - 1);
 
     loadTime();
+    // FocusScope.of(context).unfocus();
   }
 
   @override
@@ -316,10 +317,10 @@ class _GroupChat extends State<GroupChat> {
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (pageScrollController.positions.isNotEmpty) {
-        pageScrollController
-            .jumpTo(pageScrollController.position.maxScrollExtent);
-      }
+      // if (pageScrollController.positions.isNotEmpty) {
+      //   pageScrollController
+      //       .jumpTo(pageScrollController.position.maxScrollExtent);
+      // }
     });
 
     return Column(
@@ -412,8 +413,8 @@ class _GroupChat extends State<GroupChat> {
               controller: _controller,
               sendFunction: SendReply,
               isBlock: false,
-              blockText: "이미 답변이 완료된 질문입니다?!",
-              hintText: "내 생각 쓰기!!",
+              blockText: "이미 답변이 완료된 질문입니다.",
+              hintText: "내 생각 쓰기...",
               questionId: 1,
               isBlurting: true),
         ),
@@ -507,9 +508,10 @@ class _GroupChat extends State<GroupChat> {
               // 48시간 지났으면 3일차
               day = 'Day3';
             }
+            int index = 0;
             // 노태윤에게. 여기가 답변 추가하는 부분인데 여기만 수정하면 됨
             for (final answerData in responseData['answers']) {
-              int index = 0;
+              index++;
               if (answerData['room'] != null) {
                 isAlready = true;
               } else {
@@ -521,14 +523,28 @@ class _GroupChat extends State<GroupChat> {
                 for (var reply in answerData['reply']) {
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
-                          .userId) {
-                    childReplies.add(ChildReply(MyChatReply(
-                      writerUserId: reply['writerUserId'],
-                      writerUserName: reply['writerUserName'],
-                      content: reply['content'],
+                          .userId) // 내가 쓴 글인지 아닌지 판별
+                  {
+                    if (reply['writerUserId'] ==
+                        Provider.of<UserProvider>(context, listen: false)
+                            .userId) //답글도 내가 씀
 
-                      createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-                    )));
+                    {
+                      childReplies.add(ChildReply(MyChatReplyOtherPerson(
+                        writerUserId: reply['writerUserId'],
+                        writerUserName: reply['writerUserName'],
+                        content: reply['content'],
+                        createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                      )));
+                    } else {
+                      //답글은 내가 쓴게 아님
+                      childReplies.add(ChildReply(MyChatReplyOtherPerson(
+                        writerUserId: reply['writerUserId'],
+                        writerUserName: reply['writerUserName'],
+                        content: reply['content'],
+                        createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                      )));
+                    }
                   } else {
                     childReplies.add(ChildReply(OtherChatReply(
                       writerUserId: reply['writerUserId'],
@@ -550,6 +566,7 @@ class _GroupChat extends State<GroupChat> {
                               answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
                           message: answerData['answer'],
                           answerID: answerData['id'], // 답변 내용
+
                           createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
                           read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                           isBlurting:
@@ -635,27 +652,48 @@ class _GroupChat extends State<GroupChat> {
             for (var reply in answerData['reply']) {
               if (answerData['userId'] ==
                   Provider.of<UserProvider>(context, listen: false).userId) {
-                childReplies.add(ChildReply(MyChatReply(
-                  writerUserId: reply['writerUserId'], // 답변 내용
-                  writerUserName:
-                      reply['writerUserName'], // 읽었는지인데 귓속말에서만 필요해서 true로 처리
-                  content: reply['content'],
-
-                  createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-
-                  // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                )));
+                if (reply['writerUserId'] ==
+                    Provider.of<UserProvider>(context, listen: false).userId) {
+                  childReplies.add(ChildReply(MyChatReplyOtherPerson(
+                    writerUserId: reply['writerUserId'],
+                    writerUserName: "나의 답변",
+                    content: reply['content'],
+                    createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                  )));
+                } else {
+                  childReplies.add(ChildReply(MyChatReplyOtherPerson(
+                    writerUserId: reply['writerUserId'],
+                    writerUserName: reply['writerUserName'],
+                    content: reply['content'],
+                    createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                  )));
+                }
               } else {
-                childReplies.add(ChildReply(OtherChatReply(
-                  writerUserId: reply['writerUserId'], // 답변 내용
-                  writerUserName:
-                      reply['writerUserName'], // 읽었는지인데 귓속말에서만 필요해서 true로 처리
-                  content: reply['content'],
+                if (reply['writerUserId'] ==
+                    Provider.of<UserProvider>(context, listen: false).userId)
+                //다른 사람이 쓴 글에 내가 답변을 달았을 때 우히힝
+                {
+                  childReplies.add(ChildReply(OtherChatReply(
+                    writerUserId: reply['writerUserId'], // 답변 내용
+                    writerUserName: "나의 답변", // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                    content: reply['content'],
 
-                  createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                    createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
 
-                  // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                )));
+                    // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                  )));
+                } else {
+                  childReplies.add(ChildReply(OtherChatReply(
+                    writerUserId: reply['writerUserId'], // 답변 내용
+                    writerUserName:
+                        reply['writerUserName'], // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                    content: reply['content'],
+
+                    createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+
+                    // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                  )));
+                }
               }
             }
             setState(() {
@@ -753,9 +791,16 @@ class _GroupChat extends State<GroupChat> {
     print("SendReply 실행이 됨");
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
-    Widget newReply = OtherChatReply(
+    Widget otherchatReply = OtherChatReply(
       writerUserId: 0,
-      writerUserName: "",
+      writerUserName: "나의 답변",
+      content: reply,
+      createdAt: "",
+    );
+
+    Widget mychatReply = MyChatReplyOtherPerson(
+      writerUserId: 0,
+      writerUserName: "나의 답변",
       content: reply,
       createdAt: "",
     );
@@ -788,13 +833,30 @@ class _GroupChat extends State<GroupChat> {
         setState(() {
           isBlock[currentIndex] = true; // true가 맞음
           // rooms[currentIndex].replies.add(Reply(newReply, []));
-          rooms[currentIndex]
-              .replies[Provider.of<ReplySelectedNumberProvider>(context,
-                          listen: false)
-                      .ReplySelectedNumber -
-                  1]
-              .childReplies
-              .insert(0, ChildReply(newReply));
+          print("ismychatReply");
+          print(Provider.of<MyChatReplyProvider>(context, listen: false)
+              .ismychatReply);
+          if (Provider.of<MyChatReplyProvider>(context, listen: false)
+                  .ismychatReply ==
+              true) //내가 쓴 글에 대한 답변
+          {
+            rooms[currentIndex]
+                .replies[Provider.of<ReplySelectedNumberProvider>(context,
+                            listen: false)
+                        .ReplySelectedNumber -
+                    1]
+                .childReplies
+                .insert(0, ChildReply(mychatReply));
+          } else //내가 안 쓴 글에 대한 답변
+          {
+            rooms[currentIndex]
+                .replies[Provider.of<ReplySelectedNumberProvider>(context,
+                            listen: false)
+                        .ReplySelectedNumber -
+                    1]
+                .childReplies
+                .insert(0, ChildReply(otherchatReply));
+          }
         });
       }
     } else if (response.statusCode == 401) {

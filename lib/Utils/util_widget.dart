@@ -38,6 +38,30 @@ class LeftTailClipper extends CustomClipper<Path> {
   }
 }
 
+class OtherChatReplyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    // 시작점을 변경하여 둥근 모서리를 시작점으로 합니다.
+    path.moveTo(0, 25); // 왼쪽 상단 모서리를 둥글게 시작하기 위해 Y 좌표를 25로 설정
+    path.quadraticBezierTo(0, 0, 25, 0); // 변경: 왼쪽 상단 모서리를 둥글게 처리
+    path.lineTo(size.width - 30, 0); // 상단 선
+    path.quadraticBezierTo(size.width, 0, size.width, 25); // 우측 상단 둥글게
+    path.lineTo(size.width, size.height - 25); // 우측 선
+    path.quadraticBezierTo(
+        size.width, size.height, size.width - 25, size.height); // 우측 하단 둥글게
+    path.lineTo(25, size.height); // 하단 선
+    path.quadraticBezierTo(0, size.height, 0, size.height - 25); // 좌측 하단 둥글게
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
 class ReplyClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -214,114 +238,238 @@ class _CustomInputFieldState extends State<CustomInputField> {
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
       padding: !widget.isBlurting
+          //여기에서 키보드 밑에 여백 처리함.
           ? EdgeInsets.fromLTRB(0, 7, 0, 27)
-          : focusNode.hasFocus
-              ? EdgeInsets.fromLTRB(0, 7, 0, 0)
-              : EdgeInsets.fromLTRB(0, 7, 0, 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ClipPath(
-                clipper: InputfieldClipper(),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 20,
-                  child: TextField(
-                    minLines: 1, maxLines: 3,
-                    enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
-                    focusNode: focusNode,
-                    onTapOutside: (event) {
-                      focusNode.unfocus();
+          : !Provider.of<ReplyProvider>(context, listen: true).isReply
+              ? (focusNode.hasFocus
+                  ? EdgeInsets.fromLTRB(0, 7, 0, 0)
+                  : EdgeInsets.fromLTRB(0, 7, 0, 20))
+              : EdgeInsets.fromLTRB(0, 10, 0, 25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (Provider.of<ReplyProvider>(context, listen: false).isReply ==
+                  true &&
+              Provider.of<MyChatReplyProvider>(context, listen: false)
+                      .ismychatReply ==
+                  true)
+            Container(
+              margin: EdgeInsets.only(left: 10, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      ImageIcon(AssetImage('assets/images/reply.png'),
+                          color: Color(0xff868686), size: 20),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
+                          child: Text("나에게 답변",
+                              style: TextStyle(
+                                  color: Color(0xff868686),
+                                  fontSize: 12,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.normal))),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        focusNode.unfocus();
 
-                      Provider.of<ReplyProvider>(context, listen: false)
-                          .IsReply = false;
-                    },
-                    onChanged: (value) {
-                      length = value.length;
-
-                      if (value != '') {
-                        inputValid(true);
-                      } else {
+                        print(
+                            "After unfocus: ${focusNode.hasFocus}"); // Debug log
                         inputValid(false);
-                      }
-
-                      if (value.length >= 100) {
-                        inputPointValid(true);
-                      } else {
                         inputPointValid(false);
-                      }
+                        widget.controller.clear();
+                      });
+                      if (Provider.of<ReplyProvider>(context, listen: false)
+                          .IsReply = true)
+                        Provider.of<ReplyProvider>(context, listen: false)
+                            .IsReply = false;
+                      print(Provider.of<ReplyProvider>(context, listen: false)
+                          .isReply);
+                      print("close 누름");
                     },
-                    style: TextStyle(fontSize: 12),
-                    controller: widget.controller,
-                    cursorColor: mainColor.MainColor,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: widget.isBlock
-                          ? EdgeInsets.only(top: 15, left: 10)
-                          : EdgeInsets.only(left: 10),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                        ),
+                    child: Container(
+                      margin: EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Icons.close,
+                        color: Color(0xff868686),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                        ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          if (Provider.of<ReplyProvider>(context, listen: false).isReply ==
+                  true &&
+              Provider.of<MyChatReplyProvider>(context, listen: false)
+                      .ismychatReply ==
+                  false)
+            Container(
+              margin: EdgeInsets.only(left: 10, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      ImageIcon(AssetImage('assets/images/reply.png'),
+                          color: Color(0xff868686), size: 20),
+                      Container(
+                          margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
+                          child: Text(
+                              Provider.of<ReplySelectedNumberProvider>(context,
+                                          listen: false)
+                                      .ReplySelectedUsername +
+                                  "에게 답변",
+                              style: TextStyle(
+                                  color: Color(0xff868686),
+                                  fontSize: 12,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.normal))),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        focusNode.unfocus();
+
+                        print(
+                            "After unfocus: ${focusNode.hasFocus}"); // Debug log
+                        inputValid(false);
+                        inputPointValid(false);
+                        widget.controller.clear();
+                      });
+                      if (Provider.of<ReplyProvider>(context, listen: false)
+                          .IsReply = true)
+                        Provider.of<ReplyProvider>(context, listen: false)
+                            .IsReply = false;
+                      print(Provider.of<ReplyProvider>(context, listen: false)
+                          .isReply);
+                      print("close 누름");
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Icons.close,
+                        color: Color(0xff868686),
                       ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText:
-                          !widget.isBlock ? widget.hintText : widget.blockText,
-                      hintStyle: TextStyle(fontSize: 12),
-                      suffixIcon: IconButton(
-                        onPressed: (isValid)
-                            ? () {
-                                widget.sendFunction!(widget.controller.text,
-                                    widget.questionId, 0);
-                                setState(() {
-                                  inputValid(false);
-                                  inputPointValid(false);
-                                  widget.controller.clear();
-                                });
-                              }
-                            : null,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: isValid
-                                ? mainColor.MainColor
-                                : mainColor.MainColor.withOpacity(0.5),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipPath(
+                    clipper: InputfieldClipper(),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - 20,
+                      child: TextField(
+                        minLines: 1, maxLines: 3,
+                        enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
+                        focusNode: focusNode,
+                        onTapOutside: (event) {
+                          // focusNode.unfocus();
+                          // if (Provider.of<ReplyProvider>(context, listen: false)
+                          //     .IsReply = true)
+                          //   Provider.of<ReplyProvider>(context, listen: false)
+                          //       .IsReply = false;
+                        },
+                        onChanged: (value) {
+                          length = value.length;
+
+                          if (value != '') {
+                            inputValid(true);
+                          } else {
+                            inputValid(false);
+                          }
+
+                          if (value.length >= 100) {
+                            inputPointValid(true);
+                          } else {
+                            inputPointValid(false);
+                          }
+                        },
+                        style: TextStyle(fontSize: 12),
+                        controller: widget.controller,
+                        cursorColor: mainColor.MainColor,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: widget.isBlock
+                              ? EdgeInsets.only(top: 15, left: 10)
+                              : EdgeInsets.only(left: 10),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 0,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.keyboard_arrow_up_outlined,
-                            color: Colors.white,
-                            size: 25,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 0,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: !widget.isBlock
+                              ? widget.hintText
+                              : widget.blockText,
+                          hintStyle: TextStyle(fontSize: 12),
+                          suffixIcon: IconButton(
+                            onPressed: (isValid)
+                                ? () {
+                                    widget.sendFunction!(widget.controller.text,
+                                        widget.questionId, 0);
+                                    setState(() {
+                                      inputValid(false);
+                                      inputPointValid(false);
+                                      widget.controller.clear();
+                                    });
+                                  }
+                                : null,
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: isValid
+                                    ? mainColor.MainColor
+                                    : mainColor.MainColor.withOpacity(0.5),
+                              ),
+                              child: Icon(
+                                Icons.keyboard_arrow_up_outlined,
+                                color: Colors.white,
+                                size: 25,
+                              ),
+                            ),
+                            color: Color.fromRGBO(48, 48, 48, 1),
                           ),
                         ),
-                        color: Color.fromRGBO(48, 48, 48, 1),
                       ),
                     ),
                   ),
-                ),
+                  if (focusNode.hasFocus &&
+                      widget.isBlurting &&
+                      !Provider.of<ReplyProvider>(context, listen: true)
+                          .isReply)
+                    Container(
+                        alignment: Alignment.bottomRight,
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          '$length자',
+                          style: TextStyle(
+                              color: mainColor.Gray,
+                              fontFamily: 'Heebo',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400),
+                        ))
+                ],
               ),
-              if (focusNode.hasFocus &&
-                  widget.isBlurting &&
-                  !Provider.of<ReplyProvider>(context, listen: true).isReply)
-                Container(
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      '$length자',
-                      style: TextStyle(
-                          color: mainColor.Gray,
-                          fontFamily: 'Heebo',
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400),
-                    ))
             ],
           ),
         ],
@@ -502,8 +650,14 @@ class _MyChatState extends State<MyChat> {
         Provider.of<FocusNodeProvider>(context, listen: false)
             .focusNode
             .requestFocus();
+        Provider.of<QuestionNumberProvider>(context, listen: false).questionId =
+            widget.answerID;
         print(Provider.of<FocusNodeProvider>(context, listen: false).focusNode);
         Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
+        Provider.of<ReplySelectedNumberProvider>(context, listen: false)
+            .replyselectednumber = widget.index;
+        Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
+            true;
       },
       subtitle: // 답변 내용
           Container(
@@ -661,7 +815,7 @@ class _MyChatReplyState extends State<MyChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -673,13 +827,13 @@ class _MyChatReplyState extends State<MyChatReply> {
                     Container(
                       padding: EdgeInsets.fromLTRB(60, 6, 25, 0),
                       child: ClipPath(
-                        clipper: RightTailReplyClipper(),
+                        clipper: OtherChatReplyClipper(),
                         child: Container(
                           width: 160,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color.fromARGB(255, 152, 106, 124),
+                            color: Color(0xffffeeee),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -725,6 +879,113 @@ class _MyChatReplyState extends State<MyChatReply> {
   }
 }
 
+class MyChatReplyOtherPerson extends StatefulWidget {
+  final int writerUserId;
+  final String writerUserName;
+  final String content;
+  final String createdAt;
+
+  MyChatReplyOtherPerson({
+    super.key,
+    required this.writerUserId,
+    required this.writerUserName,
+    required this.content,
+    required this.createdAt,
+  });
+
+  @override
+  State<MyChatReplyOtherPerson> createState() => _MyChatReplyOtherPersonState();
+}
+
+class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.key);
+    return ListTile(
+      onTap: () {
+        print("눌림");
+      },
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(60, 6, 25, 0),
+                      child: ClipPath(
+                        clipper: OtherChatReplyClipper(),
+                        child: Container(
+                          width: 160,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xffffeeee),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: widget.writerUserName.length * 10 + 7,
+                                    right: 10,
+                                    top: 5,
+                                    bottom: 5),
+                                child: Text(
+                                  widget.content,
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 70,
+                      top: 20,
+                      child: Container(
+                        width: widget.writerUserName.length * 10 + 3,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFD2D2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
+                          child: Text(
+                            widget.writerUserName,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//남들이 채팅한거의 답변 위젯
 class OtherChatReply extends StatefulWidget {
   final int writerUserId;
   final String writerUserName;
@@ -755,10 +1016,11 @@ class _OtherChatReplyState extends State<OtherChatReply> {
     return ListTile(
       onTap: () {
         print("눌림");
+        print("여기임?");
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -770,13 +1032,121 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                     Container(
                       padding: EdgeInsets.fromLTRB(60, 0, 25, 0),
                       child: ClipPath(
-                        clipper: LeftTailClipper(),
+                        clipper: OtherChatReplyClipper(),
                         child: Container(
                           width: 160,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color.fromARGB(255, 152, 106, 124),
+                            color: Color(0xFFFFEEEE),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    // left: widget.writerUserName.length * 10 + 7,
+                                    left: 10,
+                                    right: 10,
+                                    top: 5,
+                                    bottom: 5),
+                                child: Text(
+                                  "               " + widget.content,
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 70,
+                      top: 13,
+                      child: Container(
+                        width: widget.writerUserName.length * 10 + 3,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFD2D2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
+                          child: Text(
+                            widget.writerUserName,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OtherChatReplyOtherAnswer extends StatefulWidget {
+  final int writerUserId;
+  final String writerUserName;
+  final String content;
+  final String createdAt;
+
+  OtherChatReplyOtherAnswer({
+    super.key,
+    required this.writerUserId,
+    required this.writerUserName,
+    required this.content,
+    required this.createdAt,
+  });
+
+  @override
+  State<OtherChatReplyOtherAnswer> createState() =>
+      _OtherChatReplyOtherAnswerState();
+}
+
+class _OtherChatReplyOtherAnswerState extends State<OtherChatReplyOtherAnswer> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.key);
+    return ListTile(
+      onTap: () {
+        print("눌림");
+      },
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(60, 0, 25, 0),
+                      child: ClipPath(
+                        clipper: OtherChatReplyClipper(),
+                        child: Container(
+                          width: 160,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFFFFEEEE),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -798,6 +1168,25 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                         ),
                       ),
                     ),
+                    Positioned(
+                      left: 70,
+                      top: 20,
+                      child: Container(
+                        width: widget.writerUserName.length * 10 + 3,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFD2D2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
+                          child: Text(
+                            widget.writerUserName,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    )
                     // Positioned(
                     //   top: 0,
                     //   right: 0,
@@ -1736,6 +2125,13 @@ class _AnswerItemState extends State<AnswerItem> {
                                   Provider.of<ReplyProvider>(context,
                                           listen: false)
                                       .IsReply = true;
+                                  Provider.of<MyChatReplyProvider>(context,
+                                          listen: false)
+                                      .ismychatReply = false;
+                                  Provider.of<ReplySelectedNumberProvider>(
+                                          context,
+                                          listen: false)
+                                      .replyselectedusername = widget.userName;
                                 },
                                 child: Container(
                                   width: 200,

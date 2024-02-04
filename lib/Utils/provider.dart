@@ -69,6 +69,18 @@ class ReplyProvider with ChangeNotifier {
   }
 }
 
+//custominputfield에서 답글인지 아닌지 확인하는 provider
+class MyChatReplyProvider with ChangeNotifier {
+  bool _ismychatReply = false;
+
+  bool get ismychatReply => _ismychatReply;
+
+  set ismychatReply(bool value) {
+    _ismychatReply = value;
+    notifyListeners();
+  }
+}
+
 class QuestionNumberProvider with ChangeNotifier {
   // questionId 관리
 
@@ -84,11 +96,18 @@ class QuestionNumberProvider with ChangeNotifier {
 
 class ReplySelectedNumberProvider with ChangeNotifier {
   int _ReplySelectedNumber = 0;
+  String _ReplySelectedUsername = "";
 
   int get ReplySelectedNumber => _ReplySelectedNumber;
+  String get ReplySelectedUsername => _ReplySelectedUsername;
 
   set replyselectednumber(int value) {
     _ReplySelectedNumber = value;
+    notifyListeners();
+  }
+
+  set replyselectedusername(String value) {
+    _ReplySelectedUsername = value;
     notifyListeners();
   }
 }
