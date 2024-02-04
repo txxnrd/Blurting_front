@@ -302,6 +302,8 @@ class _GroupChat extends State<GroupChat> {
                 setState(() {
                   currentIndex = index + 1;
                   fetchIndexComments(currentIndex);
+                  Provider.of<ReplyProvider>(context, listen: false).IsReply =
+                      false;
                 });
               },
             ),
@@ -331,6 +333,7 @@ class _GroupChat extends State<GroupChat> {
             children: [
               // 노태윤에게. 여기에서 답변 내용 스크롤뷰로 보여줌
               SingleChildScrollView(
+                reverse: true,
                 controller: pageScrollController,
                 child: Column(
                   children: [

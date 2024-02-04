@@ -210,9 +210,10 @@ class _CustomInputFieldState extends State<CustomInputField> {
   @override
   void initState() {
     super.initState();
-    focusNode =
-        Provider.of<FocusNodeProvider>(context, listen: false).focusNode;
 
+    focusNode = FocusNode();
+    //     Provider.of<FocusNodeProvider>(context, listen: false).focusNode;
+    // focusNode.unfocus();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         isPocusState(true);
@@ -232,9 +233,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<FocusNodeProvider>(context, listen: false)
-        .focusNode
-        .requestFocus();
+    // Provider.of<FocusNodeProvider>(context, listen: false)
+    //     .focusNode
+    //     .requestFocus();
     return Container(
       color: Color.fromRGBO(250, 250, 250, 0.5),
       padding: !widget.isBlurting
@@ -302,7 +303,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 ],
               ),
             ),
-          if (Provider.of<ReplyProvider>(context, listen: false).isReply ==
+          if (Provider.of<ReplyProvider>(context, listen: true).isReply ==
                   true &&
               Provider.of<MyChatReplyProvider>(context, listen: false)
                       .ismychatReply ==
@@ -334,7 +335,6 @@ class _CustomInputFieldState extends State<CustomInputField> {
                     onTap: () {
                       setState(() {
                         focusNode.unfocus();
-
                         print(
                             "After unfocus: ${focusNode.hasFocus}"); // Debug log
                         inputValid(false);
@@ -364,7 +364,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   ClipPath(
                     clipper: InputfieldClipper(),
@@ -380,6 +380,10 @@ class _CustomInputFieldState extends State<CustomInputField> {
                           //     .IsReply = true)
                           //   Provider.of<ReplyProvider>(context, listen: false)
                           //       .IsReply = false;
+                          if (Provider.of<ReplyProvider>(context, listen: false)
+                                  .isReply ==
+                              false) focusNode.unfocus();
+                          widget.controller.clear();
                         },
                         onChanged: (value) {
                           length = value.length;
@@ -431,6 +435,11 @@ class _CustomInputFieldState extends State<CustomInputField> {
                                       inputValid(false);
                                       inputPointValid(false);
                                       widget.controller.clear();
+                                      if (widget.isBlurting)
+                                        focusNode.unfocus();
+                                      Provider.of<ReplyProvider>(context,
+                                              listen: false)
+                                          .IsReply = false;
                                     });
                                   }
                                 : null,
@@ -458,7 +467,6 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       !Provider.of<ReplyProvider>(context, listen: true)
                           .isReply)
                     Container(
-                        alignment: Alignment.bottomRight,
                         padding: EdgeInsets.all(5),
                         child: Text(
                           '$length자',
@@ -647,12 +655,14 @@ class _MyChatState extends State<MyChat> {
         print("음..?");
         print(widget.answerID);
         print(widget.index);
-        Provider.of<FocusNodeProvider>(context, listen: false)
-            .focusNode
-            .requestFocus();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<FocusNodeProvider>(context, listen: false)
+              .focusNode
+              .requestFocus();
+        });
+
         Provider.of<QuestionNumberProvider>(context, listen: false).questionId =
             widget.answerID;
-        print(Provider.of<FocusNodeProvider>(context, listen: false).focusNode);
         Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
         Provider.of<ReplySelectedNumberProvider>(context, listen: false)
             .replyselectednumber = widget.index;
@@ -937,12 +947,13 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: widget.writerUserName.length * 10 + 7,
+                                    // left: widget.writerUserName.length * 10 + 7,
+                                    left: 7,
                                     right: 10,
                                     top: 5,
                                     bottom: 5),
                                 child: Text(
-                                  widget.content,
+                                  "                  " + widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
@@ -956,8 +967,8 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                       ),
                     ),
                     Positioned(
-                      left: 70,
-                      top: 20,
+                      left: 75,
+                      top: 19,
                       child: Container(
                         width: widget.writerUserName.length * 10 + 3,
                         height: 20,
@@ -1046,12 +1057,12 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                               Container(
                                 margin: EdgeInsets.only(
                                     // left: widget.writerUserName.length * 10 + 7,
-                                    left: 10,
+                                    left: 7,
                                     right: 10,
                                     top: 5,
                                     bottom: 5),
                                 child: Text(
-                                  "               " + widget.content,
+                                  "                 " + widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
@@ -1065,7 +1076,7 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                       ),
                     ),
                     Positioned(
-                      left: 70,
+                      left: 75,
                       top: 13,
                       child: Container(
                         width: widget.writerUserName.length * 10 + 3,
@@ -2045,7 +2056,6 @@ class _AnswerItemState extends State<AnswerItem> {
   @override
   Widget build(BuildContext context) {
     print(widget.key);
-
     return ListTile(
       subtitle: // 답변 내용
           Row(
@@ -2118,10 +2128,13 @@ class _AnswerItemState extends State<AnswerItem> {
                                   Provider.of<QuestionNumberProvider>(context,
                                           listen: false)
                                       .questionId = widget.answerId;
-                                  Provider.of<FocusNodeProvider>(context,
-                                          listen: false)
-                                      .focusNode
-                                      .requestFocus();
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    Provider.of<FocusNodeProvider>(context,
+                                            listen: false)
+                                        .focusNode
+                                        .requestFocus();
+                                  });
                                   Provider.of<ReplyProvider>(context,
                                           listen: false)
                                       .IsReply = true;

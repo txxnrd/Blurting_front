@@ -60,11 +60,18 @@ class WhisperProvider with ChangeNotifier {
 //custominputfield에서 답글인지 아닌지 확인하는 provider
 class ReplyProvider with ChangeNotifier {
   bool _isReply = false;
+  bool _isAnswer = false;
 
   bool get isReply => _isReply;
+  bool get isAnswer => _isAnswer;
 
   set IsReply(bool value) {
     _isReply = value;
+    notifyListeners();
+  }
+
+  set IsAnswer(bool value) {
+    _isAnswer = value;
     notifyListeners();
   }
 }
