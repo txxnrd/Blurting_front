@@ -261,9 +261,10 @@ class _CustomInputFieldState extends State<CustomInputField> {
                     focusNode: focusNode,
                     onTapOutside: (event) {
                       focusNode.unfocus();
-
-                      Provider.of<ReplyProvider>(context, listen: false)
-                          .IsReply = false;
+                      if (Provider.of<ReplyProvider>(context, listen: false)
+                          .IsReply = true)
+                        Provider.of<ReplyProvider>(context, listen: false)
+                            .IsReply = false;
                     },
                     onChanged: (value) {
                       length = value.length;
@@ -694,7 +695,7 @@ class _MyChatReplyState extends State<MyChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -791,7 +792,7 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -816,7 +817,10 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: 10, right: 10, top: 5, bottom: 5),
+                                    left: widget.writerUserName.length * 10 + 7,
+                                    right: 10,
+                                    top: 5,
+                                    bottom: 5),
                                 child: Text(
                                   widget.content,
                                   style: TextStyle(
@@ -831,19 +835,25 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                         ),
                       ),
                     ),
-                    // Positioned(
-                    //   top: 0,
-                    //   right: 0,
-                    //   child: Container(
-                    //     width: 40,
-                    //     height: 40,
-                    //     decoration: BoxDecoration(
-                    //       color: Color.fromARGB(255, 152, 106, 124),
-                    //       borderRadius: BorderRadius.circular(50),
-                    //     ),
-                    //     child: Text("퓨퓨651"),
-                    //   ),
-                    // ),
+                    Positioned(
+                      left: 70,
+                      top: 20,
+                      child: Container(
+                        width: widget.writerUserName.length * 10 + 3,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFD2D2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
+                          child: Text(
+                            widget.writerUserName,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ],
@@ -875,6 +885,114 @@ class OtherChatReply extends StatefulWidget {
 }
 
 class _OtherChatReplyState extends State<OtherChatReply> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.key);
+    return ListTile(
+      onTap: () {
+        print("눌림");
+        print("여기임?");
+      },
+      subtitle: // 답변 내용
+          Container(
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(60, 0, 25, 0),
+                      child: ClipPath(
+                        clipper: OtherChatReplyClipper(),
+                        child: Container(
+                          width: 160,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFFFFEEEE),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: widget.writerUserName.length * 10 + 7,
+                                    right: 10,
+                                    top: 5,
+                                    bottom: 5),
+                                child: Text(
+                                  widget.content,
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 70,
+                      top: 13,
+                      child: Container(
+                        width: widget.writerUserName.length * 10 + 3,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFD2D2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
+                          child: Text(
+                            widget.writerUserName,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OtherChatReplyOtherAnswer extends StatefulWidget {
+  final int writerUserId;
+  final String writerUserName;
+  final String content;
+  final String createdAt;
+
+  OtherChatReplyOtherAnswer({
+    super.key,
+    required this.writerUserId,
+    required this.writerUserName,
+    required this.content,
+    required this.createdAt,
+  });
+
+  @override
+  State<OtherChatReplyOtherAnswer> createState() =>
+      _OtherChatReplyOtherAnswerState();
+}
+
+class _OtherChatReplyOtherAnswerState extends State<OtherChatReplyOtherAnswer> {
   @override
   void initState() {
     super.initState();
@@ -929,6 +1047,25 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                         ),
                       ),
                     ),
+                    Positioned(
+                      left: 70,
+                      top: 20,
+                      child: Container(
+                        width: widget.writerUserName.length * 10 + 3,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFD2D2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
+                          child: Text(
+                            widget.writerUserName,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    )
                     // Positioned(
                     //   top: 0,
                     //   right: 0,
@@ -1869,7 +2006,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                       .IsReply = true;
                                   Provider.of<MyChatReplyProvider>(context,
                                           listen: false)
-                                      .ismychatReply = true;
+                                      .ismychatReply = false;
                                 },
                                 child: Container(
                                   width: 200,
