@@ -253,7 +253,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   true &&
               Provider.of<MyChatReplyProvider>(context, listen: false)
                       .ismychatReply ==
-                  true)
+                  true &&
+              widget.isBlurting)
             Container(
               margin: EdgeInsets.only(left: 10, bottom: 5),
               child: Row(
@@ -307,7 +308,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   true &&
               Provider.of<MyChatReplyProvider>(context, listen: false)
                       .ismychatReply ==
-                  false)
+                  false &&
+              widget.isBlurting)
             Container(
               margin: EdgeInsets.only(left: 10, bottom: 5),
               child: Row(
@@ -375,15 +377,19 @@ class _CustomInputFieldState extends State<CustomInputField> {
                         enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
                         focusNode: focusNode,
                         onTapOutside: (event) {
-                          // focusNode.unfocus();
+                          if (!widget.isBlurting) focusNode.unfocus();
                           // if (Provider.of<ReplyProvider>(context, listen: false)
                           //     .IsReply = true)
                           //   Provider.of<ReplyProvider>(context, listen: false)
                           //       .IsReply = false;
-                          if (Provider.of<ReplyProvider>(context, listen: false)
-                                  .isReply ==
-                              false) focusNode.unfocus();
-                          widget.controller.clear();
+                          if (widget.isBlurting &&
+                              Provider.of<ReplyProvider>(context, listen: false)
+                                      .isReply ==
+                                  false) {
+                            focusNode.unfocus();
+
+                            widget.controller.clear();
+                          }
                         },
                         onChanged: (value) {
                           length = value.length;
@@ -948,7 +954,7 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                               Container(
                                 margin: EdgeInsets.only(
                                     // left: widget.writerUserName.length * 10 + 7,
-                                    left: 7,
+                                    left: 8,
                                     right: 10,
                                     top: 5,
                                     bottom: 5),
@@ -967,7 +973,7 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                       ),
                     ),
                     Positioned(
-                      left: 75,
+                      left: 77,
                       top: 19,
                       child: Container(
                         width: widget.writerUserName.length * 10 + 3,
@@ -976,11 +982,14 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                           color: Color(0xffFFD2D2),
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
-                          child: Text(
-                            widget.writerUserName,
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                        child: Center(
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(2, 2, 2, 4),
+                            child: Text(
+                              widget.writerUserName,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
                           ),
                         ),
                       ),
@@ -1057,12 +1066,12 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                               Container(
                                 margin: EdgeInsets.only(
                                     // left: widget.writerUserName.length * 10 + 7,
-                                    left: 7,
+                                    left: 8,
                                     right: 10,
                                     top: 5,
                                     bottom: 5),
                                 child: Text(
-                                  "                 " + widget.content,
+                                  "                  " + widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
@@ -1076,7 +1085,7 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                       ),
                     ),
                     Positioned(
-                      left: 75,
+                      left: 77,
                       top: 13,
                       child: Container(
                         width: widget.writerUserName.length * 10 + 3,
@@ -1085,11 +1094,14 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                           color: Color(0xffFFD2D2),
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
-                          child: Text(
-                            widget.writerUserName,
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                        child: Center(
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(2, 2, 2, 4),
+                            child: Text(
+                              widget.writerUserName,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
                           ),
                         ),
                       ),
