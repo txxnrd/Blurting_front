@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:blurting/mainapp.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -103,6 +104,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: const Locale('ko'),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('ko', ''),
+      ],
       theme: ThemeData(
           appBarTheme: AppBarTheme(color: Colors.white),
           scaffoldBackgroundColor: Colors.white,

@@ -4,6 +4,7 @@ import 'package:blurting/pages/policy/policyFive.dart';
 import 'package:blurting/pages/policy/policyFour.dart';
 import 'package:blurting/pages/policy/policyThree.dart';
 import 'package:blurting/pages/policy/policyTwo.dart';
+import 'package:blurting/pages/useguide/useguidepageone.dart';
 import 'package:blurting/signup_questions/phonenumber.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
   ];
   Future<void> _increaseProgressAndNavigate() async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => UseGuidePagedone()));
+        context, MaterialPageRoute(builder: (context) => UseGuidePageOne()));
   }
 
   Widget customCheckbox(String hobbyText, int index) {
