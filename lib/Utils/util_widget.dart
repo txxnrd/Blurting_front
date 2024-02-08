@@ -294,7 +294,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       print("close 누름");
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 8),
+                      margin: EdgeInsets.only(right: 14),
                       child: Icon(
                         Icons.close,
                         color: Color(0xff868686),
@@ -371,7 +371,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ClipPath(
                     clipper: InputfieldClipper(),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width - 40,
+                      width: MediaQuery.of(context).size.width - 20,
                       child: TextField(
                         minLines: 1, maxLines: 3,
                         enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
@@ -677,7 +677,7 @@ class _MyChatState extends State<MyChat> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -831,7 +831,7 @@ class _MyChatReplyState extends State<MyChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 3, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -928,7 +928,7 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -2112,7 +2112,7 @@ class _AnswerItemState extends State<AnswerItem> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(bottom: 20),
+                margin: EdgeInsets.only(bottom: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
