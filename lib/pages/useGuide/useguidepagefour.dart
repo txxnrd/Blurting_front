@@ -154,14 +154,25 @@ class _UseGuidePageFourState extends State<UseGuidePageFour>
                     )),
               ),
               SizedBox(height: 40),
-              Center(
-                child: Stack(
-                  clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                  children: <Widget>[
-                    Container(
+              Stack(
+                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
                       width: 294,
                       height: 338,
                       child: Image.asset("assets/images/profilecard.png"),
+                    ),
+                  ),
+                  Positioned(
+                    left: 150, // 원하는 위치로 조정하세요.
+                    top: 270, // 원하는 위치로 조정하세요.
+                    child: Image.asset(
+                      "assets/images/pointer.png",
+                      width: 36.7,
+                      height: 47,
+
                     ),
                     Positioned(
                       left: 130, // 원하는 위치로 조정하세요.

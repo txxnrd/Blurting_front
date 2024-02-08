@@ -99,24 +99,85 @@ class _NotificationandSoundState extends State<NotificationandSound> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SwitchListTile(
-                    title: Text('알림 설정'),
-                    value: _notificationSettings,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _notificationSettings = value;
-                      });
-                      if (value) {
-                        // 스위치가 true(켜짐)로 변경될 때 실행할 로직
-                        _sendEnableNotificationRequest();
-                      } else {
-                        // 스위치가 false(꺼짐)로 변경될 때 실행할 로직
-                        _sendDisableNotificationRequest();
-                      }
-                    },
-
-                    activeColor: mainColor.pink, // 활성화 상태일 때의 색상
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _notificationSettings = !_notificationSettings;
+                        });
+                        if (_notificationSettings) {
+                          // 스위치가 true(켜짐)로 변경될 때 실행할 로직
+                          _sendEnableNotificationRequest();
+                        } else {
+                          // 스위치가 false(꺼짐)로 변경될 때 실행할 로직
+                          _sendDisableNotificationRequest();
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '알림 설정',
+                            style: TextStyle(
+                                color: mainColor.Gray,
+                                fontSize: 15,
+                                fontFamily: "Heebo",
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Stack(
+                            children: [
+                              AnimatedContainer(
+                                duration: Duration(milliseconds: 500),
+                                width: 38,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                    color: 
+                                    _notificationSettings
+                                        ? mainColor.MainColor
+                                        : 
+                                        mainColor.lightGray,
+                                    borderRadius: BorderRadius.circular(50)),
+                              ),
+                              AnimatedPositioned(
+                                duration: Duration(milliseconds: 500),
+                                top: 2,
+                                right: 
+                                _notificationSettings ? 2 : 
+                                17,
+                                child: Container(
+                                  width: 18,
+                                  height: 18,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.white),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+                                
+                  // SwitchListTile(
+                  //   title: Text('알림 설정'),
+                  //   value: _notificationSettings,
+                  //   onChanged: (bool value) {
+                  //     setState(() {
+                  //       _notificationSettings = value;
+                  //     });
+                  //     if (value) {
+                  //       // 스위치가 true(켜짐)로 변경될 때 실행할 로직
+                  //       _sendEnableNotificationRequest();
+                  //     } else {
+                  //       // 스위치가 false(꺼짐)로 변경될 때 실행할 로직
+                  //       _sendDisableNotificationRequest();
+                  //     }
+                  //   },
+
+                  //   activeColor: mainColor.pink, // 활성화 상태일 때의 색상
+                  // ),
                 ],
               ),
             ),

@@ -190,8 +190,9 @@ class _Blurting extends State<Blurting> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
-            SizedBox(width: 10),
+            Container(margin: EdgeInsets.only(top: 20, right: 4), child: pointAppbar()),
+            Container(
+              width: 10),
           ],
         ),
       ),
@@ -203,7 +204,7 @@ class _Blurting extends State<Blurting> {
             children: [
               if (isState == 'Continue')
               Container(
-                margin: EdgeInsets.only(bottom: 20),
+                margin: EdgeInsets.only(bottom: 10),
                 width: width * 0.6,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -263,6 +264,44 @@ class _Blurting extends State<Blurting> {
                   ],
                 ),
               ),
+              if (isState != 'Continue')
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  width: width * 0.6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.transparent),
+                        child: Text(
+                          '화살 날리기',
+                          style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.transparent),
+                          ),
+                        ),Container(
+                          margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60),
+                              color: Colors.transparent),
+                          child: Text(
+                            '내가 받은 화살',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.transparent),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
               Center(
                 child: Stack(
                   alignment: Alignment.bottomRight,
@@ -284,9 +323,7 @@ class _Blurting extends State<Blurting> {
                               color: mainColor.Gray.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10)),
                           width: width * 0.9,
-                          height: ProfileList[currentPage].length > 4
-                              ? width * 0.8
-                              : width * 0.7,
+                          height: width * 0.8,
                           child: isState == 'Start'
                               ? Center(
                                   child: Column(
@@ -391,14 +428,14 @@ class _Blurting extends State<Blurting> {
                                     color: isTap[currentPage] == true ||
                                             ( iSended[currentPage]) == true
                                         ? mainColor.MainColor
-                                        : mainColor.lightPink,
+                                        : mainColor.lightGray,
                                   ))),
                         ],
                       )
                   ],
                 ),
               ),
-              if (isState == 'Continue')
+              // if (isState == 'Continue')
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   width: double.infinity,
@@ -407,8 +444,8 @@ class _Blurting extends State<Blurting> {
                     controller: pageController,
                     count: 3,
                     effect: ScrollingDotsEffect(
-                      dotColor: mainColor.lightPink,
-                      activeDotColor: mainColor.MainColor,
+                      dotColor: isState == 'Continue' ? mainColor.lightPink : Colors.transparent,
+                      activeDotColor: isState == 'Continue' ? mainColor.MainColor : Colors.transparent,
                       activeStrokeWidth: 10,
                       activeDotScale: 1.0,
                       maxVisibleDots: 5,
@@ -422,7 +459,7 @@ class _Blurting extends State<Blurting> {
             ],
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(width * 0.05, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(width * 0.06, 0, 0, 0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -437,7 +474,7 @@ class _Blurting extends State<Blurting> {
                         fontFamily: 'Heebo'),
                   ),
                   if (isState != 'Continue' && isState != 'end')
-                    Text('진행 중인 블러팅이 없습니다.',
+                    Text('진행 중인 블러팅이 없습니다.\n',
                         style: TextStyle(
                             color: mainColor.Gray,
                             fontWeight: FontWeight.w400,
@@ -823,7 +860,7 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
-        responseData = 1;       // 없애야 할 것
+        responseData = 3;       // 없애야 할 것
 
         print(responseData);
         if (mounted) {

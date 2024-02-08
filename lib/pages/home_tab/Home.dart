@@ -891,7 +891,7 @@ Widget NowBlurting(String icon, String getCountText, int dynamicCount) {
       ],
     ),
     Padding(
-      padding: const EdgeInsets.only(right: 31),
+      padding: const EdgeInsets.only(right: 15),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

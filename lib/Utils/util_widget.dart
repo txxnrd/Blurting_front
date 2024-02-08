@@ -509,6 +509,7 @@ class pointAppbar extends StatelessWidget {
             );
           },
           child: Container(
+            // margin: EdgeInsets.only(right: 4),
             height: 30,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -567,6 +568,8 @@ class OtherChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.only(right: 15),
+
         subtitle: Container(
       margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
       child: Row(
@@ -659,7 +662,7 @@ class _MyChatState extends State<MyChat> {
   Widget build(BuildContext context) {
     print(widget.key);
     return ListTile(
-      onTap: () {
+      onTap: (widget.isBlurting) ? () {
         print("눌림");
         print("음..?");
         print(widget.answerID);
@@ -677,7 +680,8 @@ class _MyChatState extends State<MyChat> {
             .replyselectednumber = widget.index;
         Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
             true;
-      },
+      } : null,
+      contentPadding: EdgeInsets.only(right: 15),
       subtitle: // 답변 내용
           Container(
         margin: EdgeInsets.only(left: 20, bottom: 0, top: 0),
@@ -2073,6 +2077,8 @@ class _AnswerItemState extends State<AnswerItem> {
   Widget build(BuildContext context) {
     print(widget.key);
     return ListTile(
+      contentPadding: EdgeInsets.only(right: 15),
+
       subtitle: // 답변 내용
           Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2198,7 +2204,7 @@ class _AnswerItemState extends State<AnswerItem> {
                         Positioned(
                           bottom: 0,
                           right: (likedNum == 0) ? 10 : 0,
-                          child: GestureDetector(
+                          child: InkWell(
                             onTap: () {
                               changeLike(widget.answerId);
                               HapticFeedback.vibrate();

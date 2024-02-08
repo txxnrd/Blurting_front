@@ -230,19 +230,33 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                 }
                               : null,
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 50,
-                            height: 50,
-                            child: Text(
-                              '이미 회원이신가요?',
-                              style: TextStyle(
-                                  decorationColor: Colors.white,
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(top: 10),
+                                height: 50,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '이미 회원이신가요?',
+                                      style: TextStyle(
+                                          decorationColor: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.zero,
+                                      padding: EdgeInsets.zero,
+                                      width: 125,
+                                      height: 1,
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       )
