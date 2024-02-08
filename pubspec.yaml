@@ -60,6 +60,7 @@ dependencies:
   extended_image: ^8.2.0
   flutter_dotenv: ^5.1.0
   photo_view: ^0.14.0
+  webview_flutter: ^3.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -154,7 +155,7 @@ flutter:
     - assets/images/home_scroll_button.png
     - assets/images/dashedLine.png
     - assets/images/unmatch.png
-    - assets/images/reply.png
+    # - assets/images/reply.png
 
   fonts:
     - family: Pretendard

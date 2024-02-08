@@ -754,7 +754,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 // 대괄호 제거
     characters = characters.replaceAll('[', '').replaceAll(']', '');
 
-    double screenWidth = MediaQuery.of(context).size.width * 0.95;
+    double screenWidth = MediaQuery.of(context).size.width * 0.93;
 
     Widget toggleReligion(BuildContext context, int index, String religion) {
       modifiedFlags["religion"] = true;
@@ -871,7 +871,7 @@ class _MyPageEditState extends State<MyPageEdit> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Container(
-          margin: EdgeInsets.only(top: 20),
+          margin: EdgeInsets.only(top: 20, left: 10),
           child: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
@@ -888,20 +888,20 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
         ),
         actions: [
-          Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
+          Container(margin: EdgeInsets.only(top: 20, right: 4), child: pointAppbar()),
           SizedBox(width: 10),
         ],
       ),
       body: SizedBox(
         height: mediaquery_height * 0.9,
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 30),
           child: Container(
             margin: EdgeInsets.only(top: 110),
             child: Column(
               children: [
                 Container(
-                    padding: EdgeInsets.only(left: 13, top: 20),
+                    padding: EdgeInsets.only(left: 0, top: 20),
                     child: ellipseText(text: 'Editing')),
                 Center(
                   child: SizedBox(
@@ -985,7 +985,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
+                              padding: const EdgeInsets.only(left: 10.0),
                               child: Text(
                                 '* 10포인트를 지불하고 랜덤으로 닉네임을 바꿀 수 있어요!',
                                 style: TextStyle(
