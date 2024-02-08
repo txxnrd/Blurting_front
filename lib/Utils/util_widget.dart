@@ -1047,7 +1047,7 @@ class _OtherChatReplyState extends State<OtherChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0, right: 0),
+        margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.start,
