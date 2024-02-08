@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/useGuide/done.dart';
+import 'package:blurting/settings/setting.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -84,7 +85,7 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
     }
 
     _startAnimation();
-    
+
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1), // 애니메이션의 지속 시간 설정
@@ -97,14 +98,15 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
         setState(() {});
-      });      
+      });
   }
 
   void _startBlinking() {
     _blinkTimer = Timer.periodic(Duration(milliseconds: 1000), (Timer timer) {
       if (mounted) {
         setState(() {
-          if (isVisible == 0.3) isVisible = 1.0;
+          if (isVisible == 0.3)
+            isVisible = 1.0;
           else if (isVisible == 1.0) isVisible = 0.3;
           _startBlinking(); // 다음 깜빡임을 예약합니다.
         });
@@ -129,7 +131,8 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
     Navigator.of(context)
         .push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => PolicyOne(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            UseGuidePagedone(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -225,23 +228,23 @@ class _UseGuidePageEightState extends State<UseGuidePageEight>
                         ),
                       ],
                     ),
-                                                  Expanded(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 40),
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 700),
-                    opacity: isVisible,
-                    child: Text("화면을 터치해 주세요!",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: mainColor.Gray,
-                          fontFamily: 'Heebo',
-                        )),
-                  ),
-                ),
-              ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.bottomCenter,
+                        padding: EdgeInsets.only(bottom: 40),
+                        child: AnimatedOpacity(
+                          duration: Duration(milliseconds: 700),
+                          opacity: isVisible,
+                          child: Text("화면을 터치해 주세요!",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: mainColor.Gray,
+                                fontFamily: 'Heebo',
+                              )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

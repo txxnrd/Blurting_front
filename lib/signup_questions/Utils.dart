@@ -13,7 +13,7 @@ Widget ProgressBar(
       Container(
         alignment: Alignment.center,
         height: 10,
-        width: MediaQuery.of(context).size.width * 0.8,
+        width: MediaQuery.of(context).size.width * 0.92,
         decoration: BoxDecoration(
           color: mainColor.lightGray, //
           borderRadius: BorderRadius.circular(4.0),

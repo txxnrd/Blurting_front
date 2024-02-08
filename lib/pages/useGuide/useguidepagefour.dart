@@ -25,7 +25,7 @@ class UseGuidePageFour extends StatefulWidget {
 class _UseGuidePageFourState extends State<UseGuidePageFour>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
-  
+
   Animation<double>? _progressAnimation;
   bool isVisible = true;
   Timer? _blinkTimer;
@@ -83,7 +83,9 @@ class _UseGuidePageFourState extends State<UseGuidePageFour>
         timer.cancel();
       }
     });
-  }  @override
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -152,24 +154,26 @@ class _UseGuidePageFourState extends State<UseGuidePageFour>
                     )),
               ),
               SizedBox(height: 40),
-              Stack(
-                clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
-                children: <Widget>[
-                  Container(
-                    width: 294,
-                    height: 338,
-                    child: Image.asset("assets/images/profilecard.png"),
-                  ),
-                  Positioned(
-                    left: 130, // 원하는 위치로 조정하세요.
-                    top: 270, // 원하는 위치로 조정하세요.
-                    child: Image.asset(
-                      "assets/images/pointer.png",
-                      width: 36.7,
-                      height: 47,
+              Center(
+                child: Stack(
+                  clipBehavior: Clip.none, // 화면 밑에 짤리는 부분 나오게 하기
+                  children: <Widget>[
+                    Container(
+                      width: 294,
+                      height: 338,
+                      child: Image.asset("assets/images/profilecard.png"),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      left: 130, // 원하는 위치로 조정하세요.
+                      top: 270, // 원하는 위치로 조정하세요.
+                      child: Image.asset(
+                        "assets/images/pointer.png",
+                        width: 36.7,
+                        height: 47,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Expanded(
                 child: Container(

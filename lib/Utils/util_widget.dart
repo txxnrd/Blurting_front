@@ -263,7 +263,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   Row(
                     children: [
                       ImageIcon(AssetImage('assets/images/reply.png'),
-                          color: Color(0xff868686), size: 20),
+                          color: Color(0xff868686), size: 12),
                       Container(
                           margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
                           child: Text("나에게 답변",
@@ -294,7 +294,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       print("close 누름");
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 14),
+                      margin: EdgeInsets.only(right: 11),
                       child: Icon(
                         Icons.close,
                         color: Color(0xff868686),
@@ -317,8 +317,11 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 children: [
                   Row(
                     children: [
-                      ImageIcon(AssetImage('assets/images/reply.png'),
-                          color: Color(0xff868686), size: 20),
+                      Container(
+                        margin: EdgeInsets.only(left: 2),
+                        child: ImageIcon(AssetImage('assets/images/reply.png'),
+                            color: Color(0xff868686), size: 12),
+                      ),
                       Container(
                           margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
                           child: Text(
@@ -352,7 +355,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       print("close 누름");
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 8),
+                      margin: EdgeInsets.only(right: 11),
                       child: Icon(
                         Icons.close,
                         color: Color(0xff868686),
@@ -922,6 +925,8 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
   @override
   Widget build(BuildContext context) {
     print(widget.key);
+    late int leftMargin = 3 * (widget.writerUserName.length + 1) - 1;
+
     return ListTile(
       onTap: () {
         print("눌림");
@@ -954,12 +959,12 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                               Container(
                                 margin: EdgeInsets.only(
                                     // left: widget.writerUserName.length * 10 + 7,
-                                    left: 8,
+                                    left: 10,
                                     right: 10,
                                     top: 5,
                                     bottom: 5),
                                 child: Text(
-                                  "                  " + widget.content,
+                                  " " * leftMargin + widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
@@ -1033,6 +1038,8 @@ class _OtherChatReplyState extends State<OtherChatReply> {
   @override
   Widget build(BuildContext context) {
     print(widget.key);
+    late int leftMargin = 3 * (widget.writerUserName.length + 1);
+
     return ListTile(
       onTap: () {
         print("눌림");
@@ -1040,7 +1047,7 @@ class _OtherChatReplyState extends State<OtherChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -1065,13 +1072,10 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    // left: widget.writerUserName.length * 10 + 7,
-                                    left: 8,
-                                    right: 10,
-                                    top: 5,
-                                    bottom: 5),
+                                    left: 7, right: 10, top: 5, bottom: 5),
                                 child: Text(
-                                  "                  " + widget.content,
+                                  " " * leftMargin + widget.content,
+                                  //여기가 지금 왼쪽.
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
