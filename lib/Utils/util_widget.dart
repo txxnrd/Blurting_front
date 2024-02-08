@@ -371,7 +371,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ClipPath(
                     clipper: InputfieldClipper(),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width - 20,
+                      width: MediaQuery.of(context).size.width - 40,
                       child: TextField(
                         minLines: 1, maxLines: 3,
                         enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능

@@ -823,7 +823,7 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
-        // responseData = 3;       // 없애야 할 것
+        responseData = 1;       // 없애야 할 것
 
         print(responseData);
         if (mounted) {
@@ -887,43 +887,40 @@ class _Blurting extends State<Blurting> {
               currentDay = 0;
             });
 
-            if(latestIndex >= 1 && latestIndex <= 3){
-              day = 'Day1';
-            }
+            if (isState == 'Continue') {
+              if (latestIndex >= 1 && latestIndex <= 3) {
+                day = 'Day1';
+              } else if (latestIndex >= 4 && latestIndex <= 6) {
+                day = 'Day2';
+                pageController.page == 1;
 
-            else if (latestIndex >= 4 && latestIndex <= 6) {
-              day = 'Day2';
-              pageController.page == 1;
+                if (mounted) {
+                  setState(() {
+                    isValidDay[1] = true;
+                    currentDay = 1;
+                  });
+                }
 
-              if (mounted) {
-                setState(() {
-                  isValidDay[1] = true;
-                  currentDay = 1;
-                });
-              }
+                if (iSended[0] == false) {
+                  print('이틀째인데 첫 번째 안 보냄');
+                  sendArrow(-1, 0);
+                }
+              } else if (latestIndex >= 7) {
+                day = 'Day3';
 
-              if (iSended[0] == false) {
-                print('이틀째인데 첫 번째 안 보냄');
-                sendArrow(-1, 0);
-              }
-            }
+                pageController.page == 2;
 
-            else if (latestIndex >= 7) {
+                if (mounted) {
+                  setState(() {
+                    isValidDay[2] = true;
+                    currentDay = 2;
+                  });
+                }
 
-              day = 'Day3';
-
-              pageController.page == 2;
-
-              if (mounted) {
-                setState(() {
-                  isValidDay[2] = true;
-                  currentDay = 2;
-                });
-              }
-
-              if (iSended[1] == false) {
-                print('삼일째인데 두 번째 안 보냄');
-                sendArrow(-1, 1);
+                if (iSended[1] == false) {
+                  print('삼일째인데 두 번째 안 보냄');
+                  sendArrow(-1, 1);
+                }
               }
             }
 
