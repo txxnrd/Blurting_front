@@ -172,19 +172,18 @@ class _UseGuidePageFourState extends State<UseGuidePageFour>
                       "assets/images/pointer.png",
                       width: 36.7,
                       height: 47,
-
                     ),
-                    Positioned(
-                      left: 130, // 원하는 위치로 조정하세요.
-                      top: 270, // 원하는 위치로 조정하세요.
-                      child: Image.asset(
-                        "assets/images/pointer.png",
-                        width: 36.7,
-                        height: 47,
-                      ),
+                  ),
+                  Positioned(
+                    left: 130, // 원하는 위치로 조정하세요.
+                    top: 270, // 원하는 위치로 조정하세요.
+                    child: Image.asset(
+                      "assets/images/pointer.png",
+                      width: 36.7,
+                      height: 47,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Expanded(
                 child: Container(

@@ -948,38 +948,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                                         // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
                                       ),
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.all(10),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          _showWarning(
-                                              context,
-                                              '닉네임을 바꾸기 위해선 10포인트가 필요합니다.',
-                                              '계속하시겠습니까?',
-                                              '계속하기',
-                                              changeNickName);
-                                        },
-                                        child: Ink(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: mainColor.MainColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            padding:
-                                                EdgeInsets.fromLTRB(9, 2, 9, 2),
-                                            child: Text(
-                                              '수정',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 12,
-                                                fontFamily: 'Pretendard',
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),

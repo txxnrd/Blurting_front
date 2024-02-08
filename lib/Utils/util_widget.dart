@@ -263,7 +263,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   Row(
                     children: [
                       ImageIcon(AssetImage('assets/images/reply.png'),
-                          color: Color(0xff868686), size: 12),
+                          color: Color(0xff868686), size: 20),
                       Container(
                           margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
                           child: Text("나에게 답변",
@@ -294,7 +294,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       print("close 누름");
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 11),
+                      margin: EdgeInsets.only(right: 8),
                       child: Icon(
                         Icons.close,
                         color: Color(0xff868686),
@@ -317,11 +317,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 2),
-                        child: ImageIcon(AssetImage('assets/images/reply.png'),
-                            color: Color(0xff868686), size: 12),
-                      ),
+                      ImageIcon(AssetImage('assets/images/reply.png'),
+                          color: Color(0xff868686), size: 20),
                       Container(
                           margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
                           child: Text(
@@ -355,7 +352,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       print("close 누름");
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 11),
+                      margin: EdgeInsets.only(right: 8),
                       child: Icon(
                         Icons.close,
                         color: Color(0xff868686),
@@ -374,7 +371,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   ClipPath(
                     clipper: InputfieldClipper(),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width - 20,
+                      width: MediaQuery.of(context).size.width - 40,
                       child: TextField(
                         minLines: 1, maxLines: 3,
                         enabled: !widget.isBlock, // 블락이 되지 않았을 때 사용 가능
@@ -568,10 +565,10 @@ class OtherChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.only(right: 15),
+      contentPadding: EdgeInsets.only(left: 20),
 
         subtitle: Container(
-      margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+      margin: EdgeInsets.only(left: 0, bottom: 20, top: 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -681,10 +678,10 @@ class _MyChatState extends State<MyChat> {
         Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
             true;
       } : null,
-      contentPadding: EdgeInsets.only(right: 15),
+      contentPadding: EdgeInsets.only(right: 20),
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -838,7 +835,7 @@ class _MyChatReplyState extends State<MyChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 3, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -929,15 +926,13 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
   @override
   Widget build(BuildContext context) {
     print(widget.key);
-    late int leftMargin = 3 * (widget.writerUserName.length + 1) - 1;
-
     return ListTile(
       onTap: () {
         print("눌림");
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -963,12 +958,12 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                               Container(
                                 margin: EdgeInsets.only(
                                     // left: widget.writerUserName.length * 10 + 7,
-                                    left: 10,
+                                    left: 8,
                                     right: 10,
                                     top: 5,
                                     bottom: 5),
                                 child: Text(
-                                  " " * leftMargin + widget.content,
+                                  "                  " + widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
@@ -1042,8 +1037,6 @@ class _OtherChatReplyState extends State<OtherChatReply> {
   @override
   Widget build(BuildContext context) {
     print(widget.key);
-    late int leftMargin = 3 * (widget.writerUserName.length + 1);
-
     return ListTile(
       onTap: () {
         print("눌림");
@@ -1051,7 +1044,7 @@ class _OtherChatReplyState extends State<OtherChatReply> {
       },
       subtitle: // 답변 내용
           Container(
-        margin: EdgeInsets.only(left: 20, bottom: 0, top: 0, right: 0),
+        margin: EdgeInsets.only(left: 20, bottom: 5, top: 0, right: 0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -1076,10 +1069,13 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: 7, right: 10, top: 5, bottom: 5),
+                                    // left: widget.writerUserName.length * 10 + 7,
+                                    left: 8,
+                                    right: 10,
+                                    top: 5,
+                                    bottom: 5),
                                 child: Text(
-                                  " " * leftMargin + widget.content,
-                                  //여기가 지금 왼쪽.
+                                  "                  " + widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
@@ -1607,12 +1603,468 @@ class _AnswerItemState extends State<AnswerItem> {
     reportedUser = false;
     isValid = false;
 
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return StatefulBuilder(builder: (context, setState) {
+    //       print('재빌드');
+
+    //       return Stack(
+    //         children: [
+    //           Center(
+    //             child: SizedBox(
+    //               height: 470,
+    //               width: 330,
+    //               child: AlertDialog(
+    //                 surfaceTintColor: Colors.white,
+    //                 shape: RoundedRectangleBorder(
+    //                   borderRadius: BorderRadius.all(Radius.circular(10)),
+    //                   side: BorderSide(color: mainColor.MainColor, width: 1.0),
+    //                 ),
+    //                 // contentPadding: EdgeInsets.zero,
+    //                 content: Stack(
+    //                   children: [
+    //                     Column(
+    //                       mainAxisSize: MainAxisSize.min,
+    //                       children: [
+    //                         Stack(
+    //                           children: [
+    //                             Padding(
+    //                               padding: const EdgeInsets.all(12.0),
+    //                               child: Column(
+    //                                 // 동적으로 눌린 유저의 정보 받아오기
+    //                                 mainAxisSize: MainAxisSize.min,
+    //                                 children: [
+    //                                   Container(
+    //                                     margin: EdgeInsets.only(bottom: 10),
+    //                                     child: Stack(
+    //                                       children: [
+    //                                         Align(
+    //                                           alignment: Alignment.center,
+    //                                           child: Container(
+    //                                             // padding: EdgeInsets.only(top: 10),
+    //                                             alignment: Alignment.center,
+    //                                             child: Text(
+    //                                               'Profile',
+    //                                               style: TextStyle(
+    //                                                   color:
+    //                                                       mainColor.MainColor,
+    //                                                   fontFamily: "Heebo",
+    //                                                   fontSize: 20,
+    //                                                   fontWeight:
+    //                                                       FontWeight.w400),
+    //                                             ),
+    //                                           ),
+    //                                         ),
+    //                                       ],
+    //                                     ),
+    //                                   ),
+    //                                   SizedBox(
+    //                                       width: 150,
+    //                                       child: Image.asset(
+    //                                         widget.image == "F"
+    //                                             ? 'assets/images/profile_woman.png'
+    //                                             : 'assets/images/profile_man.png',
+    //                                         fit: BoxFit.fitHeight,
+    //                                       )),
+    //                                   Column(
+    //                                     mainAxisAlignment:
+    //                                         MainAxisAlignment.center,
+    //                                     children: [
+    //                                       Text(
+    //                                         widget.userName,
+    //                                         style: TextStyle(
+    //                                             fontFamily: "Pretendard",
+    //                                             fontWeight: FontWeight.w700,
+    //                                             fontSize: 24,
+    //                                             color: mainColor.MainColor),
+    //                                       ),
+    //                                       Text(
+    //                                         widget.mbti.toUpperCase(),
+    //                                         style: TextStyle(
+    //                                             fontFamily: "Pretendard",
+    //                                             fontWeight: FontWeight.w500,
+    //                                             fontSize: 15,
+    //                                             color: mainColor.MainColor),
+    //                                       ),
+    //                                     ],
+    //                                   ),
+    //                                 ],
+    //                               ),
+    //                             ),
+    //                             Positioned.fill(
+    //                               child: AnimatedOpacity(
+    //                                 duration: Duration(milliseconds: 500),
+    //                                 opacity: isValid ? 1.0 : 0.0,
+    //                                 child: ClipRRect(
+    //                                     child: BackdropFilter(
+    //                                         filter: ImageFilter.blur(
+    //                                             sigmaX: 7, sigmaY: 7),
+    //                                         child: Container(
+    //                                             color: Colors.transparent))),
+    //                               ),
+    //                             ),
+    //                             Align(
+    //                               alignment: Alignment.topRight,
+    //                               child: Container(
+    //                                 margin: EdgeInsets.only(top: 12),
+    //                                 width: 20,
+    //                                 height: 20,
+    //                                 child: GestureDetector(
+    //                                   child: Image.asset(
+    //                                     'assets/images/block.png',
+    //                                     fit: BoxFit.fill,
+    //                                   ),
+    //                                   onTap: () {
+    //                                     _ClickWarningButton(context,
+    //                                         widget.userId); // jsonData 줘야 함
+    //                                   },
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                             Positioned.fill(
+    //                               child: AnimatedOpacity(
+    //                                 duration: Duration(milliseconds: 500),
+    //                                 opacity: isValid ? 1.0 : 0.0,
+    //                                 child: Container(
+    //                                   margin: EdgeInsets.only(top: 30),
+    //                                   child: Column(
+    //                                     mainAxisAlignment:
+    //                                         MainAxisAlignment.center,
+    //                                     children: const [
+    //                                       Text(
+    //                                         '귓속말을 걸면 10p가 차감됩니다.',
+    //                                         style: TextStyle(
+    //                                             color: Colors.black,
+    //                                             fontWeight: FontWeight.w500,
+    //                                             fontSize: 14,
+    //                                             fontFamily: "Heebo"),
+    //                                       ),
+    //                                       Text(
+    //                                         '계속 진행하시겠습니까?',
+    //                                         style: TextStyle(
+    //                                             color: Colors.black,
+    //                                             fontWeight: FontWeight.w500,
+    //                                             fontSize: 14,
+    //                                             fontFamily: "Heebo"),
+    //                                       ),
+    //                                     ],
+    //                                   ),
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                           ],
+    //                         ),
+    //                         GestureDetector(
+    //                           onTap: (!isAlready)
+    //                               ? () async {
+    //                                   await checkPoint();
+    //                                   setState(() {
+    //                                     if (!isAlready && enoughPoint) {
+    //                                       isTap(true);
+    //                                       HapticFeedback.vibrate();
+    //                                     }
+    //                                   });
+    //                                 }
+    //                               : null,
+    //                           child: Stack(
+    //                             children: [
+    //                               AnimatedContainer(
+    //                                 margin: EdgeInsets.only(bottom: 10),
+    //                                 duration: Duration(milliseconds: 500),
+    //                                 decoration: BoxDecoration(
+    //                                     color: Colors.white,
+    //                                     borderRadius: BorderRadius.circular(50),
+    //                                     border: Border.all(
+    //                                         color: isAlready || isValid
+    //                                             ? mainColor.lightGray
+    //                                             : mainColor.MainColor,
+    //                                         width: 2)),
+    //                                 child: Padding(
+    //                                   padding: const EdgeInsets.fromLTRB(
+    //                                       15, 3, 15, 5),
+    //                                   child: AnimatedDefaultTextStyle(
+    //                                     duration: Duration(milliseconds: 500),
+    //                                     style: TextStyle(
+    //                                       fontSize: 17,
+    //                                       fontWeight: FontWeight.w500,
+    //                                       color: isAlready || isValid
+    //                                           ? mainColor.lightGray
+    //                                           : mainColor.MainColor,
+    //                                     ),
+    //                                     child: Text(
+    //                                       '귓속말 걸기',
+    //                                     ),
+    //                                   ),
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         )
+    //                       ],
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //           Positioned(
+    //             bottom: 80,
+    //             child: AnimatedOpacity(
+    //               opacity: enoughPoint ? 0.0 : 1.0,
+    //               duration: Duration(milliseconds: 500),
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Container(
+    //                     width: MediaQuery.of(context).size.width,
+    //                     margin: EdgeInsets.only(top: 30),
+    //                     child: Column(
+    //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //                       children: [
+    //                         Container(
+    //                           width: MediaQuery.of(context).size.width * 0.9,
+    //                           decoration: BoxDecoration(
+    //                               borderRadius: BorderRadius.circular(10),
+    //                               color: mainColor.lightGray.withOpacity(0.5)),
+    //                           child: Stack(
+    //                             alignment: Alignment.centerLeft,
+    //                             children: [
+    //                               Container(
+    //                                 margin: EdgeInsets.only(left: 20),
+    //                                 child: Image.asset(
+    //                                   'assets/images/alert.png',
+    //                                   width: 30,
+    //                                 ),
+    //                               ),
+    //                               Align(
+    //                                 alignment: Alignment.center,
+    //                                 child: GestureDetector(
+    //                                   child: Container(
+    //                                     margin: EdgeInsets.all(10),
+    //                                     child: Column(
+    //                                       children: [
+    //                                         Text(
+    //                                           '앗! 포인트 부족',
+    //                                           style: TextStyle(
+    //                                               color: Colors.white,
+    //                                               fontWeight: FontWeight.w800,
+    //                                               fontSize: 15,
+    //                                               fontFamily: "Heebo"),
+    //                                         ),
+    //                                         Text(
+    //                                           '포인트가 부족하여 귓속말을 걸 수 없습니다.',
+    //                                           style: TextStyle(
+    //                                               color: Colors.white,
+    //                                               fontWeight: FontWeight.w500,
+    //                                               fontSize: 10,
+    //                                               fontFamily: "Heebo"),
+    //                                         ),
+    //                                         Text(
+    //                                           '포인트를 모은 뒤 다시 시도해 주세요!',
+    //                                           style: TextStyle(
+    //                                               color: Colors.white,
+    //                                               fontWeight: FontWeight.w500,
+    //                                               fontSize: 10,
+    //                                               fontFamily: "Heebo"),
+    //                                         ),
+    //                                       ],
+    //                                     ),
+    //                                   ),
+    //                                   onTap: () {
+    //                                     if (enoughPoint) {
+    //                                       Navigator.of(context).pop();
+    //                                     }
+    //                                   },
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   )
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //           Positioned(
+    //             bottom: 100,
+    //             child: AnimatedOpacity(
+    //               opacity: reportedUser ? 1.0 : 0.0,
+    //               duration: Duration(milliseconds: 500),
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Container(
+    //                     width: MediaQuery.of(context).size.width,
+    //                     margin: EdgeInsets.only(top: 30),
+    //                     child: Column(
+    //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //                       children: [
+    //                         Container(
+    //                           width: MediaQuery.of(context).size.width * 0.9,
+    //                           decoration: BoxDecoration(
+    //                               borderRadius: BorderRadius.circular(10),
+    //                               color: mainColor.lightGray.withOpacity(0.5)),
+    //                           child: Stack(
+    //                             alignment: Alignment.centerLeft,
+    //                             children: [
+    //                               Container(
+    //                                 margin: EdgeInsets.only(left: 20),
+    //                                 child: Image.asset(
+    //                                   'assets/images/alert.png',
+    //                                   width: 30,
+    //                                 ),
+    //                               ),
+    //                               Align(
+    //                                 alignment: Alignment.center,
+    //                                 child: GestureDetector(
+    //                                   child: Container(
+    //                                     margin: EdgeInsets.all(10),
+    //                                     child: Column(
+    //                                       children: [
+    //                                         Text(
+    //                                           '앗! 귓속말을 걸 수 없어요!',
+    //                                           style: TextStyle(
+    //                                               color: Colors.white,
+    //                                               fontWeight: FontWeight.w800,
+    //                                               fontSize: 15,
+    //                                               fontFamily: "Heebo"),
+    //                                         ),
+    //                                         Text(
+    //                                           '신고한 회원에게는 귓속말을 걸 수 없어요!',
+    //                                           style: TextStyle(
+    //                                               color: Colors.white,
+    //                                               fontWeight: FontWeight.w500,
+    //                                               fontSize: 10,
+    //                                               fontFamily: "Heebo"),
+    //                                         ),
+    //                                       ],
+    //                                     ),
+    //                                   ),
+    //                                   onTap: () {
+    //                                     if (reportedUser) {
+    //                                       Navigator.of(context).pop();
+    //                                     }
+    //                                   },
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   )
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //           Positioned(
+    //             bottom: 20,
+    //             child: AnimatedOpacity(
+    //               opacity: isValid ? 1.0 : 0.0,
+    //               duration: Duration(milliseconds: 500),
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   SizedBox(
+    //                     width: MediaQuery.of(context).size.width,
+    //                     // margin: EdgeInsets.only(top: 30),
+    //                     child: Column(
+    //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //                       children: [
+    //                         Container(
+    //                           margin: EdgeInsets.only(bottom: 5),
+    //                           child: Stack(
+    //                             alignment: Alignment.bottomCenter,
+    //                             children: [
+    //                               GestureDetector(
+    //                                 child: Container(
+    //                                   width: MediaQuery.of(context).size.width *
+    //                                       0.9,
+    //                                   decoration: BoxDecoration(
+    //                                       borderRadius:
+    //                                           BorderRadius.circular(10),
+    //                                       color: mainColor.MainColor),
+    //                                   height: 50,
+    //                                   child: Center(
+    //                                     child: Text(
+    //                                       '계속하기',
+    //                                       style: TextStyle(
+    //                                           fontFamily: 'Heebo',
+    //                                           color: Colors.white,
+    //                                           fontSize: 20,
+    //                                           fontWeight: FontWeight.w500),
+    //                                     ),
+    //                                   ),
+    //                                 ),
+    //                                 onTap: () async {
+    //                                   // 귓속말 걸기가...
+    //                                   if (isValid) {
+    //                                     await startWhisper();
+    //                                     if (!reportedUser) {
+    //                                       // 신고한 유저가 아닌 경우에만
+    //                                       Navigator.of(context).pop();
+    //                                     } else {
+    //                                       // 신고한 유저라면
+    //                                       setState(() {
+    //                                         isTap(false);
+    //                                       });
+    //                                     }
+    //                                   } else {
+    //                                     Navigator.of(context).pop();
+    //                                   }
+    //                                 },
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                         GestureDetector(
+    //                           child: Container(
+    //                             margin: EdgeInsets.only(top: 5),
+    //                             width: MediaQuery.of(context).size.width * 0.9,
+    //                             height: 50,
+    //                             decoration: BoxDecoration(
+    //                                 borderRadius: BorderRadius.circular(10),
+    //                                 color: mainColor.warning),
+    //                             // color: mainColor.MainColor,
+    //                             child: Center(
+    //                               child: Text(
+    //                                 '취소',
+    //                                 style: TextStyle(
+    //                                     fontFamily: 'Heebo',
+    //                                     color: Colors.white,
+    //                                     fontSize: 20,
+    //                                     fontWeight: FontWeight.w500),
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           onTap: () {
+    //                             setState(() {
+    //                               // Navigator.of(context).pop();
+    //                               isTap(false);
+    //                             });
+    //                           },
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   )
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ],
+    //       );
+    //     });
+    //   },
+    // );
+
+    
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
-          print('재빌드');
-
           return Stack(
             children: [
               Center(
@@ -1625,185 +2077,140 @@ class _AnswerItemState extends State<AnswerItem> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       side: BorderSide(color: mainColor.MainColor, width: 1.0),
                     ),
-                    // contentPadding: EdgeInsets.zero,
-                    content: Stack(
+                    content: Column(
+                      // 동적으로 눌린 유저의 정보 받아오기
+                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  // padding: EdgeInsets.only(top: 10),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Profile',
+                                    style: TextStyle(
+                                        color: mainColor.MainColor,
+                                        fontFamily: "Heebo",
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: GestureDetector(
+                                    child: Image.asset(
+                                      'assets/images/block.png',
+                                      fit: BoxFit.fill,
+                                    ),
+                                    onTap: () {
+                                      _ClickWarningButton(context,
+                                          widget.userId); // jsonData 줘야 함
+                                      print('신고 버튼 눌림');
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                            // margin: EdgeInsets.only(top: 5),
+                            width: 150,
+                            child: Image.asset(
+                              widget.image == "F"
+                                  ? 'assets/images/profile_woman.png'
+                                  : 'assets/images/profile_man.png',
+                              fit: BoxFit.fitHeight,
+                            )),
                         Column(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Stack(
+                            Text(
+                              widget.userName,
+                              style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 24,
+                                  color: mainColor.MainColor),
+                            ),
+                            Text(
+                              widget.mbti.toUpperCase(),
+                              style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  color: mainColor.MainColor),
+                            ),
+                            Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    // 동적으로 눌린 유저의 정보 받아오기
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                // padding: EdgeInsets.only(top: 10),
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  'Profile',
-                                                  style: TextStyle(
-                                                      color:
-                                                          mainColor.MainColor,
-                                                      fontFamily: "Heebo",
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 20),
+                                  child: GestureDetector(
+                                    onTap: (!isAlready)
+                                        ? () async {
+                                            await checkPoint();
+                                            setState(() {
+                                              if (!isAlready && enoughPoint) {
+                                                isTap(true);
+                                                HapticFeedback.vibrate();
+                                              }
+                                            });
+                                          }
+                                        : null,
+                                    child: Stack(
+                                      children: [
+                                        AnimatedContainer(
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          duration: Duration(milliseconds: 500),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              border: Border.all(
+                                                  color: isAlready || isValid
+                                                      ? mainColor.lightGray
+                                                      : mainColor.MainColor,
+                                                  width: 2)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                15, 3, 15, 5),
+                                            child: AnimatedDefaultTextStyle(
+                                              duration:
+                                                  Duration(milliseconds: 500),
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: isAlready || isValid
+                                                    ? mainColor.lightGray
+                                                    : mainColor.MainColor,
+                                              ),
+                                              child: Text(
+                                                '귓속말 걸기',
                                               ),
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                          width: 150,
-                                          child: Image.asset(
-                                            widget.image == "F"
-                                                ? 'assets/images/profile_woman.png'
-                                                : 'assets/images/profile_man.png',
-                                            fit: BoxFit.fitHeight,
-                                          )),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            widget.userName,
-                                            style: TextStyle(
-                                                fontFamily: "Pretendard",
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 24,
-                                                color: mainColor.MainColor),
-                                          ),
-                                          Text(
-                                            widget.mbti.toUpperCase(),
-                                            style: TextStyle(
-                                                fontFamily: "Pretendard",
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 15,
-                                                color: mainColor.MainColor),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Positioned.fill(
-                                  child: AnimatedOpacity(
-                                    duration: Duration(milliseconds: 500),
-                                    opacity: isValid ? 1.0 : 0.0,
-                                    child: ClipRRect(
-                                        child: BackdropFilter(
-                                            filter: ImageFilter.blur(
-                                                sigmaX: 7, sigmaY: 7),
-                                            child: Container(
-                                                color: Colors.transparent))),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    margin: EdgeInsets.only(top: 12),
-                                    width: 20,
-                                    height: 20,
-                                    child: GestureDetector(
-                                      child: Image.asset(
-                                        'assets/images/block.png',
-                                        fit: BoxFit.fill,
-                                      ),
-                                      onTap: () {
-                                        _ClickWarningButton(context,
-                                            widget.userId); // jsonData 줘야 함
-                                      },
+                                      ],
                                     ),
                                   ),
-                                ),
-                                Positioned.fill(
-                                  child: AnimatedOpacity(
-                                    duration: Duration(milliseconds: 500),
-                                    opacity: isValid ? 1.0 : 0.0,
-                                    child: Container(
-                                      margin: EdgeInsets.only(top: 30),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Text(
-                                            '귓속말을 걸면 10p가 차감됩니다.',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                fontFamily: "Heebo"),
-                                          ),
-                                          Text(
-                                            '계속 진행하시겠습니까?',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                fontFamily: "Heebo"),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                )
+                                // if (!isAlready)
+                                //   Text(
+                                //     '귓속말 걸기',
+                                //     style: TextStyle(
+                                //         fontSize: 10,
+                                //         fontWeight: FontWeight.w500,
+                                //         color: mainColor.lightGray),
+                                //   ),
                               ],
-                            ),
-                            GestureDetector(
-                              onTap: (!isAlready)
-                                  ? () async {
-                                      await checkPoint();
-                                      setState(() {
-                                        if (!isAlready && enoughPoint) {
-                                          isTap(true);
-                                          HapticFeedback.vibrate();
-                                        }
-                                      });
-                                    }
-                                  : null,
-                              child: Stack(
-                                children: [
-                                  AnimatedContainer(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    duration: Duration(milliseconds: 500),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(50),
-                                        border: Border.all(
-                                            color: isAlready || isValid
-                                                ? mainColor.lightGray
-                                                : mainColor.MainColor,
-                                            width: 2)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          15, 3, 15, 5),
-                                      child: AnimatedDefaultTextStyle(
-                                        duration: Duration(milliseconds: 500),
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          color: isAlready || isValid
-                                              ? mainColor.lightGray
-                                              : mainColor.MainColor,
-                                        ),
-                                        child: Text(
-                                          '귓속말 걸기',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
                             )
                           ],
                         ),
@@ -1983,7 +2390,40 @@ class _AnswerItemState extends State<AnswerItem> {
                               child: Stack(
                                 alignment: Alignment.bottomCenter,
                                 children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 110,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.warning),
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '귓속말을 걸면 10p가 차감됩니다.',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                          Text(
+                                            '계속하시겠습니까?',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                   GestureDetector(
+                                    // 귓속말을 걸고 나서, 포인트가 부족하다면 포인트 부족 안내가 떠야 함
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.9,
@@ -2004,7 +2444,6 @@ class _AnswerItemState extends State<AnswerItem> {
                                       ),
                                     ),
                                     onTap: () async {
-                                      // 귓속말 걸기가...
                                       if (isValid) {
                                         await startWhisper();
                                         if (!reportedUser) {
@@ -2077,8 +2516,6 @@ class _AnswerItemState extends State<AnswerItem> {
   Widget build(BuildContext context) {
     print(widget.key);
     return ListTile(
-      contentPadding: EdgeInsets.only(right: 15),
-
       subtitle: // 답변 내용
           Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2122,7 +2559,7 @@ class _AnswerItemState extends State<AnswerItem> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(bottom: 0),
+                margin: EdgeInsets.only(bottom: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

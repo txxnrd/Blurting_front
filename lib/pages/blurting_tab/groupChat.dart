@@ -636,6 +636,8 @@ class _GroupChat extends State<GroupChat> {
     if (response.statusCode == 200) {
       try {
         Map<String, dynamic> responseData = jsonDecode(response.body);
+print(responseData);
+
         if (mounted) {
           setState(() {
             currentIndex = responseData['questionNo'];

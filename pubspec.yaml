@@ -158,6 +158,11 @@ flutter:
     - assets/images/dashedLine.png
     - assets/images/unmatch.png
     - assets/images/reply.png
+    - assets/images/random_1.png
+    - assets/images/random_2.png
+    - assets/images/random_3.png
+    - assets/images/random_4.png
+    - assets/images/random_5.png
 
   fonts:
     - family: Pretendard

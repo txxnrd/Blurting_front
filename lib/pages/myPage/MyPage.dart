@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -62,6 +63,10 @@ class _MyPage extends State<MyPage> {
   List<String> imagePaths = [];
   Map<String, dynamic> userProfile = {};
   String nickName = 'unknown';
+  bool change = false;
+  Timer? _timer;
+  String randomImage = 'assets/images/random_1.png';
+  int time = 0;
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     // var token = getToken();
@@ -198,139 +203,188 @@ class _MyPage extends State<MyPage> {
     }
   }
 
-  void changeNickName() {
-    Navigator.pop(context);
-    changeName();
-  }
-
   void _showWarning(BuildContext context, String warningText1,
-      String warningText2, String text, Function function) {
+      String warningText2, String text) {
+    change = false;
+    randomImage = 'assets/images/random_1.png';
+    time = 0;
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.2),
-            body: Stack(
-              children: [
-                Positioned(
-                  bottom: 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(top: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              width: 260,
-                              height: 360,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Scaffold(
+                backgroundColor: Colors.black.withOpacity(0.2),
+                body: Stack(
+                  children: [
+                    Positioned(
+                      top: 130,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(top: 30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(60),
+                                width: 260,
+                                height: 360,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                                child: Image.asset(randomImage,
+                                    fit: BoxFit.fill,
+                                    alignment: Alignment.bottomCenter),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
-                              child: Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    height: 110,
+                              if (!change)
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
+                                  child: Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width * 0.9,
+                                        height: 110,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: mainColor.warning),
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                          margin: EdgeInsets.all(10),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                warningText1,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14,
+                                                    fontFamily: "Heebo"),
+                                              ),
+                                              Text(
+                                                warningText2,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14,
+                                                    fontFamily: "Heebo"),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width *
+                                              0.9,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: mainColor.MainColor),
+                                          height: 50,
+                                          child: Center(
+                                            child: Text(
+                                              text,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Heebo',
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            _timer = Timer.periodic(
+                                                Duration(milliseconds: 1000),
+                                                (Timer timer) {
+                                              if (mounted) {
+                                                // setState(() {
+                                                //   time++;
+                                                //   switch (time) {
+                                                //     case 1:
+                                                //       randomImage =
+                                                //           'assets/images/random_2.png';
+                                                //     case 2:
+                                                //       randomImage =
+                                                //           'assets/images/random_3.png';
+                                                //     case 3:
+                                                //       randomImage =
+                                                //           'assets/images/random_1.png';
+                                                //     case 4:
+                                                //       randomImage =
+                                                //           'assets/images/random_4.png';
+                                                //     case 5:
+                                                //       randomImage =
+                                                //           'assets/images/random_5.png';
+                                                //   }
+                                                //   print(time);
+
+                                                //   if (time == 6) {
+                                                //     _timer?.cancel();
+                                                //     Navigator.pop(context);
+                                                //   }
+                                                // });
+                                              } else {
+                                                timer.cancel();
+                                              }
+                                            });
+                                            change = true;
+                                            changeName();
+                                            Navigator.pop(context);
+
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if(!change)
+                                GestureDetector(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.9,
+                                    height: 50,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: mainColor.warning),
-                                    alignment: Alignment.topCenter,
-                                    child: Container(
-                                      margin: EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            warningText1,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                fontFamily: "Heebo"),
-                                          ),
-                                          Text(
-                                            warningText2,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                fontFamily: "Heebo"),
-                                          ),
-                                        ],
+                                    child: Center(
+                                      child: Text(
+                                        '취소',
+                                        style: TextStyle(
+                                            fontFamily: 'Heebo',
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: mainColor.MainColor),
-                                      height: 50,
-                                      child: Center(
-                                        child: Text(
-                                          text,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: 'Heebo',
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      function();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.warning),
-                                child: Center(
-                                  child: Text(
-                                    '취소',
-                                    style: TextStyle(
-                                        fontFamily: 'Heebo',
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                                  onTap: () {
+                                    if (mounted) {
+                                      setState(() {
+                                        _timer?.cancel();
+                                        Navigator.of(context).pop();
+                                      });
+                                    }
+                                  },
                                 ),
-                              ),
-                              onTap: () {
-                                if (mounted) {
-                                  setState(() {
-                                    Navigator.of(context).pop();
-                                  });
-                                }
-                              },
+                              ],
                             ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
           );
         });
   }
@@ -549,8 +603,8 @@ class _MyPage extends State<MyPage> {
                                 context,
                                 '닉네임을 바꾸기 위해선 10포인트가 필요합니다.',
                                 '계속하시겠습니까?',
-                                '계속하기',
-                                changeNickName);
+                                '계속하기'
+                                );
                           },
                           child: Ink(
                             child: Container(

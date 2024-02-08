@@ -860,7 +860,7 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
-        responseData = 3;       // 없애야 할 것
+        // responseData = 1;       // 없애야 할 것
 
         print(responseData);
         if (mounted) {
@@ -1193,8 +1193,10 @@ class _Blurting extends State<Blurting> {
       print(response.statusCode);
       await getnewaccesstoken(context, () async {}, null, null, null, null,
           sendArrow, [userId, day]);
-    } else {
-      print(response.statusCode);
+    } else if (response.statusCode == 400) {
+    }
+    else{
+            print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
