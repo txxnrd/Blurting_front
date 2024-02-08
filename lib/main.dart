@@ -50,9 +50,13 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => GroupChatProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => ScrollProvider())
-        // ChangeNotifierProvider(create: (context) => TokenProvider())
-        // 필요한 경우 다른 ChangeNotifierProvider를 추가할 수 있습니다.
+        ChangeNotifierProvider(create: (context) => ScrollProvider()),
+        ChangeNotifierProvider(create: (context) => FocusNodeProvider()),
+        ChangeNotifierProvider(create: (context) => ReplyProvider()),
+        ChangeNotifierProvider(create: (context) => QuestionNumberProvider()),
+        ChangeNotifierProvider(
+            create: (context) => ReplySelectedNumberProvider()),
+        ChangeNotifierProvider(create: (context) => MyChatReplyProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

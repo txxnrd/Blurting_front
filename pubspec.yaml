@@ -154,6 +154,7 @@ flutter:
     - assets/images/home_scroll_button.png
     - assets/images/dashedLine.png
     - assets/images/unmatch.png
+    - assets/images/reply.png
 
   fonts:
     - family: Pretendard

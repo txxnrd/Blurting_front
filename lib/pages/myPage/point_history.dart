@@ -217,15 +217,30 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       appBar: AppBar(
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0.0,
-        toolbarHeight: 80,
+        toolbarHeight: 70,
         title: Column(
           children: [
             AppbarDescription("포인트 내역"),
           ],
         ),
-        flexibleSpace: Container(
-          margin: EdgeInsets.only(top: 80),
-          child: Row(
+        // flexibleSpace: Container(
+        //   margin: EdgeInsets.only(top: 80),
+        //   child: ,
+        // ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 48, 48, 1),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
@@ -284,20 +299,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
               ),
             ],
           ),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(48, 48, 48, 1),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -363,11 +364,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                 trailing: Text(
                   entry['time'] ?? 'Unknown',
                   style: TextStyle(
-                    fontFamily: "Heebo",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 11,
-                    color: mainColor.Gray
-                  ),
+                      fontFamily: "Heebo",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11,
+                      color: mainColor.Gray),
                 ),
               ),
           ],
@@ -375,7 +375,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       },
     );
   }
-  
+
 // Function to format history text with pink square bullet
   Widget formatHistoryText(String history) {
     return RichText(
