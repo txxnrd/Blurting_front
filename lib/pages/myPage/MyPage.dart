@@ -3,6 +3,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/pages/mypage/mypage_edit.dart';
 import 'package:blurting/utils/util_widget.dart';
@@ -56,6 +57,7 @@ class _MyPage extends State<MyPage> {
   final PageController mainPageController = PageController(initialPage: 0);
   List<String> imagePaths = [];
   Map<String, dynamic> userProfile = {};
+  String nickName = 'unknown';
 
   Future<void> goToMyPageEdit(BuildContext context) async {
     // var token = getToken();
@@ -133,6 +135,7 @@ class _MyPage extends State<MyPage> {
       Map<String, dynamic> data = json.decode(response.body);
       setState(() {
         userProfile = data;
+        nickName = userProfile['nickname'];
         imagePaths = List<String>.from(userProfile['images']);
       });
     } else if (response.statusCode == 401) {
@@ -140,6 +143,178 @@ class _MyPage extends State<MyPage> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(context, fetchUserProfile);
     } else {}
+  }
+
+  Future<void> changeName() async {
+    final url = Uri.parse(API.nickname);
+    String savedToken = await getToken();
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $savedToken',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      if (response.body == 'false') {
+        showSnackBar(context, '포인트 부족!');
+      } else {
+        showSnackBar(context, '닉네임 변경 완료');
+        Map responseData = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point =
+                responseData['point'];
+            nickName = responseData['nickname'];
+          });
+        }
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      // ignore: use_build_context_synchronously
+      await getnewaccesstoken(
+          context, () async {}, null, changeName, null, null);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  void changeNickName() {
+    Navigator.pop(context);
+    changeName();
+  }
+
+  void _showWarning(BuildContext context, String warningText1,
+      String warningText2, String text, Function function) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.2),
+            body: Stack(
+              children: [
+                Positioned(
+                  bottom: 50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              width: 260,
+                              height: 360,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 110,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.warning),
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            warningText1,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                          Text(
+                                            warningText2,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      child: Center(
+                                        child: Text(
+                                          text,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      function();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.warning),
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                if (mounted) {
+                                  setState(() {
+                                    Navigator.of(context).pop();
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -193,8 +368,8 @@ class _MyPage extends State<MyPage> {
                 child: Container(
                   margin: EdgeInsets.only(top: 20),
                   alignment: Alignment.center,
-                  width: 259,
-                  height: 346,
+                  width: 260,
+                  height: 360,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -220,7 +395,7 @@ class _MyPage extends State<MyPage> {
                               width: 40,
                             ),
                             buildPinkBox(
-                                '#${userProfile['nickname']}' ?? 'Unknown'),
+                                '#$nickName'),
                             SizedBox(
                               width: 6,
                             ),
@@ -298,14 +473,14 @@ class _MyPage extends State<MyPage> {
                               fontWeight: FontWeight.w400,
                               color: Color(0XFFF66464)),
                         ),
-                        Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
+                        Padding(padding: EdgeInsets.fromLTRB(0, 7, 0, 0)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 SizedBox(width: 25),
-                                Text(userProfile['nickname'] ?? 'Unknown',
+                                Text(nickName,
                                     style: TextStyle(
                                         fontFamily: "Heebo",
                                         fontWeight: FontWeight.w700,
@@ -324,10 +499,6 @@ class _MyPage extends State<MyPage> {
                               padding: const EdgeInsets.fromLTRB(25, 0, 0, 15),
                               child: Row(
                                 children: [
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(right: 5),
-                                  //   child: Icon(Icons.check, color: mainColor.lightPink,),
-                                  // ),
                                   Text('🏡 ${userProfile['region'].toString() ?? 'Unknown'}',
                                       style: TextStyle(
                                           fontFamily: "Heebo",
@@ -340,8 +511,6 @@ class _MyPage extends State<MyPage> {
                           ],
                         ),
                         Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                        // _buildInfoRow('지역:',
-                        //     userProfile['region'].toString() ?? 'Unknown'),
                         _buildInfoRow('종교:',
                             userProfile['religion'].toString() ?? 'Unknown'),
                         _buildInfoRow('전공:',
@@ -354,6 +523,52 @@ class _MyPage extends State<MyPage> {
                                 'Unknown'),
                         _buildInfoRow('음주정도:',
                             getDrinkString(userProfile['drink']) ?? 'Unknown'),
+
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          child: InkWell(
+                            onTap: () async {
+                              _showWarning(
+                                  context,
+                                  '닉네임을 바꾸기 위해선 10포인트가 필요합니다.',
+                                  '계속하시겠습니까?',
+                                  '계속하기',
+                                  changeNickName);
+                            },
+                            child: Ink(
+                              child: Container(
+                                margin: EdgeInsets.only(top: 5),
+                                width: 150,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: mainColor.MainColor,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '랜덤 닉네임',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Container(
+                                margin: EdgeInsets.only(left: 7),
+                                      width: 20,
+                                      child: Image.asset(
+                                        'assets/images/random.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ]),

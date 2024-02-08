@@ -563,40 +563,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
-  Future<void> changeName() async {
-    final url = Uri.parse(API.nickname);
-    String savedToken = await getToken();
-
-    var response = await http.get(url, headers: {
-      'Authorization': 'Bearer $savedToken',
-      'Content-Type': 'application/json',
-    });
-
-    if (response.statusCode == 200) {
-      print(response.body);
-      if (response.body == 'false') {
-        showSnackBar(context, '포인트 부족!');
-      } else {
-        showSnackBar(context, '닉네임 변경 완료');
-        Map responseData = jsonDecode(response.body);
-        if (mounted) {
-          setState(() {
-            Provider.of<UserProvider>(context, listen: false).point =
-                responseData['point'];
-          });
-        }
-      }
-    } else if (response.statusCode == 401) {
-      //refresh token으로 새로운 accesstoken 불러오는 코드.
-      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      // ignore: use_build_context_synchronously
-      await getnewaccesstoken(
-          context, () async {}, null, changeName, null, null);
-    } else {
-      print(response.statusCode);
-    }
-  }
-
   Widget MBTIbox(double width, int index) {
     bool? isselected = selectedfunction(index);
     return Container(
@@ -644,7 +610,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
   void changeNickName() {
     Navigator.pop(context);
-    changeName();
+    // changeName();
   }
 
   void _showWarning(BuildContext context, String warningText1,
@@ -657,7 +623,7 @@ class _MyPageEditState extends State<MyPageEdit> {
             body: Stack(
               children: [
                 Positioned(
-                  bottom: 100,
+                  bottom: 50,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

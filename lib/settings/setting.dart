@@ -53,7 +53,7 @@ class _SettingPageState extends State<SettingPage> {
             body: Stack(
               children: [
                 Positioned(
-                  bottom: 100,
+                  bottom: 50,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -176,7 +176,7 @@ class _SettingPageState extends State<SettingPage> {
             body: Stack(
               children: [
                 Positioned(
-                  bottom: 100,
+                  bottom: 50,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

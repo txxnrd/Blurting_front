@@ -416,7 +416,7 @@ class _Whisper extends State<Whisper> {
                       body: Stack(
                         children: [
                           Positioned(
-                            bottom: 100,
+                            bottom: 50,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -574,7 +574,7 @@ class _Whisper extends State<Whisper> {
           ),
           Container(
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-            color: Colors.white.withOpacity(0.4),
+            color: Colors.white.withOpacity(0.2),
           ),
           Column(
             children: <Widget>[

@@ -56,7 +56,7 @@ class _chatListItemState extends State<ChatListItem> {
           return Stack(
             children: [
               Positioned(
-                bottom: 100,
+                bottom: 50,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -596,7 +596,7 @@ class _chattingList extends State<ChattingList> {
           ),
           Container(
             height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-            color: Colors.white.withOpacity(0.4),
+            color: Colors.white.withOpacity(0.2),
           ),
           SingleChildScrollView(
             padding: EdgeInsets.only(top: 280, bottom: 80), // 시작 위치에 여백 추가
