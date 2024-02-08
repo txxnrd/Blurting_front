@@ -68,116 +68,119 @@ class _UniversityPageState extends State<UniversityPage>
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
     Gender? _gender;
     if (widget.selectedGender == "Gender.male") {
       _gender = Gender.male;
     } else if (widget.selectedGender == "Gender.female") {
       _gender = Gender.female;
     }
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        sendBackRequest(context, false);
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          title: Text(''),
-          elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 25,
-              ),
-              Center(
-                child: Container(
-                    width: width * 0.8,
-                    child: ProgressBar(context, _progressAnimation!, _gender!)),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              smallTitleQuestion("당신의 대학은 어디인가요?"),
-              SizedBox(height: 30),
-              Autocomplete<String>(
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  if (textEditingValue.text == '') {
-                    return const Iterable.empty();
-                  }
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: Text(''),
+            elevation: 0,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 25,
+                ),
+                Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                smallTitleQuestion("당신의 대학은 어디인가요?"),
+                SizedBox(height: 30),
+                Autocomplete<String>(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return const Iterable.empty();
+                    }
 
-                  return universities.where((university) => university
-                      .toLowerCase()
-                      .contains(textEditingValue.text.toLowerCase()));
-                },
-                onSelected: (String selection) {
-                  int selectedIndex = universities.indexOf(selection);
-                  selectedUniversity = selection;
-                  // 선택된 인덱스를 사용하거나 저장
-                  if (selectedIndex != null) {
-                    Domain = university_domain[selectedIndex!];
-                    setState(() {
-                      IsValid = true;
-                    });
-                  }
-                },
-                fieldViewBuilder: (BuildContext context,
-                    TextEditingController textEditingController,
-                    FocusNode focusNode,
-                    VoidCallback onFieldSubmitted) {
-                  return TextField(
-                    controller: textEditingController,
-                    focusNode: focusNode,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      hintText: '당신의 대학교를 입력하세요',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: mainColor.lightGray,
-                        ), // 초기 테두리 색상
+                    return universities.where((university) => university
+                        .toLowerCase()
+                        .contains(textEditingValue.text.toLowerCase()));
+                  },
+                  onSelected: (String selection) {
+                    int selectedIndex = universities.indexOf(selection);
+                    selectedUniversity = selection;
+                    // 선택된 인덱스를 사용하거나 저장
+                    if (selectedIndex != null) {
+                      Domain = university_domain[selectedIndex!];
+                      setState(() {
+                        IsValid = true;
+                      });
+                    }
+                  },
+                  fieldViewBuilder: (BuildContext context,
+                      TextEditingController textEditingController,
+                      FocusNode focusNode,
+                      VoidCallback onFieldSubmitted) {
+                    return TextField(
+                      controller: textEditingController,
+                      focusNode: focusNode,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        hintText: '당신의 대학교를 입력하세요',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: mainColor.lightGray,
+                          ), // 초기 테두리 색상
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: mainColor.lightGray,
+                          ), // 입력할 때 테두리 색상
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: mainColor.pink,
+                          ), // 선택/포커스 됐을 때 테두리 색상
+                        ),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: mainColor.lightGray,
-                        ), // 입력할 때 테두리 색상
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: mainColor.pink,
-                        ), // 선택/포커스 됐을 때 테두리 색상
-                      ),
-                    ),
-                    onChanged: (value) {
-                      InputUniversity(value);
-                    },
-                    style: DefaultTextStyle.of(context).style,
-                  );
-                },
-              ),
-              SizedBox(height: 312),
-            ],
+                      onChanged: (value) {
+                        InputUniversity(value);
+                      },
+                      style: DefaultTextStyle.of(context).style,
+                    );
+                  },
+                ),
+                SizedBox(height: 312),
+              ],
+            ),
           ),
-        ),
-        floatingActionButton: Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-          child: InkWell(
-            splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-            child: signupButton(text: '다음', IsValid: IsValid),
-            onTap: (IsValid)
-                ? () {
-                    _increaseProgressAndNavigate();
-                  }
-                : null,
+          floatingActionButton: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
+            child: InkWell(
+              splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+              child: signupButton(text: '다음', IsValid: IsValid),
+              onTap: (IsValid)
+                  ? () {
+                      _increaseProgressAndNavigate();
+                    }
+                  : null,
+            ),
           ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked, // 버튼의 위치
         ),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
   }

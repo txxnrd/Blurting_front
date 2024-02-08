@@ -49,7 +49,7 @@ class _EmailPageState extends State<EmailPage>
     );
     _progressAnimation = Tween<double>(
       begin: 14 / 15,
-      end: 14.02 / 15,
+      end: 14.7 / 15,
     ).animate(
         CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
       ..addListener(() {
@@ -104,7 +104,6 @@ class _EmailPageState extends State<EmailPage>
   Future<void> _sendPostRequest() async {
     try {
       trial += 1;
-      certification = true;
       var url = Uri.parse(API.signupemail);
       if (trial == 1) old_token = await getToken();
       print("old_token");
@@ -125,6 +124,7 @@ class _EmailPageState extends State<EmailPage>
         Certification = true;
         var data = json.decode(response.body);
         if (data['signupToken'] != null && trial > 0) {
+          certification = true;
           var token = data['signupToken'];
           await saveToken(token);
         } else {
@@ -136,7 +136,6 @@ class _EmailPageState extends State<EmailPage>
         showSnackBar(context, message);
       }
     } catch (e) {
-      trial = 0;
       showSnackBar(context, '이메일 전송이 완료 되지 않았습니디.');
     }
   }
@@ -274,10 +273,8 @@ class _EmailPageState extends State<EmailPage>
                       height: 25,
                     ),
                     Center(
-                      child: Container(
-                          width: width * 0.8,
-                          child: ProgressBar(
-                              context, _progressAnimation!, _gender!)),
+                      child:
+                          ProgressBar(context, _progressAnimation!, _gender!),
                     ),
                     SizedBox(
                       height: 50,

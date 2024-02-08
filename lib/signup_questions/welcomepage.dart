@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:blurting/pages/policy/policyOne.dart';
 import 'package:blurting/pages/useguide/useguidepageone.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +28,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              UseGuidePageOne(),
+          pageBuilder: (context, animation, secondaryAnimation) => PolicyOne(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = 0.0;
             const end = 1.0;
