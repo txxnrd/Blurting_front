@@ -283,7 +283,7 @@ class _Whisper extends State<Whisper> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Container(
-          margin: EdgeInsets.only(top: 20, left: 10),
+          margin: EdgeInsets.only(top: 20, left: 4),
           child: InkWell(
               child: Icon(
                 Icons.arrow_back_ios,
