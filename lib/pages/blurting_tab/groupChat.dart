@@ -484,6 +484,7 @@ class _GroupChat extends State<GroupChat> {
         'auth': {'authorization': 'Bearer $savedToken'},
       });
 
+      print(rooms[currentIndex].replies);
       try {
         Map<String, dynamic> responseData = jsonDecode(response.body);
 
@@ -513,6 +514,8 @@ class _GroupChat extends State<GroupChat> {
             }
             int index = 0;
             // 노태윤에게. 여기가 답변 추가하는 부분인데 여기만 수정하면 됨
+
+            //답변을 받음
             for (final answerData in responseData['answers']) {
               index++;
               if (answerData['room'] != null) {
@@ -578,7 +581,6 @@ class _GroupChat extends State<GroupChat> {
                           index: index,
                         ),
                         childReplies));
-
                     isBlock[currentIndex] = true; // true가 맞음
                   } else {
                     rooms[currentIndex].replies.add(Reply(
@@ -601,6 +603,8 @@ class _GroupChat extends State<GroupChat> {
                         ),
                         childReplies)); // 걍... 소켓임 신경 쓸 필요 없음
                   }
+                  print("추가된 답변 ${rooms[currentIndex].replies}");
+                  print("윽");
                 });
               }
             }
@@ -617,6 +621,7 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> fetchIndexComments(int no) async {
+    print("fetchIndexComments 실행 완료!!");
     rooms[currentIndex].replies.clear();
 
     // 선택된 QnA
@@ -632,6 +637,7 @@ class _GroupChat extends State<GroupChat> {
         'Content-Type': 'application/json',
       },
     );
+    print(savedToken);
 
     if (response.statusCode == 200) {
       try {
@@ -639,33 +645,47 @@ class _GroupChat extends State<GroupChat> {
         if (mounted) {
           setState(() {
             currentIndex = responseData['questionNo'];
+            print("질문 번호 ${responseData['questionNo']}");
             _question = responseData['question'];
             currentQuestionId = responseData['questionId'];
           });
           int index = 0;
-          for (final answerData in responseData['answers']) {
+          print("답변 개수 ${responseData['answers'].length}");
+
+          for (var answerData in responseData['answers'].toList()) {
             index++;
+            print("index ${index}");
             if (answerData['room'] != null) {
               isAlready = true;
             } else {
               isAlready = false;
             }
             List<ChildReply> childReplies = [];
-
-            for (var reply in answerData['reply']) {
+            print("애초에 여기부터 실행이 안되나?");
+            for (var reply in answerData['reply'].toList()) {
+              var writerUserId;
+              print("reply가 제대로 안돼서 출력이 안되나"); //여기까지는 잘됨
+              if (reply['writerUserId'] == null) {
+                writerUserId = 0;
+              } else {
+                writerUserId = reply['writerUserId'];
+              }
               if (answerData['userId'] ==
                   Provider.of<UserProvider>(context, listen: false).userId) {
                 if (reply['writerUserId'] ==
                     Provider.of<UserProvider>(context, listen: false).userId) {
+                  print("내가 쓴글에 내가 쓴 답변 추가 완료");
                   childReplies.add(ChildReply(MyChatReplyOtherPerson(
-                    writerUserId: reply['writerUserId'],
+                    writerUserId: writerUserId,
                     writerUserName: "나의 답변",
                     content: reply['content'],
                     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
                   )));
                 } else {
+                  print("내가 쓴글에 남이 쓴 답변 추가 완료");
+
                   childReplies.add(ChildReply(MyChatReplyOtherPerson(
-                    writerUserId: reply['writerUserId'],
+                    writerUserId: writerUserId,
                     writerUserName: reply['writerUserName'],
                     content: reply['content'],
                     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
@@ -676,8 +696,10 @@ class _GroupChat extends State<GroupChat> {
                     Provider.of<UserProvider>(context, listen: false).userId)
                 //다른 사람이 쓴 글에 내가 답변을 달았을 때 우히힝
                 {
+                  print("남이 쓴글에 내가 쓴 답변 추가 완료");
+
                   childReplies.add(ChildReply(OtherChatReply(
-                    writerUserId: reply['writerUserId'], // 답변 내용
+                    writerUserId: writerUserId, // 답변 내용
                     writerUserName: "나의 답변", // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                     content: reply['content'],
 
@@ -686,56 +708,68 @@ class _GroupChat extends State<GroupChat> {
                     // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
                   )));
                 } else {
+                  print("남이 쓴글에 남이 쓴 답변 추가 완료");
+
                   childReplies.add(ChildReply(OtherChatReply(
-                    writerUserId: reply['writerUserId'], // 답변 내용
+                    writerUserId: writerUserId, // 답변 내용
                     writerUserName:
                         reply['writerUserName'], // 읽었는지인데 귓속말에서만 필요해서 true로 처리
                     content: reply['content'],
 
                     createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-
                     // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
                   )));
                 }
               }
             }
-            setState(() {
-              if (answerData['userId'] ==
-                  Provider.of<UserProvider>(context, listen: false).userId) {
-                rooms[currentIndex].replies.add(Reply(
-                    MyChat(
-                        key: ObjectKey(answerData['id']),
-                        message: answerData['answer'],
-                        createdAt: '',
-                        read: true,
-                        answerID: answerData['id'],
-                        isBlurting: true,
-                        likedNum: answerData['likes'],
-                        index: index),
-                    childReplies));
-                isBlock[currentIndex] = true; // true가 맞음
-              } else {
-                rooms[currentIndex].replies.add(Reply(
-                    AnswerItem(
+
+            print("여기도 잘됨");
+
+            if (answerData['userId'] ==
+                Provider.of<UserProvider>(context, listen: false).userId) {
+              print("내가 쓴 답변 추가 완료");
+              rooms[currentIndex].replies.add(Reply(
+                  MyChat(
                       key: ObjectKey(answerData['id']),
                       message: answerData['answer'],
-                      iLike: answerData['ilike'],
+                      createdAt: '',
+                      read: true,
+                      answerID: answerData['id'],
+                      isBlurting: true,
                       likedNum: answerData['likes'],
-                      userId: answerData['userId'],
-                      userName: answerData['userNickname'],
-                      isAlready: isAlready,
-                      image: answerData['userSex'],
-                      mbti: answerData['mbti'] ?? '',
-                      answerId: answerData['id'],
-                      socket: socket,
-                      index: index,
-                    ),
-                    childReplies));
-              }
-            });
+                      index: index),
+                  childReplies));
+              isBlock[currentIndex] = true; // true가 맞음
+            } else {
+              print("남이 쓴 답변 추가 완료");
+              rooms[currentIndex].replies.add(Reply(
+                  AnswerItem(
+                    key: ObjectKey(answerData['id']),
+                    message: answerData['answer'],
+                    iLike: answerData['ilike'],
+                    likedNum: answerData['likes'],
+                    userId: answerData['userId'],
+                    userName: answerData['userNickname'],
+                    isAlready: isAlready,
+                    image: answerData['userSex'],
+                    mbti: answerData['mbti'] ?? '',
+                    answerId: answerData['id'],
+                    socket: socket,
+                    index: index,
+                  ),
+                  childReplies));
+            }
+            print("여기는 실행이 안됨");
+
+            for (var reply in rooms[currentIndex].replies) {
+              print("추가가 된 reply들 ${reply}");
+            }
+            print("추가된 답변 개수 ${rooms[currentIndex].replies.length}");
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        print("예외 발생: $e");
+      }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -747,6 +781,7 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> SendAnswer(String answer, int questionId, int index) async {
+    print(answer);
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget newAnswer = MyChat(
@@ -773,6 +808,8 @@ class _GroupChat extends State<GroupChat> {
         Map responseData = jsonDecode(response.body);
         Provider.of<UserProvider>(context, listen: false).point =
             responseData['point'];
+
+        print("responseData : ${responseData}");
       } else {}
 
       // 성공적으로 응답

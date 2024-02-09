@@ -210,10 +210,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
   @override
   void initState() {
     super.initState();
-
     focusNode = FocusNode();
     //     Provider.of<FocusNodeProvider>(context, listen: false).focusNode;
-    // focusNode.unfocus();
+    focusNode.unfocus();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         isPocusState(true);
@@ -222,8 +221,11 @@ class _CustomInputFieldState extends State<CustomInputField> {
       }
     });
     inputPointValid(false);
-    Provider.of<FocusNodeProvider>(context, listen: false).focusnode =
-        focusNode;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<FocusNodeProvider>(context, listen: false).focusnode =
+          focusNode;
+    });
   }
 
   @override
