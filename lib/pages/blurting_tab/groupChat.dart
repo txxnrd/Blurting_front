@@ -240,7 +240,7 @@ class _GroupChat extends State<GroupChat> {
               Positioned(
                   right: 0,
                   child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 8, 10, 0),
+                      margin: EdgeInsets.fromLTRB(0, 8, 14, 0),
                       child: pointAppbar())),
             ],
           ),
@@ -642,6 +642,8 @@ class _GroupChat extends State<GroupChat> {
     if (response.statusCode == 200) {
       try {
         Map<String, dynamic> responseData = jsonDecode(response.body);
+print(responseData);
+
         if (mounted) {
           setState(() {
             currentIndex = responseData['questionNo'];
