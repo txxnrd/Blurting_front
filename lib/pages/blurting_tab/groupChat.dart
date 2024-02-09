@@ -191,7 +191,7 @@ class _GroupChat extends State<GroupChat> {
             // alignment: Alignment.center,
             children: [
               Positioned(
-                left: 8,
+                left: 5,
                 child: IconButton(
                   icon: Icon(
                     Icons.arrow_back_ios,

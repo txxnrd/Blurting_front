@@ -569,8 +569,9 @@ class OtherChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+    contentPadding: EdgeInsets.only(left: 15),
         subtitle: Container(
-      margin: EdgeInsets.only(left: 20, bottom: 20, top: 0),
+      margin: EdgeInsets.only(bottom: 20, top: 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -680,6 +681,7 @@ class _MyChatState extends State<MyChat> {
         Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
             true;
       },
+    contentPadding: EdgeInsets.only(right: 14),
       subtitle: // 답변 내용
           Container(
         margin: EdgeInsets.only(left: 20, bottom: 0, top: 0),
@@ -2059,6 +2061,7 @@ class _AnswerItemState extends State<AnswerItem> {
   Widget build(BuildContext context) {
     print(widget.key);
     return ListTile(
+      contentPadding: EdgeInsets.only(left: 10),
       subtitle: // 답변 내용
           Row(
         crossAxisAlignment: CrossAxisAlignment.start,
