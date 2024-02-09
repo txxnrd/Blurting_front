@@ -527,6 +527,13 @@ class _GroupChat extends State<GroupChat> {
                 List<ChildReply> childReplies = [];
 
                 for (var reply in answerData['reply']) {
+                  var writerUserId;
+                  print("reply가 제대로 안돼서 출력이 안되나"); //여기까지는 잘됨
+                  if (reply['writerUserId'] == null) {
+                    writerUserId = 0;
+                  } else {
+                    writerUserId = reply['writerUserId'];
+                  }
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
                           .userId) // 내가 쓴 글인지 아닌지 판별
@@ -537,7 +544,7 @@ class _GroupChat extends State<GroupChat> {
 
                     {
                       childReplies.add(ChildReply(MyChatReplyOtherPerson(
-                        writerUserId: reply['writerUserId'],
+                        writerUserId: writerUserId,
                         writerUserName: reply['writerUserName'],
                         content: reply['content'],
                         createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
@@ -545,7 +552,7 @@ class _GroupChat extends State<GroupChat> {
                     } else {
                       //답글은 내가 쓴게 아님
                       childReplies.add(ChildReply(MyChatReplyOtherPerson(
-                        writerUserId: reply['writerUserId'],
+                        writerUserId: writerUserId,
                         writerUserName: reply['writerUserName'],
                         content: reply['content'],
                         createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
@@ -553,7 +560,7 @@ class _GroupChat extends State<GroupChat> {
                     }
                   } else {
                     childReplies.add(ChildReply(OtherChatReply(
-                      writerUserId: reply['writerUserId'],
+                      writerUserId: writerUserId,
                       writerUserName: reply['writerUserName'],
                       content: reply['content'],
                       createdAt: '',
@@ -642,7 +649,7 @@ class _GroupChat extends State<GroupChat> {
     if (response.statusCode == 200) {
       try {
         Map<String, dynamic> responseData = jsonDecode(response.body);
-print(responseData);
+        print(responseData);
 
         if (mounted) {
           setState(() {
