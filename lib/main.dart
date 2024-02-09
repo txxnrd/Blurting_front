@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:js';
 import 'package:blurting/signup_questions/Utils.dart';
 import 'package:blurting/signup_questions/email.dart';
+import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
@@ -10,12 +13,16 @@ import 'package:blurting/mainapp.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
 
@@ -134,4 +141,75 @@ class MyApp extends StatelessWidget {
           : LoginPage(),
     );
   }
+  
+Future<bool> _initialize() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    var storeVersion = Platform.isAndroid
+        ? await _getAndroidStoreVersion(packageInfo)
+        : Platform.isIOS
+            ? await _getiOSStoreVersion(packageInfo)
+            : "";
+
+    print('my device version : ${packageInfo.version}');
+    print('current store version: ${storeVersion.toString()}');
+
+    if (storeVersion.toString().compareTo(packageInfo.version) != 0 &&
+        storeVersion.toString().compareTo("") != 0) {
+      final int result = await CustomDialog().showTwoButtonDialog(context, ConstantString.update_need_text);
+      if (result == 0) {
+        launch(Constant.getStoreUrlValue(
+            packageInfo.packageName, packageInfo.appName));
+      }
+    }
+  }
+
+  String? getStoreUrlValue(String packageName, String appName) {
+    if (Platform.isAndroid) {
+      return "https://play.google.com/store/apps/details?id=$packageName";
+    } else if (Platform.isIOS)
+      return "http://apps.apple.com/kr/app/$appName/id${ConstantString.APP_STORE_ID}";
+    else
+      return null;
+  }
+}
+
+Future<String> _getAndroidStoreVersion(PackageInfo packageInfo) async {
+  final id = packageInfo.packageName;
+  final uri =
+      Uri.https("play.google.com", "/store/apps/details", {"id": "$id"});
+  final response = await http.get(uri);
+  if (response.statusCode != 200) {
+    debugPrint('Can\'t find an app in the Play Store with the id: $id');
+    return "";
+  }
+  final document = parse(response.body);
+  final elements = document.getElementsByClassName('hAyfc');
+  final versionElement = elements.firstWhere(
+    (elm) => elm.querySelector('.BgcNfc')!.text == 'Current Version',
+  );
+  return versionElement.querySelector('.htlgb')!.text;
+}
+
+Future<dynamic> _getiOSStoreVersion(PackageInfo packageInfo) async {
+  final id = packageInfo.packageName;
+
+  final parameters = {"bundleId": "$id"};
+
+  var uri = Uri.https("itunes.apple.com", "/lookup", parameters);
+  final response = await http.get(uri);
+
+  if (response.statusCode != 200) {
+    debugPrint('Can\'t find an app in the App Store with the id: $id');
+    return "";
+  }
+
+  final jsonObj = json.decode(response.body);
+
+  /* 일반 print에서 일정 길이 이상의 문자열이 들어왔을 때, 
+     해당 길이만큼 문자열이 출력된 후 나머지 문자열은 잘린다.
+     debugPrint의 경우 일반 print와 달리 잘리지 않고 여러 행의 문자열 형태로 출력된다. */
+
+  // debugPrint(response.body.toString());
+  return jsonObj['results'][0]['version'];
 }
