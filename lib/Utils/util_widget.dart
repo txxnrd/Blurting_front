@@ -1713,7 +1713,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                     child: Stack(
                                       children: [
                                         AnimatedContainer(
-                                          margin: EdgeInsets.only(bottom: 10),
+                                          margin: EdgeInsets.only(bottom: 0),
                                           duration: Duration(milliseconds: 500),
                                           decoration: BoxDecoration(
                                               color: Colors.white,

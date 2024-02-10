@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:js';
 import 'package:blurting/signup_questions/Utils.dart';
 import 'package:blurting/signup_questions/email.dart';
+import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
@@ -11,13 +14,17 @@ import 'package:flutter/services.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:store_redirect/store_redirect.dart';
+
 
 import 'notification.dart'; // phonenumber.dart를 임포트
 
@@ -225,7 +232,7 @@ class _MyAppState extends State<MyApp> {
       home: widget.isLoggedIn
           ? MainApp(
               currentIndex: 0,
-            )
+            ) 
           : LoginPage(),
     );
   }
