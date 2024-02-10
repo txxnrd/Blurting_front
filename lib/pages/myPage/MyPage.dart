@@ -219,7 +219,7 @@ class _MyPage extends State<MyPage> {
                 body: Stack(
                   children: [
                     Positioned(
-                      top: 130,
+                      top: 110,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
