@@ -9,6 +9,8 @@ class API {
   /*signup 과정에서 필요한 api */
   static final String sendphone =
       "${ServerEndpoints.serverEndpoint}/auth/signup/phonenumber";
+  static final String version =
+      "${ServerEndpoints.serverEndpoint}/home/version";
   static final String alreadyuser =
       "${ServerEndpoints.serverEndpoint}/auth/already/signed";
   static final String alreadyusercheck =
@@ -63,7 +65,8 @@ class API {
   static final String like = "${ServerEndpoints.serverEndpoint}/blurting/like/";
   static final String blurtingInfo =
       "${ServerEndpoints.serverEndpoint}/blurting/group-info";
-  static final String result = "${ServerEndpoints.serverEndpoint}/blurting/result";
+  static final String result =
+      "${ServerEndpoints.serverEndpoint}/blurting/result";
   /*ARROW */
   static final String sendArrow =
       "${ServerEndpoints.serverEndpoint}/blurting/arrow/";

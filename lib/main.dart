@@ -76,7 +76,7 @@ void showForceUpdateDialog(bool forceUpdate, BuildContext context) {
 }
 
 Future<String> fetchLatestVersionFromServer() async {
-  var url = Uri.parse(API.user); //여기 수정해야댐
+  var url = Uri.parse(API.version); //여기 수정해야댐
   var response = await http.get(url);
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
