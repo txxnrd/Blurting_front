@@ -47,6 +47,8 @@ dependencies:
   dio: ^5.3.3
   shared_preferences: ^2.2.2
   intl: ^0.18.1
+  package_info: ^2.0.2
+  store_redirect: ^2.0.1
   flarelane_flutter: 1.4.0
   top_snackbar_flutter: ^3.1.0
   flutter_native_splash: ^2.3.8
