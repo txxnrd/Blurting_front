@@ -76,7 +76,7 @@ class _PersonalityPageState extends State<PersonalityPage>
 
   List<String> characteristic = [
     "개성적인",
-    "책임감있는",
+    "유교중시",
     "열정적인",
     "귀여운",
     "상냥한",
@@ -84,11 +84,11 @@ class _PersonalityPageState extends State<PersonalityPage>
     "낙천적인",
     "유머있는",
     "차분한",
-    "지적인",
+    "집돌이",
     "섬세한",
-    "무뚝뚝한",
-    "외향적인",
-    "내향적인"
+    "오타쿠",
+    "MZ",
+    "갓생러"
   ];
 
   void updateSelectedCharacteristics() {
@@ -235,7 +235,8 @@ class _PersonalityPageState extends State<PersonalityPage>
               SizedBox(
                 height: 25,
               ),
-              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
+              Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),
@@ -245,7 +246,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
                 children: [
                   customPersonalityCheckBox('개성있는', 0, width, height),
-                  customPersonalityCheckBox('책임감있는', 1, width, height),
+                  customPersonalityCheckBox('유교중시', 1, width, height),
                 ],
               ),
               SizedBox(
@@ -285,7 +286,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   customPersonalityCheckBox('차분한', 8, width, height),
-                  customPersonalityCheckBox('지적인', 9, width, height),
+                  customPersonalityCheckBox('집돌이', 9, width, height),
                 ],
               ),
               SizedBox(
@@ -295,7 +296,7 @@ class _PersonalityPageState extends State<PersonalityPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   customPersonalityCheckBox('섬세한', 10, width, height),
-                  customPersonalityCheckBox('무뚝뚝한', 11, width, height),
+                  customPersonalityCheckBox('오타쿠', 11, width, height),
                 ],
               ),
               SizedBox(
@@ -304,8 +305,8 @@ class _PersonalityPageState extends State<PersonalityPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  customPersonalityCheckBox('외향적인', 12, width, height),
-                  customPersonalityCheckBox('내향적인', 13, width, height),
+                  customPersonalityCheckBox('MZ', 12, width, height),
+                  customPersonalityCheckBox('갓생러', 13, width, height),
                 ],
               ),
               SizedBox(height: 26),
