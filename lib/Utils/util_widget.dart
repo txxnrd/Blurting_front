@@ -569,61 +569,61 @@ class OtherChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-    contentPadding: EdgeInsets.only(left: 15),
+        contentPadding: EdgeInsets.only(left: 15),
         subtitle: Container(
-      margin: EdgeInsets.only(bottom: 20, top: 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ClipPath(
-            clipper: ReplyClipper(),
-            child: Container(
-              width: 200,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Color.fromRGBO(255, 238, 238, 1),
+          margin: EdgeInsets.only(bottom: 20, top: 0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ClipPath(
+                clipper: ReplyClipper(),
+                child: Container(
+                  width: 200,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Color.fromRGBO(255, 238, 238, 1),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 10, right: 10, top: 5, bottom: 5),
+                        child: Text(
+                          message,
+                          style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              child: Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+                children: [
                   Container(
-                    margin:
-                        EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                    margin: EdgeInsets.only(top: 5, left: 5),
                     child: Text(
-                      message,
+                      createdAt,
                       style: TextStyle(
                         fontFamily: "Pretendard",
-                        fontSize: 12,
-                        color: Colors.black,
+                        fontSize: 10,
+                        color: mainColor.Gray,
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 5, left: 5),
-                child: Text(
-                  createdAt,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontSize: 10,
-                    color: mainColor.Gray,
-                  ),
-                ),
-              ),
             ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 }
 
@@ -667,7 +667,7 @@ class _MyChatState extends State<MyChat> {
         print("음..?");
         print(widget.answerID);
         print(widget.index);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(Duration(milliseconds: 30), () {
           Provider.of<FocusNodeProvider>(context, listen: false)
               .focusNode
               .requestFocus();
@@ -681,7 +681,7 @@ class _MyChatState extends State<MyChat> {
         Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
             true;
       },
-    contentPadding: EdgeInsets.only(right: 14),
+      contentPadding: EdgeInsets.only(right: 14),
       subtitle: // 답변 내용
           Container(
         margin: EdgeInsets.only(left: 20, bottom: 0, top: 0),
@@ -2133,8 +2133,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                   Provider.of<QuestionNumberProvider>(context,
                                           listen: false)
                                       .questionId = widget.answerId;
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
+                                  Future.delayed(Duration(milliseconds: 30),
+                                      () {
                                     Provider.of<FocusNodeProvider>(context,
                                             listen: false)
                                         .focusNode

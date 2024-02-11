@@ -501,6 +501,8 @@ class _MyPageEditState extends State<MyPageEdit> {
             String imageUrl = urlList[0]['url'];
 
             setState(() {
+              modifiedFlags["image"] = true;
+
               _image2Url = imageUrl;
               if (image_uploaded_count == image_uploading_count) IsValid = true;
             });
@@ -554,6 +556,8 @@ class _MyPageEditState extends State<MyPageEdit> {
             String imageUrl = urlList[0]['url'];
 
             setState(() {
+              modifiedFlags["image"] = true;
+
               _image3Url = imageUrl;
               if (image_uploaded_count == image_uploading_count) IsValid = true;
             });
@@ -888,7 +892,8 @@ class _MyPageEditState extends State<MyPageEdit> {
           ),
         ),
         actions: [
-          Container(margin: EdgeInsets.only(top: 20, right: 4), child: pointAppbar()),
+          Container(
+              margin: EdgeInsets.only(top: 20, right: 4), child: pointAppbar()),
           SizedBox(width: 10),
         ],
       ),
