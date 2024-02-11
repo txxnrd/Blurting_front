@@ -29,7 +29,49 @@ Future<bool> checkAppVersion() async {
   // 서버로부터 최신 버전 정보 가져오기 (가상의 함수, 실제 구현 필요)
   String latestVersion = await fetchLatestVersionFromServer();
 
-  if (currentVersion != latestVersion) {
+  bool isupdateneeded = isUpDateNeeded(currentVersion, latestVersion);
+
+  return isupdateneeded;
+}
+
+bool isCurrentVersionUpToDate(String currentVersion, String latestVersion) {
+  List<int> currentParts = currentVersion.split('.').map(int.parse).toList();
+  List<int> latestParts = latestVersion.split('.').map(int.parse).toList();
+
+  // 길이가 다르면 비교를 위해 짧은 쪽을 0으로 채웁니다.
+  int lengthDifference = currentParts.length - latestParts.length;
+  if (lengthDifference > 0) {
+    latestParts.addAll(List.filled(lengthDifference, 0));
+  } else if (lengthDifference < 0) {
+    currentParts.addAll(List.filled(-lengthDifference, 0));
+  }
+
+  // 각 부분을 순차적으로 비교합니다.
+  for (int i = 0; i < currentParts.length; i++) {
+    if (currentParts[i] > latestParts[i]) {
+      return true; // 현재 버전이 더 높습니다.
+    } else if (currentParts[i] < latestParts[i]) {
+      return false; // 최신 버전이 더 높습니다.
+    }
+  }
+
+  // 모든 부분이 같으면, 현재 버전은 최신 버전입니다.
+  return true;
+}
+
+bool isUpDateNeeded(String currentVersion, String latestVersion) {
+  List<int> currentParts = currentVersion.split('.').map(int.parse).toList();
+  List<int> latestParts = latestVersion.split('.').map(int.parse).toList();
+
+  // 길이가 다르면 비교를 위해 짧은 쪽을 0으로 채웁니다.
+  int lengthDifference = currentParts.length - latestParts.length;
+  if (lengthDifference > 0) {
+    latestParts.addAll(List.filled(lengthDifference, 0));
+  } else if (lengthDifference < 0) {
+    currentParts.addAll(List.filled(-lengthDifference, 0));
+  }
+
+  if (currentParts[1] == latestParts[1]) {
     return false;
   } else {
     return true;

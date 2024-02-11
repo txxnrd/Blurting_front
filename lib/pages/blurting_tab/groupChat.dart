@@ -405,7 +405,7 @@ class _GroupChat extends State<GroupChat> {
               controller: _controller,
               sendFunction: SendAnswer,
               isBlock: isBlock[currentIndex],
-              blockText: "이미 답변이 완료된 질문입니다.",
+              blockText: "이미 답변이 완료된 질문입니다. 상대방의 답변을 눌러 답글을 남겨 보세요.",
               hintText: "내 생각 쓰기...",
               questionId: 1,
               isBlurting: true),
@@ -416,7 +416,7 @@ class _GroupChat extends State<GroupChat> {
               controller: _controller,
               sendFunction: SendReply,
               isBlock: false,
-              blockText: "이미 답변이 완료된 질문입니다.",
+              blockText: "이미 답변이 완료된 질문입니다. 상대방의 답변을 눌러 답글을 남겨 보세요.",
               hintText: "내 생각 쓰기...",
               questionId: 1,
               isBlurting: true),
@@ -528,7 +528,6 @@ class _GroupChat extends State<GroupChat> {
 
                 for (var reply in answerData['reply']) {
                   var writerUserId;
-                  print("reply가 제대로 안돼서 출력이 안되나"); //여기까지는 잘됨
                   if (reply['writerUserId'] == null) {
                     writerUserId = 0;
                   } else {
@@ -545,7 +544,7 @@ class _GroupChat extends State<GroupChat> {
                     {
                       childReplies.add(ChildReply(MyChatReplyOtherPerson(
                         writerUserId: writerUserId,
-                        writerUserName: reply['writerUserName'],
+                        writerUserName: "나의 답변",
                         content: reply['content'],
                         createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
                       )));
@@ -559,12 +558,25 @@ class _GroupChat extends State<GroupChat> {
                       )));
                     }
                   } else {
-                    childReplies.add(ChildReply(OtherChatReply(
-                      writerUserId: writerUserId,
-                      writerUserName: reply['writerUserName'],
-                      content: reply['content'],
-                      createdAt: '',
-                    )));
+                    if (reply['writerUserId'] ==
+                        Provider.of<UserProvider>(context, listen: false)
+                            .userId) //답글도 내가 씀
+
+                    {
+                      childReplies.add(ChildReply(OtherChatReply(
+                        writerUserId: writerUserId,
+                        writerUserName: "나의 답변",
+                        content: reply['content'],
+                        createdAt: '',
+                      )));
+                    } else {
+                      childReplies.add(ChildReply(OtherChatReply(
+                        writerUserId: writerUserId,
+                        writerUserName: reply['writerUserName'],
+                        content: reply['content'],
+                        createdAt: '',
+                      )));
+                    }
                   }
                 }
                 setState(() {

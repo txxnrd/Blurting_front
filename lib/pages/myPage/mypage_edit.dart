@@ -448,6 +448,8 @@ class _MyPageEditState extends State<MyPageEdit> {
 
             setState(() {
               modifiedFlags["image"] = true;
+              IsValid = true;
+
               _image1Url = imageUrl;
               if (image_uploaded_count == image_uploading_count) IsValid = true;
             });
@@ -502,7 +504,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
             setState(() {
               modifiedFlags["image"] = true;
-
+              IsValid = true;
               _image2Url = imageUrl;
               if (image_uploaded_count == image_uploading_count) IsValid = true;
             });
@@ -557,6 +559,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
             setState(() {
               modifiedFlags["image"] = true;
+              IsValid = true;
 
               _image3Url = imageUrl;
               if (image_uploaded_count == image_uploading_count) IsValid = true;
@@ -1266,7 +1269,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                         mainAxisAlignment: MainAxisAlignment.start, // 가로축 중앙 정렬
                         children: [
                           customHobbyCheckbox('개성있는', 0, width, false),
-                          customHobbyCheckbox('책임감있는', 1, width, false),
+                          customHobbyCheckbox('유교중시', 1, width, false),
                         ],
                       ),
                       Row(
@@ -1294,21 +1297,21 @@ class _MyPageEditState extends State<MyPageEdit> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           customHobbyCheckbox('차분한', 8, width, false),
-                          customHobbyCheckbox('지적인', 9, width, false),
+                          customHobbyCheckbox('집돌이', 9, width, false),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           customHobbyCheckbox('섬세한', 10, width, false),
-                          customHobbyCheckbox('무뚝뚝한', 11, width, false),
+                          customHobbyCheckbox('오타쿠', 11, width, false),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          customHobbyCheckbox('외향적인', 12, width, false),
-                          customHobbyCheckbox('내향적인', 13, width, false),
+                          customHobbyCheckbox('MZ', 12, width, false),
+                          customHobbyCheckbox('갓생러', 13, width, false),
                         ],
                       ),
                       MyPageallDescription("취미"),
