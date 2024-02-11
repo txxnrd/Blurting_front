@@ -41,7 +41,7 @@ List<Widget> religion = <Widget>[
 
 List<String> characteristic = [
   "개성적인",
-  "책임감있는",
+  "유교중시",
   "열정적인",
   "귀여운",
   "상냥한",
@@ -49,11 +49,11 @@ List<String> characteristic = [
   "낙천적인",
   "유머있는",
   "차분한",
-  "지적인",
+  "집돌이",
   "섬세한",
-  "무뚝뚝한",
-  "외향적인",
-  "내향적인"
+  "오타쿠",
+  "MZ",
+  "갓생러"
 ];
 List<String> hobby = [
   "애니",

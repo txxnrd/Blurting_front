@@ -392,8 +392,6 @@ class _CustomInputFieldState extends State<CustomInputField> {
                                       .isReply ==
                                   false) {
                             focusNode.unfocus();
-
-                            widget.controller.clear();
                           }
                         },
                         onChanged: (value) {
