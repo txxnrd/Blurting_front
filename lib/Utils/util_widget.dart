@@ -1948,7 +1948,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                       child: Column(
                                         children: [
                                           Text(
-                                            '귓속말을 걸면 10p가 차감됩니다.',
+                                            '귓속말을 걸면 40p가 차감됩니다.',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
