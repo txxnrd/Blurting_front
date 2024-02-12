@@ -503,7 +503,7 @@ var university_domain = [
   'sungsim.ac.kr',
   'saekyung.ac.kr',
   'songgok.ac.kr',
-  'songwon.ac.kr',
+  'office.songwon.ac.kr',
   'songho.ac.kr',
   'sc.ac.kr',
   'ssc.ac.kr',

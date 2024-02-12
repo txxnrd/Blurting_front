@@ -223,9 +223,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _checkForUpdates() async {
-    bool isLatestVersion = await checkAppVersion();
+    bool isupdateneeded = await checkAppVersion();
 
-    if (!isLatestVersion) {
+    if (isupdateneeded) {
       // 앱의 컨텍스트가 준비된 후에 업데이트 다이얼로그를 표시합니다.
       showForceUpdateDialog(true, navigatorKey.currentState!.overlay!.context);
     }
