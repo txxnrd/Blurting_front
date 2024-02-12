@@ -11,20 +11,87 @@ import 'package:blurting/startpage/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainapp.dart';
 import 'package:flutter/services.dart';
+import 'package:blurting/Utils/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:blurting/Utils/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:upgrader/upgrader.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import 'package:store_redirect/store_redirect.dart';
+
 
 import 'notification.dart'; // phonenumber.dart를 임포트
+
+Future<bool> checkAppVersion() async {
+  final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  String currentVersion = packageInfo.version;
+  print(currentVersion);
+
+  // 서버로부터 최신 버전 정보 가져오기 (가상의 함수, 실제 구현 필요)
+  String latestVersion = await fetchLatestVersionFromServer();
+
+  if (currentVersion != latestVersion) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+void showForceUpdateDialog(bool forceUpdate, BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: Text(forceUpdate ? '업데이트가 필요' : '새로운 버전 출시'),
+            content: Text(forceUpdate
+                ? '중요한 변경으로 인해 업데이트를 해야 앱 사용이 가능합니다.'
+                : '업데이트를 하고 새로운 기능을 만나보세요.'),
+            actions: [
+              if (!forceUpdate)
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('나중에')),
+              TextButton(
+                  onPressed: () async {
+                    // Navigator.pop(context);
+                    // 앱 업데이트
+                    StoreRedirect.redirect(
+                        androidAppId: 'com.Blurting.blurting',
+                        iOSAppId: '6474533328');
+                  },
+                  child: const Text(
+                    '업데이트',
+                    style: TextStyle(
+                      color: Color.fromRGBO(246, 100, 100, 1),
+                    ),
+                  ))
+            ],
+          ),
+        );
+      });
+}
+
+Future<String> fetchLatestVersionFromServer() async {
+  var url = Uri.parse(API.user); //여기 수정해야댐
+  var response = await http.get(url);
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    return data['latestVersion'];
+  } else {
+    throw Exception('Failed to load latest version');
+  }
+}
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'blurting_project', // id
@@ -42,6 +109,7 @@ void main() async {
   // bool isLoggedIn = token != "No Token";
   bool isLoggedIn = await isLoggedInCheck();
 
+  print("함수 안에서 문제가 발생한거지?");
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.notification.isDenied.then((value) {
     if (value) {
@@ -103,11 +171,38 @@ Future<bool> isLoggedInCheck() async {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final bool isLoggedIn;
 
   MyApp({required this.isLoggedIn});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _checkForUpdates();
+  }
+
+  Future<void> _checkForUpdates() async {
+    bool isLatestVersion = await checkAppVersion();
+
+    if (!isLatestVersion) {
+      // 앱의 컨텍스트가 준비된 후에 업데이트 다이얼로그를 표시합니다.
+
+      showForceUpdateDialog(true, navigatorKey.currentState!.overlay!.context);
+    }
+  }
+  //     _checkForUpdates();
+
+  //   bool isLatestVersion = await checkAppVersion();
+  // print(isLatestVersion);
+  // if (isLatestVersion == false) {
+  //   showForceUpdateDialog(true, navigatorKey.currentContext!);
+  // }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -134,7 +229,7 @@ class MyApp extends StatelessWidget {
           child: child!),
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn
+      home: widget.isLoggedIn
           ? MainApp(
               currentIndex: 0,
             ) 
