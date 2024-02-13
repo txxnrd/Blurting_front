@@ -665,7 +665,7 @@ class _MyChatState extends State<MyChat> {
         print("음..?");
         print(widget.answerID);
         print(widget.index);
-        Future.delayed(Duration(milliseconds: 30), () {
+        Future.delayed(Duration(milliseconds: 50), () {
           Provider.of<FocusNodeProvider>(context, listen: false)
               .focusNode
               .requestFocus();
@@ -2131,7 +2131,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                   Provider.of<QuestionNumberProvider>(context,
                                           listen: false)
                                       .questionId = widget.answerId;
-                                  Future.delayed(Duration(milliseconds: 30),
+                                  Future.delayed(Duration(milliseconds: 50),
                                       () {
                                     Provider.of<FocusNodeProvider>(context,
                                             listen: false)

@@ -892,7 +892,6 @@ class _GroupChat extends State<GroupChat> {
       // 성공적으로 응답
       if (mounted) {
         setState(() {
-          isBlock[currentIndex] = true; // true가 맞음
           // rooms[currentIndex].replies.add(Reply(newReply, []));
           print("ismychatReply");
           print(Provider.of<MyChatReplyProvider>(context, listen: false)
