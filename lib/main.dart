@@ -29,8 +29,7 @@ Future<bool> checkAppVersion() async {
   print(currentVersion);
 
   // 서버로부터 최신 버전 정보 가져오기 (가상의 함수, 실제 구현 필요)
-  // String latestVersion = await fetchLatestVersionFromServer();
-  String latestVersion = "0";
+  String latestVersion = await fetchLatestVersionFromServer();
   if (latestVersion == "0") {
     isServerCheck = true;
   }
