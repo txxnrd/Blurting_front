@@ -170,6 +170,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
       }
     } else {
       // 오류가 발생한 경우 처리
+      showSnackBar(context, "인증번호를 다시 확인해주세요");
     }
   }
 

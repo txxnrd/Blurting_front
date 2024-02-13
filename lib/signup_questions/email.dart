@@ -408,6 +408,40 @@ class _EmailPageState extends State<EmailPage>
                       ),
                     ),
                     Container(
+                      margin: EdgeInsets.only(left: 11),
+                      child: Visibility(
+                        visible: !isEmailCorrect,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 10),
+                          height: 12,
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Pretendard',
+                                color: mainColor.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: "⚠️ 대학 이메일이 아닌 경우",
+                                ),
+                                TextSpan(
+                                  text: ' 계정중지',
+                                  style: TextStyle(
+                                      color:
+                                          Color(0xFFF66464)), // 원하는 색으로 변경하세요.
+                                ),
+                                TextSpan(
+                                  text: ' 될 수 있습니다.',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
                       height: 10,
                     ),
                     Visibility(

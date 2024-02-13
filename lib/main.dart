@@ -25,7 +25,9 @@ bool isServerCheck = false;
 
 Future<bool> checkAppVersion() async {
   final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  String currentVersion = packageInfo.version;
+  // String currentVersion = packageInfo.version;
+  String currentVersion = "1.0.7";
+
   print(currentVersion);
 
   // 서버로부터 최신 버전 정보 가져오기 (가상의 함수, 실제 구현 필요)
