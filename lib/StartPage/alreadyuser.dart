@@ -27,6 +27,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
   FocusNode _focusNode0 = FocusNode();
 
   void startTimer() {
+    print("start timer 실행");
     _timer?.cancel(); // 이전 타이머가 있다면 취소
     _duration = Duration(minutes: 3); // 타이머 초기화
 
@@ -95,16 +96,26 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
+    print("여기까지 실행이 됨");
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print("여기까지 실행이 됨");
 
       startTimer();
+      print("여기까지 실행이 됨222");
+
       NowCertification();
     } else {
       // 오류가 발생한 경우 처리
-
-      var data = json.decode(response.body);
-      errormessage = data['message'];
+      try {
+        var data = json.decode(response.body);
+        errormessage = data['message'];
+      } catch (e) {
+        var data = json.decode(response.body);
+        print("JSON decode error: $e");
+        showSnackBar(context, "${e}");
+      }
       showSnackBar(context, errormessage);
     }
   }
@@ -190,7 +201,6 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: mainColor.MainColor,

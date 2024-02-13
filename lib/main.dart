@@ -21,16 +21,21 @@ import 'package:store_redirect/store_redirect.dart';
 
 import 'notification.dart'; // phonenumber.dart를 임포트
 
+bool isServerCheck = false;
+
 Future<bool> checkAppVersion() async {
   final PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String currentVersion = packageInfo.version;
   print(currentVersion);
 
   // 서버로부터 최신 버전 정보 가져오기 (가상의 함수, 실제 구현 필요)
-  String latestVersion = await fetchLatestVersionFromServer();
+  // String latestVersion = await fetchLatestVersionFromServer();
+  String latestVersion = "0";
+  if (latestVersion == "0") {
+    isServerCheck = true;
+  }
 
   bool isupdateneeded = isUpDateNeeded(currentVersion, latestVersion);
-
   return isupdateneeded;
 }
 
@@ -112,6 +117,22 @@ void showForceUpdateDialog(bool forceUpdate, BuildContext context) {
                     ),
                   ))
             ],
+          ),
+        );
+      });
+}
+
+void showServercheckDialog(BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: Text('서버 점검중'),
+            content: Text('현재 서버 점검으로 인해 앱 사용이 불가능합니다.'),
+            actions: [],
           ),
         );
       });
@@ -224,12 +245,16 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _checkForUpdates() async {
     bool isupdateneeded = await checkAppVersion();
+    if (isServerCheck) {
+      showServercheckDialog(navigatorKey.currentState!.overlay!.context);
+    }
 
     if (isupdateneeded) {
       // 앱의 컨텍스트가 준비된 후에 업데이트 다이얼로그를 표시합니다.
       showForceUpdateDialog(true, navigatorKey.currentState!.overlay!.context);
     }
   }
+
   //     _checkForUpdates();
 
   //   bool isLatestVersion = await checkAppVersion();
