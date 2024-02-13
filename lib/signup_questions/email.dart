@@ -83,6 +83,7 @@ class _EmailPageState extends State<EmailPage>
   String Email = '';
   bool IsValid = false;
   bool Certification = false;
+  bool isEmailCorrect = true;
   @override
   void InputEmail(String value) {
     setState(() {
@@ -102,6 +103,7 @@ class _EmailPageState extends State<EmailPage>
   String old_token = "";
 
   Future<void> _sendPostRequest() async {
+    String requestEmail = "";
     try {
       trial += 1;
       var url = Uri.parse(API.signupemail);
@@ -110,13 +112,27 @@ class _EmailPageState extends State<EmailPage>
       print(old_token);
       print("trial");
       print(trial);
+
+      if (isEmailCorrect) {
+        requestEmail = Email + '@' + widget.domain;
+      } else {
+        requestEmail = Email;
+        if (requestEmail.toLowerCase().contains('.com') ||
+            requestEmail.toLowerCase().contains('copyhome.win') ||
+            requestEmail.toLowerCase().contains('ruu.kr') ||
+            requestEmail.toLowerCase().contains('iralborz.bid') ||
+            requestEmail.toLowerCase().contains('kumli.racing')) {
+          showSnackBar(context, "대학교 이메일을 입력해주세요.");
+          return;
+        }
+      }
       var response = await http.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $old_token',
         },
-        body: json.encode({"email": Email + '@' + widget.domain}),
+        body: json.encode({"email": requestEmail}),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -296,64 +312,137 @@ class _EmailPageState extends State<EmailPage>
                           fontFamily: 'Pretendard'),
                     ),
                     SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: width * 0.4,
-                          height: 48,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              hintText: '이메일 입력',
-                              border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainColor.lightGray),
+                    Visibility(
+                      visible: isEmailCorrect,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: width * 0.4,
+                            height: 48,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                hintText: '이메일 입력',
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: mainColor.lightGray),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: mainColor.lightGray),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFF66464)),
+                                ),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: mainColor.lightGray),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFF66464)),
-                              ),
+                              onChanged: (value) {
+                                InputEmail(value);
+                              },
                             ),
-                            onChanged: (value) {
-                              InputEmail(value);
-                            },
                           ),
-                        ),
-                        SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
-                        Text(
-                          '@',
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        SizedBox(width: 4),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12), // 내부 여백을 추가
-                          alignment: Alignment.centerLeft,
-                          height: 48, // TextField의 높이와 일치하도록 설정
-                          width: width * 0.4,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: mainColor.lightGray),
-                            borderRadius: BorderRadius.circular(
-                                4), // TextField의 테두리와 일치하도록 설정
+                          SizedBox(width: 4), // 두 위젯 사이의 간격을 주기 위한 SizedBox
+                          Text(
+                            '@',
+                            style: TextStyle(fontSize: 24),
                           ),
-                          child: Align(
+                          SizedBox(width: 4),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12), // 내부 여백을 추가
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              widget.domain,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16.0,
-                                // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                            height: 48, // TextField의 높이와 일치하도록 설정
+                            width: width * 0.4,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: mainColor.lightGray),
+                              borderRadius: BorderRadius.circular(
+                                  4), // TextField의 테두리와 일치하도록 설정
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                widget.domain,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  // 다른 텍스트 스타일 속성을 추가할 수 있습니다.
+                                ),
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: !isEmailCorrect,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: width * 0.86,
+                            height: 48,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                hintText: '본인의 대학교 이메일을 입력해주세요.',
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: mainColor.lightGray),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: mainColor.lightGray),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFF66464)),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                InputEmail(value);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 10,
+                    ),
+                    Visibility(
+                      visible: isEmailCorrect && !isBlurred,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isEmailCorrect = false;
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(top: height * 0.04),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  '이메일 도메인이 실제와 다른가요?',
+                                  style: TextStyle(
+                                      decorationColor: mainColor.MainColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: mainColor.MainColor),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.zero,
+                                  padding: EdgeInsets.zero,
+                                  width: 210,
+                                  height: 1,
+                                  color: mainColor.MainColor,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
