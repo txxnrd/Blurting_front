@@ -1132,12 +1132,13 @@ class _Blurting extends State<Blurting> {
           //
           for (final iReceivedItem in iReceivedList) {
             i++;
-            if(i>=3) break;
 
             int _day = (iReceivedItem['day'] - 1);
             iReceived[_day].add(recievedProfile(
                 userName: iReceivedItem['username'] ?? '탈퇴한 사용자',
                 userSex: iReceivedItem['userSex'] ?? 'none'));
+            
+            if(i>=3) break;
           }
         }
         //

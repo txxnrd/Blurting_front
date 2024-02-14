@@ -90,6 +90,8 @@ class _ProfileCard extends State<ProfileCard> {
     };
     widget.socket.emit('report', data);
 
+    showSnackBar(context, '신고 완료');
+
     print('신고 내용 서버에 전송 완료 $data');
   }
 
