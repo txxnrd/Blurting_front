@@ -1405,6 +1405,7 @@ class _AnswerItemState extends State<AnswerItem> {
       'reason': reason
     };
     widget.socket.emit('report', data);
+    showSnackBar(context, '신고 완료');
   }
 
   // 신고하시겠습니까? 모달 띄우는 함수
