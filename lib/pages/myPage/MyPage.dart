@@ -601,7 +601,7 @@ class _MyPage extends State<MyPage> {
                           onTap: () async {
                             _showWarning(
                                 context,
-                                '닉네임을 바꾸기 위해선 10포인트가 필요합니다.',
+                                '닉네임을 바꾸기 위해선 40포인트가 필요합니다.',
                                 '계속하시겠습니까?',
                                 '계속하기'
                                 );
