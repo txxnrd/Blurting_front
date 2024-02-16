@@ -963,7 +963,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Text(
-                                '* 10포인트를 지불하고 랜덤으로 닉네임을 바꿀 수 있어요!',
+                                '* 40포인트를 지불하고 랜덤으로 닉네임을 바꿀 수 있어요!',
                                 style: TextStyle(
                                     color: mainColor.Gray,
                                     fontSize: 11.0,
