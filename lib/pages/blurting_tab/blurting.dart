@@ -852,7 +852,7 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
-        responseData = 3;       // 없애야 할 것
+        // responseData = 3;       // 없애야 할 것
 
         print(responseData);
         if (mounted) {
