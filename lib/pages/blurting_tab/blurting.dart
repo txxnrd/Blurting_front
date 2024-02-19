@@ -23,9 +23,7 @@ String isState = 'loading...';
 
 bool isVisible = false;
 
-List<bool> isTap = [
-  false, false, false
-];
+List<bool> isTap = [false, false, false];
 
 List<List<Widget>> ProfileList = List.generate(
     3, (index) => <Widget>[]); // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
@@ -122,7 +120,6 @@ class _Blurting extends State<Blurting> {
         });
       }
     });
-
   }
 
   @override
@@ -151,6 +148,8 @@ class _Blurting extends State<Blurting> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    print(height);
 
     dividedProfileList[0].clear();
     dividedProfileList[1].clear();
@@ -165,30 +164,57 @@ class _Blurting extends State<Blurting> {
     }
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(160),
-        child: AppBar(
-          toolbarHeight: 80,
-          scrolledUnderElevation: 0.0,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              Container(
-                  margin: EdgeInsets.only(top: 100),
-                  padding: EdgeInsets.all(13),
-                  child: ellipseText(text: 'Blurting')),
-            ],
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            Container(margin: EdgeInsets.only(top: 20, right: 4), child: pointAppbar()),
-            Container(
-              width: 10),
-          ],
-        ),
-      ),
+      appBar: height > 670
+          ? PreferredSize(
+              preferredSize: Size.fromHeight(160),
+              child: AppBar(
+                toolbarHeight: 80,
+                scrolledUnderElevation: 0.0,
+                automaticallyImplyLeading: false,
+                flexibleSpace: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 100),
+                        padding: EdgeInsets.all(13),
+                        child: ellipseText(text: 'Blurting')),
+                  ],
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                actions: [
+                  Container(
+                      margin: EdgeInsets.only(top: 20, right: 4),
+                      child: pointAppbar()),
+                  Container(width: 10),
+                ],
+              ),
+            )
+          : PreferredSize(
+              preferredSize: Size.fromHeight(100),
+              child: AppBar(
+                toolbarHeight: 80,
+                scrolledUnderElevation: 0.0,
+                automaticallyImplyLeading: false,
+                flexibleSpace: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 40),
+                        padding: EdgeInsets.all(13),
+                        child: ellipseText(text: 'Blurting')),
+                  ],
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                actions: [
+                  Container(
+                      margin: EdgeInsets.only(top: 20, right: 4),
+                      child: pointAppbar()),
+                  Container(width: 10),
+                ],
+              ),
+            ),
       extendBodyBehindAppBar: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -196,67 +222,67 @@ class _Blurting extends State<Blurting> {
           Column(
             children: [
               if (isState == 'Continue')
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                width: width * 0.6,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          isMine = false;
-                        });
-                        if (isState == 'Continue') {
-                          pageController.jumpToPage(currentDay);
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: isMine
-                                ? mainColor.lightGray
-                                : mainColor.MainColor),
-                        child: Text(
-                          '화살 날리기',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  width: width * 0.6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isMine = false;
+                          });
+                          if (isState == 'Continue') {
+                            pageController.jumpToPage(currentDay);
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: isMine
+                                  ? mainColor.lightGray
+                                  : mainColor.MainColor),
+                          child: Text(
+                            '화살 날리기',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          isMine = true;
-                        });
-                        if (isState == 'Continue') {
-                          pageController.jumpToPage(currentDay);
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60),
-                            color: isMine
-                                ? mainColor.MainColor
-                                : mainColor.lightGray),
-                        child: Text(
-                          '내가 받은 화살',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isMine = true;
+                          });
+                          if (isState == 'Continue') {
+                            pageController.jumpToPage(currentDay);
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60),
+                              color: isMine
+                                  ? mainColor.MainColor
+                                  : mainColor.lightGray),
+                          child: Text(
+                            '내가 받은 화살',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
               if (isState != 'Continue')
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
@@ -273,24 +299,25 @@ class _Blurting extends State<Blurting> {
                         child: Text(
                           '화살 날리기',
                           style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.transparent),
-                          ),
-                        ),Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(60),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
                               color: Colors.transparent),
-                          child: Text(
-                            '내가 받은 화살',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.transparent),
-                          ),
                         ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60),
+                            color: Colors.transparent),
+                        child: Text(
+                          '내가 받은 화살',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.transparent),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -344,7 +371,8 @@ class _Blurting extends State<Blurting> {
                               : isState == 'Matching'
                                   ? Center(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             '블러팅 방이 매칭 중이에요.',
@@ -395,11 +423,10 @@ class _Blurting extends State<Blurting> {
                               child: Text(
                                 '터치해서 화살을 날려주세요!',
                                 style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "Heebo"
-                                ),
+                                    color: mainColor.Gray,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Heebo"),
                               ),
                             ),
                           ),
@@ -419,7 +446,7 @@ class _Blurting extends State<Blurting> {
                                   child: Image.asset(
                                     'assets/images/blurtingArrow.png',
                                     color: isTap[currentPage] == true ||
-                                            ( iSended[currentPage]) == true
+                                            (iSended[currentPage]) == true
                                         ? mainColor.MainColor
                                         : mainColor.lightGray,
                                   ))),
@@ -429,26 +456,30 @@ class _Blurting extends State<Blurting> {
                 ),
               ),
               // if (isState == 'Continue')
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: SmoothPageIndicator(
-                    controller: pageController,
-                    count: 3,
-                    effect: ScrollingDotsEffect(
-                      dotColor: isState == 'Continue' ? mainColor.lightPink : Colors.transparent,
-                      activeDotColor: isState == 'Continue' ? mainColor.MainColor : Colors.transparent,
-                      activeStrokeWidth: 10,
-                      activeDotScale: 1.0,
-                      maxVisibleDots: 5,
-                      radius: 8,
-                      spacing: 5,
-                      dotHeight: 10,
-                      dotWidth: 10,
-                    ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: SmoothPageIndicator(
+                  controller: pageController,
+                  count: 3,
+                  effect: ScrollingDotsEffect(
+                    dotColor: isState == 'Continue'
+                        ? mainColor.lightPink
+                        : Colors.transparent,
+                    activeDotColor: isState == 'Continue'
+                        ? mainColor.MainColor
+                        : Colors.transparent,
+                    activeStrokeWidth: 10,
+                    activeDotScale: 1.0,
+                    maxVisibleDots: 5,
+                    radius: 8,
+                    spacing: 5,
+                    dotHeight: 10,
+                    dotWidth: 10,
                   ),
                 ),
+              ),
             ],
           ),
           Container(
@@ -496,7 +527,9 @@ class _Blurting extends State<Blurting> {
             child: staticButton(
                 text: isState == 'Continue'
                     ? "방 입장하기"
-                    : isState == 'Matching' ? '매칭중' : "새로운 블러팅 시작하기"),
+                    : isState == 'Matching'
+                        ? '매칭중'
+                        : "새로운 블러팅 시작하기"),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -507,8 +540,7 @@ class _Blurting extends State<Blurting> {
               print(day);
 
               if (isState == 'Continue') {
-                if(localDay == day)
-                {
+                if (localDay == day) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => GroupChat()));
                 } else {
@@ -519,7 +551,9 @@ class _Blurting extends State<Blurting> {
                                 day: day,
                               )));
                 }
-              } else if (isState == 'Start' || isState == 'Matching' || isState == 'end') {
+              } else if (isState == 'Start' ||
+                  isState == 'Matching' ||
+                  isState == 'end') {
                 // 아직 방이 만들어지지 않음
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Matching()));
@@ -534,7 +568,8 @@ class _Blurting extends State<Blurting> {
     );
   }
 
-  Widget _arrowPage(int index) {        // end일 때, continue일 때로 나눠서... 리팩토링해야 댐ㅜ
+  Widget _arrowPage(int index) {
+    // end일 때, continue일 때로 나눠서... 리팩토링해야 댐ㅜ
     return Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -606,7 +641,7 @@ class _Blurting extends State<Blurting> {
                             ],
                           )
                         : Stack(
-                          children: [
+                            children: [
                               Positioned(
                                   left: 27.5,
                                   top: 20,
@@ -622,17 +657,20 @@ class _Blurting extends State<Blurting> {
                                 margin: EdgeInsets.all(5),
                                 width: 55,
                                 child: Image.asset(
-                                    fit: BoxFit.fill, 'assets/images/unmatch.png'),
+                                    fit: BoxFit.fill,
+                                    'assets/images/unmatch.png'),
                               ),
-                          ],
-                        ),
+                            ],
+                          ),
                     Container(
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
                       width: 70,
                       child: Image.asset(
                         'assets/images/dashedLine.png',
                         fit: BoxFit.fill,
-                        color: finalMatching ? mainColor.MainColor : mainColor.Gray,
+                        color: finalMatching
+                            ? mainColor.MainColor
+                            : mainColor.Gray,
                       ),
                     ),
                     Column(
@@ -650,15 +688,21 @@ class _Blurting extends State<Blurting> {
                             finalMatching ? 'assets/images/matchMan.png' : 'assets/images/unmatchMan.png'       // API 연결 (MY)
                           : finalMatching ? 'assets/images/matchWoman.png' : 'assets/images/unmatcWoman.png' 
                           ),
+                          child: Image.asset(
+                              fit: BoxFit.fill,
+                              matchingSex == 'M'
+                                  ? 'assets/man.png' // API 연결 (MY)
+                                  : 'assets/woman.png'),
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 7),
                           padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                           decoration: BoxDecoration(
-                              color: mainColor.lightPink,
-                              borderRadius: BorderRadius.circular(50),),
+                            color: mainColor.lightPink,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                           child: Text(
-                            myName,        // API 연결 (MY)
+                            myName, // API 연결 (MY)
                             style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
@@ -804,7 +848,7 @@ class _Blurting extends State<Blurting> {
     );
   }
 
-  Future<void> result() async{
+  Future<void> result() async {
     final url = Uri.parse(API.result);
     String savedToken = await getToken();
 
@@ -862,10 +906,10 @@ class _Blurting extends State<Blurting> {
             } else if (responseData == 0) {
               isState = 'Start';
               // pref.setString('day', 'Day0');
-            } else if(responseData == 2) {
+            } else if (responseData == 2) {
               isState = 'Matching';
               // pref.setString('day', 'Day0');
-            } else if(responseData == 3) {
+            } else if (responseData == 3) {
               isState = 'end';
               // pref.setString('day', 'Day0');
             }
@@ -1076,7 +1120,6 @@ class _Blurting extends State<Blurting> {
         }
       } catch (e) {
         print(e);
-
       }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
@@ -1156,7 +1199,7 @@ class _Blurting extends State<Blurting> {
 
   Future<void> sendArrow(int userId, int day) async {
     // 화살표를 보냄
-    final url = Uri.parse('${API.sendArrow}$userId/${day+1}');
+    final url = Uri.parse('${API.sendArrow}$userId/${day + 1}');
     String savedToken = await getToken();
 
     print(day);
@@ -1185,9 +1228,8 @@ class _Blurting extends State<Blurting> {
       await getnewaccesstoken(context, () async {}, null, null, null, null,
           sendArrow, [userId, day]);
     } else if (response.statusCode == 400) {
-    }
-    else{
-            print(response.statusCode);
+    } else {
+      print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
@@ -1204,8 +1246,7 @@ class _Blurting extends State<Blurting> {
 
         _blinkTimer?.cancel();
         isVisible = false;
-      }
-      else{
+      } else {
         print('클릭');
         _startBlinking();
       }
@@ -1290,7 +1331,7 @@ class _profileState extends State<profile> {
       onTap: () {
         if (isTap[currentPage] == true && !widget.thisSelected) {
         } else {
-          if (canSendArrow) {            
+          if (canSendArrow) {
             setState(() {
               widget.thisSelected = !widget.thisSelected;
             });

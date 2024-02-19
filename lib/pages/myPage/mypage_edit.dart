@@ -356,7 +356,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       body: json.encode({
         if (modifiedFlags["religion"] == true)
           "religion": selectedReligionString,
-        if (modifiedFlags["region"] == true) "region": content,
+        if (modifiedFlags["region"] == true) "region": new_region,
         if (modifiedFlags["smoke"] == true) "cigarette": smoke,
         if (modifiedFlags["drink"] == true) "drink": drink,
         if (modifiedFlags["height"] == true) "height": height,
@@ -764,10 +764,11 @@ class _MyPageEditState extends State<MyPageEdit> {
     double screenWidth = MediaQuery.of(context).size.width * 0.93;
 
     Widget toggleReligion(BuildContext context, int index, String religion) {
-      modifiedFlags["religion"] = true;
       return InkWell(
         onTap: () {
           setState(() {
+            modifiedFlags["religion"] = true;
+
             IsValid = true;
             for (int i = 0; i < selectedreligion.length; i++) {
               selectedreligion[i] = false;
@@ -798,11 +799,12 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
 
     Widget toggleAlcohol(BuildContext context, int index, String alcohol) {
-      modifiedFlags["drink"] = true;
       return Container(
         child: InkWell(
           onTap: () {
             setState(() {
+              modifiedFlags["drink"] = true;
+
               IsValid = true;
               for (int i = 0; i < selectedsmoke.length; i++) {
                 selectedalcohol[i] = false;
@@ -834,11 +836,12 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
 
     Widget toggleSmoke(BuildContext context, int index, String smoke) {
-      modifiedFlags["smoke"] = true;
       return Container(
         child: InkWell(
           onTap: () {
             setState(() {
+              modifiedFlags["smoke"] = true;
+
               IsValid = true;
               for (int i = 0; i < selectedsmoke.length; i++) {
                 selectedsmoke[i] = false;
@@ -1019,6 +1022,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                           content = result;
                                           setState(() {
                                             IsValid = true;
+                                            modifiedFlags["region"] = true;
                                           });
                                         }
                                       });

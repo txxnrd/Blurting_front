@@ -36,7 +36,12 @@ Future<bool> checkAppVersion() async {
   }
 
   bool isupdateneeded = isUpDateNeeded(currentVersion, latestVersion);
-  return isupdateneeded;
+  bool iscurrentVersionUpToDate =
+      isCurrentVersionUpToDate(currentVersion, latestVersion);
+  if (iscurrentVersionUpToDate)
+    return false;
+  else
+    return isupdateneeded;
 }
 
 bool isCurrentVersionUpToDate(String currentVersion, String latestVersion) {
@@ -54,7 +59,7 @@ bool isCurrentVersionUpToDate(String currentVersion, String latestVersion) {
   // 각 부분을 순차적으로 비교합니다.
   for (int i = 0; i < currentParts.length; i++) {
     if (currentParts[i] > latestParts[i]) {
-      return true; // 현재 버전이 더 높습니다.
+      return true; // 현재 버전이 더 높습니다.(테스트시)
     } else if (currentParts[i] < latestParts[i]) {
       return false; // 최신 버전이 더 높습니다.
     }
