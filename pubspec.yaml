@@ -167,6 +167,10 @@ flutter:
     - assets/images/random_3.png
     - assets/images/random_4.png
     - assets/images/random_5.png
+    - assets/images/matchMan.png
+    - assets/images/matchWoman.png
+    - assets/images/unmatchMan.png
+    - assets/images/unmatchWoman.png
 
   fonts:
     - family: Pretendard
