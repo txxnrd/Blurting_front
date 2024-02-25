@@ -168,6 +168,21 @@ class _SettingPageState extends State<SettingPage> {
         });
   }
 
+  Future<void> _sendDisableNotificationRequest() async {
+    String savedToken = await getToken();
+
+    var url = Uri.parse(API.disable);
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+    } else {}
+  }
+
   void _showlogoutWarning(BuildContext context) {
     showDialog(
         context: context,
@@ -239,6 +254,7 @@ class _SettingPageState extends State<SettingPage> {
                                     ),
                                     onTap: () {
                                       clearAllData();
+                                      _sendDisableNotificationRequest();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
