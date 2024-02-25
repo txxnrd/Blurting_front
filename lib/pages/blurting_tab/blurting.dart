@@ -87,6 +87,7 @@ class _Blurting extends State<Blurting> {
 
     Future.delayed(Duration.zero, () async {
       SharedPreferences pref = await SharedPreferences.getInstance();
+        await result();
 
       await fetchPoint();
       await isMatched();
@@ -107,14 +108,6 @@ class _Blurting extends State<Blurting> {
         print('gd');
         pref.setString('day', 'Day0');
         day = 'Day0';
-      }
-
-      if (isState == 'end') {
-        // 만약에 블러팅이 끝났다면
-        // 몇 번째 블러팅인지, 매칭 되었는지
-        // 매칭 상대방 정보 받아오기
-        await result();
-        print(finalMatching);
       }
       print(day);
     });
@@ -611,36 +604,37 @@ class _Blurting extends State<Blurting> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    finalMatching
-                        ? Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                width: 55,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  color: mainColor.lightPink,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Image.asset(
-                                    fit: BoxFit.fill,
-                                    matchingSex == 'M'
-                                        ? 'assets/man.png'
-                                        : 'assets/woman.png'), // API 연결 (OTHER)
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(top: 7),
-                                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                decoration: BoxDecoration(
-                                  color: mainColor.lightPink,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Text(
-                                  matchingName, // API 연결 (OTHER)
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Heebo',
+                    finalMatching ? 
+                    Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          width: 55,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            color: mainColor.lightPink,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Image.asset(
+                            fit: BoxFit.fill,
+                            matchingSex == 'M' ?
+                            'assets/images/matchMan.png' 
+                          : 'assets/images/matchWoman.png'
+                          ),       // API 연결 (OTHER)
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 7),
+                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          decoration: BoxDecoration(
+                            color: mainColor.lightPink,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Text(
+                            matchingName,        // API 연결 (OTHER)
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Heebo',
                                       color: Colors.black),
                                 ),
                               ),
@@ -686,8 +680,13 @@ class _Blurting extends State<Blurting> {
                           width: 55,
                           height: 55,
                           decoration: BoxDecoration(
-                            color: mainColor.lightPink,
-                            borderRadius: BorderRadius.circular(50),
+                              color: mainColor.lightPink,
+                              borderRadius: BorderRadius.circular(50),),
+                          child: Image.asset(
+                            fit: BoxFit.fill,
+                            mySex == 'M' ?
+                            finalMatching ? 'assets/images/matchMan.png' : 'assets/images/unmatchMan.png'       // API 연결 (MY)
+                          : finalMatching ? 'assets/images/matchWoman.png' : 'assets/images/unmatcWoman.png' 
                           ),
                           child: Image.asset(
                               fit: BoxFit.fill,
@@ -727,10 +726,8 @@ class _Blurting extends State<Blurting> {
                     fontSize: 16,
                     fontFamily: 'Heebo'),
               ),
-            if (isState == 'Continue' &&
-                (!iSended[currentPage] && isValidDay[index]))
               Text(
-                '* 오늘이 지나기 전에 화살표를 날려 주세요!',
+                isState == 'Continue'&&(! iSended[currentPage] && isValidDay[index]) ? '* 오늘이 지나기 전에 화살표를 날려 주세요!' : '',
                 style: TextStyle(
                     color: mainColor.Gray,
                     fontWeight: FontWeight.w600,
@@ -863,23 +860,21 @@ class _Blurting extends State<Blurting> {
     if (response.statusCode == 200) {
       try {
         print(response.body);
-        print('object');
 
         Map<String, dynamic> responseData = jsonDecode(response.body);
+          myName = responseData['myname'];
+          mySex = responseData['mysex'];
 
-        myName = responseData['myname'];
-        mySex = responseData['mysex'];
-
-        if (responseData['othername'] == null) {
-          finalMatching = false;
-          matchingName = '';
-          matchingSex = '';
-        } else {
-          finalMatching = true;
-        }
-      } catch (e) {
-        print(e);
-      }
+          if (responseData['othername'] == null) {
+            finalMatching = false;
+            matchingName = '';
+            matchingSex = '';
+          } else {
+            finalMatching = true;
+            matchingName = responseData['othername'];
+            matchingSex = responseData['othersex'];
+          }
+      } catch (e) {print(e);}
     } else {
       print(response.statusCode);
     }
@@ -901,7 +896,7 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
-        // responseData = 1;       // 없애야 할 것
+        // responseData = 3;       // 없애야 할 것
 
         print(responseData);
         if (mounted) {
@@ -1177,8 +1172,6 @@ class _Blurting extends State<Blurting> {
             iReceived[_day].add(recievedProfile(
                 userName: iReceivedItem['username'] ?? '탈퇴한 사용자',
                 userSex: iReceivedItem['userSex'] ?? 'none'));
-
-            if (i >= 3) break;
           }
         }
         //
