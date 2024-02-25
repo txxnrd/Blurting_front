@@ -7,6 +7,7 @@ import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:blurting/utils/util_widget.dart';
+import 'package:blurting/utils/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,35 +35,34 @@ class _PolicyTwoState extends State<PolicyTwo> with TickerProviderStateMixin {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(''),
-        elevation: 0,
-        automaticallyImplyLeading: false,
+        scrolledUnderElevation: 0.0,
+        toolbarHeight: 70,
+        title: Column(
+          children: [
+            AppbarDescription("이용약관"),
+          ],
+        ),
+        // flexibleSpace: Container(
+        //   margin: EdgeInsets.only(top: 80),
+        //   child: ,
+        // ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(48, 48, 48, 1),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Row(
-              children: [
-                IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () => Navigator.pop(context)),
-                SizedBox(
-                  width: 100,
-                ),
-                Text(
-                  '이용약관',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF868686),
-                      fontFamily: 'Pretendard'),
-                ),
-              ],
-            ),
             SizedBox(
               height: 25,
             ),

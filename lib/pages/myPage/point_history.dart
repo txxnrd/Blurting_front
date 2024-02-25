@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:convert';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
@@ -67,6 +68,46 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     } catch (error) {
       throw error;
     }
+  }
+
+  RewardedAd? _rewardedAd;
+  Future<void> _callRewardScreenAd() async {
+    await RewardedAd.load(
+      adUnitId: "ca-app-pub-3073920976555254/9648855736",
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (RewardedAd ad) {
+          _rewardedAd = ad;
+
+          // 보상형 광고 이벤트 설정
+          _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (RewardedAd ad) {
+              // 광고가 로드되면 호출되는 이벤트
+            },
+            onAdDismissedFullScreenContent: (RewardedAd ad) {
+              // 사용자가 광고를 종료하면 호출되는 이벤트
+              ad.dispose();
+            },
+            onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+              print("$ad onAdDismissedFullScreenContent");
+              ad.dispose();
+            },
+            onAdImpression: (RewardedAd ad) {
+              // 광고 인상이 발생하면 호출
+            },
+          );
+
+          // 광고 표시
+          _rewardedAd?.show(
+              onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
+            setState(() {});
+          });
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          // 광고 로드 실패 시 처리
+        },
+      ),
+    );
   }
 
   Future<List<Map<String, dynamic>>> fetchPointSubtract() async {
@@ -236,6 +277,18 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.wallet,
+              color: Color.fromRGBO(48, 48, 48, 1),
+            ),
+            onPressed: () {
+              _callRewardScreenAd();
+            },
+          ),
+        ],
+
         centerTitle: true,
       ),
       body: Column(

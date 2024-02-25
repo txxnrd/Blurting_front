@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,20 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:store_redirect/store_redirect.dart';
 
-import 'notification.dart'; // phonenumber.dart를 임포트
+import 'notification.dart';
+import 'package:flutter/foundation.dart';
+
+const Map<String, String> UNIT_ID = kReleaseMode
+    ? {
+        'ios': 'ca-app-pub-3073920976555254/9648855736',
+        'android': 'ca-app-pub-3073920976555254/4104691491',
+      }
+    : {
+        'ios': 'ca-app-pub-3073920976555254/9648855736',
+        'android': 'ca-app-pub-3073920976555254/4104691491',
+      };
+
+List<String> testDeviceIds = ['A4737E18064A9996925962F030F7A929'];
 
 bool isServerCheck = false;
 
@@ -163,6 +176,12 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
+  RequestConfiguration configuration =
+      RequestConfiguration(testDeviceIds: testDeviceIds);
+  MobileAds.instance.updateRequestConfiguration(configuration);
+
   await initializeDateFormatting('ko_KR', null);
   await dotenv.load(fileName: ".env");
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
@@ -170,7 +189,6 @@ void main() async {
   // bool isLoggedIn = token != "No Token";
   bool isLoggedIn = await isLoggedInCheck();
 
-  print("함수 안에서 문제가 발생한거지?");
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.notification.isDenied.then((value) {
     if (value) {
