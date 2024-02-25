@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blurting/signup_questions/university.dart';
 import 'package:blurting/signup_questions/utils.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,35 @@ class ImagePageState extends State<ImagePage>
   double? image_maxheight = 1000;
   double? image_maxwidth = 1000;
   int imageQuality = 90;
+  bool permission_image = false;
+
+  Future<bool> showImageUsage(BuildContext context) async {
+    Completer<bool> completer = Completer<bool>();
+
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('이미지 활용 동의'),
+            content: Text(
+                'Blurting에서는 프로필 이미지 제공을 위하여 이미지를 수집합니다.동의하시면 다음 단계로 넘어갑니다.'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    completer.complete(
+                        true); // 사용자가 동의했음을 나타내는 true 값을 completer에 전달합니다.
+                  },
+                  child: const Text('동의',
+                      style:
+                          TextStyle(color: Color.fromRGBO(255, 125, 125, 1)))),
+            ],
+          );
+        });
+
+    return completer.future; // completer의 future를 반환하여, 호출자가 await 할 수 있도록 합니다.
+  }
 
   Future<void> _pickAndUploadImage(int imageNumber) async {
     if (imageNumber == 1) {
@@ -56,6 +87,27 @@ class ImagePageState extends State<ImagePage>
       image_uploaded_count_3 = false;
       print("image3 start");
     }
+    bool onlyOneIsTrue = (image_uploading_count_1 ||
+            image_uploading_count_2 ||
+            image_uploading_count_3) // 최소 하나는 true
+        &&
+        !(image_uploading_count_1 &&
+            image_uploading_count_2) // 첫 번째와 두 번째가 동시에 true가 아님
+        &&
+        !(image_uploading_count_1 &&
+            image_uploading_count_3) // 첫 번째와 세 번째가 동시에 true가 아님
+        &&
+        !(image_uploading_count_2 &&
+            image_uploading_count_3); // 두 번째와 세 번째가 동시에 true가 아님
+    if (!image_uploaded_count_1 &&
+        !image_uploaded_count_2 &&
+        !image_uploaded_count_3 &&
+        (onlyOneIsTrue) &&
+        Platform.isAndroid) {
+      bool permission = await showImageUsage(context);
+      if (permission == false) return;
+    }
+
     IsValid = false;
     var picker = ImagePicker();
     if (imageNumber == 1) {
