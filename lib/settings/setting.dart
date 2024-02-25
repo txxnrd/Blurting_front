@@ -1,3 +1,4 @@
+import 'package:blurting/pages/policy/policyOne.dart';
 import 'package:blurting/startpage/startpage.dart';
 import 'package:blurting/settings/url_link.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -529,6 +530,21 @@ class _SettingPageState extends State<SettingPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => UseGuidePageOne()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        settingDescription_list("사용 설명서 확인하기"),
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PolicyOne()),
                       );
                     },
                     child: Row(

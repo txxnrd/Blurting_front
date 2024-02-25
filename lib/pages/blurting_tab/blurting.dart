@@ -688,11 +688,11 @@ class _Blurting extends State<Blurting> {
                             finalMatching ? 'assets/images/matchMan.png' : 'assets/images/unmatchMan.png'       // API 연결 (MY)
                           : finalMatching ? 'assets/images/matchWoman.png' : 'assets/images/unmatcWoman.png' 
                           ),
-                          child: Image.asset(
-                              fit: BoxFit.fill,
-                              matchingSex == 'M'
-                                  ? 'assets/man.png' // API 연결 (MY)
-                                  : 'assets/woman.png'),
+                          // child: Image.asset(
+                          //     fit: BoxFit.fill,
+                          //     matchingSex == 'M'
+                          //         ? 'assets/man.png' // API 연결 (MY)
+                          //         : 'assets/woman.png'),
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 7),
