@@ -496,17 +496,24 @@ class _CustomInputFieldState extends State<CustomInputField> {
 }
 
 class pointAppbar extends StatelessWidget {
-  pointAppbar({super.key});
+  final bool canNavigate;
+
+  pointAppbar({
+    super.key,
+    this.canNavigate = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PointHistoryPage()),
-            );
+            if (canNavigate) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PointHistoryPage()),
+              );
+            }
           },
           child: Container(
             height: 30,

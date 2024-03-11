@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/utils/provider.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class PointHistoryPage extends StatefulWidget {
   // Constructor to receive the user token
@@ -278,15 +279,11 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           },
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.wallet,
-              color: Color.fromRGBO(48, 48, 48, 1),
-            ),
-            onPressed: () {
-              _callRewardScreenAd();
-            },
-          ),
+          Container(
+              margin: EdgeInsets.only(top: 20, right: 40),
+              child: pointAppbar(
+                canNavigate: false,
+              )),
         ],
 
         centerTitle: true,

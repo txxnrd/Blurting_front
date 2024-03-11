@@ -55,7 +55,7 @@ class ImagePageState extends State<ImagePage>
           return AlertDialog(
             title: Text('이미지 활용 동의'),
             content: Text(
-                'Blurting에서는 프로필 이미지 제공을 위하여 이미지를 수집합니다.동의하시면 다음 단계로 넘어갑니다.'),
+                'Blurting 앱은 프로필 이미지 기능을 위하여 이미지를 수집합니다.동의하시면 다음 단계로 넘어갑니다. 동의 하지 않으시면 사용에 제한이 있을 수 있습니다.'),
             actions: [
               TextButton(
                   onPressed: () {
@@ -64,6 +64,14 @@ class ImagePageState extends State<ImagePage>
                         true); // 사용자가 동의했음을 나타내는 true 값을 completer에 전달합니다.
                   },
                   child: const Text('동의',
+                      style:
+                          TextStyle(color: Color.fromRGBO(255, 125, 125, 1)))),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    completer.complete(false);
+                  },
+                  child: const Text('나중에 하기',
                       style:
                           TextStyle(color: Color.fromRGBO(255, 125, 125, 1)))),
             ],
