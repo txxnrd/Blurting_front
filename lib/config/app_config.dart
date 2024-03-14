@@ -82,8 +82,10 @@ class API {
       "${ServerEndpoints.serverEndpoint}/point/chat";
   static final String pointcheck =
       "${ServerEndpoints.serverEndpoint}/point/check";
+  static final String getpoint = "${ServerEndpoints.serverEndpoint}/point/ad";
+  /*ETC*/
   static final String userpoint = "${ServerEndpoints.serverEndpoint}/user";
-  static final String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
+  static final String pointAd = "${ServerEndpoints.serverEndpoint}/point/ad";
   static final String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";
   static final String disable = "${ServerEndpoints.serverEndpoint}/fcm/disable";
   static final String fcmcheck = "${ServerEndpoints.serverEndpoint}/fcm/check";

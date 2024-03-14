@@ -40,7 +40,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     if (!mounted) return [];
 
     try {
-      final url = Uri.parse(API.pointAdd);
+      final url = Uri.parse(API.pointAd);
       String savedToken = await getToken();
 
       final response = await http.get(url, headers: {
@@ -73,13 +73,14 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
   RewardedAd? _rewardedAd;
   Future<void> _callRewardScreenAd() async {
+    print("광고 실행");
     await RewardedAd.load(
       adUnitId: "ca-app-pub-3073920976555254/9648855736",
       request: AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
-
+          _isAdRequestSent = false; // 광고가 로드될 때마다 false로 리셋
           // 보상형 광고 이벤트 설정
           _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
             onAdShowedFullScreenContent: (RewardedAd ad) {
@@ -88,6 +89,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             onAdDismissedFullScreenContent: (RewardedAd ad) {
               // 사용자가 광고를 종료하면 호출되는 이벤트
               ad.dispose();
+              _sendAdRequest();
+              print("광고 종료됨");
             },
             onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
               print("$ad onAdDismissedFullScreenContent");
@@ -247,10 +250,156 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     } catch (error) {}
   }
 
+  bool _isAdRequestSent = false;
+
+  Future<void> _sendAdRequest() async {
+    print("sendAdRequest 실행됨");
+    var url = Uri.parse(API.pointAd);
+
+    if (!_isAdRequestSent) {
+      _isAdRequestSent = true; // 함수 호출 전에 true로 설정
+      String savedToken = await getToken();
+
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+        // JSON 형태로 인코딩
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var data = json.decode(response.body);
+        print(data);
+        _isAdRequestSent = false; // 성공적으로 호출되면 false로 리셋
+      } else {
+        // 오류가 발생한 경우 처리
+      }
+    }
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _showAd(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.2),
+            body: Stack(
+              children: [
+                Positioned(
+                  bottom: 50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.warning),
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.fromLTRB(10, 16, 10, 10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '광고를 시청하고 5p를 얻으시겠습니까?',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      // color: mainColor.MainColor,
+                                      child: Center(
+                                        child: Text(
+                                          '포인트 얻기',
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      _callRewardScreenAd();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.warning),
+                                // color: mainColor.MainColor,
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                if (mounted) {
+                                  setState(() {
+                                    Navigator.of(context).pop();
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -280,10 +429,23 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         ),
         actions: [
           Container(
-              margin: EdgeInsets.only(top: 20, right: 40),
+              margin: EdgeInsets.only(top: 20, right: 1),
               child: pointAppbar(
                 canNavigate: false,
               )),
+          InkWell(
+            onTap: () {
+              _showAd(context);
+            },
+            child: Container(
+              width: 30,
+              height: 30,
+              margin: EdgeInsets.only(top: 20, right: 5),
+              child: Image.asset(
+                'assets/images/point_plus.png',
+              ),
+            ),
+          ),
         ],
 
         centerTitle: true,

@@ -132,6 +132,7 @@ flutter:
     - assets/images/check.png
     - assets/images/block.png
     - assets/images/leaveRoom.png
+    - assets/images/point_plus.png
     - assets/animation/girl.png
     - assets/animation/boy.png
     - assets/animation/leftBottom.png

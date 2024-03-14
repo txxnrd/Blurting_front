@@ -557,16 +557,13 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   InkWell(
                     splashColor: Colors.transparent,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PolicyOne()),
-                      );
+                    onTap: () async {
+                      print(await getToken());
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        settingDescription_list("사용 설명서 확인하기"),
+                        settingDescription_list("토큰 확인하기"),
                       ],
                     ),
                   ),
