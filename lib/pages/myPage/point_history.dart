@@ -40,7 +40,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     if (!mounted) return [];
 
     try {
-      final url = Uri.parse(API.pointAd);
+      final url = Uri.parse(API.pointAdd);
       String savedToken = await getToken();
 
       final response = await http.get(url, headers: {
@@ -51,6 +51,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       // Handle the response as needed
       if (response.statusCode == 200) {
         // Extract data from the response and update the state
+        print(response.body);
+
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
@@ -67,6 +69,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         throw Exception('failed to load added point');
       }
     } catch (error) {
+      print(error);
       throw error;
     }
   }
