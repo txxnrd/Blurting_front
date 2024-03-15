@@ -86,6 +86,8 @@ class API {
   /*ETC*/
   static final String userpoint = "${ServerEndpoints.serverEndpoint}/user";
   static final String pointAd = "${ServerEndpoints.serverEndpoint}/point/ad";
+  static final String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
+
   static final String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";
   static final String disable = "${ServerEndpoints.serverEndpoint}/fcm/disable";
   static final String fcmcheck = "${ServerEndpoints.serverEndpoint}/fcm/check";
