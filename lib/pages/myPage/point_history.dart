@@ -93,7 +93,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
               _sendAdRequest(context);
               ad.dispose();
               _fetchDataForCurrentTab();
-              setState(() {});
             },
             onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
               print("$ad onAdDismissedFullScreenContent");
@@ -278,7 +277,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       if (response.statusCode == 200 || response.statusCode == 201) {
         var data = json.decode(response.body);
         print(data);
-        setState(() {});
+        setState(() {
+          Provider.of<UserProvider>(context, listen: false).point =
+              data['point'];
+        });
       } else {
         // 오류가 발생한 경우 처리
         print("오류 응답: ${response.statusCode}");
