@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
@@ -72,7 +73,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
   RewardedAd? _rewardedAd;
 
-  Future<void> _callRewardScreenAd() async {
+  Future<void> _callRewardScreenAd(BuildContext context) async {
     print("광고 실행");
     await RewardedAd.load(
       adUnitId: "ca-app-pub-3073920976555254/9648855736",
@@ -89,9 +90,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             },
             onAdDismissedFullScreenContent: (RewardedAd ad) {
               // 사용자가 광고를 종료하면 호출되는 이벤트
+              _sendAdRequest(context);
               ad.dispose();
-              _sendAdRequest();
-              print("광고 종료됨");
+              _fetchDataForCurrentTab();
+              setState(() {});
             },
             onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
               print("$ad onAdDismissedFullScreenContent");
@@ -253,7 +255,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
   bool _isAdRequestSent = false;
 
-  Future<void> _sendAdRequest() async {
+  Future<void> _sendAdRequest(BuildContext context) async {
     if (_isAdRequestSent) {
       print("이미 광고 요청 중입니다.");
       return;
@@ -276,6 +278,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       if (response.statusCode == 200 || response.statusCode == 201) {
         var data = json.decode(response.body);
         print(data);
+        setState(() {});
       } else {
         // 오류가 발생한 경우 처리
         print("오류 응답: ${response.statusCode}");
@@ -363,7 +366,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                                       ),
                                     ),
                                     onTap: () {
-                                      _callRewardScreenAd();
+                                      _callRewardScreenAd(context);
+                                      showSnackBar(context, "곧 광고가 실행됩니다");
                                       Navigator.of(context).pop();
                                     },
                                   ),
