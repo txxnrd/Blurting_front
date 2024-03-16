@@ -278,7 +278,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
         padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Color(0xFFF66464),
+            foregroundColor: Color(0xFFF66464),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
