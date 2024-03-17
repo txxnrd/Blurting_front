@@ -55,7 +55,7 @@ class ImagePageState extends State<ImagePage>
           return AlertDialog(
             title: Text('이미지 활용 동의'),
             content: Text(
-                'Blurting 앱은 프로필 이미지 기능을 위하여 이미지를 수집합니다.동의하시면 다음 단계로 넘어갑니다. 동의 하지 않으시면 사용에 제한이 있을 수 있습니다.'),
+                'Blurting 앱은 앱의 프로필 이미지 기능을 위하여 앱 회원 가입시에 이미지를 수집합니다. 동의하시면 다음 단계로 넘어갑니다. 동의하지 않으시면 사용에 제한이 있을 수 있습니다.'),
             actions: [
               TextButton(
                   onPressed: () {
