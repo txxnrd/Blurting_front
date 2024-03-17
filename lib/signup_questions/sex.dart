@@ -139,7 +139,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                           color: mainColor.lightGray,
                           width: 2,
                         ),
-                        primary: mainColor.black,
+                        foregroundColor: mainColor.black,
                         backgroundColor: selectedGender == Gender.male
                             ? mainColor.lightGray
                             : Colors.transparent,
@@ -174,7 +174,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     child: TextButton(
                       style: TextButton.styleFrom(
                         side: BorderSide(color: mainColor.lightGray, width: 2),
-                        primary: mainColor.lightGray,
+                        foregroundColor: mainColor.lightGray,
                         backgroundColor: selectedGender == Gender.female
                             ? mainColor.lightGray
                             : Colors.transparent,

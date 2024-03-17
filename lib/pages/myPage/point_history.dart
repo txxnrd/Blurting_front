@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +43,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     try {
       final url = Uri.parse(API.pointAdd);
       String savedToken = await getToken();
-
       final response = await http.get(url, headers: {
         'authorization': 'Bearer $savedToken',
         'Content-Type': 'application/json',
@@ -75,13 +75,15 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   }
 
   RewardedAd? _rewardedAd;
-  Future<void> _callRewardScreenAd() async {
+
+  Future<void> _callRewardScreenAd(BuildContext context) async {
     print("광고 실행");
     await RewardedAd.load(
       adUnitId: "ca-app-pub-3073920976555254/9648855736",
       request: AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (RewardedAd ad) {
+          _rewardedAd?.fullScreenContentCallback = null;
           _rewardedAd = ad;
           _isAdRequestSent = false; // 광고가 로드될 때마다 false로 리셋
           // 보상형 광고 이벤트 설정
@@ -91,9 +93,9 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             },
             onAdDismissedFullScreenContent: (RewardedAd ad) {
               // 사용자가 광고를 종료하면 호출되는 이벤트
+              _sendAdRequest(context);
               ad.dispose();
-              _sendAdRequest();
-              print("광고 종료됨");
+              _fetchDataForCurrentTab();
             },
             onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
               print("$ad onAdDismissedFullScreenContent");
@@ -255,12 +257,16 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
   bool _isAdRequestSent = false;
 
-  Future<void> _sendAdRequest() async {
+  Future<void> _sendAdRequest(BuildContext context) async {
+    if (_isAdRequestSent) {
+      print("이미 광고 요청 중입니다.");
+      return;
+    }
     print("sendAdRequest 실행됨");
-    var url = Uri.parse(API.pointAd);
+    _isAdRequestSent = true; // 함수 호출 전에 true로 설정
 
-    if (!_isAdRequestSent) {
-      _isAdRequestSent = true; // 함수 호출 전에 true로 설정
+    try {
+      var url = Uri.parse(API.pointAd);
       String savedToken = await getToken();
 
       var response = await http.get(
@@ -269,16 +275,22 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $savedToken',
         },
-        // JSON 형태로 인코딩
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         var data = json.decode(response.body);
         print(data);
-        _isAdRequestSent = false; // 성공적으로 호출되면 false로 리셋
+        setState(() {
+          Provider.of<UserProvider>(context, listen: false).point =
+              data['point'];
+        });
       } else {
         // 오류가 발생한 경우 처리
+        print("오류 응답: ${response.statusCode}");
       }
+    } catch (e) {
+      // 예외 발생 시 로깅
+      print("요청 중 예외 발생: $e");
     }
   }
 
@@ -359,7 +371,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
                                       ),
                                     ),
                                     onTap: () {
-                                      _callRewardScreenAd();
+                                      _callRewardScreenAd(context);
+                                      showSnackBar(context, "곧 광고가 실행됩니다");
                                       Navigator.of(context).pop();
                                     },
                                   ),
