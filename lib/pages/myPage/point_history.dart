@@ -52,6 +52,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
       // Handle the response as needed
       if (response.statusCode == 200) {
         // Extract data from the response and update the state
+        print(response.body);
+
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
@@ -69,6 +71,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         throw Exception('failed to load added point');
       }
     } catch (error) {
+      print(error);
       throw error;
     }
   }
