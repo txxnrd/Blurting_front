@@ -126,89 +126,89 @@ class _HomeState extends State<Home> {
     }
 
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
             print('재빌드');
             return Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(22),
-                        image: DecorationImage(
-                          image: AssetImage('./assets/images/homecard.png'),
-                          fit: BoxFit.cover,
-                        ),
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      image: DecorationImage(
+                        image: AssetImage('./assets/images/homecard.png'),
+                        fit: BoxFit.cover,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 20),
-                                child: Row(
-                                  children: [
-                                    if (cardItems[index].userSex == 'M')
-                                      ClipOval(
-                                        child: Container(
-                                          padding: EdgeInsets.all(5),
-                                          color: mainColor.pink.withOpacity(0.5),
-                                          child: Image.asset(
-                                            './assets/man.png',
-                                            width: 30,
-                                            height: 30,
-                                          ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Row(
+                                children: [
+                                  if (cardItems[index].userSex == 'M')
+                                    ClipOval(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        color: mainColor.pink.withOpacity(0.5),
+                                        child: Image.asset(
+                                          './assets/man.png',
+                                          width: 30,
+                                          height: 30,
                                         ),
-                                      ),
-                                    if (cardItems[index].userSex == 'F')
-                                      ClipOval(
-                                        child: Container(
-                                          padding: EdgeInsets.all(5),
-                                          color: mainColor.MainColor.withOpacity(0.5),
-                                          child: Image.asset(
-                                            './assets/woman.png',
-                                            width: 30,
-                                            height: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${cardItems[index].userName} 님의 답변',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Heebo',
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 12),
-                              SingleChildScrollView(
-                                child: Text(
-                                  'Q: ${cardItems[index].question}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Heebo',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
+                                  if (cardItems[index].userSex == 'F')
+                                    ClipOval(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        color: mainColor.MainColor.withOpacity(
+                                            0.5),
+                                        child: Image.asset(
+                                          './assets/woman.png',
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '${cardItems[index].userName} 님의 답변',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Heebo',
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            SingleChildScrollView(
+                              child: Text(
+                                'Q: ${cardItems[index].question}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              SizedBox(height: 13),
-                              Expanded(
-                                child: Stack(
-                                  children: [
+                            ),
+                            SizedBox(height: 13),
+                            Expanded(
+                              child: Stack(
+                                children: [
                                   RawScrollbar(
                                     thumbColor: mainColor.pink.withOpacity(0.8),
                                     trackColor: Colors.white.withOpacity(0.7),
@@ -234,49 +234,50 @@ class _HomeState extends State<Home> {
                                       },
                                       child: SingleChildScrollView(
                                         controller: _answercontroller,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 14.0),
-                                            child: Text(
-                                              'A: ${cardItems[index].answer}\n\n',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Heebo',
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              overflow: TextOverflow.fade,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 14.0),
+                                          child: Text(
+                                            'A: ${cardItems[index].answer}\n\n',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Heebo',
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
                                             ),
+                                            overflow: TextOverflow.fade,
                                           ),
                                         ),
                                       ),
+                                    ),
                                   )
                                 ],
                               ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: const [
-                                  Expanded(
-                                    child: Divider(
-                                      color: Colors.white,
-                                      height: 10,
-                                    ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: const [
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors.white,
+                                    height: 10,
                                   ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.thumb_up,
-                                            color: ilike
-                                                ? mainColor.pink
-                                                : Colors.white,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.thumb_up,
+                                        color: ilike
+                                            ? mainColor.pink
+                                            : Colors.white,
                                         size: 17,
                                       ),
                                       Container(
@@ -337,35 +338,34 @@ class _HomeState extends State<Home> {
                                 ),
                                 // GestureDetector(
                                 //   onTap: () {
-                                  //     setState(() {
-                                  //       setDialog(index);
-                                  //     });
-                                  //     changeLike(
-                                  //         cardItems[index].answerId, index);
-                                  //   },
-                                  //   child: Icon(
-                                  //     Icons.thumb_up,
-                                  //       color: ilike
-                                  //           ? mainColor.pink
-                                  //           : Colors.white,
-                                  //       size: 17,
-                                  //     ),
-                                  //   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
+                                //     setState(() {
+                                //       setDialog(index);
+                                //     });
+                                //     changeLike(
+                                //         cardItems[index].answerId, index);
+                                //   },
+                                //   child: Icon(
+                                //     Icons.thumb_up,
+                                //       color: ilike
+                                //           ? mainColor.pink
+                                //           : Colors.white,
+                                //       size: 17,
+                                //     ),
+                                //   ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              );
-          }
-        );
+                ),
+              ],
+            );
+          });
         });
   }
 
@@ -373,7 +373,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final pages = List.generate(cardItems.length, (index) {
       return GestureDetector(
-        onTap: (){
+        onTap: () {
           print('mvp 카드 눌림 $index');
           _showMVPCard(context, index);
         },
@@ -570,18 +570,18 @@ class _HomeState extends State<Home> {
                       //       setDialog(index);
                       //     });
                       //     changeLike(
-                                  //         cardItems[index].answerId, index);
-                                  //   },
-                                  //   child: Icon(
-                                  //     Icons.thumb_up,
-                                  //       color: ilike
-                                  //           ? mainColor.pink
-                                  //           : Colors.white,
-                                  //       size: 17,
-                                  //     ),
-                                  //   ),
-                                ],
-                              ),
+                      //         cardItems[index].answerId, index);
+                      //   },
+                      //   child: Icon(
+                      //     Icons.thumb_up,
+                      //       color: ilike
+                      //           ? mainColor.pink
+                      //           : Colors.white,
+                      //       size: 17,
+                      //     ),
+                      //   ),
+                    ],
+                  ),
                   SizedBox(
                     height: 10,
                   )

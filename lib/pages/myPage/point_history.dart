@@ -38,6 +38,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   }
 
   Future<List<Map<String, dynamic>>> fetchPointAdd() async {
+    print("지급 내역 불러오기 실행됨");
     if (!mounted) return [];
 
     try {
@@ -55,6 +56,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
         usageHistoryList = [];
+        print(data);
         earningHistoryList = data;
 
         return data;
@@ -88,11 +90,16 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             onAdShowedFullScreenContent: (RewardedAd ad) {
               // 광고가 로드되면 호출되는 이벤트
             },
-            onAdDismissedFullScreenContent: (RewardedAd ad) {
+            onAdDismissedFullScreenContent: (RewardedAd ad) async {
               // 사용자가 광고를 종료하면 호출되는 이벤트
-              _sendAdRequest(context);
-              ad.dispose();
-              _fetchDataForCurrentTab();
+
+              sendAdRequest(); //5포인트 달라고 서버에 요청
+              List<Map<String, dynamic>> data = [];
+              data = await fetchPointAdd();
+              setState(() {
+                earningHistoryList = data;
+              }); //포인트 받아온거 지급내역에 업데이트
+              ad.dispose(); //광고 화면 없앰
             },
             onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
               print("$ad onAdDismissedFullScreenContent");
@@ -111,6 +118,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         },
         onAdFailedToLoad: (LoadAdError error) {
           // 광고 로드 실패 시 처리
+          showSnackBar(context, "광고 로드 실패");
         },
       ),
     );
@@ -254,42 +262,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
   bool _isAdRequestSent = false;
 
-  Future<void> _sendAdRequest(BuildContext context) async {
-    if (_isAdRequestSent) {
-      print("이미 광고 요청 중입니다.");
-      return;
-    }
-    print("sendAdRequest 실행됨");
-    _isAdRequestSent = true; // 함수 호출 전에 true로 설정
-
-    try {
-      var url = Uri.parse(API.pointAd);
-      String savedToken = await getToken();
-
-      var response = await http.get(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $savedToken',
-        },
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var data = json.decode(response.body);
-        print(data);
-        setState(() {
-          Provider.of<UserProvider>(context, listen: false).point =
-              data['point'];
-        });
-      } else {
-        // 오류가 발생한 경우 처리
-        print("오류 응답: ${response.statusCode}");
-      }
-    } catch (e) {
-      // 예외 발생 시 로깅
-      print("요청 중 예외 발생: $e");
-    }
-  }
+//광고 보고 났으니 포인트 받아오는 함수
 
   @override
   void dispose() {
@@ -297,122 +270,181 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     super.dispose();
   }
 
-  void _showAd(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.2),
-            body: Stack(
-              children: [
-                Positioned(
-                  bottom: 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(top: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: 20),
-                              child: Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: mainColor.warning),
-                                    alignment: Alignment.topCenter,
-                                    child: Container(
-                                      margin:
-                                          EdgeInsets.fromLTRB(10, 16, 10, 10),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '광고를 시청하고 5p를 얻으시겠습니까?',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                fontFamily: "Heebo"),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: mainColor.MainColor),
-                                      height: 50,
-                                      // color: mainColor.MainColor,
-                                      child: Center(
-                                        child: Text(
-                                          '포인트 얻기',
-                                          style: TextStyle(
-                                              fontFamily: 'Heebo',
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      _callRewardScreenAd(context);
-                                      showSnackBar(context, "곧 광고가 실행됩니다");
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: mainColor.warning),
-                                // color: mainColor.MainColor,
-                                child: Center(
-                                  child: Text(
-                                    '취소',
-                                    style: TextStyle(
-                                        fontFamily: 'Heebo',
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                if (mounted) {
-                                  setState(() {
-                                    Navigator.of(context).pop();
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        });
+  // void _showAd(BuildContext context) async {
+  //   // showDialog의 결과를 기다립니다.
+  //   final shouldShowAd = await showDialog<bool>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Scaffold(
+  //         backgroundColor: Colors.black.withOpacity(0.2),
+  //         body: Stack(
+  //           children: [
+  //             Positioned(
+  //               bottom: 50,
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Container(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     margin: EdgeInsets.only(top: 30),
+  //                     child: Column(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                       children: [
+  //                         Container(
+  //                           margin: EdgeInsets.only(bottom: 20),
+  //                           child: Stack(
+  //                             alignment: Alignment.bottomCenter,
+  //                             children: [
+  //                               Container(
+  //                                 width:
+  //                                     MediaQuery.of(context).size.width * 0.9,
+  //                                 height: 100,
+  //                                 decoration: BoxDecoration(
+  //                                     borderRadius: BorderRadius.circular(10),
+  //                                     color: mainColor.warning),
+  //                                 alignment: Alignment.topCenter,
+  //                                 child: Container(
+  //                                   margin: EdgeInsets.fromLTRB(10, 16, 10, 10),
+  //                                   child: Column(
+  //                                     children: [
+  //                                       Text(
+  //                                         '광고를 시청하고 5p를 얻으시겠습니까?',
+  //                                         style: TextStyle(
+  //                                             color: Colors.white,
+  //                                             fontWeight: FontWeight.w500,
+  //                                             fontSize: 14,
+  //                                             fontFamily: "Heebo"),
+  //                                       )
+  //                                     ],
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                               GestureDetector(
+  //                                 child: Container(
+  //                                   width:
+  //                                       MediaQuery.of(context).size.width * 0.9,
+  //                                   decoration: BoxDecoration(
+  //                                       borderRadius: BorderRadius.circular(10),
+  //                                       color: mainColor.MainColor),
+  //                                   height: 50,
+  //                                   // color: mainColor.MainColor,
+  //                                   child: Center(
+  //                                     child: Text(
+  //                                       '포인트 얻기',
+  //                                       style: TextStyle(
+  //                                           fontFamily: 'Heebo',
+  //                                           color: Colors.white,
+  //                                           fontSize: 20,
+  //                                           fontWeight: FontWeight.w500),
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 onTap: () {
+  //                                   Navigator.of(context).pop(true);
+  //                                 },
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                         GestureDetector(
+  //                           child: Container(
+  //                             width: MediaQuery.of(context).size.width * 0.9,
+  //                             height: 50,
+  //                             decoration: BoxDecoration(
+  //                                 borderRadius: BorderRadius.circular(10),
+  //                                 color: mainColor.warning),
+  //                             // color: mainColor.MainColor,
+  //                             child: Center(
+  //                               child: Text(
+  //                                 '취소',
+  //                                 style: TextStyle(
+  //                                     fontFamily: 'Heebo',
+  //                                     color: Colors.white,
+  //                                     fontSize: 20,
+  //                                     fontWeight: FontWeight.w500),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           onTap: () {
+  //                             if (mounted) {
+  //                               setState(() {
+  //                                 Navigator.of(context).pop();
+  //                               });
+  //                             }
+  //                           },
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+
+  //   // 사용자가 '포인트 얻기'를 선택한 경우, 광고 로드 함수 호출
+  //   if (shouldShowAd == true) {
+  //     _callRewardScreenAd(context);
+  //     showSnackBar(context, "곧 광고가 실행됩니다");
+  //   }
+  // }
+
+  // 이 메서드는 UserProvider의 인스턴스를 반환합니다.
+  UserProvider getUserProvider() {
+    try {
+      return Provider.of<UserProvider>(context, listen: false);
+    } catch (e) {
+      print('Error finding UserProvider: $e');
+      rethrow; // 오류를 다시 발생시키거나 적절하게 처리하세요.
+    }
+  }
+
+  Future<void> sendAdRequest() async {
+    if (!mounted) return;
+
+    if (_isAdRequestSent) {
+      print("이미 광고 요청 중입니다.");
+      return;
+    }
+    print("sendAdRequest 실행됨");
+    _isAdRequestSent = true;
+
+    String savedToken = await getToken();
+
+    var response = await http.get(
+      Uri.parse(API.pointAd),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var data = json.decode(response.body);
+      print(data);
+
+      // 이 부분을 새로운 함수로 분리하고,
+      // 이 함수는 build 메소드 안이나 다른 적절한 곳에서 호출해야 합니다.
+      updatePoints(data['point']);
+    } else {
+      // 오류 처리
+      print("오류 응답: ${response.statusCode}");
+    }
+  }
+
+// points를 업데이트하는 로직을 별도의 함수로 분리
+  void updatePoints(int newPoints) {
+    if (!mounted) return;
+
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.point = newPoints;
+    } catch (e) {
+      print('Error updating points: $e');
+    }
   }
 
   @override
@@ -448,7 +480,8 @@ class _PointHistoryPageState extends State<PointHistoryPage>
               )),
           InkWell(
             onTap: () {
-              _showAd(context);
+              // _showAd(context);
+              _callRewardScreenAd(context);
             },
             child: Container(
               width: 30,
@@ -530,10 +563,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
               physics: NeverScrollableScrollPhysics(),
               children: [
                 // 1. 지급내역
-                _buildHistoryList(earningHistoryList),
+                _buildHistoryList(earningHistoryList, context),
 
                 // 2. 사용내역
-                _buildHistoryList(usageHistoryList),
+                _buildHistoryList(usageHistoryList, context),
               ],
             ),
           ),
@@ -542,15 +575,11 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     );
   }
 
-  Widget _buildHistoryList(List<Map<String, dynamic>> historyList) {
-    // if (historyList.isEmpty) {
-    //   return Center(child: Text('No data available'));
-    // }
-
+  Widget _buildHistoryList(
+      List<Map<String, dynamic>> historyList, BuildContext context) {
     // Group data by date
     Map<String, List<Map<String, dynamic>>> groupedData =
         groupDataByDate(historyList);
-
     return ListView.builder(
       padding: EdgeInsets.only(top: 15),
       itemCount: groupedData.length,

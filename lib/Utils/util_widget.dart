@@ -508,6 +508,8 @@ class pointAppbar extends StatelessWidget {
     return Container(
       child: InkWell(
           onTap: () {
+            print("Navigating to PointHistoryPage with context: $context");
+
             if (canNavigate) {
               Navigator.push(
                 context,
@@ -525,7 +527,7 @@ class pointAppbar extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.fromLTRB(9, 0, 9, 0),
                 child: Text(
-                  '${Provider.of<UserProvider>(context, listen: false).point}p',
+                  '${Provider.of<UserProvider>(context, listen: true).point}p',
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Heebo',
