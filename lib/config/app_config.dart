@@ -91,4 +91,11 @@ class API {
       "${ServerEndpoints.serverEndpoint}/user/account";
   static final String nickname =
       "${ServerEndpoints.serverEndpoint}/point/nickname";
+  /*EVENT */
+  static final event = "${ServerEndpoints.serverEndpoint}/event";
+  static final eventRegister = "${ServerEndpoints.serverEndpoint}/event/register";
+  static final eventNo = "${ServerEndpoints.serverEndpoint}/event/";
+  static final eventAnwer = "${ServerEndpoints.serverEndpoint}/event/answer";
+  static final eventResult = "${ServerEndpoints.serverEndpoint}/event/result";
+  static final eventOff = "${ServerEndpoints.serverEndpoint}/event/meeting/";
 }

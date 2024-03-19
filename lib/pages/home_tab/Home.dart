@@ -1,5 +1,7 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
+import 'package:blurting/pages/blurting_tab/matchingAni.dart';
+import 'package:blurting/pages/home_tab/eventGroup.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/model/post.dart';
@@ -65,6 +67,9 @@ class _HomeState extends State<Home> {
   int likes = 0;
   final answercontroller = ScrollController();
   final _answercontroller = ScrollController();
+  String code = '';
+  String tableNo = '';
+  late int state = -1;
 
   late Future<List<home>> futureHome;
 
@@ -632,6 +637,7 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
           Container(
+            width: 25,
             margin: EdgeInsets.only(top: 20),
             child: IconButton(
               icon: Icon(
@@ -646,6 +652,161 @@ class _HomeState extends State<Home> {
               },
             ),
           ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: IconButton(
+              icon: Icon(
+                Icons.event,
+                color: mainColor.Gray,
+              ),
+              onPressed: () async {
+                await fetchState();
+                print(state);
+                // 일홉 방 매칭 dialog (코드 입력)
+                if (state == 0) {
+                  print('요청');
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return (Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: 250,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: Text('코드 입력',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'Heebo',
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w700)),
+                                    ),
+                                    TextField(
+                                      onChanged: (value) {
+                                        code = value;
+                                      },
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: Text('테이블 번호 입력',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'Heebo',
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w700)),
+                                    ),
+                                    TextField(
+                                      onChanged: (value) {
+                                        tableNo = value;
+                                      },
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: mainColor.MainColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                          child: InkWell(
+                                              child: Text(
+                                                '방 입장하기',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Heebo',
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              onTap: () {
+                                                print(code);
+                                                print(tableNo);
+                                                //  코드가 일치한다면 백엔드에 요청
+                                                if (code == '') {
+                                                  // 일일호프, 일홉 코드
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Matching(
+                                                                event: true, tableNo: tableNo,
+                                                              )));
+                                                }
+                                                else{
+                                                  showSnackBar(context, '코드를 다시 확인해 주세요!');
+                                                }
+                                              }),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: mainColor.lightGray,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                          child: InkWell(
+                                            child: Text(
+                                              '취소',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: 'Heebo',
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ]),
+                            ),
+                          ),
+                        ));
+                      });
+                }
+                else if(state == 1){
+                  // 방으로 들어가기
+                  // Navigator.push(context, route);
+                  print('방');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => eventGroupChat(
+                              )));
+                }
+                else if (state == 2) {
+                  // 매칭 애니로 이동
+                  // Navigator.push(context, route);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Matching(event: true, tableNo: tableNo,)));
+                  print('애니');
+                } else if (state == 3) {
+                  // 화살 날리기
+                  print('화살');
+                }
+                else{
+                  print('object');
+                }
+              },
+            ),
+          )
         ],
       ),
       body: Column(
@@ -863,6 +1024,34 @@ class _HomeState extends State<Home> {
         });
       }
     } else {}
+  }
+  
+  Future<void> fetchState() async {
+    // answerId 보내
+    final url = Uri.parse(API.event);
+    String savedToken = await getToken();
+
+    final response = await http.get(url,
+        headers: {
+          'authorization': 'Bearer $savedToken',
+          'Content-Type': 'application/json',
+        });
+
+    if (response.statusCode == 201) {
+      try {
+        state = jsonDecode(response.body);
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchState);
+    } else {
+      print(response.statusCode);
+    }
+    state = 0;
+    print(state);
   }
 }
 

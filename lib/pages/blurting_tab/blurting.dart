@@ -556,7 +556,7 @@ class _Blurting extends State<Blurting> {
                   isState == 'end') {
                 // 아직 방이 만들어지지 않음
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Matching()));
+                    MaterialPageRoute(builder: (context) => Matching(event: false, tableNo: '',)));
               }
 
               // 데이터를 로컬에 저장하는 함수
