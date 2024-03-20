@@ -8,7 +8,6 @@ import 'package:blurting/token.dart';
 import 'package:blurting/utils/provider.dart';
 
 class PointHistoryPage extends StatefulWidget {
-  // Constructor to receive the user token
   PointHistoryPage({super.key});
 
   @override
@@ -47,9 +46,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
         'Content-Type': 'application/json',
       });
 
-      // Handle the response as needed
       if (response.statusCode == 200) {
-        // Extract data from the response and update the state
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
@@ -149,14 +146,11 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   String extractTimeFromDate(String dateTimeString) {
     try {
       if (dateTimeString.isNotEmpty) {
-        // Split the time string
         List<String> timeParts = dateTimeString.split(':');
 
-        // Ensure that there are at least three parts (hours, minutes, seconds)
         if (timeParts.length >= 3) {
           int hours = int.parse(timeParts[0]);
           int minutes = int.parse(timeParts[1]);
-          // Split seconds and milliseconds
           List<String> secondsAndMilliseconds = timeParts[2].split('.');
           int seconds = int.parse(secondsAndMilliseconds[0]);
 
@@ -165,21 +159,15 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           return DateFormat.Hm().format(dateTime);
         }
       }
-    } catch (e) {
-      // Handle the exception or log the error
-    }
+    } catch (e) {}
     return 'Unknown time';
   }
 
-// Function to extract date and time from the date-time string
   List<String> splitDateTime(String dateTimeString) {
     try {
-      // Ensure that the dateTimeString is not empty
       if (dateTimeString.isNotEmpty) {
-        // Split the date-time string
         List<String> dateTimeParts = dateTimeString.split('T');
 
-        // Ensure that there are two parts (date and time)
         if (dateTimeParts.length == 2) {
           String date = dateTimeParts[0];
           String time = extractTimeFromDate(dateTimeParts[1]);
@@ -187,15 +175,11 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           return [date, time];
         }
       }
-    } catch (e) {
-      // Handle the exception or log the error
-    }
+    } catch (e) {}
 
-    // Return a default value or handle the error as needed
     return ['Unknown date', 'Unknown time'];
   }
 
-// Function to group the data by date
   Map<String, List<Map<String, dynamic>>> groupDataByDate(
       List<Map<String, dynamic>> data) {
     Map<String, List<Map<String, dynamic>>> groupedData = {};
@@ -264,10 +248,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             AppbarDescription("포인트 내역"),
           ],
         ),
-        // flexibleSpace: Container(
-        //   margin: EdgeInsets.only(top: 80),
-        //   child: ,
-        // ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -288,7 +268,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             },
           ),
         ],
-
         centerTitle: true,
       ),
       body: Column(
@@ -359,7 +338,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
               children: [
                 // 1. 지급내역
                 _buildHistoryList(earningHistoryList),
-
                 // 2. 사용내역
                 _buildHistoryList(usageHistoryList),
               ],
@@ -371,11 +349,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   }
 
   Widget _buildHistoryList(List<Map<String, dynamic>> historyList) {
-    // if (historyList.isEmpty) {
-    //   return Center(child: Text('No data available'));
-    // }
-
-    // Group data by date
     Map<String, List<Map<String, dynamic>>> groupedData =
         groupDataByDate(historyList);
 
@@ -392,7 +365,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                date, // Show only date
+                date,
                 style: TextStyle(
                   fontFamily: "Heebo",
                   fontWeight: FontWeight.w500,
@@ -429,7 +402,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     );
   }
 
-// Function to format history text with pink square bullet
   Widget formatHistoryText(String history) {
     return RichText(
       text: TextSpan(
