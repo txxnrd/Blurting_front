@@ -542,7 +542,7 @@ class _Blurting extends State<Blurting> {
               if (isState == 'Continue') {
                 if (localDay == day) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => GroupChat()));
+                      MaterialPageRoute(builder: (context) => GroupChat(day: day,)));
                 } else {
                   Navigator.push(
                       context,

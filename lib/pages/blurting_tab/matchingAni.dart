@@ -298,14 +298,14 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
   Future<void> eventRegister(String tableNo) async {
     final url = Uri.parse(API.eventRegister);
     String savedToken = await getToken();
+    print(tableNo);
 
-    final response = await http.post(url, headers: {
-      'authorization': 'Bearer $savedToken',
-      'Content-Type': 'application/json',
-    },
-    body:       json.encode({
-        'table': tableNo
-      }));
+    final response = await http.post(url,
+        headers: {
+          'authorization': 'Bearer $savedToken',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'table': tableNo}));
 
     if (response.statusCode == 201) {
       print('요청 성공');
@@ -313,6 +313,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
       print('Response body: ${response.body}');
     } else if (response.statusCode == 400) {
       print('매칭 중');
+      print('Response body: ${response.body}');
     } else if (response.statusCode == 409) {
       print('매칭 완료');
     } else {

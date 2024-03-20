@@ -93,9 +93,11 @@ class API {
       "${ServerEndpoints.serverEndpoint}/point/nickname";
   /*EVENT */
   static final event = "${ServerEndpoints.serverEndpoint}/event";
+  static final eventLatest = "${ServerEndpoints.serverEndpoint}/event/latest";
   static final eventRegister = "${ServerEndpoints.serverEndpoint}/event/register";
   static final eventNo = "${ServerEndpoints.serverEndpoint}/event/";
   static final eventAnwer = "${ServerEndpoints.serverEndpoint}/event/answer";
   static final eventResult = "${ServerEndpoints.serverEndpoint}/event/result";
   static final eventOff = "${ServerEndpoints.serverEndpoint}/event/meeting/";
+  static final eventInfo = "${ServerEndpoints.serverEndpoint}/event/group-info";
 }

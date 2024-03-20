@@ -30,7 +30,7 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => GroupChat(),
+          pageBuilder: (context, animation, secondaryAnimation) => GroupChat(day: day),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = 0.0;
             const end = 1.0;

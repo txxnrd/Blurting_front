@@ -36,7 +36,7 @@ int currentIndex = 0; // 현재 보고 있는 페이지
 int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
 String _question = '';
-String day = 'Day0';
+String part = 'Part0';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -100,59 +100,29 @@ class QuestionItem extends StatelessWidget {
   }
 }
 
-class GroupChat extends StatefulWidget {
+class eventGroupChat extends StatefulWidget {
   static bool pointValid = false;
-  final String day;
+  final String part;
 
-  GroupChat({super.key, required this.day});
+  eventGroupChat({super.key, required this.part});
 
   @override
-  _GroupChat createState() => _GroupChat();
+  _eventGroupChat createState() => _eventGroupChat();
 }
 
-class _GroupChat extends State<GroupChat> {
+class _eventGroupChat extends State<eventGroupChat> {
   PageController _pageController = PageController();
 
   TextEditingController _controller = TextEditingController();
-  List<bool> isBlock = List<bool>.filled(10, false);
+  List<bool> isBlock = List<bool>.filled(4, false);
   late DateTime lastTime = DateTime.now();
   late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
+    fetchLatestComments();
 
-    Future<void> initializeSocket() async {
-      // 맨 처음 들어왔을 땐 마지막...
-      await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
-
-      print(currentIndex);
-
-      socket.on('create_room', (data) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Whisper(
-                  socket: socket,
-                  userName: data['nickname'] as String? ?? '',
-                  roomId: data['roomId'] as String? ?? '')),
-        ).then((value) {
-          setState(() {
-            fetchIndexComments(currentIndex);
-          });
-        });
-      });
-
-      socket.on('connect', (_) {
-        print('소켓 연결됨');
-      });
-
-      socket.on('disconnect', (_) {
-        print('소켓 연결 끊김');
-      });
-    }
-
-    initializeSocket();
     _pageController = PageController(initialPage: _questionNumber - 1);
 
     loadTime();
@@ -174,7 +144,7 @@ class _GroupChat extends State<GroupChat> {
     });
   }
 
-  List<Room> rooms = List.generate(10, (index) => Room(index + 1, []));
+  List<Room> rooms = List.generate(4, (index) => Room(index + 1, []));
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +179,7 @@ class _GroupChat extends State<GroupChat> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        day,
+                        widget.part,
                         style: TextStyle(
                             fontFamily: "Heebo",
                             fontSize: 32,
@@ -219,7 +189,7 @@ class _GroupChat extends State<GroupChat> {
                     ],
                   ),
                   Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
+                      width: MediaQuery.of(context).size.width * 0.2,
                       height: 25,
                       margin: EdgeInsets.only(top: 10),
                       child: Row(
@@ -228,12 +198,6 @@ class _GroupChat extends State<GroupChat> {
                           QuestionNumber(1),
                           QuestionNumber(2),
                           QuestionNumber(3),
-                          QuestionNumber(4),
-                          QuestionNumber(5),
-                          QuestionNumber(6),
-                          QuestionNumber(7),
-                          QuestionNumber(8),
-                          QuestionNumber(9),
                         ],
                       )),
                 ],
@@ -465,9 +429,9 @@ class _GroupChat extends State<GroupChat> {
 
   // 노태윤에게. 백엔드에서 어떻게 줄진 모르겟는데 이게 딱 맨 처음에 들어갓을 때 뜨는 거임. 번호 눌럿을 때 or 페이지 넘겻을 때에는 fetchIndexComments 호출 둘이 작동하는 방식은 걍 같아요
   Future<void> fetchLatestComments() async {
-    DateTime createdAt;
+    // DateTime createdAt;
 
-    final url = Uri.parse(API.latest);
+    final url = Uri.parse(API.eventLatest);
     String savedToken = await getToken();
 
     final response = await http.get(
@@ -479,19 +443,15 @@ class _GroupChat extends State<GroupChat> {
     );
 
     if (response.statusCode == 200) {
-      socket = IO.io(
-          '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
-        'transports': ['websocket'],
-        'auth': {'authorization': 'Bearer $savedToken'},
-      });
+      print('sdf');
 
       print(rooms[currentIndex].replies);
       try {
         Map<String, dynamic> responseData = jsonDecode(response.body);
+        print(responseData);
 
-        createdAt = _parseDateTime(responseData['createdAt']);
+        // createdAt = _parseDateTime(responseData['createdAt']);
 
-        // 노태윤에게. day 관련해서는 안 봐도 되고
         if (mounted) {
           setState(() {
             _questionNumber = responseData['questionNo'];
@@ -502,19 +462,9 @@ class _GroupChat extends State<GroupChat> {
 
             rooms[currentIndex].replies.clear();
 
-            // Duration timeDifference =
-            //     DateTime.now().add(Duration(hours: 9)).difference(createdAt);
+            print(response.body);
 
-            // if (timeDifference >= Duration(hours: 24)) {
-            //   // 24시간 지났으면 2일차
-            //   day = 'Day2';
-            // }
-            // if (timeDifference >= Duration(hours: 48)) {
-            //   // 48시간 지났으면 3일차
-            //   day = 'Day3';
-            // }
             int index = 0;
-            // 노태윤에게. 여기가 답변 추가하는 부분인데 여기만 수정하면 됨
 
             //답변을 받음
             for (final answerData in responseData['answers']) {
@@ -624,13 +574,14 @@ class _GroupChat extends State<GroupChat> {
                         childReplies)); // 걍... 소켓임 신경 쓸 필요 없음
                   }
                   print("추가된 답변 ${rooms[currentIndex].replies}");
-                  print("윽");
                 });
               }
             }
           });
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     } else if (response.statusCode == 401) {
       //refresh token으로 새로운 accesstoken 불러오는 코드.
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
@@ -647,7 +598,7 @@ class _GroupChat extends State<GroupChat> {
     // 선택된 QnA
     // 선택된 QnA로 화면 새로 그리기
 
-    final url = Uri.parse('${API.answerNo}$no');
+    final url = Uri.parse('${API.eventNo}$no');
     String savedToken = await getToken();
 
     final response = await http.get(
@@ -745,8 +696,6 @@ class _GroupChat extends State<GroupChat> {
               }
             }
 
-            print("여기도 잘됨");
-
             if (answerData['userId'] ==
                 Provider.of<UserProvider>(context, listen: false).userId) {
               print("내가 쓴 답변 추가 완료");
@@ -781,7 +730,6 @@ class _GroupChat extends State<GroupChat> {
                   ),
                   childReplies));
             }
-            print("여기는 실행이 안됨");
 
             for (var reply in rooms[currentIndex].replies) {
               print("추가가 된 reply들 ${reply}");
@@ -815,7 +763,7 @@ class _GroupChat extends State<GroupChat> {
         likedNum: 0,
         index: 0);
 
-    final url = Uri.parse(API.answer);
+    final url = Uri.parse(API.eventAnwer);
     String savedToken = await getToken();
 
     var response = await http.post(url,
@@ -850,7 +798,6 @@ class _GroupChat extends State<GroupChat> {
   }
 
   Future<void> SendReply(String reply, int questionId, int index) async {
-    print("SendReply 실행이 됨");
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget otherchatReply = OtherChatReply(
@@ -885,9 +832,6 @@ class _GroupChat extends State<GroupChat> {
     print(response.statusCode);
     if (response.statusCode == 201) {
       if (response.body != 'Created') {
-        // Map responseData = jsonDecode(response.body);
-        // Provider.of<UserProvider>(context, listen: false).point =
-        //     responseData['point'];
       } else {}
 
       // 성공적으로 응답

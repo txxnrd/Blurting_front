@@ -1,7 +1,9 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
+// import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/blurting_tab/matchingAni.dart';
 import 'package:blurting/pages/home_tab/eventGroup.dart';
+import 'package:blurting/pages/myPage/Utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/model/post.dart';
@@ -16,6 +18,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
+bool isTap = false;
+
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
     return DateTime(1, 11, 30, 0, 0, 0, 0); //  기본 값
@@ -26,6 +30,8 @@ DateTime _parseDateTime(String? dateTimeString) {
     return DateTime.now(); // 혹은 다른 기본 값으로 대체
   }
 }
+
+bool iSended = false;
 
 class CardItem {
   final String userName;
@@ -70,6 +76,13 @@ class _HomeState extends State<Home> {
   String code = '';
   String tableNo = '';
   late int state = -1;
+  String part = 'Part0';
+  Timer? _blinkTimer;
+  bool isVisible = false;
+  int userId = 0;
+  // List<List<Widget>> ProfileList = List.generate(
+  //   3, (index) => <Widget>[]); // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
+  List<Widget> ProfileList = [];
 
   late Future<List<home>> futureHome;
 
@@ -80,6 +93,33 @@ class _HomeState extends State<Home> {
     cardItems = [];
     initializePages(); //위젯 생성 될 때 불러와야하는 정보들
     updateRemainingTime();
+    fetchUserId();
+  }
+
+  @override
+  void dispose() {
+    _blinkTimer?.cancel();
+    isTap = false;
+    super.dispose();
+  }
+
+  void _startBlinking() {
+    print('깜빢');
+
+    _blinkTimer = Timer.periodic(Duration(milliseconds: 1000), (Timer timer) {
+      if (mounted) {
+        setState(() {
+          isVisible = !isVisible;
+          print(isVisible);
+        });
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  fetchUserId() async {
+    userId = await getuserId();
   }
 
   Future<void> initializePages() async {
@@ -131,89 +171,89 @@ class _HomeState extends State<Home> {
     }
 
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
             print('재빌드');
             return Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(22),
-                        image: DecorationImage(
-                          image: AssetImage('./assets/images/homecard.png'),
-                          fit: BoxFit.cover,
-                        ),
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      image: DecorationImage(
+                        image: AssetImage('./assets/images/homecard.png'),
+                        fit: BoxFit.cover,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 20),
-                                child: Row(
-                                  children: [
-                                    if (cardItems[index].userSex == 'M')
-                                      ClipOval(
-                                        child: Container(
-                                          padding: EdgeInsets.all(5),
-                                          color: mainColor.pink.withOpacity(0.5),
-                                          child: Image.asset(
-                                            './assets/man.png',
-                                            width: 30,
-                                            height: 30,
-                                          ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Row(
+                                children: [
+                                  if (cardItems[index].userSex == 'M')
+                                    ClipOval(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        color: mainColor.pink.withOpacity(0.5),
+                                        child: Image.asset(
+                                          './assets/man.png',
+                                          width: 30,
+                                          height: 30,
                                         ),
-                                      ),
-                                    if (cardItems[index].userSex == 'F')
-                                      ClipOval(
-                                        child: Container(
-                                          padding: EdgeInsets.all(5),
-                                          color: mainColor.MainColor.withOpacity(0.5),
-                                          child: Image.asset(
-                                            './assets/woman.png',
-                                            width: 30,
-                                            height: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${cardItems[index].userName} 님의 답변',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Heebo',
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 12),
-                              SingleChildScrollView(
-                                child: Text(
-                                  'Q: ${cardItems[index].question}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Heebo',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
+                                  if (cardItems[index].userSex == 'F')
+                                    ClipOval(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        color: mainColor.MainColor.withOpacity(
+                                            0.5),
+                                        child: Image.asset(
+                                          './assets/woman.png',
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '${cardItems[index].userName} 님의 답변',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Heebo',
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            SingleChildScrollView(
+                              child: Text(
+                                'Q: ${cardItems[index].question}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              SizedBox(height: 13),
-                              Expanded(
-                                child: Stack(
-                                  children: [
+                            ),
+                            SizedBox(height: 13),
+                            Expanded(
+                              child: Stack(
+                                children: [
                                   RawScrollbar(
                                     thumbColor: mainColor.pink.withOpacity(0.8),
                                     trackColor: Colors.white.withOpacity(0.7),
@@ -239,49 +279,50 @@ class _HomeState extends State<Home> {
                                       },
                                       child: SingleChildScrollView(
                                         controller: _answercontroller,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 14.0),
-                                            child: Text(
-                                              'A: ${cardItems[index].answer}\n\n',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Heebo',
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              overflow: TextOverflow.fade,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 14.0),
+                                          child: Text(
+                                            'A: ${cardItems[index].answer}\n\n',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Heebo',
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
                                             ),
+                                            overflow: TextOverflow.fade,
                                           ),
                                         ),
                                       ),
+                                    ),
                                   )
                                 ],
                               ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: const [
-                                  Expanded(
-                                    child: Divider(
-                                      color: Colors.white,
-                                      height: 10,
-                                    ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: const [
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors.white,
+                                    height: 10,
                                   ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.thumb_up,
-                                            color: ilike
-                                                ? mainColor.pink
-                                                : Colors.white,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.thumb_up,
+                                        color: ilike
+                                            ? mainColor.pink
+                                            : Colors.white,
                                         size: 17,
                                       ),
                                       Container(
@@ -342,35 +383,160 @@ class _HomeState extends State<Home> {
                                 ),
                                 // GestureDetector(
                                 //   onTap: () {
-                                  //     setState(() {
-                                  //       setDialog(index);
-                                  //     });
-                                  //     changeLike(
-                                  //         cardItems[index].answerId, index);
-                                  //   },
-                                  //   child: Icon(
-                                  //     Icons.thumb_up,
-                                  //       color: ilike
-                                  //           ? mainColor.pink
-                                  //           : Colors.white,
-                                  //       size: 17,
-                                  //     ),
-                                  //   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
+                                //     setState(() {
+                                //       setDialog(index);
+                                //     });
+                                //     changeLike(
+                                //         cardItems[index].answerId, index);
+                                //   },
+                                //   child: Icon(
+                                //     Icons.thumb_up,
+                                //       color: ilike
+                                //           ? mainColor.pink
+                                //           : Colors.white,
+                                //       size: 17,
+                                //     ),
+                                //   ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              );
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  void _showArrowDialog(BuildContext context) {
+    
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.width * 0.6,
+                child: (Stack(
+                  children: [
+                    Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 8),
+                              child: Text(
+                                'Final',
+                                style: TextStyle(
+                                    color: mainColor.Gray,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 32,
+                                    fontFamily: 'Heebo'),
+                              ),
+                            ),
+                            if (!iSended)
+                              Text(
+                                '누가 당신의 마음을 사로잡았나요?',
+                                style: TextStyle(
+                                    color: mainColor.Gray,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    fontFamily: 'Heebo'),
+                              ),
+                            if (!iSended)
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    for (int i = 0; i < ProfileList.length; i++)
+                                      ProfileList[i],
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                        if (iSended)
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '화살표 날리기 완료!\n다른 사람들의 선택이 모두 끝날 때까지\n기다려 주세요.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: mainColor.Gray,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  fontFamily: 'Heebo'),
+                            ),
+                          ),
+                      ],
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          AnimatedOpacity(
+                            duration: Duration(milliseconds: 1000),
+                            opacity: isVisible ? 1 : 0,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                '터치해서 화살을 날려주세요!',
+                                style: TextStyle(
+                                    color: mainColor.Gray,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Heebo"),
+                              ),
+                            ),
+                          ),
+                          Container(
+                              margin: EdgeInsets.fromLTRB(0, 4, 10, 10),
+                              width: 40,
+                              child: InkWell(
+                                  splashColor:
+                                      Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+                                  onTap: (isTap == true && iSended == false)
+                                      ? () {
+                                          // 하나라도 true일 떄 (하나라도 선택되었을 때)
+                                          sendArrow(userId, 0);
+                                        }
+                                      : null,
+                                  child: Image.asset(
+                                    'assets/images/blurtingArrow.png',
+                                    color: isTap == true || iSended == true
+                                        ? mainColor.MainColor
+                                        : mainColor.lightGray,
+                                  ))),
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+              ),
+            );
           }
-        );
+          );
+        }).then((_){
+          // dialog가 닫히면
+          _blinkTimer?.cancel();
+          isTap = false;
+          isVisible = false;
         });
   }
 
@@ -378,7 +544,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final pages = List.generate(cardItems.length, (index) {
       return GestureDetector(
-        onTap: (){
+        onTap: () {
           print('mvp 카드 눌림 $index');
           _showMVPCard(context, index);
         },
@@ -575,18 +741,18 @@ class _HomeState extends State<Home> {
                       //       setDialog(index);
                       //     });
                       //     changeLike(
-                                  //         cardItems[index].answerId, index);
-                                  //   },
-                                  //   child: Icon(
-                                  //     Icons.thumb_up,
-                                  //       color: ilike
-                                  //           ? mainColor.pink
-                                  //           : Colors.white,
-                                  //       size: 17,
-                                  //     ),
-                                  //   ),
-                                ],
-                              ),
+                      //         cardItems[index].answerId, index);
+                      //   },
+                      //   child: Icon(
+                      //     Icons.thumb_up,
+                      //       color: ilike
+                      //           ? mainColor.pink
+                      //           : Colors.white,
+                      //       size: 17,
+                      //     ),
+                      //   ),
+                    ],
+                  ),
                   SizedBox(
                     height: 10,
                   )
@@ -597,6 +763,8 @@ class _HomeState extends State<Home> {
         ),
       );
     });
+
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -669,6 +837,8 @@ class _HomeState extends State<Home> {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
+                        code = '';
+                        tableNo = '';
                         return (Scaffold(
                           backgroundColor: Colors.transparent,
                           body: Align(
@@ -744,11 +914,13 @@ class _HomeState extends State<Home> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               Matching(
-                                                                event: true, tableNo: tableNo,
+                                                                event: true,
+                                                                tableNo:
+                                                                    tableNo,
                                                               )));
-                                                }
-                                                else{
-                                                  showSnackBar(context, '코드를 다시 확인해 주세요!');
+                                                } else {
+                                                  showSnackBar(context,
+                                                      '코드를 다시 확인해 주세요!');
                                                 }
                                               }),
                                         ),
@@ -780,28 +952,41 @@ class _HomeState extends State<Home> {
                           ),
                         ));
                       });
-                }
-                else if(state == 1){
+                } else if (state == 1) {
                   // 방으로 들어가기
-                  // Navigator.push(context, route);
                   print('방');
+                  // 마지막 질문 인덱스 받아오기
+                  await fetchLatestComments();
+
+                  // ignore: use_build_context_synchronously
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => eventGroupChat(
+                                part: part,
                               )));
-                }
-                else if (state == 2) {
+                } else if (state == 2) {
                   // 매칭 애니로 이동
-                  // Navigator.push(context, route);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Matching(event: true, tableNo: tableNo,)));
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Matching(
+                                event: true,
+                                tableNo: tableNo,
+                              )));
                   print('애니');
                 } else if (state == 3) {
                   // 화살 날리기
                   print('화살');
-                }
-                else{
+                  // ignore: use_build_context_synchronously
+
+                  await fetchGroupInfo();
+                  _showArrowDialog(context);
+
+                  // ignore: use_build_context_synchronously
+                  
+                } else {
                   print('object');
                 }
               },
@@ -1000,6 +1185,71 @@ class _HomeState extends State<Home> {
     }
   }
 
+    Future<void> fetchGroupInfo() async {
+    // 프로필 리스트에 저장
+
+    final url = Uri.parse(API.eventInfo);
+    String savedToken = await getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        ProfileList.clear();
+
+        List<dynamic> responseData = jsonDecode(response.body);
+
+        print('----responseData----');
+        print(responseData);
+        print('--------------------');
+
+        for (final profileData in responseData) {
+          if (mounted) {
+            setState(() {
+              if (profileData['userId'] !=
+                  Provider.of<UserProvider>(context, listen: false).userId) {
+
+                ProfileList.add(profile(
+                    userName: profileData['userNickname'],
+                    userSex: profileData['userSex'],
+                    day: 0,
+                    selected: false,
+                    userId: profileData['userId'],
+                    clickProfile: clickProfile));
+              }
+              // }
+            });
+          }
+        }
+
+        ProfileList.add(profile(
+            userName: '선택안함',
+            userSex: 'none',
+            day: 0,
+            selected: false,
+            userId: -1,
+            clickProfile: clickProfile));
+
+        print(ProfileList);
+      } catch (e) {
+        print('-----에러-----');
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchGroupInfo);
+    } else {
+      throw Exception('groupInfo : 블러팅 정보를 로드하는 데 실패했습니다');
+    }
+  }
+
   Future<void> changeLike(int answerId, int index) async {
     // answerId 보내
     final url = Uri.parse(API.homeLike);
@@ -1025,19 +1275,18 @@ class _HomeState extends State<Home> {
       }
     } else {}
   }
-  
+
   Future<void> fetchState() async {
     // answerId 보내
     final url = Uri.parse(API.event);
     String savedToken = await getToken();
 
-    final response = await http.get(url,
-        headers: {
-          'authorization': 'Bearer $savedToken',
-          'Content-Type': 'application/json',
-        });
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $savedToken',
+      'Content-Type': 'application/json',
+    });
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       try {
         state = jsonDecode(response.body);
       } catch (e) {
@@ -1050,8 +1299,90 @@ class _HomeState extends State<Home> {
     } else {
       print(response.statusCode);
     }
-    state = 0;
+    // state = 1;
     print(state);
+  }
+
+  Future<void> fetchLatestComments() async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
+    String savedToken = await getToken();
+
+    final url = Uri.parse(API.eventLatest);
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            int latestIndex = responseData['questionNo'];
+            print('latestIndex');
+            print(latestIndex);
+
+            if (latestIndex == 1) {
+              part = 'Part1';
+            } else if (latestIndex == 2) {
+              part = 'Part2';
+            } else if (latestIndex >= 3) {
+              part = 'Part3';
+            }
+          });
+        }
+        //
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchLatestComments);
+    } else {
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다 ${response.statusCode}');
+    }
+  }
+
+  Future<void> sendArrow(int userId, int day) async {
+    // 화살표를 보냄
+    final url = Uri.parse('${API.sendArrow}$userId/${day + 1}');
+    String savedToken = await getToken();
+
+    print(day);
+
+    final response = await http.post(url, headers: {
+      'authorization': 'Bearer $savedToken',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 201) {
+      try {
+        if (mounted) {
+          setState(() {
+            iSended = true;
+            _blinkTimer?.cancel();
+            isVisible = false;
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      print(response.statusCode);
+      await getnewaccesstoken(context, () async {}, null, null, null, null,
+          sendArrow, [userId, day]);
+    } else if (response.statusCode == 400) {
+    } else {
+      print(response.statusCode);
+      throw Exception('채팅방을 로드하는 데 실패했습니다');
+    }
   }
 }
 
@@ -1100,4 +1431,85 @@ Widget NowBlurting(String icon, String getCountText, int dynamicCount) {
       ),
     ),
   ]);
+}
+
+class profile extends StatefulWidget {
+  final String userName;
+  final String userSex;
+  final int day;
+  final bool selected;
+  final int userId;
+  final Function clickProfile;
+  bool thisSelected = false;
+
+  profile(
+      {super.key,
+      required this.day,
+      required this.selected,
+      required this.userId,
+      required this.userName,
+      required this.userSex,
+      required this.clickProfile});
+
+  @override
+  State<profile> createState() => _profileState();
+}
+
+class _profileState extends State<profile> {
+  @override
+  Widget build(BuildContext context) {
+
+    return GestureDetector(
+      onTap: () {
+        if (isTap == true && !widget.thisSelected) {
+        } else {
+          setState(() {
+            widget.thisSelected = !widget.thisSelected;
+            widget.clickProfile(widget.thisSelected, widget.userId);
+          });
+        }
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(5),
+            width: 55,
+            height: 55,
+            decoration: BoxDecoration(
+                color: mainColor.lightPink,
+                borderRadius: BorderRadius.circular(50),
+                border: widget.thisSelected
+                    ? Border.all(color: mainColor.MainColor, width: 1)
+                    : Border.all(color: Colors.transparent, width: 1)),
+            child: Image.asset(
+              fit: BoxFit.fill,
+              widget.userSex == 'M'
+                  ? 'assets/man.png'
+                  : widget.userSex == 'none'
+                      ? 'assets/none.png'
+                      : 'assets/woman.png',
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+            decoration: BoxDecoration(
+                color: mainColor.lightPink,
+                borderRadius: BorderRadius.circular(50),
+                border: widget.thisSelected
+                    ? Border.all(color: mainColor.MainColor, width: 1)
+                    : Border.all(color: Colors.transparent, width: 1)),
+            child: Text(
+              widget.userName,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Heebo',
+                  color: Colors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
