@@ -555,18 +555,6 @@ class _SettingPageState extends State<SettingPage> {
                       ],
                     ),
                   ),
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    onTap: () async {
-                      print(await getToken());
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        settingDescription_list("토큰 확인하기"),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

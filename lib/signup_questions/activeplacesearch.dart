@@ -103,7 +103,7 @@ class _SearchPage extends State<SearchPage> {
                 height: 48,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Color(0xFFF66464),
+                    foregroundColor: mainColor.MainColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
