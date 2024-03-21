@@ -722,7 +722,7 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.only(top: 8, bottom: 5),
+                                    padding: const EdgeInsets.only(top: 5, bottom: 5),
                                     margin: EdgeInsets.only(bottom: 2),
                                     width: MediaQuery.of(context).size.width * 0.7,
                                     height: 48,
