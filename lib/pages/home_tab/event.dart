@@ -6,6 +6,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurting_tab/groupChat.dart';
+import 'package:blurting/pages/home_tab/eventProfileCard.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,12 +26,15 @@ class Event extends StatefulWidget {
 
 bool isTap = false;
 bool iSended = false;
+bool finalMatching = false;
+bool offResult = true;       // 오프라인에서 만나기로 한 거 결과 보냇는지
 
 class _Event extends State<Event> {
   final PageController pageController = PageController(initialPage: 0);
   Timer? _blinkTimer;
   bool isVisible = false;
   int userId = 0;
+  bool result = false;
   // List<List<Widget>> ProfileList = List.generate(
   //   3, (index) => <Widget>[]); // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
   List<Widget> ProfileList = [];
@@ -42,6 +46,7 @@ class _Event extends State<Event> {
     Future.delayed(Duration.zero, () async {
       await fetchGroupInfo();
       await fetchArrow();
+      await fetchResult();
     });
 
     fetchUserId();
@@ -91,25 +96,35 @@ class _Event extends State<Event> {
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          Positioned(
-            top: 150,
+          if (result == false || finalMatching == false)
+            Positioned(
+              top: 150,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
               decoration: BoxDecoration(
                 color: mainColor.Gray.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(30),
               ),
-              child: Text(
-                '마음에 드는 사람을 선택하고 최종 매칭에 성공해 보세요!',
-                style: TextStyle(
-                    color: mainColor.Gray,
-                    fontFamily: 'Heebo',
-                    fontWeight: FontWeight.w700),
+              child: 
+              SizedBox(      // result가 false이거나, finalMatching이 되지 않았다면,,,
+                width: MediaQuery.of(context).size.width*0.9,
+                child: Text(
+                  result == false
+                      ? '  마음에 드는 사람을 선택하고 최종 매칭에 성공해 보세요!'
+                      : '  나의 인연이 없어서 아쉽다면 블러팅 앱을 사용하여\n  새로운 나의 소울메이트를 찾아 보세요!',
+                  style: TextStyle(
+                      color: mainColor.Gray,
+                      fontFamily: 'Heebo',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14),
+                ),
               ),
             ),
           ),
           Center(
-            child: (Container(
+            child: (
+              !finalMatching ? 
+              Container(
               decoration: BoxDecoration(
                   color: mainColor.Gray.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10)),
@@ -165,7 +180,7 @@ class _Event extends State<Event> {
                             style: TextStyle(
                                 color: mainColor.Gray,
                                 fontWeight: FontWeight.w600,
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontFamily: 'Heebo'),
                           ),
                         ),
@@ -216,9 +231,11 @@ class _Event extends State<Event> {
                   )
                 ],
               )),
-            )),
+            )
+            : EventProfileCard(blurValue: 4, userId: -1)),
           ),
-                    Positioned(
+          if(!finalMatching)
+          Positioned(
             bottom: 150,
             child: Container(
               padding: EdgeInsets.all(10),
@@ -231,6 +248,115 @@ class _Event extends State<Event> {
                     fontSize: 20),
               ),
             ),
+          ),
+          Stack(
+            children: [
+              Positioned(
+                bottom: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(top: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 20),
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  height: 110,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color:
+                                          mainColor.warning.withOpacity(0.3)),
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    margin: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '당신과 매칭된 상대방의 프로필입니다.',
+                                          style: TextStyle(
+                                              color: mainColor.Gray,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              fontFamily: "Heebo"),
+                                        ),
+                                        Text(
+                                          '실제로 상대방을 만나 보시겠습니까?',
+                                          style: TextStyle(
+                                              color: mainColor.Gray,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              fontFamily: "Heebo"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.MainColor),
+                                    height: 50,
+                                    // color: mainColor.MainColor,
+                                    child: Center(
+                                      child: Text(
+                                        '만나기',
+                                        style: TextStyle(
+                                            fontFamily: 'Heebo',
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // eventOff로 yes 보내는 await 함수 작성
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: mainColor.warning.withOpacity(0.3)),
+                              // color: mainColor.MainColor,
+                              child: Center(
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(
+                                      fontFamily: 'Heebo',
+                                      color: mainColor.Gray,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                                  onTap: () {
+                                    // eventOff로 no를 보내는 await 함수 작성
+                                  },
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
         ],
       ),
@@ -475,6 +601,61 @@ class _Event extends State<Event> {
       print(response.statusCode);
       throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
+  }
+  
+    Future<void> fetchResult() async {
+    // 화살표를 보냄
+    final url = Uri.parse(API.eventResult);
+    String savedToken = await getToken();
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $savedToken',
+      'Content-Type': 'application/json',
+    });
+
+    print('내 화살');
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      try {
+        Map responseData = jsonDecode(response.body);
+
+        setState(() {
+          result = true;
+
+          if (responseData.isEmpty) {
+            // 응답이 비어 있다면 매칭되지 않은 것
+            finalMatching = false;
+          } else {
+            finalMatching = true;
+            // 정보 받아와서 띄우는 건 eventProfileCard에서 함
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 400) {
+      // 아직 최종 선택 마감 전
+      result = false;
+      print(response.body);
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      print(response.statusCode);
+      await getnewaccesstoken(context, () async {}, null, null, null, null,
+          sendArrow, [userId, day]);
+    } else {
+      print(response.statusCode);
+      throw Exception('채팅방을 로드하는 데 실패했습니다');
+    }
+
+    // 테스트 코드
+    setState(() {
+      result = true;
+      finalMatching = true;
+    });
+    // 테스트 코드
+  
   }
 }
 
