@@ -2,6 +2,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 // import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/blurting_tab/matchingAni.dart';
+import 'package:blurting/pages/home_tab/event.dart';
 import 'package:blurting/pages/home_tab/eventGroup.dart';
 import 'package:blurting/pages/myPage/Utils.dart';
 import 'package:blurting/utils/util_widget.dart';
@@ -18,7 +19,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
-bool isTap = false;
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -30,8 +30,6 @@ DateTime _parseDateTime(String? dateTimeString) {
     return DateTime.now(); // 혹은 다른 기본 값으로 대체
   }
 }
-
-bool iSended = false;
 
 class CardItem {
   final String userName;
@@ -77,12 +75,6 @@ class _HomeState extends State<Home> {
   String tableNo = '';
   late int state = -1;
   String part = 'Part0';
-  Timer? _blinkTimer;
-  bool isVisible = false;
-  int userId = 0;
-  // List<List<Widget>> ProfileList = List.generate(
-  //   3, (index) => <Widget>[]); // 프로필, day별로 네 개씩 (이성애자) -> http로 받아오기
-  List<Widget> ProfileList = [];
 
   late Future<List<home>> futureHome;
 
@@ -93,33 +85,11 @@ class _HomeState extends State<Home> {
     cardItems = [];
     initializePages(); //위젯 생성 될 때 불러와야하는 정보들
     updateRemainingTime();
-    fetchUserId();
   }
 
   @override
   void dispose() {
-    _blinkTimer?.cancel();
-    isTap = false;
     super.dispose();
-  }
-
-  void _startBlinking() {
-    print('깜빢');
-
-    _blinkTimer = Timer.periodic(Duration(milliseconds: 1000), (Timer timer) {
-      if (mounted) {
-        setState(() {
-          isVisible = !isVisible;
-          print(isVisible);
-        });
-      } else {
-        timer.cancel();
-      }
-    });
-  }
-
-  fetchUserId() async {
-    userId = await getuserId();
   }
 
   Future<void> initializePages() async {
@@ -411,132 +381,6 @@ class _HomeState extends State<Home> {
               ],
             );
           });
-        });
-  }
-
-  void _showArrowDialog(BuildContext context) {
-    
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return Dialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 0,
-              child: SizedBox(
-                height: MediaQuery.of(context).size.width * 0.6,
-                child: (Stack(
-                  children: [
-                    Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 8),
-                              child: Text(
-                                'Final',
-                                style: TextStyle(
-                                    color: mainColor.Gray,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 32,
-                                    fontFamily: 'Heebo'),
-                              ),
-                            ),
-                            if (!iSended)
-                              Text(
-                                '누가 당신의 마음을 사로잡았나요?',
-                                style: TextStyle(
-                                    color: mainColor.Gray,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                    fontFamily: 'Heebo'),
-                              ),
-                            if (!iSended)
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    for (int i = 0; i < ProfileList.length; i++)
-                                      ProfileList[i],
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                        if (iSended)
-                          Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '화살표 날리기 완료!\n다른 사람들의 선택이 모두 끝날 때까지\n기다려 주세요.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: mainColor.Gray,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Heebo'),
-                            ),
-                          ),
-                      ],
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          AnimatedOpacity(
-                            duration: Duration(milliseconds: 1000),
-                            opacity: isVisible ? 1 : 0,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: Text(
-                                '터치해서 화살을 날려주세요!',
-                                style: TextStyle(
-                                    color: mainColor.Gray,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Heebo"),
-                              ),
-                            ),
-                          ),
-                          Container(
-                              margin: EdgeInsets.fromLTRB(0, 4, 10, 10),
-                              width: 40,
-                              child: InkWell(
-                                  splashColor:
-                                      Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-                                  onTap: (isTap == true && iSended == false)
-                                      ? () {
-                                          // 하나라도 true일 떄 (하나라도 선택되었을 때)
-                                          sendArrow(userId, 0);
-                                        }
-                                      : null,
-                                  child: Image.asset(
-                                    'assets/images/blurtingArrow.png',
-                                    color: isTap == true || iSended == true
-                                        ? mainColor.MainColor
-                                        : mainColor.lightGray,
-                                  ))),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
-              ),
-            );
-          }
-          );
-        }).then((_){
-          // dialog가 닫히면
-          _blinkTimer?.cancel();
-          isTap = false;
-          isVisible = false;
         });
   }
 
@@ -980,12 +824,11 @@ class _HomeState extends State<Home> {
                   // 화살 날리기
                   print('화살');
                   // ignore: use_build_context_synchronously
-
-                  await fetchGroupInfo();
-                  _showArrowDialog(context);
-
-                  // ignore: use_build_context_synchronously
-                  
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Event(
+                              )));
                 } else {
                   print('object');
                 }
@@ -1185,71 +1028,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-    Future<void> fetchGroupInfo() async {
-    // 프로필 리스트에 저장
-
-    final url = Uri.parse(API.eventInfo);
-    String savedToken = await getToken();
-
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $savedToken',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      try {
-        ProfileList.clear();
-
-        List<dynamic> responseData = jsonDecode(response.body);
-
-        print('----responseData----');
-        print(responseData);
-        print('--------------------');
-
-        for (final profileData in responseData) {
-          if (mounted) {
-            setState(() {
-              if (profileData['userId'] !=
-                  Provider.of<UserProvider>(context, listen: false).userId) {
-
-                ProfileList.add(profile(
-                    userName: profileData['userNickname'],
-                    userSex: profileData['userSex'],
-                    day: 0,
-                    selected: false,
-                    userId: profileData['userId'],
-                    clickProfile: clickProfile));
-              }
-              // }
-            });
-          }
-        }
-
-        ProfileList.add(profile(
-            userName: '선택안함',
-            userSex: 'none',
-            day: 0,
-            selected: false,
-            userId: -1,
-            clickProfile: clickProfile));
-
-        print(ProfileList);
-      } catch (e) {
-        print('-----에러-----');
-        print(e);
-      }
-    } else if (response.statusCode == 401) {
-      //refresh token으로 새로운 accesstoken 불러오는 코드.
-      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      await getnewaccesstoken(context, fetchGroupInfo);
-    } else {
-      throw Exception('groupInfo : 블러팅 정보를 로드하는 데 실패했습니다');
-    }
-  }
-
   Future<void> changeLike(int answerId, int index) async {
     // answerId 보내
     final url = Uri.parse(API.homeLike);
@@ -1299,7 +1077,7 @@ class _HomeState extends State<Home> {
     } else {
       print(response.statusCode);
     }
-    // state = 1;
+    // state = 0;
     print(state);
   }
 
@@ -1345,43 +1123,6 @@ class _HomeState extends State<Home> {
       await getnewaccesstoken(context, fetchLatestComments);
     } else {
       throw Exception('groupChat : 답변을 로드하는 데 실패했습니다 ${response.statusCode}');
-    }
-  }
-
-  Future<void> sendArrow(int userId, int day) async {
-    // 화살표를 보냄
-    final url = Uri.parse('${API.sendArrow}$userId/${day + 1}');
-    String savedToken = await getToken();
-
-    print(day);
-
-    final response = await http.post(url, headers: {
-      'authorization': 'Bearer $savedToken',
-      'Content-Type': 'application/json',
-    });
-
-    if (response.statusCode == 201) {
-      try {
-        if (mounted) {
-          setState(() {
-            iSended = true;
-            _blinkTimer?.cancel();
-            isVisible = false;
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
-    } else if (response.statusCode == 401) {
-      //refresh token으로 새로운 accesstoken 불러오는 코드.
-      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      print(response.statusCode);
-      await getnewaccesstoken(context, () async {}, null, null, null, null,
-          sendArrow, [userId, day]);
-    } else if (response.statusCode == 400) {
-    } else {
-      print(response.statusCode);
-      throw Exception('채팅방을 로드하는 데 실패했습니다');
     }
   }
 }
@@ -1433,83 +1174,83 @@ Widget NowBlurting(String icon, String getCountText, int dynamicCount) {
   ]);
 }
 
-class profile extends StatefulWidget {
-  final String userName;
-  final String userSex;
-  final int day;
-  final bool selected;
-  final int userId;
-  final Function clickProfile;
-  bool thisSelected = false;
+// class profile extends StatefulWidget {
+//   final String userName;
+//   final String userSex;
+//   final int day;
+//   final bool selected;
+//   final int userId;
+//   final Function clickProfile;
+//   bool thisSelected = false;
 
-  profile(
-      {super.key,
-      required this.day,
-      required this.selected,
-      required this.userId,
-      required this.userName,
-      required this.userSex,
-      required this.clickProfile});
+//   profile(
+//       {super.key,
+//       required this.day,
+//       required this.selected,
+//       required this.userId,
+//       required this.userName,
+//       required this.userSex,
+//       required this.clickProfile});
 
-  @override
-  State<profile> createState() => _profileState();
-}
+//   @override
+//   State<profile> createState() => _profileState();
+// }
 
-class _profileState extends State<profile> {
-  @override
-  Widget build(BuildContext context) {
+// class _profileState extends State<profile> {
+//   @override
+//   Widget build(BuildContext context) {
 
-    return GestureDetector(
-      onTap: () {
-        if (isTap == true && !widget.thisSelected) {
-        } else {
-          setState(() {
-            widget.thisSelected = !widget.thisSelected;
-            widget.clickProfile(widget.thisSelected, widget.userId);
-          });
-        }
-      },
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 55,
-            height: 55,
-            decoration: BoxDecoration(
-                color: mainColor.lightPink,
-                borderRadius: BorderRadius.circular(50),
-                border: widget.thisSelected
-                    ? Border.all(color: mainColor.MainColor, width: 1)
-                    : Border.all(color: Colors.transparent, width: 1)),
-            child: Image.asset(
-              fit: BoxFit.fill,
-              widget.userSex == 'M'
-                  ? 'assets/man.png'
-                  : widget.userSex == 'none'
-                      ? 'assets/none.png'
-                      : 'assets/woman.png',
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 7),
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-            decoration: BoxDecoration(
-                color: mainColor.lightPink,
-                borderRadius: BorderRadius.circular(50),
-                border: widget.thisSelected
-                    ? Border.all(color: mainColor.MainColor, width: 1)
-                    : Border.all(color: Colors.transparent, width: 1)),
-            child: Text(
-              widget.userName,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Heebo',
-                  color: Colors.black),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//     return GestureDetector(
+//       onTap: () {
+//         if (isTap == true && !widget.thisSelected) {
+//         } else {
+//           setState(() {
+//             widget.thisSelected = !widget.thisSelected;
+//             widget.clickProfile(widget.thisSelected, widget.userId);
+//           });
+//         }
+//       },
+//       child: Column(
+//         children: [
+//           Container(
+//             padding: EdgeInsets.all(5),
+//             width: 55,
+//             height: 55,
+//             decoration: BoxDecoration(
+//                 color: mainColor.lightPink,
+//                 borderRadius: BorderRadius.circular(50),
+//                 border: widget.thisSelected
+//                     ? Border.all(color: mainColor.MainColor, width: 1)
+//                     : Border.all(color: Colors.transparent, width: 1)),
+//             child: Image.asset(
+//               fit: BoxFit.fill,
+//               widget.userSex == 'M'
+//                   ? 'assets/man.png'
+//                   : widget.userSex == 'none'
+//                       ? 'assets/none.png'
+//                       : 'assets/woman.png',
+//             ),
+//           ),
+//           Container(
+//             margin: EdgeInsets.only(top: 7),
+//             padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+//             decoration: BoxDecoration(
+//                 color: mainColor.lightPink,
+//                 borderRadius: BorderRadius.circular(50),
+//                 border: widget.thisSelected
+//                     ? Border.all(color: mainColor.MainColor, width: 1)
+//                     : Border.all(color: Colors.transparent, width: 1)),
+//             child: Text(
+//               widget.userName,
+//               style: TextStyle(
+//                   fontSize: 12,
+//                   fontWeight: FontWeight.w400,
+//                   fontFamily: 'Heebo',
+//                   color: Colors.black),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

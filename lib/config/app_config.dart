@@ -100,4 +100,6 @@ class API {
   static final eventResult = "${ServerEndpoints.serverEndpoint}/event/result";
   static final eventOff = "${ServerEndpoints.serverEndpoint}/event/meeting/";
   static final eventInfo = "${ServerEndpoints.serverEndpoint}/event/group-info";
+  static final eventSendArrow = "${ServerEndpoints.serverEndpoint}/event/arrow/";
+  static final eventArrow = "${ServerEndpoints.serverEndpoint}/event/arrow";
 }
