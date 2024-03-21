@@ -67,7 +67,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
             child: Checkbox(
               side: BorderSide(color: Colors.transparent),
               fillColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+                    (Set<MaterialState> states) {
                   if (states.contains(MaterialState.selected)) {
                     return Color(0xFFF66464); // 선택되었을 때의 배경 색상
                   }
@@ -278,7 +278,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
         padding: EdgeInsets.fromLTRB(20, 0, 20, 34),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            foregroundColor: Color(0xFFF66464),
+            backgroundColor: Color(0xFFF66464),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -287,8 +287,8 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
           ),
           onPressed: (IsValid)
               ? () {
-                  _increaseProgressAndNavigate();
-                }
+            _increaseProgressAndNavigate();
+          }
               : null,
           child: Text(
             '다음',
@@ -302,7 +302,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+      FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }
