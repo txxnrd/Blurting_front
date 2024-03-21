@@ -481,9 +481,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
               child: pointAppbar(
                 canNavigate: false,
               )),
-          InkWell(
+          GestureDetector(
             onTap: () {
               // _showAd(context);
+              showSnackBar(context, "곧 광고가 실행됩니다");
               _callRewardScreenAd(context);
             },
             child: Container(
