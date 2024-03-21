@@ -139,13 +139,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                           color: mainColor.lightGray,
                           width: 2,
                         ),
-                        primary: mainColor.black,
                         backgroundColor: selectedGender == Gender.male
                             ? mainColor.lightGray
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                          BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                         ),
                       ),
                       onPressed: () {
@@ -174,13 +173,12 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                     child: TextButton(
                       style: TextButton.styleFrom(
                         side: BorderSide(color: mainColor.lightGray, width: 2),
-                        primary: mainColor.lightGray,
                         backgroundColor: selectedGender == Gender.female
                             ? mainColor.lightGray
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                          BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                         ),
                       ),
                       onPressed: () {
@@ -218,13 +216,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
             ),
             onTap: (IsValid)
                 ? () {
-                    _sendPostRequest();
-                  }
+              _sendPostRequest();
+            }
                 : null,
           ),
         ),
         floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+        FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
   }

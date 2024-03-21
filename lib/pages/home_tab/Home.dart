@@ -19,7 +19,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
-
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
     return DateTime(1, 11, 30, 0, 0, 0, 0); //  기본 값
@@ -689,109 +688,160 @@ class _HomeState extends State<Home> {
                             alignment: Alignment.center,
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              height: 250,
+                              height: 350,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(22),
                               ),
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(top: 10),
-                                      child: Text('코드 입력',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: 'Heebo',
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700)),
+                              child:Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children:[
+                                  Container(
+                                  margin: EdgeInsets.only(top: 5, bottom: 3),
+                                  child: Text(
+                                   'Event 2',
+                                    style: TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: mainColor.Gray
+                                    )
+                                  )
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    child: Text(
+                                        '현장 블러팅',
+                                        style: TextStyle(
+                                          fontFamily: 'Heebo',
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: mainColor.black
+                                        )
                                     ),
-                                    TextField(
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                    margin: EdgeInsets.only(bottom: 2),
+                                    width: MediaQuery.of(context).size.width * 0.7,
+                                    height: 48,
+                                    child: TextField(
                                       onChanged: (value) {
                                         code = value;
                                       },
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(top: 10),
-                                      child: Text('테이블 번호 입력',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: 'Heebo',
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700)),
-                                    ),
-                                    TextField(
-                                      onChanged: (value) {
-                                        tableNo = value;
-                                      },
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.all(10),
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              color: mainColor.MainColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          child: InkWell(
-                                              child: Text(
-                                                '방 입장하기',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'Heebo',
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              onTap: () {
-                                                print(code);
-                                                print(tableNo);
-                                                //  코드가 일치한다면 백엔드에 요청
-                                                if (code == '') {
-                                                  // 일일호프, 일홉 코드
-                                                  Navigator.pop(context);
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Matching(
-                                                                event: true,
-                                                                tableNo:
-                                                                    tableNo,
-                                                              )));
-                                                } else {
-                                                  showSnackBar(context,
-                                                      '코드를 다시 확인해 주세요!');
-                                                }
-                                              }),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.all(10),
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
+                                      cursorColor: mainColor.MainColor,
+                                      decoration: InputDecoration(
+                                          hintText: '테이블 번호를 입력해주세요.',
+                                          hintStyle: TextStyle(
                                               color: mainColor.lightGray,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          child: InkWell(
-                                            child: Text(
-                                              '취소',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'Heebo',
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w700,
+                                              fontFamily: 'Pretendard'
                                           ),
-                                        )
-                                      ],
-                                    )
-                                  ]),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                                color: mainColor.lightGray,
+                                              )
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                                color: mainColor.MainColor,
+                                              )
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                                color: mainColor.MainColor,
+                                              )
+                                          )
+                                      )
+                                    ),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width * 0.7,
+                                    padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                    height: 48,
+                                    child: TextField(
+                                        onChanged: (value) {
+                                          code = value;
+                                        },
+                                        cursorColor: mainColor.MainColor,
+                                        decoration: InputDecoration(
+                                          hintText: '인증 코드를 입력해주세요.',
+                                          hintStyle: TextStyle(
+                                              color: mainColor.lightGray,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w700,
+                                              fontFamily: 'Pretendard'
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                            borderSide: BorderSide(
+                                              color: mainColor.lightGray,
+                                            )
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                            borderSide: BorderSide(
+                                              color: mainColor.MainColor,
+                                            )
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                                color: mainColor.MainColor,
+                                              )
+                                          )
+                                      )
+                                    ),
+                                  ),
+                                 InkWell(
+                                     onTap: () {
+                                       print(code);
+                                       print(tableNo);
+                                       //  코드가 일치한다면 백엔드에 요청
+                                       if (code == '') {
+                                         // 일일호프, 일홉 코드
+                                         Navigator.pop(context);
+                                         Navigator.push(
+                                             context,
+                                             MaterialPageRoute(
+                                                 builder: (context) =>
+                                                     Matching(
+                                                       event: true,
+                                                       tableNo:
+                                                       tableNo,
+                                                     )));
+                                       } else {
+                                         showSnackBar(context,
+                                             '코드를 다시 확인해 주세요!');
+                                       }
+                                   },
+                                   child: Container(
+                                     width: MediaQuery.of(context).size.width * 0.7,
+                                     height: 48,
+                                     margin: EdgeInsets.only(top: 30),
+                                     padding: EdgeInsets.all(8),
+                                     decoration: BoxDecoration(
+                                       color: mainColor.lightGray, // code가 맞으면 mainColor로 색깔이 바뀌어야 함
+                                       borderRadius: BorderRadius.circular(10),
+                                     ),
+                                     child: Text(
+                                       "다음",
+                                       textAlign: TextAlign.center,
+                                       style: TextStyle(
+                                         fontSize: 20,
+                                         color: Colors.white,
+                                         fontFamily: 'Pretendard'
+                                       )
+                                     )
+                                   ),
+
+                                 )
+                                ]
+                              )
                             ),
                           ),
                         ));

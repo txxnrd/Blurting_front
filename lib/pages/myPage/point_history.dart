@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/utils/provider.dart';
+import 'package:blurting/utils/util_widget.dart';
 
 class PointHistoryPage extends StatefulWidget {
-  // Constructor to receive the user token
   PointHistoryPage({super.key});
 
   @override
@@ -41,15 +42,12 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     try {
       final url = Uri.parse(API.pointAdd);
       String savedToken = await getToken();
-
       final response = await http.get(url, headers: {
         'authorization': 'Bearer $savedToken',
         'Content-Type': 'application/json',
       });
 
-      // Handle the response as needed
       if (response.statusCode == 200) {
-        // Extract data from the response and update the state
         final List<Map<String, dynamic>> data =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
 
@@ -71,14 +69,17 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   }
 
   RewardedAd? _rewardedAd;
-  Future<void> _callRewardScreenAd() async {
+
+  Future<void> _callRewardScreenAd(BuildContext context) async {
+    print("광고 실행");
     await RewardedAd.load(
       adUnitId: "ca-app-pub-3073920976555254/9648855736",
       request: AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (RewardedAd ad) {
+          _rewardedAd?.fullScreenContentCallback = null;
           _rewardedAd = ad;
-
+          _isAdRequestSent = false; // 광고가 로드될 때마다 false로 리셋
           // 보상형 광고 이벤트 설정
           _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
             onAdShowedFullScreenContent: (RewardedAd ad) {
@@ -86,7 +87,9 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             },
             onAdDismissedFullScreenContent: (RewardedAd ad) {
               // 사용자가 광고를 종료하면 호출되는 이벤트
+              _sendAdRequest(context);
               ad.dispose();
+              _fetchDataForCurrentTab();
             },
             onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
               print("$ad onAdDismissedFullScreenContent");
@@ -149,14 +152,11 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   String extractTimeFromDate(String dateTimeString) {
     try {
       if (dateTimeString.isNotEmpty) {
-        // Split the time string
         List<String> timeParts = dateTimeString.split(':');
 
-        // Ensure that there are at least three parts (hours, minutes, seconds)
         if (timeParts.length >= 3) {
           int hours = int.parse(timeParts[0]);
           int minutes = int.parse(timeParts[1]);
-          // Split seconds and milliseconds
           List<String> secondsAndMilliseconds = timeParts[2].split('.');
           int seconds = int.parse(secondsAndMilliseconds[0]);
 
@@ -165,21 +165,15 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           return DateFormat.Hm().format(dateTime);
         }
       }
-    } catch (e) {
-      // Handle the exception or log the error
-    }
+    } catch (e) {}
     return 'Unknown time';
   }
 
-// Function to extract date and time from the date-time string
   List<String> splitDateTime(String dateTimeString) {
     try {
-      // Ensure that the dateTimeString is not empty
       if (dateTimeString.isNotEmpty) {
-        // Split the date-time string
         List<String> dateTimeParts = dateTimeString.split('T');
 
-        // Ensure that there are two parts (date and time)
         if (dateTimeParts.length == 2) {
           String date = dateTimeParts[0];
           String time = extractTimeFromDate(dateTimeParts[1]);
@@ -187,15 +181,11 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           return [date, time];
         }
       }
-    } catch (e) {
-      // Handle the exception or log the error
-    }
+    } catch (e) {}
 
-    // Return a default value or handle the error as needed
     return ['Unknown date', 'Unknown time'];
   }
 
-// Function to group the data by date
   Map<String, List<Map<String, dynamic>>> groupDataByDate(
       List<Map<String, dynamic>> data) {
     Map<String, List<Map<String, dynamic>>> groupedData = {};
@@ -246,10 +236,167 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     } catch (error) {}
   }
 
+  bool _isAdRequestSent = false;
+
+  Future<void> _sendAdRequest(BuildContext context) async {
+    if (_isAdRequestSent) {
+      print("이미 광고 요청 중입니다.");
+      return;
+    }
+    print("sendAdRequest 실행됨");
+    _isAdRequestSent = true; // 함수 호출 전에 true로 설정
+
+    try {
+      var url = Uri.parse(API.pointAd);
+      String savedToken = await getToken();
+
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $savedToken',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var data = json.decode(response.body);
+        print(data);
+        setState(() {
+          Provider.of<UserProvider>(context, listen: false).point =
+              data['point'];
+        });
+      } else {
+        // 오류가 발생한 경우 처리
+        print("오류 응답: ${response.statusCode}");
+      }
+    } catch (e) {
+      // 예외 발생 시 로깅
+      print("요청 중 예외 발생: $e");
+    }
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _showAd(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.2),
+            body: Stack(
+              children: [
+                Positioned(
+                  bottom: 50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.warning),
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.fromLTRB(10, 16, 10, 10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '광고를 시청하고 5p를 얻으시겠습니까?',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                fontFamily: "Heebo"),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      // color: mainColor.MainColor,
+                                      child: Center(
+                                        child: Text(
+                                          '포인트 얻기',
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      _callRewardScreenAd(context);
+                                      showSnackBar(context, "곧 광고가 실행됩니다");
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.warning),
+                                // color: mainColor.MainColor,
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                if (mounted) {
+                                  setState(() {
+                                    Navigator.of(context).pop();
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -264,10 +411,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             AppbarDescription("포인트 내역"),
           ],
         ),
-        // flexibleSpace: Container(
-        //   margin: EdgeInsets.only(top: 80),
-        //   child: ,
-        // ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -278,17 +421,25 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           },
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.wallet,
-              color: Color.fromRGBO(48, 48, 48, 1),
-            ),
-            onPressed: () {
-              _callRewardScreenAd();
+          Container(
+              margin: EdgeInsets.only(top: 20, right: 1),
+              child: pointAppbar(
+                canNavigate: false,
+              )),
+          InkWell(
+            onTap: () {
+              _showAd(context);
             },
+            child: Container(
+              width: 30,
+              height: 30,
+              margin: EdgeInsets.only(top: 20, right: 5),
+              child: Image.asset(
+                'assets/images/point_plus.png',
+              ),
+            ),
           ),
         ],
-
         centerTitle: true,
       ),
       body: Column(
@@ -359,7 +510,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
               children: [
                 // 1. 지급내역
                 _buildHistoryList(earningHistoryList),
-
                 // 2. 사용내역
                 _buildHistoryList(usageHistoryList),
               ],
@@ -371,11 +521,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   }
 
   Widget _buildHistoryList(List<Map<String, dynamic>> historyList) {
-    // if (historyList.isEmpty) {
-    //   return Center(child: Text('No data available'));
-    // }
-
-    // Group data by date
     Map<String, List<Map<String, dynamic>>> groupedData =
         groupDataByDate(historyList);
 
@@ -392,7 +537,7 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                date, // Show only date
+                date,
                 style: TextStyle(
                   fontFamily: "Heebo",
                   fontWeight: FontWeight.w500,
@@ -429,7 +574,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     );
   }
 
-// Function to format history text with pink square bullet
   Widget formatHistoryText(String history) {
     return RichText(
       text: TextSpan(
