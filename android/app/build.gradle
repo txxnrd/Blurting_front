@@ -30,7 +30,7 @@ android {
 
     namespace "com.Blurting.blurting"
     compileSdkVersion flutter.compileSdkVersion
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     lintOptions {
