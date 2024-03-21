@@ -599,6 +599,7 @@ class _GroupChat extends State<GroupChat> {
                               true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
                           likedNum: answerData['likes'],
                           index: index,
+                          event: false,
                         ),
                         childReplies));
                     isBlock[currentIndex] = true; // true가 맞음
@@ -620,6 +621,7 @@ class _GroupChat extends State<GroupChat> {
                               answerData['id'], // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
                           socket: socket,
                           index: index,
+                          event: false,
                         ),
                         childReplies)); // 걍... 소켓임 신경 쓸 필요 없음
                   }
@@ -759,7 +761,8 @@ class _GroupChat extends State<GroupChat> {
                       answerID: answerData['id'],
                       isBlurting: true,
                       likedNum: answerData['likes'],
-                      index: index),
+                      index: index,
+                      event: false),
                   childReplies));
               isBlock[currentIndex] = true; // true가 맞음
             } else {
@@ -778,6 +781,7 @@ class _GroupChat extends State<GroupChat> {
                     answerId: answerData['id'],
                     socket: socket,
                     index: index,
+                    event: false,
                   ),
                   childReplies));
             }
@@ -813,7 +817,8 @@ class _GroupChat extends State<GroupChat> {
         read: true,
         isBlurting: true,
         likedNum: 0,
-        index: 0);
+        index: 0,
+        event: false);
 
     final url = Uri.parse(API.answer);
     String savedToken = await getToken();

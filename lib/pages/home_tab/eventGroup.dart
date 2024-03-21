@@ -284,10 +284,6 @@ class _eventGroupChat extends State<eventGroupChat> {
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      // if (pageScrollController.positions.isNotEmpty) {
-      //   pageScrollController
-      //       .jumpTo(pageScrollController.position.maxScrollExtent);
-      // }
     });
 
     return Column(
@@ -296,7 +292,6 @@ class _eventGroupChat extends State<eventGroupChat> {
         Expanded(
           child: Stack(
             children: [
-              // 노태윤에게. 여기에서 답변 내용 스크롤뷰로 보여줌
               SingleChildScrollView(
                 reverse: true,
                 controller: pageScrollController,
@@ -317,7 +312,6 @@ class _eventGroupChat extends State<eventGroupChat> {
                   ],
                 ),
               ),
-              // 노태윤에게. 여긴 그... 100자 채웠는지 확인하는 거
               if (Provider.of<GroupChatProvider>(context).isPocus &&
                   !Provider.of<ReplyProvider>(context, listen: true).isReply)
                 Align(
@@ -379,7 +373,7 @@ class _eventGroupChat extends State<eventGroupChat> {
           visible: Provider.of<ReplyProvider>(context, listen: true).isReply,
           child: CustomInputField(
               controller: _controller,
-              sendFunction: SendReply,
+              sendFunction: null,
               isBlock: false,
               blockText: "답변 완료! 상대방의 답변을 눌러 답글을 남겨 보세요.",
               hintText: "내 생각 쓰기...",
@@ -427,7 +421,6 @@ class _eventGroupChat extends State<eventGroupChat> {
 
   bool isAlready = false;
 
-  // 노태윤에게. 백엔드에서 어떻게 줄진 모르겟는데 이게 딱 맨 처음에 들어갓을 때 뜨는 거임. 번호 눌럿을 때 or 페이지 넘겻을 때에는 fetchIndexComments 호출 둘이 작동하는 방식은 걍 같아요
   Future<void> fetchLatestComments() async {
     // DateTime createdAt;
 
@@ -549,6 +542,7 @@ class _eventGroupChat extends State<eventGroupChat> {
                               true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
                           likedNum: answerData['likes'],
                           index: index,
+                          event: true
                         ),
                         childReplies));
                     isBlock[currentIndex] = true; // true가 맞음
@@ -570,6 +564,7 @@ class _eventGroupChat extends State<eventGroupChat> {
                               answerData['id'], // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
                           socket: socket,
                           index: index,
+                          event: true
                         ),
                         childReplies)); // 걍... 소켓임 신경 쓸 필요 없음
                   }
@@ -708,7 +703,8 @@ class _eventGroupChat extends State<eventGroupChat> {
                       answerID: answerData['id'],
                       isBlurting: true,
                       likedNum: answerData['likes'],
-                      index: index),
+                      index: index,
+                      event: true),
                   childReplies));
               isBlock[currentIndex] = true; // true가 맞음
             } else {
@@ -727,6 +723,7 @@ class _eventGroupChat extends State<eventGroupChat> {
                     answerId: answerData['id'],
                     socket: socket,
                     index: index,
+                    event: true,
                   ),
                   childReplies));
             }
@@ -761,7 +758,8 @@ class _eventGroupChat extends State<eventGroupChat> {
         read: true,
         isBlurting: true,
         likedNum: 0,
-        index: 0);
+        index: 0,
+        event: false,);
 
     final url = Uri.parse(API.eventAnwer);
     String savedToken = await getToken();
@@ -794,81 +792,6 @@ class _eventGroupChat extends State<eventGroupChat> {
       //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
       await getnewaccesstoken(
           context, () async {}, null, null, SendAnswer, [answer, questionId]);
-    } else {}
-  }
-
-  Future<void> SendReply(String reply, int questionId, int index) async {
-    // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
-    // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
-    Widget otherchatReply = OtherChatReply(
-      writerUserId: 0,
-      writerUserName: "나의 답변",
-      content: reply,
-      createdAt: "",
-    );
-
-    Widget mychatReply = MyChatReplyOtherPerson(
-      writerUserId: 0,
-      writerUserName: "나의 답변",
-      content: reply,
-      createdAt: "",
-    );
-    int answerId =
-        Provider.of<QuestionNumberProvider>(context, listen: false).questionId;
-
-    // 답변 아이디
-    final url = Uri.parse("${API.reply}/${answerId}");
-    print(url);
-    String savedToken = await getToken();
-
-    var response = await http.post(url,
-        headers: {
-          'Authorization': 'Bearer $savedToken',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({'content': reply}));
-
-    print(response.body);
-    print(response.statusCode);
-    if (response.statusCode == 201) {
-      if (response.body != 'Created') {
-      } else {}
-
-      // 성공적으로 응답
-      if (mounted) {
-        setState(() {
-          // rooms[currentIndex].replies.add(Reply(newReply, []));
-          print("ismychatReply");
-          print(Provider.of<MyChatReplyProvider>(context, listen: false)
-              .ismychatReply);
-          if (Provider.of<MyChatReplyProvider>(context, listen: false)
-                  .ismychatReply ==
-              true) //내가 쓴 글에 대한 답변
-          {
-            rooms[currentIndex]
-                .replies[Provider.of<ReplySelectedNumberProvider>(context,
-                            listen: false)
-                        .ReplySelectedNumber -
-                    1]
-                .childReplies
-                .insert(0, ChildReply(mychatReply));
-          } else //내가 안 쓴 글에 대한 답변
-          {
-            rooms[currentIndex]
-                .replies[Provider.of<ReplySelectedNumberProvider>(context,
-                            listen: false)
-                        .ReplySelectedNumber -
-                    1]
-                .childReplies
-                .insert(0, ChildReply(otherchatReply));
-          }
-        });
-      }
-    } else if (response.statusCode == 401) {
-      //refresh token으로 새로운 accesstoken 불러오는 코드.
-      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
-      await getnewaccesstoken(
-          context, () async {}, null, null, SendReply, [reply]);
     } else {}
   }
 }

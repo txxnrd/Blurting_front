@@ -682,169 +682,201 @@ class _HomeState extends State<Home> {
                       builder: (BuildContext context) {
                         code = '';
                         tableNo = '';
-                        return (Scaffold(
+                        return Scaffold(
                           backgroundColor: Colors.transparent,
-                          body: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: 350,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(22),
-                              ),
-                              child:Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children:[
-                                  Container(
-                                  margin: EdgeInsets.only(top: 5, bottom: 3),
-                                  child: Text(
-                                   'Event 2',
-                                    style: TextStyle(
-                                        fontFamily: 'Pretendard',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700,
-                                        color: mainColor.Gray
-                                    )
-                                  )
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 10),
+                          body: (Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height: 350,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(22),
+                                ),
+                                child:Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children:[
+                                    Container(
+                                    margin: EdgeInsets.only(top: 5, bottom: 3),
                                     child: Text(
-                                        '현장 블러팅',
-                                        style: TextStyle(
-                                          fontFamily: 'Heebo',
-                                          fontSize: 20,
+                                     'Event 2',
+                                      style: TextStyle(
+                                          fontFamily: 'Pretendard',
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w700,
-                                          color: mainColor.black
-                                        )
+                                          color: mainColor.Gray
+                                      )
+                                    )
                                     ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                                    margin: EdgeInsets.only(bottom: 2),
-                                    width: MediaQuery.of(context).size.width * 0.7,
-                                    height: 48,
-                                    child: TextField(
-                                      onChanged: (value) {
-                                        code = value;
-                                      },
-                                      cursorColor: mainColor.MainColor,
-                                      decoration: InputDecoration(
-                                          hintText: '테이블 번호를 입력해주세요.',
-                                          hintStyle: TextStyle(
-                                              color: mainColor.lightGray,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: 'Pretendard'
-                                          ),
-                                          border: OutlineInputBorder(
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      child: Text(
+                                          '현장 블러팅',
+                                          style: TextStyle(
+                                            fontFamily: 'Heebo',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700,
+                                            color: mainColor.black
+                                          )
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                      margin: EdgeInsets.only(bottom: 2),
+                                      width: MediaQuery.of(context).size.width * 0.7,
+                                      height: 48,
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          tableNo = value;
+                                        },
+                                        cursorColor: mainColor.MainColor,
+                                        decoration: InputDecoration(
+                                            hintText: '테이블 번호를 입력해주세요.',
+                                            hintStyle: TextStyle(
+                                                color: mainColor.lightGray,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: 'Pretendard'
+                                            ),
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                  color: mainColor.lightGray,
+                                                )
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                  color: mainColor.MainColor,
+                                                )
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                  color: mainColor.MainColor,
+                                                )
+                                            )
+                                        )
+                                      ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.7,
+                                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                      height: 48,
+                                      child: TextField(
+                                          onChanged: (value) {
+                                            code = value;
+                                          },
+                                          cursorColor: mainColor.MainColor,
+                                          decoration: InputDecoration(
+                                            hintText: '인증 코드를 입력해주세요.',
+                                            hintStyle: TextStyle(
+                                                color: mainColor.lightGray,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: 'Pretendard'
+                                            ),
+                                            border: OutlineInputBorder(
                                               borderRadius: BorderRadius.circular(8),
                                               borderSide: BorderSide(
                                                 color: mainColor.lightGray,
                                               )
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
                                               borderRadius: BorderRadius.circular(8),
                                               borderSide: BorderSide(
                                                 color: mainColor.MainColor,
                                               )
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                              borderSide: BorderSide(
-                                                color: mainColor.MainColor,
-                                              )
-                                          )
-                                      )
-                                    ),
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width * 0.7,
-                                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                                    height: 48,
-                                    child: TextField(
-                                        onChanged: (value) {
-                                          code = value;
-                                        },
-                                        cursorColor: mainColor.MainColor,
-                                        decoration: InputDecoration(
-                                          hintText: '인증 코드를 입력해주세요.',
-                                          hintStyle: TextStyle(
-                                              color: mainColor.lightGray,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: 'Pretendard'
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(
-                                              color: mainColor.lightGray,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                  color: mainColor.MainColor,
+                                                )
                                             )
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(
-                                              color: mainColor.MainColor,
-                                            )
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                              borderSide: BorderSide(
-                                                color: mainColor.MainColor,
-                                              )
-                                          )
-                                      )
+                                        )
+                                      ),
                                     ),
-                                  ),
-                                 InkWell(
-                                     onTap: () {
-                                       print(code);
-                                       print(tableNo);
-                                       //  코드가 일치한다면 백엔드에 요청
-                                       if (code == '') {
-                                         // 일일호프, 일홉 코드
-                                         Navigator.pop(context);
-                                         Navigator.push(
-                                             context,
-                                             MaterialPageRoute(
-                                                 builder: (context) =>
-                                                     Matching(
-                                                       event: true,
-                                                       tableNo:
-                                                       tableNo,
-                                                     )));
-                                       } else {
-                                         showSnackBar(context,
-                                             '코드를 다시 확인해 주세요!');
-                                       }
-                                   },
-                                   child: Container(
-                                     width: MediaQuery.of(context).size.width * 0.7,
-                                     height: 48,
-                                     margin: EdgeInsets.only(top: 30),
-                                     padding: EdgeInsets.all(8),
-                                     decoration: BoxDecoration(
-                                       color: mainColor.lightGray, // code가 맞으면 mainColor로 색깔이 바뀌어야 함
-                                       borderRadius: BorderRadius.circular(10),
-                                     ),
-                                     child: Text(
-                                       "다음",
-                                       textAlign: TextAlign.center,
-                                       style: TextStyle(
-                                         fontSize: 20,
-                                         color: Colors.white,
-                                         fontFamily: 'Pretendard'
-                                       )
-                                     )
-                                   ),
+                                   Column(
+                                     children: [
+                                       InkWell(
+                                           onTap: () {
+                                             print(code);
+                                             print(tableNo);
+                                             //  코드가 일치한다면 백엔드에 요청
+                                             if (code == 'BLT#11') {
+                                               // 일일호프, 일홉 코드
+                                               Navigator.pop(context);
+                                               Navigator.push(
+                                                   context,
+                                                   MaterialPageRoute(
+                                                       builder: (context) =>
+                                                           Matching(
+                                                             event: true,
+                                                             tableNo: tableNo,
+                                                           )));
 
-                                 )
-                                ]
-                              )
-                            ),
-                          ),
-                        ));
+                                            print(tableNo);
+                                             } else {
+                                              print(code);
+
+                                               showSnackBar(context,
+                                                   '코드를 다시 확인해 주세요!');
+                                             }
+                                         },
+                                         child: Container(
+                                           width: MediaQuery.of(context).size.width * 0.7,
+                                           height: 48,
+                                           margin: EdgeInsets.only(top: 30),
+                                           padding: EdgeInsets.all(8),
+                                           decoration: BoxDecoration(
+                                             color: mainColor.MainColor, // code가 맞으면 mainColor로 색깔이 바뀌어야 함
+                                             borderRadius: BorderRadius.circular(10),
+                                           ),
+                                           child: Text(
+                                             "다음",
+                                             textAlign: TextAlign.center,
+                                             style: TextStyle(
+                                               fontSize: 20,
+                                               color: Colors.white,
+                                               fontFamily: 'Pretendard'
+                                             )
+                                           )
+                                         ),
+                                                                 
+                                       ),
+                                       InkWell(
+                                           onTap: () {
+                                            Navigator.pop(context);
+                                         },
+                                         child: Container(
+                                           width: MediaQuery.of(context).size.width * 0.7,
+                                           height: 48,
+                                           margin: EdgeInsets.only(top: 10),
+                                           padding: EdgeInsets.all(8),
+                                           decoration: BoxDecoration(
+                                             color: mainColor.Gray, // code가 맞으면 mainColor로 색깔이 바뀌어야 함
+                                             borderRadius: BorderRadius.circular(10),
+                                           ),
+                                           child: Text(
+                                             "취소",
+                                             textAlign: TextAlign.center,
+                                             style: TextStyle(
+                                               fontSize: 20,
+                                               color: Colors.white,
+                                               fontFamily: 'Pretendard'
+                                             )
+                                           )
+                                         ),
+                                                                 
+                                       ),
+                                     ],
+                                   )
+                                  ]
+                                )
+                              ),
+                          )),
+                        );
                       });
                 } else if (state == 1) {
                   // 방으로 들어가기

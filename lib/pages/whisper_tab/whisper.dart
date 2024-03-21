@@ -118,6 +118,7 @@ class _Whisper extends State<Whisper> {
                 read: read,
                 isBlurting: false,
                 likedNum: 0,
+                event: false,
               );
               sendingMessageList.clear();
               print('내 메시지 전송 완료: $chat');
@@ -160,6 +161,7 @@ class _Whisper extends State<Whisper> {
                       read: true,
                       isBlurting: false,
                       likedNum: 0,
+                      event: false
                     ));
               });
             }
@@ -650,6 +652,7 @@ class _Whisper extends State<Whisper> {
       read: true,
       isBlurting: false,
       likedNum: 0,
+      event: false
     );
 
     // 소켓 서버에 데이터 전송
@@ -744,6 +747,7 @@ class _Whisper extends State<Whisper> {
                   read: read, // http에서 받아오는 거니까..
                   isBlurting: false,
                   likedNum: 0,
+                  event: false
                 );
               } else {
                 fetchChatList = OtherChat(

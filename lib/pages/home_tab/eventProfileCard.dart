@@ -13,10 +13,7 @@ import 'package:blurting/Utils/provider.dart';
 class EventProfileCard extends StatefulWidget {
   final int blurValue;
 
-  final int userId;
-
   EventProfileCard({
-    required this.userId,
     required this.blurValue,
   });
 

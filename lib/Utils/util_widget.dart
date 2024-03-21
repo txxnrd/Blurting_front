@@ -642,6 +642,7 @@ class MyChat extends StatefulWidget {
   final int likedNum;
   final int answerID;
   final int index;
+  final bool event;
 
   MyChat(
       {super.key,
@@ -651,7 +652,8 @@ class MyChat extends StatefulWidget {
       required this.isBlurting,
       required this.likedNum,
       required this.answerID,
-      required this.index});
+      required this.index,
+      required this.event});
 
   @override
   State<MyChat> createState() => _MyChatState();
@@ -668,23 +670,25 @@ class _MyChatState extends State<MyChat> {
     print(widget.key);
     return ListTile(
       onTap: () {
-        print("눌림");
-        print("음..?");
-        print(widget.answerID);
-        print(widget.index);
-        Future.delayed(Duration(milliseconds: 50), () {
-          Provider.of<FocusNodeProvider>(context, listen: false)
-              .focusNode
-              .requestFocus();
-        });
+        if (!widget.event) {
+          print("눌림");
+          print("음..?");
+          print(widget.answerID);
+          print(widget.index);
+          Future.delayed(Duration(milliseconds: 50), () {
+            Provider.of<FocusNodeProvider>(context, listen: false)
+                .focusNode
+                .requestFocus();
+          });
 
-        Provider.of<QuestionNumberProvider>(context, listen: false).questionId =
-            widget.answerID;
-        Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
-        Provider.of<ReplySelectedNumberProvider>(context, listen: false)
-            .replyselectednumber = widget.index;
-        Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
-            true;
+          Provider.of<QuestionNumberProvider>(context, listen: false)
+              .questionId = widget.answerID;
+          Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
+          Provider.of<ReplySelectedNumberProvider>(context, listen: false)
+              .replyselectednumber = widget.index;
+          Provider.of<MyChatReplyProvider>(context, listen: false)
+              .ismychatReply = true;
+        }
       },
       contentPadding: EdgeInsets.only(right: 14),
       subtitle: // 답변 내용
@@ -1380,6 +1384,7 @@ class AnswerItem extends StatefulWidget {
   final String mbti;
   final int answerId;
   final int index;
+  final bool event;
 
   AnswerItem(
       {super.key,
@@ -1393,7 +1398,8 @@ class AnswerItem extends StatefulWidget {
       required this.image,
       required this.mbti,
       required this.answerId,
-      required this.index});
+      required this.index,
+      required this.event});
 
   @override
   State<AnswerItem> createState() => _AnswerItemState();
@@ -2129,33 +2135,36 @@ class _AnswerItemState extends State<AnswerItem> {
                               //채팅 내역 있는곳
                               child: GestureDetector(
                                 onTap: () {
-                                  print("눌림");
-                                  print(widget.index);
-                                  print(widget.answerId);
-                                  Provider.of<ReplySelectedNumberProvider>(
-                                          context,
-                                          listen: false)
-                                      .replyselectednumber = widget.index;
-                                  Provider.of<QuestionNumberProvider>(context,
-                                          listen: false)
-                                      .questionId = widget.answerId;
-                                  Future.delayed(Duration(milliseconds: 50),
-                                      () {
-                                    Provider.of<FocusNodeProvider>(context,
+                                  if (!widget.event) {
+                                    print("눌림");
+                                    print(widget.index);
+                                    print(widget.answerId);
+                                    Provider.of<ReplySelectedNumberProvider>(
+                                            context,
                                             listen: false)
-                                        .focusNode
-                                        .requestFocus();
-                                  });
-                                  Provider.of<ReplyProvider>(context,
-                                          listen: false)
-                                      .IsReply = true;
-                                  Provider.of<MyChatReplyProvider>(context,
-                                          listen: false)
-                                      .ismychatReply = false;
-                                  Provider.of<ReplySelectedNumberProvider>(
-                                          context,
-                                          listen: false)
-                                      .replyselectedusername = widget.userName;
+                                        .replyselectednumber = widget.index;
+                                    Provider.of<QuestionNumberProvider>(context,
+                                            listen: false)
+                                        .questionId = widget.answerId;
+                                    Future.delayed(Duration(milliseconds: 50),
+                                        () {
+                                      Provider.of<FocusNodeProvider>(context,
+                                              listen: false)
+                                          .focusNode
+                                          .requestFocus();
+                                    });
+                                    Provider.of<ReplyProvider>(context,
+                                            listen: false)
+                                        .IsReply = true;
+                                    Provider.of<MyChatReplyProvider>(context,
+                                            listen: false)
+                                        .ismychatReply = false;
+                                    Provider.of<ReplySelectedNumberProvider>(
+                                                context,
+                                                listen: false)
+                                            .replyselectedusername =
+                                        widget.userName;
+                                  }
                                 },
                                 child: Container(
                                   width: 200,
