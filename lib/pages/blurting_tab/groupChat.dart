@@ -102,8 +102,9 @@ class QuestionItem extends StatelessWidget {
 
 class GroupChat extends StatefulWidget {
   static bool pointValid = false;
+  final String day;
 
-  GroupChat({super.key});
+  GroupChat({super.key, required this.day});
 
   @override
   _GroupChat createState() => _GroupChat();
@@ -501,17 +502,17 @@ class _GroupChat extends State<GroupChat> {
 
             rooms[currentIndex].replies.clear();
 
-            Duration timeDifference =
-                DateTime.now().add(Duration(hours: 9)).difference(createdAt);
+            // Duration timeDifference =
+            //     DateTime.now().add(Duration(hours: 9)).difference(createdAt);
 
-            if (timeDifference >= Duration(hours: 24)) {
-              // 24시간 지났으면 2일차
-              day = 'Day2';
-            }
-            if (timeDifference >= Duration(hours: 48)) {
-              // 48시간 지났으면 3일차
-              day = 'Day3';
-            }
+            // if (timeDifference >= Duration(hours: 24)) {
+            //   // 24시간 지났으면 2일차
+            //   day = 'Day2';
+            // }
+            // if (timeDifference >= Duration(hours: 48)) {
+            //   // 48시간 지났으면 3일차
+            //   day = 'Day3';
+            // }
             int index = 0;
             // 노태윤에게. 여기가 답변 추가하는 부분인데 여기만 수정하면 됨
 

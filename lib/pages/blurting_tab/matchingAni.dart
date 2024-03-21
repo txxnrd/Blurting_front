@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -7,7 +9,10 @@ import 'package:blurting/config/app_config.dart';
 import 'package:flutter/material.dart';
 
 class Matching extends StatefulWidget {
-  Matching({super.key});
+  final bool event;
+  final String tableNo;
+
+  Matching({super.key, required this.event, required this.tableNo});
 
   @override
   State<Matching> createState() => _MatchingState();
@@ -31,7 +36,11 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    register();
+    if (!widget.event) {
+      register();
+    } else {
+      eventRegister(widget.tableNo);
+    }
 
     controller = AnimationController(
       duration: Duration(seconds: 1),
@@ -174,12 +183,17 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
               color: Color.fromRGBO(48, 48, 48, 1),
             ),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MainApp(
-                            currentIndex: 1,
-                          ))).then((value) => setState(() {}));
+              if (!widget.event) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MainApp(
+                              currentIndex: 1,
+                            ))).then((value) => setState(() {}));
+              } else {
+                // 일홉일 때, 홈으로 간다
+                Navigator.pop(context);
+              }
             },
           ),
         ),
@@ -273,6 +287,33 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
       print('Response body: ${response.body}');
     } else if (response.statusCode == 400) {
       print('매칭 중');
+    } else if (response.statusCode == 409) {
+      print('매칭 완료');
+    } else {
+      print(response.statusCode);
+      throw Exception('매칭 등록 실패');
+    }
+  }
+
+  Future<void> eventRegister(String tableNo) async {
+    final url = Uri.parse(API.eventRegister);
+    String savedToken = await getToken();
+    print(tableNo);
+
+    final response = await http.post(url,
+        headers: {
+          'authorization': 'Bearer $savedToken',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'table': tableNo}));
+
+    if (response.statusCode == 201) {
+      print('요청 성공');
+      print('등록 완료');
+      print('Response body: ${response.body}');
+    } else if (response.statusCode == 400) {
+      print('매칭 중');
+      print('Response body: ${response.body}');
     } else if (response.statusCode == 409) {
       print('매칭 완료');
     } else {
