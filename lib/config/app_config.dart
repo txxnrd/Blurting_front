@@ -91,6 +91,8 @@ class API {
       "${ServerEndpoints.serverEndpoint}/user/account";
   static final String nickname =
       "${ServerEndpoints.serverEndpoint}/point/nickname";
+  static final String pointAd = "${ServerEndpoints.serverEndpoint}/point/ad";
+
   /*EVENT */
   static final event = "${ServerEndpoints.serverEndpoint}/event";
   static final eventLatest = "${ServerEndpoints.serverEndpoint}/event/latest";

@@ -496,7 +496,12 @@ class _CustomInputFieldState extends State<CustomInputField> {
 }
 
 class pointAppbar extends StatelessWidget {
-  pointAppbar({super.key});
+  final bool canNavigate;
+
+  pointAppbar({
+    super.key,
+    this.canNavigate = true,
+  });
 
   @override
   Widget build(BuildContext context) {
