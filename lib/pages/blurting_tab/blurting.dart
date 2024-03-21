@@ -87,7 +87,7 @@ class _Blurting extends State<Blurting> {
 
     Future.delayed(Duration.zero, () async {
       SharedPreferences pref = await SharedPreferences.getInstance();
-        await result();
+      await result();
 
       await fetchPoint();
       await isMatched();
@@ -149,7 +149,6 @@ class _Blurting extends State<Blurting> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    print(height);
 
     dividedProfileList[0].clear();
     dividedProfileList[1].clear();
@@ -542,7 +541,7 @@ class _Blurting extends State<Blurting> {
               if (isState == 'Continue') {
                 if (localDay == day) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => GroupChat()));
+                      MaterialPageRoute(builder: (context) => GroupChat(day: day,)));
                 } else {
                   Navigator.push(
                       context,
@@ -556,7 +555,7 @@ class _Blurting extends State<Blurting> {
                   isState == 'end') {
                 // 아직 방이 만들어지지 않음
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Matching()));
+                    MaterialPageRoute(builder: (context) => Matching(event: false, tableNo: '',)));
               }
 
               // 데이터를 로컬에 저장하는 함수
@@ -1050,6 +1049,44 @@ class _Blurting extends State<Blurting> {
       throw Exception('point : 잔여 포인트를 로드하는 데 실패했습니다');
     }
   }
+
+  
+  Future<void> fetchMyArrow() async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
+
+    final url = Uri.parse(API.userpoint);
+    String savedToken = await getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point =
+                responseData['point'];
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchPoint);
+    } else {
+      throw Exception('point : 잔여 포인트를 로드하는 데 실패했습니다');
+    }
+  }
+
 
   Future<void> fetchGroupInfo() async {
     // 프로필 리스트에 저장
