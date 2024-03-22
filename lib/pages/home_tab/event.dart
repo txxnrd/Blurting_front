@@ -791,6 +791,7 @@ class _Event extends State<Event> {
           setState(() {
             if (iSendedList.isEmpty) {
               print('아직 없');
+              iSended = false;
             } else {
               print('이미 보냄');
               iSended = true;
