@@ -175,6 +175,7 @@ flutter:
     - assets/images/unmatchMan.png
     - assets/images/unmatchWoman.png
     - assets/images/event.png
+    - assets/images/point_plus.png
 
   fonts:
     - family: Pretendard
