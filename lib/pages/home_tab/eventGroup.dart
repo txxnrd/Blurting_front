@@ -608,6 +608,7 @@ class _eventGroupChat extends State<eventGroupChat> {
     if (response.statusCode == 200) {
       try {
         Map<String, dynamic> responseData = jsonDecode(response.body);
+        print('indexComment 응답=====');
         print(responseData);
 
         if (mounted) {

@@ -316,7 +316,7 @@ class _Event extends State<Event> {
                 ),
               ),
             ),
-          if (finalMatching && !offResult)     // 최종 매칭이 되었고, 실제로 만날 건지 선택을 안 했다면 띄우기
+          if ((finalMatching && !offResult) && result)     // 최종 매칭이 되었고, 실제로 만날 건지 선택을 안 했다면, 그리고 끝났다면 띄우기
             Stack(
               children: [
                 Positioned(
@@ -422,6 +422,7 @@ class _Event extends State<Event> {
                               ),
                               onTap: () {
                                 // eventOff로 no를 보내는 await 함수 작성
+                                endEvent();
                                 eventOff('no');
                                 // 테스트 코드
                                 // setState(() {
@@ -718,7 +719,7 @@ class _Event extends State<Event> {
     if (response.statusCode == 200) {
       try {
         if (mounted) {
-          if (jsonDecode(response.body)) {
+          if (jsonDecode(response.body) == true) {
             offResult = true;
           }
         }
@@ -828,18 +829,23 @@ class _Event extends State<Event> {
 
     if (response.statusCode == 200) {
       try {
-        print('이거 이거');
-
         setState(() {
           result = true; // 최종 선택이 마감 되엇는가
 
-          Map<String, dynamic>? responseData = jsonDecode(response.body);
-          print('ㅇㄴㄹㄴㅇㄹ');
+          print('===');
 
-          if (responseData == null) {
+          if (response.body == '') {
             // 응답이 비어 있다면 매칭되지 않은 것
+            print('매칭 여부===');
+            print(response.body);
+            print('매칭 ㄴㄴ');
+            print('매칭 여부===');
             finalMatching = false;
           } else {
+            print('매칭 여부===');
+            print(response.body);
+            print('매칭 ㅇㅇ');
+            print('매칭 여부===');
             finalMatching = true;
             eventOffCheck();
             // 정보 받아와서 띄우는 건 eventProfileCard에서 함
@@ -851,6 +857,7 @@ class _Event extends State<Event> {
       }
     } else if (response.statusCode == 400) {
       // 아직 최종 선택 마감 전
+      print('마감 전');
       result = false;
       print(response.body);
     } else if (response.statusCode == 401) {
@@ -870,6 +877,11 @@ class _Event extends State<Event> {
     //   finalMatching = false;
     // });
     // 테스트 코드
+
+    print('최종선택====');
+    print(response.statusCode);
+    print(result);
+    print('최종선택====');
   }
 }
 

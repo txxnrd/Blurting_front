@@ -289,6 +289,9 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
       print('매칭 중');
     } else if (response.statusCode == 409) {
       print('매칭 완료');
+    } else if (response.statusCode == 401) {
+      await getnewaccesstoken(context, register);
+      ;
     } else {
       print(response.statusCode);
       throw Exception('매칭 등록 실패');
@@ -315,7 +318,9 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
       print('매칭 중');
       print('Response body: ${response.body}');
     } else if (response.statusCode == 409) {
-      print('매칭 완료');
+    } else if (response.statusCode == 401) {
+      getnewaccesstoken(
+          context, () async {}, eventRegister, tableNo, null, null);
     } else {
       print(response.statusCode);
       throw Exception('매칭 등록 실패');
