@@ -667,10 +667,11 @@ class _HomeState extends State<Home> {
           Container(
             margin: EdgeInsets.only(top: 20),
             child: IconButton(
-              icon: Icon(
-                Icons.event,
-                color: mainColor.Gray,
-              ),
+              icon: Container(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset('assets/images/event.png',
+                      fit: BoxFit.fill)),
               onPressed: () async {
                 await fetchState();
                 print(state);
@@ -1169,7 +1170,6 @@ class _HomeState extends State<Home> {
     } else {
       print(response.statusCode);
     }
-    state = 0;
     print(state);
   }
 

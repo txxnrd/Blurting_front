@@ -564,8 +564,7 @@ class _Blurting extends State<Blurting> {
                         builder: (context) => Matching(
                               event: false,
                               tableNo: '',
-                            )));
-              }
+                            )));              }
 
               // 데이터를 로컬에 저장하는 함수
               await prefs.setString('day', day);

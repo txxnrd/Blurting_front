@@ -144,7 +144,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                          BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                         ),
                       ),
                       onPressed: () {
@@ -178,7 +178,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
+                          BorderRadius.circular(10.0), // 원하는 모서리 둥글기 값
                         ),
                       ),
                       onPressed: () {
@@ -216,13 +216,13 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
             ),
             onTap: (IsValid)
                 ? () {
-                    _sendPostRequest();
-                  }
+              _sendPostRequest();
+            }
                 : null,
           ),
         ),
         floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+        FloatingActionButtonLocation.centerDocked, // 버튼의 위치
       ),
     );
   }

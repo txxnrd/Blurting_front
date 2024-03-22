@@ -82,8 +82,12 @@ class API {
       "${ServerEndpoints.serverEndpoint}/point/chat";
   static final String pointcheck =
       "${ServerEndpoints.serverEndpoint}/point/check";
+  static final String getpoint = "${ServerEndpoints.serverEndpoint}/point/ad";
+  /*ETC*/
   static final String userpoint = "${ServerEndpoints.serverEndpoint}/user";
+  static final String pointAd = "${ServerEndpoints.serverEndpoint}/point/ad";
   static final String pointAdd = "${ServerEndpoints.serverEndpoint}/point/add";
+
   static final String pointSub = "${ServerEndpoints.serverEndpoint}/point/sub";
   static final String disable = "${ServerEndpoints.serverEndpoint}/fcm/disable";
   static final String fcmcheck = "${ServerEndpoints.serverEndpoint}/fcm/check";
@@ -91,19 +95,17 @@ class API {
       "${ServerEndpoints.serverEndpoint}/user/account";
   static final String nickname =
       "${ServerEndpoints.serverEndpoint}/point/nickname";
-  static final String pointAd = "${ServerEndpoints.serverEndpoint}/point/ad";
-
   /*EVENT */
   static final event = "${ServerEndpoints.serverEndpoint}/event";
   static final eventLatest = "${ServerEndpoints.serverEndpoint}/event/latest";
-  static final eventRegister =
-      "${ServerEndpoints.serverEndpoint}/event/register";
+  static final eventRegister = "${ServerEndpoints.serverEndpoint}/event/register";
   static final eventNo = "${ServerEndpoints.serverEndpoint}/event/";
   static final eventAnwer = "${ServerEndpoints.serverEndpoint}/event/answer";
   static final eventResult = "${ServerEndpoints.serverEndpoint}/event/result";
   static final eventOff = "${ServerEndpoints.serverEndpoint}/event/meeting/";
   static final eventInfo = "${ServerEndpoints.serverEndpoint}/event/group-info";
-  static final eventSendArrow =
-      "${ServerEndpoints.serverEndpoint}/event/arrow/";
+  static final eventSendArrow = "${ServerEndpoints.serverEndpoint}/event/arrow/";
   static final eventArrow = "${ServerEndpoints.serverEndpoint}/event/arrow";
+  static final eventEnd = "${ServerEndpoints.serverEndpoint}/event/end";
+  static final eventOffCheck = "${ServerEndpoints.serverEndpoint}/event/meeting/check";
 }
