@@ -121,7 +121,38 @@ class _eventGroupChat extends State<eventGroupChat> {
   @override
   void initState() {
     super.initState();
-    fetchLatestComments();
+
+        Future<void> initializeSocket() async {
+      // 맨 처음 들어왔을 땐 마지막...
+      await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
+
+      print(currentIndex);
+
+      socket.on('create_room', (data) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Whisper(
+                  socket: socket,
+                  userName: data['nickname'] as String? ?? '',
+                  roomId: data['roomId'] as String? ?? '')),
+        ).then((value) {
+          setState(() {
+            fetchIndexComments(currentIndex);
+          });
+        });
+      });
+
+      socket.on('connect', (_) {
+        print('소켓 연결됨');
+      });
+
+      socket.on('disconnect', (_) {
+        print('소켓 연결 끊김');
+      });
+    }
+
+    initializeSocket();
 
     _pageController = PageController(initialPage: _questionNumber - 1);
 
@@ -436,6 +467,11 @@ class _eventGroupChat extends State<eventGroupChat> {
     );
 
     if (response.statusCode == 200) {
+      socket = IO.io(
+          '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
+        'transports': ['websocket'],
+        'auth': {'authorization': 'Bearer $savedToken'},
+      });
       print('sdf');
 
       print(rooms[currentIndex].replies);
