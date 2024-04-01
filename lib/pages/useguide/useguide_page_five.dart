@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:blurting/pages/useguide/useguide_page_six.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/styles/styles.dart';
 
 void main() {
   runApp(MyApp());

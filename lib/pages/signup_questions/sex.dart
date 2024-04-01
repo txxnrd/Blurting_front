@@ -7,6 +7,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/pages/signup_questions/Utils.dart';
+import 'package:blurting/styles/styles.dart';
 
 class SexPage extends StatefulWidget {
   const SexPage({super.key});

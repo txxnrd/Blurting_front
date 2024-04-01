@@ -1,6 +1,6 @@
 //두개 씩 따로 묶어서 관리
 import 'package:flutter/material.dart';
-import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/styles/styles.dart';
 
 enum EorI { e, i }
 

@@ -4,6 +4,7 @@ import 'package:blurting/pages/signup_questions/university_list.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'email.dart';
 import 'package:blurting/utils/util_widget.dart';
+import 'package:blurting/styles/styles.dart';
 
 class UniversityPage extends StatefulWidget {
   final String selectedGender;

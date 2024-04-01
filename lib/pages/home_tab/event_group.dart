@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:blurting/styles/styles.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisper_tab/whisper.dart';
 import 'package:blurting/token.dart';
@@ -122,7 +122,7 @@ class _eventGroupChat extends State<eventGroupChat> {
   void initState() {
     super.initState();
 
-        Future<void> initializeSocket() async {
+    Future<void> initializeSocket() async {
       // 맨 처음 들어왔을 땐 마지막...
       await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
 
@@ -314,8 +314,7 @@ class _eventGroupChat extends State<eventGroupChat> {
     ScrollController pageScrollController =
         ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-    });
+    SchedulerBinding.instance.addPostFrameCallback((_) {});
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -567,41 +566,39 @@ class _eventGroupChat extends State<eventGroupChat> {
                           .userId) {
                     rooms[currentIndex].replies.add(Reply(
                         MyChat(
-                          key: ObjectKey(
-                              answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                          message: answerData['answer'],
-                          answerID: answerData['id'], // 답변 내용
+                            key: ObjectKey(
+                                answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                            message: answerData['answer'],
+                            answerID: answerData['id'], // 답변 내용
 
-                          createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
-                          read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
-                          isBlurting:
-                              true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
-                          likedNum: answerData['likes'],
-                          index: index,
-                          event: true
-                        ),
+                            createdAt: '', // 언제 달았는지인데 귓속말에서만 필요해서 ''로 처리
+                            read: true, // 읽었는지인데 귓속말에서만 필요해서 true로 처리
+                            isBlurting:
+                                true, // 블러팅인지 귓속말인지에 따라 레이아웃 달라져서 줌, 항상 true로
+                            likedNum: answerData['likes'],
+                            index: index,
+                            event: true),
                         childReplies));
                     isBlock[currentIndex] = true; // true가 맞음
                   } else {
                     rooms[currentIndex].replies.add(Reply(
                         AnswerItem(
-                          key: ObjectKey(
-                              answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
-                          message: answerData['answer'], // 답변 내용
-                          iLike: answerData['ilike'], // 내가 좋아요 했는지 안 했는지
-                          likedNum: answerData['likes'], // 좋아요 개수
-                          userId:
-                              answerData['userId'], // 답글 단 사람 아이디 (귓속말 걸 때 필요)
-                          userName: answerData['userNickname'], // 답글 단 사람 닉네임
-                          isAlready: isAlready, // 지금 귓속말 하고 있는지 아닌지
-                          image: answerData['userSex'], // 성별
-                          mbti: answerData['mbti'] ?? '', // mbti
-                          answerId:
-                              answerData['id'], // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
-                          socket: socket,
-                          index: index,
-                          event: true
-                        ),
+                            key: ObjectKey(
+                                answerData['id']), // 다른 방이랑 헷갈리지 말라고 위젯에 키 부여
+                            message: answerData['answer'], // 답변 내용
+                            iLike: answerData['ilike'], // 내가 좋아요 했는지 안 했는지
+                            likedNum: answerData['likes'], // 좋아요 개수
+                            userId: answerData[
+                                'userId'], // 답글 단 사람 아이디 (귓속말 걸 때 필요)
+                            userName: answerData['userNickname'], // 답글 단 사람 닉네임
+                            isAlready: isAlready, // 지금 귓속말 하고 있는지 아닌지
+                            image: answerData['userSex'], // 성별
+                            mbti: answerData['mbti'] ?? '', // mbti
+                            answerId:
+                                answerData['id'], // 무슨 댓글에 좋아요 눌렀는지 알려주려고 id 부여
+                            socket: socket,
+                            index: index,
+                            event: true),
                         childReplies)); // 걍... 소켓임 신경 쓸 필요 없음
                   }
                   print("추가된 답변 ${rooms[currentIndex].replies}");
@@ -789,14 +786,15 @@ class _eventGroupChat extends State<eventGroupChat> {
     // 노태윤에게. utilWidget의 CustomInputfield에 매개변수로 전달되는 함수
     // 지금은 어차피 내 답변만 추가하는 기능밖에 없었어서 그냥 MyChat 넣어줫는데 답글인지 아닌지 판별해서 답글이면 만든 위젯 넣어 주는 걸로 바꿔야 댐
     Widget newAnswer = MyChat(
-        answerID: 0,
-        message: answer,
-        createdAt: '',
-        read: true,
-        isBlurting: true,
-        likedNum: 0,
-        index: 0,
-        event: false,);
+      answerID: 0,
+      message: answer,
+      createdAt: '',
+      read: true,
+      isBlurting: true,
+      likedNum: 0,
+      index: 0,
+      event: false,
+    );
 
     final url = Uri.parse(API.eventAnwer);
     String savedToken = await getToken();

@@ -10,6 +10,7 @@ import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:blurting/utils/util_widget.dart';
+import 'package:blurting/styles/styles.dart';
 
 class AlreadyUserPage extends StatefulWidget {
   const AlreadyUserPage({super.key});

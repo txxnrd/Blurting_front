@@ -15,6 +15,7 @@ import '../../config/app_config.dart';
 import '../../token.dart';
 import 'dart:io';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
+import 'package:blurting/styles/styles.dart';
 
 class MyPageEdit extends StatefulWidget {
   final dynamic data;

@@ -1,6 +1,6 @@
 import 'dart:async';
-
-import 'package:blurting/pages/useGuide/useguidepagethree.dart';
+import 'package:blurting/styles/styles.dart';
+import 'package:blurting/pages/useguide/useguide_page_three.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 

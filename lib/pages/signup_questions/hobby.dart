@@ -7,6 +7,7 @@ import 'package:blurting/config/app_config.dart';
 import 'image.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/utils/util_widget.dart';
+import 'package:blurting/styles/styles.dart';
 
 class HobbyPage extends StatefulWidget {
   final String selectedGender;

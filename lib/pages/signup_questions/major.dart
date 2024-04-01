@@ -8,6 +8,7 @@ import 'package:blurting/pages/signup_questions/utils.dart';
 import 'package:blurting/pages/signup_questions/mbti/mbti.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'major_list.dart';
+import 'package:blurting/styles/styles.dart';
 
 class MajorPage extends StatefulWidget {
   final String selectedGender;

@@ -9,6 +9,7 @@ import 'package:blurting/pages/signup_questions/Utils.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
+import 'package:blurting/styles/styles.dart';
 
 class EmailPage extends StatefulWidget {
   final String domain;

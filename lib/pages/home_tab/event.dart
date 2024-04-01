@@ -15,6 +15,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/pages/blurting_tab/matching_ani.dart';
 import 'package:blurting/pages/blurting_tab/day_ani.dart';
+import 'package:blurting/styles/styles.dart';
+
 import 'package:http/http.dart' as http;
 
 class Event extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:blurting/styles/styles.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -190,9 +190,9 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
                         builder: (context) => MainApp(
                               currentIndex: 1,
                             ))).then((value) => setState(() {}));
-              }
-              else{   // 일홉일 때, 홈으로 간다
-                  Navigator.pop(context);
+              } else {
+                // 일홉일 때, 홈으로 간다
+                Navigator.pop(context);
               }
             },
           ),
@@ -297,7 +297,7 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
       throw Exception('매칭 등록 실패');
     }
   }
-  
+
   Future<void> eventRegister(String tableNo) async {
     final url = Uri.parse(API.eventRegister);
     String savedToken = await getToken();

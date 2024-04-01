@@ -12,6 +12,7 @@ import '../token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
 import "package:blurting/pages/useguide/useguide_page_one.dart";
+import 'package:blurting/styles/styles.dart';
 
 class SettingPage extends StatefulWidget {
   @override

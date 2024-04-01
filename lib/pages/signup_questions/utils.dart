@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/styles/styles.dart';
 
 enum Gender { male, female, none }
 

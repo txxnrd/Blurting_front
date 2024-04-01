@@ -7,6 +7,7 @@ import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:blurting/styles/styles.dart';
 
 class PersonalityPage extends StatefulWidget {
   final String selectedGender;

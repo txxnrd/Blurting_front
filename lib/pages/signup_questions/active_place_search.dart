@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
-import 'package:blurting/Utils/provider.dart';
-
-// import 'package:blurting/signupquestions/activeplace.dart';
-// import 'package:blurting/signupquestions/activeplacedone.dart';
+import 'package:blurting/styles/styles.dart';
 
 String searchText = '';
 TextEditingController _searchController = TextEditingController();
@@ -83,7 +80,7 @@ class _SearchPage extends State<SearchPage> {
                           icon: Icon(Icons.search),
                           onPressed: () {
                             searchByLocation =
-                            false; //위치로 검색 모드가 아니라 이름검색 모드임을 알려주는 것
+                                false; //위치로 검색 모드가 아니라 이름검색 모드임을 알려주는 것
                             searchByLocationName();
                           },
                         )),
@@ -127,7 +124,7 @@ class _SearchPage extends State<SearchPage> {
               ),
               Expanded(
                 child: ListView.builder(
-                  // items 변수에 저장되어 있는 모든 값 출력
+                    // items 변수에 저장되어 있는 모든 값 출력
                     itemCount: filteredItems.length,
                     itemBuilder: (BuildContext currentcontext, int index) {
                       return Card(
@@ -137,7 +134,7 @@ class _SearchPage extends State<SearchPage> {
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.elliptical(10, 10))),
+                                BorderRadius.all(Radius.elliptical(10, 10))),
                         child: ListTile(
                             title: Text(
                               filteredItems[index],
@@ -149,8 +146,8 @@ class _SearchPage extends State<SearchPage> {
                               ),
                             ),
                             onTap: () => {
-                              cardClickEvent(context, index),
-                            }),
+                                  cardClickEvent(context, index),
+                                }),
                       );
                     }),
               ),
@@ -203,7 +200,7 @@ class _SearchPage extends State<SearchPage> {
 
         // 서버 응답을 사용하여 검색 결과 업데이트
         List<String> serverResponse =
-        (json.decode(response.body) as List<dynamic>).cast<String>();
+            (json.decode(response.body) as List<dynamic>).cast<String>();
         setState(() {
           itemsByLocation = serverResponse;
           filterItems();
@@ -222,7 +219,7 @@ class _SearchPage extends State<SearchPage> {
 
     if (response.statusCode == 200) {
       List<String> serverResponse =
-      (json.decode(response.body) as List<dynamic>).cast<String>();
+          (json.decode(response.body) as List<dynamic>).cast<String>();
       setState(() {
         itemsByName = serverResponse;
         filterItems();

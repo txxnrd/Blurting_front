@@ -4,6 +4,7 @@ import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/home_tab/Home.dart';
 import 'package:blurting/pages/mypage/mypage.dart';
 import 'package:blurting/pages/whisper_tab/chattingList.dart';
+import 'package:blurting/styles/styles.dart';
 
 class MainApp extends StatefulWidget {
   final int currentIndex;

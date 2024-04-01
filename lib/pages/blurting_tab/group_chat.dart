@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:blurting/styles/styles.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisper_tab/whisper.dart';
 import 'package:blurting/token.dart';

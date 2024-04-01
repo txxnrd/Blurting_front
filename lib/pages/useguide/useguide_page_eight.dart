@@ -1,7 +1,8 @@
 import 'dart:ui';
+import 'package:blurting/styles/styles.dart';
 
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/pages/useGuide/done.dart';
+import 'package:blurting/pages/useguide/useguide_done.dart';
 import 'package:blurting/settings/setting.dart';
 import 'package:flutter/material.dart';
 

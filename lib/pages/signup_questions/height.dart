@@ -7,6 +7,7 @@ import 'package:blurting/pages/signup_questions/Utils.dart';
 import 'package:blurting/token.dart'; // token.dart를 임포트
 import 'package:blurting/pages/signup_questions/major.dart'; // major.dart를 임포트
 import 'package:blurting/utils/util_widget.dart';
+import 'package:blurting/styles/styles.dart';
 
 final labels = ['안 핌', '가끔', '자주', '매일'];
 

@@ -11,6 +11,7 @@ import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:blurting/pages/signup_questions/Utils.dart';
+import 'package:blurting/styles/styles.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   const PhoneNumberPage({super.key});

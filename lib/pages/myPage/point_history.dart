@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/utils/provider.dart';
 import 'package:blurting/utils/util_widget.dart';
+import 'package:blurting/styles/styles.dart';
 
 class PointHistoryPage extends StatefulWidget {
   // Constructor to receive the user token

@@ -18,6 +18,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'package:blurting/styles/styles.dart';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {

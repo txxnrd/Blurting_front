@@ -9,6 +9,7 @@ import 'package:blurting/token.dart';
 import 'package:blurting/pages/signup_questions/religion.dart';
 import 'package:blurting/config/app_config.dart';
 import 'active_place_search.dart';
+import 'package:blurting/styles/styles.dart';
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;

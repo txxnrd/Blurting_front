@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/signup_questions/alcohol.dart';
+import 'package:blurting/pages/signup_questions/alcohol.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/pages/signup_questions/Utils.dart';
-
+import 'package:blurting/styles/styles.dart';
 import 'package:blurting/config/app_config.dart';
 
 class SexualPreferencePage extends StatefulWidget {

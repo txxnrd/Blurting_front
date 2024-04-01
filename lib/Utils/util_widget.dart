@@ -10,6 +10,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:provider/provider.dart';
 import 'package:blurting/pages/mypage/point_history.dart';
 import 'package:http/http.dart' as http;
+import 'package:blurting/styles/styles.dart';
 
 // 상대방 말풍선 클리퍼
 class LeftTailClipper extends CustomClipper<Path> {

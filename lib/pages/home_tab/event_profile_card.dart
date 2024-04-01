@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../config/app_config.dart';
 import 'dart:async';
-import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/styles/styles.dart';
 
 class EventProfileCard extends StatefulWidget {
   final int blurValue;

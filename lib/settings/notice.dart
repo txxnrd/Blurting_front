@@ -1,6 +1,7 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:blurting/styles/styles.dart';
 
 class NoticePage extends StatefulWidget {
   @override
