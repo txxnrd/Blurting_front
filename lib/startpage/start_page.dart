@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/signup_questions/phonenumber.dart';
+import 'package:blurting/signup_questions/phone_number.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'alreadyuser.dart';
+import 'already_user.dart';
 
 void main() {
   runApp(MyApp());
@@ -141,7 +141,9 @@ class _LoginPageState extends State<LoginPage> {
                 opacity: opacity,
                 child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                    child: Container(color: Color.fromRGBO(118, 118, 118, 1).withOpacity(0.3))),
+                    child: Container(
+                        color:
+                            Color.fromRGBO(118, 118, 118, 1).withOpacity(0.3))),
               ),
               Container(
                 margin: EdgeInsets.only(bottom: 50),

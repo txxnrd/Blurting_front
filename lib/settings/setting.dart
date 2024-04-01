@@ -1,5 +1,5 @@
 import 'package:blurting/pages/policy/policyOne.dart';
-import 'package:blurting/startpage/startpage.dart';
+import 'package:blurting/startpage/start_page.dart';
 import 'package:blurting/settings/url_link.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/settings/info.dart';

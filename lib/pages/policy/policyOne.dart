@@ -1,11 +1,11 @@
 import 'package:blurting/mainapp.dart';
-import 'package:blurting/pages/useguide/done.dart';
+import 'package:blurting/pages/useguide/useguide_done.dart';
 import 'package:blurting/pages/policy/policyFive.dart';
 import 'package:blurting/pages/policy/policyFour.dart';
 import 'package:blurting/pages/policy/policyThree.dart';
 import 'package:blurting/pages/policy/policyTwo.dart';
 import 'package:blurting/pages/useguide/useguidepageone.dart';
-import 'package:blurting/signup_questions/phonenumber.dart';
+import 'package:blurting/signup_questions/phone_number.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/config/app_config.dart';
@@ -67,7 +67,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
             child: Checkbox(
               side: BorderSide(color: Colors.transparent),
               fillColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
                   if (states.contains(MaterialState.selected)) {
                     return Color(0xFFF66464); // 선택되었을 때의 배경 색상
                   }
@@ -287,8 +287,8 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
           ),
           onPressed: (IsValid)
               ? () {
-            _increaseProgressAndNavigate();
-          }
+                  _increaseProgressAndNavigate();
+                }
               : null,
           child: Text(
             '다음',
@@ -302,7 +302,7 @@ class _PolicyOneState extends State<PolicyOne> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerDocked, // 버튼의 위치
+          FloatingActionButtonLocation.centerDocked, // 버튼의 위치
     );
   }
 }

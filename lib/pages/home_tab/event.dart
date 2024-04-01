@@ -5,16 +5,16 @@ import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
-import 'package:blurting/pages/blurting_tab/groupChat.dart';
-import 'package:blurting/pages/home_tab/eventProfileCard.dart';
+import 'package:blurting/pages/blurting_tab/group_chat.dart';
+import 'package:blurting/pages/home_tab/event_profile_card.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/pages/blurting_tab/matchingAni.dart';
-import 'package:blurting/pages/blurting_tab/dayAni.dart';
+import 'package:blurting/pages/blurting_tab/matching_ani.dart';
+import 'package:blurting/pages/blurting_tab/day_ani.dart';
 import 'package:http/http.dart' as http;
 
 class Event extends StatefulWidget {
@@ -316,7 +316,8 @@ class _Event extends State<Event> {
                 ),
               ),
             ),
-          if ((finalMatching && !offResult) && result)     // 최종 매칭이 되었고, 실제로 만날 건지 선택을 안 했다면, 그리고 끝났다면 띄우기
+          if ((finalMatching && !offResult) &&
+              result) // 최종 매칭이 되었고, 실제로 만날 건지 선택을 안 했다면, 그리고 끝났다면 띄우기
             Stack(
               children: [
                 Positioned(
@@ -443,35 +444,35 @@ class _Event extends State<Event> {
               alignment: Alignment.bottomCenter,
               children: [
                 Positioned(
-                bottom: 50,
-                child: GestureDetector(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: mainColor.MainColor),
-                    height: 50,
-                    // color: mainColor.MainColor,
-                    child: Center(
-                      child: Text(
-                        '블러팅 종료하기',
-                        style: TextStyle(
-                            fontFamily: 'Heebo',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
+                  bottom: 50,
+                  child: GestureDetector(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: mainColor.MainColor),
+                      height: 50,
+                      // color: mainColor.MainColor,
+                      child: Center(
+                        child: Text(
+                          '블러팅 종료하기',
+                          style: TextStyle(
+                              fontFamily: 'Heebo',
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
-                  ),
-                  onTap: () {
-                    // 0으로 바꿔 주는 api 요청
+                    onTap: () {
+                      // 0으로 바꿔 주는 api 요청
                       endEvent();
                       Navigator.pop(context);
                     },
                   ),
                 )
-            ],
-          )
+              ],
+            )
         ],
       ),
     );
@@ -705,7 +706,6 @@ class _Event extends State<Event> {
     }
   }
 
-  
   Future<void> eventOffCheck() async {
     // 만날지 말지 이미 선택햇다면 offResult true
     final url = Uri.parse(API.eventOffCheck);
@@ -732,7 +732,6 @@ class _Event extends State<Event> {
       print(response.statusCode);
 
       await getnewaccesstoken(context, eventOffCheck);
-
     } else if (response.statusCode == 400) {
       print(response.body);
     } else {
@@ -741,9 +740,7 @@ class _Event extends State<Event> {
     }
   }
 
-  
   Future<void> endEvent() async {
-
     // 블러팅 끗
 
     final url = Uri.parse(API.eventEnd);

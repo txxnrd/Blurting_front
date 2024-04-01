@@ -8,7 +8,7 @@ import 'package:blurting/signup_questions/Utils.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/signup_questions/religion.dart';
 import '../config/app_config.dart';
-import 'activeplacesearch.dart';
+import 'active_place_search.dart';
 
 class ActivePlacePage extends StatefulWidget {
   final String selectedGender;
@@ -164,7 +164,8 @@ class _ActivePlacePageState extends State<ActivePlacePage>
               SizedBox(
                 height: 25,
               ),
-              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
+              Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),

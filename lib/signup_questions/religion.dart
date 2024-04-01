@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:blurting/signup_questions/utils.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/signup_questions/sexualpreference.dart';
+import 'package:blurting/signup_questions/sexual_preference.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/Utils/provider.dart';
@@ -185,7 +185,8 @@ class _ReligionPageState extends State<ReligionPage>
               SizedBox(
                 height: 25,
               ),
-              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
+              Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),

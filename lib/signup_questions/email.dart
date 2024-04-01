@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/signup_questions/welcomepage.dart';
+import 'package:blurting/signup_questions/welcome_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/signup_questions/Utils.dart';

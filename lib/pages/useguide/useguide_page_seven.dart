@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blurting/pages/useguide/useguidepageeight.dart';
+import 'package:blurting/pages/useguide/useguide_page_eight.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 
@@ -180,23 +180,23 @@ class _UseGuidePageSevenState extends State<UseGuidePageSeven>
                     ],
                   ),
                 ),
-                              Expanded(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 40),
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 700),
-                    opacity: isVisible ? 1.0 : 0.3,
-                    child: Text("화면을 터치해 주세요!",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: mainColor.Gray,
-                          fontFamily: 'Heebo',
-                        )),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: EdgeInsets.only(bottom: 40),
+                    child: AnimatedOpacity(
+                      duration: Duration(milliseconds: 700),
+                      opacity: isVisible ? 1.0 : 0.3,
+                      child: Text("화면을 터치해 주세요!",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: mainColor.Gray,
+                            fontFamily: 'Heebo',
+                          )),
+                    ),
                   ),
                 ),
-              ),
               ],
             ),
           ),

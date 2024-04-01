@@ -5,15 +5,15 @@ import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
-import 'package:blurting/pages/blurting_tab/groupChat.dart';
+import 'package:blurting/pages/blurting_tab/group_chat.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/pages/blurting_tab/matchingAni.dart';
-import 'package:blurting/pages/blurting_tab/dayAni.dart';
+import 'package:blurting/pages/blurting_tab/matching_ani.dart';
+import 'package:blurting/pages/blurting_tab/day_ani.dart';
 import 'package:http/http.dart' as http;
 
 /** */
@@ -564,7 +564,8 @@ class _Blurting extends State<Blurting> {
                         builder: (context) => Matching(
                               event: false,
                               tableNo: '',
-                            )));              }
+                            )));
+              }
 
               // 데이터를 로컬에 저장하는 함수
               await prefs.setString('day', day);

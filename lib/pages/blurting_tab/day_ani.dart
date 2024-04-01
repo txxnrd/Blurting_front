@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:blurting/pages/blurting_tab/groupChat.dart';
+import 'package:blurting/pages/blurting_tab/group_chat.dart';
 import 'package:flutter/material.dart';
 
 class DayAni extends StatefulWidget {
@@ -30,7 +30,8 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => GroupChat(day: day),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              GroupChat(day: day),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = 0.0;
             const end = 1.0;

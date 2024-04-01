@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blurting/signup_questions/utils.dart';
-import 'package:blurting/signup_questions/universitylist.dart';
+import 'package:blurting/signup_questions/university_list.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'email.dart';
 import 'package:blurting/utils/util_widget.dart';

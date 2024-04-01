@@ -7,7 +7,7 @@ import '../config/app_config.dart';
 import 'package:blurting/signup_questions/utils.dart';
 import 'package:blurting/signup_questions/mbti/mbti.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'majorlist.dart';
+import 'major_list.dart';
 
 class MajorPage extends StatefulWidget {
   final String selectedGender;
@@ -202,7 +202,8 @@ class _MajorPageState extends State<MajorPage>
               SizedBox(
                 height: 25,
               ),
-              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
+              Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),
