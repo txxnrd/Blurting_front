@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:blurting/signup_questions/active_place.dart';
+import 'package:blurting/pages/signup_questions/active_place.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/Utils/provider.dart';
-import '../config/app_config.dart';
+import 'package:blurting/config/app_config.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/pages/signup_questions/Utils.dart';
 
 class SexPage extends StatefulWidget {
   const SexPage({super.key});

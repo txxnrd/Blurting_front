@@ -1,13 +1,12 @@
 import 'dart:async';
-
-import 'package:blurting/signup_questions/university.dart';
-import 'package:blurting/signup_questions/utils.dart';
+import 'package:blurting/pages/signup_questions/university.dart';
+import 'package:blurting/pages/signup_questions/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:dio/dio.dart';
-import '../config/app_config.dart';
+import 'package:blurting/config/app_config.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart'; // 추가
+import 'package:image_picker/image_picker.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/utils/util_widget.dart';
 

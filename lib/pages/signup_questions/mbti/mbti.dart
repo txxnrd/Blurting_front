@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/signup_questions/mbti/utils.dart';
+import 'package:blurting/pages/signup_questions/mbti/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/signup_questions/utils.dart';
-import 'package:blurting/signup_questions/personality.dart';
+import 'package:blurting/pages/signup_questions/utils.dart';
+import 'package:blurting/pages/signup_questions/personality.dart';
 import 'package:http/http.dart' as http;
-import '../../config/app_config.dart';
+import 'package:blurting/config/app_config.dart';
 
 class MBTIPage extends StatefulWidget {
   final String selectedGender;
@@ -154,7 +154,8 @@ class _MBTIPageState extends State<MBTIPage>
               SizedBox(
                 height: 25,
               ),
-              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
+              Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),

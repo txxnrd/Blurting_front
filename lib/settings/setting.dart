@@ -1,5 +1,5 @@
-import 'package:blurting/pages/policy/policyOne.dart';
-import 'package:blurting/startpage/start_page.dart';
+import 'package:blurting/pages/policy/policy_one.dart';
+import 'package:blurting/pages/startpage/start_page.dart';
 import 'package:blurting/settings/url_link.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/settings/info.dart';
@@ -11,7 +11,7 @@ import 'dart:convert';
 import '../token.dart';
 import 'notice.dart';
 import 'notificationandsound.dart';
-import "package:blurting/pages/useguide/useguidepageone.dart";
+import "package:blurting/pages/useguide/useguide_page_one.dart";
 
 class SettingPage extends StatefulWidget {
   @override

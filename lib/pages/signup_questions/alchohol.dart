@@ -3,10 +3,10 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/token.dart';
-import 'package:blurting/signup_questions/Utils.dart';
-import 'package:blurting/signup_questions/smoke.dart';
+import 'package:blurting/pages/signup_questions/Utils.dart';
+import 'package:blurting/pages/signup_questions/smoke.dart';
 import 'package:blurting/utils/util_widget.dart';
-import '../config/app_config.dart';
+import 'package:blurting/config/app_config.dart';
 
 final labels = ['안 마심', '가끔', '자주', '매일'];
 
@@ -129,7 +129,8 @@ class _AlcoholPageState extends State<AlcoholPage>
               SizedBox(
                 height: 25,
               ),
-              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
+              Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),

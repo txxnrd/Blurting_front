@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:blurting/pages/policy/policyOne.dart';
-import 'package:blurting/pages/useguide/useguidepageone.dart';
+import 'package:blurting/pages/policy/policy_one.dart';
+import 'package:blurting/pages/useguide/useguide_page_one.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:blurting/settings/setting.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';
-import 'package:blurting/pages/policy/policyOne.dart';
+import 'package:blurting/pages/policy/policy_one.dart';
 
 void main() {
   runApp(MyApp());

@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/signup_questions/welcome_page.dart';
+import 'package:blurting/pages/signup_questions/welcome_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/signup_questions/Utils.dart';
+import 'package:blurting/pages/signup_questions/Utils.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
-import '../config/app_config.dart';
+import 'package:blurting/config/app_config.dart';
 
 class EmailPage extends StatefulWidget {
   final String domain;

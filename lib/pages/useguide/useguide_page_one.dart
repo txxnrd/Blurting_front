@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blurting/pages/useguide/useguidepagetwo.dart';
+import 'package:blurting/pages/useguide/useguide_page_two.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 
@@ -161,4 +161,3 @@ class _UseGuidePageOneState extends State<UseGuidePageOne>
     );
   }
 }
-

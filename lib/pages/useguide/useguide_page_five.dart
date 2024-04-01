@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blurting/pages/useguide/useguidepagesix.dart';
+import 'package:blurting/pages/useguide/useguide_page_six.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 
@@ -82,7 +82,9 @@ class _UseGuidePageFiveState extends State<UseGuidePageFive>
         timer.cancel();
       }
     });
-  }  @override
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {

@@ -1,12 +1,4 @@
-import 'package:blurting/mainapp.dart';
-import 'package:blurting/pages/useguide/useguidepagetwo.dart';
-import 'package:blurting/signup_questions/phone_number.dart';
-import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
-import 'package:blurting/config/app_config.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/utils/provider.dart';
 
 void main() {

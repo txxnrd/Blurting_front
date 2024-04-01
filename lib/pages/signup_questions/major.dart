@@ -1,35 +1,46 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
-import 'package:blurting/signup_questions/alcohol.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
+import 'package:blurting/config/app_config.dart';
+import 'package:blurting/pages/signup_questions/utils.dart';
+import 'package:blurting/pages/signup_questions/mbti/mbti.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/signup_questions/Utils.dart';
+import 'major_list.dart';
 
-import '../config/app_config.dart';
-
-class SexualPreferencePage extends StatefulWidget {
+class MajorPage extends StatefulWidget {
   final String selectedGender;
 
-  SexualPreferencePage({super.key, required this.selectedGender});
+  MajorPage({super.key, required this.selectedGender});
   @override
-  _SexualPreferencePageState createState() => _SexualPreferencePageState();
+  _MajorPageState createState() => _MajorPageState();
 }
 
-enum SexualPreference { different, same, both, etc }
+enum Major {
+  humanities, // 인문계열
+  social, // 사회계열
+  education, // 교육계열
+  engineering, // 공학계열
+  medical, // 의학계열
+  artsPhysical, // 예체능계열
+  naturalScience // 자연계열
+}
 
-class _SexualPreferencePageState extends State<SexualPreferencePage>
+class _MajorPageState extends State<MajorPage>
     with SingleTickerProviderStateMixin {
-  SexualPreference? _selectedSexPreference;
+  Major? _selectedMajor;
+  double _currentHeightValue = 160.0; // 초기 키 값
   AnimationController? _animationController;
   Animation<double>? _progressAnimation;
+  String? selectedMajor = majors[0];
+
   Future<void> _increaseProgressAndNavigate() async {
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            AlcoholPage(selectedGender: widget.selectedGender),
+            MBTIPage(selectedGender: widget.selectedGender),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -38,7 +49,6 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
   }
 
   bool IsValid = false;
-
   @override
   void IsSelected() {
     IsValid = true;
@@ -49,60 +59,21 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 400), // 애니메이션의 지속 시간
+      duration: Duration(milliseconds: 600), // 애니메이션의 지속 시간 설정
       vsync: this,
     );
 
     _progressAnimation = Tween<double>(
-      begin: 4 / 15, // 시작 게이지 값
-      end: 5 / 15, // 종료 게이지 값
-    ).animate(_animationController!);
-
-    _animationController?.addListener(() {
-      setState(() {}); // 애니메이션 값이 변경될 때마다 화면을 다시 그립니다.
-    });
+      begin: 8 / 15, // 시작 너비 (30%)
+      end: 9 / 15, // 종료 너비 (40%)
+    ).animate(
+        CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut))
+      ..addListener(() {
+        setState(() {});
+      });
   }
 
-  Future<void> _sendPostRequest() async {
-    var url = Uri.parse(API.signup);
-
-    var sexOrient = "";
-    if (_selectedSexPreference == SexualPreference.different) {
-      sexOrient = "hetero";
-    } else if (_selectedSexPreference == SexualPreference.same) {
-      sexOrient = "homo";
-    } else {
-      sexOrient = "bi";
-    }
-    String savedToken = await getToken();
-
-    var response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $savedToken',
-      },
-      body: json.encode({"sexOrient": sexOrient}), // JSON 형태로 인코딩
-    );
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
-
-      var data = json.decode(response.body);
-
-      if (data['signupToken'] != null) {
-        var token = data['signupToken'];
-
-        await saveToken(token);
-        _increaseProgressAndNavigate();
-      }
-    } else {
-      // 오류가 발생한 경우 처리
-    }
-  }
-
-  Widget sexualPreference_checkbox(double width,
-      SexualPreference sexualPreference, String sexualPreference_name) {
+  Widget major_checkbox(double width, Major major, String major_name) {
     return Container(
       width: width * 0.42, // 원하는 너비 값
       height: 48, // 원하는 높이 값
@@ -110,7 +81,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Checkbox(
-            value: _selectedSexPreference == sexualPreference,
+            value: _selectedMajor == major,
             side: BorderSide(color: Colors.transparent),
             fillColor: MaterialStateProperty.resolveWith<Color?>(
               (Set<MaterialState> states) {
@@ -122,7 +93,7 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
             ),
             onChanged: (bool? newValue) {
               setState(() {
-                _selectedSexPreference = sexualPreference;
+                _selectedMajor = major;
                 IsSelected();
               });
             },
@@ -131,12 +102,12 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
           GestureDetector(
             onTap: () {
               setState(() {
-                _selectedSexPreference = sexualPreference;
+                _selectedMajor = major;
                 IsSelected();
               });
             },
             child: Text(
-              sexualPreference_name,
+              major_name,
               style: TextStyle(
                 color: mainColor.black,
                 fontFamily: 'Pretendard',
@@ -150,6 +121,57 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
     );
   }
 
+  Future<void> _sendPostRequest() async {
+    print('_sendPostRequest called');
+    var url = Uri.parse(API.signup);
+    print(_selectedMajor);
+    var major = '';
+    if (_selectedMajor == Major.humanities) {
+      major = '인문계열';
+    } else if (_selectedMajor == Major.social) {
+      major = '사회계열';
+    } else if (_selectedMajor == Major.education) {
+      major = '교육계열';
+    } else if (_selectedMajor == Major.engineering) {
+      major = '공학계열';
+    } else if (_selectedMajor == Major.naturalScience) {
+      major = '자연계열';
+    } else if (_selectedMajor == Major.medical) {
+      major = '의학계열';
+    } else {
+      major = '예체능계열';
+    }
+
+    String savedToken = await getToken();
+    print(savedToken);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"major": major}), // JSON 형태로 인코딩
+    );
+    print(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+      print('Server returned OK');
+      print('Response body: ${response.body}');
+      var data = json.decode(response.body);
+
+      if (data['signupToken'] != null) {
+        var token = data['signupToken'];
+        print(token);
+        await saveToken(token);
+        _increaseProgressAndNavigate();
+      } else {}
+    } else {
+      // 오류가 발생한 경우 처리
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Gender? _gender;
@@ -159,13 +181,13 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
       _gender = Gender.female;
     }
     double width = MediaQuery.of(context).size.width;
-
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
         sendBackRequest(context, false);
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -180,67 +202,43 @@ class _SexualPreferencePageState extends State<SexualPreferencePage>
               SizedBox(
                 height: 25,
               ),
-              Center(child: ProgressBar(context, _progressAnimation!, _gender!)),
+              Center(
+                  child: ProgressBar(context, _progressAnimation!, _gender!)),
               SizedBox(
                 height: 50,
               ),
-              TitleQuestion("성적지향성은 어떻게 되시나요?"),
-              SizedBox(height: 30, width: 20),
+              smallTitleQuestion("당신의 전공은 무엇인가요?"),
+              SizedBox(height: 30),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  sexualPreference_checkbox(
-                      width, SexualPreference.different, "이성애자"),
-                  SizedBox(width: 23),
-                  sexualPreference_checkbox(
-                      width, SexualPreference.same, "동성애자"),
+                mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+                children: [
+                  major_checkbox(width, Major.humanities, "인문계열"),
+                  major_checkbox(width, Major.social, "사회계열"),
                 ],
               ),
-              SizedBox(
-                height: 17,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+                children: [
+                  major_checkbox(width, Major.education, "교육계열"),
+                  major_checkbox(width, Major.engineering, "공학계열"),
+                ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  sexualPreference_checkbox(
-                      width, SexualPreference.both, "양성애자"),
-                  SizedBox(width: 23),
+                mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+                children: [
+                  major_checkbox(width, Major.naturalScience, "자연계열"),
+                  major_checkbox(width, Major.medical, "의학계열"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center, // 가로축 중앙 정렬
+                children: [
+                  major_checkbox(width, Major.artsPhysical, "예체능계열"),
                   Container(
-                    width: width * 0.42,
-                    height: 48,
+                    width: width * 0.42, // 원하는 너비 값
+                    height: 48, // 원하는 높이 값
                   ),
                 ],
-              ),
-              SizedBox(height: 25),
-              Container(
-                width: 180,
-                height: 12,
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Pretendard',
-                      color: mainColor.black,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '*동성애자 선택시 ',
-                      ),
-                      TextSpan(
-                        text: '동성끼리만',
-                        style: TextStyle(
-                            color: Color(0xFFF66464)), // 원하는 색으로 변경하세요.
-                      ),
-                      TextSpan(
-                        text: ' 매칭해드립니다.',
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 21,
               ),
             ],
           ),
