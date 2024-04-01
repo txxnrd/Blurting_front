@@ -136,6 +136,7 @@ class UserProvider with ChangeNotifier {
 
   set point(int value) {
     _point = value;
+    print("point: $_point");
     notifyListeners();
   }
 

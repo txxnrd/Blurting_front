@@ -496,7 +496,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
   }
 }
 
-class pointAppbar extends StatelessWidget {
+class pointAppbar extends StatefulWidget {
   final bool canNavigate;
 
   pointAppbar({
@@ -505,14 +505,22 @@ class pointAppbar extends StatelessWidget {
   });
 
   @override
+  State<pointAppbar> createState() => _pointAppbarState();
+}
+
+class _pointAppbarState extends State<pointAppbar> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: InkWell(
           onTap: () {
-            if (canNavigate) {
+            if (widget.canNavigate) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PointHistoryPage()),
+                MaterialPageRoute(
+                    builder: (context) => PointHistoryPage(
+                        point: Provider.of<UserProvider>(context, listen: false)
+                            .point)),
               );
             }
           },
@@ -526,7 +534,7 @@ class pointAppbar extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.fromLTRB(9, 0, 9, 0),
                 child: Text(
-                  '${Provider.of<UserProvider>(context, listen: false).point}p',
+                  '${Provider.of<UserProvider>(context, listen: true).point}p',
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Heebo',
