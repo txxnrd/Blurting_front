@@ -6,7 +6,7 @@ import 'package:blurting/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:blurting/pages/mypage/mypage_edit.dart';
+import 'package:blurting/pages/my_page/mypage_edit.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
 import '../../config/app_config.dart';
@@ -14,7 +14,6 @@ import '../../settings/setting.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:blurting/styles/styles.dart';
-
 
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
