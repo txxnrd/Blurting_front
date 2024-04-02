@@ -2,7 +2,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/home_tab/Home.dart';
-import 'package:blurting/pages/mypage/mypage.dart';
+import 'package:blurting/pages/my_page/mypage.dart';
 import 'package:blurting/pages/whisper_tab/chatting_list.dart';
 import 'package:blurting/styles/styles.dart';
 

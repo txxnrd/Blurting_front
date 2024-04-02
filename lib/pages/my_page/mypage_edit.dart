@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/main.dart';
-import 'package:blurting/pages/mypage/utils.dart';
+import 'package:blurting/pages/my_page/utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/pages/signup_questions/active_place_search.dart';
 import 'package:blurting/mainapp.dart';

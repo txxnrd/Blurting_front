@@ -8,7 +8,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:provider/provider.dart';
-import 'package:blurting/pages/mypage/point_history.dart';
+import 'package:blurting/pages/my_page/point_history.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/styles/styles.dart';
 
