@@ -1,3 +1,5 @@
+import 'package:blurting/main.dart';
+import 'package:blurting/mainapp.dart';
 import 'package:blurting/pages/home_tab/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -476,7 +478,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
           onPressed: () {
             Navigator.of(context).push(
               PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => Home(),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MainApp(
+                  currentIndex: 0,
+                ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return FadeTransition(opacity: animation, child: child);
