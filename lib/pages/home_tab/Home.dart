@@ -4,7 +4,7 @@ import 'package:blurting/Utils/time.dart';
 import 'package:blurting/pages/blurting_tab/matching_ani.dart';
 import 'package:blurting/pages/home_tab/event.dart';
 import 'package:blurting/pages/home_tab/event_group.dart';
-import 'package:blurting/pages/myPage/Utils.dart';
+import 'package:blurting/pages/my_page/Utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/model/post.dart';

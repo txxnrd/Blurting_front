@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/pages/whisper_tab/profileCard.dart';
+import 'package:blurting/pages/whisper_tab/profile_card.dart';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
 import 'package:blurting/styles/styles.dart';
 
