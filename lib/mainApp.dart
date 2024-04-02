@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/home_tab/Home.dart';
 import 'package:blurting/pages/mypage/mypage.dart';
-import 'package:blurting/pages/whisper_tab/chattingList.dart';
+import 'package:blurting/pages/whisper_tab/chatting_list.dart';
+import 'package:blurting/styles/styles.dart';
 
 class MainApp extends StatefulWidget {
   final int currentIndex;
@@ -23,9 +24,6 @@ class _MainApp extends State<MainApp> {
   void initState() {
     super.initState();
     _currentIndex = widget.currentIndex;
-
-    print('mainApp으로');
-
     _pages = [
       Home(),
       Blurting(),

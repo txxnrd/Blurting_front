@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:blurting/mainapp.dart';
 import 'package:blurting/pages/blurting_tab/blurting.dart';
-import 'package:blurting/pages/whisper_tab/chattingList.dart';
+import 'package:blurting/pages/whisper_tab/chatting_list.dart';
 import 'package:blurting/pages/whisper_tab/whisper.dart';
 import 'package:blurting/settings/setting.dart';
 import 'package:firebase_core/firebase_core.dart';

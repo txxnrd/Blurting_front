@@ -1,3 +1,4 @@
+import 'package:blurting/pages/home_tab/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -8,10 +9,12 @@ import 'package:intl/intl.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/utils/provider.dart';
 import 'package:blurting/utils/util_widget.dart';
+import 'package:blurting/styles/styles.dart';
 
 class PointHistoryPage extends StatefulWidget {
-  // Constructor to receive the user token
-  PointHistoryPage({super.key});
+  final int point;
+
+  PointHistoryPage({super.key, required this.point});
 
   @override
   _PointHistoryPageState createState() => _PointHistoryPageState();
@@ -23,10 +26,11 @@ class _PointHistoryPageState extends State<PointHistoryPage>
   List<Map<String, dynamic>> earningHistoryList = [];
   List<Map<String, dynamic>> usageHistoryList = [];
   bool isFetchingData = false; //무한 http 호출 방지
-
+  int point = 0;
   @override
   void initState() {
     super.initState();
+    point = widget.point;
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabChange);
 
@@ -273,128 +277,6 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     super.dispose();
   }
 
-  // void _showAd(BuildContext context) async {
-  //   // showDialog의 결과를 기다립니다.
-  //   final shouldShowAd = await showDialog<bool>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Scaffold(
-  //         backgroundColor: Colors.black.withOpacity(0.2),
-  //         body: Stack(
-  //           children: [
-  //             Positioned(
-  //               bottom: 50,
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Container(
-  //                     width: MediaQuery.of(context).size.width,
-  //                     margin: EdgeInsets.only(top: 30),
-  //                     child: Column(
-  //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                       children: [
-  //                         Container(
-  //                           margin: EdgeInsets.only(bottom: 20),
-  //                           child: Stack(
-  //                             alignment: Alignment.bottomCenter,
-  //                             children: [
-  //                               Container(
-  //                                 width:
-  //                                     MediaQuery.of(context).size.width * 0.9,
-  //                                 height: 100,
-  //                                 decoration: BoxDecoration(
-  //                                     borderRadius: BorderRadius.circular(10),
-  //                                     color: mainColor.warning),
-  //                                 alignment: Alignment.topCenter,
-  //                                 child: Container(
-  //                                   margin: EdgeInsets.fromLTRB(10, 16, 10, 10),
-  //                                   child: Column(
-  //                                     children: [
-  //                                       Text(
-  //                                         '광고를 시청하고 5p를 얻으시겠습니까?',
-  //                                         style: TextStyle(
-  //                                             color: Colors.white,
-  //                                             fontWeight: FontWeight.w500,
-  //                                             fontSize: 14,
-  //                                             fontFamily: "Heebo"),
-  //                                       )
-  //                                     ],
-  //                                   ),
-  //                                 ),
-  //                               ),
-  //                               GestureDetector(
-  //                                 child: Container(
-  //                                   width:
-  //                                       MediaQuery.of(context).size.width * 0.9,
-  //                                   decoration: BoxDecoration(
-  //                                       borderRadius: BorderRadius.circular(10),
-  //                                       color: mainColor.MainColor),
-  //                                   height: 50,
-  //                                   // color: mainColor.MainColor,
-  //                                   child: Center(
-  //                                     child: Text(
-  //                                       '포인트 얻기',
-  //                                       style: TextStyle(
-  //                                           fontFamily: 'Heebo',
-  //                                           color: Colors.white,
-  //                                           fontSize: 20,
-  //                                           fontWeight: FontWeight.w500),
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                                 onTap: () {
-  //                                   Navigator.of(context).pop(true);
-  //                                 },
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                         GestureDetector(
-  //                           child: Container(
-  //                             width: MediaQuery.of(context).size.width * 0.9,
-  //                             height: 50,
-  //                             decoration: BoxDecoration(
-  //                                 borderRadius: BorderRadius.circular(10),
-  //                                 color: mainColor.warning),
-  //                             // color: mainColor.MainColor,
-  //                             child: Center(
-  //                               child: Text(
-  //                                 '취소',
-  //                                 style: TextStyle(
-  //                                     fontFamily: 'Heebo',
-  //                                     color: Colors.white,
-  //                                     fontSize: 20,
-  //                                     fontWeight: FontWeight.w500),
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           onTap: () {
-  //                             if (mounted) {
-  //                               setState(() {
-  //                                 Navigator.of(context).pop();
-  //                               });
-  //                             }
-  //                           },
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             )
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-
-  //   // 사용자가 '포인트 얻기'를 선택한 경우, 광고 로드 함수 호출
-  //   if (shouldShowAd == true) {
-  //     _callRewardScreenAd(context);
-  //     showSnackBar(context, "곧 광고가 실행됩니다");
-  //   }
-  // }
-
   // 이 메서드는 UserProvider의 인스턴스를 반환합니다.
   UserProvider getUserProvider() {
     try {
@@ -431,7 +313,10 @@ class _PointHistoryPageState extends State<PointHistoryPage>
 
       // 이 부분을 새로운 함수로 분리하고,
       // 이 함수는 build 메소드 안이나 다른 적절한 곳에서 호출해야 합니다.
+
       updatePoints(data['point']);
+      point = data['point'];
+      showSnackBar(context, "포인트 지급이 완료 되었습니다");
     } else {
       // 오류 처리
       print("오류 응답: ${response.statusCode}");
@@ -448,6 +333,123 @@ class _PointHistoryPageState extends State<PointHistoryPage>
     } catch (e) {
       print('Error updating points: $e');
     }
+  }
+
+  void _showAd(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.2),
+            body: Stack(
+              children: [
+                Positioned(
+                  bottom: 50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(top: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    height: 110,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: mainColor.warning),
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      margin: EdgeInsets.all(20),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '광고를 시청하고 5p를 얻으시겠습니까?',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 16,
+                                                fontFamily: "Heebo"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: mainColor.MainColor),
+                                      height: 50,
+                                      // color: mainColor.MainColor,
+                                      child: Center(
+                                        child: Text(
+                                          '시청하기',
+                                          style: TextStyle(
+                                              fontFamily: 'Heebo',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      showSnackBar(context, "곧 광고가 실행됩니다");
+                                      _callRewardScreenAd(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: mainColor.warning),
+                                // color: mainColor.MainColor,
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        fontFamily: 'Heebo',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                if (mounted) {
+                                  setState(() {
+                                    Navigator.of(context).pop();
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -472,20 +474,43 @@ class _PointHistoryPageState extends State<PointHistoryPage>
             color: Color.fromRGBO(48, 48, 48, 1),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => Home(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              ),
+            );
           },
         ),
         actions: [
           Container(
               margin: EdgeInsets.only(top: 20, right: 1),
-              child: pointAppbar(
-                canNavigate: false,
+              child: Container(
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: mainColor.MainColor.withOpacity(0.5),
+                ),
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(9, 0, 9, 0),
+                    child: Text(
+                      '${point}p',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Heebo',
+                          color: Colors.white,
+                          fontSize: 15),
+                    ),
+                  ),
+                ),
               )),
           GestureDetector(
             onTap: () {
-              // _showAd(context);
-              showSnackBar(context, "곧 광고가 실행됩니다");
-              _callRewardScreenAd(context);
+              _showAd(context);
             },
             child: Container(
               width: 30,

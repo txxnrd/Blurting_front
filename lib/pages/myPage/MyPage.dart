@@ -13,6 +13,8 @@ import '../../config/app_config.dart';
 import '../../settings/setting.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:blurting/styles/styles.dart';
+
 
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;

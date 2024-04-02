@@ -4,7 +4,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/main.dart';
 import 'package:blurting/pages/mypage/utils.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/signup_questions/activeplacesearch.dart';
+import 'package:blurting/pages/signup_questions/active_place_search.dart';
 import 'package:blurting/mainapp.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import '../../config/app_config.dart';
 import '../../token.dart';
 import 'dart:io';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
+import 'package:blurting/styles/styles.dart';
 
 class MyPageEdit extends StatefulWidget {
   final dynamic data;

@@ -1,9 +1,9 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 // import 'package:blurting/pages/blurting_tab/blurting.dart';
-import 'package:blurting/pages/blurting_tab/matchingAni.dart';
+import 'package:blurting/pages/blurting_tab/matching_ani.dart';
 import 'package:blurting/pages/home_tab/event.dart';
-import 'package:blurting/pages/home_tab/eventGroup.dart';
+import 'package:blurting/pages/home_tab/event_group.dart';
 import 'package:blurting/pages/myPage/Utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/config/app_config.dart';
@@ -18,6 +18,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'package:blurting/styles/styles.dart';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -647,7 +648,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: <Widget>[
-          Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
+          // Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
           Container(
             width: 25,
             margin: EdgeInsets.only(top: 20),
@@ -670,8 +671,8 @@ class _HomeState extends State<Home> {
               icon: Container(
                   width: 20,
                   height: 20,
-                  child: Image.asset('assets/images/event.png',
-                      fit: BoxFit.fill)),
+                  child:
+                      Image.asset('assets/images/event.png', fit: BoxFit.fill)),
               onPressed: () async {
                 await fetchState();
                 print(state);

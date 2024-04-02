@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../../config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:blurting/token.dart';
+import 'package:blurting/styles/styles.dart';
 
 class AlarmPage extends StatefulWidget {
   // Constructor to receive the user token
@@ -193,18 +193,18 @@ class _AlarmPageState extends State<AlarmPage> {
 // Function to format history text with pink square bullet
 Widget formatHistoryText(String history) {
   return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: history,
-            style: TextStyle(
-              fontFamily: "Heebo",
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: mainColor.Gray,
-            ),
+    text: TextSpan(
+      children: [
+        TextSpan(
+          text: history,
+          style: TextStyle(
+            fontFamily: "Heebo",
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            color: mainColor.Gray,
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 }

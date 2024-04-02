@@ -10,6 +10,7 @@ import '../../config/app_config.dart';
 import 'dart:async';
 import 'package:blurting/Utils/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:blurting/styles/styles.dart';
 
 class ProfileCard extends StatefulWidget {
   final PageController mainPageController;
@@ -150,7 +151,8 @@ class _ProfileCard extends State<ProfileCard> {
                           value: isCheckSexuality,
                           onChanged: (value) {
                             setState(() {
-                              if (value == false || !checkReason.contains(true)) {
+                              if (value == false ||
+                                  !checkReason.contains(true)) {
                                 isCheckSexuality = value!;
                                 checkReason[0] = !checkReason[0];
                                 reason = '음란성/선정성';
@@ -182,7 +184,8 @@ class _ProfileCard extends State<ProfileCard> {
                           value: isCheckedAbuse,
                           onChanged: (value) {
                             setState(() {
-                              if (value == false || !checkReason.contains(true)) {
+                              if (value == false ||
+                                  !checkReason.contains(true)) {
                                 isCheckedAbuse = value!;
                                 checkReason[1] = !checkReason[1];
                                 reason = '욕설/인신공격';
@@ -214,7 +217,8 @@ class _ProfileCard extends State<ProfileCard> {
                           value: isCheckedEtc,
                           onChanged: (value) {
                             setState(() {
-                              if (value == false || !checkReason.contains(true)) {
+                              if (value == false ||
+                                  !checkReason.contains(true)) {
                                 isCheckedEtc = value!;
                                 checkReason[2] = !checkReason[2];
                                 reason = '기타';
@@ -250,11 +254,12 @@ class _ProfileCard extends State<ProfileCard> {
                             width: 210,
                             height: 50,
                             decoration: BoxDecoration(
-                              color:
-                                  (checkReason.any((element) => element == true))
-                                      ? mainColor.MainColor
-                                      : mainColor.lightGray,
-                              borderRadius: BorderRadius.circular(7), // 둥근 모서리 설정
+                              color: (checkReason
+                                      .any((element) => element == true))
+                                  ? mainColor.MainColor
+                                  : mainColor.lightGray,
+                              borderRadius:
+                                  BorderRadius.circular(7), // 둥근 모서리 설정
                             ),
                             child: Align(
                               alignment: Alignment.center,
