@@ -36,7 +36,7 @@ int currentIndex = 0; // 현재 보고 있는 페이지
 int _questionNumber = 0; // 최신 질문 번호
 int currentQuestionId = 0;
 String _question = '';
-String day = 'Day0';
+String day = 'Part1';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -71,24 +71,24 @@ class QuestionItem extends StatelessWidget {
                 // maxLines: 3,
                 text: TextSpan(
                   children: [
-                    TextSpan(
-                      text: 'Q$questionNumber. ',
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 12,
-                        color: mainColor.Gray,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    TextSpan(
-                      text: question,
-                      style: TextStyle(
-                        fontFamily: 'Heebo',
-                        fontSize: 12,
-                        color: mainColor.Gray,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    // TextSpan(
+                    //   text: 'Q$questionNumber. ',
+                    //   style: TextStyle(
+                    //     fontFamily: 'Heebo',
+                    //     fontSize: 12,
+                    //     color: mainColor.Gray,
+                    //     fontWeight: FontWeight.w700,
+                    //   ),
+                    // ),
+                    // TextSpan(
+                    //   text: question,
+                    //   style: TextStyle(
+                    //     fontFamily: 'Heebo',
+                    //     fontSize: 12,
+                    //     color: mainColor.Gray,
+                    //     fontWeight: FontWeight.w500,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -181,10 +181,10 @@ class _GroupChat extends State<GroupChat> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-        toolbarHeight: 200,
+        toolbarHeight: 125,
         titleSpacing: 0,
         title: Container(
           // margin: EdgeInsets.only(top: 20),
@@ -251,24 +251,27 @@ class _GroupChat extends State<GroupChat> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
-                      Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
-                    ],
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    topLeft: Radius.circular(30),
-                  ),
-                ),
-              ),
-              QuestionItem(questionNumber: currentIndex, question: _question),
+//기존의 뒤에 배경
+
+              // Container(
+              //   height: 80,
+              //   decoration: BoxDecoration(
+              //     gradient: LinearGradient(
+              //       begin: Alignment.topCenter,
+              //       end: Alignment.bottomCenter,
+              //       colors: [
+              //         Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+              //         Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+              //       ],
+              //     ),
+              //     borderRadius: BorderRadius.only(
+              //       topRight: Radius.circular(30),
+              //       topLeft: Radius.circular(30),
+              //     ),
+              //   ),
+              // ),
+              // NewQuestionItem(
+              //     questionNumber: currentIndex, question: _question),
             ],
           ),
         ),
@@ -276,22 +279,22 @@ class _GroupChat extends State<GroupChat> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
+          // Container(
+          //   height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
+          //   decoration: BoxDecoration(
+          //     image: DecorationImage(
+          //       fit: BoxFit.cover,
+          //       image: AssetImage('assets/images/body_background.png'),
+          //     ),
+          //   ),
+          // ),
+          // Container(
+          //   padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
+          //   height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
+          //   color: Colors.white.withOpacity(0.2),
+          // ),
           Container(
-            height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/body_background.png'),
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
-            height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-            color: Colors.white.withOpacity(0.2),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 250), // 시작 위치에 여백 추가
+            margin: EdgeInsets.only(top: 200), // 시작 위치에 여백 추가
             child: PageView.builder(
               controller: _pageController,
               // PageController(initialPage: _questionNumber - 1),

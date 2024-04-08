@@ -1,5 +1,6 @@
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
+import 'package:blurting/utils/util_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -146,6 +147,20 @@ class UserProvider with ChangeNotifier {
   }
 }
 
+class MatchingStateProvider with ChangeNotifier {
+  // userId, point 등 모든 정보 관리
+
+  int _state = 0;
+
+  int get state => state;
+
+  set state(int value) {
+    _state = value;
+    print("state: $_state");
+    notifyListeners();
+  }
+}
+
 class FocusNodeProvider with ChangeNotifier {
   FocusNode _focusNode = FocusNode();
   FocusNode get focusNode => _focusNode;
@@ -160,23 +175,6 @@ class FocusNodeProvider with ChangeNotifier {
     _focusNode.dispose();
     super.dispose();
   }
-}
-
-void showSnackBar(BuildContext context, String message) {
-  final snackBar = SnackBar(
-    content: Text(message),
-    action: SnackBarAction(
-      label: '닫기',
-      textColor: mainColor.lightPink,
-      onPressed: () {
-        // SnackBar 닫기 액션
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      },
-    ),
-    behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
-    duration: const Duration(seconds: 1),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
@@ -210,16 +208,4 @@ Future<void> sendBackRequest(BuildContext context, bool isbutton) async {
   } else {
     // 오류가 발생한 경우 처리
   }
-}
-
-Widget AppbarDescription(String text) {
-  return Text(
-    text,
-    style: TextStyle(
-      fontFamily: "Heebo",
-      fontSize: 20,
-      fontWeight: FontWeight.w700,
-      color: mainColor.Gray,
-    ),
-  );
 }

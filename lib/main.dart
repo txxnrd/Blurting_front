@@ -276,13 +276,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  //     _checkForUpdates();
-
-  //   bool isLatestVersion = await checkAppVersion();
-  // print(isLatestVersion);
-  // if (isLatestVersion == false) {
-  //   showForceUpdateDialog(true, navigatorKey.currentContext!);
-  // }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -12,6 +12,35 @@ import 'package:blurting/pages/my_page/point_history.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/styles/styles.dart';
 
+void showSnackBar(BuildContext context, String message) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    action: SnackBarAction(
+      label: '닫기',
+      textColor: mainColor.lightPink,
+      onPressed: () {
+        // SnackBar 닫기 액션
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
+    ),
+    behavior: SnackBarBehavior.floating, // SnackBar 스타일 (floating or fixed)
+    duration: const Duration(seconds: 1),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+Widget AppbarDescription(String text) {
+  return Text(
+    text,
+    style: TextStyle(
+      fontFamily: "Heebo",
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      color: mainColor.Gray,
+    ),
+  );
+}
+
 // 상대방 말풍선 클리퍼
 class LeftTailClipper extends CustomClipper<Path> {
   @override
