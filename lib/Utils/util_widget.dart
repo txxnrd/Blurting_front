@@ -749,7 +749,7 @@ class _MyChatState extends State<MyChat> {
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color.fromRGBO(255, 210, 210, 1),
+                            color: mainColor.pink,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -903,7 +903,7 @@ class _MyChatReplyState extends State<MyChatReply> {
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color(0xffffeeee),
+                            color: mainColor.bgRed,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -2208,9 +2208,8 @@ class _AnswerItemState extends State<AnswerItem> {
                                   width: 200,
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Color.fromRGBO(255, 238, 238, 1),
-                                  ),
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: mainColor.bgGray),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,

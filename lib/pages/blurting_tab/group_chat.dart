@@ -100,6 +100,92 @@ class QuestionItem extends StatelessWidget {
   }
 }
 
+class NewQuestionItem extends StatelessWidget {
+  final int questionNumber;
+  final String question;
+
+  NewQuestionItem(
+      {super.key, required this.questionNumber, required this.question});
+
+  // 답변 위젯
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.only(left: 10),
+      subtitle: // 답변 내용
+          Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+            child: Container(
+              padding: EdgeInsets.all(5),
+              width: 50,
+              height: 45,
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(50)),
+              child: Image.asset(
+                'assets/images/blurting_groupchat.png',
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  "Question" + questionNumber.toString(),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: mainColor.MainColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                child: ClipPath(
+                  clipper: LeftTailClipper(),
+                  //채팅 내역 있는곳
+
+                  child: Container(
+                    width: 200,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: mainColor.bgGray,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 10, right: 10, top: 5, bottom: 5),
+                          child: Text(
+                            question,
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontSize: 12,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class GroupChat extends StatefulWidget {
   static bool pointValid = false;
   final String day;
@@ -184,7 +270,7 @@ class _GroupChat extends State<GroupChat> {
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-        toolbarHeight: 125,
+        toolbarHeight: 200,
         titleSpacing: 0,
         title: Container(
           // margin: EdgeInsets.only(top: 20),
@@ -270,8 +356,8 @@ class _GroupChat extends State<GroupChat> {
               //     ),
               //   ),
               // ),
-              // NewQuestionItem(
-              //     questionNumber: currentIndex, question: _question),
+              NewQuestionItem(
+                  questionNumber: currentIndex, question: _question),
             ],
           ),
         ),

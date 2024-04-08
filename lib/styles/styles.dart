@@ -10,4 +10,7 @@ class mainColor {
   static Color lightPink = Color.fromRGBO(255, 210, 210, 1);
   static Color black = Color.fromRGBO(48, 48, 48, 1);
   static Color warning = Color.fromRGBO(195, 192, 195, 1);
+  static Color bgGray = Color(0xFFF5F5F5);
+  static Color red = Color(0xFFFF6B6B);
+  static Color bgRed = Color(0xffFFECEC);
 }
