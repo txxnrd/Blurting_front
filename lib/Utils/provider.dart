@@ -152,7 +152,7 @@ class MatchingStateProvider with ChangeNotifier {
 
   int _state = 0;
 
-  int get state => state;
+  int get state => _state;
 
   set state(int value) {
     _state = value;

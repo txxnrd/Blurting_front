@@ -1,10 +1,14 @@
+import 'dart:ffi';
+
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/pages/blurting_tab/group_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/home_tab/Home.dart';
 import 'package:blurting/pages/my_page/mypage.dart';
 import 'package:blurting/pages/whisper_tab/chatting_list.dart';
 import 'package:blurting/styles/styles.dart';
+import 'package:provider/provider.dart';
 
 class MainApp extends StatefulWidget {
   final int currentIndex;
@@ -24,9 +28,20 @@ class _MainApp extends State<MainApp> {
   void initState() {
     super.initState();
     _currentIndex = widget.currentIndex;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updatePages(); // 의존성이 변경될 때마다 페이지를 업데이트
+  }
+
+  void _updatePages() {
     _pages = [
       Home(),
-      Blurting(),
+      Provider.of<MatchingStateProvider>(context, listen: true).state == 2
+          ? SizedBox()
+          : Blurting(),
       ChattingList(),
       MyPage(),
     ];
@@ -125,6 +140,17 @@ class TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (_currentIndex == 1) {
+      if (Provider.of<MatchingStateProvider>(context, listen: true).state == 2)
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => GroupChat(
+                        day: day,
+                      )));
+        });
+    }
     return Column(
       children: [
         Container(

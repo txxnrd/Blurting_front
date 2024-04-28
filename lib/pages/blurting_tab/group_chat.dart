@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:blurting/mainApp.dart';
+import 'package:blurting/pages/home_tab/Home.dart';
 import 'package:blurting/styles/styles.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/whisper_tab/whisper.dart';
@@ -285,7 +287,12 @@ class _GroupChat extends State<GroupChat> {
                     color: Color.fromRGBO(48, 48, 48, 1),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MainApp(
+                                  currentIndex: 0,
+                                )));
                   },
                 ),
               ),

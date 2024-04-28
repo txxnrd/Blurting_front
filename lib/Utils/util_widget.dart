@@ -762,7 +762,7 @@ class _MyChatState extends State<MyChat> {
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontSize: 12,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),

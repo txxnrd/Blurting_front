@@ -456,7 +456,6 @@ class _Blurting extends State<Blurting> {
                         : "새로운 블러팅 시작하기"),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
-
               String? localDay = prefs.getString('day');
               print('로컬 데이');
               print(localDay);
@@ -830,6 +829,7 @@ class _Blurting extends State<Blurting> {
   Future<void> isMatched() async {
     // 방이 있는지 없는지 확인
     final url = Uri.parse(API.matching);
+    var intToState = ['Start', 'Continue', 'Matching', "end"];
     String savedToken = await getToken();
 
     final response = await http.get(url, headers: {
@@ -849,18 +849,7 @@ class _Blurting extends State<Blurting> {
             responseData;
         if (mounted) {
           setState(() {
-            if (responseData == 1) {
-              isState = 'Continue';
-            } else if (responseData == 0) {
-              isState = 'Start';
-              // pref.setString('day', 'Day0');
-            } else if (responseData == 2) {
-              isState = 'Matching';
-              // pref.setString('day', 'Day0');
-            } else if (responseData == 3) {
-              isState = 'end';
-              // pref.setString('day', 'Day0');
-            }
+            isState = intToState[responseData];
           });
 
           print(pref.getString('day'));
