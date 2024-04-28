@@ -123,12 +123,12 @@ class NewQuestionItem extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(5),
               width: 50,
-              height: 45,
+              height: 50,
               decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(50)),
               child: Image.asset(
-                'assets/images/blurting_groupchat.png',
+                'assets/blurting_background.png',
                 fit: BoxFit.fill,
               ),
             ),

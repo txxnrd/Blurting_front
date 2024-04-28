@@ -118,6 +118,8 @@ flutter:
     - assets/signupface.png
     - assets/man.png
     - assets/woman.png
+    - assets/woman_background.png
+    - assets/blurting_background.png
     - assets/images/arrow.png
     - assets/images/boy.png
     - assets/woman.png

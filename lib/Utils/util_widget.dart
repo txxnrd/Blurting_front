@@ -2132,7 +2132,9 @@ class _AnswerItemState extends State<AnswerItem> {
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(50)),
                 child: Image.asset(
-                  widget.image == 'F' ? 'assets/woman.png' : 'assets/man.png',
+                  widget.image == 'F'
+                      ? 'assets/woman_background.png'
+                      : 'assets/man.png',
                   fit: BoxFit.fill,
                 ),
               ),
