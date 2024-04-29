@@ -2134,7 +2134,7 @@ class _AnswerItemState extends State<AnswerItem> {
                 child: Image.asset(
                   widget.image == 'F'
                       ? 'assets/woman_background.png'
-                      : 'assets/man.png',
+                      : 'assets/man_background.png',
                   fit: BoxFit.fill,
                 ),
               ),

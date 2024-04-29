@@ -119,6 +119,7 @@ flutter:
     - assets/man.png
     - assets/woman.png
     - assets/woman_background.png
+    - assets/man_background.png
     - assets/blurting_background.png
     - assets/images/arrow.png
     - assets/images/boy.png
