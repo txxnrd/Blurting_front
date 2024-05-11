@@ -52,142 +52,6 @@ DateTime _parseDateTime(String? dateTimeString) {
   }
 }
 
-class QuestionItem extends StatelessWidget {
-  final int questionNumber;
-  final String question;
-
-  QuestionItem(
-      {super.key, required this.questionNumber, required this.question});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: RichText(
-                // overflow: TextOverflow.ellipsis,
-                // maxLines: 3,
-                text: TextSpan(
-                  children: [
-                    // TextSpan(
-                    //   text: 'Q$questionNumber. ',
-                    //   style: TextStyle(
-                    //     fontFamily: 'Heebo',
-                    //     fontSize: 12,
-                    //     color: mainColor.Gray,
-                    //     fontWeight: FontWeight.w700,
-                    //   ),
-                    // ),
-                    // TextSpan(
-                    //   text: question,
-                    //   style: TextStyle(
-                    //     fontFamily: 'Heebo',
-                    //     fontSize: 12,
-                    //     color: mainColor.Gray,
-                    //     fontWeight: FontWeight.w500,
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NewQuestionItem extends StatelessWidget {
-  final int questionNumber;
-  final String question;
-
-  NewQuestionItem(
-      {super.key, required this.questionNumber, required this.question});
-
-  // 답변 위젯
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.only(left: 10),
-      subtitle: // 답변 내용
-          Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-            child: Container(
-              padding: EdgeInsets.all(5),
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(50)),
-              child: Image.asset(
-                'assets/blurting_background.png',
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  "Question" + questionNumber.toString(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: mainColor.MainColor,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                child: ClipPath(
-                  clipper: LeftTailClipper(),
-                  //채팅 내역 있는곳
-
-                  child: Container(
-                    width: 200,
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: mainColor.bgGray,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: 10, right: 10, top: 5, bottom: 5),
-                          child: Text(
-                            question,
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontSize: 12,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class GroupChat extends StatefulWidget {
   static bool pointValid = false;
   final String day;
@@ -200,7 +64,8 @@ class GroupChat extends StatefulWidget {
 
 class _GroupChat extends State<GroupChat> {
   PageController _pageController = PageController();
-
+  List<ScrollController> pageScrollControllers = [];
+  List<GlobalKey> replyKeys = []; // GlobalKey 목록
   TextEditingController _controller = TextEditingController();
   List<bool> isBlock = List<bool>.filled(10, false);
   late DateTime lastTime = DateTime.now();
@@ -209,13 +74,12 @@ class _GroupChat extends State<GroupChat> {
   @override
   void initState() {
     super.initState();
-
     Future<void> initializeSocket() async {
       // 맨 처음 들어왔을 땐 마지막...
       await fetchLatestComments(); // 서버에서 답변 목록 가져오는 함수 호출, init 시 답변 로드
-
+      await fetchIndexComments(currentIndex);
       print(currentIndex);
-
+      replyKeys = List.generate(answersLength, (index) => GlobalKey());
       socket.on('create_room', (data) {
         Navigator.push(
           context,
@@ -242,7 +106,7 @@ class _GroupChat extends State<GroupChat> {
 
     initializeSocket();
     _pageController = PageController(initialPage: _questionNumber - 1);
-
+    pageScrollControllers = List.generate(10, (index) => ScrollController());
     loadTime();
     // FocusScope.of(context).unfocus();
   }
@@ -251,6 +115,9 @@ class _GroupChat extends State<GroupChat> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+    pageScrollControllers.forEach((controller) {
+      controller.dispose();
+    });
     socket.disconnect();
   }
 
@@ -263,303 +130,7 @@ class _GroupChat extends State<GroupChat> {
   }
 
   List<Room> rooms = List.generate(10, (index) => Room(index + 1, []));
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        toolbarHeight: 200,
-        titleSpacing: 0,
-        title: Container(
-          // margin: EdgeInsets.only(top: 20),
-          child: Stack(
-            // alignment: Alignment.center,
-            children: [
-              Positioned(
-                left: 5,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Color.fromRGBO(48, 48, 48, 1),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MainApp(
-                                  currentIndex: 0,
-                                )));
-                  },
-                ),
-              ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        day,
-                        style: TextStyle(
-                            fontFamily: "Heebo",
-                            fontSize: 32,
-                            fontWeight: FontWeight.w700,
-                            color: mainColor.MainColor),
-                      ),
-                    ],
-                  ),
-                  Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      height: 25,
-                      margin: EdgeInsets.only(top: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          QuestionNumber(1),
-                          QuestionNumber(2),
-                          QuestionNumber(3),
-                          QuestionNumber(4),
-                          QuestionNumber(5),
-                          QuestionNumber(6),
-                          QuestionNumber(7),
-                          QuestionNumber(8),
-                          QuestionNumber(9),
-                        ],
-                      )),
-                ],
-              ),
-              Positioned(
-                  right: 0,
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 8, 14, 0),
-                      child: pointAppbar())),
-            ],
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size(10, 10),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-//기존의 뒤에 배경
-
-              // Container(
-              //   height: 80,
-              //   decoration: BoxDecoration(
-              //     gradient: LinearGradient(
-              //       begin: Alignment.topCenter,
-              //       end: Alignment.bottomCenter,
-              //       colors: [
-              //         Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
-              //         Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
-              //       ],
-              //     ),
-              //     borderRadius: BorderRadius.only(
-              //       topRight: Radius.circular(30),
-              //       topLeft: Radius.circular(30),
-              //     ),
-              //   ),
-              // ),
-              NewQuestionItem(
-                  questionNumber: currentIndex, question: _question),
-            ],
-          ),
-        ),
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          // Container(
-          //   height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-          //   decoration: BoxDecoration(
-          //     image: DecorationImage(
-          //       fit: BoxFit.cover,
-          //       image: AssetImage('assets/images/body_background.png'),
-          //     ),
-          //   ),
-          // ),
-          // Container(
-          //   padding: EdgeInsets.only(top: 244), // 시작 위치에 여백 추가
-          //   height: MediaQuery.of(context).size.height, // 현재 화면의 높이로 설정
-          //   color: Colors.white.withOpacity(0.2),
-          // ),
-          Container(
-            margin: EdgeInsets.only(top: 200), // 시작 위치에 여백 추가
-            child: PageView.builder(
-              controller: _pageController,
-              // PageController(initialPage: _questionNumber - 1),
-              itemCount: _questionNumber, // 전체 페이지 수
-              itemBuilder: (BuildContext context, int index) {
-                return questionPage(index + 1);
-              },
-              onPageChanged: (index) {
-                setState(() {
-                  currentIndex = index + 1;
-                  fetchIndexComments(currentIndex);
-                  Provider.of<ReplyProvider>(context, listen: false).IsReply =
-                      false;
-                });
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-// 노태윤에게. 이 위젯이랑 utilWidget이랑... fetch 함수만 보면 될 듯
-
-  Widget questionPage(int index) {
-    ScrollController pageScrollController =
-        ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      // if (pageScrollController.positions.isNotEmpty) {
-      //   pageScrollController
-      //       .jumpTo(pageScrollController.position.maxScrollExtent);
-      // }
-    });
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Stack(
-            children: [
-              // 노태윤에게. 여기에서 답변 내용 스크롤뷰로 보여줌
-              SingleChildScrollView(
-                reverse: true,
-                controller: pageScrollController,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Column(
-                        children: <Widget>[
-                          for (var answer in rooms[index].replies) ...[
-                            answer.replyWidget,
-                            for (var childReply in answer.childReplies.reversed)
-                              childReply.childreplyWidget,
-                          ],
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              // 노태윤에게. 여긴 그... 100자 채웠는지 확인하는 거
-              if (Provider.of<GroupChatProvider>(context).isPocus &&
-                  !Provider.of<ReplyProvider>(context, listen: true).isReply)
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
-                    margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
-                    width: 47,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Provider.of<GroupChatProvider>(context).pointValid
-                          ? mainColor.MainColor
-                          : Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                            width: 11,
-                            margin: EdgeInsets.only(left: 5, right: 3),
-                            child: Image.asset(
-                              'assets/images/check.png',
-                              fit: BoxFit.fill,
-                              color: Provider.of<GroupChatProvider>(context)
-                                      .pointValid
-                                  ? mainColor.lightPink
-                                  : mainColor.lightGray,
-                            )),
-                        Text(
-                          '10P',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontFamily: "Heebo",
-                              color: Provider.of<GroupChatProvider>(context)
-                                      .pointValid
-                                  ? Colors.white
-                                  : mainColor.lightGray),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-            ],
-          ),
-        ),
-        Visibility(
-          visible: !Provider.of<ReplyProvider>(context, listen: true).isReply,
-          child: CustomInputField(
-              controller: _controller,
-              sendFunction: SendAnswer,
-              isBlock: isBlock[currentIndex],
-              blockText: "답변 완료! 상대방의 답변을 눌러 답글을 남겨 보세요.",
-              hintText: "내 생각 쓰기...",
-              questionId: 1,
-              isBlurting: true),
-        ),
-        Visibility(
-          visible: Provider.of<ReplyProvider>(context, listen: true).isReply,
-          child: CustomInputField(
-              controller: _controller,
-              sendFunction: SendReply,
-              isBlock: false,
-              blockText: "답변 완료! 상대방의 답변을 눌러 답글을 남겨 보세요.",
-              hintText: "내 생각 쓰기...",
-              questionId: 1,
-              isBlurting: true),
-        ),
-      ],
-    );
-  }
-
-  Widget QuestionNumber(int index) {
-    // 누르면
-    return Container(
-      margin: EdgeInsets.zero,
-      child: InkWell(
-        splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
-        onTap: (_questionNumber >= index)
-            ? () {
-                _pageController.animateToPage(
-                  index - 1,
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                );
-              }
-            : null,
-        child: AnimatedDefaultTextStyle(
-          duration: Duration(milliseconds: 500),
-          style: TextStyle(
-            fontFamily: "Heebo",
-            fontSize: currentIndex == index ? 18 : 15,
-            fontWeight: FontWeight.w500,
-            color: currentIndex == index
-                ? mainColor.MainColor
-                : _questionNumber >= index
-                    ? mainColor.MainColor.withOpacity(0.5)
-                    : mainColor.Gray,
-          ),
-          child: Text(
-            '$index',
-          ),
-        ),
-      ),
-    );
-  }
-
-  bool isAlready = false;
-
-  // 노태윤에게. 백엔드에서 어떻게 줄진 모르겟는데 이게 딱 맨 처음에 들어갓을 때 뜨는 거임. 번호 눌럿을 때 or 페이지 넘겻을 때에는 fetchIndexComments 호출 둘이 작동하는 방식은 걍 같아요
+// 노태윤에게. 백엔드에서 어떻게 줄진 모르겟는데 이게 딱 맨 처음에 들어갓을 때 뜨는 거임. 번호 눌럿을 때 or 페이지 넘겻을 때에는 fetchIndexComments 호출 둘이 작동하는 방식은 걍 같아요
   Future<void> fetchLatestComments() async {
     DateTime createdAt;
 
@@ -574,6 +145,8 @@ class _GroupChat extends State<GroupChat> {
       },
     );
 
+    Map<String, dynamic> responseData = jsonDecode(response.body);
+    print("${responseData['answers'].length}+ fetchLatestComments");
     if (response.statusCode == 200) {
       socket = IO.io(
           '${ServerEndpoints.socketServerEndpoint}/whisper', <String, dynamic>{
@@ -583,8 +156,6 @@ class _GroupChat extends State<GroupChat> {
 
       print(rooms[currentIndex].replies);
       try {
-        Map<String, dynamic> responseData = jsonDecode(response.body);
-
         createdAt = _parseDateTime(responseData['createdAt']);
 
         // 노태윤에게. day 관련해서는 안 봐도 되고
@@ -677,7 +248,6 @@ class _GroupChat extends State<GroupChat> {
                   }
                 }
                 setState(() {
-                  // 노태윤에게. 만약에 답글을 식별하는 스키마가 잇으면 그거 판별해서 너가 utilWidget에 답글 위젯 하나 만들어서 그 위젯을 answerList[currentIndex].add 해주면 댐
                   // 지금은 내 거인지 아닌지만 판별
                   if (answerData['userId'] ==
                       Provider.of<UserProvider>(context, listen: false)
@@ -719,7 +289,7 @@ class _GroupChat extends State<GroupChat> {
                           index: index,
                           event: false,
                         ),
-                        childReplies)); // 걍... 소켓임 신경 쓸 필요 없음
+                        childReplies));
                   }
                   print("추가된 답변 ${rooms[currentIndex].replies}");
                   print("윽");
@@ -738,6 +308,296 @@ class _GroupChat extends State<GroupChat> {
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 130,
+        titleSpacing: 0,
+        title: Container(
+          // margin: EdgeInsets.only(top: 20),
+          child: Stack(
+            // alignment: Alignment.center,
+            children: [
+              Positioned(
+                left: 5,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Color.fromRGBO(48, 48, 48, 1),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MainApp(
+                                  currentIndex: 0,
+                                )));
+                  },
+                ),
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        day,
+                        style: TextStyle(
+                            fontFamily: "Heebo",
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                            color: mainColor.MainColor),
+                      ),
+                    ],
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: 25,
+                      margin: EdgeInsets.only(top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          QuestionNumber(1),
+                          QuestionNumber(2),
+                          QuestionNumber(3),
+                          QuestionNumber(4),
+                          QuestionNumber(5),
+                          QuestionNumber(6),
+                          QuestionNumber(7),
+                          QuestionNumber(8),
+                          QuestionNumber(9),
+                        ],
+                      )),
+                ],
+              ),
+              Positioned(
+                  right: 0,
+                  child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 8, 14, 0),
+                      child: pointAppbar())),
+            ],
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size(10, 10),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+//기존의 뒤에 배경
+
+              // Container(
+              //   height: 80,
+              //   decoration: BoxDecoration(
+              //     gradient: LinearGradient(
+              //       begin: Alignment.topCenter,
+              //       end: Alignment.bottomCenter,
+              //       colors: [
+              //         Colors.white.withOpacity(0.5), // 시작 색상 (더 투명한 흰색)
+              //         Colors.white.withOpacity(0), // 끝 색상 (초기 투명도)
+              //       ],
+              //     ),
+              //     borderRadius: BorderRadius.only(
+              //       topRight: Radius.circular(30),
+              //       topLeft: Radius.circular(30),
+              //     ),
+              //   ),
+              // ),
+              // NewQuestionItem(
+              //     questionNumber: currentIndex, question: _question),
+            ],
+          ),
+        ),
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 200), // 시작 위치에 여백 추가
+            child: PageView.builder(
+              controller: _pageController,
+              // PageController(initialPage: _questionNumber - 1),
+              itemCount: _questionNumber, // 전체 페이지 수
+              itemBuilder: (BuildContext context, int index) {
+                return questionPage(index + 1);
+              },
+              onPageChanged: (index) {
+                setState(() {
+                  currentIndex = index + 1;
+                  fetchIndexComments(currentIndex);
+                  Provider.of<ReplyProvider>(context, listen: false).IsReply =
+                      false;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+// 노태윤에게. 이 위젯이랑 utilWidget이랑... fetch 함수만 보면 될 듯
+
+  Widget questionPage(int index) {
+    ScrollController pageScrollController =
+        ScrollController(); // 각 페이지에 대한 새로운 ScrollController 생성
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Expanded(
+          child: Stack(
+            children: [
+              // 노태윤에게. 여기에서 답변 내용 스크롤뷰로 보여줌
+              SingleChildScrollView(
+                reverse: true,
+                controller: pageScrollControllers[index],
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Column(
+                        children: <Widget>[
+                          for (var answer in rooms[index].replies) ...[
+                            answer.replyWidget,
+                            for (var childReply in answer.childReplies.reversed)
+                              childReply.childreplyWidget,
+                          ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 20,
+                bottom: 20,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    pageScrollControllers[index].animateTo(
+                      pageScrollControllers[index]
+                          .position
+                          .maxScrollExtent, // 스크롤의 최대 길이로 이동
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                  },
+                  child: Icon(Icons.arrow_upward),
+                ),
+              ),
+
+              // 노태윤에게. 여긴 그... 100자 채웠는지 확인하는 거
+              if (Provider.of<GroupChatProvider>(context).isPocus &&
+                  !Provider.of<ReplyProvider>(context, listen: true).isReply)
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 500),
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
+                    width: 47,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Provider.of<GroupChatProvider>(context).pointValid
+                          ? mainColor.MainColor
+                          : Colors.white,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                            width: 11,
+                            margin: EdgeInsets.only(left: 5, right: 3),
+                            child: Image.asset(
+                              'assets/images/check.png',
+                              fit: BoxFit.fill,
+                              color: Provider.of<GroupChatProvider>(context)
+                                      .pointValid
+                                  ? mainColor.lightPink
+                                  : mainColor.lightGray,
+                            )),
+                        Text(
+                          '10P',
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: "Heebo",
+                              color: Provider.of<GroupChatProvider>(context)
+                                      .pointValid
+                                  ? Colors.white
+                                  : mainColor.lightGray),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+            ],
+          ),
+        ),
+        Visibility(
+          visible: !Provider.of<ReplyProvider>(context, listen: true).isReply,
+          child: CustomInputField(
+              controller: _controller,
+              sendFunction: SendAnswer,
+              isBlock: false,
+              blockText: "답변 완료! 상대방의 답변을 눌러 답글을 남겨 보세요.",
+              hintText: "내 생각 쓰기...",
+              questionId: 1,
+              isBlurting: true),
+        ),
+        Visibility(
+          visible: Provider.of<ReplyProvider>(context, listen: true).isReply,
+          child: CustomInputField(
+              controller: _controller,
+              sendFunction: SendReply,
+              isBlock: false,
+              blockText: "답변 완료! 상대방의 답변을 눌러 답글을 남겨 보세요.",
+              hintText: "내 생각 쓰기...",
+              questionId: 1,
+              isBlurting: true),
+        ),
+      ],
+    );
+  }
+
+  Widget QuestionNumber(int index) {
+    // 누르면
+    return Container(
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        splashColor: Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+        onTap: (_questionNumber >= index)
+            ? () {
+                _pageController.animateToPage(
+                  index - 1,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              }
+            : null,
+        child: AnimatedDefaultTextStyle(
+          duration: Duration(milliseconds: 500),
+          style: TextStyle(
+            fontFamily: "Heebo",
+            fontSize: currentIndex == index ? 18 : 15,
+            fontWeight: FontWeight.w500,
+            color: currentIndex == index
+                ? mainColor.MainColor
+                : _questionNumber >= index
+                    ? mainColor.MainColor.withOpacity(0.5)
+                    : mainColor.Gray,
+          ),
+          child: Text(
+            '$index',
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool isAlready = false;
+  int answersLength = 0;
   Future<void> fetchIndexComments(int no) async {
     print("fetchIndexComments 실행 완료!!");
     rooms[currentIndex].replies.clear();
@@ -756,6 +616,7 @@ class _GroupChat extends State<GroupChat> {
       },
     );
     print(savedToken);
+    List<ChildReply> childReplies = [];
 
     if (response.statusCode == 200) {
       try {
@@ -766,12 +627,21 @@ class _GroupChat extends State<GroupChat> {
           setState(() {
             currentIndex = responseData['questionNo'];
             print("질문 번호 ${responseData['questionNo']}");
+            print("질문 번호 ${responseData}");
+
             _question = responseData['question'];
             currentQuestionId = responseData['questionId'];
+            //여기여기
+            rooms[currentIndex].replies.add(Reply(
+                QuestionItem(
+                  question: _question,
+                  number: currentIndex,
+                ),
+                childReplies));
           });
           int index = 0;
           print("답변 개수 ${responseData['answers'].length}");
-
+          answersLength = responseData['answers'].length;
           for (var answerData in responseData['answers'].toList()) {
             index++;
             print("index ${index}");

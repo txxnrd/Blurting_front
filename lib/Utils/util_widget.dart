@@ -2483,3 +2483,114 @@ class ellipseText extends StatelessWidget {
     );
   }
 }
+
+class QuestionItem extends StatefulWidget {
+  final String question;
+
+  final int number;
+
+  QuestionItem({
+    super.key,
+    required this.question,
+    required this.number,
+  });
+
+  @override
+  State<QuestionItem> createState() => _QuestionItemState();
+}
+
+class _QuestionItemState extends State<QuestionItem> {
+  // 답변 위젯
+  @override
+  Widget build(BuildContext context) {
+    print(widget.key);
+    return ListTile(
+      contentPadding: EdgeInsets.only(left: 10),
+      subtitle: // 답변 내용
+          Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+            child: Container(
+              padding: EdgeInsets.all(5),
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(50)),
+              child: Image.asset(
+                'assets/images/blurting_groupchat.png',
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  "Question" + widget.number.toString(),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: mainColor.red,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                          child: ClipPath(
+                            clipper: LeftTailClipper(),
+                            //채팅 내역 있는곳
+                            child: GestureDetector(
+                              child: Container(
+                                width: 200,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: mainColor.bgGray),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                          top: 5,
+                                          bottom: 5),
+                                      child: Text(
+                                        widget.question,
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
