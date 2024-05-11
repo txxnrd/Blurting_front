@@ -295,13 +295,13 @@ class _CustomInputFieldState extends State<CustomInputField> {
                   Row(
                     children: [
                       ImageIcon(AssetImage('assets/images/reply.png'),
-                          color: Color(0xff868686), size: 12),
+                          color: Color(0xff868686), size: 14),
                       Container(
                           margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
                           child: Text("나에게 답변",
                               style: TextStyle(
                                   color: Color(0xff868686),
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   fontFamily: 'Heebo',
                                   fontWeight: FontWeight.normal))),
                     ],
@@ -352,7 +352,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       Container(
                         margin: EdgeInsets.only(left: 2),
                         child: ImageIcon(AssetImage('assets/images/reply.png'),
-                            color: Color(0xff868686), size: 12),
+                            color: Color(0xff868686), size: 14),
                       ),
                       Container(
                           margin: EdgeInsets.fromLTRB(5, 4, 0, 0),
@@ -363,7 +363,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                                   "에게 답변",
                               style: TextStyle(
                                   color: Color(0xff868686),
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   fontFamily: 'Heebo',
                                   fontWeight: FontWeight.normal))),
                     ],
@@ -439,7 +439,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                             inputPointValid(false);
                           }
                         },
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(fontSize: 14),
                         controller: widget.controller,
                         cursorColor: mainColor.MainColor,
                         decoration: InputDecoration(
@@ -460,11 +460,11 @@ class _CustomInputFieldState extends State<CustomInputField> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: mainColor.bgGray,
                           hintText: !widget.isBlock
                               ? widget.hintText
                               : widget.blockText,
-                          hintStyle: TextStyle(fontSize: 12),
+                          hintStyle: TextStyle(fontSize: 14),
                           suffixIcon: IconButton(
                             onPressed: (isValid)
                                 ? () {
@@ -486,8 +486,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50),
                                 color: isValid
-                                    ? mainColor.MainColor
-                                    : mainColor.MainColor.withOpacity(0.5),
+                                    ? mainColor.lightGray
+                                    : mainColor.lightGray.withOpacity(0.5),
                               ),
                               child: Icon(
                                 Icons.keyboard_arrow_up_outlined,
@@ -505,16 +505,20 @@ class _CustomInputFieldState extends State<CustomInputField> {
                       widget.isBlurting &&
                       !Provider.of<ReplyProvider>(context, listen: true)
                           .isReply)
+                    // Container(
+                    //     padding: EdgeInsets.all(5),
+                    //     child: Text(
+                    //       '$length자',
+                    //       style: TextStyle(
+                    //           color: mainColor.Gray,
+                    //           fontFamily: 'Heebo',
+                    //           fontSize: 10,
+                    //           fontWeight: FontWeight.w400),
+                    //     ))
                     Container(
-                        padding: EdgeInsets.all(5),
-                        child: Text(
-                          '$length자',
-                          style: TextStyle(
-                              color: mainColor.Gray,
-                              fontFamily: 'Heebo',
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400),
-                        ))
+                      padding: EdgeInsets.all(5),
+                      child: SizedBox(),
+                    )
                 ],
               ),
             ],
@@ -557,7 +561,7 @@ class _pointAppbarState extends State<pointAppbar> {
             height: 30,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
-              color: mainColor.MainColor.withOpacity(0.5),
+              color: mainColor.Peach1,
             ),
             child: Center(
               child: Container(
@@ -638,7 +642,7 @@ class OtherChat extends StatelessWidget {
                           message,
                           style: TextStyle(
                             fontFamily: "Pretendard",
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
@@ -749,7 +753,7 @@ class _MyChatState extends State<MyChat> {
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: mainColor.pink,
+                            color: mainColor.red,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -761,8 +765,8 @@ class _MyChatState extends State<MyChat> {
                                   widget.message,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
-                                    fontSize: 12,
-                                    color: Colors.white,
+                                    fontSize: 14,
+                                    color: mainColor.bgGray,
                                   ),
                                 ),
                               ),
@@ -915,7 +919,7 @@ class _MyChatReplyState extends State<MyChatReply> {
                                   widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
-                                    fontSize: 12,
+                                    fontSize: 14,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -1012,14 +1016,14 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                                     // left: widget.writerUserName.length * 10 + 7,
                                     left: 10,
                                     right: 10,
-                                    top: 5,
+                                    top: 23,
                                     bottom: 5),
                                 child: Text(
-                                  " " * leftMargin + widget.content,
+                                  widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
-                                    fontSize: 12,
-                                    color: Colors.black,
+                                    fontSize: 14,
+                                    color: mainColor.Gray,
                                   ),
                                 ),
                               ),
@@ -1030,7 +1034,7 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                     ),
                     Positioned(
                       left: 77,
-                      top: 19,
+                      top: 15,
                       child: Container(
                         width: widget.writerUserName.length * 10 + 3,
                         height: 20,
@@ -1040,11 +1044,14 @@ class _MyChatReplyOtherPersonState extends State<MyChatReplyOtherPerson> {
                         ),
                         child: Center(
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(2, 2, 2, 4),
+                            margin: EdgeInsets.fromLTRB(2, 3, 2, 4),
                             child: Text(
                               widget.writerUserName,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Heebo'),
                             ),
                           ),
                         ),
@@ -1116,21 +1123,21 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Color(0xFFFFEEEE),
+                            color: Color(0xFFF5F5F5),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: 7, right: 10, top: 5, bottom: 5),
+                                    left: 7, right: 10, top: 23, bottom: 5),
                                 child: Text(
-                                  " " * leftMargin + widget.content,
+                                  widget.content,
                                   //여기가 지금 왼쪽.
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
-                                    fontSize: 12,
-                                    color: Colors.black,
+                                    fontSize: 14,
+                                    color: mainColor.Gray,
                                   ),
                                 ),
                               ),
@@ -1140,22 +1147,25 @@ class _OtherChatReplyState extends State<OtherChatReply> {
                       ),
                     ),
                     Positioned(
-                      left: 77,
-                      top: 13,
+                      left: 75,
+                      top: 10,
                       child: Container(
                         width: widget.writerUserName.length * 10 + 3,
                         height: 20,
                         decoration: BoxDecoration(
-                          color: Color(0xffFFD2D2),
+                          color: mainColor.lightGray,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Center(
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(2, 2, 2, 4),
+                            margin: EdgeInsets.fromLTRB(2, 3, 2, 4),
                             child: Text(
                               widget.writerUserName,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Heebo'),
                             ),
                           ),
                         ),
@@ -1236,7 +1246,7 @@ class _OtherChatReplyOtherAnswerState extends State<OtherChatReplyOtherAnswer> {
                                   widget.content,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
-                                    fontSize: 12,
+                                    fontSize: 14,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -1260,7 +1270,7 @@ class _OtherChatReplyOtherAnswerState extends State<OtherChatReplyOtherAnswer> {
                           margin: EdgeInsets.fromLTRB(4, 2, 2, 4),
                           child: Text(
                             widget.writerUserName,
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                            style: TextStyle(color: Colors.white, fontSize: 14),
                           ),
                         ),
                       ),
@@ -1355,7 +1365,7 @@ class _QustionState extends State<QustionState> {
                                 widget.message,
                                 style: TextStyle(
                                   fontFamily: "Pretendard",
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   color: Colors.black,
                                 ),
                               ),
@@ -1493,7 +1503,7 @@ class _AnswerItemState extends State<AnswerItem> {
               ),
             ),
             content: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(14.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -2126,8 +2136,8 @@ class _AnswerItemState extends State<AnswerItem> {
                   : null,
               child: Container(
                 padding: EdgeInsets.all(5),
-                width: 45,
-                height: 45,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(50)),
@@ -2148,7 +2158,7 @@ class _AnswerItemState extends State<AnswerItem> {
                 child: Text(
                   widget.userName,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     color: widget.userId == 0
                         ? mainColor.Gray
                         : Color.fromRGBO(48, 48, 48, 1),
@@ -2226,7 +2236,7 @@ class _AnswerItemState extends State<AnswerItem> {
                                           widget.message,
                                           style: TextStyle(
                                             fontFamily: "Pretendard",
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             color: Colors.black,
                                           ),
                                         ),
@@ -2250,7 +2260,7 @@ class _AnswerItemState extends State<AnswerItem> {
                               width: (likedNum == 0) ? 15 : 25,
                               height: 15,
                               decoration: BoxDecoration(
-                                color: Color.fromRGBO(255, 210, 210, 1),
+                                color: mainColor.lightGray,
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               child: Row(
@@ -2514,8 +2524,8 @@ class _QuestionItemState extends State<QuestionItem> {
             margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
             child: Container(
               padding: EdgeInsets.all(5),
-              width: 45,
-              height: 45,
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(50)),
@@ -2533,7 +2543,7 @@ class _QuestionItemState extends State<QuestionItem> {
                 child: Text(
                   "Question" + widget.number.toString(),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     color: mainColor.red,
                     fontWeight: FontWeight.w700,
                   ),
@@ -2571,7 +2581,7 @@ class _QuestionItemState extends State<QuestionItem> {
                                         widget.question,
                                         style: TextStyle(
                                           fontFamily: "Pretendard",
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           color: Colors.black,
                                         ),
                                       ),

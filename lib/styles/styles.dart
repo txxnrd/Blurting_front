@@ -13,4 +13,5 @@ class mainColor {
   static Color bgGray = Color(0xFFF5F5F5);
   static Color red = Color(0xFFFF6B6B);
   static Color bgRed = Color(0xffFFECEC);
+  static Color Peach1 = Color(0xffFF8787);
 }

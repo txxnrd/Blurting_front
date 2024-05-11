@@ -65,6 +65,8 @@ class GroupChat extends StatefulWidget {
 class _GroupChat extends State<GroupChat> {
   PageController _pageController = PageController();
   List<ScrollController> pageScrollControllers = [];
+  List<bool> showFAB = []; // 각 페이지에 대해 FAB 표시 여부를 관리하는 리스트
+
   List<GlobalKey> replyKeys = []; // GlobalKey 목록
   TextEditingController _controller = TextEditingController();
   List<bool> isBlock = List<bool>.filled(10, false);
@@ -106,9 +108,26 @@ class _GroupChat extends State<GroupChat> {
 
     initializeSocket();
     _pageController = PageController(initialPage: _questionNumber - 1);
-    pageScrollControllers = List.generate(10, (index) => ScrollController());
+    pageScrollControllers = List.generate(10, (index) {
+      var controller = ScrollController();
+      controller.addListener(() => handleScroll(controller, index));
+      showFAB = List.filled(10, true); // 모든 페이지에 대해 FAB을 처음에는 보이게 설정합니다.
+
+      return controller;
+    });
     loadTime();
     // FocusScope.of(context).unfocus();
+  }
+
+  void handleScroll(ScrollController controller, int index) {
+    // 현재 스크롤 위치가 맨 아래(시각적으로는 맨 위)인지 확인합니다.
+    bool isAtBottom = controller.offset >= controller.position.maxScrollExtent;
+    // 상태 업데이트
+    if (showFAB[index] != !isAtBottom) {
+      setState(() {
+        showFAB[index] = !isAtBottom;
+      });
+    }
   }
 
   @override
@@ -116,6 +135,8 @@ class _GroupChat extends State<GroupChat> {
     super.dispose();
     _pageController.dispose();
     pageScrollControllers.forEach((controller) {
+      controller.removeListener(() {});
+
       controller.dispose();
     });
     socket.disconnect();
@@ -417,7 +438,7 @@ class _GroupChat extends State<GroupChat> {
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 200), // 시작 위치에 여백 추가
+            margin: EdgeInsets.only(top: 180), // 시작 위치에 여백 추가
             child: PageView.builder(
               controller: _pageController,
               // PageController(initialPage: _questionNumber - 1),
@@ -471,22 +492,24 @@ class _GroupChat extends State<GroupChat> {
                   ],
                 ),
               ),
-              Positioned(
-                right: 20,
-                bottom: 20,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    pageScrollControllers[index].animateTo(
-                      pageScrollControllers[index]
-                          .position
-                          .maxScrollExtent, // 스크롤의 최대 길이로 이동
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                    );
-                  },
-                  child: Icon(Icons.arrow_upward),
+              if (showFAB[index]) // 조건에 따라 FAB 표시
+
+                Positioned(
+                  right: 20,
+                  bottom: 20,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      pageScrollControllers[index].animateTo(
+                        pageScrollControllers[index]
+                            .position
+                            .maxScrollExtent, // 스크롤의 최대 길이로 이동
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                      );
+                    },
+                    child: Icon(Icons.arrow_upward),
+                  ),
                 ),
-              ),
 
               // 노태윤에게. 여긴 그... 100자 채웠는지 확인하는 거
               if (Provider.of<GroupChatProvider>(context).isPocus &&

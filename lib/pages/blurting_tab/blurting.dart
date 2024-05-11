@@ -346,34 +346,51 @@ class _Blurting extends State<Blurting> {
                         //         fontFamily: 'Pretendard'),
                         //   ),
                         Container(
-                            decoration: BoxDecoration(
-                                color: mainColor.Gray.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10)),
-                            width: width * 0.9,
-                            height: width * 0.8,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '새로운 블러팅 시작하기 버튼을 눌러주세요!',
-                                    style: TextStyle(
-                                        color: mainColor.Gray,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Heebo'),
+                          decoration: BoxDecoration(
+                              color: mainColor.Gray.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10)),
+                          width: width * 0.9,
+                          height: width * 0.8,
+                          child: isState == 'Matching'
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '새로운 블러팅 시작하기 버튼을 눌러주세요!',
+                                        style: TextStyle(
+                                            color: mainColor.Gray,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            fontFamily: 'Heebo'),
+                                      ),
+                                      Text(
+                                        '버튼을 누르면 매칭이 시작됩니다',
+                                        style: TextStyle(
+                                            color: mainColor.Gray,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            fontFamily: 'Heebo'),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    '버튼을 누르면 매칭이 시작됩니다',
-                                    style: TextStyle(
-                                        color: mainColor.Gray,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Heebo'),
-                                  ),
-                                ],
-                              ),
-                            )),
+                                )
+                              : !isMine
+                                  ? PageView(
+                                      controller: pageController,
+                                      children: [
+                                          _arrowPage(0),
+                                          _arrowPage(1),
+                                          _arrowPage(2),
+                                        ])
+                                  : PageView(
+                                      controller: pageController,
+                                      children: [
+                                          _myArrowPage(0),
+                                          _myArrowPage(1),
+                                          _myArrowPage(2),
+                                        ]),
+                        ),
                       ],
                     ),
                   ],
