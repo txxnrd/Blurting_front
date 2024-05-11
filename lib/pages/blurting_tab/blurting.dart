@@ -538,7 +538,6 @@ class _Blurting extends State<Blurting> {
               print(localDay);
               print('실제 데이');
               print(day);
-
               if (isState == 'Continue') {
                 if (localDay == day) {
                   Navigator.push(
