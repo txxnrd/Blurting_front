@@ -188,8 +188,9 @@ Future<void> isMatched(BuildContext context) async {
           response.body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
       // responseData = 3;       // 없애야 할 것
       print("응답 데이터는 ${responseData}입니다.");
-      Provider.of<MatchingStateProvider>(context, listen: false).state =
-          responseData;
+      // Provider.of<MatchingStateProvider>(context, listen: false).state =
+      //     responseData;
+      Provider.of<MatchingStateProvider>(context, listen: false).state = 1;
     } catch (e) {
       print(e);
     }

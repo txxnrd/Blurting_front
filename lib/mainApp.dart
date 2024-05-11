@@ -39,7 +39,8 @@ class _MainApp extends State<MainApp> {
   void _updatePages() {
     _pages = [
       Home(),
-      Provider.of<MatchingStateProvider>(context, listen: true).state == 2
+      Provider.of<MatchingStateProvider>(context, listen: true).state ==
+              2 // 2: 매칭 완료
           ? SizedBox()
           : Blurting(),
       ChattingList(),
@@ -141,6 +142,7 @@ class TabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_currentIndex == 1) {
+      //Main에서 현재 MatchingStateProvider 통해 매칭 상태를 Provider로 관리
       if (Provider.of<MatchingStateProvider>(context, listen: true).state == 2)
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
