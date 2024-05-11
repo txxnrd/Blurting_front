@@ -1,3 +1,4 @@
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blurting/pages/policy/policy_one.dart';
 import 'package:blurting/pages/startpage/start_page.dart';
 import 'package:blurting/settings/url_link.dart';
@@ -444,6 +445,7 @@ class _SettingPageState extends State<SettingPage> {
                     splashColor: Colors.transparent,
                     onTap: () {
                       _getuserinfo();
+                      Amplitude.getInstance().logEvent('BUTTON_CLICKED');
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

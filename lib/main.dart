@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
@@ -19,6 +20,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'notification.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 const Map<String, String> UNIT_ID = kReleaseMode
     ? {
@@ -202,9 +204,22 @@ Future<void> isMatched(BuildContext context) async {
   }
 }
 
+Future<void> exampleForAmplitude() async {
+  // Create the instance
+  final Amplitude analytics = Amplitude.getInstance(instanceName: "Blurting");
+
+  // Initialize SDK
+  analytics.init(dotenv.env['AMPLITUDE_API_KEY']!);
+
+  // Log an event
+  analytics.logEvent('MyApp startup',
+      eventProperties: {'friend_num': 10, 'is_heavy_user': true});
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  exampleForAmplitude();
 
   RequestConfiguration configuration =
       RequestConfiguration(testDeviceIds: testDeviceIds);
