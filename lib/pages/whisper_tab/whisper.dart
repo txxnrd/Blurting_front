@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:blurting/config/app_config.dart';
 import 'package:http/http.dart' as http;
-import 'package:blurting/pages/whisper_tab/profileCard.dart';
+import 'package:blurting/pages/whisper_tab/profile_card.dart';
 import 'package:extended_image/extended_image.dart' hide MultipartFile;
+import 'package:blurting/styles/styles.dart';
 
 class Whisper extends StatefulWidget {
   final String userName;
@@ -118,6 +119,7 @@ class _Whisper extends State<Whisper> {
                 read: read,
                 isBlurting: false,
                 likedNum: 0,
+                event: false,
               );
               sendingMessageList.clear();
               print('내 메시지 전송 완료: $chat');
@@ -153,14 +155,14 @@ class _Whisper extends State<Whisper> {
                 chatMessages.insert(
                     i,
                     MyChat(
-                      index: 0,
-                      answerID: 0,
-                      message: widget.message,
-                      createdAt: widget.createdAt,
-                      read: true,
-                      isBlurting: false,
-                      likedNum: 0,
-                    ));
+                        index: 0,
+                        answerID: 0,
+                        message: widget.message,
+                        createdAt: widget.createdAt,
+                        read: true,
+                        isBlurting: false,
+                        likedNum: 0,
+                        event: false));
               });
             }
           }
@@ -643,14 +645,14 @@ class _Whisper extends State<Whisper> {
 
     // 입력한 내용을 ListTile에 추가
     Widget newAnswer = MyChat(
-      index: 0,
-      answerID: 0,
-      message: message,
-      createdAt: '전송 중...',
-      read: true,
-      isBlurting: false,
-      likedNum: 0,
-    );
+        index: 0,
+        answerID: 0,
+        message: message,
+        createdAt: '전송 중...',
+        read: true,
+        isBlurting: false,
+        likedNum: 0,
+        event: false);
 
     // 소켓 서버에 데이터 전송
     if (message.isNotEmpty) {
@@ -736,15 +738,15 @@ class _Whisper extends State<Whisper> {
               if (chatData['userId'] ==
                   Provider.of<UserProvider>(context, listen: false).userId) {
                 fetchChatList = MyChat(
-                  index: 0,
-                  answerID: 0,
-                  message: chatData['chat'] as String? ?? '',
-                  createdAt: dateFormatAA.format(
-                      _parseDateTime(chatData['createdAt'] as String? ?? '')),
-                  read: read, // http에서 받아오는 거니까..
-                  isBlurting: false,
-                  likedNum: 0,
-                );
+                    index: 0,
+                    answerID: 0,
+                    message: chatData['chat'] as String? ?? '',
+                    createdAt: dateFormatAA.format(
+                        _parseDateTime(chatData['createdAt'] as String? ?? '')),
+                    read: read, // http에서 받아오는 거니까..
+                    isBlurting: false,
+                    likedNum: 0,
+                    event: false);
               } else {
                 fetchChatList = OtherChat(
                     message: chatData['chat'] as String? ?? '',

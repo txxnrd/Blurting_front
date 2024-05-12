@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:blurting/token.dart';
+import 'package:blurting/styles/styles.dart';
 
 class NotificationandSound extends StatefulWidget {
   final bool fcmstate; // 생성자를 통해 받을 변수를 final로 선언
@@ -132,19 +133,15 @@ class _NotificationandSoundState extends State<NotificationandSound> {
                                 width: 38,
                                 height: 22,
                                 decoration: BoxDecoration(
-                                    color: 
-                                    _notificationSettings
+                                    color: _notificationSettings
                                         ? mainColor.MainColor
-                                        : 
-                                        mainColor.lightGray,
+                                        : mainColor.lightGray,
                                     borderRadius: BorderRadius.circular(50)),
                               ),
                               AnimatedPositioned(
                                 duration: Duration(milliseconds: 500),
                                 top: 2,
-                                right: 
-                                _notificationSettings ? 2 : 
-                                17,
+                                right: _notificationSettings ? 2 : 17,
                                 child: Container(
                                   width: 18,
                                   height: 18,
@@ -159,7 +156,7 @@ class _NotificationandSoundState extends State<NotificationandSound> {
                       ),
                     ),
                   ),
-                                
+
                   // SwitchListTile(
                   //   title: Text('알림 설정'),
                   //   value: _notificationSettings,

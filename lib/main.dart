@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
-import 'package:blurting/startpage/startpage.dart';
+import 'package:blurting/pages/startpage/start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/mainapp.dart';
 import 'package:flutter/services.dart';
@@ -14,11 +14,9 @@ import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:blurting/styles/styles.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
 import 'package:store_redirect/store_redirect.dart';
-
 import 'notification.dart';
 import 'package:flutter/foundation.dart';
 

@@ -1,5 +1,10 @@
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
+// import 'package:blurting/pages/blurting_tab/blurting.dart';
+import 'package:blurting/pages/blurting_tab/matching_ani.dart';
+import 'package:blurting/pages/home_tab/event.dart';
+import 'package:blurting/pages/home_tab/event_group.dart';
+import 'package:blurting/pages/my_page/Utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/model/post.dart';
@@ -13,6 +18,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'package:blurting/styles/styles.dart';
 
 DateTime _parseDateTime(String? dateTimeString) {
   if (dateTimeString == null) {
@@ -65,6 +71,11 @@ class _HomeState extends State<Home> {
   int likes = 0;
   final answercontroller = ScrollController();
   final _answercontroller = ScrollController();
+  String code = '';
+  bool isValid = false;
+  String tableNo = '';
+  late int state = -1;
+  String part = 'Part0';
 
   late Future<List<home>> futureHome;
 
@@ -75,6 +86,11 @@ class _HomeState extends State<Home> {
     cardItems = [];
     initializePages(); //위젯 생성 될 때 불러와야하는 정보들
     updateRemainingTime();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> initializePages() async {
@@ -126,89 +142,89 @@ class _HomeState extends State<Home> {
     }
 
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
             print('재빌드');
             return Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(22),
-                        image: DecorationImage(
-                          image: AssetImage('./assets/images/homecard.png'),
-                          fit: BoxFit.cover,
-                        ),
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      image: DecorationImage(
+                        image: AssetImage('./assets/images/homecard.png'),
+                        fit: BoxFit.cover,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 20),
-                                child: Row(
-                                  children: [
-                                    if (cardItems[index].userSex == 'M')
-                                      ClipOval(
-                                        child: Container(
-                                          padding: EdgeInsets.all(5),
-                                          color: mainColor.pink.withOpacity(0.5),
-                                          child: Image.asset(
-                                            './assets/man.png',
-                                            width: 30,
-                                            height: 30,
-                                          ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Row(
+                                children: [
+                                  if (cardItems[index].userSex == 'M')
+                                    ClipOval(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        color: mainColor.pink.withOpacity(0.5),
+                                        child: Image.asset(
+                                          './assets/man.png',
+                                          width: 30,
+                                          height: 30,
                                         ),
-                                      ),
-                                    if (cardItems[index].userSex == 'F')
-                                      ClipOval(
-                                        child: Container(
-                                          padding: EdgeInsets.all(5),
-                                          color: mainColor.MainColor.withOpacity(0.5),
-                                          child: Image.asset(
-                                            './assets/woman.png',
-                                            width: 30,
-                                            height: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${cardItems[index].userName} 님의 답변',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Heebo',
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 12),
-                              SingleChildScrollView(
-                                child: Text(
-                                  'Q: ${cardItems[index].question}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Heebo',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
+                                  if (cardItems[index].userSex == 'F')
+                                    ClipOval(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        color: mainColor.MainColor.withOpacity(
+                                            0.5),
+                                        child: Image.asset(
+                                          './assets/woman.png',
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '${cardItems[index].userName} 님의 답변',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Heebo',
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            SingleChildScrollView(
+                              child: Text(
+                                'Q: ${cardItems[index].question}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              SizedBox(height: 13),
-                              Expanded(
-                                child: Stack(
-                                  children: [
+                            ),
+                            SizedBox(height: 13),
+                            Expanded(
+                              child: Stack(
+                                children: [
                                   RawScrollbar(
                                     thumbColor: mainColor.pink.withOpacity(0.8),
                                     trackColor: Colors.white.withOpacity(0.7),
@@ -234,49 +250,50 @@ class _HomeState extends State<Home> {
                                       },
                                       child: SingleChildScrollView(
                                         controller: _answercontroller,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 14.0),
-                                            child: Text(
-                                              'A: ${cardItems[index].answer}\n\n',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Heebo',
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              overflow: TextOverflow.fade,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 14.0),
+                                          child: Text(
+                                            'A: ${cardItems[index].answer}\n\n',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Heebo',
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
                                             ),
+                                            overflow: TextOverflow.fade,
                                           ),
                                         ),
                                       ),
+                                    ),
                                   )
                                 ],
                               ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: const [
-                                  Expanded(
-                                    child: Divider(
-                                      color: Colors.white,
-                                      height: 10,
-                                    ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: const [
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors.white,
+                                    height: 10,
                                   ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.thumb_up,
-                                            color: ilike
-                                                ? mainColor.pink
-                                                : Colors.white,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.thumb_up,
+                                        color: ilike
+                                            ? mainColor.pink
+                                            : Colors.white,
                                         size: 17,
                                       ),
                                       Container(
@@ -337,35 +354,34 @@ class _HomeState extends State<Home> {
                                 ),
                                 // GestureDetector(
                                 //   onTap: () {
-                                  //     setState(() {
-                                  //       setDialog(index);
-                                  //     });
-                                  //     changeLike(
-                                  //         cardItems[index].answerId, index);
-                                  //   },
-                                  //   child: Icon(
-                                  //     Icons.thumb_up,
-                                  //       color: ilike
-                                  //           ? mainColor.pink
-                                  //           : Colors.white,
-                                  //       size: 17,
-                                  //     ),
-                                  //   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
+                                //     setState(() {
+                                //       setDialog(index);
+                                //     });
+                                //     changeLike(
+                                //         cardItems[index].answerId, index);
+                                //   },
+                                //   child: Icon(
+                                //     Icons.thumb_up,
+                                //       color: ilike
+                                //           ? mainColor.pink
+                                //           : Colors.white,
+                                //       size: 17,
+                                //     ),
+                                //   ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              );
-          }
-        );
+                ),
+              ],
+            );
+          });
         });
   }
 
@@ -373,7 +389,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final pages = List.generate(cardItems.length, (index) {
       return GestureDetector(
-        onTap: (){
+        onTap: () {
           print('mvp 카드 눌림 $index');
           _showMVPCard(context, index);
         },
@@ -570,18 +586,18 @@ class _HomeState extends State<Home> {
                       //       setDialog(index);
                       //     });
                       //     changeLike(
-                                  //         cardItems[index].answerId, index);
-                                  //   },
-                                  //   child: Icon(
-                                  //     Icons.thumb_up,
-                                  //       color: ilike
-                                  //           ? mainColor.pink
-                                  //           : Colors.white,
-                                  //       size: 17,
-                                  //     ),
-                                  //   ),
-                                ],
-                              ),
+                      //         cardItems[index].answerId, index);
+                      //   },
+                      //   child: Icon(
+                      //     Icons.thumb_up,
+                      //       color: ilike
+                      //           ? mainColor.pink
+                      //           : Colors.white,
+                      //       size: 17,
+                      //     ),
+                      //   ),
+                    ],
+                  ),
                   SizedBox(
                     height: 10,
                   )
@@ -592,6 +608,8 @@ class _HomeState extends State<Home> {
         ),
       );
     });
+
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -630,8 +648,9 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: <Widget>[
-          Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
+          // Container(margin: EdgeInsets.only(top: 20), child: pointAppbar()),
           Container(
+            width: 25,
             margin: EdgeInsets.only(top: 20),
             child: IconButton(
               icon: Icon(
@@ -646,6 +665,270 @@ class _HomeState extends State<Home> {
               },
             ),
           ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: IconButton(
+              icon: Container(
+                  width: 20,
+                  height: 20,
+                  child:
+                      Image.asset('assets/images/event.png', fit: BoxFit.fill)),
+              onPressed: () async {
+                await fetchState();
+                print(state);
+                // 일홉 방 매칭 dialog (코드 입력)
+                if (state == 0) {
+                  print('요청');
+                  showDialog(
+                      context: context,
+                      barrierDismissible:
+                          true, // 이 줄을 추가하여 다이얼로그 바깥 터치시 닫히도록 설정
+                      builder: (BuildContext context) {
+                        code = '';
+                        tableNo = '';
+                        return StatefulBuilder(builder: (context, setState) {
+                          return (Scaffold(
+                            backgroundColor: Colors.transparent,
+                            body: Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  height: 350,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Container(
+                                            child: Text('Event 2',
+                                                style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: mainColor.Gray))),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: 4, bottom: 21),
+                                          child: Text('현장 블러팅',
+                                              style: TextStyle(
+                                                  fontFamily: 'Heebo',
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: mainColor.black)),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              top: 5, bottom: 5),
+                                          margin: EdgeInsets.only(bottom: 2),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          height: 55,
+                                          child: TextField(
+                                              onChanged: (value) {
+                                                tableNo = value;
+                                              },
+                                              cursorHeight: 22,
+                                              decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 10.0,
+                                                          horizontal: 10),
+                                                  hintText: '테이블 번호를 입력해주세요.',
+                                                  hintStyle: TextStyle(
+                                                      color:
+                                                          mainColor.lightGray,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontFamily: 'Pretendard'),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            mainColor.lightGray,
+                                                      )),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: mainColor
+                                                                .MainColor,
+                                                          )),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: mainColor
+                                                                .MainColor,
+                                                          )))),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          padding: const EdgeInsets.only(
+                                              top: 5, bottom: 5),
+                                          height: 55,
+                                          child: TextField(
+                                              onChanged: (value) {
+                                                code = value;
+                                                if (value == 'BLT#11') {
+                                                  print("value==BLT#11");
+                                                  setState(() {
+                                                    IsValid = true;
+                                                  });
+                                                } else {
+                                                  setState(() {
+                                                    IsValid = false;
+                                                  });
+                                                }
+                                              },
+                                              decoration: InputDecoration(
+                                                  isDense: true,
+                                                  hintText: '인증 코드를 입력해주세요.',
+                                                  hintStyle: TextStyle(
+                                                      color:
+                                                          mainColor.lightGray,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontFamily: 'Pretendard'),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            mainColor.lightGray,
+                                                      )),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: mainColor
+                                                                .MainColor,
+                                                          )),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: mainColor
+                                                                .MainColor,
+                                                          )))),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            if (IsValid) {
+                                              print(code);
+                                              print(tableNo);
+                                              //  코드가 일치한다면 백엔드에 요청
+
+                                              // 일일호프, 일홉 코드
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Matching(
+                                                            event: true,
+                                                            tableNo: tableNo,
+                                                          )));
+                                            } else {
+                                              null;
+                                            }
+                                          },
+                                          child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7,
+                                              height: 48,
+                                              margin: EdgeInsets.only(top: 30),
+                                              padding: EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: IsValid
+                                                    ? mainColor.MainColor
+                                                    : mainColor
+                                                        .lightGray, // code가 맞으면 mainColor로 색깔이 바뀌어야 함
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text("다음",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                      fontFamily:
+                                                          'Pretendard'))),
+                                        )
+                                      ])),
+                            ),
+                          ));
+                        });
+                      });
+                } else if (state == 1) {
+                  // 방으로 들어가기
+                  print('방');
+                  // 마지막 질문 인덱스 받아오기
+                  await fetchLatestComments();
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => eventGroupChat(
+                                part: part,
+                              )));
+                } else if (state == 2) {
+                  // 매칭 애니로 이동
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Matching(
+                                event: true,
+                                tableNo: tableNo,
+                              )));
+                  print('애니');
+                } else if (state == 3) {
+                  // 화살 날리기
+                  print('화살');
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Event()));
+                } else {
+                  print('object');
+                }
+              },
+            ),
+          )
         ],
       ),
       body: Column(
@@ -863,6 +1146,77 @@ class _HomeState extends State<Home> {
         });
       }
     } else {}
+  }
+
+  Future<void> fetchState() async {
+    // answerId 보내
+    final url = Uri.parse(API.event);
+    String savedToken = await getToken();
+
+    final response = await http.get(url, headers: {
+      'authorization': 'Bearer $savedToken',
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      try {
+        state = jsonDecode(response.body);
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchState);
+    } else {
+      print(response.statusCode);
+    }
+    print(state);
+  }
+
+  Future<void> fetchLatestComments() async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
+    String savedToken = await getToken();
+
+    final url = Uri.parse(API.eventLatest);
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            int latestIndex = responseData['questionNo'];
+            print('latestIndex');
+            print(latestIndex);
+
+            if (latestIndex == 1) {
+              part = 'Part1';
+            } else if (latestIndex == 2) {
+              part = 'Part2';
+            } else if (latestIndex >= 3) {
+              part = 'Part3';
+            }
+          });
+        }
+        //
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchLatestComments);
+    } else {
+      throw Exception('groupChat : 답변을 로드하는 데 실패했습니다 ${response.statusCode}');
+    }
   }
 }
 

@@ -8,8 +8,9 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:provider/provider.dart';
-import 'package:blurting/pages/mypage/point_history.dart';
+import 'package:blurting/pages/my_page/point_history.dart';
 import 'package:http/http.dart' as http;
+import 'package:blurting/styles/styles.dart';
 
 // 상대방 말풍선 클리퍼
 class LeftTailClipper extends CustomClipper<Path> {
@@ -495,7 +496,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
   }
 }
 
-class pointAppbar extends StatelessWidget {
+class pointAppbar extends StatefulWidget {
   final bool canNavigate;
 
   pointAppbar({
@@ -504,14 +505,22 @@ class pointAppbar extends StatelessWidget {
   });
 
   @override
+  State<pointAppbar> createState() => _pointAppbarState();
+}
+
+class _pointAppbarState extends State<pointAppbar> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: InkWell(
           onTap: () {
-            if (canNavigate) {
+            if (widget.canNavigate) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PointHistoryPage()),
+                MaterialPageRoute(
+                    builder: (context) => PointHistoryPage(
+                        point: Provider.of<UserProvider>(context, listen: false)
+                            .point)),
               );
             }
           },
@@ -525,7 +534,7 @@ class pointAppbar extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.fromLTRB(9, 0, 9, 0),
                 child: Text(
-                  '${Provider.of<UserProvider>(context, listen: false).point}p',
+                  '${Provider.of<UserProvider>(context, listen: true).point}p',
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Heebo',
@@ -642,6 +651,7 @@ class MyChat extends StatefulWidget {
   final int likedNum;
   final int answerID;
   final int index;
+  final bool event;
 
   MyChat(
       {super.key,
@@ -651,7 +661,8 @@ class MyChat extends StatefulWidget {
       required this.isBlurting,
       required this.likedNum,
       required this.answerID,
-      required this.index});
+      required this.index,
+      required this.event});
 
   @override
   State<MyChat> createState() => _MyChatState();
@@ -668,23 +679,25 @@ class _MyChatState extends State<MyChat> {
     print(widget.key);
     return ListTile(
       onTap: () {
-        print("눌림");
-        print("음..?");
-        print(widget.answerID);
-        print(widget.index);
-        Future.delayed(Duration(milliseconds: 50), () {
-          Provider.of<FocusNodeProvider>(context, listen: false)
-              .focusNode
-              .requestFocus();
-        });
+        if (!widget.event) {
+          print("눌림");
+          print("음..?");
+          print(widget.answerID);
+          print(widget.index);
+          Future.delayed(Duration(milliseconds: 50), () {
+            Provider.of<FocusNodeProvider>(context, listen: false)
+                .focusNode
+                .requestFocus();
+          });
 
-        Provider.of<QuestionNumberProvider>(context, listen: false).questionId =
-            widget.answerID;
-        Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
-        Provider.of<ReplySelectedNumberProvider>(context, listen: false)
-            .replyselectednumber = widget.index;
-        Provider.of<MyChatReplyProvider>(context, listen: false).ismychatReply =
-            true;
+          Provider.of<QuestionNumberProvider>(context, listen: false)
+              .questionId = widget.answerID;
+          Provider.of<ReplyProvider>(context, listen: false).IsReply = true;
+          Provider.of<ReplySelectedNumberProvider>(context, listen: false)
+              .replyselectednumber = widget.index;
+          Provider.of<MyChatReplyProvider>(context, listen: false)
+              .ismychatReply = true;
+        }
       },
       contentPadding: EdgeInsets.only(right: 14),
       subtitle: // 답변 내용
@@ -1380,6 +1393,7 @@ class AnswerItem extends StatefulWidget {
   final String mbti;
   final int answerId;
   final int index;
+  final bool event;
 
   AnswerItem(
       {super.key,
@@ -1393,7 +1407,8 @@ class AnswerItem extends StatefulWidget {
       required this.image,
       required this.mbti,
       required this.answerId,
-      required this.index});
+      required this.index,
+      required this.event});
 
   @override
   State<AnswerItem> createState() => _AnswerItemState();
@@ -2129,33 +2144,36 @@ class _AnswerItemState extends State<AnswerItem> {
                               //채팅 내역 있는곳
                               child: GestureDetector(
                                 onTap: () {
-                                  print("눌림");
-                                  print(widget.index);
-                                  print(widget.answerId);
-                                  Provider.of<ReplySelectedNumberProvider>(
-                                          context,
-                                          listen: false)
-                                      .replyselectednumber = widget.index;
-                                  Provider.of<QuestionNumberProvider>(context,
-                                          listen: false)
-                                      .questionId = widget.answerId;
-                                  Future.delayed(Duration(milliseconds: 50),
-                                      () {
-                                    Provider.of<FocusNodeProvider>(context,
+                                  if (!widget.event) {
+                                    print("눌림");
+                                    print(widget.index);
+                                    print(widget.answerId);
+                                    Provider.of<ReplySelectedNumberProvider>(
+                                            context,
                                             listen: false)
-                                        .focusNode
-                                        .requestFocus();
-                                  });
-                                  Provider.of<ReplyProvider>(context,
-                                          listen: false)
-                                      .IsReply = true;
-                                  Provider.of<MyChatReplyProvider>(context,
-                                          listen: false)
-                                      .ismychatReply = false;
-                                  Provider.of<ReplySelectedNumberProvider>(
-                                          context,
-                                          listen: false)
-                                      .replyselectedusername = widget.userName;
+                                        .replyselectednumber = widget.index;
+                                    Provider.of<QuestionNumberProvider>(context,
+                                            listen: false)
+                                        .questionId = widget.answerId;
+                                    Future.delayed(Duration(milliseconds: 50),
+                                        () {
+                                      Provider.of<FocusNodeProvider>(context,
+                                              listen: false)
+                                          .focusNode
+                                          .requestFocus();
+                                    });
+                                    Provider.of<ReplyProvider>(context,
+                                            listen: false)
+                                        .IsReply = true;
+                                    Provider.of<MyChatReplyProvider>(context,
+                                            listen: false)
+                                        .ismychatReply = false;
+                                    Provider.of<ReplySelectedNumberProvider>(
+                                                context,
+                                                listen: false)
+                                            .replyselectedusername =
+                                        widget.userName;
+                                  }
                                 },
                                 child: Container(
                                   width: 200,

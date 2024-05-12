@@ -5,16 +5,17 @@ import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
-import 'package:blurting/pages/blurting_tab/groupChat.dart';
+import 'package:blurting/pages/blurting_tab/group_chat.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:blurting/utils/util_widget.dart';
-import 'package:blurting/pages/blurting_tab/matchingAni.dart';
-import 'package:blurting/pages/blurting_tab/dayAni.dart';
+import 'package:blurting/pages/blurting_tab/matching_ani.dart';
+import 'package:blurting/pages/blurting_tab/day_ani.dart';
 import 'package:http/http.dart' as http;
+import 'package:blurting/styles/styles.dart';
 
 /** */
 DateTime createdAt = DateTime.now();
@@ -87,7 +88,7 @@ class _Blurting extends State<Blurting> {
 
     Future.delayed(Duration.zero, () async {
       SharedPreferences pref = await SharedPreferences.getInstance();
-        await result();
+      await result();
 
       await fetchPoint();
       await isMatched();
@@ -149,7 +150,6 @@ class _Blurting extends State<Blurting> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    print(height);
 
     dividedProfileList[0].clear();
     dividedProfileList[1].clear();
@@ -541,8 +541,12 @@ class _Blurting extends State<Blurting> {
 
               if (isState == 'Continue') {
                 if (localDay == day) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => GroupChat()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupChat(
+                                day: day,
+                              )));
                 } else {
                   Navigator.push(
                       context,
@@ -555,8 +559,13 @@ class _Blurting extends State<Blurting> {
                   isState == 'Matching' ||
                   isState == 'end') {
                 // 아직 방이 만들어지지 않음
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Matching()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Matching(
+                              event: false,
+                              tableNo: '',
+                            )));
               }
 
               // 데이터를 로컬에 저장하는 함수
@@ -604,37 +613,36 @@ class _Blurting extends State<Blurting> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    finalMatching ? 
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          width: 55,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            color: mainColor.lightPink,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Image.asset(
-                            fit: BoxFit.fill,
-                            matchingSex == 'M' ?
-                            'assets/images/matchMan.png' 
-                          : 'assets/images/matchWoman.png'
-                          ),       // API 연결 (OTHER)
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 7),
-                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          decoration: BoxDecoration(
-                            color: mainColor.lightPink,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Text(
-                            matchingName,        // API 연결 (OTHER)
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Heebo',
+                    finalMatching
+                        ? Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                width: 55,
+                                height: 55,
+                                decoration: BoxDecoration(
+                                  color: mainColor.lightPink,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Image.asset(
+                                    fit: BoxFit.fill,
+                                    matchingSex == 'M'
+                                        ? 'assets/images/matchMan.png'
+                                        : 'assets/images/matchWoman.png'), // API 연결 (OTHER)
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 7),
+                                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                decoration: BoxDecoration(
+                                  color: mainColor.lightPink,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Text(
+                                  matchingName, // API 연결 (OTHER)
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Heebo',
                                       color: Colors.black),
                                 ),
                               ),
@@ -680,14 +688,18 @@ class _Blurting extends State<Blurting> {
                           width: 55,
                           height: 55,
                           decoration: BoxDecoration(
-                              color: mainColor.lightPink,
-                              borderRadius: BorderRadius.circular(50),),
-                          child: Image.asset(
-                            fit: BoxFit.fill,
-                            mySex == 'M' ?
-                            finalMatching ? 'assets/images/matchMan.png' : 'assets/images/unmatchMan.png'       // API 연결 (MY)
-                          : finalMatching ? 'assets/images/matchWoman.png' : 'assets/images/unmatcWoman.png' 
+                            color: mainColor.lightPink,
+                            borderRadius: BorderRadius.circular(50),
                           ),
+                          child: Image.asset(
+                              fit: BoxFit.fill,
+                              mySex == 'M'
+                                  ? finalMatching
+                                      ? 'assets/images/matchMan.png'
+                                      : 'assets/images/unmatchMan.png' // API 연결 (MY)
+                                  : finalMatching
+                                      ? 'assets/images/matchWoman.png'
+                                      : 'assets/images/unmatcWoman.png'),
                           // child: Image.asset(
                           //     fit: BoxFit.fill,
                           //     matchingSex == 'M'
@@ -726,14 +738,17 @@ class _Blurting extends State<Blurting> {
                     fontSize: 16,
                     fontFamily: 'Heebo'),
               ),
-              Text(
-                isState == 'Continue'&&(! iSended[currentPage] && isValidDay[index]) ? '* 오늘이 지나기 전에 화살표를 날려 주세요!' : '',
-                style: TextStyle(
-                    color: mainColor.Gray,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 10,
-                    fontFamily: 'Heebo'),
-              ),
+            Text(
+              isState == 'Continue' &&
+                      (!iSended[currentPage] && isValidDay[index])
+                  ? '* 오늘이 지나기 전에 화살표를 날려 주세요!'
+                  : '',
+              style: TextStyle(
+                  color: mainColor.Gray,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 10,
+                  fontFamily: 'Heebo'),
+            ),
             if (isState == 'Continue' && !iSended[currentPage])
               if (ProfileList[currentPage].length <= 4)
                 Container(
@@ -862,19 +877,21 @@ class _Blurting extends State<Blurting> {
         print(response.body);
 
         Map<String, dynamic> responseData = jsonDecode(response.body);
-          myName = responseData['myname'];
-          mySex = responseData['mysex'];
+        myName = responseData['myname'];
+        mySex = responseData['mysex'];
 
-          if (responseData['othername'] == null) {
-            finalMatching = false;
-            matchingName = '';
-            matchingSex = '';
-          } else {
-            finalMatching = true;
-            matchingName = responseData['othername'];
-            matchingSex = responseData['othersex'];
-          }
-      } catch (e) {print(e);}
+        if (responseData['othername'] == null) {
+          finalMatching = false;
+          matchingName = '';
+          matchingSex = '';
+        } else {
+          finalMatching = true;
+          matchingName = responseData['othername'];
+          matchingSex = responseData['othersex'];
+        }
+      } catch (e) {
+        print(e);
+      }
     } else {
       print(response.statusCode);
     }
@@ -1020,6 +1037,42 @@ class _Blurting extends State<Blurting> {
     String savedToken = await getToken();
     int userId = await getuserId();
     Provider.of<UserProvider>(context, listen: false).userId = userId;
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $savedToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (mounted) {
+          setState(() {
+            Provider.of<UserProvider>(context, listen: false).point =
+                responseData['point'];
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+    } else if (response.statusCode == 401) {
+      //refresh token으로 새로운 accesstoken 불러오는 코드.
+      //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+      await getnewaccesstoken(context, fetchPoint);
+    } else {
+      throw Exception('point : 잔여 포인트를 로드하는 데 실패했습니다');
+    }
+  }
+
+  Future<void> fetchMyArrow() async {
+    // day 정보 (dayAni 띄울지 말지 결정) + 블러팅 현황 보여주기 (day2일 때에만 day1이 활성화)
+
+    final url = Uri.parse(API.userpoint);
+    String savedToken = await getToken();
 
     final response = await http.get(
       url,
