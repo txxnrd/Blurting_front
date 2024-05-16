@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        google()  // Required for Android Gradle plugin
+        mavenCentral()  // In case some dependencies are found here
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.1'
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -8,9 +18,7 @@ allprojects {
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
+    evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {

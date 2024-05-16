@@ -2392,17 +2392,17 @@ class _AnswerItemState extends State<AnswerItem> {
 
 class staticButton extends StatelessWidget {
   final String text;
+  final bool enabled;
 
-  staticButton({required this.text});
+  staticButton({required this.text, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: mainColor.MainColor,
+        color: enabled ? mainColor.MainColor : mainColor.lightGray,
       ),
-      // margin: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width * 0.9,
       height: 48,
       child: Column(

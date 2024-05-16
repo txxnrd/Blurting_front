@@ -79,11 +79,12 @@ class Blurting extends StatefulWidget {
 class _Blurting extends State<Blurting> {
   final PageController pageController = PageController(initialPage: 0);
   Timer? _blinkTimer;
+  late Duration remainingTime = Duration.zero;
 
   @override
   void initState() {
     super.initState();
-
+    updateRemainingTime();
     Future.delayed(Duration.zero, () async {
       SharedPreferences pref = await SharedPreferences.getInstance();
       await result();
@@ -146,6 +147,26 @@ class _Blurting extends State<Blurting> {
     });
   }
 
+  String formatDuration(Duration duration) {
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes.remainder(60);
+    int remainingSeconds = duration.inSeconds.remainder(60);
+
+    return '$hours시간 $minutes분 $remainingSeconds초';
+  }
+
+  void updateRemainingTime() {
+    Future.delayed(Duration(seconds: 1), () {
+      if (mounted && remainingTime.inSeconds > 0) {
+        setState(() {
+          remainingTime = remainingTime - Duration(seconds: 1);
+        });
+        updateRemainingTime();
+      } // 다음 업데이트 예약
+      else {}
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -166,7 +187,7 @@ class _Blurting extends State<Blurting> {
       backgroundColor: Colors.white,
       appBar: height > 670
           ? PreferredSize(
-              preferredSize: Size.fromHeight(160),
+              preferredSize: Size.fromHeight(140),
               child: AppBar(
                 toolbarHeight: 80,
                 scrolledUnderElevation: 0.0,
@@ -211,7 +232,6 @@ class _Blurting extends State<Blurting> {
                   Container(
                       margin: EdgeInsets.only(top: 20, right: 4),
                       child: pointAppbar()),
-                  Container(width: 10),
                 ],
               ),
             ),
@@ -221,112 +241,140 @@ class _Blurting extends State<Blurting> {
         children: [
           Column(
             children: [
-              if (isState == 'Continue')
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: width * 0.6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isMine = false;
-                          });
-                          if (isState == 'Continue') {
-                            pageController.jumpToPage(currentDay);
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: isMine
-                                  ? mainColor.lightGray
-                                  : mainColor.MainColor),
-                          child: Text(
-                            '화살 날리기',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isMine = true;
-                          });
-                          if (isState == 'Continue') {
-                            pageController.jumpToPage(currentDay);
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(60),
-                              color: isMine
-                                  ? mainColor.MainColor
-                                  : mainColor.lightGray),
-                          child: Text(
-                            '내가 받은 화살',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              if (isState != 'Continue')
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: width * 0.6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.transparent),
-                        child: Text(
-                          '화살 날리기',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.transparent),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60),
-                            color: Colors.transparent),
-                        child: Text(
-                          '내가 받은 화살',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.transparent),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              // if (isState == 'Continue')
+              //   Container(
+              //     margin: EdgeInsets.only(bottom: 10),
+              //     width: width * 0.6,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //       children: <Widget>[
+              //         InkWell(
+              //           onTap: () {
+              //             setState(() {
+              //               isMine = false;
+              //             });
+              //             if (isState == 'Continue') {
+              //               pageController.jumpToPage(currentDay);
+              //             }
+              //           },
+              //           child: Container(
+              //             margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+              //             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              //             decoration: BoxDecoration(
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 color: isMine
+              //                     ? mainColor.lightGray
+              //                     : mainColor.MainColor),
+              //             child: Text(
+              //               '화살 날리기',
+              //               style: TextStyle(
+              //                   fontSize: 15,
+              //                   fontWeight: FontWeight.w500,
+              //                   color: Colors.white),
+              //             ),
+              //           ),
+              //         ),
+              //         InkWell(
+              //           onTap: () {
+              //             setState(() {
+              //               isMine = true;
+              //             });
+              //             if (isState == 'Continue') {
+              //               pageController.jumpToPage(currentDay);
+              //             }
+              //           },
+              //           child: Container(
+              //             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+              //             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              //             decoration: BoxDecoration(
+              //                 borderRadius: BorderRadius.circular(60),
+              //                 color: isMine
+              //                     ? mainColor.MainColor
+              //                     : mainColor.lightGray),
+              //             child: Text(
+              //               '내가 받은 화살',
+              //               style: TextStyle(
+              //                   fontSize: 15,
+              //                   fontWeight: FontWeight.w500,
+              //                   color: Colors.white),
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // if (isState != 'Continue')
+              //   Container(
+              //     margin: EdgeInsets.only(bottom: 10),
+              //     width: width * 0.6,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //       children: <Widget>[
+              //         Container(
+              //           margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+              //           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              //           decoration: BoxDecoration(
+              //               borderRadius: BorderRadius.circular(10),
+              //               color: Colors.transparent),
+              //           child: Text(
+              //             '화살 날리기',
+              //             style: TextStyle(
+              //                 fontSize: 15,
+              //                 fontWeight: FontWeight.w500,
+              //                 color: Colors.transparent),
+              //           ),
+              //         ),
+              //         Container(
+              //           margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+              //           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              //           decoration: BoxDecoration(
+              //               borderRadius: BorderRadius.circular(60),
+              //               color: Colors.transparent),
+              //           child: Text(
+              //             '내가 받은 화살',
+              //             style: TextStyle(
+              //                 fontSize: 15,
+              //                 fontWeight: FontWeight.w500,
+              //                 color: Colors.transparent),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // Container(
+              //   margin: EdgeInsets.only(bottom: 10),
+              //   width: width * 0.6,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: <Widget>[],
+              //   ),
+              // ),
               Container(
-                margin: EdgeInsets.only(bottom: 10),
-                width: width * 0.6,
+                margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[],
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        '다음 파트 시작까지:  ',
+                        style: TextStyle(
+                          color: Color.fromRGBO(48, 48, 48, 0.8),
+                          fontFamily: 'Heebo',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      formatDuration(remainingTime),
+                      style: TextStyle(
+                        color: mainColor.MainColor.withOpacity(0.8),
+                        fontFamily: 'Heebo',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
+                  ],
                 ),
               ),
               Center(
@@ -375,61 +423,99 @@ class _Blurting extends State<Blurting> {
                                     ],
                                   ),
                                 )
-                              : !isMine
-                                  ? PageView(
-                                      controller: pageController,
-                                      children: [
-                                          _arrowPage(0),
-                                          _arrowPage(1),
-                                          _arrowPage(2),
-                                        ])
-                                  : PageView(
-                                      controller: pageController,
-                                      children: [
-                                          _myArrowPage(0),
-                                          _myArrowPage(1),
-                                          _myArrowPage(2),
-                                        ]),
+                              : PageView(controller: pageController, children: [
+                                  _arrowPage(currentDay),
+                                  // _arrowPage(1),
+                                  // _arrowPage(2),
+                                ]),
                         ),
                       ],
                     ),
+                    if (isState == 'Continue' && !isMine)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          AnimatedOpacity(
+                            duration: Duration(milliseconds: 1000),
+                            opacity: isVisible ? 1 : 0,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                '터치해서 화살을 날려주세요!',
+                                style: TextStyle(
+                                    color: mainColor.Gray,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Heebo"),
+                              ),
+                            ),
+                          ),
+                          Container(
+                              margin: EdgeInsets.fromLTRB(0, 4, 10, 10),
+                              width: 40,
+                              child: InkWell(
+                                  splashColor:
+                                      Colors.transparent, // 터치 효과를 투명하게 만듭니다.
+                                  onTap: (isTap[currentPage] == true &&
+                                          iSended[currentPage] == false)
+                                      ? () {
+                                          // 하나라도 true일 떄 (하나라도 선택되었을 때)
+                                          sendArrow(userId, currentDay);
+                                          iSended[currentPage] = true;
+                                          isVisible = false;
+                                        }
+                                      : null,
+                                  child: Image.asset(
+                                    'assets/images/blurtingArrow.png',
+                                    color: isTap[currentPage] == true ||
+                                            (iSended[currentPage]) == true
+                                        ? mainColor.MainColor
+                                        : mainColor.lightGray,
+                                  ))),
+                        ],
+                      ),
                   ],
                 ),
               ),
+
               // if (isState == 'Continue')
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: SmoothPageIndicator(
-                  controller: pageController,
-                  count: 3,
-                  effect: ScrollingDotsEffect(
-                    dotColor: isState == 'Continue'
-                        ? mainColor.lightPink
-                        : Colors.transparent,
-                    activeDotColor: isState == 'Continue'
-                        ? mainColor.MainColor
-                        : Colors.transparent,
-                    activeStrokeWidth: 10,
-                    activeDotScale: 1.0,
-                    maxVisibleDots: 5,
-                    radius: 8,
-                    spacing: 5,
-                    dotHeight: 10,
-                    dotWidth: 10,
-                  ),
-                ),
-              ),
+              // Container(
+              //   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              //   width: double.infinity,
+              //   alignment: Alignment.center,
+              //   child: SmoothPageIndicator(
+              //     controller: pageController,
+              //     count: 3,
+              //     effect: ScrollingDotsEffect(
+              //       dotColor: isState == 'Continue'
+              //           ? mainColor.lightPink
+              //           : Colors.transparent,
+              //       activeDotColor: isState == 'Continue'
+              //           ? mainColor.MainColor
+              //           : Colors.transparent,
+              //       activeStrokeWidth: 10,
+              //       activeDotScale: 1.0,
+              //       maxVisibleDots: 5,
+              //       radius: 8,
+              //       spacing: 5,
+              //       dotHeight: 10,
+              //       dotWidth: 10,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           InkWell(
             child: staticButton(
-                text: isState == 'Continue'
-                    ? "방 입장하기"
-                    : isState == 'Matching'
-                        ? '매칭중'
-                        : "새로운 블러팅 시작하기"),
+              text: isState == 'Continue'
+                  ? "결과 보기"
+                  : isState == 'end'
+                      ? '결과보기'
+                      : isState == 'Matching'
+                          ? '매칭중'
+                          : "새로운 블러팅 시작하기",
+              enabled: isState == 'Continue' ? iSended[currentPage] : true,
+            ),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? localDay = prefs.getString('day');
@@ -492,7 +578,7 @@ class _Blurting extends State<Blurting> {
             Container(
               margin: EdgeInsets.only(top: 8),
               child: Text(
-                isState == 'end' ? 'Final Day' : 'Day${index + 1}',
+                isState == 'end' ? 'Final Part' : 'Part${index + 1}',
                 style: TextStyle(
                     color: mainColor.Gray,
                     fontWeight: FontWeight.w700,
@@ -643,17 +729,17 @@ class _Blurting extends State<Blurting> {
                     fontSize: 16,
                     fontFamily: 'Heebo'),
               ),
-            Text(
-              isState == 'Continue' &&
-                      (!iSended[currentPage] && isValidDay[index])
-                  ? '* 오늘이 지나기 전에 화살표를 날려 주세요!'
-                  : '',
-              style: TextStyle(
-                  color: mainColor.Gray,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 10,
-                  fontFamily: 'Heebo'),
-            ),
+            // Text(
+            //   isState == 'Continue' &&
+            //           (!iSended[currentPage] && isValidDay[index])
+            //       ? '* 오늘이 지나기 전에 화살표를 날려 주세요!'
+            //       : '',
+            //   style: TextStyle(
+            //       color: mainColor.Gray,
+            //       fontWeight: FontWeight.w600,
+            //       fontSize: 10,
+            //       fontFamily: 'Heebo'),
+            // ),
             if (isState == 'Continue' && !iSended[currentPage])
               if (ProfileList[currentPage].length <= 4)
                 Container(
