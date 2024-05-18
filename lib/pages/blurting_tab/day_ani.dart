@@ -113,6 +113,18 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
                         fontFamily: 'Pretendard')),
               ),
             ),
+            Center(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 2000),
+                opacity: seconds >= 1 ? 1 : 0,
+                child: Text("매칭 성공",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 48,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Pretendard')),
+              ),
+            ),
           ],
         ),
       ),

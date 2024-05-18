@@ -524,34 +524,34 @@ class _Blurting extends State<Blurting> {
               print('실제 데이');
               print(day);
 
-              // if (isState == 'Continue') {
-              //   if (localDay == day) {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => GroupChat(
-              //                   day: day,
-              //                 )));
-              //   } else {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => DayAni(
-              //                   day: day,
-              //                 )));
-              //   }
-              // } else if (isState == 'Start' ||
-              //     isState == 'Matching' ||
-              //     isState == 'end') {
-              //   // 아직 방이 만들어지지 않음
-              //   Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => Matching(
-              //                 event: false,
-              //                 tableNo: '',
-              //               )));
-              // }
+              if (isState == 'Continue') {
+                if (localDay == day) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GroupChat(
+                                day: day,
+                              )));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DayAni(
+                                day: day,
+                              )));
+                }
+              } else if (isState == 'Start' ||
+                  isState == 'Matching' ||
+                  isState == 'end') {
+                // 아직 방이 만들어지지 않음
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Matching(
+                              event: false,
+                              tableNo: '',
+                            )));
+              }
               Navigator.push(
                   context,
                   MaterialPageRoute(
