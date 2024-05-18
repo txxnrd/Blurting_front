@@ -626,11 +626,11 @@ class _HomeState extends State<Home> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  '다음 질문까지   ',
+                  '남은 시간:   ',
                   style: TextStyle(
-                    color: Color.fromRGBO(48, 48, 48, 0.8),
+                    color: mainColor.Gray,
                     fontFamily: 'Heebo',
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -638,9 +638,9 @@ class _HomeState extends State<Home> {
               Text(
                 formatDuration(remainingTime),
                 style: TextStyle(
-                  color: mainColor.MainColor.withOpacity(0.8),
+                  color: mainColor.MainColor,
                   fontFamily: 'Heebo',
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               )
@@ -940,9 +940,9 @@ class _HomeState extends State<Home> {
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  '실시간 인기 답글',
+                  '오늘의 Hot Topic',
                   style: TextStyle(
-                    color: mainColor.black,
+                    color: mainColor.darkGray,
                     fontFamily: 'Heebo',
                     fontSize: 20,
                     fontWeight: FontWeight.w700,

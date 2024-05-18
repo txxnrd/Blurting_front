@@ -58,7 +58,7 @@ android {
         applicationId "com.Blurting.blurting"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 20
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -87,6 +87,4 @@ dependencies {
     implementation 'androidx.window:window:1.0.0'
     implementation 'androidx.window:window-java:1.0.0'
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
-    implementation 'com.android.billingclient:billing:4.1.0'
-}
-
+    }
