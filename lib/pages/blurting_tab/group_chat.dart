@@ -9,6 +9,7 @@ import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:blurting/config/app_config.dart';
@@ -377,21 +378,21 @@ class _GroupChat extends State<GroupChat> {
                     ],
                   ),
                   Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
+                      width: MediaQuery.of(context).size.width,
                       height: 25,
-                      margin: EdgeInsets.only(top: 10),
+                      margin: EdgeInsets.only(top: 30),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          QuestionNumber(1),
-                          QuestionNumber(2),
-                          QuestionNumber(3),
-                          QuestionNumber(4),
-                          QuestionNumber(5),
-                          QuestionNumber(6),
-                          QuestionNumber(7),
-                          QuestionNumber(8),
-                          QuestionNumber(9),
+                          questionNumber(1),
+                          questionNumber(2),
+                          questionNumber(3),
+                          questionNumber(4),
+                          questionNumber(5),
+                          questionNumber(6),
+                          questionNumber(7),
+                          questionNumber(8),
+                          questionNumber(9),
                         ],
                       )),
                 ],
@@ -584,7 +585,7 @@ class _GroupChat extends State<GroupChat> {
     );
   }
 
-  Widget QuestionNumber(int index) {
+  Widget questionNumber(int index) {
     // 누르면
     return Container(
       margin: EdgeInsets.zero,
@@ -611,8 +612,19 @@ class _GroupChat extends State<GroupChat> {
                     ? mainColor.MainColor.withOpacity(0.5)
                     : mainColor.Gray,
           ),
-          child: Text(
-            '$index',
+          child: CircleAvatar(
+            backgroundColor: mainColor.bgGray,
+            radius: 20,
+            child: Text('$index',
+                style: TextStyle(
+                    fontFamily: 'Heebo',
+                    fontSize: 13,
+                    color: currentIndex == index
+                        ? mainColor.MainColor
+                        : _questionNumber >= index
+                            ? mainColor.MainColor.withOpacity(0.5)
+                            : mainColor.Gray,
+                    fontWeight: FontWeight.w500)),
           ),
         ),
       ),
