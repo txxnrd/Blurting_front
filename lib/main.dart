@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/token.dart';
@@ -19,6 +20,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'notification.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 const Map<String, String> UNIT_ID = kReleaseMode
     ? {
@@ -172,9 +174,51 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 );
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+Future<void> isMatched(BuildContext context) async {
+  // 방이 있는지 없는지 확인
+  final url = Uri.parse(API.matching);
+  String savedToken = await getToken();
+
+  final response = await http.get(url, headers: {
+    'authorization': 'Bearer $savedToken',
+    'Content-Type': 'application/json',
+  });
+
+  if (response.statusCode == 200) {
+    try {
+      int responseData = jsonDecode(
+          response.body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
+      // responseData = 3;       // 없애야 할 것
+      print("응답 데이터는 ${responseData}입니다.");
+      // Provider.of<MatchingStateProvider>(context, listen: false).state =
+      //     responseData;
+    } catch (e) {
+      print(e);
+    }
+  } else if (response.statusCode == 401) {
+    //refresh token으로 새로운 accesstoken 불러오는 코드.
+    //accessToken 만료시 새롭게 요청함 (token.dart에 정의 되어 있음)
+  } else {
+    throw Exception('채팅방을 로드하는 데 실패했습니다');
+  }
+}
+
+Future<void> exampleForAmplitude() async {
+  // Create the instance
+  final Amplitude analytics = Amplitude.getInstance(instanceName: "Blurting");
+
+  // Initialize SDK
+  analytics.init(dotenv.env['AMPLITUDE_API_KEY']!);
+
+  // Log an event
+  analytics.logEvent('MyApp startup',
+      eventProperties: {'friend_num': 10, 'is_heavy_user': true});
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  exampleForAmplitude();
 
   RequestConfiguration configuration =
       RequestConfiguration(testDeviceIds: testDeviceIds);
@@ -262,6 +306,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _checkForUpdates();
+    isMatched(context as BuildContext);
   }
 
   Future<void> _checkForUpdates() async {
@@ -276,13 +321,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  //     _checkForUpdates();
-
-  //   bool isLatestVersion = await checkAppVersion();
-  // print(isLatestVersion);
-  // if (isLatestVersion == false) {
-  //   showForceUpdateDialog(true, navigatorKey.currentContext!);
-  // }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

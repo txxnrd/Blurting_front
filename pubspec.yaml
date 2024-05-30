@@ -31,6 +31,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  amplitude_flutter: ^3.13.0
   image_picker: ^1.0.4
   url_launcher: ^6.2.1
   location: ^5.0.3
@@ -118,6 +119,9 @@ flutter:
     - assets/signupface.png
     - assets/man.png
     - assets/woman.png
+    - assets/woman_background.png
+    - assets/man_background.png
+    - assets/blurting_background.png
     - assets/images/arrow.png
     - assets/images/boy.png
     - assets/woman.png
@@ -176,6 +180,7 @@ flutter:
     - assets/images/unmatchWoman.png
     - assets/images/event.png
     - assets/images/point_plus.png
+    - assets/images/blurting_groupchat.png
 
   fonts:
     - family: Pretendard
