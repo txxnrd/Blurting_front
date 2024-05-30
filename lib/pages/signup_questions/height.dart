@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/config/app_config.dart';
+import 'package:blurting/service/amplitude.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -77,6 +78,8 @@ class _HeightPageState extends State<HeightPage>
   }
 
   Future<void> _sendPostRequest() async {
+    amplitudeCheck("height");
+
     if (100 > height! || height! > 240) {
       showSnackBar(context, "유효한 키 정보를 입력해주세요");
       return;

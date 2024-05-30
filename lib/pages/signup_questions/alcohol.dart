@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/service/amplitude.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:blurting/token.dart';
@@ -61,6 +62,7 @@ class _AlcoholPageState extends State<AlcoholPage>
   }
 
   Future<void> _sendPostRequest() async {
+    amplitudeCheck("alcohol");
     var url = Uri.parse(API.signup);
     var drink = 0;
     if (_selectedAlcoholPreference == AlcoholPreference.none) {

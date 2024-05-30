@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blurting/pages/signup_questions/active_place.dart';
+import 'package:blurting/service/amplitude.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -47,6 +49,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _sendPostRequest() async {
+    amplitudeCheck("sex");
     var url = Uri.parse(API.signup);
     var sex = selectedGender == Gender.female ? "F" : "M";
 

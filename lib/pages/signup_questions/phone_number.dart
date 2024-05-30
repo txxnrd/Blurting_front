@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:blurting/service/amplitude.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/pages/signup_questions/sex.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -89,6 +90,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   bool first_post = true;
 
   Future<void> _sendPostRequest(String phoneNumber) async {
+    amplitudeCheck("phone_number");
+
     var fcmToken = await FirebaseMessaging.instance.getToken(
         vapidKey:
             "BOiszqzKnTUzx44lNnF45LDQhhUqdBGqXZ_3vEqKWRXP3ktKuSYiLxXGgg7GzShKtq405GL8Wd9v3vEutfHw_nw");

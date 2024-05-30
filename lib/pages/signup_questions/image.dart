@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:blurting/pages/signup_questions/university.dart';
 import 'package:blurting/pages/signup_questions/utils.dart';
+import 'package:blurting/service/amplitude.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:dio/dio.dart';
@@ -247,6 +248,8 @@ class ImagePageState extends State<ImagePage>
   }
 
   Future<void> _sendPostRequest() async {
+    amplitudeCheck("image");
+
     String savedToken = await getToken();
 
     Dio dio = Dio();

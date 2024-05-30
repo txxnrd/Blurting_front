@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blurting/Utils/provider.dart';
+import 'package:blurting/service/amplitude.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/pages/signup_questions/Utils.dart';
@@ -169,6 +170,8 @@ class HobbyPageState extends State<HobbyPage>
   }
 
   Future<void> _sendPostRequest() async {
+    amplitudeCheck("hobby");
+
     var url = Uri.parse(API.signup);
 
     String savedToken = await getToken();

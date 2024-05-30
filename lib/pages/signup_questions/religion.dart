@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blurting/service/amplitude.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/signup_questions/utils.dart';
 import 'package:blurting/token.dart';
@@ -65,8 +66,8 @@ class _ReligionPageState extends State<ReligionPage>
   }
 
   Future<void> _sendPostRequest() async {
+    amplitudeCheck("religion");
     var url = Uri.parse(API.signup);
-
     var religion = '';
     if (_selectedReligion == Religion.none) {
       religion = '무교';

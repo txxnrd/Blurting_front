@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blurting/service/amplitude.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/token.dart';
 import 'package:blurting/pages/signup_questions/utils.dart';
@@ -171,6 +172,8 @@ class _PersonalityPageState extends State<PersonalityPage>
   }
 
   Future<void> _sendPostRequest() async {
+    amplitudeCheck("phonenumber");
+
     var url = Uri.parse(API.signup);
     updateSelectedCharacteristics();
 
