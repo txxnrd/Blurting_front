@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:blurting/service/amplitude.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/token.dart';
@@ -426,6 +427,7 @@ class _MyPage extends State<MyPage> {
                           color: mainColor.Gray,
                         ),
                         onPressed: () {
+                          amplitudeCheck('move to setting page');
                           Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -97,7 +97,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
       body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
     );
 
-    print("여기까지 실행이 됨");
+    print("phonenumber : ${formattedPhoneNumber}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // 서버로부터 응답이 성공적으로 돌아온 경우 처리

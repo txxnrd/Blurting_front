@@ -6,6 +6,7 @@ import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/Utils/time.dart';
 import 'package:blurting/config/app_config.dart';
 import 'package:blurting/pages/blurting_tab/group_chat.dart';
+import 'package:blurting/service/amplitude.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -531,6 +532,7 @@ class _Blurting extends State<Blurting> {
                         ? '매칭중'
                         : "새로운 블러팅 시작하기"),
             onTap: () async {
+              amplitudeCheck('blurting_start');
               SharedPreferences prefs = await SharedPreferences.getInstance();
 
               String? localDay = prefs.getString('day');

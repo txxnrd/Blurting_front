@@ -206,7 +206,7 @@ Future<void> isMatched(BuildContext context) async {
 Future<void> exampleForAmplitude() async {
   // Create the instance
   final Amplitude analytics = Amplitude.getInstance(instanceName: "Blurting");
-
+  print("amplitude 잘 실행됨");
   // Initialize SDK
   analytics.init(dotenv.env['AMPLITUDE_API_KEY']!);
 
@@ -218,14 +218,13 @@ Future<void> exampleForAmplitude() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  await initializeDateFormatting('ko_KR', null);
+  await dotenv.load(fileName: ".env");
   exampleForAmplitude();
-
   RequestConfiguration configuration =
       RequestConfiguration(testDeviceIds: testDeviceIds);
   MobileAds.instance.updateRequestConfiguration(configuration);
 
-  await initializeDateFormatting('ko_KR', null);
-  await dotenv.load(fileName: ".env");
   var token = await getToken(); // 만약 getToken이 비동기 함수라면 await를 사용
   print("첫번째에 token이 무엇인지: $token");
   // bool isLoggedIn = token != "No Token";

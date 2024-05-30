@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:blurting/config/app_config.dart';
+import 'package:blurting/service/amplitude.dart';
 import 'package:blurting/token.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -514,6 +515,7 @@ class _pointAppbarState extends State<pointAppbar> {
     return Container(
       child: InkWell(
           onTap: () {
+            amplitudeCheck('point_history');
             if (widget.canNavigate) {
               Navigator.push(
                 context,
