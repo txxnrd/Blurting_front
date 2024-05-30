@@ -526,10 +526,16 @@ class _Blurting extends State<Blurting> {
 
               if (isState == 'Continue') {
                 if (localDay == day) {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => GroupChat(
+                  //               day: day,
+                  //             )));
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => GroupChat(
+                          builder: (context) => DayAni(
                                 day: day,
                               )));
                 } else {
@@ -552,12 +558,12 @@ class _Blurting extends State<Blurting> {
                               tableNo: '',
                             )));
               }
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => GroupChat(
-                            day: day,
-                          )));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => GroupChat(
+              //               day: day,
+              //             )));
 
               // 데이터를 로컬에 저장하는 함수
               await prefs.setString('day', day);

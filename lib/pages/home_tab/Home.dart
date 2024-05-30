@@ -940,7 +940,7 @@ class _HomeState extends State<Home> {
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  '실시간 인기 답글',
+                  '오늘의 Hot Topic',
                   style: TextStyle(
                     color: mainColor.black,
                     fontFamily: 'Heebo',
@@ -949,64 +949,64 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Container(
-                  margin: EdgeInsets.fromLTRB(7, 0, 0, 0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: mainColor.MainColor, width: 1)),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                    child: Text(
-                      _mvpName,
-                      style: TextStyle(
-                          color: mainColor.MainColor,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Heebo',
-                          fontSize: 12),
-                    ),
-                  ))
+              // Container(
+              //     margin: EdgeInsets.fromLTRB(7, 0, 0, 0),
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(10),
+              //         border: Border.all(color: mainColor.MainColor, width: 1)),
+              //     child: Padding(
+              //       padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+              //       child: Text(
+              //         _mvpName,
+              //         style: TextStyle(
+              //             color: mainColor.MainColor,
+              //             fontWeight: FontWeight.w700,
+              //             fontFamily: 'Heebo',
+              //             fontSize: 12),
+              //       ),
+              //     ))
             ],
           ),
-          SizedBox(
-            height: 250,
-            child: apiResponse != null && apiResponse!['answers'].isNotEmpty
-                ? PageView.builder(
-                    padEnds: false,
-                    pageSnapping: true,
-                    onPageChanged: (index) => {mvpName(index), print(index)},
-                    controller: controller,
-                    itemCount: min(cardItems.length, 3),
-                    itemBuilder: (_, index) {
-                      return pages[index];
-                    },
-                  )
-                : Center(
-                    child: Text(
-                      'MVP 답변 준비중이에요!',
-                      style: TextStyle(
-                        color: mainColor.Gray,
-                        fontFamily: 'Heebo',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-          ),
+          // SizedBox(
+          //   height: 250,
+          //   child: apiResponse != null && apiResponse!['answers'].isNotEmpty
+          //       ? PageView.builder(
+          //           padEnds: false,
+          //           pageSnapping: true,
+          //           onPageChanged: (index) => {mvpName(index), print(index)},
+          //           controller: controller,
+          //           itemCount: min(cardItems.length, 3),
+          //           itemBuilder: (_, index) {
+          //             return pages[index];
+          //           },
+          //         )
+          //       : Center(
+          //           child: Text(
+          //             'MVP 답변 준비중이에요!',
+          //             style: TextStyle(
+          //               color: mainColor.Gray,
+          //               fontFamily: 'Heebo',
+          //               fontSize: 18,
+          //               fontWeight: FontWeight.w700,
+          //             ),
+          //           ),
+          //         ),
+          // ),
 
-          if (apiResponse != null && apiResponse!['answers'].isNotEmpty)
-            Center(
-              child: SmoothPageIndicator(
-                controller: controller,
-                count: pages.length,
-                effect: ScrollingDotsEffect(
-                    activeDotScale: 1.0,
-                    dotHeight: 7,
-                    dotWidth: 27,
-                    // type: WormType.thinUnderground,
-                    dotColor: Color.fromRGBO(217, 217, 217, 1),
-                    activeDotColor: Color.fromRGBO(246, 100, 100, 0.5)),
-              ),
-            ),
+          // if (apiResponse != null && apiResponse!['answers'].isNotEmpty)
+          //   Center(
+          //     child: SmoothPageIndicator(
+          //       controller: controller,
+          //       count: pages.length,
+          //       effect: ScrollingDotsEffect(
+          //           activeDotScale: 1.0,
+          //           dotHeight: 7,
+          //           dotWidth: 27,
+          //           // type: WormType.thinUnderground,
+          //           dotColor: Color.fromRGBO(217, 217, 217, 1),
+          //           activeDotColor: Color.fromRGBO(246, 100, 100, 0.5)),
+          //     ),
+          //   ),
           // Today's Blurting
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),

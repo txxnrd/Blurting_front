@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:blurting/pages/blurting_tab/group_chat.dart';
+import 'package:blurting/styles/styles.dart';
 import 'package:flutter/material.dart';
 
 class DayAni extends StatefulWidget {
@@ -20,6 +21,7 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    print("여기 왓다가 가는거임");
     // socket = Provider.of<SocketProvider>(context, listen: false).socket;
     controller = AnimationController(
       vsync: this,
@@ -73,7 +75,9 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
     return PopScope(
       canPop: false, // 뒤로가기 금지
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(245, 220, 220, 1),
+        // backgroundColor: Color.fromRGBO(245, 220, 220, 1),
+        backgroundColor: mainColor.bgGray,
+
         body: Stack(
           children: [
             AnimatedPositioned(
@@ -113,15 +117,16 @@ class _DayAniState extends State<DayAni> with TickerProviderStateMixin {
                         fontFamily: 'Pretendard')),
               ),
             ),
-            Center(
+            Align(
+              alignment: Alignment(0, 0.13),
               child: AnimatedOpacity(
                 duration: Duration(milliseconds: 2000),
                 opacity: seconds >= 1 ? 1 : 0,
                 child: Text("매칭 성공",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 48,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
                         fontFamily: 'Pretendard')),
               ),
             ),
