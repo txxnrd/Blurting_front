@@ -220,6 +220,7 @@ class _SearchPage extends State<SearchPage> {
     if (response.statusCode == 200) {
       List<String> serverResponse =
           (json.decode(response.body) as List<dynamic>).cast<String>();
+      print("serverResponse : $serverResponse");
       setState(() {
         itemsByName = serverResponse;
         filterItems();

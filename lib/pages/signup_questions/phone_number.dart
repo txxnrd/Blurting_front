@@ -88,6 +88,42 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
   var login_token = "";
   bool first_post = true;
 
+  Future<void> _sendSignUpRequest(String phoneNumber) async {
+    var url = Uri.parse(API.signup);
+    //API.sendphone
+    var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
+
+    String savedToken = await getToken();
+
+    first_post = false;
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $savedToken',
+      },
+      body: json.encode({"phoneNumber": formattedPhoneNumber}), // JSON 형태로 인코딩
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // 서버로부터 응답이 성공적으로 돌아온 경우 처리
+
+      var data = json.decode(response.body);
+      var token = data['signupToken'];
+      if (token != null) {
+        // 토큰을 로컬에 저장
+        await saveToken(token);
+        _sendPostRequest(phoneNumber);
+      }
+    } else {
+      var data = json.decode(response.body);
+      errormessage = data['message'];
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, errormessage);
+    }
+  }
+
   Future<void> _sendPostRequest(String phoneNumber) async {
     var fcmToken = await FirebaseMessaging.instance.getToken(
         vapidKey:
@@ -346,7 +382,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
                             width: 56, // 버튼의 너비를 설정
                             child: ElevatedButton(
                               onPressed: () {
-                                _sendPostRequest(phonenumber);
+                                _sendSignUpRequest(phonenumber);
                                 startTimer();
                               },
                               style: ElevatedButton.styleFrom(

@@ -4,6 +4,7 @@ import 'package:blurting/Utils/time.dart';
 import 'package:blurting/pages/blurting_tab/matching_ani.dart';
 import 'package:blurting/pages/home_tab/event.dart';
 import 'package:blurting/pages/home_tab/event_group.dart';
+import 'package:blurting/pages/home_tab/utils.dart';
 import 'package:blurting/pages/my_page/Utils.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/config/app_config.dart';
@@ -933,22 +934,131 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Row(
+          Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  '오늘의 Hot Topic',
-                  style: TextStyle(
-                    color: mainColor.black,
-                    fontFamily: 'Heebo',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                padding: const EdgeInsets.fromLTRB(35, 0, 0, 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '오늘의 Hot Topic',
+                    style: TextStyle(
+                      color: mainColor.black,
+                      fontFamily: 'Heebo',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
+              CustomShadowContainer(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'xxx명이 참여중',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Heebo',
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6.0, vertical: 2.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(0xffF66464), // 테두리 색상
+                                width: 1.3, // 테두리 두께
+                              ),
+                              borderRadius:
+                                  BorderRadius.circular(20.0), // 둥근 테두리
+                            ),
+                            child: Text(
+                              'by 개굴',
+                              style: TextStyle(
+                                  color: Color(0xffF66464),
+                                  fontSize: 12,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        '깻잎 논쟁, 어떻게 생각하시나요?',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Heebo',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                      Text(
+                        '개굴 123',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontFamily: 'Heebo',
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4.0, vertical: 1.0),
+                              decoration: BoxDecoration(
+                                color: Color(0xffF66464),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Text(
+                                'best',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Heebo',
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                '논쟁이 될 필요가 있을까요. 깻잎은 먹...',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Heebo',
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
               // Container(
               //     margin: EdgeInsets.fromLTRB(7, 0, 0, 0),
               //     decoration: BoxDecoration(

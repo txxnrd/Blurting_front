@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (data['signupToken'] != null) {
         var token = data['signupToken'];
-
+        print("signupToken:$token");
         await saveToken(token);
         _increaseProgressAndNavigate();
       } else {
