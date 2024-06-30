@@ -189,7 +189,7 @@ Future<void> isMatched(BuildContext context) async {
     try {
       int responseData = jsonDecode(response
           .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching, 4->arrowing
-      responseData = 3; // 없애야 할 것
+      responseData = 0; // 없애야 할 것
       print("응답 데이터는 ${responseData}입니다.");
       Provider.of<MatchingStateProvider>(context, listen: false).state =
           responseData;

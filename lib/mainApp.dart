@@ -40,9 +40,8 @@ class _MainApp extends State<MainApp> {
   void _updatePages() {
     _pages = [
       Home(),
-      Provider.of<MatchingStateProvider>(context, listen: true).state == 0 ||
-              Provider.of<MatchingStateProvider>(context, listen: true).state ==
-                  1 ||
+      // Provider.of<MatchingStateProvider>(context, listen: true).state == 0 ||
+      Provider.of<MatchingStateProvider>(context, listen: true).state == 1 ||
               Provider.of<MatchingStateProvider>(context, listen: true).state ==
                   2 // 0: 매칭 완료 2:매칭중
           ? SizedBox()

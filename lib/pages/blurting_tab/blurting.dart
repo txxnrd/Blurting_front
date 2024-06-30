@@ -92,7 +92,7 @@ class _Blurting extends State<Blurting> {
       await fetchPoint();
       await isMatched();
 
-      isState = 'end'; //여기도 바꿔야되네
+      isState = 'Start'; //여기도 바꿔야되네
 
       if (isState == 'Continue' || isState == 'end') {
         await fetchLatestComments();
@@ -412,7 +412,13 @@ class _Blurting extends State<Blurting> {
                           : isState == 'Arrowing'
                               ? '지금은 투표시간입니다 '
                               : "새로운 블러팅 시작하기",
-              enabled: isState == 'Continue' ? iSended[currentPage] : false,
+              enabled: isState == 'Start'
+                  ? true
+                  : isState == "Arrowing"
+                      ? false
+                      : isState == 'Continue'
+                          ? iSended[0] && iSended[1] && iSended[2] //여기 로직 좀 헷갈림
+                          : true,
             ),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -809,7 +815,7 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching, 3-> End, 4 -> Arrowing
-        responseData = 3; // 바꿔야 할 것
+        responseData = 0; // 바꿔야 할 것
         print(responseData);
         Provider.of<MatchingStateProvider>(context, listen: false).state =
             responseData;
