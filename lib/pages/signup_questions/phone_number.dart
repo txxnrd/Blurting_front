@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:blurting/pages/signup_questions/birth.dart';
 import 'package:blurting/utils/util_widget.dart';
 import 'package:blurting/pages/signup_questions/sex.dart';
 import 'package:blurting/Utils/provider.dart';
@@ -53,7 +54,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage>
     await _animationController!.forward();
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => SexPage(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            BirthDatePage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
