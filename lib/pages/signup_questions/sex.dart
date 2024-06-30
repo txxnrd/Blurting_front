@@ -73,7 +73,7 @@ class _SexPageState extends State<SexPage> with SingleTickerProviderStateMixin {
         _increaseProgressAndNavigate();
       }
     } else {
-      // 오류가 발생한 경우 처리
+      print(response.body);
     }
   }
 

@@ -2394,7 +2394,7 @@ class staticButton extends StatelessWidget {
   final String text;
   final bool enabled;
 
-  staticButton({required this.text, this.enabled = true});
+  staticButton({required this.text, this.enabled = false});
 
   @override
   Widget build(BuildContext context) {

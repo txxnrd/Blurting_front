@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:blurting/config/app_config.dart';
@@ -186,13 +187,12 @@ Future<void> isMatched(BuildContext context) async {
 
   if (response.statusCode == 200) {
     try {
-      int responseData = jsonDecode(
-          response.body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching
-      // responseData = 3;       // 없애야 할 것
+      int responseData = jsonDecode(response
+          .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching, 4->arrowing
+      responseData = 3; // 없애야 할 것
       print("응답 데이터는 ${responseData}입니다.");
-      // Provider.of<MatchingStateProvider>(context, listen: false).state =
-      //     responseData;
-      Provider.of<MatchingStateProvider>(context, listen: false).state = 1;
+      Provider.of<MatchingStateProvider>(context, listen: false).state =
+          responseData;
     } catch (e) {
       print(e);
     }
@@ -242,7 +242,6 @@ void main() async {
   await initFcm();
 
   await Future.delayed(const Duration(seconds: 3));
-
   runApp(
     MultiProvider(
       providers: [

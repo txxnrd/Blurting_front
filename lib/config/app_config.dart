@@ -8,7 +8,7 @@ class ServerEndpoints {
 class API {
   /*signup 과정에서 필요한 api */
   static final String sendphone =
-      "${ServerEndpoints.serverEndpoint}/auth/signup/phonenumber";
+      "${ServerEndpoints.serverEndpoint}/auth/signup";
   static final String version =
       "${ServerEndpoints.serverEndpoint}/home/version";
   static final String alreadyuser =

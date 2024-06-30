@@ -704,7 +704,10 @@ class _MyPage extends State<MyPage> {
                 ),
               ),
               InkWell(
-                child: staticButton(text: '수정'),
+                child: staticButton(
+                  text: '수정',
+                  enabled: true,
+                ),
                 onTap: () {
                   goToMyPageEdit(context);
                 },

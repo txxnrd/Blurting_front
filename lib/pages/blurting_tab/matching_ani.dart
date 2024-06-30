@@ -183,17 +183,12 @@ class _MatchingState extends State<Matching> with TickerProviderStateMixin {
               color: Color.fromRGBO(48, 48, 48, 1),
             ),
             onPressed: () {
-              if (!widget.event) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainApp(
-                              currentIndex: 1,
-                            ))).then((value) => setState(() {}));
-              } else {
-                // 일홉일 때, 홈으로 간다
-                Navigator.pop(context);
-              }
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainApp(
+                            currentIndex: 0,
+                          )));
             },
           ),
         ),

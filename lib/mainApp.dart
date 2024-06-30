@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:blurting/Utils/provider.dart';
 import 'package:blurting/pages/blurting_tab/group_chat.dart';
+import 'package:blurting/pages/blurting_tab/matching_ani.dart';
 import 'package:flutter/material.dart';
 import 'package:blurting/pages/blurting_tab/blurting.dart';
 import 'package:blurting/pages/home_tab/Home.dart';
@@ -39,8 +40,11 @@ class _MainApp extends State<MainApp> {
   void _updatePages() {
     _pages = [
       Home(),
-      Provider.of<MatchingStateProvider>(context, listen: true).state ==
-              2 // 2: 매칭 완료
+      Provider.of<MatchingStateProvider>(context, listen: true).state == 0 ||
+              Provider.of<MatchingStateProvider>(context, listen: true).state ==
+                  1 ||
+              Provider.of<MatchingStateProvider>(context, listen: true).state ==
+                  2 // 0: 매칭 완료 2:매칭중
           ? SizedBox()
           : Blurting(),
       ChattingList(),
@@ -143,7 +147,8 @@ class TabItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (_currentIndex == 1) {
       //Main에서 현재 MatchingStateProvider 통해 매칭 상태를 Provider로 관리
-      if (Provider.of<MatchingStateProvider>(context, listen: true).state == 2)
+      if (Provider.of<MatchingStateProvider>(context, listen: true).state ==
+          1) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
               context,
@@ -152,6 +157,19 @@ class TabItem extends StatelessWidget {
                         day: day,
                       )));
         });
+      } else if (Provider.of<MatchingStateProvider>(context, listen: true)
+              .state ==
+          2) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Matching(
+                        event: false,
+                        tableNo: '',
+                      )));
+        });
+      }
     }
     return Column(
       children: [

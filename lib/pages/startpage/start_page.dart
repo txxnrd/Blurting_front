@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
+import 'package:blurting/pages/signup_questions/job.dart';
 import 'package:blurting/styles/styles.dart';
 import 'package:blurting/pages/signup_questions/phone_number.dart';
 import 'package:blurting/token.dart';
@@ -42,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             PhoneNumberPage(),
+        // JobPage(selectedGender: "Gender.male"),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },

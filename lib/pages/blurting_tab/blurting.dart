@@ -92,7 +92,7 @@ class _Blurting extends State<Blurting> {
       await fetchPoint();
       await isMatched();
 
-      isState = 'Continue';
+      isState = 'end'; //여기도 바꿔야되네
 
       if (isState == 'Continue' || isState == 'end') {
         await fetchLatestComments();
@@ -241,114 +241,6 @@ class _Blurting extends State<Blurting> {
         children: [
           Column(
             children: [
-              // if (isState == 'Continue')
-              //   Container(
-              //     margin: EdgeInsets.only(bottom: 10),
-              //     width: width * 0.6,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //       children: <Widget>[
-              //         InkWell(
-              //           onTap: () {
-              //             setState(() {
-              //               isMine = false;
-              //             });
-              //             if (isState == 'Continue') {
-              //               pageController.jumpToPage(currentDay);
-              //             }
-              //           },
-              //           child: Container(
-              //             margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-              //             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              //             decoration: BoxDecoration(
-              //                 borderRadius: BorderRadius.circular(10),
-              //                 color: isMine
-              //                     ? mainColor.lightGray
-              //                     : mainColor.MainColor),
-              //             child: Text(
-              //               '화살 날리기',
-              //               style: TextStyle(
-              //                   fontSize: 15,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.white),
-              //             ),
-              //           ),
-              //         ),
-              //         InkWell(
-              //           onTap: () {
-              //             setState(() {
-              //               isMine = true;
-              //             });
-              //             if (isState == 'Continue') {
-              //               pageController.jumpToPage(currentDay);
-              //             }
-              //           },
-              //           child: Container(
-              //             margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-              //             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              //             decoration: BoxDecoration(
-              //                 borderRadius: BorderRadius.circular(60),
-              //                 color: isMine
-              //                     ? mainColor.MainColor
-              //                     : mainColor.lightGray),
-              //             child: Text(
-              //               '내가 받은 화살',
-              //               style: TextStyle(
-              //                   fontSize: 15,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.white),
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // if (isState != 'Continue')
-              //   Container(
-              //     margin: EdgeInsets.only(bottom: 10),
-              //     width: width * 0.6,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //       children: <Widget>[
-              //         Container(
-              //           margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-              //           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              //           decoration: BoxDecoration(
-              //               borderRadius: BorderRadius.circular(10),
-              //               color: Colors.transparent),
-              //           child: Text(
-              //             '화살 날리기',
-              //             style: TextStyle(
-              //                 fontSize: 15,
-              //                 fontWeight: FontWeight.w500,
-              //                 color: Colors.transparent),
-              //           ),
-              //         ),
-              //         Container(
-              //           margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-              //           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              //           decoration: BoxDecoration(
-              //               borderRadius: BorderRadius.circular(60),
-              //               color: Colors.transparent),
-              //           child: Text(
-              //             '내가 받은 화살',
-              //             style: TextStyle(
-              //                 fontSize: 15,
-              //                 fontWeight: FontWeight.w500,
-              //                 color: Colors.transparent),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // Container(
-              //   margin: EdgeInsets.only(bottom: 10),
-              //   width: width * 0.6,
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //     children: <Widget>[],
-              //   ),
-              // ),
               Container(
                 margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
                 child: Row(
@@ -399,7 +291,7 @@ class _Blurting extends State<Blurting> {
                               borderRadius: BorderRadius.circular(10)),
                           width: width * 0.9,
                           height: width * 0.8,
-                          child: isState == 'Matching'
+                          child: isState == 'Start'
                               ? Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -423,11 +315,15 @@ class _Blurting extends State<Blurting> {
                                     ],
                                   ),
                                 )
-                              : PageView(controller: pageController, children: [
-                                  _arrowPage(currentDay),
-                                  // _arrowPage(1),
-                                  // _arrowPage(2),
-                                ]),
+                              : isState == "Arrowing"
+                                  ? PageView(
+                                      controller: pageController,
+                                      children: [
+                                          _arrowPage(currentDay),
+                                          // _arrowPage(1),
+                                          // _arrowPage(2),
+                                        ])
+                                  : SizedBox(),
                         ),
                       ],
                     ),
@@ -513,8 +409,10 @@ class _Blurting extends State<Blurting> {
                       ? '결과보기'
                       : isState == 'Matching'
                           ? '매칭중'
-                          : "새로운 블러팅 시작하기",
-              enabled: isState == 'Continue' ? iSended[currentPage] : true,
+                          : isState == 'Arrowing'
+                              ? '지금은 투표시간입니다 '
+                              : "새로운 블러팅 시작하기",
+              enabled: isState == 'Continue' ? iSended[currentPage] : false,
             ),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -911,14 +809,13 @@ class _Blurting extends State<Blurting> {
       try {
         int responseData = jsonDecode(response
             .body); // int로 바꾸고, 0 -> Start, 1 -> Continue, 2 -> Matching, 3-> End, 4 -> Arrowing
-        responseData = 1; // 없애야 할 것
+        responseData = 3; // 바꿔야 할 것
         print(responseData);
         Provider.of<MatchingStateProvider>(context, listen: false).state =
             responseData;
         if (mounted) {
           setState(() {
-            // isState = intToState[responseData];
-            isState = 'Continue';
+            isState = intToState[responseData];
           });
 
           print(pref.getString('day'));

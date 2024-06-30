@@ -123,18 +123,20 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
   Future<void> _sendVerificationRequest(String phoneNumber) async {
     var url = Uri.parse(API.alreadyusercheck);
-    //API.sendphone
+
     var formattedPhoneNumber = phoneNumber.replaceAll('-', '');
-    var queryParameters = {
+
+    var body = json.encode({
+      'phoneNumber': formattedPhoneNumber,
       'code': verificationnumber,
-    };
-    var uri = url.replace(queryParameters: queryParameters);
+    });
 
     var response = await http.post(
-      uri,
+      url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
+      body: body,
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -158,7 +160,7 @@ class _AlreadyUserPageState extends State<AlreadyUserPage>
 
         var urlfcm = Uri.parse(API.notification);
 
-        var response = await http.post(
+        var fcmResponse = await http.post(
           urlfcm,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

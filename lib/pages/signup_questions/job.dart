@@ -48,6 +48,7 @@ class _JobPageState extends State<JobPage> with SingleTickerProviderStateMixin {
 
   String Job = '';
   bool IsValid = false;
+  String? selectedJob;
   @override
   void InputJob(String value) {
     setState(() {
@@ -82,7 +83,7 @@ class _JobPageState extends State<JobPage> with SingleTickerProviderStateMixin {
     } else if (widget.selectedGender == "Gender.female") {
       _gender = Gender.female;
     }
-    var selectedJob;
+
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
@@ -171,22 +172,25 @@ class _JobPageState extends State<JobPage> with SingleTickerProviderStateMixin {
                 //     );
                 //   },
                 // ),
-                DropdownButton<String>(
-                  hint: Text('당신의 직업을 선택하세요'),
-                  value: selectedJob,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedJob = newValue;
-                      // 선택된 직업에 따라 관련 도메인을 설정합니다.
-                      IsValid = true;
-                    });
-                  },
-                  items: jobs.map<DropdownMenuItem<String>>((String job) {
-                    return DropdownMenuItem<String>(
-                      value: job,
-                      child: Text(job),
-                    );
-                  }).toList(),
+                Center(
+                  child: DropdownButton<String>(
+                    hint: Text('당신의 직업을 선택하세요'),
+                    value: selectedJob,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedJob = newValue;
+                        // 선택된 직업에 따라 관련 도메인을 설정합니다.
+                        IsValid = true;
+                        print('Selected job: $selectedJob');
+                      });
+                    },
+                    items: jobs.map<DropdownMenuItem<String>>((String job) {
+                      return DropdownMenuItem<String>(
+                        value: job,
+                        child: Text(job),
+                      );
+                    }).toList(),
+                  ),
                 ),
 
                 SizedBox(height: 312),
